@@ -4,7 +4,7 @@
 
 $this->title = 'CAPATOOLS V2.0';
 ?>
-<div class="site-index">
+<div class="dashboard-index">
 
     <div class="jumbotron">
         <h1>Congratulations!</h1>

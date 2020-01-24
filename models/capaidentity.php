@@ -1,7 +1,8 @@
 <?php
 
 namespace app\models;
-
+use Yii;
+use yii\base\Security;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -82,9 +83,11 @@ class capaidentity extends ActiveRecord  implements IdentityInterface
      * @param string $password password to validate
      * @return bool if password provided is valid for current user
      */
-    public function validatePassword($password)
+    public function validatePassword($pass)
     {
-        return $this->password === $password;
+        $this->password_hash = Yii::$app->getSecurity()->generatePasswordHash($pass);
+        echo $this->password_hash;
+        return Yii::$app->getSecurity()->validatePassword($pass, $this->password_hash);
     }
 
 }

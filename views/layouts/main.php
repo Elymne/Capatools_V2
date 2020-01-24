@@ -36,20 +36,20 @@ AppAsset::register($this);
         ],
     ]);
 
-    $item [] = ['label' => 'Home', 'url' => ['/site/index']];
+    $item [] = ['label' => 'Home', 'url' => ['/dashboard/index']];
 
     if((Yii::$app->user->isGuest) )
     {
         
-        array_push($item, ['label' => 'Login', 'url' => ['/site/login']]);
+        array_push($item, ['label' => 'Login', 'url' => ['/dashboard/login']]);
     }
     else
     {
         
-        array_push($item,['label' => 'About', 'url' => ['/site/about']]);
-        array_push($item,['label' => 'Contact', 'url' => ['/site/contact']]);
+        array_push($item,['label' => 'About', 'url' => ['/dashboard/about']]);
+        array_push($item,['label' => 'Contact', 'url' => ['/dashboard/contact']]);
         array_push($item,'<li>'
-        . Html::beginForm(['/site/logout'], 'post')
+        . Html::beginForm(['/dashboard/logout'], 'post')
         . Html::submitButton(
             'Logout (' . Yii::$app->user->identity->username . ')',
             ['class' => 'btn btn-link logout']
