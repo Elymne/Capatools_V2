@@ -7,10 +7,6 @@ use yii\web\IdentityInterface;
 
 class capaidentity extends ActiveRecord  implements IdentityInterface
 {
-    public static function tableName()
-    {
-        return 'capaidentity';
-    }
 
     /**
      * Trouve une identité à partir de l'identifiant donné.
@@ -27,7 +23,7 @@ class capaidentity extends ActiveRecord  implements IdentityInterface
      * Trouve une identité à partir de l'identifiant donné.
      *
      * @param string|int $id l'identifiant à rechercher
-     * @return IdentityInterface|null l'objet identité qui correspond à l'identifiant donné
+     * @return username|null l'objet identité qui correspond à l'identifiant donné
      */
     public static function findByUsername($name)
     {
@@ -68,7 +64,28 @@ class capaidentity extends ActiveRecord  implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return $this->getAuthKey() === $authKey;
+        $bresultat = false;
+        $userAuthkey = $this->getAuthKey() ;
+        if( $userAuthkey === $authKey)
+        {
+            if($userAuthkey == $authKey)
+            {
+                $bresultat = true;
+            }
+        }
+        return $bresultat;
+
     }
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return $this->password === $password;
+    }
+
 }
 

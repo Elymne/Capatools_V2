@@ -10,7 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 
-class SiteController extends Controller
+class DashboardController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -61,7 +61,23 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        //Si l'utilisateur est logger alors affiche la page principal
+        if (!Yii::$app->user->isGuest) {
+            return $this->render('index');
+        }
+
+        //Création du formulaire de login
+        $model = new LoginForm();
+    
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->render('index');
+        }
+
+        $model->password = '';
+        return $this->render('login', [
+            'model' => $model,
+        ]);
+        //return $this->render('index');
     }
 
     /**
