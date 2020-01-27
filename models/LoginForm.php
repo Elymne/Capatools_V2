@@ -27,12 +27,12 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
+            ['username', 'required', 'message' => 'Le nom d\'utilisateur ne peut être vide.'],
+            ['password', 'required', 'message' => 'Le mot de passe ne peut être vide.'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
+     
     }
 
     /**
@@ -48,7 +48,7 @@ class LoginForm extends Model
             $user = $this->getUser();
 
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+                $this->addError($attribute, 'nom d\'utilisateur ou le mot de passe est incorrecte.');
             }
         }
     }
@@ -78,4 +78,8 @@ class LoginForm extends Model
 
         return $this->_user;
     }
+
+
+
+    
 }

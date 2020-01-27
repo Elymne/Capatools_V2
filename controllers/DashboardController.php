@@ -19,25 +19,7 @@ class DashboardController extends Controller
      */
     public function behaviors()
     {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
+        return [];
     }
 
     /**
@@ -117,7 +99,7 @@ class DashboardController extends Controller
         //Si l'utilisateur est logger alors affiche la page principal
         if (!Yii::$app->user->isGuest) {
             $toto = Yii::$app->user->identity->userrightapplication;
-            var_dump($toto);
+           
             echo "iuuu";
             $data =  $this->getControllers();
             return $this->render('index');
@@ -128,7 +110,7 @@ class DashboardController extends Controller
     
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $toto = Yii::$app->user->identity->userrightapplication;
-            var_dump($toto);
+            
             echo "iuuu";
             $data =  $this->getControllers();
             return $this->render('index');
