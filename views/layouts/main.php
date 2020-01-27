@@ -9,6 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\widgets\TopMenuBar;
 
 AppAsset::register($this);
 ?>
@@ -24,38 +25,18 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body class="has-fixed-sidenav">
-<?php $this->beginBody()?>
+<?php $this->beginBody();
 
-	  <!-- barre de navigation en haut de l'écran -->
-      <div class="navbar-fixed">
-        <nav class="navbar gradient">
-            <div class="nav-wrapper">
-   <!-- searchbox -->
-                <div class="header-search-wrapper hide-on-med-and-down">
-                      <i class="material-icons white-text">search</i>
-                      <input class="header-search-input z-depth-2 type="text" name="Search" placeholder="Rechercher" data-search="template-list">
-                </div>
-                <!-- /searchbox -->
-                
-                <ul id="nav-mobile" class="right">
-                    <li class="hide-on-med-and-down">
-                    <li><a href="#!" data-target="dropdownAvatar" class="dropdown-trigger waves-effect">
-                    <span class="avatar-status avatar-online">
-                    <img src="<?= Html::encode(Yii::$app->homeUrl) ?>images/avatar.png" alt="avatar" />
-                    <i></i>
-                    </span>
-                    </a></li>
-                </ul><a href="#!" data-target="sidenav-left" class="sidenav-trigger left"><i class="material-icons black-text">menu</i></a>
-            </div>
-        </nav>
-        </div>      
+TopMenuBar::begin();
 
-	  
-	  <ul id='dropdownAvatar' class='dropdown-content dropcontainer'>
-		<!--<li><a class="grey-text text-darken-1" href="#!"><i class="material-icons">person_outline</i>Profile</a></li>-->
-		<li class="divider" tabindex="-1"></li>
-    <li><a class="grey-text text-darken-1" href="<?= Yii::$app->homeUrl ?>dashboard/logout"><i class="material-icons">keyboard_tab</i>D&eacute;connexion</a></li>
-	  </ul>
+TopMenuBar::widget();
+TopMenuBar::end();
+
+?>
+
+
+
+
 
         <ul id="sidenav-left" class="sidenav sidenav-fixed">
         <li><a href="<?= Yii::$app->homeUrl?>" class="logo-container"><?= Html::encode(Yii::$app->name) ?><i class="material-icons left"><img src="<?= Html::encode(Yii::$app->homeUrl) ?>images/logo.png"/></i></a></li>
