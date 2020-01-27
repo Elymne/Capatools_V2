@@ -7,7 +7,7 @@ use yii\web\Controller;
 
 
 
-class RHController extends Controller implements  ServiceInterface
+class AdminstrationController extends Controller implements  ServiceInterface
 {
     /**
      * {@inheritdoc}
@@ -33,7 +33,8 @@ class RHController extends Controller implements  ServiceInterface
     */
     public static  function GetRight()
     {
-
+        return ['Aucun',
+                'Responsable'];
     }
 
     /**

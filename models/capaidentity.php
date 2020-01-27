@@ -6,7 +6,7 @@ use yii\base\Security;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
-class capaidentity extends ActiveRecord  implements IdentityInterface
+class Capaidentity extends ActiveRecord  implements IdentityInterface
 {
 
     /**
@@ -85,10 +85,17 @@ class capaidentity extends ActiveRecord  implements IdentityInterface
      */
     public function validatePassword($pass)
     {
-        $this->password_hash = Yii::$app->getSecurity()->generatePasswordHash($pass);
-        echo $this->password_hash;
+        //$this->password_hash = Yii::$app->getSecurity()->generatePasswordHash($pass);
+       // echo $this->password_hash;
         return Yii::$app->getSecurity()->validatePassword($pass, $this->password_hash);
     }
+
+    public function getRights()
+    {
+        
+        //return $this->hasMany(Rights::className(), ['Userid' => 'id']);
+    }
+
 
 }
 

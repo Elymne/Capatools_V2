@@ -89,8 +89,6 @@ class DashboardController extends Controller
 
 
                 $class_name = 'app\controllers\\'.$class_name.'Controller';
-                echo $class_name;
-                $class_name::hello();
                 if($class_name != 'Dashboard')
                 {
                     array_push( $data, $class_name);
@@ -119,6 +117,7 @@ class DashboardController extends Controller
         //Si l'utilisateur est logger alors affiche la page principal
         if (!Yii::$app->user->isGuest) {
 
+            $toto = Yii::$app->user->identity->getRights();
             $data =  $this->getControllers();
             return $this->render('index');
         }
@@ -127,7 +126,9 @@ class DashboardController extends Controller
         $model = new LoginForm();
     
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            
+            $toto = Yii::$app->user->identity->getRights();
+            echo $toto;
+            echo "iuuu";
             $data =  $this->getControllers();
             return $this->render('index');
         }

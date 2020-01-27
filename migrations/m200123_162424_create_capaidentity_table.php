@@ -2,6 +2,7 @@
 
 use yii\db\Migration;
 
+use yii\base\Security;
 /**
  * Handles the creation of table `{{%capaidentity}}`.
  */
@@ -20,7 +21,16 @@ class m200123_162424_create_capaidentity_table extends Migration
             'password_hash' => $this->string(),
 
         ]);
+       $password_hash = Yii::$app->getSecurity()->generatePasswordHash('toto');
 
+
+        $this->insert('capaidentity', [
+            'id' => '1',
+            'username' => 'toto',
+            'auth_key' => 'test100key',
+            'password_hash' =>  $password_hash
+        ]);
+             
     }
 
     /**
