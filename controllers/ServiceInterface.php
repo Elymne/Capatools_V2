@@ -10,4 +10,5 @@ interface ServiceInterface
 {   
     public static  function GetRight();
     public static  function GetIndicateur($user);
+    public static  function GetActionUser($user);
 }

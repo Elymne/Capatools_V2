@@ -19,16 +19,23 @@ class m200124_154824_create_UserRightApplication_table extends Migration
             'Credential'   => $this->string()
         ]);
 
-               // ajoute un clé étrangère vers la table `user`
-               $this->addForeignKey(
-                'fk-post_tag-post_id',
-                '{{%UserRightApplication}}',
-                'Userid',
-                'capaidentity',
-                'id',
-                'CASCADE'
-            );
+        // ajoute un clé étrangère vers la table `user`
+        $this->addForeignKey(
+        'fk-post_tag-post_id',
+        '{{%UserRightApplication}}',
+        'Userid',
+        'capaidentity',
+        'id',
+        'CASCADE'
+        );
  
+       
+        $this->insert('{{%UserRightApplication}}', [
+            'id' => '1',
+            'Userid' => '1',
+            'Application' => 'RH',
+            'Credential' => 'Aucun'
+        ]);     
     }
 
     /**

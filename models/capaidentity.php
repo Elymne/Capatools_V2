@@ -90,10 +90,10 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         return Yii::$app->getSecurity()->validatePassword($pass, $this->password_hash);
     }
 
-    public function getRights()
+    public function getuserrightapplication()
     {
         
-        //return $this->hasMany(Rights::className(), ['Userid' => 'id']);
+        return $this->hasMany(userrightapplication::className(), ['Userid' => 'id']);
     }
 
 

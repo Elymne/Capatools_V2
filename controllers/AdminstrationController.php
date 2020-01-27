@@ -47,6 +47,16 @@ class AdminstrationController extends Controller implements  ServiceInterface
     }
 
     /**
+     * Get Action for the user
+     */
+    public static  function GetActionUser($user)
+    {
+
+    }
+
+
+
+    /**
      * Displays homepage.
      *
      * @return string

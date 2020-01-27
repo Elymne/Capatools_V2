@@ -116,8 +116,9 @@ class DashboardController extends Controller
     {
         //Si l'utilisateur est logger alors affiche la page principal
         if (!Yii::$app->user->isGuest) {
-
-            $toto = Yii::$app->user->identity->getRights();
+            $toto = Yii::$app->user->identity->userrightapplication;
+            var_dump($toto);
+            echo "iuuu";
             $data =  $this->getControllers();
             return $this->render('index');
         }
@@ -126,8 +127,8 @@ class DashboardController extends Controller
         $model = new LoginForm();
     
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            $toto = Yii::$app->user->identity->getRights();
-            echo $toto;
+            $toto = Yii::$app->user->identity->userrightapplication;
+            var_dump($toto);
             echo "iuuu";
             $data =  $this->getControllers();
             return $this->render('index');
