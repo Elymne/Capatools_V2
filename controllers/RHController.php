@@ -51,7 +51,10 @@ class RHController extends Controller implements  ServiceInterface
      */
     public static  function GetActionUser($user)
     {
-
+       return ['Priorite' => 1,'Name' =>'RH',
+        'items' => [ ['url' => 'RH/ActionName','label'=>'ooooo','icon'=>'show_chart'],
+         ['url' =>'RH/nn;','label'=>'kkklisateur','icon'=>'show_chart']  ]    
+        ];
     }
 
 

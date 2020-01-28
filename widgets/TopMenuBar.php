@@ -53,7 +53,7 @@ class TopMenuBar extends \yii\bootstrap\Widget
         <ul id=\'dropdownAvatar\' class=\'dropdown-content dropcontainer\'>
           <!--<li><a class="grey-text text-darken-1" href="#!"><i class="material-icons">person_outline</i>Profile</a></li>-->
           <li class="divider" tabindex="-1"></li>
-      <li><a class="grey-text text-darken-1" href="<?= Yii::$app->homeUrl ?>dashboard/logout"><i class="material-icons">keyboard_tab</i>D&eacute;connexion</a></li>
+      <li><a class="grey-text text-darken-1" href="'.Yii::$app->homeUrl.'dashboard/logout"><i class="material-icons">keyboard_tab</i>D&eacute;connexion</a></li>
       </ul>';
       
   

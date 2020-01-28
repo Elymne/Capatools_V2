@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use Yii;
-use yii\helpers\FileHelper;
 use yii\base\Application;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -40,49 +39,7 @@ class DashboardController extends Controller
     }
 
 
-    public function getControllers()
-    {
 
-
-        $path = Yii::$app->getControllerPath();
-
-        $data = array();
-
-
-        $files = FileHelper::findFiles($path, array("fileTypes" => array("php")));
-
-
-        foreach ($files as $file)
-        {
-
-
-            include_once $file;
-
-             $data = array();
-
-            $filename = basename($file, '.php');
-
-
-            if (($pos = strpos($filename, 'Controller')) > 0)
-             {
-
-
-                $class_name = $controllers[] = substr($filename, 0, $pos);
-
-
-                $class_name = 'app\controllers\\'.$class_name.'Controller';
-                if($class_name != 'Dashboard')
-                {
-                    array_push( $data, $class_name);
-                }
-
-            }
-        }
-            
-    return $data;
-
-    }
-   
     public static  function hello()
     {
         echo 'hello';
@@ -98,10 +55,7 @@ class DashboardController extends Controller
     {
         //Si l'utilisateur est logger alors affiche la page principal
         if (!Yii::$app->user->isGuest) {
-            $toto = Yii::$app->user->identity->userrightapplication;
-           
-            echo "iuuu";
-            $data =  $this->getControllers();
+
             return $this->render('index');
         }
 
@@ -109,10 +63,7 @@ class DashboardController extends Controller
         $model = new LoginForm();
     
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            $toto = Yii::$app->user->identity->userrightapplication;
-            
-            echo "iuuu";
-            $data =  $this->getControllers();
+        
             return $this->render('index');
         }
 
