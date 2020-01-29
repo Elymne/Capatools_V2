@@ -10,6 +10,9 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Capaidentity;
+use app\models\Cellule;
+use app\models\userrightapplication;
 
 class DashboardController extends Controller
 {
@@ -87,6 +90,7 @@ class DashboardController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            
             return $this->goBack();
         }
 

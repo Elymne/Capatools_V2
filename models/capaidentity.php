@@ -96,6 +96,11 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         return $this->hasMany(userrightapplication::className(), ['Userid' => 'id']);
     }
 
+    public function getcellule()
+    {
+        return $this->hasOne(Cellule::className(), ['id' => 'Celluleid']);
+    }
+
 
 }
 
