@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use app\models\ForgetPasswordForm;
 use app\models\ContactForm;
 use app\models\Capaidentity;
 use app\models\Cellule;
@@ -21,7 +22,9 @@ class DashboardController extends Controller
      */
     public function behaviors()
     {
-        return [];
+        return [
+
+            ];
     }
 
     /**
@@ -48,7 +51,10 @@ class DashboardController extends Controller
         echo 'hello';
     }
 
-
+    public function actionDire()
+    {
+        echo 'hello';
+    }
     /**
      * Displays homepage.
      *
@@ -56,6 +62,7 @@ class DashboardController extends Controller
      */
     public function actionIndex()
     {
+        echo 'hello';
         //Si l'utilisateur est logger alors affiche la page principal
         if (!Yii::$app->user->isGuest) {
 
@@ -74,7 +81,6 @@ class DashboardController extends Controller
         return $this->render('login', [
             'model' => $model,
         ]);
-        //return $this->render('index');
     }
 
     /**
@@ -99,6 +105,26 @@ class DashboardController extends Controller
             'model' => $model,
         ]);
     }
+
+    /**
+     * Displays resetpassword page.
+     *
+     * @return Response|string
+     */
+    public function actionResetpassword()
+    {
+       
+        $model = new ForgetPasswordForm();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->generatednewpassword();  
+            return  $this->goHome();
+
+        }
+        return $this->render('ForgetPassword', [
+            'model' => $model,
+        ]);
+    }
+
 
     /**
      * Logout action.

@@ -20,9 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label('Utilisateur') ?>
-
-        <?= $form->field($model, 'password')->passwordInput()->label('Mot de passe')  ?>
+        <?= $form->field($model, 'email')->textInput(['autofocus' => true])->label('Email') ?>
 
         <div class="form-group">
             <div class="col-lg-offset-1 col-lg-11">
@@ -30,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 
-        <?= Html::a('Mot de passe perdu ?', ['resetpassword']) ?>
     <?php ActiveForm::end(); ?>
 
 
