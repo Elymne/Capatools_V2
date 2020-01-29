@@ -21,6 +21,10 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         parent::init();
 
     }
+
+    /**
+     * Récupère la liste des controller sauf le dashboard
+     */
     public function getControllers()
     {
 
@@ -32,7 +36,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
 
         $files = FileHelper::findFiles($path, array("fileTypes" => array("php")));
 
-
+        //Parcours du répeertoire contenant les controllers
         foreach ($files as $file)
         {
             include_once $file;
@@ -44,6 +48,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
 
                 $class_name = $controllers[] = substr($filename, 0, $pos);
 
+                //On exclu le dashboard
                 if($class_name != 'Dashboard')
                 {
                     $class_name = 'app\controllers\\'.$class_name.'Controller';
@@ -61,6 +66,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         $Ctrls =  $this->getControllers();
         $ActionsCtrl = array();
 
+        //Pour chaque controller service on récupére la listes des actions filtrer par droit d'utilisateur (nom du service, priorité d'affichage, liste des actions)
         foreach($Ctrls as &$ctrl)
         {
             $Action = $ctrl::GetActionUser(Yii::$app->user);
@@ -70,6 +76,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         }
         asort($ActionsCtrl);   
         $stringSubmenu="";
+        //Création des menus et sous menus
         foreach ($ActionsCtrl as &$Action)
         {
           

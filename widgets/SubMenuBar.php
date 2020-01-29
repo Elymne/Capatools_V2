@@ -38,6 +38,7 @@ class SubMenuBar extends Widget
     {
         $subitems = array();
         asort($this->Submenulist);
+        //Parcours des sous menu du service afin de créer les liens.
         foreach($this->Submenulist as &$submenu)
         {
             $item =  ['label' => $submenu['label'], 'url' => [ $submenu['url']],
