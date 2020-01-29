@@ -37,6 +37,7 @@ class SubMenuBar extends Widget
     public function run()
     {
         $subitems = array();
+        asort($this->Submenulist);
         foreach($this->Submenulist as &$submenu)
         {
             $item =  ['label' => $submenu['label'], 'url' => [ $submenu['url']],

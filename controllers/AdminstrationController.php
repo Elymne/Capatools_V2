@@ -53,8 +53,8 @@ class AdminstrationController extends Controller implements  ServiceInterface
     {
        // if($user->get)
         return ['Priorite' => 1,'Name' =>'Administration',
-        'items' => [ ['url' => 'Administration/index','label'=>'Liste Utilisateur','icon'=>'show_chart'],
-         ['url' =>'Administration/userform;','label'=>'Ajouter utilisateur','icon'=>'show_chart']  ]    
+        'items' => [ ['Priorite' => 1,'url' => 'Administration/index','label'=>'Liste Utilisateur','icon'=>'show_chart'],
+         ['Priorite' => 2,'url' =>'Administration/userform;','label'=>'Ajouter utilisateur','icon'=>'show_chart']  ]    
         ];
     }
 

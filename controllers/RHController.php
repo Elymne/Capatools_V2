@@ -51,9 +51,9 @@ class RHController extends Controller implements  ServiceInterface
      */
     public static  function GetActionUser($user)
     {
-       return ['Priorite' => 1,'Name' =>'RH',
-        'items' => [ ['url' => 'RH/ActionName','label'=>'ooooo','icon'=>'show_chart'],
-         ['url' =>'RH/nn;','label'=>'kkklisateur','icon'=>'show_chart']  ]    
+       return ['Priorite' => 2,'Name' =>'RH',
+        'items' => [['Priorite' => 2,'url' =>'RH/nn;','label'=>'Demande de congé','icon'=>'show_chart'] , ['Priorite' => 1,'url' => 'RH/ActionName','label'=>'Etat des congés','icon'=>'show_chart'],
+          ]    
         ];
     }
 

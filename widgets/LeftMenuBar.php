@@ -72,44 +72,19 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         $stringSubmenu="";
         foreach ($ActionsCtrl as &$Action)
         {
+          
           $stringSubmenu = $stringSubmenu. SubMenuBar::widget(['titleSub'=> $Action['Name'], 'Submenulist'=> $Action['items']]);
       
         }
         
-       // SubMenuBar::widget(['titleSub'=>'toto', 'Submenulist'=> $Action[1]['items']]);
-
-
         $string = 
         '<ul id="sidenav-left" class="sidenav sidenav-fixed">
         <li><a href="'.Yii::$app->homeUrl.'" class="logo-container">'.Yii::$app->name.'<i class="material-icons left"><img src="'.Yii::$app->homeUrl.'images/logo.png"/></i></a></li>
         <li class="no-padding">
-      '.$stringSubmenu.'  
-        </li>
-        </ul>
+      '.$stringSubmenu.'</li>
+        </ul>';
 
 
-
-      <div id="dropdown1" class="dropdown-content notifications">
-        <div class="notifications-title">notifications</div>
-        <div class="card">
-          <div class="card-content"><span class="card-title">Joe Smith made a purchase</span>
-            <p>Content</p>
-          </div>
-          <div class="card-action"><a href="#!">view</a><a href="#!">dismiss</a></div>
-        </div>
-        <div class="card">
-          <div class="card-content"><span class="card-title">Daily Traffic Update</span>
-            <p>Content</p>
-          </div>
-          <div class="card-action"><a href="#!">view</a><a href="#!">dismiss</a></div>
-        </div>
-        <div class="card">
-          <div class="card-content"><span class="card-title">New User Joined</span>
-            <p>Content</p>
-          </div>
-          <div class="card-action"><a href="#!">view</a><a href="#!">dismiss</a></div>
-        </div>
-      </div>';
        
       return $string;
     }
