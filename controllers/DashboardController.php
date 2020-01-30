@@ -8,12 +8,19 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ForgetPasswordForm;
+
+//Model utile pour login
+use app\models\login\LoginForm;
+use app\models\login\ForgetPasswordForm;
+
+
 use app\models\ContactForm;
-use app\models\Capaidentity;
-use app\models\Cellule;
-use app\models\userrightapplication;
+
+
+//Model de données utilisateurs.
+use app\models\User\Capaidentity;
+use app\models\User\Cellule;
+use app\models\User\userrightapplication;
 
 class DashboardController extends Controller
 {
@@ -96,21 +103,49 @@ class DashboardController extends Controller
      */
     public function actionLogin()
     {
+        $resultat;
         //Dans le cas d'une action d'autologin
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
+           $capuser =  Yii::$app->user->getIdentity();
+            if($capuser->flagPassword)
+            {
+                //Lancement du formulaire de renouvellement de mot passe utilisateur
+            }
+            else
+            {
+                $resultat = $this->goHome();
+            }
         }
+        else
+        {
+            $model = new LoginForm();
+            if ($model->load(Yii::$app->request->post()) && $model->login())
+            {
+                
+                
+                //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
+            $capuser =  Yii::$app->user->getIdentity();
+                if($capuser->flagPassword)
+                {
+                    //Lancement du formulaire de renouvellement de mot passe utilisateur
+                }
+                else
+                {
+                    $resultat = $this->goBack();
+                }
+            }
+            else
+            {
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            
-            return $this->goBack();
+                $model->password = '';
+                $resultat =  $this->render('login', [
+                    'model' => $model,
+                ]);
+            }
         }
+        return $resultat;
 
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
     }
 
     /**

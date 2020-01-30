@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\login;
 
 use Yii;
 use yii\base\Model;
@@ -11,9 +11,11 @@ use yii\base\Model;
  * @property User|null $user This property is read-only.
  *
  */
-class ForgetPasswordForm extends Model
+class FirstConnexion extends Model
 {
-    public $email;
+    public $password;
+    public $newpassword;
+    public $confirmationpassword;
 
     /**
      * @return array the validation rules.
@@ -22,10 +24,13 @@ class ForgetPasswordForm extends Model
     {
         return [
             // username and password are both required
-            ['email', 'required', 'message' => 'L\'adresse email ne peut être vide.'],
-            ['email', 'email', 'message' => 'L\'adresse email doit être valide.']   ,
-           // password is validated by validateUserMail()
-            ['email', 'validateUserMail'],
+            ['password', 'required', 'message' => 'Veulliez renseigner l\'ancien mot de passe'],
+            ['newpassword', 'required', 'message' => 'Veulliez renseigner un nouveau mot de passe']   ,
+            ['confirmationpassword', 'required', 'message' => 'Veulliez confirmer le nouveau mot de passe']   ,
+           // password is validated by validatePasseword()
+            ['newpassword', 'validatePasseword'],
+            // password is validated by validateConfirmatedPasseword()
+            ['confirmationpassword', 'validateConfirmatedPasseword'],
         ];
      
     }
@@ -57,15 +62,13 @@ class ForgetPasswordForm extends Model
     public function generatednewpassword()
     {
 
-
- 
         if ($this->validate()) {
             
             $user = Capaidentity::findByemail($this->email);
             $Newpassword = $user->generatePasswordResetPassord();
             Yii::$app->mailer->compose()
                 ->setTo($this->email)
-                ->setFrom('juien.viaud@capacites.fr')
+                ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
                 ->setSubject('mot de passe')
                 ->setTextBody('Le nouveau mdp : '. $Newpassword)
                 ->send();

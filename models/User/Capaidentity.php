@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\User;
 use Yii;
 use yii\base\Security;
 use yii\db\ActiveRecord;
@@ -78,6 +78,9 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
     {
         //Generate le nouveau mot de passe de 12 characteres
         $Newpassword = Yii::$app->getSecurity()->generateRandomString(12) ;
+
+        $this->flagPassword = true;
+
         //Save Hash du nouveau password
         $this->SaveNewPasswordPassord($Newpassword);
 
@@ -128,6 +131,7 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         return Yii::$app->getSecurity()->validatePassword($pass, $this->password_hash);
     }
 
+    
     public function getuserrightapplication()
     {
         
