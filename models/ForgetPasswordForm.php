@@ -23,11 +23,31 @@ class ForgetPasswordForm extends Model
         return [
             // username and password are both required
             ['email', 'required', 'message' => 'L\'adresse email ne peut être vide.'],
-            ['email', 'email', 'message' => 'L\'adresse email doit être valide.']
+            ['email', 'email', 'message' => 'L\'adresse email doit être valide.']   ,
+           // password is validated by validateUserMail()
+            ['email', 'validateUserMail'],
         ];
      
     }
 
+    /**
+     * Validates the email.
+     * This method serves as the inline validation for email.
+     *
+     * @param string $attribute the attribute currently being validated
+     * @param array $params the additional name-value pairs given in the rule
+     */
+    public function validateUserMail($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $user = Capaidentity::findByemail($this->email);
+
+            if (!$user) {
+                $this->addError($attribute, 'l\'adresse email est inconnue');
+            }
+
+        }
+    }
 
     /**
      * Sends an email to the specified email address using the information collected by this model.
@@ -37,12 +57,17 @@ class ForgetPasswordForm extends Model
     public function generatednewpassword()
     {
 
+
+ 
         if ($this->validate()) {
+            
+            $user = Capaidentity::findByemail($this->email);
+            $Newpassword = $user->generatePasswordResetPassord();
             Yii::$app->mailer->compose()
                 ->setTo($this->email)
                 ->setFrom('juien.viaud@capacites.fr')
                 ->setSubject('mot de passe')
-                ->setTextBody('winner')
+                ->setTextBody('Le nouveau mdp : '. $Newpassword)
                 ->send();
 
             return true;

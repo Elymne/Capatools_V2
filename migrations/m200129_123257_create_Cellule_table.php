@@ -43,6 +43,8 @@ class m200129_123257_create_Cellule_table extends Migration
         //On change de nom la colonne name qui redondante en colonne pour stocker les adresses email.
         $this->renameColumn('capaidentity','name','email');
 
+        ///Modification des données de test pour associer l'utilisateur toto à la cellule AROBO
+        $this->update('capaidentity', ['email' => 'toto@gmail.com'], ['username' => 'toto']);
     }
 
     /**

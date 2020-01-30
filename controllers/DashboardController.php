@@ -25,7 +25,7 @@ class DashboardController extends Controller
         return [
             'access' => [
             'class' => AccessControl::className(),
-            'only' => ['logout','contact','resetpassword'],
+            'only' => ['logout','contact','resetpassword','login'],
             'rules' => [
                 [
                     'actions' => ['logout','contact'],
@@ -33,7 +33,7 @@ class DashboardController extends Controller
                     'roles' => ['@'],
                 ],
                 [
-                    'actions' => ['resetpassword'],
+                    'actions' => ['resetpassword','login'],
                     'allow' => true,
                     'roles' => ['?'],
                 ],
@@ -60,8 +60,6 @@ class DashboardController extends Controller
         ];
     }
 
-
-
  
     /**
      * Displays homepage.
@@ -70,7 +68,7 @@ class DashboardController extends Controller
      */
     public function actionIndex()
     {
-        echo 'hello';
+
         //Si l'utilisateur est logger alors affiche la page principal
         if (!Yii::$app->user->isGuest) {
 
@@ -98,6 +96,7 @@ class DashboardController extends Controller
      */
     public function actionLogin()
     {
+        //Dans le cas d'une action d'autologin
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -121,10 +120,10 @@ class DashboardController extends Controller
      */
     public function actionResetpassword()
     {
-       //if(Yii::$app->user->isGuest) 
+
        {
             $model = new ForgetPasswordForm();
-            if ($model->load(Yii::$app->request->post())) {
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $model->generatednewpassword();  
                 return  $this->goHome();
 

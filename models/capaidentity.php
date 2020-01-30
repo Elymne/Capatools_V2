@@ -31,6 +31,17 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         return static::findOne(['username' => $name]);
     }
 
+    /**
+     * Trouve une identité à partir de l'email donné.
+     *
+     * @param string|int $email de l'identifiant à rechercher
+     * @return username|null l'objet identité qui correspond à l'email donné
+     */
+    public static function findByemail($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
+
 
     /**
      * Trouve une identité à partir du jeton donné
@@ -58,6 +69,33 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
     {
         return $this->auth_key;
     }
+
+   /**
+     * Generates new password
+     * @return string le nouveau password
+     */
+    public function generatePasswordResetPassord()
+    {
+        //Generate le nouveau mot de passe de 12 characteres
+        $Newpassword = Yii::$app->getSecurity()->generateRandomString(12) ;
+        //Save Hash du nouveau password
+        $this->SaveNewPasswordPassord($Newpassword);
+
+        return $Newpassword;
+        
+    }
+
+   /**
+     * Sauvegarde le hash du nouveau password
+      * @param string $password le mot de passe
+    */
+    public function SaveNewPasswordPassord($password)
+    {
+        $this->password_hash = Yii::$app->getSecurity()->generatePasswordHash($password);
+        
+    }
+
+
 
     /**
      * @param string $authKey
