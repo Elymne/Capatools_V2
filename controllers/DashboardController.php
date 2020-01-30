@@ -23,6 +23,22 @@ class DashboardController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+            'class' => AccessControl::className(),
+            'only' => ['logout','contact','resetpassword'],
+            'rules' => [
+                [
+                    'actions' => ['logout','contact'],
+                    'allow' => true,
+                    'roles' => ['@'],
+                ],
+                [
+                    'actions' => ['resetpassword'],
+                    'allow' => true,
+                    'roles' => ['?'],
+                ],
+            ],
+        ],
 
             ];
     }
@@ -46,15 +62,7 @@ class DashboardController extends Controller
 
 
 
-    public static  function hello()
-    {
-        echo 'hello';
-    }
-
-    public function actionDire()
-    {
-        echo 'hello';
-    }
+ 
     /**
      * Displays homepage.
      *
@@ -113,16 +121,18 @@ class DashboardController extends Controller
      */
     public function actionResetpassword()
     {
-       
-        $model = new ForgetPasswordForm();
-        if ($model->load(Yii::$app->request->post())) {
-            $model->generatednewpassword();  
-            return  $this->goHome();
+       //if(Yii::$app->user->isGuest) 
+       {
+            $model = new ForgetPasswordForm();
+            if ($model->load(Yii::$app->request->post())) {
+                $model->generatednewpassword();  
+                return  $this->goHome();
 
-        }
-        return $this->render('ForgetPassword', [
-            'model' => $model,
-        ]);
+            }
+            return $this->render('ForgetPassword', [
+                'model' => $model,
+            ]);
+       }
     }
 
 

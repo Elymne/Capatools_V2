@@ -24,6 +24,7 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\capaidentity',
+            'loginUrl'=>'index',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
