@@ -33,10 +33,10 @@ class DashboardController extends Controller
         return [
             'access' => [
             'class' => AccessControl::className(),
-            'only' => ['logout','contact','resetpassword','login'],
+            'only' => ['logout','firstlogin','resetpassword','login'],
             'rules' => [
                 [
-                    'actions' => ['logout','contact'],
+                    'actions' => ['logout','firstlogin'],
                     'allow' => true,
                     'roles' => ['@'],
                 ],

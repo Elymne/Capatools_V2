@@ -46,13 +46,12 @@ class SubMenuBar extends Widget
             array_unshift( $subitems, $item);
       
         }
-
         $string = Menu::widget([
             'items' =>[
                 [
                'label' => $this->titleSub,
                 'options'=>['class'=>'bold waves-effect'],
-                'template' => '<a class="collapsible-header" >{label}<i class="material-icons chevron">chevron_left</i></a>',
+                'template' => '<a  class="collapsible-header" >{label}<i class="material-icons chevron">chevron_left</i></a>',
                 'items' =>$subitems
                   
                 ]

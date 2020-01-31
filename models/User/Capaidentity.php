@@ -5,9 +5,23 @@ use Yii;
 use yii\base\Security;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-
+use yii\data\ActiveDataProvider;
+use yii\base\Model;
 class Capaidentity extends ActiveRecord  implements IdentityInterface
 {
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['id', 'Celluleid', 'flagPassword'], 'integer'],
+            [['username', 'email', 'auth_key','cellule', 'password_hash'], 'safe'],
+        ];
+    }
+
+
 
     /**
      * Trouve une identité à partir de l'identifiant donné.
@@ -143,6 +157,66 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         return $this->hasOne(Cellule::className(), ['id' => 'Celluleid']);
     }
 
+   /**
+     * {@inheritdoc}
+     */
+    public function scenarios()
+    {
+        // bypass scenarios() implementation in the parent class
+        return Model::scenarios();
+    }
 
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function search($params)
+    {
+        $query = Capaidentity::find();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'username' => SORT_ASC,
+                ]
+            ],
+        ]);
+     $dataProvider->sort->attributes['cellule'] = [
+            'asc' => ['cellule.name' => SORT_ASC],
+            'desc' => ['cellule.name' => SORT_DESC],];
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            $query->joinWith(['cellule']);
+            return $dataProvider;
+        }
+        // filter by country name
+        $query->joinWith(['cellule' => function ($q) {
+        $q->where('cellule.name LIKE "%' . $this->cellule . '%"');
+        }]);
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'Celluleid' => $this->Celluleid,
+            'flagPassword' => $this->flagPassword,
+        ]);
+        
+        $query->andFilterWhere(['like', 'username', $this->username])
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'auth_key', $this->auth_key])
+            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
+            ->andFilterWhere(['like', 'cellule', $this->cellule]);
+
+        return $dataProvider;
+    }
 }
 
