@@ -82,7 +82,7 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         $this->flagPassword = true;
 
         //Save Hash du nouveau password
-        $this->SaveNewPasswordPassord($Newpassword);
+        $this->SetNewPassword($Newpassword);
 
         return $Newpassword;
         
@@ -92,7 +92,7 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
      * Sauvegarde le hash du nouveau password
       * @param string $password le mot de passe
     */
-    public function SaveNewPasswordPassord($password)
+    public function SetNewPassword($password)
     {
         $this->password_hash = Yii::$app->getSecurity()->generatePasswordHash($password);
         

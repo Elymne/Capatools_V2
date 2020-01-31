@@ -27,7 +27,7 @@ AppAsset::register($this);
 </head>
 <body class="has-fixed-sidenav">
 <?php $this->beginBody();
-if(!Yii::$app->user->isGuest )
+if(!Yii::$app->user->isGuest && Yii::$app->controller->action->id != 'firstlogin' )
 {
 TopMenuBar::begin();
 

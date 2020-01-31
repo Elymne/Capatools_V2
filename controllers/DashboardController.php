@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 //Model utile pour login
 use app\models\login\LoginForm;
 use app\models\login\ForgetPasswordForm;
+use app\models\login\FirstConnexionForm;
 
 
 use app\models\ContactForm;
@@ -87,7 +88,17 @@ class DashboardController extends Controller
     
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
         
+                        //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
+           $capuser =  Yii::$app->user->getIdentity();
+           if($capuser->flagPassword)
+           {
+               //Lancement du formulaire de renouvellement de mot passe utilisateur
+               $this->redirect('dashboard/firstlogin');
+           }
+           else
+           {
             return $this->render('index');
+           }
         }
 
         $model->password = '';
@@ -103,7 +114,7 @@ class DashboardController extends Controller
      */
     public function actionLogin()
     {
-        $resultat;
+        $resultat  = $this->goHome();
         //Dans le cas d'une action d'autologin
         if (!Yii::$app->user->isGuest) {
             //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
@@ -111,6 +122,7 @@ class DashboardController extends Controller
             if($capuser->flagPassword)
             {
                 //Lancement du formulaire de renouvellement de mot passe utilisateur
+                $this->redirect('dashboard/firstlogin');
             }
             else
             {
@@ -129,6 +141,7 @@ class DashboardController extends Controller
                 if($capuser->flagPassword)
                 {
                     //Lancement du formulaire de renouvellement de mot passe utilisateur
+                    $this->redirect('dashboard/firstlogin');
                 }
                 else
                 {
@@ -169,6 +182,26 @@ class DashboardController extends Controller
        }
     }
 
+    /**
+     * Displays firstlogin page.
+     *
+     * @return Response|string
+     */
+    public function actionFirstlogin()
+    {
+
+       {
+            $model = new FirstConnexionForm();
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                $model->SaveNewpassword();  
+                return  $this->goHome();
+
+            }
+            return $this->render('FirstConnexion', [
+                'model' => $model,
+            ]);
+       }
+    }
 
     /**
      * Logout action.

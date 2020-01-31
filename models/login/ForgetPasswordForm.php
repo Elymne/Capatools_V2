@@ -5,6 +5,7 @@ namespace app\models\login;
 use Yii;
 use yii\base\Model;
 
+use app\models\User\Capaidentity;
 /**
  * LoginForm is the model behind the login form.
  *
@@ -61,6 +62,7 @@ class ForgetPasswordForm extends Model
             
             $user = Capaidentity::findByemail($this->email);
             $Newpassword = $user->generatePasswordResetPassord();
+            $user->save();
             Yii::$app->mailer->compose()
                 ->setTo($this->email)
                 ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])

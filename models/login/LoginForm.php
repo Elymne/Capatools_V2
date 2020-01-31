@@ -4,7 +4,7 @@ namespace app\models\login;
 
 use Yii;
 use yii\base\Model;
-
+use app\models\User\Capaidentity;
 /**
  * LoginForm is the model behind the login form.
  *

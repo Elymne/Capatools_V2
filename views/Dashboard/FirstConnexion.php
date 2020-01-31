@@ -20,8 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-        <?= $form->field($model, 'email')->textInput(['autofocus' => true])->label('Email') ?>
-
+        <?= $form->field($model, 'password')->passwordInput()->label('Ancien mot de passe')  ?>
+        <?= $form->field($model, 'newpassword')->passwordInput()->label('Nouveau mot de passe')  ?>
+        <?= $form->field($model, 'confirmationpassword')->passwordInput()->label('Confirmer le mot de passe')  ?>
         <div class="form-group">
             <div class="col-lg-offset-1 col-lg-11">
                 <?= Html::submitButton('Envoyer', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
