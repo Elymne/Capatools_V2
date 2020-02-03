@@ -4,14 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 use app\models\User\Cellule;
+use yii\helpers\ArrayHelper;
+$value = Cellule::find()->all();
+$listData=ArrayHelper::map($value,'identifiant','name');
 
-$value = Cellule::find()->select('name')->all();
-$celle =array();
-foreach ($value as $val)
-{
-   
-    array_unshift(  $celle, $val['name']);
-}
+asort($listData);
 if($model->cellule != null)
 {
     $comboxselect = $model->cellule->name;
@@ -34,7 +31,7 @@ else
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label('Email :') ?>
 
-    <?=  $form->field($model, 'celname')->dropDownList($celle,['prompt'=>$comboxselect ])->label('Nom de la cellule :');   ?>
+    <?=  $form->field($model, 'celname')->dropDownList($listData,['prompt'=>$comboxselect ])->label('Nom de la cellule :');   ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

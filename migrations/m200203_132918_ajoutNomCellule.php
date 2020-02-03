@@ -20,118 +20,116 @@ class m200203_132918_ajoutNomCellule extends Migration
 
         //Ajout de la cellule AROBO
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'AROBO',
-            'name' => 'Robotique et Procede'
+            'identifiant' => 'AIERA',
+            'name' => 'IREALITE'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'AIREA',
-            'name' => 'Irealite'
+            'identifiant' => 'ACMER',
+            'name' => 'MER'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ACMER',
-            'name' => 'Mer'
+            'identifiant' => 'ACAPT',
+            'name' => 'CAPTEURS ET COMPOSITES'
+        ]);
+
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'AIXEA',
+            'name' => 'IXEAD'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ACAPT',
-            'name' => 'Capteurs et Composites'
+            'identifiant' => 'AERIM',
+            'name' => 'ERIMAT'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'AIXEA',
-            'name' => 'Ixead'
+            'identifiant' => 'AIXPE',
+            'name' => 'IXPEL'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'AERIM',
-            'name' => 'Erimat'
+            'identifiant' => 'ACSUP',
+            'name' => 'SUPPORT'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ACSUP',
-            'name' => 'Support'
+            'identifiant' => 'AROBO',
+            'name' => 'ROBOTIQUE ET PROCEDES'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ACBSO',
-            'name' => 'Cbs'
+            'identifiant' => 'ACBSO',
+            'name' => 'CBS'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ATHCH',
+            'identifiant' => 'ATHCH',
             'name' => 'THERACH'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'AGENO',
+            'identifiant' => 'AGENO',
             'name' => 'BIRD'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ACPCE',
-            'name' => 'CPC ENG'
+            'identifiant' => 'ACPCE',
+            'name' => 'CPC'
         ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'AINSI',
-            'name' => 'Insilico'
+            'identifiant' => 'AINSI',
+            'name' => 'INSILICO'
         ]); 
 
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ABIOS',
-            'name' => 'Biosys'
+            'identifiant' => 'ABIOS',
+            'name' => 'BIOSYS'
         ]); 
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'AKNOW',
-            'name' => 'Know Edge'
+            'identifiant' => 'AKNOW',
+            'name' => 'KNOWEDGE'
         ]);
 
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ADZYM',
-            'name' => 'D-Zyme'
+            'identifiant' => 'ADZYM',
+            'name' => 'DZYME'
         ]);   
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'XXXXXXXXXXXXXXX',
+            'identifiant' => 'XXXXXXXXXXXXXXX',
             'name' => 'Gepea'
         ]); 
+
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ASPEC',
-            'name' => 'Spectrometrise'
-        ]);  
-        $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'XXXXXXXXXXXXXXXXXXXXXX',
-            'name' => 'C.E.C'
-        ]);  
-        $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'XXXXXXXXXXXXXXXX',
-            'name' => 'EASI'
-        ]);    
-        $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'XXXXXXXXXXXXXXXX',
-            'name' => 'ITIS!'
-        ]);    
-        $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ALTENXXXXXXXXXXXXXX',
+            'identifiant' => 'ALTEN',
             'name' => 'LTN'
-        ]);   
+        ]);    
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'XXXXXXXXXXXX',
-            'name' => 'OBS LITTORAL'
-        ]);  
-        $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'AVALI',
+            'identifiant' => 'AVALI',
             'name' => 'VALINBTP'
         ]);  
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'APATR',
+            'identifiant' => 'APATR',
             'name' => 'PATRIMOINE'
         ]);  
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ATHCL',
+            'identifiant' => 'ATHCL',
             'name' => 'THERACLM'
-        ]);  
+        ]);
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ATHCL',
-            'name' => 'THERACLM'
-        ]);  
-        $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ATHPC',
+            'identifiant' => 'ATHPC',
             'name' => 'THERAPC'
         ]); 
         $this->insert('{{%Cellule}}', [
-            'idententifiant' => 'ACECO',
-            'name' => 'Economie Circulaire'
+            'identifiant' => 'ACECO',
+            'name' => 'ECONOMIE CIRCULAIRE'
+        ]);
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'ASPEC',
+            'name' => 'SPECTROMAITRISE'
+        ]); 
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'AEREL',
+            'name' => 'ERELUEC'
+        ]);  
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'AEASI',
+            'name' => 'EASI'
+        ]); 
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'ATHAL',
+            'name' => 'ATHAL'
         ]);  
     }
 

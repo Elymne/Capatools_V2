@@ -8,7 +8,7 @@ use app\models\User\Capaidentitysearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\helpers\VarDumper;
 /**
  * AdministrationController implements the CRUD actions for Capaidentity model.
  */
@@ -66,8 +66,13 @@ class AdministrationController extends Controller
     {
         $model = new Capaidentity();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        VarDumper::dump('iuuiui');
+        VarDumper::dump(Yii::$app->request->post());
+        if ($model->load(Yii::$app->request->post()))
+        {
+            if( $model->save()) {
+           // return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [

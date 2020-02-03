@@ -14,7 +14,7 @@ class m200129_123257_create_Cellule_table extends Migration
     {
         $this->createTable('{{%Cellule}}', [
             'id' => $this->primaryKey(),
-            'idententifiant' => $this->string(),
+            'identifiant' => $this->string(),
             'name' => $this->string(),
         ]);
         $this->addColumn('capaidentity', 'Celluleid', $this->integer());
@@ -33,7 +33,7 @@ class m200129_123257_create_Cellule_table extends Migration
        //Ajout de la cellule AROBO
         $this->insert('{{%Cellule}}', [
             'id' => '1',
-            'idententifiant' => 'AROBO',
+            'identifiant' => 'AROBO',
             'name' => 'Robotique et Procede'
         ]);  
 
