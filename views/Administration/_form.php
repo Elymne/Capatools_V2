@@ -12,7 +12,14 @@ foreach ($value as $val)
    
     array_unshift(  $celle, $val['name']);
 }
-
+if($model->cellule != null)
+{
+    $comboxselect = $model->cellule->name;
+}
+else
+{
+    $comboxselect = 'Choisir la cellule ...' ;
+}
 /* @var $this yii\web\View */
 /* @var $model app\models\User\Capaidentity */
 /* @var $form yii\widgets\ActiveForm */
@@ -23,11 +30,11 @@ foreach ($value as $val)
     <?php $form = ActiveForm::begin(); ?>
 
    
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'username')->textInput(['maxlength' => true])->label('Nom de l\'utilisateur :') ?>
 
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label('Email :') ?>
 
-    <?= $form->field($model->cellule, 'name')->dropDownList($celle,['prompt'=>$model->cellule->name])->label('Nom de la cellule')?>
+    <?=  $form->field($model, 'celname')->dropDownList($celle,['prompt'=>$comboxselect ])->label('Nom de la cellule :');   ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

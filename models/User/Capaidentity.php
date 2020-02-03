@@ -10,7 +10,7 @@ use yii\base\Model;
 class Capaidentity extends ActiveRecord  implements IdentityInterface
 {
 
-
+    public $celname;
     public static function tableName()
     {
         return 'Capaidentity';
