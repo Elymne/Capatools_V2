@@ -31,7 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'username',
             'email:email',
-            'Celluleid',
+            [                      // the owner name of the model
+                'label' => 'Nom de la cellule',
+                'attribute'=>'cellule.name',
+            ],
         ],
     ]) ?>
 
