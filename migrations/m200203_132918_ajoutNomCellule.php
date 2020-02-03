@@ -14,7 +14,10 @@ class m200203_132918_ajoutNomCellule extends Migration
     {
         
         $this->delete('Cellule');
-        
+
+        //Redémarre l'autoincrement à 1
+        $this->execute('ALTER TABLE Cellule AUTO_INCREMENT = 1');
+
         //Ajout de la cellule AROBO
         $this->insert('{{%Cellule}}', [
             'idententifiant' => 'AROBO',
@@ -139,7 +142,7 @@ class m200203_132918_ajoutNomCellule extends Migration
     {
         $this->delete('Cellule');
 
-        return false;
+        return true;
     }
 
     /*
