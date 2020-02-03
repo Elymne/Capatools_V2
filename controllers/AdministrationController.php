@@ -35,7 +35,7 @@ class AdministrationController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new Capaidentity();
+        $searchModel = new Capaidentitysearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

@@ -33,10 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Cellule',
                 'format' => 'ntext',
-                'attribute'=>'cellule',
-                'value' => function($model) {
-                    return $model->cellule->name;
-                },
+                'attribute'=>'cellule.name',
+                
             ],
             ['class' => 'yii\grid\ActionColumn',
             'template' => '{view} {update} {delete} {link}',
