@@ -61,7 +61,7 @@ class ForgetPasswordForm extends Model
         if ($this->validate()) {
             
             $user = Capaidentity::findByemail($this->email);
-            $Newpassword = $user->generatePasswordResetPassord();
+            $Newpassword = $user->generatePassword();
             $user->save();
             Yii::$app->mailer->compose()
                 ->setTo($this->email)

@@ -66,12 +66,11 @@ class AdministrationController extends Controller
     {
         $model = new Capaidentity();
 
-        VarDumper::dump('iuuiui');
-        VarDumper::dump(Yii::$app->request->post());
         if ($model->load(Yii::$app->request->post()))
         {
+            $model->generatePasswordAndmail();
             if( $model->save()) {
-           // return $this->redirect(['view', 'id' => $model->id]);
+                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 

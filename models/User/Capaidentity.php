@@ -24,11 +24,23 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
     {
         return [
 
+            // email required
+            ['email', 'required', 'message' => 'Veulliez renseigner l\'email de l\'utilisateur'],
+            ['username', 'required', 'message' => 'Veulliez renseigner le nom de l\'utilisateur'],
+            ['Celluleid', 'required', 'message' => 'Veulliez selectionner la cellule de l\'utilisateur'],
+            ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],  
+            ['Celluleid','validateCelid' , 'message' => 'Le nom de la cellule est inconnue'],
         ];
     }
 
+    public function validateCelid($param)
+    {
+        if(!Cellule::find()->where(['id'=>$this->Celluleid])->exists())
+        {
+            $this->addError($attribute, 'la cellule n\'existe pas');
+        }
 
-
+    }
     /**
      * Trouve une identité à partir de l'identifiant donné.
      *
@@ -90,11 +102,29 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         return $this->auth_key;
     }
 
+
+  /**
+     * Generates new password
+     * @return string le nouveau password
+     */
+    public function generatePasswordAndmail()
+    {
+
+        $Newpassword = $this->generatePassword();        
+        $this->save();
+        Yii::$app->mailer->compose()
+        ->setTo($this->email)
+        ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
+        ->setSubject('mot de passe')
+        ->setTextBody('Le nouveau mdp : '. $Newpassword)
+        ->send();
+
+    }
    /**
      * Generates new password
      * @return string le nouveau password
      */
-    public function generatePasswordResetPassord()
+    public function generatePassword()
     {
         //Generate le nouveau mot de passe de 12 characteres
         $Newpassword = Yii::$app->getSecurity()->generateRandomString(12) ;

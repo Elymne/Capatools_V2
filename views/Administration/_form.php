@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 use app\models\User\Cellule;
 use yii\helpers\ArrayHelper;
 $value = Cellule::find()->all();
-$listData=ArrayHelper::map($value,'identifiant','name');
+$listData=ArrayHelper::map($value,'id','name');
 
 asort($listData);
 if($model->cellule != null)
@@ -31,7 +31,7 @@ else
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label('Email :') ?>
 
-    <?=  $form->field($model, 'celname')->dropDownList($listData,['prompt'=>$comboxselect ])->label('Nom de la cellule :');   ?>
+    <?=  $form->field($model, 'Celluleid')->dropDownList($listData,['prompt'=>$comboxselect ])->label('Nom de la cellule :');   ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

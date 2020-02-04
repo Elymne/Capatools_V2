@@ -58,15 +58,11 @@ class m200203_132918_ajoutNomCellule extends Migration
         ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ATHCH',
-            'name' => 'THERACH'
-        ]);
-        $this->insert('{{%Cellule}}', [
-            'identifiant' => 'AGENO',
-            'name' => 'BIRD'
+            'name' => 'THERASSAY CH'
         ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ACPCE',
-            'name' => 'CPC'
+            'name' => 'CPC ENG'
         ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'AINSI',
@@ -83,12 +79,8 @@ class m200203_132918_ajoutNomCellule extends Migration
         ]);
 
         $this->insert('{{%Cellule}}', [
-            'identifiant' => 'ADZYM',
-            'name' => 'DZYME'
-        ]);   
-        $this->insert('{{%Cellule}}', [
-            'identifiant' => 'XXXXXXXXXXXXXXX',
-            'name' => 'Gepea'
+            'identifiant' => 'AGEPR',
+            'name' => 'GP'
         ]); 
 
         $this->insert('{{%Cellule}}', [
@@ -98,39 +90,70 @@ class m200203_132918_ajoutNomCellule extends Migration
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'AVALI',
             'name' => 'VALINBTP'
-        ]);  
-        $this->insert('{{%Cellule}}', [
-            'identifiant' => 'APATR',
-            'name' => 'PATRIMOINE'
-        ]);  
-        $this->insert('{{%Cellule}}', [
-            'identifiant' => 'ATHCL',
-            'name' => 'THERACLM'
-        ]);
-        $this->insert('{{%Cellule}}', [
-            'identifiant' => 'ATHPC',
-            'name' => 'THERAPC'
         ]); 
-        $this->insert('{{%Cellule}}', [
-            'identifiant' => 'ACECO',
-            'name' => 'ECONOMIE CIRCULAIRE'
-        ]);
+        
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ASPEC',
             'name' => 'SPECTROMAITRISE'
         ]); 
         $this->insert('{{%Cellule}}', [
+            'identifiant' => 'APATR',
+            'name' => 'PATRIMOINE'
+        ]);
+            
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'ADZYM',
+            'name' => 'DZYME'
+        ]);  
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'ATHCL',
+            'name' => 'THERASSAY CLM'
+        ]);
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'ATHPC',
+            'name' => 'THERASSAY PC'
+        ]); 
+        $this->insert('{{%Cellule}}', [
             'identifiant' => 'AEREL',
             'name' => 'ERELUEC'
-        ]);  
+        ]);   
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'ACECO',
+            'name' => 'ECONOMIE CIRCULAIRE'
+        ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'AEASI',
             'name' => 'EASI'
         ]); 
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ATHAL',
-            'name' => 'ATHAL'
-        ]);  
+            'name' => 'THALASSOMICS'
+        ]);
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'AEAU0',
+            'name' => 'EAU'
+        ]);
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'AACCE',
+            'name' => 'ACCESS MEMORIA'
+        ]);
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'AOBSL',
+            'name' => 'OBSERVATOIRE DU LITTORAL'
+        ]);
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'AOBS2',
+            'name' => 'OBSERVATOIRE DU LITTORAL 2'
+        ]);
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'AEPUM',
+            'name' => 'EPUM'
+        ]);
+        $this->insert('{{%Cellule}}', [
+            'identifiant' => 'AENFA',
+            'name' => 'ENFANCE'
+        ]);
+         
     }
 
     /**
