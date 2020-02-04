@@ -1,6 +1,5 @@
 <?php
 namespace app\widgets;
-use yii\helpers\FileHelper;
 use Yii;
 /**
  * Cette classe permet de générer le menu utilisateur
@@ -22,48 +21,9 @@ class LeftMenuBar extends \yii\bootstrap\Widget
 
     }
 
-    /**
-     * Récupère la liste des controller sauf le dashboard
-     */
-    public function getControllers()
-    {
-
-
-        $path = Yii::$app->getControllerPath();
-
-        $data = array();
-
-
-        $files = FileHelper::findFiles($path, array("fileTypes" => array("php")));
-
-        //Parcours du répeertoire contenant les controllers
-        foreach ($files as $file)
-        {
-            include_once $file;
- 
-            $filename = basename($file, '.php');
-
-            if (($pos = strpos($filename, 'Controller')) > 0)
-             {
-
-                $class_name = $controllers[] = substr($filename, 0, $pos);
-
-                //On exclu le dashboard
-                if($class_name != 'Dashboard')
-                {
-                    $class_name = 'app\controllers\\'.$class_name.'Controller';
-                    array_unshift( $data, $class_name);
-                }
-
-            }
-        }
-            
-    return $data;
-
-    }
     public function run()
     {
-        $Ctrls =  $this->getControllers();
+        $Ctrls =  Yii::$app->DiscoverService->getServices();
         $ActionsCtrl = array();
 
         //Pour chaque controller service on récupére la listes des actions filtrer par droit d'utilisateur (nom du service, priorité d'affichage, liste des actions)

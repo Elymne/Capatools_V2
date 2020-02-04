@@ -54,6 +54,11 @@ $config = [
             'rules' => [
             ],
         ],
+        'DiscoverService' => [
+         
+            'class' => 'app\components\DiscoverService',
+
+            ],
         
     ],
     'name' => 'CAPATOOLS V2.0',
