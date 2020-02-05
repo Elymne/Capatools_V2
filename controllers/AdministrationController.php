@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\User\Capaidentity;
+use app\models\User\userrightapplication;
 use app\models\User\Capaidentitysearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -68,6 +69,22 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post()))
         {
+            $array = Yii::$app->request->post('Capaidentity')['userrightapplication'];
+            $arraykey = array_keys($array);
+            foreach( $arraykey as $Service)
+            {
+                
+                $Rightmodel = new userrightapplication();
+
+
+                $Rightmodel = new userrightapplication();
+                $Rightmodel->Userid = $id;
+                $Rightmodel->Application = $Service;
+
+                $Rightmodel->Credential = $array[$Service];
+                $Rightmodel->Save();
+            }
+
             $model->generatePasswordAndmail();
             if( $model->save()) {
                  return $this->redirect(['view', 'id' => $model->id]);
@@ -90,7 +107,33 @@ class AdministrationController extends Controller
     {
         $model = $this->findModel($id);
 
+      
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+           
+            $array = Yii::$app->request->post('Capaidentity')['userrightapplication'];
+            $arraykey = array_keys($array);
+            foreach( $arraykey as $Service)
+            {
+                
+                $Rightmodel = new userrightapplication();
+                $Existmodel = userrightapplication::find()->where(['Application' => $Service,'Userid' => $id ])->exists();
+
+                //Je vérifie si l'enregistrement existe sinon je le créé.
+                if(!$Existmodel)
+                {
+                    $Rightmodel = new userrightapplication();
+                    $Rightmodel->Userid = $id;
+                    $Rightmodel->Application = $Service;
+                }
+                else
+                {
+                    $Rightmodel =  userrightapplication::findOne(['Application' => $Service,'Userid' => $id ]);
+                }
+                $Rightmodel->Credential = $array[$Service];
+                $Rightmodel->Save();
+            }
+    
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -157,4 +200,7 @@ class AdministrationController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+    
 }
