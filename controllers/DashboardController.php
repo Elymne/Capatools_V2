@@ -33,10 +33,10 @@ class DashboardController extends Controller
         return [
             'access' => [
             'class' => AccessControl::className(),
-            'only' => ['logout','firstlogin','resetpassword','login'],
+            'only' => ['logout','resetpassword','login'],
             'rules' => [
                 [
-                    'actions' => ['logout','firstlogin'],
+                    'actions' => ['logout'],
                     'allow' => true,
                     'roles' => ['@'],
                 ],
@@ -122,7 +122,7 @@ class DashboardController extends Controller
             if($capuser->flagPassword)
             {
                 //Lancement du formulaire de renouvellement de mot passe utilisateur
-                $this->redirect('dashboard/firstlogin');
+                $this->redirect('firstlogin');
             }
             else
             {
@@ -141,7 +141,7 @@ class DashboardController extends Controller
                 if($capuser->flagPassword)
                 {
                     //Lancement du formulaire de renouvellement de mot passe utilisateur
-                    $this->redirect('dashboard/firstlogin');
+                    $this->redirect('firstlogin');
                 }
                 else
                 {
