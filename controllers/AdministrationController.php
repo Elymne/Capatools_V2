@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\VarDumper;
+use yii\data\ActiveDataProvider;
 /**
  * AdministrationController implements the CRUD actions for Capaidentity model.
  */
@@ -53,8 +54,14 @@ class AdministrationController extends Controller
      */
     public function actionView($id)
     {
+        $query = userrightapplication::find()->where(['Userid' => $id ]);
+
+        $Rightprovider =new ActiveDataProvider([
+            'query' => $query,
+        ]);
+       
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($id),'Rightprovider'=>$Rightprovider,
         ]);
     }
 
