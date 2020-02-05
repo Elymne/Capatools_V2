@@ -54,7 +54,7 @@ function showData($dataProvider)
                 'template' => '{change}',
                 'buttons' => [
                     'change' => function ($url, $model, $key) {
-                        return Html::a('Modifier', ['devis/get', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-small orange']);
+                        return Html::a('Modifier', ['devis/update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-small orange']);
                     }
                 ],
             ],

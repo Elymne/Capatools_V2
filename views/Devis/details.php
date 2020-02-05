@@ -1,6 +1,7 @@
 <?php
 
 use yii\widgets\DetailView;
+use yii\helpers\Html;
 
 $this->title = $query->id_capa;
 
@@ -9,9 +10,6 @@ topHtml($query);
 displayDetails($query);
 
 bottomHtml($query);
-
-
-
 
 
 
@@ -101,9 +99,13 @@ function displayDetails($query)
 function topHtml($query)
 { ?>
 
-    <h3>
-        Devis : <?php echo $query->internal_name; ?>
-    </h3>
+    <div class="row">
+        <div class="card teal lighten-2">
+            <div class="card-content white-text">
+                <span class="card-title"> Devis : <?php echo $query->internal_name; ?></span>
+            </div>
+        </div>
+    </div>
 
 <?php }
 
@@ -111,6 +113,10 @@ function topHtml($query)
 function bottomHtml($query)
 { ?>
 
-    <a class="waves-effect waves-light btn">button</a>
+    <?php echo Html::a(
+        'Retour',
+        ['devis/index'],
+        ['class' => 'waves-effect waves-light btn btn-large']
+    ); ?>
 
 <?php }

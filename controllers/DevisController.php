@@ -3,21 +3,15 @@
 namespace app\controllers;
 
 use yii\web\Controller;
-use \app\models\devis\Devis;
-use richardfan\sortable\SortableAction;
 use yii\data\ActiveDataProvider;
+
+use \app\models\devis\Devis;
 
 class DevisController extends Controller implements ServiceInterface
 {
 
     public function actions()
     {
-        return [
-            'sortItem' => [
-                'class' => SortableAction::className(),
-                'activeRecordClassName' => Devis::className()
-            ]
-        ];
     }
 
     public static function GetActionUser($user)
@@ -31,7 +25,13 @@ class DevisController extends Controller implements ServiceInterface
                     'url' => 'devis/index',
                     'label' => 'Liste des devis',
                     'icon' => 'show_chart'
-                ]
+                ],
+                [
+                    'Priorite' => 2,
+                    'url' => 'devis/create',
+                    'label' => 'Créer un devis',
+                    'icon' => 'show_chart'
+                ],
             ]
         ];
     }
@@ -73,7 +73,20 @@ class DevisController extends Controller implements ServiceInterface
         $query = Devis::getOneById($id);
 
         return $this->render(
-            'devis_details',
+            'details',
+            [
+                'query' => $query
+            ]
+        );
+    }
+
+    public function actionUpdate($id)
+    {
+
+        $query = Devis::getOneById($id);
+
+        return $this->render(
+            'update',
             [
                 'query' => $query
             ]

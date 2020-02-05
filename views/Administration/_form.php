@@ -5,11 +5,11 @@ use yii\widgets\ActiveForm;
 use app\models\User\Cellule;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
-
 use  yii\data\ArrayDataProvider;
 use app\models\User\userrightapplication;
 
 ///Récupère la liste des cellules
+
 $value = Cellule::find()->all();
 
 $Listcellule=ArrayHelper::map($value,'id','name');
