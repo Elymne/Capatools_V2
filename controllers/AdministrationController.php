@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use yii\filters\AccessControl;
 use Yii;
 use app\models\User\Capaidentity;
 use app\models\User\userrightapplication;
@@ -28,9 +29,52 @@ class AdministrationController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['Index','View','Create','Update','Delete'],
+                'rules' => [
+                    [
+                        'actions' => ['Index','View','Create','Update','Delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ];
     }
 
+
+
+/**
+ * before action for a controller
+ */
+    public function beforeAction($action)
+    {
+        //Verifie les Behavior
+        $result = parent::beforeAction($action);
+        if($result)
+        {
+            $capidentityuser = Yii::$app->user->identity;
+
+            if($capidentityuser->getuserrightapplication()->where(['Application'=>'Administration'])->exists())
+            {
+                $rights=$capidentityuser->getuserrightapplication()->where(['Application'=>'Administration'])->select('Credential')->one();
+                if($rights->Credential == 'Aucun')
+                {
+                    $result = false;
+                }
+            }
+            else
+            {
+                $result = false;
+            }
+            
+
+        }
+
+      return $result;
+
+      }
     /**
      * Lists all Capaidentity models.
      * @return mixed
@@ -158,8 +202,17 @@ class AdministrationController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        //on empêche l'auto suppression
+        if(Yii::$app->user->identity->id != $id)
+        {
+            $Rightmodels = userrightapplication::findAll(['Userid'=>$id]);
+            foreach($Rightmodels as $Rightmodel)
+            {
+                $Rightmodel->delete();
+            }
+            $this->findModel($id)->delete();
 
+        }
         return $this->redirect(['index']);
     }
    /**
@@ -185,11 +238,24 @@ class AdministrationController extends Controller
      */
     public static  function GetActionUser($user)
     {
-       // if($user->get)
-        return ['Priorite' => 1,'Name' =>'Administration',
-        'items' => [ ['Priorite' => 1,'url' => 'administration/index','label'=>'Liste Utilisateur','icon'=>'show_chart'],
-         ['Priorite' => 2,'url' =>'administration/userform','label'=>'Ajouter utilisateur','icon'=>'show_chart']  ]    
-        ];
+        $result = [];
+        //Je verifie qu'il possède au moin un droit sur le service administration
+        if($user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->exists())
+            {
+                //Je récupère le service administration
+                $rights=$user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->select('Credential')->one();
+                
+                //Je verifie qu'il est reponsable
+                if($rights->Credential == 'Responsable')
+                {
+                    $result = ['Priorite' => 1,'Name' =>'Administration',
+                    'items' => [ ['Priorite' => 1,'url' => 'administration/index','label'=>'Liste Utilisateur','icon'=>'show_chart'],
+                     ['Priorite' => 2,'url' =>'administration/userform','label'=>'Ajouter utilisateur','icon'=>'show_chart']  ]]  ;
+                }
+            }
+
+        return   $result;
+        
     }
 
     /**
