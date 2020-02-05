@@ -2,13 +2,19 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
 use app\models\User\Cellule;
 use yii\helpers\ArrayHelper;
-$value = Cellule::find()->all();
-$listData=ArrayHelper::map($value,'id','name');
+use yii\grid\GridView;
 
-asort($listData);
+use  yii\data\ArrayDataProvider;
+use app\models\User\userrightapplication;
+
+///Récupère la liste des cellules
+$value = Cellule::find()->all();
+
+$Listcellule=ArrayHelper::map($value,'id','name');
+asort($Listcellule);
+
 if($model->cellule != null)
 {
     $comboxselect = $model->cellule->name;
@@ -17,6 +23,20 @@ else
 {
     $comboxselect = 'Choisir la cellule ...' ;
 }
+
+//$model->userrightapplication['Administration'];
+//Pour chaque controller service on récupère la listes des droits possibles
+
+$Services = Yii::$app->DiscoverService->getServices();
+$ArrayserviceRight = array();
+
+foreach($Services as &$service)
+{
+    $ListRight = $service::GetRight();
+
+    $result[$ListRight['name']] = $ListRight;
+}
+
 /* @var $this yii\web\View */
 /* @var $model app\models\User\Capaidentity */
 /* @var $form yii\widgets\ActiveForm */
@@ -31,8 +51,51 @@ else
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label('Email :') ?>
 
-    <?=  $form->field($model, 'Celluleid')->dropDownList($listData,['prompt'=>$comboxselect ])->label('Nom de la cellule :');   ?>
+    <?=  $form->field($model, 'Celluleid')->dropDownList($Listcellule,['prompt'=>$comboxselect ])->label('Nom de la cellule :');   ?>
+    <?php 
+    $data = array();
+        foreach($result as  $application)
+        {
+            $stringpromp = 'Aucun';
+            //Je recherche la valeur de l'utilisateur pour l'application
+            $key = array_search($application['name'], array_column( $model->userrightapplication, 'Application'));
+            
+            if(!is_bool($key))
+            {
+                
+                $stringpromp = $model->userrightapplication[$key]->Credential;
+            }
 
+            //Je génére les différents champs pour l'affichage
+            $value= $form->field($model,'userrightapplication['.$application['name'].']')->dropDownList($application['Right'], ['text' => 'Please select', 'options' =>array($stringpromp=>array('selected'=>true))] )->label('');   
+            $arr  = ['name'=>$application['name'],'link'=>$value];
+            array_unshift( $data, $arr);
+        }
+  
+        
+        $Rightprovider = new ArrayDataProvider([
+            'allModels' => $data,
+
+        ]);
+
+        //J'affiche le tableau des éléments
+        echo GridView::widget([
+            'dataProvider' => $Rightprovider,
+            'columns' => [
+                [
+                    'label' => 'Service',
+                    'attribute' => 'name',
+                    'format' => 'text'
+                ],
+                [
+
+                    'label' => 'Statut',
+                    'attribute' => 'link',
+                    'format' => 'raw'
+                ],
+            ]
+        ]);
+        ?>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

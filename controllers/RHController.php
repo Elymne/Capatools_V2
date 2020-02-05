@@ -33,6 +33,8 @@ class RHController extends Controller implements  ServiceInterface
     */
     public static  function GetRight()
     {
+        return ['name'=>'RH','Right'=>['Aucun'=>'Aucun',
+                'Responsable'=>'Responsable']];
 
     }
 

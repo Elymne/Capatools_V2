@@ -117,8 +117,8 @@ class AdministrationController extends Controller
     */
     public static  function GetRight()
     {
-        return ['Aucun',
-                'Responsable'];
+      return  ['name'=>'Administration','Right'=>['Aucun'=>'Aucun',
+        'Responsable'=>'Responsable']];
     }
 
     /**
