@@ -29,9 +29,8 @@ class Devis extends ActiveRecord
     }
 
 
-
     public function getUnit() {
-        return $this->hasOne(Unit::className(), ['id' => 'unit_id']);
+        return $this->hasOne(Cellule::className(), ['id' => 'unit_id']);
     }
 
     public function getClient() {
