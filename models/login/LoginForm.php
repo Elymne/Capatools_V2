@@ -13,7 +13,7 @@ use app\models\User\Capaidentity;
  */
 class LoginForm extends Model
 {
-    public $username;
+    public $email;
     public $password;
     public $rememberMe = true;
 
@@ -27,7 +27,7 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            ['username', 'required', 'message' => 'Le nom d\'utilisateur ne peut être vide.'],
+            ['email', 'required', 'message' => 'L\'email ne peut être vide.'],
             ['password', 'required', 'message' => 'Le mot de passe ne peut être vide.'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
@@ -73,7 +73,7 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = Capaidentity::findByUsername($this->username);
+            $this->_user = Capaidentity::findByemail($this->email);
         }
 
         return $this->_user;

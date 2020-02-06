@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User\Capaidentity */
@@ -37,5 +38,23 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
+
+<?= 
+
+GridView::widget([
+    'dataProvider' => $Rightprovider,
+    'columns' => [
+                [
+                    'label' => 'Service',
+                    'attribute' => 'Application',
+                ],
+                [
+
+                    'label' => 'Statut',
+                    'attribute' => 'Credential',
+                ],
+            ]
+        ]);
+                    ?>
 
 </div>

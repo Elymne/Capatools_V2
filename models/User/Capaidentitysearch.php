@@ -20,7 +20,7 @@ class Capaidentitysearch extends Capaidentity
     {
         return [
             [['id', 'Celluleid', 'flagPassword'], 'integer'],
-            [['username', 'email', 'auth_key', 'password_hash','cellule.name'], 'safe'],
+            [['username', 'email', 'auth_key', 'password_hash','cellule.name','userrightapplication'], 'safe'],
         ];
     }
 

@@ -2,14 +2,16 @@
 
 namespace app\controllers;
 
+use yii\filters\AccessControl;
 use Yii;
 use app\models\User\Capaidentity;
+use app\models\User\userrightapplication;
 use app\models\User\Capaidentitysearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\VarDumper;
-
+use yii\data\ActiveDataProvider;
 /**
  * AdministrationController implements the CRUD actions for Capaidentity model.
  */
@@ -26,9 +28,52 @@ class AdministrationController extends Controller {
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['Index','View','Create','Update','Delete'],
+                'rules' => [
+                    [
+                        'actions' => ['Index','View','Create','Update','Delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ];
     }
 
+
+
+/**
+ * before action for a controller
+ */
+    public function beforeAction($action)
+    {
+        //Verifie les Behavior
+        $result = parent::beforeAction($action);
+        if($result)
+        {
+            $capidentityuser = Yii::$app->user->identity;
+
+            if($capidentityuser->getuserrightapplication()->where(['Application'=>'Administration'])->exists())
+            {
+                $rights=$capidentityuser->getuserrightapplication()->where(['Application'=>'Administration'])->select('Credential')->one();
+                if($rights->Credential == 'Aucun')
+                {
+                    $result = false;
+                }
+            }
+            else
+            {
+                $result = false;
+            }
+            
+
+        }
+
+      return $result;
+
+      }
     /**
      * Lists all Capaidentity models.
      * @return mixed
@@ -50,8 +95,14 @@ class AdministrationController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        $query = userrightapplication::find()->where(['Userid' => $id ]);
+
+        $Rightprovider =new ActiveDataProvider([
+            'query' => $query,
+        ]);
+       
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+            'model' => $this->findModel($id),'Rightprovider'=>$Rightprovider,
         ]);
     }
 
@@ -64,6 +115,22 @@ class AdministrationController extends Controller {
         $model = new Capaidentity();
 
         if ($model->load(Yii::$app->request->post())) {
+            $array = Yii::$app->request->post('Capaidentity')['userrightapplication'];
+            $arraykey = array_keys($array);
+            foreach( $arraykey as $Service)
+            {
+                
+                $Rightmodel = new userrightapplication();
+
+
+                $Rightmodel = new userrightapplication();
+                $Rightmodel->Userid = $id;
+                $Rightmodel->Application = $Service;
+
+                $Rightmodel->Credential = $array[$Service];
+                $Rightmodel->Save();
+            }
+
             $model->generatePasswordAndmail();
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -85,7 +152,33 @@ class AdministrationController extends Controller {
     public function actionUpdate($id) {
         $model = $this->findModel($id);
 
+      
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+           
+            $array = Yii::$app->request->post('Capaidentity')['userrightapplication'];
+            $arraykey = array_keys($array);
+            foreach( $arraykey as $Service)
+            {
+                
+                $Rightmodel = new userrightapplication();
+                $Existmodel = userrightapplication::find()->where(['Application' => $Service,'Userid' => $id ])->exists();
+
+                //Je vérifie si l'enregistrement existe sinon je le créé.
+                if(!$Existmodel)
+                {
+                    $Rightmodel = new userrightapplication();
+                    $Rightmodel->Userid = $id;
+                    $Rightmodel->Application = $Service;
+                }
+                else
+                {
+                    $Rightmodel =  userrightapplication::findOne(['Application' => $Service,'Userid' => $id ]);
+                }
+                $Rightmodel->Credential = $array[$Service];
+                $Rightmodel->Save();
+            }
+    
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -102,8 +195,17 @@ class AdministrationController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id) {
-        $this->findModel($id)->delete();
+        //on empêche l'auto suppression
+        if(Yii::$app->user->identity->id != $id)
+        {
+            $Rightmodels = userrightapplication::findAll(['Userid'=>$id]);
+            foreach($Rightmodels as $Rightmodel)
+            {
+                $Rightmodel->delete();
+            }
+            $this->findModel($id)->delete();
 
+        }
         return $this->redirect(['index']);
     }
 
@@ -111,8 +213,8 @@ class AdministrationController extends Controller {
      * Get list of the right
      */
     public static function GetRight() {
-        return ['Aucun',
-            'Responsable'];
+      return  ['name'=>'Administration','Right'=>['Aucun'=>'Aucun',
+        'Responsable'=>'Responsable']];
     }
 
     /**
@@ -127,25 +229,24 @@ class AdministrationController extends Controller {
      * Get Action for the user
      */
     public static function GetActionUser($user) {
-        // if($user->get)
-        return [
-            'Priorite' => 1,
-            'Name' => 'Administration',
-            'items' => [
-                [
-                    'Priorite' => 1,
-                    'url' => 'administration/index',
-                    'label' => 'Liste Utilisateur',
-                    'icon' => 'show_chart'
-                ],
-                [
-                    'Priorite' => 2,
-                    'url' => 'administration/userform',
-                    'label' => 'Ajouter utilisateur',
-                    'icon' => 'show_chart'
-                ]
-            ]
-        ];
+        $result = [];
+        //Je verifie qu'il possède au moin un droit sur le service administration
+        if($user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->exists())
+            {
+                //Je récupère le service administration
+                $rights=$user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->select('Credential')->one();
+                
+                //Je verifie qu'il est reponsable
+                if($rights->Credential == 'Responsable')
+                {
+                    $result = ['Priorite' => 1,'Name' =>'Administration',
+                    'items' => [ ['Priorite' => 1,'url' => 'administration/index','label'=>'Liste Utilisateur','icon'=>'show_chart'],
+                     ['Priorite' => 2,'url' =>'administration/userform','label'=>'Ajouter utilisateur','icon'=>'show_chart']  ]]  ;
+                }
+            }
+
+        return   $result;
+        
     }
 
     /**
@@ -163,4 +264,6 @@ class AdministrationController extends Controller {
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+
+    
 }

@@ -25,6 +25,8 @@ class RHController extends Controller implements ServiceInterface {
      * Get list of the right
      */
     public static function GetRight() {
+        return ['name'=>'RH','Right'=>['Aucun'=>'Aucun',
+                'Responsable'=>'Responsable']];
         
     }
 
