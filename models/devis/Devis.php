@@ -29,16 +29,16 @@ class Devis extends ActiveRecord
     }
 
 
-    public function getUnit() {
-        return $this->hasOne(Cellule::className(), ['id' => 'unit_id']);
+    public function getCellule() {
+        return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
     }
 
-    public function getClient() {
-        return $this->hasOne(Client::className(), ['id' => 'client_id']);
+    public function getCompany() {
+        return $this->hasOne(Client::className(), ['id' => 'company_id']);
     }
 
     public function getProjectManager() {
-        return $this->hasOne(ProjectManager::className(), ['id' => 'project_manager_id']);
+        return $this->hasOne(capaidentity::className(), ['id' => 'capaidentity_id']);
     }
 
 }
