@@ -33,8 +33,10 @@ $ArrayserviceRight = array();
 foreach($Services as &$service)
 {
     $ListRight = $service::GetRight();
-
-    $result[$ListRight['name']] = $ListRight;
+    if(!empty (  $ListRight ) && $ListRight != null)
+    {
+        $result[$ListRight['name']] = $ListRight;
+    }
 }
 
 /* @var $this yii\web\View */
@@ -67,7 +69,7 @@ foreach($Services as &$service)
             }
 
             //Je génére les différents champs pour l'affichage
-            $value= $form->field($model,'userrightapplication['.$application['name'].']')->dropDownList($application['Right'], ['text' => 'Please select', 'options' =>array($stringpromp=>array('selected'=>true))] )->label('');   
+            $value= $form->field($model,'userrightapplication['.$application['name'].']')->dropDownList($application['right'], ['text' => 'Please select', 'options' =>array($stringpromp=>array('selected'=>true))] )->label('');   
             $arr  = ['name'=>$application['name'],'link'=>$value];
             array_unshift( $data, $arr);
         }

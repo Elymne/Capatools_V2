@@ -30,7 +30,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         foreach($Ctrls as &$ctrl)
         {
             $Action = $ctrl::GetActionUser(Yii::$app->user);
-            if(!empty (  $Action ))
+            if(!empty (  $Action ) && $Action != null)
             {
                array_unshift( $ActionsCtrl, $Action);
             }

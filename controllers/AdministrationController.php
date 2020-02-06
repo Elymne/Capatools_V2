@@ -213,8 +213,15 @@ class AdministrationController extends Controller {
      * Get list of the right
      */
     public static function GetRight() {
-      return  ['Name'=>'Administration','Right'=>['Aucun'=>'Aucun',
-        'Responsable'=>'Responsable']];
+      return 
+       [
+          'name'=>'Administration',
+          'right'=>
+          [
+            'Aucun'=>'Aucun',
+            'Responsable'=>'Responsable'
+          ]
+        ];
     }
 
     /**
