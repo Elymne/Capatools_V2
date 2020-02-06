@@ -17,17 +17,17 @@ class DevisController extends Controller implements ServiceInterface
     public static function GetActionUser($user)
     {
         return [
-            'Priorite' => 3,
-            'Name' => 'Devis',
+            'priorite' => 3,
+            'name' => 'Devis',
             'items' => [
                 [
-                    'Priorite' => 1,
+                    'priorite' => 1,
                     'url' => 'devis/index',
                     'label' => 'Liste des devis',
                     'icon' => 'show_chart'
                 ],
                 [
-                    'Priorite' => 2,
+                    'priorite' => 2,
                     'url' => 'devis/create',
                     'label' => 'Créer un devis',
                     'icon' => 'show_chart'

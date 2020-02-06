@@ -25,8 +25,15 @@ class RHController extends Controller implements ServiceInterface {
      * Get list of the right
      */
     public static function GetRight() {
-        return ['name'=>'RH','Right'=>['Aucun'=>'Aucun',
-                'Responsable'=>'Responsable']];
+        return
+        [
+            'name'=>'RH',
+            'right'=>
+            [
+                'Aucun'=>'Aucun',
+                'Responsable'=>'Responsable'
+            ]
+        ];
         
     }
 
@@ -43,17 +50,17 @@ class RHController extends Controller implements ServiceInterface {
      */
     public static function GetActionUser($user) {
         return [
-            'Priorite' => 2,
-            'Name' => 'RH',
+            'priorite' => 2,
+            'name' => 'RH',
             'items' => [
                 [
-                    'Priorite' => 2,
+                    'priorite' => 2,
                     'url' => 'RH/nn',
                     'label' => 'Demande de congé',
                     'icon' => 'show_chart'
                 ],
                 [
-                    'Priorite' => 1,
+                    'priorite' => 1,
                     'url' => 'RH/ActionName',
                     'label' => 'Etat des congés',
                     'icon' => 'show_chart'

@@ -30,8 +30,10 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         foreach($Ctrls as &$ctrl)
         {
             $Action = $ctrl::GetActionUser(Yii::$app->user);
-           
-            array_unshift( $ActionsCtrl, $Action);
+            if(!empty (  $Action ))
+            {
+               array_unshift( $ActionsCtrl, $Action);
+            }
 
         }
         asort($ActionsCtrl);   
@@ -40,7 +42,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         foreach ($ActionsCtrl as &$Action)
         {
           
-          $stringSubmenu = $stringSubmenu. SubMenuBar::widget(['titleSub'=> $Action['Name'], 'Submenulist'=> $Action['items']]);
+          $stringSubmenu = $stringSubmenu. SubMenuBar::widget(['titleSub'=> $Action['name'], 'Submenulist'=> $Action['items']]);
       
         }
         

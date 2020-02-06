@@ -213,7 +213,7 @@ class AdministrationController extends Controller {
      * Get list of the right
      */
     public static function GetRight() {
-      return  ['name'=>'Administration','Right'=>['Aucun'=>'Aucun',
+      return  ['Name'=>'Administration','Right'=>['Aucun'=>'Aucun',
         'Responsable'=>'Responsable']];
     }
 
@@ -239,9 +239,26 @@ class AdministrationController extends Controller {
                 //Je verifie qu'il est reponsable
                 if($rights->Credential == 'Responsable')
                 {
-                    $result = ['Priorite' => 1,'Name' =>'Administration',
-                    'items' => [ ['Priorite' => 1,'url' => 'administration/index','label'=>'Liste Utilisateur','icon'=>'show_chart'],
-                     ['Priorite' => 2,'url' =>'administration/userform','label'=>'Ajouter utilisateur','icon'=>'show_chart']  ]]  ;
+                    $result =
+                    [
+                        'priorite' => 1,
+                        'name' =>'Administration',
+                        'items' =>
+                        [ 
+                            [
+                                'priorite' => 1,
+                                'url' => 'administration/index',
+                                'label'=>'Liste Utilisateur',
+                                'icon'=>'show_chart'
+                            ],
+                            [
+                                'priorite' => 2,
+                                'url' =>'administration/userform',
+                                'label'=>'Ajouter utilisateur',
+                                'icon'=>'show_chart'
+                                ]
+                        ]
+                    ];
                 }
             }
 
