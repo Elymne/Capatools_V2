@@ -8,6 +8,12 @@ use app\helper\UUID;
 class Devis extends ActiveRecord
 {
 
+    public static function tableName()
+    {
+        return 'Devis';
+    }
+
+
     /**
      * Récupère tous les devis.
      */
