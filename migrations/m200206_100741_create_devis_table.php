@@ -15,16 +15,16 @@ class m200206_100741_create_devis_table extends Migration
 
         $this->createTable('{{%devis}}', [
             'id' => $this->primaryKey(),
-            'id_capa' => $this->string(250),
-            'internal_name' => $this->string(250),
-            'service_duration' => $this->integer(),
-            'version' => $this->integer(),
-            'filename' => $this->string(250),
-            'filename_first_upload' => $this->dateTime(),
-            'filename_last_upload' => $this->dateTime(),
-            'cellule_id' => $this->integer(),
-            'company_id' => $this->integer(),
-            'capaidentity_id' => $this->integer()
+            'id_capa' => $this->string(250)->notNull(),
+            'internal_name' => $this->string(250)->notNull(),
+            'service_duration' => $this->integer()->defaultValue(0),
+            'version' => $this->integer()->defaultValue(0),
+            'filename' => $this->string(250)->defaultValue(null),
+            'filename_first_upload' => $this->dateTime()->defaultValue(null),
+            'filename_last_upload' => $this->dateTime()->defaultValue(null),
+            'cellule_id' => $this->integer()->notNull(),
+            'company_id' => $this->integer()->notNull(),
+            'capaidentity_id' => $this->integer()->notNull()
         ]);
 
         $this->addForeignKey(

@@ -18,8 +18,14 @@ class DevisSearch extends Devis
     {
         return [
             [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capaidentity_id'], 'integer'],
-            [['id_capa', 'internal_name', 'filename', 'filename_first_upload', 'filename_last_upload'], 'safe'],
+            [['id_capa', 'internal_name', 'filename', 'filename_first_upload', 'filename_last_upload', 'capaidentity.username', 'company.name', 'cellule.name'], 'safe'],
         ];
+    }
+
+    public function attributes()
+    {
+        // add related fields to searchable attributes
+        return array_merge(parent::attributes(), ['capaidentity.username', 'company.name', 'cellule.name']);
     }
 
     /**
@@ -46,13 +52,33 @@ class DevisSearch extends Devis
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ]
         ]);
 
+        $dataProvider->sort->attributes['cellule.name'] = [
+            'asc' => ['cellule.name' => SORT_ASC],
+            'desc' => ['cellule.name' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['company.name'] = [
+            'asc' => ['company.name' => SORT_ASC],
+            'desc' => ['company.name' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['capaidentity.username'] = [
+            'asc' => ['capaidentity.username' => SORT_ASC],
+            'desc' => ['capaidentity.username' => SORT_DESC],
+        ];
+        
+
         $this->load($params);
+        $query->joinWith(['capaidentity']);
+        $query->joinWith(['cellule']);
+        $query->joinWith(['company']);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
@@ -70,7 +96,10 @@ class DevisSearch extends Devis
 
         $query->andFilterWhere(['like', 'id_capa', $this->id_capa])
             ->andFilterWhere(['like', 'internal_name', $this->internal_name])
-            ->andFilterWhere(['like', 'filename', $this->filename]);
+            ->andFilterWhere(['like', 'filename', $this->filename])
+            ->andFilterWhere(['like', 'cellule.name', $this->getAttribute('cellule.name')])
+            ->andFilterWhere(['like', 'company.name', $this->getAttribute('company.name')])
+            ->andFilterWhere(['like', 'capaidentity.username', $this->getAttribute('capaidentity.username')]);
 
         return $dataProvider;
     }

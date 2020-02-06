@@ -6,41 +6,112 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
-$this->title = $model->id;
+
+if ($model->id_capa) $this->title = $model->id_capa;
+else $this->title = "Modification d'un devis";
+
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
 ?>
 <div class="devis-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h2 style="color:#009688"> Devis : <?= Html::encode($this->title) ?> </h2>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+    <div class="row">
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'id_capa',
-            'internal_name',
-            'service_duration',
-            'version',
-            'filename',
-            'filename_first_upload',
-            'filename_last_upload',
-            'cellule_id',
-            'company_id',
-            'capaidentity_id',
-        ],
-    ]) ?>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Nom interne : <?= Html::encode($model->internal_name) ?></span>
+            </div>
+            <div class="card-action">
+                <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn']) ?>
+                <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+                    'class' => 'waves-effect waves-light btn red',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to delete this item?',
+                        'method' => 'post',
+                    ],
+                ]) ?>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="card">
+            <div class="card-content teal white-text">
+                <span class="card-title"> Détails devis </span>
+            </div>
+            <div class="card-action white">
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        [
+                            'attribute' => 'service_duration',
+                            'format' => 'text',
+                            'label' => 'Durée de la prestation',
+                        ],
+                        [
+                            'attribute' => 'cellule.name',
+                            'format' => 'text',
+                            'label' => 'Nom de cellule',
+                        ],
+                        [
+                            'attribute' => 'company.name',
+                            'format' => 'text',
+                            'label' => 'Entreprise',
+                        ],
+                        [
+                            'attribute' => 'capaidentity.username',
+                            'format' => 'text',
+                            'label' => 'Responsable projet',
+                        ]
+                    ],
+                ]) ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="card">
+            <div class="card-content teal white-text">
+                <span class="card-title"> Fichier PDF</span>
+            </div>
+            <div class="card-action white">
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        [
+                            'attribute' => 'filename',
+                            'format' => 'text',
+                            'label' => 'Nom du fichier PDF',
+                        ],
+                        [
+                            'attribute' => 'version',
+                            'format' => 'text',
+                            'label' => 'Version de fichier',
+                        ],
+                        [
+                            'attribute' => 'filename_first_upload',
+                            'format' => 'text',
+                            'label' => 'Date d\'upload du fichier',
+                        ],
+                        [
+                            'attribute' => 'filename_last_upload',
+                            'format' => 'text',
+                            'label' => 'Dernière modification du fichier',
+                        ]
+                    ],
+                ]) ?>
+            </div>
+        </div>
+    </div>
 
 </div>
+
+
+
+
+<?php

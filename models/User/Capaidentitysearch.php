@@ -20,7 +20,7 @@ class Capaidentitysearch extends Capaidentity
     {
         return [
             [['id', 'Celluleid', 'flagPassword'], 'integer'],
-            [['username', 'email', 'auth_key', 'password_hash','cellule.name','userrightapplication'], 'safe'],
+            [['username', 'email', 'auth_key', 'password_hash', 'cellule.name', 'userrightapplication'], 'safe'],
         ];
     }
 
@@ -49,7 +49,8 @@ class Capaidentitysearch extends Capaidentity
      */
     public function search($params)
     {
-     $query = Capaidentity::find();
+        $query = Capaidentity::find();
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -61,11 +62,13 @@ class Capaidentitysearch extends Capaidentity
                 ]
             ],
         ]);
-     $dataProvider->sort->attributes['cellule.name'] = [
+        
+        $dataProvider->sort->attributes['cellule.name'] = [
             'asc' => ['cellule.name' => SORT_ASC],
-            'desc' => ['cellule.name' => SORT_DESC],];
+            'desc' => ['cellule.name' => SORT_DESC],
+        ];
 
-    $dataProvider->sort->defaultOrder = ['cellule.name' => SORT_ASC];
+        $dataProvider->sort->defaultOrder = ['cellule.name' => SORT_ASC];
         $this->load($params);
 
         if (!$this->validate()) {
@@ -76,7 +79,7 @@ class Capaidentitysearch extends Capaidentity
         }
         // filter by country name
         $query->joinWith(['cellule' => function ($q) {
-        $q->where('cellule.name LIKE "%' . $this->cellule . '%"');
+            $q->where('cellule.name LIKE "%' . $this->cellule . '%"');
         }]);
 
         // grid filtering conditions
@@ -85,7 +88,7 @@ class Capaidentitysearch extends Capaidentity
             'Celluleid' => $this->Celluleid,
             'flagPassword' => $this->flagPassword,
         ]);
-        
+
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])

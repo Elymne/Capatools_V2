@@ -56,31 +56,29 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             //todo Remplacer par le vrai nom du project-manager.
             [
-                'attribute' => 'capaidentity_id',
+                'attribute' => 'capaidentity.username',
                 'format' => 'text',
                 'label' => 'Responsable projet',
             ],
+
             [
-                'attribute' => 'cellule_id',
+                'attribute' => 'cellule.name',
                 'format' => 'text',
                 'label' => 'Cellule',
             ],
             [
-                'attribute' => 'company_id',
+                'attribute' => 'company.name',
                 'format' => 'text',
-                'label' => 'Cellule',
+                'label' => 'Entreprise',
             ],
-            //'service_duration',
-            //'filename',
-            //'filename_first_upload',
-            //'filename_last_upload',
+
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{get}',
                 'header' => false,
                 'buttons' => [
                     'get' => function ($url, $model, $key) {
-                        return Html::a('Voir', ['devis/view', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-flat']);
+                        return Html::a('Voir', ['devis/view', 'id' => $model->id], ['class' => 'waves-effect waves-teal btn-flat']);
                     }
                 ],
             ],
@@ -90,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => false,
                 'buttons' => [
                     'update' => function ($url, $model, $key) {
-                        return Html::a('Modifier', ['devis/update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-flat']);
+                        return Html::a('Modifier', ['devis/update', 'id' => $model->id], ['class' => 'waves-effect waves-teal btn-flat']);
                     }
                 ],
             ],
@@ -100,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => false,
                 'buttons' => [
                     'delete' => function ($url, $model, $key) {
-                        return Html::a('Supprimer', ['devis/delete', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-flat']);
+                        return Html::a('Supprimer', ['devis/delete', 'id' => $model->id], ['class' => 'waves-effect waves-teal btn-flat']);
                     }
                 ],
             ],
