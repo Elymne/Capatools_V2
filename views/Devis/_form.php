@@ -20,11 +20,10 @@ $units = ArrayHelper::map(Unit::getAll(), 'id', 'name');
 
     <?php $form = ActiveForm::begin(); ?>
 
-   
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true])->label('Nom de l\'utilisateur :') ?>
+    <?= $form->field($query, 'internal_name')->textInput(['maxlength' => true])->label('Nom interne du devis') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Confirmer', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
