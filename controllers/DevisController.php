@@ -77,10 +77,12 @@ class DevisController extends Controller implements ServiceInterface
         $model = new Devis();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->id_capa = 'test';
-            if ($model->save()) {
+
+            $model->id_capa = yii::$app->user->identity->cellule->name . $this->generateRandomString(6);
+
+
+            if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
-            }
         }
 
         return $this->render('create', [
@@ -169,5 +171,16 @@ class DevisController extends Controller implements ServiceInterface
         ];
 
         return $result;
+    }
+
+
+    private function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }
