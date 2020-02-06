@@ -3,7 +3,9 @@
 namespace app\models\devis;
 
 use yii\db\ActiveRecord;
-use app\helper\UUID;
+
+use app\models\User\Cellule;
+use app\models\User\Capaidentity;
 
 class Devis extends ActiveRecord
 {
@@ -40,7 +42,7 @@ class Devis extends ActiveRecord
     }
 
     public function getCompany() {
-        return $this->hasOne(Client::className(), ['id' => 'company_id']);
+        return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
 
     public function getProjectManager() {

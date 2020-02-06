@@ -12,15 +12,18 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\VarDumper;
 use yii\data\ActiveDataProvider;
+
 /**
  * AdministrationController implements the CRUD actions for Capaidentity model.
  */
-class AdministrationController extends Controller {
+class AdministrationController extends Controller
+{
 
     /**
      * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -30,10 +33,10 @@ class AdministrationController extends Controller {
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['Index','View','Create','Update','Delete'],
+                'only' => ['Index', 'View', 'Create', 'Update', 'Delete'],
                 'rules' => [
                     [
-                        'actions' => ['Index','View','Create','Update','Delete'],
+                        'actions' => ['Index', 'View', 'Create', 'Update', 'Delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,47 +47,40 @@ class AdministrationController extends Controller {
 
 
 
-/**
- * before action for a controller
- */
+    /**
+     * before action for a controller
+     */
     public function beforeAction($action)
     {
         //Verifie les Behavior
         $result = parent::beforeAction($action);
-        if($result)
-        {
+        if ($result) {
             $capidentityuser = Yii::$app->user->identity;
 
-            if($capidentityuser->getuserrightapplication()->where(['Application'=>'Administration'])->exists())
-            {
-                $rights=$capidentityuser->getuserrightapplication()->where(['Application'=>'Administration'])->select('Credential')->one();
-                if($rights->Credential == 'Aucun')
-                {
+            if ($capidentityuser->getuserrightapplication()->where(['Application' => 'Administration'])->exists()) {
+                $rights = $capidentityuser->getuserrightapplication()->where(['Application' => 'Administration'])->select('Credential')->one();
+                if ($rights->Credential == 'Aucun') {
                     $result = false;
                 }
-            }
-            else
-            {
+            } else {
                 $result = false;
             }
-            
-
         }
 
-      return $result;
-
-      }
+        return $result;
+    }
     /**
      * Lists all Capaidentity models.
      * @return mixed
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $searchModel = new Capaidentitysearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -94,15 +90,16 @@ class AdministrationController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id) {
-        $query = userrightapplication::find()->where(['Userid' => $id ]);
+    public function actionView($id)
+    {
+        $query = userrightapplication::find()->where(['Userid' => $id]);
 
-        $Rightprovider =new ActiveDataProvider([
+        $Rightprovider = new ActiveDataProvider([
             'query' => $query,
         ]);
-       
+
         return $this->render('view', [
-            'model' => $this->findModel($id),'Rightprovider'=>$Rightprovider,
+            'model' => $this->findModel($id), 'Rightprovider' => $Rightprovider,
         ]);
     }
 
@@ -111,15 +108,15 @@ class AdministrationController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $model = new Capaidentity();
 
         if ($model->load(Yii::$app->request->post())) {
             $array = Yii::$app->request->post('Capaidentity')['userrightapplication'];
             $arraykey = array_keys($array);
-            foreach( $arraykey as $Service)
-            {
-                
+            foreach ($arraykey as $Service) {
+
                 $Rightmodel = new userrightapplication();
 
 
@@ -138,7 +135,7 @@ class AdministrationController extends Controller {
         }
 
         return $this->render('create', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -149,41 +146,38 @@ class AdministrationController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->findModel($id);
 
-      
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-           
+
             $array = Yii::$app->request->post('Capaidentity')['userrightapplication'];
             $arraykey = array_keys($array);
-            foreach( $arraykey as $Service)
-            {
-                
+            foreach ($arraykey as $Service) {
+
                 $Rightmodel = new userrightapplication();
-                $Existmodel = userrightapplication::find()->where(['Application' => $Service,'Userid' => $id ])->exists();
+                $Existmodel = userrightapplication::find()->where(['Application' => $Service, 'Userid' => $id])->exists();
 
                 //Je vérifie si l'enregistrement existe sinon je le créé.
-                if(!$Existmodel)
-                {
+                if (!$Existmodel) {
                     $Rightmodel = new userrightapplication();
                     $Rightmodel->Userid = $id;
                     $Rightmodel->Application = $Service;
-                }
-                else
-                {
-                    $Rightmodel =  userrightapplication::findOne(['Application' => $Service,'Userid' => $id ]);
+                } else {
+                    $Rightmodel =  userrightapplication::findOne(['Application' => $Service, 'Userid' => $id]);
                 }
                 $Rightmodel->Credential = $array[$Service];
                 $Rightmodel->Save();
             }
-    
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -194,17 +188,15 @@ class AdministrationController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         //on empêche l'auto suppression
-        if(Yii::$app->user->identity->id != $id)
-        {
-            $Rightmodels = userrightapplication::findAll(['Userid'=>$id]);
-            foreach($Rightmodels as $Rightmodel)
-            {
+        if (Yii::$app->user->identity->id != $id) {
+            $Rightmodels = userrightapplication::findAll(['Userid' => $id]);
+            foreach ($Rightmodels as $Rightmodel) {
                 $Rightmodel->delete();
             }
             $this->findModel($id)->delete();
-
         }
         return $this->redirect(['index']);
     }
@@ -212,33 +204,30 @@ class AdministrationController extends Controller {
     /**
      * Get list of the right
      */
-    public static function GetRight() {
-      return 
-       [
-          'name'=>'Administration',
-          'right'=>
-          [
-            'Aucun'=>'Aucun',
-            'Responsable'=>'Responsable'
-          ]
-        ];
+    public static function GetRight()
+    {
+        return  ['name' => 'Administration', 'Right' => [
+            'Aucun' => 'Aucun',
+            'Responsable' => 'Responsable'
+        ]];
     }
 
     /**
      * Get list of indicateur
      *
      */
-    public static function GetIndicateur($user) {
-        
+    public static function GetIndicateur($user)
+    {
     }
 
     /**
      * Get Action for the user
      */
-    public static function GetActionUser($user) {
+    public static function GetActionUser($user)
+    {
         $result = [];
         //Je verifie qu'il possède au moin un droit sur le service administration
-        if($user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->exists())
+        /*if($user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->exists())
             {
                 //Je récupère le service administration
                 $rights=$user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->select('Credential')->one();
@@ -270,7 +259,6 @@ class AdministrationController extends Controller {
             }
 
         return   $result;
-        
     }
 
     /**
@@ -280,14 +268,12 @@ class AdministrationController extends Controller {
      * @return Capaidentity the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = Capaidentity::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-
-    
 }

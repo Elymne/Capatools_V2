@@ -5,12 +5,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
-$this->title = 'Update Devis: ' . $model->id;
+$this->title = 'Create Devis';
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="devis-update">
+<div class="devis-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

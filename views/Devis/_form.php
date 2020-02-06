@@ -1,29 +1,41 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
-
 use yii\widgets\ActiveForm;
 
-use \app\models\devis\Client;
-use \app\models\devis\ProjectManager;
-use \app\models\devis\Unit;
-
-$client = ArrayHelper::map(Client::getAll(), 'id', 'name');
-$projectManager = ArrayHelper::map(ProjectManager::getAll(), 'id', 'fullname');
-$units = ArrayHelper::map(Unit::getAll(), 'id', 'name');
-
+/* @var $this yii\web\View */
+/* @var $model app\models\devis\Devis */
+/* @var $form yii\widgets\ActiveForm */
 ?>
 
-
-<div class="form">
+<div class="devis-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($query, 'internal_name')->textInput(['maxlength' => true])->label('Nom interne du devis') ?>
+    <?= $form->field($model, 'id')->textInput() ?>
+
+    <?= $form->field($model, 'id_capa')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'service_duration')->textInput() ?>
+
+    <?= $form->field($model, 'version')->textInput() ?>
+
+    <?= $form->field($model, 'filename')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'filename_first_upload')->textInput() ?>
+
+    <?= $form->field($model, 'filename_last_upload')->textInput() ?>
+
+    <?= $form->field($model, 'cellule_id')->textInput() ?>
+
+    <?= $form->field($model, 'company_id')->textInput() ?>
+
+    <?= $form->field($model, 'capaidentity_id')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Confirmer', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
