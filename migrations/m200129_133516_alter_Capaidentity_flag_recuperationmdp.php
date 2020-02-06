@@ -29,7 +29,7 @@ class m200129_133516_alter_Capaidentity_flag_recuperationmdp extends Migration
     {
        
         $this->dropColumn('capaidentity', 'flagPassword', $this->boolean());
-        return false;
+        return true;
     }
 
     /*
