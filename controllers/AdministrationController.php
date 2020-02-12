@@ -94,12 +94,13 @@ class AdministrationController extends Controller
     {
         $query = userrightapplication::find()->where(['Userid' => $id]);
 
+        $model = new Capaidentity();
         $Rightprovider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         return $this->render('view', [
-            'model' => $this->findModel($id), 'Rightprovider' => $Rightprovider,
+            'model' => $model->findIdentity($id), 'Rightprovider' => $Rightprovider,
         ]);
     }
 
