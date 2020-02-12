@@ -144,8 +144,8 @@ class DevisController extends Controller implements ServiceInterface
     public static function GetRight()
     {
         return  [
-            'Name' => 'Administration',
-            'Right' => [
+            'name' => 'Administration',
+            'right' => [
                 'Aucun' => 'Aucun',
                 'Responsable' => 'Responsable'
             ]
@@ -163,7 +163,7 @@ class DevisController extends Controller implements ServiceInterface
         $result = [];
 
         $result = [
-            'Priorite' => 3, 'Name' => 'Devis',
+            'priorite' => 3, 'name' => 'Devis',
             'items' => [
                 ['Priorite' => 1, 'url' => 'devis/index', 'label' => 'Liste des devis', 'icon' => 'show_chart'],
                 ['Priorite' => 2, 'url' => 'devis/create', 'label' => 'Ajouter un devis', 'icon' => 'show_chart']

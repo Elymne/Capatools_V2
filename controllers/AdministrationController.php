@@ -227,7 +227,7 @@ class AdministrationController extends Controller
     {
         $result = [];
         //Je verifie qu'il possède au moin un droit sur le service administration
-        /*if($user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->exists())
+        if($user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->exists())
             {
                 //Je récupère le service administration
                 $rights=$user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->select('Credential')->one();
@@ -261,19 +261,5 @@ class AdministrationController extends Controller
         return   $result;
     }
 
-    /**
-     * Finds the Capaidentity model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Capaidentity the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Capaidentity::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
+ 
 }
