@@ -32,3 +32,4 @@ config/db.php
 
 #vagrant folder
 /.vagrant
+/config/db.php
