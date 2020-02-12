@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use yii\filters\AccessControl;
 use Yii;
 use app\models\devis\Devis;
 use app\models\devis\DevisSearch;
@@ -20,20 +21,15 @@ class DevisController extends Controller implements ServiceInterface
     public function behaviors()
     {
         return [
-            'priorite' => 3,
-            'name' => 'Devis',
-            'items' => [
-                [
-                    'priorite' => 1,
-                    'url' => 'devis/index',
-                    'label' => 'Liste des devis',
-                    'icon' => 'show_chart'
-                ],
-                [
-                    'priorite' => 2,
-                    'url' => 'devis/create',
-                    'label' => 'Créer un devis',
-                    'icon' => 'show_chart'
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['Index', 'View', 'Create', 'Update', 'Delete'],
+                'rules' => [
+                    [
+                        'actions' => ['Index', 'View', 'Create', 'Update', 'Delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -78,7 +74,8 @@ class DevisController extends Controller implements ServiceInterface
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $model->id_capa = yii::$app->user->identity->cellule->name . $this->generateRandomString(6);
+            ///Format ex : AROBOXXXX donc XXXX est fixe avec l'id
+            $model->id_capa = yii::$app->user->identity->cellule->name.printf('%04d',$model->id) ;
 
 
             if ($model->save())
@@ -174,13 +171,5 @@ class DevisController extends Controller implements ServiceInterface
     }
 
 
-    private function generateRandomString($length = 10) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
+
 }
