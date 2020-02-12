@@ -94,13 +94,12 @@ class AdministrationController extends Controller
     {
         $query = userrightapplication::find()->where(['Userid' => $id]);
 
-        $model = new Capaidentity();
         $Rightprovider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         return $this->render('view', [
-            'model' => $model->findIdentity($id), 'Rightprovider' => $Rightprovider,
+            'model' => $this->findModel($id), 'Rightprovider' => $Rightprovider,
         ]);
     }
 
@@ -261,6 +260,13 @@ class AdministrationController extends Controller
 
         return   $result;
     }
-
+    protected function findModel($id)
+    {
+        if (($model = Capaidentity::findOne($id)) !== null) {
+            return $model;
+        }
+ 
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
  
 }
