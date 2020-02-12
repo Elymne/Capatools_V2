@@ -42,23 +42,18 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'internal_name',
                 'format' => 'text',
-                'label' => 'Nom interne',
-            ],
-            [
-                'attribute' => 'version',
-                'format' => 'text',
-                'label' => 'Version du fichier',
-            ],
-            [
-                'attribute' => 'id_capa',
-                'format' => 'text',
-                'label' => 'Identifiant Capacites',
+                'label' => 'Nom du projet',
             ],
             //todo Remplacer par le vrai nom du project-manager.
             [
                 'attribute' => 'capaidentity.username',
                 'format' => 'text',
                 'label' => 'Responsable projet',
+            ],
+            [
+                'attribute' => 'version',
+                'format' => 'text',
+                'label' => 'Version du fichier',
             ],
 
             [

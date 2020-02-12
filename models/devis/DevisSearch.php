@@ -84,7 +84,6 @@ class DevisSearch extends Devis
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'service_duration' => $this->service_duration,
             'version' => $this->version,
             'filename_first_upload' => $this->filename_first_upload,
