@@ -206,7 +206,7 @@ class AdministrationController extends Controller
      */
     public static function GetRight()
     {
-        return  ['name' => 'Administration', 'Right' => [
+        return  ['name' => 'Administration', 'right' => [
             'Aucun' => 'Aucun',
             'Responsable' => 'Responsable'
         ]];
