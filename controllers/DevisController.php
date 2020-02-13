@@ -47,12 +47,13 @@ class DevisController extends Controller implements ServiceInterface
      */
     public function actionIndex()
     {
-        $searchModel = new DevisSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModelAvantContrat = new DevisSearch();
+        $searchModelAvantContrat->statutsearch = 'Avant contrat';
+        $dataProviderAvantContrat = $searchModelAvantContrat->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'searchModelAvantContrat' => $searchModelAvantContrat,
+            'dataProviderAvantContrat' => $dataProviderAvantContrat,
         ]);
     }
 

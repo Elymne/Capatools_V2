@@ -45,7 +45,7 @@ class Devis extends ActiveRecord
         return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
     public function getStatut() {
-        return $this->hasOne(Devistatut::className(), ['id' => 'statut_id']);
+        return $this->hasOne(Devisstatut::className(), ['id' => 'statut_id']);
     }
 
     public function getCapaidentity() {

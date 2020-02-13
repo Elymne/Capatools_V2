@@ -11,13 +11,15 @@ use app\models\devis\Devis;
  */
 class DevisSearch extends Devis
 {
+
+    public $statutsearch='';
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capaidentity_id'], 'integer'],
+            [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capaidentity_id', 'statut_id'], 'integer'],
             [['id_capa', 'internal_name', 'filename', 'filename_first_upload', 'filename_last_upload', 'capaidentity.username', 'company.name', 'cellule.name'], 'safe'],
         ];
     }
@@ -25,7 +27,7 @@ class DevisSearch extends Devis
     public function attributes()
     {
         // add related fields to searchable attributes
-        return array_merge(parent::attributes(), ['capaidentity.username', 'company.name', 'cellule.name']);
+        return array_merge(parent::attributes(), ['capaidentity.username', 'company.name', 'cellule.name','statut.label']);
     }
 
     /**
@@ -77,6 +79,7 @@ class DevisSearch extends Devis
         $query->joinWith(['capaidentity']);
         $query->joinWith(['cellule']);
         $query->joinWith(['company']);
+        $query->joinWith(['statut']);
 
         if (!$this->validate()) {
             return $dataProvider;
@@ -98,7 +101,8 @@ class DevisSearch extends Devis
             ->andFilterWhere(['like', 'filename', $this->filename])
             ->andFilterWhere(['like', 'cellule.name', $this->getAttribute('cellule.name')])
             ->andFilterWhere(['like', 'company.name', $this->getAttribute('company.name')])
-            ->andFilterWhere(['like', 'capaidentity.username', $this->getAttribute('capaidentity.username')]);
+            ->andFilterWhere(['like', 'capaidentity.username', $this->getAttribute('capaidentity.username')])
+            ->andFilterWhere(['like', 'devisstatut.label', $this->statutsearch]);
 
         return $dataProvider;
     }

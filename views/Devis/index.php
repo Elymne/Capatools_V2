@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <?php Pjax::begin(); ?>
-
+    <h1> Devis en avant contrat :</h1>
     <div class="row">
         <?php echo Html::a('Créer', ['devis/create'], ['class' => 'waves-effect waves-light btn blue']);  ?>
     </div>
@@ -66,6 +66,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'text',
                 'label' => 'Entreprise',
             ],
+            [
+                'attribute' => 'statut.label',
+                'format' => 'text',
+                'label' => 'Statut',
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -100,7 +105,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]); ?>
+    <h1> Devis en validation :</h1>
+
+    <h1> Devis en cours :</h1>
+
+    
+    <h1> Devis Terminé :</h1>
 
     <?php Pjax::end(); ?>
-
 </div>

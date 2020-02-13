@@ -42,6 +42,18 @@ class m200213_125952_create_devisstatut_table extends Migration
             'id' => '3',
             'label' => 'Projet terminé'
         ]);
+
+        //Ajout de la statut Projet en attente validation resopnsable opérationel
+        $this->insert('{{%devisstatut}}', [
+            'id' => '4',
+            'label' => 'Attente validation Opérationel'
+        ]);
+
+        //Ajout de la statut Projet en attente validation resopnsable opérationel
+        $this->insert('{{%devisstatut}}', [
+            'id' => '5',
+            'label' => 'Attente validation client'
+        ]);
         
         $this->execute('ALTER TABLE devisstatut ADD PRIMARY KEY (id)');
         
