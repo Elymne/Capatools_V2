@@ -9,9 +9,6 @@ class DevisUpdateForm extends Devis {
     
 
 
-    public $companyname;
-    public $companytva;
-
     public function rules()
     {
         return [
@@ -20,8 +17,8 @@ class DevisUpdateForm extends Devis {
             [['filename'], 'validatepresencefile'],
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
             ['service_duration', 'required', 'message' => 'Indiquer le temps du projet.'],
-            ['companyname', 'required', 'message' => 'Indiquer lenom du client.'],
-            ['companytva', 'required', 'message' => 'Indiquer le numéro de TVA associé au client.'],
+            ['company[name]', 'required', 'message' => 'Indiquer lenom du client.'],
+            ['company[tva]', 'required', 'message' => 'Indiquer le numéro de TVA associé au client.'],
             ['service_duration', 'integer','min'=>0, 'tooSmall' => 'La durée de la prestation doit être supérieur à 0.','message' => 'La durée de la prestation doit être un entier positif.'],
 
         ];

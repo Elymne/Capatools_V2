@@ -2,10 +2,11 @@
 
 use yii\helpers\Html;
 
+use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
-$this->title = 'Mise à jour du devis' ;
+$this->title = 'Mise à jour du devis :'. $model->id_capa ;
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
@@ -14,8 +15,25 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
-        'model' => $model,'type' =>'update',
-    ]) ?>
+    <?php $form = ActiveForm::begin(); ?>
+
+
+<?= $form->field($model, 'internal_name')->textInput(['maxlength' => true,'disabled'=>true])->label("Nom du projet") ?>
+
+<?= $form->field($model, 'company[name]')->textInput()->label("Nom du client") ?>
+<?= $form->field($model, 'company[tva]')->textInput()->label("TVA") ?>
+
+<?= $form->field($model, 'service_duration')->textInput()->label("Durée de la prestation (j)") ?>
+
+<?= $form->field($model, 'filename')->textInput(['maxlength' => true,'disabled'=>true])->label("Proposition Technique") ?>
+<?= $form->field($model, 'filename')->fileInput(['class'=>'btn btn-primary'])->label(false) ?>
+
+
+<div class="form-group">
+    <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class'=>'btn btn-primary']) ?>
+</div>
+
+<?php ActiveForm::end(); ?>
 
 </div>

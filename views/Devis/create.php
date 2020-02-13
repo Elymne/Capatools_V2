@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
-$this->title = 'Création du devis';
+$this->title = 'Création d\'un devis';
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -25,7 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= $form->field($model, 'companytva')->textInput()->label("TVA") ?>
 
 <div class="form-group">
-    <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class'=>'btn btn-primary']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>
