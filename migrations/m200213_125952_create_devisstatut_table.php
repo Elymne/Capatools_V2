@@ -45,6 +45,9 @@ class m200213_125952_create_devisstatut_table extends Migration
         
         $this->execute('ALTER TABLE devisstatut ADD PRIMARY KEY (id)');
         
+
+        $this->addColumn('devis', 'statut_id', $this->integer());
+
     }
 
     /**
@@ -53,5 +56,7 @@ class m200213_125952_create_devisstatut_table extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%devisstatut}}');
+        
+        $this->dropColumn('devis', 'statut_id', $this->integer());
     }
 }
