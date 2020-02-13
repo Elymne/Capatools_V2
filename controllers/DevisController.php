@@ -9,9 +9,13 @@ use yii\bootstrap\Modal;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\devis\Devis;
+use app\models\devis\Company;
 use app\models\devis\DevisCreateForm;
 use app\models\devis\DevisUpdateForm;
 use app\models\devis\DevisSearch;
+
+
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -119,19 +123,28 @@ class DevisController extends Controller implements ServiceInterface
     public function actionCreate()
     {
         $model = new DevisCreateForm();
-
         if ($model->load(Yii::$app->request->post())) {
+          
+            //Gestion de la company
+            $modelcompany = Company::find()->where(['name'=>$model->companyname,'tva'=> $model->companytva])->one();
+            
+            if($modelcompany == null)
+            {
+                $modelcompany = new Company();
+                $modelcompany->name=$model->companyname;
+                $modelcompany->tva=$model->companytva;
+                $modelcompany->save();
+            }
+
+
 
             ///Format ex : AROBOXXXX donc XXXX est fixe avec l'id
-            $model->id_capa = yii::$app->user->identity->cellule->name.printf('%04d',$model->id) ;
-
-            echo Alert::widget([
-                'options' => [
-                    'class' => 'alert-info fade',
-                ],
-                'body' => 'Devis créé',
-            ]);
-
+            $model->id_capa = yii::$app->user->identity->cellule->identifiant.printf('%04d',$model->id) ;
+            $model->id_laboxy = $model->id_capa.' - '. $modelcompany->name ;
+            $model->company_id =  $modelcompany->id ;
+            $model->capaidentity_id = yii::$app->user->identity->id;
+            $model->cellule_id =  yii::$app->user->identity->cellule->id;
+            $model->statut_id = 0;
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }
