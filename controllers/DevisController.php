@@ -5,6 +5,7 @@ namespace app\controllers;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\devis\Devis;
+use app\models\devis\DevisUpdateInsertForm;
 use app\models\devis\DevisSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -70,7 +71,7 @@ class DevisController extends Controller implements ServiceInterface
      */
     public function actionCreate()
     {
-        $model = new Devis();
+        $model = new DevisUpdateInsertForm();
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -98,12 +99,18 @@ class DevisController extends Controller implements ServiceInterface
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+       // $model = new DevisUpdateInsertForm();
+       $modelDevis =  DevisUpdateInsertForm::findOne($id);
+        if ($modelDevis->load(Yii::$app->request->post())) {
+
+            //&& $model->save()
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
+  
         return $this->render('update', [
-            'model' => $model,
+            'model' => $modelDevis,
         ]);
     }
 

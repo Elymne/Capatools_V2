@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => false,
                 'buttons' => [
                     'get' => function ($url, $model, $key) {
-                        return Html::a('Voir', ['devis/view', 'id' => $model->id], ['class' => 'waves-effect waves-teal btn-flat']);
+                        return Html::a('Voir', ['devis/view', 'id' => $model->id],['class' => 'waves-effect waves-light btn blue']);
                     }
                 ],
             ],
@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => false,
                 'buttons' => [
                     'update' => function ($url, $model, $key) {
-                        return Html::a('Modifier', ['devis/update', 'id' => $model->id], ['class' => 'waves-effect waves-teal btn-flat']);
+                        return Html::a('Modifier', ['devis/update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
                     }
                 ],
             ],
@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => false,
                 'buttons' => [
                     'delete' => function ($url, $model, $key) {
-                        return Html::a('Supprimer', ['devis/delete', 'id' => $model->id], ['class' => 'waves-effect waves-teal btn-flat']);
+                        return Html::a('Supprimer', ['devis/delete', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
                     }
                 ],
             ],
