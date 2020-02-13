@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+use yii\bootstrap\Alert;
+
+use yii\bootstrap\Modal;
+
 use yii\filters\AccessControl;
 use Yii;
 use app\models\devis\Devis;
@@ -71,13 +75,19 @@ class DevisController extends Controller implements ServiceInterface
      */
     public function actionCreate()
     {
-        $model = new DevisUpdateInsertForm();
+        $model = new DevisCreateForm();
 
         if ($model->load(Yii::$app->request->post())) {
 
             ///Format ex : AROBOXXXX donc XXXX est fixe avec l'id
             $model->id_capa = yii::$app->user->identity->cellule->name.printf('%04d',$model->id) ;
 
+            echo Alert::widget([
+                'options' => [
+                    'class' => 'alert-info fade',
+                ],
+                'body' => 'Devis créé',
+            ]);
 
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -100,8 +110,7 @@ class DevisController extends Controller implements ServiceInterface
         $model = $this->findModel($id);
 
 
-       // $model = new DevisUpdateInsertForm();
-       $modelDevis =  DevisUpdateInsertForm::findOne($id);
+       $modelDevis =  DevisUpdateForm::findOne($id);
         if ($modelDevis->load(Yii::$app->request->post())) {
 
             //&& $model->save()

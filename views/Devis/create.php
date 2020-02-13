@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 
+use yii\widgets\ActiveForm;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
@@ -13,8 +15,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
-        'model' => $model,'type' =>'create',
-    ]) ?>
+
+<?php $form = ActiveForm::begin(); ?>
+
+
+<?= $form->field($model, 'internal_name')->textInput(['maxlength' => true,])->label("Nom du projet") ?>
+
+<?= $form->field($model, 'companyname')->textInput()->label("Nom du client") ?>
+<?= $form->field($model, 'companytva')->textInput()->label("TVA") ?>
+
+<div class="form-group">
+    <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+</div>
+
+<?php ActiveForm::end(); ?>
 
 </div>
+
