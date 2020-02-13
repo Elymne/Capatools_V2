@@ -51,9 +51,50 @@ class DevisController extends Controller implements ServiceInterface
         $searchModelAvantContrat->statutsearch = 'Avant contrat';
         $dataProviderAvantContrat = $searchModelAvantContrat->search(Yii::$app->request->queryParams);
 
+
+        $searchModelAttenteop = new DevisSearch();
+        $searchModelAttenteop->statutsearch = 'Attente validation Opérationel';
+        $dataProviderAttenteop  = $searchModelAttenteop->search(Yii::$app->request->queryParams);
+
+        $searchModelAttenteClient = new DevisSearch();
+        $searchModelAttenteClient->statutsearch = 'Attente validation client';
+        $dataProviderAttenteClient  = $searchModelAttenteClient->search(Yii::$app->request->queryParams);
+
+
+        $searchModelEncours = new DevisSearch();
+        $searchModelEncours->statutsearch = 'Projet en cours';
+        $dataProviderEncours  = $searchModelEncours->search(Yii::$app->request->queryParams);
+
+
+        $searchModelTerminer = new DevisSearch();
+        $searchModelTerminer->statutsearch = 'Projet terminé';
+        $dataProviderTerminer  = $searchModelTerminer->search(Yii::$app->request->queryParams);
+
+        $searchModelAnnule = new DevisSearch();
+        $searchModelAnnule->statutsearch = 'Projet annulé';
+        $dataProviderAnnule  = $searchModelAnnule->search(Yii::$app->request->queryParams);
+
+
+
+
         return $this->render('index', [
             'searchModelAvantContrat' => $searchModelAvantContrat,
             'dataProviderAvantContrat' => $dataProviderAvantContrat,
+
+            'searchModelAttenteop' => $searchModelAttenteop,
+            'dataProviderAttenteop' => $dataProviderAttenteop,
+
+            'searchModelAttenteClient' => $searchModelAttenteClient,
+            'dataProviderAttenteClient' => $dataProviderAttenteClient,
+
+            'searchModelEncours' => $searchModelEncours,
+            'dataProviderEncours' => $dataProviderEncours,
+
+            'searchModelTerminer' => $searchModelTerminer,
+            'dataProviderTerminer' => $dataProviderTerminer,
+
+            'searchModelAnnule' => $searchModelAnnule,
+            'dataProviderAnnule' => $dataProviderAnnule,
         ]);
     }
 
