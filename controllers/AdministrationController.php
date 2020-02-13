@@ -244,13 +244,13 @@ class AdministrationController extends Controller
                             [
                                 'priorite' => 1,
                                 'url' => 'administration/index',
-                                'label'=>'Liste Utilisateur',
+                                'label'=>'Liste des salariés',
                                 'icon'=>'show_chart'
                             ],
                             [
                                 'priorite' => 2,
                                 'url' =>'administration/userform',
-                                'label'=>'Ajouter utilisateur',
+                                'label'=>'Ajouter un salarié',
                                 'icon'=>'show_chart'
                                 ]
                         ]

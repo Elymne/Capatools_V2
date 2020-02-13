@@ -102,6 +102,7 @@ class DashboardController extends Controller
         }
 
         $model->password = '';
+        $this->layout = "login";
         return $this->render('login', [
             'model' => $model,
         ]);
