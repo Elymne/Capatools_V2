@@ -9,26 +9,35 @@ use yii\bootstrap\ActiveForm;
 $this->title = Yii::$app->name;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="dashboard-login">
-    <img src= "<?= Html::encode(Yii::$app->homeUrl) ?>images/logo.png" alt="" />
-    <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
-        'layout' => 'horizontal',
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
-        ],
-    ]); ?>
+<div class="row">
+    <div class="col s6 m6">
+        <div class="card">
+            <p class="center-align">
+                <img src= "<?= Html::encode(Yii::$app->homeUrl) ?>images/logo.png" alt="" />
+            </p>
+            <div class="card-content">
+                <span class="card-title">Réinitialisation du mot de passe</span>
+                <?php $form = ActiveForm::begin([
+                    'id' => 'login-form',
+                    'layout' => 'horizontal',
+                    'fieldConfig' => [
+                        'template' => "{label}\n<div class=\"input-field col s12\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
+                        'labelOptions' => ['class' => 'blue-text control-label'],
+                    ],
+                ]); ?>
 
-        <?= $form->field($model, 'email')->textInput(['autofocus' => true])->label('Email') ?>
+                    <?= $form->field($model, 'email')->textInput(['autofocus' => true])->label('Email') ?>
 
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Envoyer', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <div class="form-group">
+                        <div class="col s12">
+                        <p class="center-align">
+                            <?= Html::submitButton('Envoyer <i class="material-icons right">mail_outline</i>', ['class' => 'btn waves-effect waves-light', 'name' => 'login-button']) ?>
+                </p>
+                        </div>
+                    </div>
+
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
-
-    <?php ActiveForm::end(); ?>
-
-
+    </div>
 </div>

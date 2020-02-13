@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\User\Capaidentity */
 
-$this->title = 'Create Capaidentity';
+$this->title = 'Création d\'un salarié';
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

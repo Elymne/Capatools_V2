@@ -46,14 +46,19 @@ foreach($Services as &$service)
 
 <div class="capaidentity-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+                    'fieldConfig' => [
+                        'labelOptions' => ['class' => 'blue-text control-label'],     
+                        ],
+                    ]); ?>
 
    
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true])->label('Nom de l\'utilisateur :') ?>
+    <?= $form->field($model, 'username')->textInput(['maxlength' => true, 'placeholder'=>'Nom et prénom'])->label('Nom de l\'utilisateur :') ?>
 
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label('Email :') ?>
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder'=>'Email capacités'])->label('Email :') ?>
 
-    <?=  $form->field($model, 'Celluleid')->dropDownList($Listcellule,['prompt'=>$comboxselect ])->label('Nom de la cellule :');   ?>
+    <?=  $form->field($model, 'Celluleid')->dropDownList($Listcellule,['prompt'=>$comboxselect])->label('Nom de la cellule :');   ?>
+
     <?php 
     $data = array();
         foreach($result as  $application)
@@ -81,7 +86,7 @@ foreach($Services as &$service)
         ]);
 
         //J'affiche le tableau des éléments
-        echo GridView::widget([
+        echo GridView::widget([            
             'dataProvider' => $Rightprovider,
             'columns' => [
                 [
@@ -95,11 +100,12 @@ foreach($Services as &$service)
                     'attribute' => 'link',
                     'format' => 'raw'
                 ],
-            ]
+            ],
+
         ]);
         ?>
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'btn waves-effect waves-light']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

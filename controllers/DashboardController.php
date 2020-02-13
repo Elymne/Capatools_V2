@@ -177,6 +177,7 @@ class DashboardController extends Controller
                 return  $this->goHome();
 
             }
+            $this->layout = "login";
             return $this->render('ForgetPassword', [
                 'model' => $model,
             ]);
@@ -198,6 +199,7 @@ class DashboardController extends Controller
                 return  $this->goHome();
 
             }
+            $this->layout = "login";
             return $this->render('FirstConnexion', [
                 'model' => $model,
             ]);

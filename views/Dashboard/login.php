@@ -13,19 +13,18 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col s6 m6">
         <div class="card">
-            <div align="center">
+            <p class="center-align">
                 <img src= "<?= Html::encode(Yii::$app->homeUrl) ?>images/logo.png" alt="" />
-            </div>
+            </p>
             <div class="card-content">
                 <?php $form = ActiveForm::begin([
                     'id' => 'login-form',
                     'layout' => 'horizontal',
                     'fieldConfig' => [
                         'template' => "{label}\n<div class=\"input-field col s12\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-                        'labelOptions' => ['class' => 'blue-text control-label'],
-                        
-                    ],
-                ]); ?>
+                        'labelOptions' => ['class' => 'blue-text control-label'],     
+                        ],
+                    ]); ?>
 
                     <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder'=>'Adresse mail capacités'])->label('<i class="material-icons prefix">account_circle</i> Email') ?>
 
