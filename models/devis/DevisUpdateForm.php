@@ -8,41 +8,51 @@ use yii\web\UploadedFile;
 class DevisUpdateForm extends Devis {
     
     public $upfilename;
-
+    public $pathfile;
     public function rules()
     {
         return [
             [['upfilename'], 'file', 'skipOnEmpty' => true,'maxSize' => 2000000, 'extensions' => 'pdf','tooBig'=> 'Le document est trop gros {formattedLimit}','message' => 'Une proposition technique doit être associée au devis.'],
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
             ['service_duration', 'required', 'message' => 'Indiquer le temps du projet.'],
-            ['company[name]', 'required', 'message' => 'Indiquer lenom du client.'],
+            ['company[name]', 'required', 'message' => 'Indiquer le nom du client.'],
             ['company[tva]', 'required', 'message' => 'Indiquer le numéro de TVA associé au client.'],
             ['service_duration', 'integer','min'=>0, 'tooSmall' => 'La durée de la prestation doit être supérieur à 0.','message' => 'La durée de la prestation doit être un entier positif.'],
 
         ];
     }
     
-
+ 
 
     public function upload()
     {
-        if ($this->validate()) {
-            //Je sauvegarde le fichier dans le répertoire uploads/CAPID/
-            $path = 'uploads/'.$id_capa;
-            if(!is_dir($path))
+        {
+            if($this->upfilename)
             {
-                mk_dir($path);
-            }
-            if(!file_exists)
-            {
+                //Je sauvegarde le fichier dans le répertoire uploads/CAPID/
+                $path = 'uploads/'.$this->id_capa;
+                if(!is_dir($path))
+                {
+                    mkdir($path);
+                }
+                $pathfile = $path.'/'. $this->upfilename->baseName . '.' . $this->upfilename->extension;
+                $result=true;
+                //if(file_exists(pathfile))
+                {
+                    ////Overright :)
 
+                }
+                if($result)
+                {
+
+                    $this->filename = $this->upfilename;
+                
+                $this->upfilename->saveAs($pathfile);
+                }
+                return true;
             }
-            
-            $this->Filename->saveAs($path.'/'. $this->File->baseName . '.' . $this->File->extension);
-            return true;
-        } else {
-            return false;
-        }
+        } 
+        
     }
 
 }

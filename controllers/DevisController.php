@@ -16,6 +16,7 @@ use app\models\devis\DevisUpdateForm;
 use app\models\devis\DevisSearch;
 
 
+use yii\web\UploadedFile;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -128,18 +129,12 @@ class DevisController extends Controller implements ServiceInterface
         if($model)
         {
         $filepath = 'uploads/'.$model->id_capa.'/'.$model->filename ;
-        var_dump( file_exists($filepath));
-        var_dump( ($filepath));
           if(file_exists($filepath))
           {
-              echo 'ok';
-              // Set up PDF headers
+             
+              // Set up PDF headers 
               header('Content-type: application/pdf');
               header('Content-Disposition: inline; filename="' . $model->filename . '"');
-              header('Content-Transfer-Encoding: binary');
-              header('Content-Length: ' . filesize($filepath));
-              header('Accept-Ranges: bytes');
-
               // Render the file
               readfile($filepath);
           }
@@ -221,13 +216,32 @@ class DevisController extends Controller implements ServiceInterface
 
 
        $modelDevis =  DevisUpdateForm::findOne($id);
-        if ($modelDevis->load(Yii::$app->request->post())) {
-            if($modelDevis-Validate())
-            {
-            //&& $model->save()
+        if ($modelDevis->load(Yii::$app->request->post()))
+        {
+            $modelDevis->upfilename = UploadedFile::getInstance($modelDevis, 'upfilename');
+            $modelDevis->upload();
+            $modelDevis->upfilename='';
+               //Gestion de la company
+              // var_dump( $modelDevis);
+              $array = Yii::$app->request->post('DevisUpdateForm')['company'];
+              
 
-            return $this->redirect(['view', 'id' => $model->id]);
-            }
+               $modelcompany = Company::find()->where(['name'=>$array['name'],'tva'=>$array['tva']])->one();
+            
+               if($modelcompany == null)
+               {
+                   $modelcompany = new Company();
+                   $modelcompany->name=$array['name'];
+                   $modelcompany->tva=$array['tva'];
+                   $modelcompany->save();
+
+               }
+               $modelDevis->company_id=$modelcompany->id;
+            $modelDevis->save(false);
+
+           
+           return $this->redirect(['view', 'id' => $model->id]);
+            
         }
   
         return $this->render('update', [

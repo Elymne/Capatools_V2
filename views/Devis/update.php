@@ -27,8 +27,18 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
 
 
 <?= $form->field($model, 'filename')->textInput(['maxlength' => true,'disabled'=>true])->label('Proposition Technique') ?>
-<?=   Html::a('Visualiser', ['viewpdf','id'=> $model->id,],['class'=>'btn btn-primary'])?>
-<?= $form->field($model, 'upfilename')->fileInput()->label('Replacer le fichier:') ?>
+<?php
+if($model->filename!='')
+{  
+  echo Html::a('Visualiser', ['viewpdf','id'=> $model->id,],['class'=>'btn btn-primary']);
+  echo $form->field($model, 'upfilename')->fileInput()->label('Remplacer le fichier:') ;
+}
+else
+{
+   echo $form->field($model, 'upfilename')->fileInput()->label('Ajouter le fichier:') ;
+
+}
+?>
 
 
 <div class="form-group">
