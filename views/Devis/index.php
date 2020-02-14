@@ -87,7 +87,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => false,
                 'buttons' => [
                     'update' => function ($url, $model, $key) {
-                        return Html::a('Modifier', ['devis/update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
+                        return Html::a('Modifier', ['devis/updateavcontrat', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
+                    }
+                ],
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{validation}',
+                'header' => false,
+                'buttons' => [
+                    'validation' => function ($url, $model, $key) {
+                        return Html::a('Valider', ['devis/validationavcontrat', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
                     }
                 ],
             ],

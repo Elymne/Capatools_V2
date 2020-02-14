@@ -9,6 +9,7 @@ use yii\bootstrap\Modal;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\devis\Devis;
+use app\models\devis\DevisStatut;
 use app\models\devis\Company;
 use app\models\devis\DevisCreateForm;
 use app\models\devis\DevisUpdateForm;
@@ -116,6 +117,24 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
+     * Deletes an existing Devis model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+
+    #region Devis Avant contrat
+
+
+    /**
      * Creates a new Devis model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -144,7 +163,7 @@ class DevisController extends Controller implements ServiceInterface
             $model->company_id =  $modelcompany->id ;
             $model->capaidentity_id = yii::$app->user->identity->id;
             $model->cellule_id =  yii::$app->user->identity->cellule->id;
-            $model->statut_id = 0;
+            $model->statut_id = Devisstatut::AVANTPROJET;
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -155,23 +174,25 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Updates an existing Devis model.
+     * Updates an existing Devis avant contrat devis models.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdateavcontrat($id)
     {
         $model = $this->findModel($id);
 
 
        $modelDevis =  DevisUpdateForm::findOne($id);
         if ($modelDevis->load(Yii::$app->request->post())) {
-
+          //  if($modelDevis-Validate())
+            {
             //&& $model->save()
 
             return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
   
         return $this->render('update', [
@@ -179,19 +200,35 @@ class DevisController extends Controller implements ServiceInterface
         ]);
     }
 
+
     /**
-     * Deletes an existing Devis model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * valide a devis and change state avantcontrat to Attente validation Opérationel
+     * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionValidationavcontrat($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
 
+        if ($model) {
+
+            //Attente validation Opérationel statut =4
+            $model->staut_id = Devisstatut::ATTENTEVALIDATIONOP;;
+
+            $model->save();
+        }
+  
         return $this->redirect(['index']);
+       
     }
+
+
+    #endregion
+
+
+
 
     /**
      * Finds the Devis model based on its primary key value.

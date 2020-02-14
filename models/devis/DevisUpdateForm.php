@@ -7,14 +7,12 @@ use yii\web\UploadedFile;
 
 class DevisUpdateForm extends Devis {
     
-
+    public $upfilename;
 
     public function rules()
     {
         return [
-            [['filename'], 'file', 'skipOnEmpty' => false,'maxSize' => 2000000, 'extensions' => 'pdf','tooBig'=> 'Le document est trop gros {formattedLimit}','message' => 'Une proposition technique doit être associée au devis.'],
-            [['filename'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf'],
-            [['filename'], 'validatepresencefile'],
+            [['upfilename'], 'file', 'skipOnEmpty' => true,'maxSize' => 2000000, 'extensions' => 'pdf','tooBig'=> 'Le document est trop gros {formattedLimit}','message' => 'Une proposition technique doit être associée au devis.'],
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
             ['service_duration', 'required', 'message' => 'Indiquer le temps du projet.'],
             ['company[name]', 'required', 'message' => 'Indiquer lenom du client.'],
@@ -26,31 +24,20 @@ class DevisUpdateForm extends Devis {
     
 
 
-
-    public function validatepresencefile()
-    {
-        $path = 'uploads/'.$id_capa;
-
-        Modal::begin([
-            'header' => '<h2>Hello world</h2>',
-            'toggleButton' => ['label' => 'click me'],
-        ]);
-    
-        echo 'Say hello...';
-    
-        Modal::end(); 
-    }
-
     public function upload()
     {
         if ($this->validate()) {
             //Je sauvegarde le fichier dans le répertoire uploads/CAPID/
             $path = 'uploads/'.$id_capa;
-            if(!file_exists($path))
+            if(!is_dir($path))
             {
                 mk_dir($path);
             }
             if(!file_exists)
+            {
+
+            }
+            
             $this->Filename->saveAs($path.'/'. $this->File->baseName . '.' . $this->File->extension);
             return true;
         } else {

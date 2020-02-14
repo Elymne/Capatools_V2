@@ -9,13 +9,13 @@ use yii\widgets\ActiveForm;
 $this->title = 'Mise à jour du devis :'. $model->id_capa ;
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Updateavcontrat';
 ?>
 <div class="devis-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
 
 <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true,'disabled'=>true])->label("Nom du projet") ?>
@@ -25,13 +25,15 @@ $this->params['breadcrumbs'][] = 'Update';
 
 <?= $form->field($model, 'service_duration')->textInput()->label("Durée de la prestation (j)") ?>
 
-<?= $form->field($model, 'filename')->textInput(['maxlength' => true,'disabled'=>true])->label("Proposition Technique") ?>
-<?= $form->field($model, 'filename')->fileInput(['class'=>'btn btn-primary'])->label(false) ?>
+
+<?= $form->field($model, 'filename')->textInput(['maxlength' => true,'disabled'=>true])->label('Proposition Technique') ?>
+<?=   Html::a('Visualiser', Html::encode(Yii::$app->basePath).'\\uploads\\'.$model->id_capa.'\\'.$model->filename)?>
+<?= $form->field($model, 'upfilename')->fileInput()->label('Replacer le fichier:') ?>
 
 
 <div class="form-group">
     <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>
-    <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class'=>'btn btn-primary']) ?>
+    <?= Html::a('Annuler', ['index'], ['class'=>'btn btn-primary']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>
