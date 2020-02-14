@@ -23,7 +23,7 @@ class AppAsset extends AssetBundle
        // 'css/dashboard.css',
         'css/materialize.min.css',
         'css/style.css',
-
+        'css/timeline.css',
         'https://fonts.googleapis.com/icon?family=Material+Icons',
     ];
     public $js = [

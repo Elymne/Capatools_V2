@@ -23,11 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="card">
             <div class="card-content">
-            <span class="card-title">Nom interne : <?= Html::encode($model->internal_name) ?></span>
-            <span class="card-title">Nom laboxy : <?= Html::encode($model->id_laboxy) ?></span>
+            <span class="card-title"> <?= Html::encode($model->internal_name) ?></span>
+            <span class="card-title"> <?= Html::encode($model->id_laboxy) ?></span>
             </div>
             <div class="card-action">
-                <?= Html::a('Revenir', ['index'], ['class' => 'waves-effect waves-light btn']) ?>
+                <?= Html::a('Revenir <i class="material-icons right">keyboard_return</i>', ['index'], ['class' => 'waves-effect waves-light btn']) ?>
                 
             </div>
         </div>

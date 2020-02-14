@@ -3,6 +3,10 @@ header, main, footer {
     
 }
 
+.container {
+    width:90%;
+    max-width: 95%;
+}
 
 .welcomeBg{
     height: 100vh;

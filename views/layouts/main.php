@@ -40,17 +40,8 @@ LeftMenuBar::begin();
 LeftMenuBar::widget();
 LeftMenuBar::end();
 
-
-
-
-
 }
 ?>
-
-
-
-
-
     <div class="container">
         <?= Alert::widget() ?>
         <?= $content ?>

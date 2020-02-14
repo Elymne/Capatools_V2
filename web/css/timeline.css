@@ -1,0 +1,89 @@
+
+/* ---- Timeline ---- */
+.timeline {
+	position: relative;
+	display: block;
+  margin-top: 100px;
+  margin-bottom : 100px;
+	height: 4px;
+  background: #31708F;
+}
+.timeline::before,
+.timeline::after {
+	content: "";
+	position: absolute;
+	top: -8px;
+	display: block;
+	width: 0;
+	height: 0;
+  border-radius: 10px;
+	border: 10px solid #31708F;
+}
+.timeline::before {
+	left: -5px;
+}
+.timeline::after {
+	right: -10px;
+	border: 10px solid transparent;
+	border-right: 0;
+	border-left: 20px solid #31708F;
+  border-radius: 3px;
+}
+
+/* ---- Timeline elements ---- */
+.timeline-event {
+	position: relative;
+	display: inline-block;
+	float: left;
+	width: 150px;
+	font: bold 14px arial;
+  height: 50px;
+}
+.timeline-event .event-label {
+  position: absolute;
+  top: -60px;
+  height: 53px;
+  left: 36%;
+  color: #000000;
+}
+.timeline-event .point {
+	content: "";
+	top: -8px;
+	left: 43%;
+	display: block;
+	width: 20px;
+	height: 20px;
+	border: 4px solid #31708F;
+	border-radius: 10px;
+	background: #fff;
+  position: absolute;
+}
+.timeline-event .description {
+  display: none;
+  background-color: #f4f4f4;
+  padding: 10px;
+  margin-top: 20px;
+  position: relative;
+  font-weight: normal;
+  z-index: 1;
+}
+.description::before {
+  content: '';
+  width: 0; 
+  height: 0; 
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #f4f4f4;
+  position: absolute;
+  top: -5px;
+  left: 43%;
+}
+
+/* ---- Hover effects ---- */
+/*.timeline-event:hover {
+	cursor: pointer;
+  color: #48A4D2;
+}*/
+.timeline-event:hover .description {
+  display: block;
+}

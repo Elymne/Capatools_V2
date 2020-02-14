@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\models\devis\Devisstatut;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\devis\DevisSearch */
@@ -10,7 +11,17 @@ use yii\widgets\Pjax;
 $this->title = 'Liste des devis';
 $this->params['breadcrumbs'][] = $this->title;
 
+$listeEtapes = array (0=>'Avant Contrat', 1=>'Attente validation Opérationnel',2=>'Attente validation client',3=>'Projet en cours',4=>'Projet terminé / annulé');
 ?>
+<div class="timeline">
+<?php foreach($listeEtapes as $uneEtape) { ?>
+
+  <div class="timeline-event">
+    <p class="event-label"><?php echo $uneEtape; ?></p>
+    <span class="point"><a href="#">&nbsp;&nbsp;</a></span>   
+  </div>   
+<?php } ?>
+</div>
 
 <div class="devis-index">
 
@@ -26,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1> Devis en avant contrat :</h1>
     <?php Pjax::begin(['id'=>'1']); ?>
     <div class="row">
-        <?php echo Html::a('Créer', ['devis/create'], ['class' => 'waves-effect waves-light btn blue']);  ?>
+        <?php echo Html::a('Créer un devis <i class="material-icons right">add_box</i>', ['devis/create'], ['class' => 'btn waves-effect waves-light']); ?>
     </div>
     <?= GridView::widget([
         'id' => 'AvantContrat_id1',
@@ -37,33 +48,57 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'id_capa',
                 'format' => 'text',
                 'label' => 'Identifiant Capacites',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre CapaId'
+                ]
             ],
             [
                 'attribute' => 'internal_name',
                 'format' => 'text',
                 'label' => 'Nom du projet',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Nom Projet'
+                ]
             ],
             //todo Remplacer par le vrai nom du project-manager.
             [
                 'attribute' => 'capaidentity.username',
                 'format' => 'text',
                 'label' => 'Responsable projet',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Responsable'
+                ]
             ],
             [
                 'attribute' => 'version',
                 'format' => 'text',
                 'label' => 'Version du fichier',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Version'
+                ]
             ],
 
             [
                 'attribute' => 'cellule.name',
                 'format' => 'text',
                 'label' => 'Cellule',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Cellule'
+                ]
             ],
             [
                 'attribute' => 'company.name',
                 'format' => 'text',
                 'label' => 'Entreprise',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Entreprise'
+                ]
             ],
             [
                 'attribute' => 'statut.label',
@@ -73,45 +108,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{get}',
-                'header' => false,
+                'template' => '{get}{update}{delete}',
+                'header' => 'Action',
                 'buttons' => [
                     'get' => function ($url, $model, $key) {
-                        return Html::a('Voir', ['devis/view', 'id' => $model->id],['class' => 'waves-effect waves-light btn blue']);
-                    }
-                ],
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}',
-                'header' => false,
-                'buttons' => [
+                        $options = ['class' => 'btn-floating blue tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Voir'];
+                        return Html::a('<i class="material-icons">search</i>', ['devis/view', 'id' => $model->id],$options);
+                    },
                     'update' => function ($url, $model, $key) {
-                        return Html::a('Modifier', ['devis/updateavcontrat', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
-                    }
-                ],
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{validation}',
-                'header' => false,
-                'buttons' => [
-                    'validation' => function ($url, $model, $key) {
-                        return Html::a('Valider', ['devis/validationavcontrat', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
-                    }
-                ],
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{delete}',
-                'header' => false,
-                'buttons' => [
+                        $options = ['class' => 'btn-floating orange tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Modifier'];
+                        return Html::a('<i class="material-icons">mode_edit</i>', ['devis/update', 'id' => $model->id], $options);
+                    },
                     'delete' => function ($url, $model, $key) {
-                        return Html::a('Supprimer', ['devis/delete', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
+                        $options = ['class' => 'btn-floating red tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Supprimer'];
+                        return Html::a('<i class="material-icons">delete</i>', ['devis/delete', 'id' => $model->id], $options);
                     }
                 ],
             ],
-
         ],
     ]); ?>
 
@@ -129,33 +148,57 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'id_capa',
                 'format' => 'text',
                 'label' => 'Identifiant Capacites',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre CapaId'
+                ]
             ],
             [
                 'attribute' => 'internal_name',
                 'format' => 'text',
                 'label' => 'Nom du projet',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Nom Projet'
+                ]
             ],
             //todo Remplacer par le vrai nom du project-manager.
             [
                 'attribute' => 'capaidentity.username',
                 'format' => 'text',
                 'label' => 'Responsable projet',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Responsable'
+                ]
             ],
             [
                 'attribute' => 'version',
                 'format' => 'text',
                 'label' => 'Version du fichier',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Version'
+                ]
             ],
 
             [
                 'attribute' => 'cellule.name',
                 'format' => 'text',
                 'label' => 'Cellule',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Cellule'
+                ]
             ],
             [
                 'attribute' => 'company.name',
                 'format' => 'text',
                 'label' => 'Entreprise',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Entreprise'
+                ]
             ],
             [
                 'attribute' => 'statut.label',
@@ -165,45 +208,36 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{get}',
+                'template' => '{get}{update}{refuse}{cloture}',
                 'header' => false,
                 'buttons' => [
                     'get' => function ($url, $model, $key) {
-                        return Html::a('Voir', ['devis/view', 'id' => $model->id],['class' => 'waves-effect waves-light btn blue']);
-                    }
-                ],
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}',
-                'header' => false,
-                'buttons' => [
+                        $options = ['class' => 'btn-floating blue tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Voir'];
+                        return Html::a('<i class="material-icons">search</i>', ['devis/view', 'id' => $model->id],$options);
+                    },
                     'update' => function ($url, $model, $key) {
-                        return Html::a('Valider', ['devis/validationop', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
+                        $options = ['class' => 'btn-floating green tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Valider'];
+                        return Html::a('<i class="material-icons">thumb_up</i>', ['devis/validationop', 'id' => $model->id], $options);
+                    },
+                    'refuse' => function ($url, $model, $key) {
+                        $options = ['class' => 'btn-floating red tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Refuser'];
+                        return Html::a('<i class="material-icons">thumb_down</i>', ['devis/RefuserOp', 'id' => $model->id], $options);
+                    },
+                    'cloture' => function ($url, $model, $key) {
+                        $options = ['class' => 'btn-floating red tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Clôturer'];
+                        return Html::a('<i class="material-icons">lock</i>', ['devis/CloturerOp', 'id' => $model->id], $options);
                     }
-                ],
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{delete}',
-                'header' => false,
-                'buttons' => [
-                    'delete' => function ($url, $model, $key) {
-                        return Html::a('Refuser', ['devis/RefuserOp', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
-                    }
-                ],
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{delete}',
-                'header' => false,
-                'buttons' => [
-                    'delete' => function ($url, $model, $key) {
-                        return Html::a('Cloturer', ['devis/CloturerOp', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
-                    }
-                ],
-            ],
 
+                ],
+            ],
         ],
     ]); ?>
 
@@ -224,33 +258,57 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'id_capa',
                 'format' => 'text',
                 'label' => 'Identifiant Capacites',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre CapaId'
+                ]
             ],
             [
                 'attribute' => 'internal_name',
                 'format' => 'text',
                 'label' => 'Nom du projet',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Nom Projet'
+                ]
             ],
             //todo Remplacer par le vrai nom du project-manager.
             [
                 'attribute' => 'capaidentity.username',
                 'format' => 'text',
                 'label' => 'Responsable projet',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Responsable'
+                ]
             ],
             [
                 'attribute' => 'version',
                 'format' => 'text',
                 'label' => 'Version du fichier',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Version'
+                ]
             ],
 
             [
                 'attribute' => 'cellule.name',
                 'format' => 'text',
                 'label' => 'Cellule',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Cellule'
+                ]
             ],
             [
                 'attribute' => 'company.name',
                 'format' => 'text',
                 'label' => 'Entreprise',
+                'filterInputOptions' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Filtre Entreprise'
+                ]
             ],
             [
                 'attribute' => 'statut.label',
@@ -260,45 +318,35 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{get}',
+                'template' => '{get}{accept}{refuse}{cloture}',
                 'header' => false,
                 'buttons' => [
                     'get' => function ($url, $model, $key) {
-                        return Html::a('Voir', ['devis/view', 'id' => $model->id],['class' => 'waves-effect waves-light btn blue']);
+                        $options = ['class' => 'btn-floating blue tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Voir'];
+                        return Html::a('<i class="material-icons">search</i>', ['devis/view', 'id' => $model->id],$options);
+                    },
+                    'accept' => function ($url, $model, $key) {
+                        $options = ['class' => 'btn-floating green tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Accepter'];
+                        return Html::a('<i class="material-icons">thumb_up</i>', ['devis/validationclient', 'id' => $model->id], $options);
+                    },
+                    'refuse' => function ($url, $model, $key) {
+                        $options = ['class' => 'btn-floating red tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Refuser'];
+                        return Html::a('<i class="material-icons">thumb_down</i>', ['devis/Refuserclient', 'id' => $model->id], $options);
+                    },
+                    'cloture' => function ($url, $model, $key) {
+                        $options = ['class' => 'btn-floating red tooltipped',
+                                    'data-position' => 'bottom',
+                                    'data-tooltip' => 'Clôturer'];
+                        return Html::a('<i class="material-icons">lock</i>', ['devis/Cloturerclient', 'id' => $model->id], $options);
                     }
                 ],
             ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}',
-                'header' => false,
-                'buttons' => [
-                    'update' => function ($url, $model, $key) {
-                        return Html::a('Accepter', ['devis/validationclient', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
-                    }
-                ],
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{delete}',
-                'header' => false,
-                'buttons' => [
-                    'delete' => function ($url, $model, $key) {
-                        return Html::a('Refuser', ['devis/Refuserclient', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
-                    }
-                ],
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{delete}',
-                'header' => false,
-                'buttons' => [
-                    'delete' => function ($url, $model, $key) {
-                        return Html::a('Cloturer', ['devis/Cloturerclient', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
-                    }
-                ],
-            ],
-
         ],
     ]); ?>
 
@@ -318,33 +366,57 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'id_capa',
             'format' => 'text',
             'label' => 'Identifiant Capacites',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre CapaId'
+            ]
         ],
         [
             'attribute' => 'internal_name',
             'format' => 'text',
             'label' => 'Nom du projet',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre Nom Projet'
+            ]
         ],
         //todo Remplacer par le vrai nom du project-manager.
         [
             'attribute' => 'capaidentity.username',
             'format' => 'text',
             'label' => 'Responsable projet',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre Responsable'
+            ]
         ],
         [
             'attribute' => 'version',
             'format' => 'text',
             'label' => 'Version du fichier',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre Version'
+            ]
         ],
 
         [
             'attribute' => 'cellule.name',
             'format' => 'text',
             'label' => 'Cellule',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre Cellule'
+            ]
         ],
         [
             'attribute' => 'company.name',
             'format' => 'text',
             'label' => 'Entreprise',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre Enreprise'
+            ]
         ],
         [
             'attribute' => 'statut.label',
@@ -354,32 +426,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{get}',
+            'template' => '{get}{update}{cloture}',
             'header' => false,
             'buttons' => [
                 'get' => function ($url, $model, $key) {
-                    return Html::a('Voir', ['devis/view', 'id' => $model->id],['class' => 'waves-effect waves-light btn blue']);
-                }
-            ],
-        ],
-        [
-            'class' => 'yii\grid\ActionColumn',
-            'template' => '{update}',
-            'header' => false,
-            'buttons' => [
+                    $options = ['class' => 'btn-floating blue tooltipped',
+                                'data-position' => 'bottom',
+                                'data-tooltip' => 'Voir'];
+                    return Html::a('<i class="material-icons">search</i>', ['devis/view', 'id' => $model->id],$options);
+                },
                 'update' => function ($url, $model, $key) {
-                    return Html::a('Modifier', ['devis/Modifierencours', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
-                }
-            ],
-        ],
-        [
-            'class' => 'yii\grid\ActionColumn',
-            'template' => '{delete}',
-            'header' => false,
-            'buttons' => [
-                'delete' => function ($url, $model, $key) {
-                    return Html::a('Cloturer', ['devis/Cloturerclient', 'id' => $model->id], ['class' => 'waves-effect waves-light btn blue']);
-                }
+                    $options = ['class' => 'btn-floating green tooltipped',
+                                'data-position' => 'bottom',
+                                'data-tooltip' => 'Modifier'];
+                    return Html::a('<i class="material-icons">mode_edit</i>', ['devis/Modifierencours', 'id' => $model->id], $options);
+                },
+                'cloture' => function ($url, $model, $key) {
+                    $options = ['class' => 'btn-floating red tooltipped',
+                                'data-position' => 'bottom',
+                                'data-tooltip' => 'Clôturer'];
+                    return Html::a('<i class="material-icons">lock</i>', ['devis/Cloturerclient', 'id' => $model->id], $options);
+                },
             ],
         ],
 
@@ -402,33 +469,57 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'id_capa',
             'format' => 'text',
             'label' => 'Identifiant Capacites',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre CapaId'
+            ]
         ],
         [
             'attribute' => 'internal_name',
             'format' => 'text',
             'label' => 'Nom du projet',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre Nom Projet'
+            ]
         ],
         //todo Remplacer par le vrai nom du project-manager.
         [
             'attribute' => 'capaidentity.username',
             'format' => 'text',
             'label' => 'Responsable projet',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre Responsable'
+            ]
         ],
         [
             'attribute' => 'version',
             'format' => 'text',
             'label' => 'Version du fichier',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre Version'
+            ]
         ],
 
         [
             'attribute' => 'cellule.name',
             'format' => 'text',
             'label' => 'Cellule',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre Cellule'
+            ]
         ],
         [
             'attribute' => 'company.name',
             'format' => 'text',
             'label' => 'Entreprise',
+            'filterInputOptions' => [
+                'class' => 'form-control',
+                'placeholder' => 'Filtre Entreprise'
+            ]
         ],
         [
             'attribute' => 'statut.label',
@@ -442,7 +533,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'header' => false,
             'buttons' => [
                 'get' => function ($url, $model, $key) {
-                    return Html::a('Voir', ['devis/view', 'id' => $model->id],['class' => 'waves-effect waves-light btn blue']);
+                    $options = ['class' => 'btn-floating blue tooltipped',
+                                'data-position' => 'bottom',
+                                'data-tooltip' => 'Voir'];
+                    return Html::a('<i class="material-icons">search</i>', ['devis/view', 'id' => $model->id],$options);
                 }
             ],
         ],
