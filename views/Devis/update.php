@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
 
 
 <?= $form->field($model, 'filename')->textInput(['maxlength' => true,'disabled'=>true])->label('Proposition Technique') ?>
-<?=   Html::a('Visualiser', Html::encode(Yii::$app->basePath).'\\uploads\\'.$model->id_capa.'\\'.$model->filename)?>
+<?=   Html::a('Visualiser', ['viewpdf','id'=> $model->id,],['class'=>'btn btn-primary'])?>
 <?= $form->field($model, 'upfilename')->fileInput()->label('Replacer le fichier:') ?>
 
 

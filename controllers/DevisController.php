@@ -116,6 +116,41 @@ class DevisController extends Controller implements ServiceInterface
         ]);
     }
 
+ /**
+     * Displays a single Devis model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionViewpdf($id)
+    {
+        $model =  $this->findModel($id);
+        if($model)
+        {
+        $filepath = 'uploads/'.$model->id_capa.'/'.$model->filename ;
+        var_dump( file_exists($filepath));
+        var_dump( ($filepath));
+          if(file_exists($filepath))
+          {
+              echo 'ok';
+              // Set up PDF headers
+              header('Content-type: application/pdf');
+              header('Content-Disposition: inline; filename="' . $model->filename . '"');
+              header('Content-Transfer-Encoding: binary');
+              header('Content-Length: ' . filesize($filepath));
+              header('Accept-Ranges: bytes');
+
+              // Render the file
+              readfile($filepath);
+          }
+          else
+          {
+             // PDF doesn't exist so throw an error or something
+          }
+        }
+
+    }
+
     /**
      * Deletes an existing Devis model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -187,7 +222,7 @@ class DevisController extends Controller implements ServiceInterface
 
        $modelDevis =  DevisUpdateForm::findOne($id);
         if ($modelDevis->load(Yii::$app->request->post())) {
-          //  if($modelDevis-Validate())
+            if($modelDevis-Validate())
             {
             //&& $model->save()
 
