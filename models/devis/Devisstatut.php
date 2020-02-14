@@ -6,12 +6,12 @@ use yii\db\ActiveRecord;
 
 class Devisstatut extends ActiveRecord {
     
-    public const AVANTPROJET       = 0;
-    public const PROJETENCOURS       = 1;
-    public const PROJETANNULE       = 2;
-    public const PROJETTERMINE = 3;
-    public const ATTENTEVALIDATIONOP = 4;
-    public const ATTENTEVALIDATIONCL = 5;
+    const AVANTPROJET       = 0;
+    const PROJETENCOURS       = 1;
+    const PROJETANNULE       = 2;
+    const PROJETTERMINE = 3;
+    const ATTENTEVALIDATIONOP = 4;
+    const ATTENTEVALIDATIONCL = 5;
 
 
 

@@ -121,7 +121,7 @@ $listeEtapes = array (0=>'Avant Contrat', 1=>'Attente validation Opérationnel',
                         $options = ['class' => 'btn-floating orange tooltipped',
                                     'data-position' => 'bottom',
                                     'data-tooltip' => 'Modifier'];
-                        return Html::a('<i class="material-icons">mode_edit</i>', ['devis/update', 'id' => $model->id], $options);
+                        return Html::a('<i class="material-icons">mode_edit</i>', ['devis/updateavcontrat', 'id' => $model->id], $options);
                     },
                     'delete' => function ($url, $model, $key) {
                         $options = ['class' => 'btn-floating red tooltipped',
