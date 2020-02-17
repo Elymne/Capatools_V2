@@ -40,6 +40,7 @@ else
 }
 ?>
 
+<?= $form->field($model, 'prix')->textInput()->label("Prix de la prestation (€)") ?>
 
 <div class="form-group">
     <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>
