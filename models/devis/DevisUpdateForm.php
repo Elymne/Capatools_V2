@@ -18,8 +18,8 @@ class DevisUpdateForm extends Devis {
             ['company[name]', 'required', 'message' => 'Indiquer le nom du client.'],
             ['company[tva]', 'required', 'message' => 'Indiquer le numéro de TVA associé au client.'],
             ['service_duration', 'integer','min'=>0, 'tooSmall' => 'La durée de la prestation doit être supérieur à 0.','message' => 'La durée de la prestation doit être un entier positif.'],
-            ['prix', 'required', 'message' => 'Indiquer le prix du projet.'],
-            ['prix', 'double','min'=>0, 'tooSmall' => 'Le prix de la prestation doit être supérieur à 0.','message' => 'Le prix de la prestation doit être positif.'],
+            ['prix', 'required', 'message' => 'Indiquer le prix de la prestation.'],
+            ['prix', 'double','min' =>1, 'tooSmall' => 'Le prix de la prestation doit être supérieur à 0.','message' => 'Le prix de la prestation doit être positif.'],
 
         ];
     }

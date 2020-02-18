@@ -68,11 +68,39 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="card">
+            <div class="card-content teal white-text">
+                <span class="card-title"> Information Laboxy </span>
+            </div>
+            <div class="card-action white">
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        [
+                            'attribute' => 'id_laboxy',
+                            'format' => 'text',
+                            'label' => 'Identifiant laboxy',
+                        ],
+                        [
+                            'attribute' => 'service_duration',
+                            'format' => 'text',
+                            'label' => 'Durée de la prestation (h)',
+                            'value'=>function($data){
+                                return $data->service_duration * Yii::$app->params['LaboxyTimeDay'] ;
+                            }
+                        ],
+                        
+                    ],
+                ]) ?>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="card">
             <div class="card-content teal white-text">
-                <span class="card-title"> Fichier PDF</span>
+                <span class="card-title"> Proposition technique</span>
             </div>
             <div class="card-action white">
                 <?= DetailView::widget([
@@ -82,6 +110,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'filename',
                             'format' => 'text',
                             'label' => 'Nom du fichier PDF',
+                        ],
+                        [
+                            'format' => 'html',
+                            'label' => 'Visualiser',
+                            'value'=>function($data){
+                                return Html::a('Visualiser', ['viewpdf','id'=> $data->id,],['class'=>'btn btn-primary']) ;
+                            }
                         ],
                         [
                             'attribute' => 'version',
@@ -97,7 +132,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'filename_last_upload',
                             'format' => 'text',
                             'label' => 'Dernière modification du fichier',
-                        ]
+                        ],
                     ],
                 ]) ?>
             </div>
