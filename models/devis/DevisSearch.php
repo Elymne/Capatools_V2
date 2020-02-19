@@ -19,15 +19,15 @@ class DevisSearch extends Devis
     public function rules()
     {
         return [
-            [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capaidentity_id', 'statut_id'], 'integer'],
-            [['id_capa', 'internal_name', 'filename', 'filename_first_upload', 'filename_last_upload', 'capaidentity.username', 'company.name', 'cellule.name'], 'safe'],
+            [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capaidentity_id', 'statut_id','typeprestation_id'], 'integer'],
+            [['id_capa', 'internal_name', 'filename', 'filename_first_upload', 'filename_last_upload', 'capaidentity.username', 'company.name', 'cellule.name', 'typeprestation.label'], 'safe'],
         ];
     }
 
     public function attributes()
     {
         // add related fields to searchable attributes
-        return array_merge(parent::attributes(), ['capaidentity.username', 'company.name', 'cellule.name','statut.label']);
+        return array_merge(parent::attributes(), ['capaidentity.username', 'company.name', 'cellule.name','statut.label','typeprestation.label']);
     }
 
     /**
@@ -75,11 +75,18 @@ class DevisSearch extends Devis
         ];
         
 
+        $dataProvider->sort->attributes['typeprestation.label'] = [
+            'asc' => ['typeprestation.label' => SORT_ASC],
+            'desc' => ['typeprestation.label' => SORT_DESC],
+        ];
+        
+
         $this->load($params);
         $query->joinWith(['capaidentity']);
         $query->joinWith(['cellule']);
         $query->joinWith(['company']);
         $query->joinWith(['statut']);
+        $query->joinWith(['typeprestation']);
 
         if (!$this->validate()) {
             return $dataProvider;
@@ -94,6 +101,7 @@ class DevisSearch extends Devis
             'cellule_id' => $this->cellule_id,
             'company_id' => $this->company_id,
             'capaidentity_id' => $this->capaidentity_id,
+            'typeprestation_id' => $this->typeprestation_id,
         ]);
 
         $query->andFilterWhere(['like', 'id_capa', $this->id_capa])
@@ -102,6 +110,7 @@ class DevisSearch extends Devis
             ->andFilterWhere(['like', 'cellule.name', $this->getAttribute('cellule.name')])
             ->andFilterWhere(['like', 'company.name', $this->getAttribute('company.name')])
             ->andFilterWhere(['like', 'capaidentity.username', $this->getAttribute('capaidentity.username')])
+            ->andFilterWhere(['like', 'typeprestation.label', $this->getAttribute('typeprestation.label')])
             ->andFilterWhere(['like', 'devisstatut.label', $this->statutsearch]);
 
         return $dataProvider;

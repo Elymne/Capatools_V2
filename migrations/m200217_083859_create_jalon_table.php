@@ -58,6 +58,6 @@ class m200217_083859_create_jalon_table extends Migration
     {
         $this->dropTable('{{%jalon}}');
         $this->dropTable('{{%jalonstatut}}');
-        $this->dropColumn('devis', 'prix', $this->string());
+        $this->dropColumn('devis', 'prix');
     }
 }

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -20,9 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true,])->label("Nom du projet") ?>
-
+<?= $form->field($model,'typeprestation_id')->dropDownList(ArrayHelper::map($prestationtypelist,'id','label'), ['text' => 'Please select'])->label('');   ?>
+   
 <?= $form->field($model, 'companyname')->textInput()->label("Nom du client") ?>
 <?= $form->field($model, 'companytva')->textInput()->label("TVA") ?>
+ 
 
 <div class="form-group">
     <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>

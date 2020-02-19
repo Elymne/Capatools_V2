@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
@@ -19,6 +20,9 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
 
 
 <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true,'disabled'=>true])->label("Nom du projet") ?>
+
+
+<?= $form->field($model,'typeprestation_id')->dropDownList(ArrayHelper::map($prestationtypelist,'id','label'), ['text' => 'Please select'])->label('');   ?>
 
 <?= $form->field($model, 'company[name]')->textInput()->label("Nom du client") ?>
 <?= $form->field($model, 'company[tva]')->textInput()->label("TVA") ?>

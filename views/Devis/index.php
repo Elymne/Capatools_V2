@@ -101,6 +101,11 @@ $listeEtapes = array (0=>'Avant Contrat', 1=>'Attente validation Opérationnel',
                 ]
             ],
             [
+                'attribute' => 'typeprestation.label',
+                'format' => 'text',
+                'label' => 'type de prestation',
+            ],
+            [
                 'attribute' => 'statut.label',
                 'format' => 'text',
                 'label' => 'Statut',

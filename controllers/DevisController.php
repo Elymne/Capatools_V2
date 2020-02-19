@@ -14,6 +14,7 @@ use app\models\devis\Company;
 use app\models\devis\DevisCreateForm;
 use app\models\devis\DevisUpdateForm;
 use app\models\devis\DevisSearch;
+use app\models\devis\Typeprestation;
 
 
 use yii\web\UploadedFile;
@@ -172,6 +173,7 @@ class DevisController extends Controller implements ServiceInterface
     public function actionCreate()
     {
         $model = new DevisCreateForm();
+        $modeltypeprestation = Typeprestation::getlisteTypePrestation();
         if ($model->load(Yii::$app->request->post())) {
           
             //Gestion de la company
@@ -198,8 +200,9 @@ class DevisController extends Controller implements ServiceInterface
                 return $this->redirect(['view', 'id' => $model->id]);
         }
 
+
         return $this->render('create', [
-            'model' => $model,
+            'model' => $model,'prestationtypelist' =>  $modeltypeprestation
         ]);
     }
 
@@ -214,6 +217,7 @@ class DevisController extends Controller implements ServiceInterface
     {
         $model = $this->findModel($id);
 
+        $modeltypeprestation = Typeprestation::getlisteTypePrestation();
 
        $modelDevis =  DevisUpdateForm::findOne($id);
         if ($modelDevis->load(Yii::$app->request->post()))
@@ -245,7 +249,7 @@ class DevisController extends Controller implements ServiceInterface
         }
   
         return $this->render('update', [
-            'model' => $modelDevis,
+            'model' => $modelDevis,'prestationtypelist' =>  $modeltypeprestation,
         ]);
     }
 

@@ -18,6 +18,7 @@ class DevisCreateForm extends Devis {
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
             ['companyname', 'required', 'message' => 'Indiquer lenom du client.'],
             ['companytva', 'required', 'message' => 'Indiquer le numéro de TVA associé au client.'],
+            ['typeprestation_id', 'required', 'message' => 'Indiquer le type de la prestation.'],
  
         ];
     }
