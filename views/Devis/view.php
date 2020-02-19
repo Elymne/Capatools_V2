@@ -49,6 +49,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => 'Durée de la prestation',
                         ],
                         [
+                            'attribute' => 'typeprestation.label',
+                            'format' => 'text',
+                            'label' => 'Type de la prestation',
+                        ],
+                        [
                             'attribute' => 'cellule.name',
                             'format' => 'text',
                             'label' => 'Nom de cellule',

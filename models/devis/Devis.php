@@ -3,7 +3,8 @@
 namespace app\models\devis;
 
 use yii\db\ActiveRecord;
-
+use dosamigos\chartjs\ChartJs;
+use yii\helpers\ArrayHelper;
 use app\models\User\Cellule;
 use app\models\User\Capaidentity;
 
@@ -24,6 +25,74 @@ class Devis extends ActiveRecord
         return static::find();
     }
 
+
+    public static function getGroupbyStatus()
+    {
+        //Je recherche l'ensemble des statuts d'un devis
+        $statuts = Devisstatut::find()->asArray()->orderby('id')->all();
+        $val= array();
+        foreach($statuts as $st)
+        {
+            //Je calcul lenb de devis par statut
+           $tot =  static::find()->where(['statut_id' => $st['id']])->count();
+
+           $val =array_merge($val,  [['statutlbl' => $st['label'], 'val' => (int)$tot]]);
+        }
+
+        $string = ChartJs::widget([
+            'options' =>[
+                'height'=> 100,
+                      
+            ],
+            'clientOptions' => [
+                'responsive' => true,
+                'legend' => [ 'display'=> false ],
+                'animation' => [
+                        'duration' => 369,
+                ],
+                'title' => [
+                    'display' => true,
+                    'text' => 'Etat des Projet(s)',
+                    'Position' => 'bottom'
+                ],
+                'scales' => [
+                    'yAxes' => [
+                        [
+                            'scaleLabel' => [
+                                'display' => 'true',
+                                'labelString' => 'Nombres de projet(s)'
+                            ],
+                            'ticks'=>[
+                                'min'=>0,
+                            ]
+                        ]
+                    ],
+                    'xAxes' => [
+                        [
+                            
+                        ]
+                    ]
+                ]
+            ],
+            'type' => 'bar',
+            'data' =>
+            [
+                'labels' => ArrayHelper::getColumn($val, 'statutlbl'),
+                'datasets' =>
+                [
+                    [
+                        'label' => "Projet(s)",
+                        'data' =>  ArrayHelper::getColumn($val,'val'),
+                        'backgroundColor' => ['blue', 'red', 'yellow', 'green'],
+                        
+                    ],
+        
+                ]
+            ],
+            
+        ]);
+        return  $string;
+    }
 
     public static function getOneById($id)
     {

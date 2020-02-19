@@ -58,7 +58,7 @@ class DevisController extends Controller implements ServiceInterface
         $searchModelAvantContrat->statutsearch = 'Avant contrat';
         $dataProviderAvantContrat = $searchModelAvantContrat->search(Yii::$app->request->queryParams);
 
-
+       
         $searchModelAttenteop = new DevisSearch();
         $searchModelAttenteop->statutsearch = 'Attente validation Opérationel';
         $dataProviderAttenteop  = $searchModelAttenteop->search(Yii::$app->request->queryParams);
@@ -314,6 +314,8 @@ class DevisController extends Controller implements ServiceInterface
 
     public static function GetIndicateur($user)
     {
+        
+        return  ['label'=> 'NbDevis','value'=> Devis::getGroupbyStatus()];
     }
 
 
