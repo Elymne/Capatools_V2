@@ -15,6 +15,7 @@ use app\models\devis\DevisCreateForm;
 use app\models\devis\DevisUpdateForm;
 use app\models\devis\DevisSearch;
 use app\models\devis\Typeprestation;
+use app\models\devis\Jalon;
 
 
 use yii\web\UploadedFile;
@@ -215,10 +216,16 @@ class DevisController extends Controller implements ServiceInterface
      */
     public function actionUpdateavcontrat($id)
     {
-        $model = $this->findModel($id);
 
+        $modelsJalon = [new Jalon];
+        $modelDevis =  DevisUpdateForm::findOne($id);
         $modeltypeprestation = Typeprestation::getlisteTypePrestation();
-
+        if (Yii::$app->request->post('addRow') == 'true') {
+            echo 'kkklklklkl';
+            return $this->render('update', [
+                'model' => $modelDevis,'prestationtypelist' =>  $modeltypeprestation,
+            ]);
+        }
        $modelDevis =  DevisUpdateForm::findOne($id);
         if ($modelDevis->load(Yii::$app->request->post()))
         {
@@ -244,12 +251,13 @@ class DevisController extends Controller implements ServiceInterface
             $modelDevis->save(false);
 
            
-           return $this->redirect(['view', 'id' => $model->id]);
+           return $this->redirect(['view', 'id' => $modelDevis->id]);
             
         }
   
         return $this->render('update', [
             'model' => $modelDevis,'prestationtypelist' =>  $modeltypeprestation,
+            'modelsJalon' => (empty($modelsJalon)) ? [new Jalon] : $modelsJalon
         ]);
     }
 
