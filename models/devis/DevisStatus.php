@@ -4,12 +4,12 @@ namespace app\models\devis;
 
 use yii\db\ActiveRecord;
 
-class DevisStatut extends ActiveRecord
+class DevisStatus extends ActiveRecord
 {
 
     public static function tableName()
     {
-        return 'devisstatut';
+        return 'devis_status';
     }
 
     const AVANTPROJET = 0;

@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use app\models\devis\Devisstatut;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\devis\DevisSearch */
@@ -106,7 +105,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                 'label' => 'type de prestation',
             ],
             [
-                'attribute' => 'statut.label',
+                'attribute' => 'devis_status.label',
                 'format' => 'text',
                 'label' => 'Statut',
             ],
@@ -212,7 +211,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                 ]
             ],
             [
-                'attribute' => 'statut.label',
+                'attribute' => 'devis_status.label',
                 'format' => 'text',
                 'label' => 'Statut',
             ],
@@ -330,7 +329,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                 ]
             ],
             [
-                'attribute' => 'statut.label',
+                'attribute' => 'devis_status.label',
                 'format' => 'text',
                 'label' => 'Statut',
             ],
@@ -446,7 +445,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                 ]
             ],
             [
-                'attribute' => 'statut.label',
+                'attribute' => 'devis_status.label',
                 'format' => 'text',
                 'label' => 'Statut',
             ],
@@ -555,7 +554,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                 ]
             ],
             [
-                'attribute' => 'statut.label',
+                'attribute' => 'devis_status.label',
                 'format' => 'text',
                 'label' => 'Statut',
             ],

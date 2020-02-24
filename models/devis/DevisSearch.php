@@ -12,14 +12,14 @@ use app\models\devis\Devis;
 class DevisSearch extends Devis
 {
 
-    public $statutsearch = '';
+    public $statusSearch = '';
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capaidentity_id', 'statut_id', 'delivery_type_id'], 'integer'],
+            [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capaidentity_id', 'status_id', 'delivery_type_id'], 'integer'],
             [['id_capa', 'internal_name', 'filename', 'filename_first_upload', 'filename_last_upload', 'capaidentity.username', 'company.name', 'cellule.name', 'deliveryType.label'], 'safe'],
         ];
     }
@@ -27,7 +27,7 @@ class DevisSearch extends Devis
     public function attributes()
     {
         // add related fields to searchable attributes
-        return array_merge(parent::attributes(), ['capaidentity.username', 'company.name', 'cellule.name', 'statut.label', 'deliveryType.label']);
+        return array_merge(parent::attributes(), ['capaidentity.username', 'company.name', 'cellule.name', 'devis_status.label', 'deliveryType.label']);
     }
 
     /**
@@ -85,7 +85,7 @@ class DevisSearch extends Devis
         $query->joinWith(['capaidentity']);
         $query->joinWith(['cellule']);
         $query->joinWith(['company']);
-        $query->joinWith(['statut']);
+        $query->joinWith(['status']);
         $query->joinWith(['deliveryType']);
 
         if (!$this->validate()) {
@@ -111,7 +111,7 @@ class DevisSearch extends Devis
             ->andFilterWhere(['like', 'company.name', $this->getAttribute('company.name')])
             ->andFilterWhere(['like', 'capaidentity.username', $this->getAttribute('capaidentity.username')])
             ->andFilterWhere(['like', 'deliveryType.label', $this->getAttribute('deliveryType.label')])
-            ->andFilterWhere(['like', 'devisstatut.label', $this->statutsearch]);
+            ->andFilterWhere(['like', 'devis_status.label', $this->statusSearch]);
 
         return $dataProvider;
     }

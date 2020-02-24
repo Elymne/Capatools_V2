@@ -5,7 +5,7 @@ namespace app\controllers;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\devis\Devis;
-use app\models\devis\DevisStatut;
+use app\models\devis\DevisStatus;
 use app\models\devis\Company;
 use app\models\devis\DevisCreateForm;
 use app\models\devis\DevisUpdateForm;
@@ -52,30 +52,30 @@ class DevisController extends Controller implements ServiceInterface
     public function actionIndex()
     {
         $searchModelAvantContrat = new DevisSearch();
-        $searchModelAvantContrat->statutsearch = 'Avant contrat';
+        $searchModelAvantContrat->statusSearch = 'Avant contrat';
         $dataProviderAvantContrat = $searchModelAvantContrat->search(Yii::$app->request->queryParams);
 
 
         $searchModelAttenteop = new DevisSearch();
-        $searchModelAttenteop->statutsearch = 'Attente validation Opérationel';
+        $searchModelAttenteop->statusSearch = 'Attente validation Opérationel';
         $dataProviderAttenteop  = $searchModelAttenteop->search(Yii::$app->request->queryParams);
 
         $searchModelAttenteClient = new DevisSearch();
-        $searchModelAttenteClient->statutsearch = 'Attente validation client';
+        $searchModelAttenteClient->statusSearch = 'Attente validation client';
         $dataProviderAttenteClient  = $searchModelAttenteClient->search(Yii::$app->request->queryParams);
 
 
         $searchModelEncours = new DevisSearch();
-        $searchModelEncours->statutsearch = 'Projet en cours';
+        $searchModelEncours->statusSearch = 'Projet en cours';
         $dataProviderEncours  = $searchModelEncours->search(Yii::$app->request->queryParams);
 
 
         $searchModelTerminer = new DevisSearch();
-        $searchModelTerminer->statutsearch = 'Projet terminé';
+        $searchModelTerminer->statusSearch = 'Projet terminé';
         $dataProviderTerminer  = $searchModelTerminer->search(Yii::$app->request->queryParams);
 
         $searchModelAnnule = new DevisSearch();
-        $searchModelAnnule->statutsearch = 'Projet annulé';
+        $searchModelAnnule->statusSearch = 'Projet annulé';
         $dataProviderAnnule  = $searchModelAnnule->search(Yii::$app->request->queryParams);
 
 
@@ -184,7 +184,7 @@ class DevisController extends Controller implements ServiceInterface
             $model->company_id =  $modelcompany->id;
             $model->capaidentity_id = yii::$app->user->identity->id;
             $model->cellule_id =  yii::$app->user->identity->cellule->id;
-            $model->statut_id = DevisStatut::AVANTPROJET;
+            $model->status_id = DevisStatus::AVANTPROJET;
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -259,7 +259,7 @@ class DevisController extends Controller implements ServiceInterface
         if ($model) {
 
             //Attente validation Opérationel statut =4
-            $model->staut_id = Devisstatut::ATTENTEVALIDATIONOP;;
+            $model->staut_id = DevisStatus::ATTENTEVALIDATIONOP;;
 
             $model->save();
         }

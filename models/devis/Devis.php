@@ -29,13 +29,13 @@ class Devis extends ActiveRecord
     public static function getGroupbyStatus()
     {
         //Je recherche l'ensemble des statuts d'un devis
-        $statuts = DevisStatut::find()->asArray()->orderby('id')->all();
+        $statusList = DevisStatus::find()->asArray()->orderby('id')->all();
         $val = array();
-        foreach ($statuts as $st) {
+        foreach ($statusList as $status) {
             //Je calcul lenb de devis par statut
-            $tot =  static::find()->where(['statut_id' => $st['id']])->count();
+            $tot =  static::find()->where(['status_id' => $status['id']])->count();
 
-            $val = array_merge($val,  [['statutlbl' => $st['label'], 'val' => (int) $tot]]);
+            $val = array_merge($val,  [['statutlbl' => $status['label'], 'val' => (int) $tot]]);
         }
 
         $string = ChartJs::widget([
@@ -114,9 +114,9 @@ class Devis extends ActiveRecord
     {
         return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
-    public function getStatut()
+    public function getStatus()
     {
-        return $this->hasOne(DevisStatut::className(), ['id' => 'statut_id']);
+        return $this->hasOne(DevisStatus::className(), ['id' => 'status_id']);
     }
 
     public function getCapaidentity()
