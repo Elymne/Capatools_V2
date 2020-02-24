@@ -220,15 +220,11 @@ class DevisController extends Controller implements ServiceInterface
         $modelsJalon = [new Jalon];
         $modelDevis =  DevisUpdateForm::findOne($id);
         $modeltypeprestation = Typeprestation::getlisteTypePrestation();
-        if (Yii::$app->request->post('addRow') == 'true') {
-            echo 'kkklklklkl';
-            return $this->render('update', [
-                'model' => $modelDevis,'prestationtypelist' =>  $modeltypeprestation,
-            ]);
-        }
-       $modelDevis =  DevisUpdateForm::findOne($id);
+
         if ($modelDevis->load(Yii::$app->request->post()))
         {
+            Model::loadMultiple($modelsJalon, Yii::$app->request->post());
+
             $modelDevis->upfilename = UploadedFile::getInstance($modelDevis, 'upfilename');
             $modelDevis->upload();
             $modelDevis->upfilename='';
@@ -248,9 +244,24 @@ class DevisController extends Controller implements ServiceInterface
 
                }
                $modelDevis->company_id=$modelcompany->id;
-            $modelDevis->save(false);
 
-           
+
+
+            $transaction = \Yii::$app->db->beginTransaction();
+            try {
+            $modelDevis->save(false);
+            foreach ($modelsJalon as $modelJalon) {
+                $modelsJalon->devis_id = $modelDevis->id;
+                if (! ($flag = $modelsJalon->save(false))) {
+                    $transaction->rollBack();
+                    break;
+                }
+            }
+            $transaction->commit();
+            } catch (Exception $e) {
+                $transaction->rollBack();
+            }
+
            return $this->redirect(['view', 'id' => $modelDevis->id]);
             
         }

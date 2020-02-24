@@ -18,25 +18,6 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="dartepicker">
-
-<?= 
- DatePicker::widget( 
-    [
-        'name'  => 'from_date',
-        // inline too, not bad
-         'inline' => false, 
-         'id'=>'dtpicker',
-         'language' => 'fr',
-         'dateFormat' => 'DD, dd MM yyyy',
-         'options' => [
-             'autoclose' => true,
-         ],
-         // modify template for custom rendering
-        
-
-        ]); ?>
-</div>
 
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form','options' => ['enctype' => 'multipart/form-data']]); ?>
 
@@ -94,7 +75,7 @@ else
             <?php foreach ($modelsJalon as $i => $modelJalon): ?>
                 <div class="item panel panel-default"><!-- widgetBody -->
                     <div class="panel-heading">
-                        <h3 class="panel-title pull-left">Jalon</h3>
+                        <h3 class="panel-title pull-left">Jalon </h3>
                         <div class="pull-right">
                             <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
                             <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
@@ -111,8 +92,10 @@ else
                          
                         <div class="row">
                             <div class="col-sm-4">
-                            <?= $form->field($modelJalon, "[{$i}]prix_jalon")->textInput(['maxlength' => true])->label('Priex') ?> 
-
+                            <?= $form->field($modelJalon, "[{$i}]label")->textInput(['maxlength' => true])->label('Label') ?> 
+                            <?= $form->field($modelJalon, "[{$i}]prix_jalon")->textInput(['maxlength' => true])->label('Prix') ?> 
+                            <?= $form->field($modelJalon, "[{$i}]date_jalon")->widget(DatePicker::classname(), [])?>
+                            <?= $form->field($modelJalon, "[{$i}]commentaires")->textarea(['maxlength' => true])->label('Commentaires') ?> 
                             </div>
                             
                         </div><!-- .row -->
