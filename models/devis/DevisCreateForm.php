@@ -5,8 +5,9 @@ namespace app\models\devis;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
-class DevisCreateForm extends Devis {
-    
+class DevisCreateForm extends Devis
+{
+
 
 
     public $companyname;
@@ -19,9 +20,7 @@ class DevisCreateForm extends Devis {
             ['companyname', 'required', 'message' => 'Indiquer lenom du client.'],
             ['companytva', 'required', 'message' => 'Indiquer le numéro de TVA associé au client.'],
             ['typeprestation_id', 'required', 'message' => 'Indiquer le type de la prestation.'],
- 
+
         ];
     }
-
-
 }

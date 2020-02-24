@@ -29,7 +29,7 @@ class Devis extends ActiveRecord
     public static function getGroupbyStatus()
     {
         //Je recherche l'ensemble des statuts d'un devis
-        $statuts = Devisstatut::find()->asArray()->orderby('id')->all();
+        $statuts = DevisStatut::find()->asArray()->orderby('id')->all();
         $val = array();
         foreach ($statuts as $st) {
             //Je calcul lenb de devis par statut
@@ -105,7 +105,6 @@ class Devis extends ActiveRecord
         return static::find()->where(['id_capa' => $id_capa])->one();
     }
 
-
     public function getCellule()
     {
         return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
@@ -117,7 +116,7 @@ class Devis extends ActiveRecord
     }
     public function getStatut()
     {
-        return $this->hasOne(Devisstatut::className(), ['id' => 'statut_id']);
+        return $this->hasOne(DevisStatut::className(), ['id' => 'statut_id']);
     }
 
     public function getCapaidentity()
