@@ -26,7 +26,8 @@ class m200206_100741_create_devis_table extends Migration
             'company_id' => $this->integer()->notNull(),
             'capaidentity_id' => $this->integer()->notNull(),
             'price' => $this->double(),
-            'delivery_type_id' => $this->integer()
+            'delivery_type_id' => $this->integer(),
+            'id_laboxy' => $this->string()
         ]);
 
         $this->addForeignKey(
