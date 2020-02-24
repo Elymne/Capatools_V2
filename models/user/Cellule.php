@@ -10,7 +10,7 @@ class Cellule extends ActiveRecord
 
     public static function tableName()
     {
-        return 'Cellule';
+        return 'cellule';
     }
 
     public function getCapaidentity()
@@ -20,6 +20,6 @@ class Cellule extends ActiveRecord
 
     public static function findByAXX($AXXX)
     {
-        return static::findOne(['identifiant' => $AXXX]);
+        return static::findOne(['identity' => $AXXX]);
     }
 }
