@@ -29,8 +29,7 @@ class m200123_162424_create_capaidentity_table extends Migration
             '{{%capaidentity}}',
             'Celluleid',
             'Cellule',
-            'id',
-            'CASCADE'
+            'id'
         );
 
         $password_hash = Yii::$app->getSecurity()->generatePasswordHash('toto');

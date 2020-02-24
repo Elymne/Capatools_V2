@@ -13,7 +13,7 @@ class Devis extends ActiveRecord
 
     public static function tableName()
     {
-        return 'Devis';
+        return 'devis';
     }
 
 
@@ -30,25 +30,24 @@ class Devis extends ActiveRecord
     {
         //Je recherche l'ensemble des statuts d'un devis
         $statuts = Devisstatut::find()->asArray()->orderby('id')->all();
-        $val= array();
-        foreach($statuts as $st)
-        {
+        $val = array();
+        foreach ($statuts as $st) {
             //Je calcul lenb de devis par statut
-           $tot =  static::find()->where(['statut_id' => $st['id']])->count();
+            $tot =  static::find()->where(['statut_id' => $st['id']])->count();
 
-           $val =array_merge($val,  [['statutlbl' => $st['label'], 'val' => (int)$tot]]);
+            $val = array_merge($val,  [['statutlbl' => $st['label'], 'val' => (int) $tot]]);
         }
 
         $string = ChartJs::widget([
-            'options' =>[
-                'height'=> 100,
-                      
+            'options' => [
+                'height' => 100,
+
             ],
             'clientOptions' => [
                 'responsive' => true,
-                'legend' => [ 'display'=> false ],
+                'legend' => ['display' => false],
                 'animation' => [
-                        'duration' => 369,
+                    'duration' => 369,
                 ],
                 'title' => [
                     'display' => true,
@@ -62,8 +61,8 @@ class Devis extends ActiveRecord
                                 'display' => 'true',
                                 'labelString' => 'Nombres de projet(s)'
                             ],
-                            'ticks'=>[
-                                'min'=>0,
+                            'ticks' => [
+                                'min' => 0,
                                 'stepSize' => 5,
                                 'suggestedMax' => 30
 
@@ -71,9 +70,7 @@ class Devis extends ActiveRecord
                         ]
                     ],
                     'xAxes' => [
-                        [
-                            
-                        ]
+                        []
                     ]
                 ]
             ],
@@ -85,14 +82,14 @@ class Devis extends ActiveRecord
                 [
                     [
                         'label' => "Projet(s)",
-                        'data' =>  ArrayHelper::getColumn($val,'val'),
+                        'data' =>  ArrayHelper::getColumn($val, 'val'),
                         'backgroundColor' => ['blue', 'red', 'yellow', 'green'],
-                        
+
                     ],
-        
+
                 ]
             ],
-            
+
         ]);
         return  $string;
     }
@@ -109,23 +106,27 @@ class Devis extends ActiveRecord
     }
 
 
-    public function getCellule() {
+    public function getCellule()
+    {
         return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
     }
 
-    public function getCompany() {
+    public function getCompany()
+    {
         return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
-    public function getStatut() {
+    public function getStatut()
+    {
         return $this->hasOne(Devisstatut::className(), ['id' => 'statut_id']);
     }
 
-    public function getCapaidentity() {
+    public function getCapaidentity()
+    {
         return $this->hasOne(Capaidentity::className(), ['id' => 'capaidentity_id']);
     }
 
-    public function gettypeprestation() {
-        return $this->hasOne(Typeprestation ::className(), ['id' => 'typeprestation_id']);
+    public function gettypeprestation()
+    {
+        return $this->hasOne(Typeprestation::className(), ['id' => 'typeprestation_id']);
     }
-
 }
