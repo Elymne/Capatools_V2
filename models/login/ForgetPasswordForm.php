@@ -5,7 +5,8 @@ namespace app\models\login;
 use Yii;
 use yii\base\Model;
 
-use app\models\User\Capaidentity;
+use app\models\user\Capaidentity;
+
 /**
  * LoginForm is the model behind the login form.
  *
@@ -24,11 +25,10 @@ class ForgetPasswordForm extends Model
         return [
             // username and password are both required
             ['email', 'required', 'message' => 'L\'adresse email ne peut être vide.'],
-            ['email', 'email', 'message' => 'L\'adresse email doit être valide.']   ,
-           // email is validated by validateUserMail()
+            ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],
+            // email is validated by validateUserMail()
             ['email', 'validateUserMail'],
         ];
-     
     }
 
     /**
@@ -46,7 +46,6 @@ class ForgetPasswordForm extends Model
             if (!$user) {
                 $this->addError($attribute, 'l\'adresse email est inconnue');
             }
-
         }
     }
 
@@ -59,7 +58,7 @@ class ForgetPasswordForm extends Model
     {
 
         if ($this->validate()) {
-            
+
             $user = Capaidentity::findByemail($this->email);
             $Newpassword = $user->generatePassword();
             $user->save();
@@ -67,12 +66,11 @@ class ForgetPasswordForm extends Model
                 ->setTo($this->email)
                 ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
                 ->setSubject('mot de passe')
-                ->setTextBody('Le nouveau mdp : '. $Newpassword)
+                ->setTextBody('Le nouveau mdp : ' . $Newpassword)
                 ->send();
 
             return true;
         }
         return false;
     }
-    
 }

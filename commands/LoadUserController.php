@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,8 +12,8 @@ use yii\console\Controller;
 use yii\console\ExitCode;
 
 
-use app\models\User\Capaidentity;
-use app\models\User\Cellule;
+use app\models\user\Capaidentity;
+use app\models\user\Cellule;
 
 
 /**
@@ -25,10 +26,10 @@ use app\models\User\Cellule;
  */
 class LoadUserController extends Controller
 {
-    
-    public $file ='';
-    public $NonAdm ='';
-    public $PrenonAdm ='';
+
+    public $file = '';
+    public $NonAdm = '';
+    public $PrenonAdm = '';
 
     public function options($actionID)
     {
@@ -49,29 +50,24 @@ class LoadUserController extends Controller
         echo $this->file . "\n";
         $bresult = ExitCode::OK;
 
-       if( ($readfile = fopen($this->file, "r"))!== FALSE)
-       {
+        if (($readfile = fopen($this->file, "r")) !== FALSE) {
             //Lecture de l'entête
-            $data = fgetcsv($readfile,10000,';');
+            $data = fgetcsv($readfile, 10000, ';');
 
             //Lecture des donnéess
-            while (($data = fgetcsv($readfile,10000,';')) !== FALSE)
-            {
+            while (($data = fgetcsv($readfile, 10000, ';')) !== FALSE) {
                 $user = new Capaidentity();
                 //Username Nom Prenom
-                $user->username =  $data[1].' '.$data[0];
+                $user->username =  $data[1] . ' ' . $data[0];
                 $user->email =  $data[2];
 
                 $user->Celluleid = Cellule::findByAXX($data[3])->id;
                 $user->generatePasswordAndmail();
                 $user->save();
-                
-            } 
-       }
-       else
-       {
+            }
+        } else {
             $bresult = ExitCode::NOINPUT;
-       }
+        }
 
 
 

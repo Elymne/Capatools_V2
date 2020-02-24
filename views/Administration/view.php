@@ -5,9 +5,9 @@ use yii\widgets\DetailView;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\User\Capaidentity */
+/* @var $model app\models\user\Capaidentity */
 
-$this->title = "Détail du salarié: ".$model->username;
+$this->title = "Détail du salarié: " . $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -32,21 +32,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             [                      // the owner name of the model
                 'label' => 'Nom et prénom',
-                'attribute'=>'username',
+                'attribute' => 'username',
             ],
             'email:email',
             [                      // the owner name of the model
                 'label' => 'Nom de la cellule',
-                'attribute'=>'cellule.name',
+                'attribute' => 'cellule.name',
             ],
         ],
     ]) ?>
 
-<?= 
+    <?=
 
-GridView::widget([
-    'dataProvider' => $Rightprovider,
-    'columns' => [
+        GridView::widget([
+            'dataProvider' => $Rightprovider,
+            'columns' => [
                 [
                     'label' => 'Service',
                     'attribute' => 'Application',
@@ -58,6 +58,6 @@ GridView::widget([
                 ],
             ]
         ]);
-                    ?>
+    ?>
 
 </div>

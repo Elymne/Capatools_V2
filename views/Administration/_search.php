@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\User\Capaidentitysearch */
+/* @var $model app\models\user\Capaidentitysearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -24,9 +24,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'celulle.name') ?>
 
 
-    <?php // echo $form->field($model, 'Celluleid') ?>
+    <?php // echo $form->field($model, 'Celluleid') 
+    ?>
 
-    <?php // echo $form->field($model, 'flagPassword') ?>
+    <?php // echo $form->field($model, 'flagPassword') 
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

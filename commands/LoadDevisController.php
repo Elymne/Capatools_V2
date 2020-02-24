@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -10,9 +11,7 @@ namespace app\commands;
 use yii\console\Controller;
 use yii\console\ExitCode;
 
-
-use app\models\User\Capaidentity;
-use app\models\User\Cellule;
+use app\models\user\Cellule;
 use app\models\Devis\Devis;
 use app\models\Devis\Company;
 
@@ -27,10 +26,10 @@ use app\models\Devis\Company;
  */
 class LoadDevisController extends Controller
 {
-    
-    public $file ='';
-    public $NonAdm ='';
-    public $PrenonAdm ='';
+
+    public $file = '';
+    public $NonAdm = '';
+    public $PrenonAdm = '';
 
     public function options($actionID)
     {
@@ -51,27 +50,22 @@ class LoadDevisController extends Controller
         echo $this->file . "\n";
         $bresult = ExitCode::OK;
 
-       if( ($readfile = fopen($this->file, "r"))!== FALSE)
-       {
+        if (($readfile = fopen($this->file, "r")) !== FALSE) {
             //Lecture de l'entête
-            $data = fgetcsv($readfile,10000,';');
+            $data = fgetcsv($readfile, 10000, ';');
 
             //Lecture des donnéess
-            while (($data = fgetcsv($readfile,10000,';')) !== FALSE)
-            {
+            while (($data = fgetcsv($readfile, 10000, ';')) !== FALSE) {
                 $berreur = false;
                 $devis = new Devis();
                 //Username Nom Prenom
-               // $user->id =  $data[0];
+                // $user->id =  $data[0];
                 $devis->id_capa =  $data[0];
                 ///Protection d'erreur indication de la ligne d'erreur
                 $devis->cellule_id = Cellule::findByAXX($data[1])->id;
-                if($berreur)
-                {
-                    echo 'Erreur Id cellule inconue : '. implode(';',$data);
-                }
-                else
-                {
+                if ($berreur) {
+                    echo 'Erreur Id cellule inconue : ' . implode(';', $data);
+                } else {
                     $devis->filename_first_upload = $data[2];
                     $devis->filename_last_upload =  $data[3];
 
@@ -85,22 +79,18 @@ class LoadDevisController extends Controller
                     ///Protection d'erreur indication de la ligne d'erreur
                     echo $data[8];
                     //$devis->capaidentity_id = Capaidentity::findByUsername($data[8])->id;
-                    if($berreur)
-                    {
-                        echo 'Erreur Responsable projet inconnu : '. implode(';',$data);
+                    if ($berreur) {
+                        echo 'Erreur Responsable projet inconnu : ' . implode(';', $data);
                     }
                     $devis->service_duration = $data[9];
                     $devis->version = $data[10];
                     $devis->filename = $data[11];
                     $devis->save();
                 }
-               
-            } 
-       }
-       else
-       {
+            }
+        } else {
             $bresult = ExitCode::NOINPUT;
-       }
+        }
 
 
 

@@ -5,8 +5,8 @@ namespace app\models\devis;
 use yii\db\ActiveRecord;
 use dosamigos\chartjs\ChartJs;
 use yii\helpers\ArrayHelper;
-use app\models\User\Cellule;
-use app\models\User\Capaidentity;
+use app\models\user\Cellule;
+use app\models\user\Capaidentity;
 
 class Devis extends ActiveRecord
 {

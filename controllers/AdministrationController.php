@@ -4,9 +4,9 @@ namespace app\controllers;
 
 use yii\filters\AccessControl;
 use Yii;
-use app\models\User\Capaidentity;
-use app\models\User\userrightapplication;
-use app\models\User\Capaidentitysearch;
+use app\models\user\Capaidentity;
+use app\models\user\userrightapplication;
+use app\models\user\Capaidentitysearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -228,36 +228,34 @@ class AdministrationController extends Controller
     {
         $result = [];
         //Je verifie qu'il possède au moin un droit sur le service administration
-        if($user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->exists())
-            {
-                //Je récupère le service administration
-                $rights=$user->identity->getuserrightapplication()->where(['Application'=>'Administration'])->select('Credential')->one();
-                
-                //Je verifie qu'il est reponsable
-                if($rights->Credential == 'Responsable')
-                {
-                    $result =
+        if ($user->identity->getuserrightapplication()->where(['Application' => 'Administration'])->exists()) {
+            //Je récupère le service administration
+            $rights = $user->identity->getuserrightapplication()->where(['Application' => 'Administration'])->select('Credential')->one();
+
+            //Je verifie qu'il est reponsable
+            if ($rights->Credential == 'Responsable') {
+                $result =
                     [
                         'priorite' => 1,
-                        'name' =>'Administration',
+                        'name' => 'Administration',
                         'items' =>
-                        [ 
+                        [
                             [
                                 'priorite' => 1,
                                 'url' => 'administration/index',
-                                'label'=>'Liste des salariés',
-                                'icon'=>'show_chart'
+                                'label' => 'Liste des salariés',
+                                'icon' => 'show_chart'
                             ],
                             [
                                 'priorite' => 2,
-                                'url' =>'administration/userform',
-                                'label'=>'Ajouter un salarié',
-                                'icon'=>'show_chart'
-                                ]
+                                'url' => 'administration/userform',
+                                'label' => 'Ajouter un salarié',
+                                'icon' => 'show_chart'
+                            ]
                         ]
                     ];
-                }
             }
+        }
 
         return   $result;
     }
@@ -266,8 +264,7 @@ class AdministrationController extends Controller
         if (($model = Capaidentity::findOne($id)) !== null) {
             return $model;
         }
- 
+
         throw new NotFoundHttpException('The requested page does not exist.');
     }
- 
 }

@@ -1,13 +1,10 @@
 <?php
 
-namespace app\models\User;
+namespace app\models\user;
 
 use Yii;
-use yii\base\Security;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use yii\data\ActiveDataProvider;
-use yii\base\Model;
 
 class Capaidentity extends ActiveRecord  implements IdentityInterface
 {

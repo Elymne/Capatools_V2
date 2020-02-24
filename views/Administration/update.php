@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\User\Capaidentity */
+/* @var $model app\models\user\Capaidentity */
 
 $this->title = 'Mise à jour de l\'utilisateur: ' . $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];

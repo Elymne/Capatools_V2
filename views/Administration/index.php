@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\User\Capaidentitysearch */
+/* @var $searchModel app\models\user\Capaidentitysearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Liste des salariés';
@@ -15,8 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= 
-            
+        <?=
+
             Html::a('Créer un salarié <i class="material-icons right">add_box</i>', ['create'], ['class' => 'btn waves-effect waves-light']); ?>
     </p>
 
@@ -33,54 +33,65 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'form-control',
                     'placeholder' => 'Filtre salarié'
                 ]
-            ],  
+            ],
             [
                 'label' => 'Email',
                 'format' => 'ntext',
-                'attribute'=>'email',
+                'attribute' => 'email',
                 'filterInputOptions' => [
                     'class' => 'form-control',
                     'placeholder' => 'Filtre Email'
                 ]
-                
+
             ],
             [
                 'label' => 'Cellule',
                 'format' => 'ntext',
-                'attribute'=>'cellule.name',
+                'attribute' => 'cellule.name',
                 'filterInputOptions' => [
                     'class' => 'form-control',
                     'placeholder' => 'Filtre Cellule'
                 ]
-                
+
             ],
-            ['class' => 'yii\grid\ActionColumn',
-            'template' => '{view} {update} {delete} {link}',
-            'header'=> 'Actions',
-            'buttons' => ['view' => function ($url,$model,$key) {
-                            $options = ['class' => 'btn-floating blue tooltipped',
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete} {link}',
+                'header' => 'Actions',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        $options = [
+                            'class' => 'btn-floating blue tooltipped',
                             'data-position' => 'bottom',
-                            'data-tooltip' => 'Voir'];
+                            'data-tooltip' => 'Voir'
+                        ];
                         return Html::a('<i class="material-icons">search</i>', $url, $options);
-                        },
-                        'update' => function ($url,$model,$key) {
-                            $options = ['class' => 'btn-floating orange tooltipped',
+                    },
+                    'update' => function ($url, $model, $key) {
+                        $options = [
+                            'class' => 'btn-floating orange tooltipped',
                             'data-position' => 'bottom',
-                            'data-tooltip' => 'Mettre à jour'];
+                            'data-tooltip' => 'Mettre à jour'
+                        ];
                         return Html::a('<i class="material-icons">mode_edit</i>', $url, $options);
-                        },
-                        'delete' => function ($url,$model,$key) {
-                            $options = ['class' => 'btn-floating red tooltipped',
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        $options = [
+                            'class' => 'btn-floating red tooltipped',
                             'data-position' => 'bottom',
-                            'data-tooltip' => 'Supprimer'];
+                            'data-tooltip' => 'Supprimer'
+                        ];
                         return Html::a('<i class="material-icons">delete</i>', $url, $options);
-                        },
-                        'link' => function ($url,$model,$key) {
-                            $options = ['class' => 'btn-floating green tooltipped',
-                                'data-position' => 'bottom',
-                                'data-tooltip' => 'Réinitialiser'];
-                            return Html::a('<i class="material-icons">sync</i>', $url, $options);
-                        }],
+                    },
+                    'link' => function ($url, $model, $key) {
+                        $options = [
+                            'class' => 'btn-floating green tooltipped',
+                            'data-position' => 'bottom',
+                            'data-tooltip' => 'Réinitialiser'
+                        ];
+                        return Html::a('<i class="material-icons">sync</i>', $url, $options);
+                    }
+                ],
             ]
         ],
     ]); ?>

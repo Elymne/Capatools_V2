@@ -1,16 +1,18 @@
 <?php
 
-namespace app\models\User;
+namespace app\models\user;
+
 use Yii;
 use yii\db\ActiveRecord;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-use app\models\User\userrightapplication;
-class userrightapplicationsearch extends userrightapplication 
+use app\models\user\userrightapplication;
+
+class userrightapplicationsearch extends userrightapplication
 {
 
-  /**
+    /**
      * {@inheritdoc}
      */
     public function rules()
@@ -39,9 +41,9 @@ class userrightapplicationsearch extends userrightapplication
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$userid)
+    public function search($params, $userid)
     {
-     $query = userrightapplication::find()->where(['userid'=> $userid]);
+        $query = userrightapplication::find()->where(['userid' => $userid]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -62,15 +64,10 @@ class userrightapplicationsearch extends userrightapplication
             // $query->where('0=1');
             return $dataProvider;
         }
-   
+
 
         // grid filtering conditions      
         $query->andFilterWhere(['like', 'Application', $this->Application]);
         return $dataProvider;
     }
-
-
-
-
 }
-

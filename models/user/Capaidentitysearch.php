@@ -1,13 +1,13 @@
 <?php
 
-namespace app\models\User;
+namespace app\models\user;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\User\Capaidentity;
+use app\models\user\Capaidentity;
 
 /**
- * Capaidentitysearch represents the model behind the search form of `app\models\User\Capaidentity`.
+ * Capaidentitysearch represents the model behind the search form of `app\models\user\Capaidentity`.
  */
 class Capaidentitysearch extends Capaidentity
 {
@@ -62,7 +62,7 @@ class Capaidentitysearch extends Capaidentity
                 ]
             ],
         ]);
-        
+
         $dataProvider->sort->attributes['cellule.name'] = [
             'asc' => ['cellule.name' => SORT_ASC],
             'desc' => ['cellule.name' => SORT_DESC],
