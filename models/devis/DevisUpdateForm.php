@@ -9,6 +9,7 @@ class DevisUpdateForm extends Devis {
     
     public $upfilename;
     public $pathfile;
+    public $datept;
     public function rules()
     {
         return [

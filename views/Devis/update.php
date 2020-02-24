@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-
+use yii\jui\DatePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
@@ -12,10 +12,31 @@ $this->title = 'Mise à jour du devis :'. $model->id_capa ;
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Updateavcontrat';
+
 ?>
 <div class="devis-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
+
+    <div class="dartepicker">
+
+<?= 
+ DatePicker::widget( 
+    [
+        'name'  => 'from_date',
+        // inline too, not bad
+         'inline' => false, 
+         'id'=>'dtpicker',
+         'language' => 'fr',
+         'dateFormat' => 'DD, dd MM yyyy',
+         'options' => [
+             'autoclose' => true,
+         ],
+         // modify template for custom rendering
+        
+
+        ]); ?>
+</div>
 
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form','options' => ['enctype' => 'multipart/form-data']]); ?>
 
@@ -31,6 +52,9 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
 <?= $form->field($model, 'service_duration')->textInput()->label("Durée de la prestation (j)") ?>
 
 
+
+
+
 <?= $form->field($model, 'filename')->textInput(['maxlength' => true,'disabled'=>true])->label('Proposition Technique') ?>
 <?php
 if($model->filename!='')
@@ -43,6 +67,8 @@ else
    echo $form->field($model, 'upfilename')->fileInput()->label('Ajouter le fichier:') ;
 
 }
+
+
 ?>
     <div class="panel panel-default">
         <div class="panel-heading"><h4><i class="glyphicon glyphicon-envelope"></i> Jalons</h4></div>
@@ -59,6 +85,7 @@ else
                 'formId' => 'dynamic-form',
                 'formFields' => [
                     'id',
+                    'prix_jalon'
 
                 ],
             ]); ?>
@@ -81,11 +108,11 @@ else
                                 echo Html::activeHiddenInput($modelJalon, "[{$i}]id");
                             }
                         ?>
-                        <?= $form->field($modelJalon, "[{$i}]id")->textInput(['maxlength' => true]) ?>
-                        
+                         
                         <div class="row">
                             <div class="col-sm-4">
-                                <?= $form->field($modelJalon, "[{$i}]prix_jalon")->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($modelJalon, "[{$i}]prix_jalon")->textInput(['maxlength' => true])->label('Priex') ?> 
+
                             </div>
                             
                         </div><!-- .row -->
