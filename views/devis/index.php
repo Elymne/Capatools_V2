@@ -105,7 +105,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                 'label' => 'type de prestation',
             ],
             [
-                'attribute' => 'devis_status.label',
+                'attribute' => 'status.label',
                 'format' => 'text',
                 'label' => 'Statut',
             ],
@@ -211,7 +211,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                 ]
             ],
             [
-                'attribute' => 'devis_status.label',
+                'attribute' => 'status.label',
                 'format' => 'text',
                 'label' => 'Statut',
             ],
@@ -329,7 +329,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                 ]
             ],
             [
-                'attribute' => 'devis_status.label',
+                'attribute' => 'status.label',
                 'format' => 'text',
                 'label' => 'Statut',
             ],
@@ -445,7 +445,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                 ]
             ],
             [
-                'attribute' => 'devis_status.label',
+                'attribute' => 'status.label',
                 'format' => 'text',
                 'label' => 'Statut',
             ],
@@ -554,7 +554,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                 ]
             ],
             [
-                'attribute' => 'devis_status.label',
+                'attribute' => 'status.label',
                 'format' => 'text',
                 'label' => 'Statut',
             ],
