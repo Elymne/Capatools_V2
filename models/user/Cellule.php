@@ -13,9 +13,9 @@ class Cellule extends ActiveRecord
         return 'cellule';
     }
 
-    public function getCapaidentity()
+    public function getCapaUser()
     {
-        return $this->hasMany(Capaidentity::className(), ['Celluleid' => 'id']);
+        return $this->hasMany(CapaUser::className(), ['cellule_id' => 'id']);
     }
 
     public static function findByAXX($AXXX)

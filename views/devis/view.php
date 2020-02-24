@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => 'Entreprise',
                         ],
                         [
-                            'attribute' => 'capaidentity.username',
+                            'attribute' => 'capa_user.username',
                             'format' => 'text',
                             'label' => 'Responsable projet',
                         ]

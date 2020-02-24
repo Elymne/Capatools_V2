@@ -4,9 +4,9 @@ namespace app\controllers;
 
 use yii\filters\AccessControl;
 use Yii;
-use app\models\user\Capaidentity;
+use app\models\user\CapaUser;
 use app\models\user\userrightapplication;
-use app\models\user\Capaidentitysearch;
+use app\models\user\CapaUserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -14,7 +14,7 @@ use yii\helpers\VarDumper;
 use yii\data\ActiveDataProvider;
 
 /**
- * AdministrationController implements the CRUD actions for Capaidentity model.
+ * AdministrationController implements the CRUD actions for CapaUser model.
  */
 class AdministrationController extends Controller
 {
@@ -70,12 +70,12 @@ class AdministrationController extends Controller
         return $result;
     }
     /**
-     * Lists all Capaidentity models.
+     * Lists all CapaUser models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new Capaidentitysearch();
+        $searchModel = new CapaUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -85,7 +85,7 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Displays a single Capaidentity model.
+     * Displays a single CapaUser model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -104,16 +104,16 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Creates a new Capaidentity model.
+     * Creates a new CapaUser model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Capaidentity();
+        $model = new CapaUser();
 
         if ($model->load(Yii::$app->request->post())) {
-            $array = Yii::$app->request->post('Capaidentity')['userrightapplication'];
+            $array = Yii::$app->request->post('CapaUser')['userrightapplication'];
             $arraykey = array_keys($array);
             foreach ($arraykey as $Service) {
 
@@ -141,7 +141,7 @@ class AdministrationController extends Controller
 
 
     /**
-     * Updates an existing Capaidentity model.
+     * Updates an existing CapaUser model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -155,7 +155,7 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            $array = Yii::$app->request->post('Capaidentity')['userrightapplication'];
+            $array = Yii::$app->request->post('CapaUser')['userrightapplication'];
             $arraykey = array_keys($array);
             foreach ($arraykey as $Service) {
 
@@ -183,7 +183,7 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Deletes an existing Capaidentity model.
+     * Deletes an existing CapaidCapaUserentity model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -261,7 +261,7 @@ class AdministrationController extends Controller
     }
     protected function findModel($id)
     {
-        if (($model = Capaidentity::findOne($id)) !== null) {
+        if (($model = CapaUser::findOne($id)) !== null) {
             return $model;
         }
 

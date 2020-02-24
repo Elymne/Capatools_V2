@@ -5,14 +5,14 @@ use yii\widgets\DetailView;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\user\Capaidentity */
+/* @var $model app\models\user\CapaUser */
 
 $this->title = "Détail du salarié: " . $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="capaidentity-view">
+<div class="capa_user-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

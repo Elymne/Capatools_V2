@@ -63,7 +63,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
             ],
             //todo Remplacer par le vrai nom du project-manager.
             [
-                'attribute' => 'capaidentity.username',
+                'attribute' => 'capa_user.username',
                 'format' => 'text',
                 'label' => 'Responsable projet',
                 'filterInputOptions' => [
@@ -174,7 +174,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
             ],
             //todo Remplacer par le vrai nom du project-manager.
             [
-                'attribute' => 'capaidentity.username',
+                'attribute' => 'capa_user.username',
                 'format' => 'text',
                 'label' => 'Responsable projet',
                 'filterInputOptions' => [
@@ -292,7 +292,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
             ],
             //todo Remplacer par le vrai nom du project-manager.
             [
-                'attribute' => 'capaidentity.username',
+                'attribute' => 'capa_user.username',
                 'format' => 'text',
                 'label' => 'Responsable projet',
                 'filterInputOptions' => [
@@ -408,7 +408,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
             ],
             //todo Remplacer par le vrai nom du project-manager.
             [
-                'attribute' => 'capaidentity.username',
+                'attribute' => 'capa_user.username',
                 'format' => 'text',
                 'label' => 'Responsable projet',
                 'filterInputOptions' => [
@@ -517,7 +517,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
             ],
             //todo Remplacer par le vrai nom du project-manager.
             [
-                'attribute' => 'capaidentity.username',
+                'attribute' => 'capa_user.username',
                 'format' => 'text',
                 'label' => 'Responsable projet',
                 'filterInputOptions' => [

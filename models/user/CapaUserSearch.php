@@ -4,12 +4,12 @@ namespace app\models\user;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\user\Capaidentity;
+use app\models\user\CapaUser;
 
 /**
- * Capaidentitysearch represents the model behind the search form of `app\models\user\Capaidentity`.
+ * CapaUserSearch represents the model behind the search form of `app\models\user\CapaUser`.
  */
-class Capaidentitysearch extends Capaidentity
+class CapaUserSearch extends CapaUser
 {
     public $name;
 
@@ -19,7 +19,7 @@ class Capaidentitysearch extends Capaidentity
     public function rules()
     {
         return [
-            [['id', 'Celluleid', 'flagPassword'], 'integer'],
+            [['id', 'Celluleid', 'flag_password'], 'integer'],
             [['username', 'email', 'auth_key', 'password_hash', 'cellule.name', 'userrightapplication'], 'safe'],
         ];
     }
@@ -49,7 +49,7 @@ class Capaidentitysearch extends Capaidentity
      */
     public function search($params)
     {
-        $query = Capaidentity::find();
+        $query = CapaUser::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -86,7 +86,7 @@ class Capaidentitysearch extends Capaidentity
         $query->andFilterWhere([
             'id' => $this->id,
             'Celluleid' => $this->Celluleid,
-            'flagPassword' => $this->flagPassword,
+            'flag_password' => $this->flag_password,
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])

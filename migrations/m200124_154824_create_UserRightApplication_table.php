@@ -18,7 +18,7 @@ class m200124_154824_create_UserRightApplication_table extends Migration
 
         // ajoute un clé étrangère vers la table `user`
         $this->addForeignKey(
-            'fk-capaidentity_UserRightApplication',
+            'fk_capa_user_to_UserRightApplication',
             '{{%UserRightApplication}}',
             'Userid',
             '{{%capa_user}}',

@@ -23,7 +23,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\user\Capaidentity',
+            'identityClass' => 'app\models\user\CapaUser',
             'loginUrl' => 'index',
             'enableAutoLogin' => true,
         ],

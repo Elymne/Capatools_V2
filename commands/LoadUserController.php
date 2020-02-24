@@ -12,7 +12,7 @@ use yii\console\Controller;
 use yii\console\ExitCode;
 
 
-use app\models\user\Capaidentity;
+use app\models\user\CapaUser;
 use app\models\user\Cellule;
 
 
@@ -56,7 +56,7 @@ class LoadUserController extends Controller
 
             //Lecture des donnéess
             while (($data = fgetcsv($readfile, 10000, ';')) !== FALSE) {
-                $user = new Capaidentity();
+                $user = new CapaUser();
                 //Username Nom Prenom
                 $user->username =  $data[1] . ' ' . $data[0];
                 $user->email =  $data[2];

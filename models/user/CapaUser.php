@@ -6,13 +6,13 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
-class Capaidentity extends ActiveRecord  implements IdentityInterface
+class CapaUser extends ActiveRecord  implements IdentityInterface
 {
 
     public $celname;
     public static function tableName()
     {
-        return 'capaidentity';
+        return 'capa_user';
     }
 
 
@@ -125,7 +125,7 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         //Generate le nouveau mot de passe de 12 characteres
         $Newpassword = Yii::$app->getSecurity()->generateRandomString(12);
 
-        $this->flagPassword = true;
+        $this->flag_password = true;
 
         //Save Hash du nouveau password
         $this->SetNewPassword($Newpassword);
@@ -142,8 +142,6 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         $this->password_hash = Yii::$app->getSecurity()->generatePasswordHash($password);
     }
 
-
-
     /**
      * @param string $authKey
      * @return bool si la clé d'authentification est valide pour l'utilisateur courant
@@ -159,6 +157,7 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         }
         return $bresultat;
     }
+
     /**
      * Validates password
      *
@@ -171,7 +170,6 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         // echo $this->password_hash;
         return Yii::$app->getSecurity()->validatePassword($pass, $this->password_hash);
     }
-
 
     public function getuserrightapplication()
     {

@@ -19,7 +19,7 @@ use app\models\ContactForm;
 
 
 //Model de données utilisateurs.
-use app\models\user\Capaidentity;
+use app\models\user\CapaUser;
 use app\models\user\Cellule;
 use app\models\user\userrightapplication;
 
@@ -90,7 +90,7 @@ class DashboardController extends Controller
 
             //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
             $capuser =  Yii::$app->user->getIdentity();
-            if ($capuser->flagPassword) {
+            if ($capuser->flag_password) {
                 //Lancement du formulaire de renouvellement de mot passe utilisateur
                 $this->redirect('dashboard/firstlogin');
             } else {
@@ -117,7 +117,7 @@ class DashboardController extends Controller
         if (!Yii::$app->user->isGuest) {
             //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
             $capuser =  Yii::$app->user->getIdentity();
-            if ($capuser->flagPassword) {
+            if ($capuser->flag_password) {
                 //Lancement du formulaire de renouvellement de mot passe utilisateur
                 $this->redirect('firstlogin');
             } else {
@@ -130,7 +130,7 @@ class DashboardController extends Controller
 
                 //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
                 $capuser =  Yii::$app->user->getIdentity();
-                if ($capuser->flagPassword) {
+                if ($capuser->flag_password) {
                     //Lancement du formulaire de renouvellement de mot passe utilisateur
                     $this->redirect('firstlogin');
                 } else {

@@ -3,14 +3,14 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\user\Capaidentity */
+/* @var $model app\models\user\CapaUser */
 
 $this->title = 'Mise à jour de l\'utilisateur: ' . $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="capaidentity-update">
+<div class="capa_user-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

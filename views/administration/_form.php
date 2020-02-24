@@ -35,11 +35,11 @@ foreach ($Services as &$service) {
 }
 
 /* @var $this yii\web\View */
-/* @var $model app\models\user\Capaidentity */
+/* @var $model app\models\user\CapaUser */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="capaidentity-form">
+<div class="capa_user-form">
 
     <?php $form = ActiveForm::begin([
         'fieldConfig' => [

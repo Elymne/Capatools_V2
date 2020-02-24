@@ -12,9 +12,8 @@ class userrightapplication extends ActiveRecord
         return 'UserRightApplication';
     }
 
-    public function getCapaidentity()
+    public function getCapaUser()
     {
-
-        return $this->hasOne(Capaidentity::className(), ['id' => 'Userid']);
+        return $this->hasOne(CapaUser::className(), ['id' => 'Userid']);
     }
 }

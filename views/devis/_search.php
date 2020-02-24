@@ -28,17 +28,23 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'version') ?>
 
-    <?php // echo $form->field($model, 'filename') ?>
+    <?php // echo $form->field($model, 'filename') 
+    ?>
 
-    <?php // echo $form->field($model, 'filename_first_upload') ?>
+    <?php // echo $form->field($model, 'filename_first_upload') 
+    ?>
 
-    <?php // echo $form->field($model, 'filename_last_upload') ?>
+    <?php // echo $form->field($model, 'filename_last_upload') 
+    ?>
 
-    <?php // echo $form->field($model, 'cellule_id') ?>
+    <?php // echo $form->field($model, 'cellule_id') 
+    ?>
 
-    <?php // echo $form->field($model, 'company_id') ?>
+    <?php // echo $form->field($model, 'company_id') 
+    ?>
 
-    <?php // echo $form->field($model, 'capaidentity_id') ?>
+    <?php // echo $form->field($model, 'capa_user_id') 
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

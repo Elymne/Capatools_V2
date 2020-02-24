@@ -24,7 +24,7 @@ class m200206_100741_create_devis_table extends Migration
             'filename_last_upload' => $this->dateTime()->defaultValue(null),
             'cellule_id' => $this->integer()->notNull(),
             'company_id' => $this->integer()->notNull(),
-            'capaidentity_id' => $this->integer()->notNull(),
+            'capa_user_id' => $this->integer()->notNull(),
             'price' => $this->double(),
             'delivery_type_id' => $this->integer(),
             'id_laboxy' => $this->string(),
@@ -57,7 +57,7 @@ class m200206_100741_create_devis_table extends Migration
         $this->addForeignKey(
             'FK_devis_capa_user',
             '{{%devis}}',
-            'capaidentity_id',
+            'capa_user_id',
             '{{%capa_user}}',
             'id',
             $delete = null,

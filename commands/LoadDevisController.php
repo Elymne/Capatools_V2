@@ -78,7 +78,7 @@ class LoadDevisController extends Controller
                     $devis->internal_name = $data[7];
                     ///Protection d'erreur indication de la ligne d'erreur
                     echo $data[8];
-                    //$devis->capaidentity_id = Capaidentity::findByUsername($data[8])->id;
+                    //$devis->capa_user_id = CapaUser::findByUsername($data[8])->id;
                     if ($berreur) {
                         echo 'Erreur Responsable projet inconnu : ' . implode(';', $data);
                     }

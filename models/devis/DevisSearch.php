@@ -19,15 +19,15 @@ class DevisSearch extends Devis
     public function rules()
     {
         return [
-            [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capaidentity_id', 'status_id', 'delivery_type_id'], 'integer'],
-            [['id_capa', 'internal_name', 'filename', 'filename_first_upload', 'filename_last_upload', 'capaidentity.username', 'company.name', 'cellule.name', 'deliveryType.label'], 'safe'],
+            [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capa_user_id', 'status_id', 'delivery_type_id'], 'integer'],
+            [['id_capa', 'internal_name', 'filename', 'filename_first_upload', 'filename_last_upload', 'capa_user.username', 'company.name', 'cellule.name', 'deliveryType.label'], 'safe'],
         ];
     }
 
     public function attributes()
     {
         // add related fields to searchable attributes
-        return array_merge(parent::attributes(), ['capaidentity.username', 'company.name', 'cellule.name', 'devis_status.label', 'deliveryType.label']);
+        return array_merge(parent::attributes(), ['capa_user.username', 'company.name', 'cellule.name', 'devis_status.label', 'deliveryType.label']);
     }
 
     /**
@@ -69,9 +69,9 @@ class DevisSearch extends Devis
             'desc' => ['company.name' => SORT_DESC],
         ];
 
-        $dataProvider->sort->attributes['capaidentity.username'] = [
-            'asc' => ['capaidentity.username' => SORT_ASC],
-            'desc' => ['capaidentity.username' => SORT_DESC],
+        $dataProvider->sort->attributes['capa_user.username'] = [
+            'asc' => ['capa_user.username' => SORT_ASC],
+            'desc' => ['capa_user.username' => SORT_DESC],
         ];
 
 
@@ -82,7 +82,7 @@ class DevisSearch extends Devis
 
 
         $this->load($params);
-        $query->joinWith(['capaidentity']);
+        $query->joinWith(['capa_user']);
         $query->joinWith(['cellule']);
         $query->joinWith(['company']);
         $query->joinWith(['status']);
@@ -100,7 +100,7 @@ class DevisSearch extends Devis
             'filename_last_upload' => $this->filename_last_upload,
             'cellule_id' => $this->cellule_id,
             'company_id' => $this->company_id,
-            'capaidentity_id' => $this->capaidentity_id,
+            'capa_user_id' => $this->capa_user_id,
             'delivery_type_id' => $this->delivery_type_id,
         ]);
 
@@ -109,7 +109,7 @@ class DevisSearch extends Devis
             ->andFilterWhere(['like', 'filename', $this->filename])
             ->andFilterWhere(['like', 'cellule.name', $this->getAttribute('cellule.name')])
             ->andFilterWhere(['like', 'company.name', $this->getAttribute('company.name')])
-            ->andFilterWhere(['like', 'capaidentity.username', $this->getAttribute('capaidentity.username')])
+            ->andFilterWhere(['like', 'capa_user.username', $this->getAttribute('capa_user.username')])
             ->andFilterWhere(['like', 'deliveryType.label', $this->getAttribute('deliveryType.label')])
             ->andFilterWhere(['like', 'devis_status.label', $this->statusSearch]);
 

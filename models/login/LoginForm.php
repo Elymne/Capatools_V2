@@ -4,7 +4,7 @@ namespace app\models\login;
 
 use Yii;
 use yii\base\Model;
-use app\models\user\Capaidentity;
+use app\models\user\CapaUser;
 
 /**
  * LoginForm is the model behind the login form.
@@ -73,7 +73,7 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = Capaidentity::findByemail($this->email);
+            $this->_user = CapaUser::findByemail($this->email);
         }
 
         return $this->_user;

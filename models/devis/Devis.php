@@ -6,7 +6,7 @@ use yii\db\ActiveRecord;
 use dosamigos\chartjs\ChartJs;
 use yii\helpers\ArrayHelper;
 use app\models\user\Cellule;
-use app\models\user\Capaidentity;
+use app\models\user\CapaUser;
 
 class Devis extends ActiveRecord
 {
@@ -99,7 +99,6 @@ class Devis extends ActiveRecord
         return static::find()->where(['id' => $id])->one();
     }
 
-
     public static function getOneByName($id_capa)
     {
         return static::find()->where(['id_capa' => $id_capa])->one();
@@ -119,9 +118,9 @@ class Devis extends ActiveRecord
         return $this->hasOne(DevisStatus::className(), ['id' => 'status_id']);
     }
 
-    public function getCapaidentity()
+    public function getCapaUser()
     {
-        return $this->hasOne(Capaidentity::className(), ['id' => 'capaidentity_id']);
+        return $this->hasOne(CapaUser::className(), ['id' => 'capa_user_id']);
     }
 
     public function getDeliveryType()

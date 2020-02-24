@@ -5,8 +5,6 @@ namespace app\models\login;
 use Yii;
 use yii\base\Model;
 
-use app\models\user\Capaidentity;
-
 /**
  * LoginForm is the model behind the login form.
  *
@@ -52,7 +50,7 @@ class FirstConnexionForm extends Model
             //J'enregistre le nouveau password
             $capuser->SetNewPassword($this->newpassword);
             //Je met que le passeword a été regénéré
-            $capuser->flagPassword = false;
+            $capuser->flag_password = false;
             $capuser->save();
 
 

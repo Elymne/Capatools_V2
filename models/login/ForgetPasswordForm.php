@@ -4,8 +4,7 @@ namespace app\models\login;
 
 use Yii;
 use yii\base\Model;
-
-use app\models\user\Capaidentity;
+use app\models\user\CapaUser;
 
 /**
  * LoginForm is the model behind the login form.
@@ -41,7 +40,7 @@ class ForgetPasswordForm extends Model
     public function validateUserMail($attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $user = Capaidentity::findByemail($this->email);
+            $user = CapaUser::findByemail($this->email);
 
             if (!$user) {
                 $this->addError($attribute, 'l\'adresse email est inconnue');
@@ -59,7 +58,7 @@ class ForgetPasswordForm extends Model
 
         if ($this->validate()) {
 
-            $user = Capaidentity::findByemail($this->email);
+            $user = CapaUser::findByemail($this->email);
             $Newpassword = $user->generatePassword();
             $user->save();
             Yii::$app->mailer->compose()
