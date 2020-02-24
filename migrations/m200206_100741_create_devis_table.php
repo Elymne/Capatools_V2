@@ -73,7 +73,7 @@ class m200206_100741_create_devis_table extends Migration
 
         $this->dropForeignKey('FK_devis_capaidentity', 'devis');
 
-        $this->dropColumn('devis', 'typeprestation_id');
+        $this->dropColumn('devis', 'delivery_type_id');
 
         $this->dropTable('{{%devis}}');
     }

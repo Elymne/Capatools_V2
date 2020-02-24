@@ -124,8 +124,8 @@ class Devis extends ActiveRecord
         return $this->hasOne(Capaidentity::className(), ['id' => 'capaidentity_id']);
     }
 
-    public function gettypeprestation()
+    public function getDeliveryType()
     {
-        return $this->hasOne(Typeprestation::className(), ['id' => 'typeprestation_id']);
+        return $this->hasOne(DeliveryType::className(), ['id' => 'delivery_type_id']);
     }
 }

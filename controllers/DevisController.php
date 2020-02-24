@@ -10,7 +10,7 @@ use app\models\devis\Company;
 use app\models\devis\DevisCreateForm;
 use app\models\devis\DevisUpdateForm;
 use app\models\devis\DevisSearch;
-use app\models\devis\Typeprestation;
+use app\models\devis\DeliveryType;
 use app\models\devis\Milestone;
 
 
@@ -165,7 +165,7 @@ class DevisController extends Controller implements ServiceInterface
     public function actionCreate()
     {
         $model = new DevisCreateForm();
-        $modeltypeprestation = Typeprestation::getlisteTypePrestation();
+        $deliveryTypeModel = DeliveryType::getDeliveryTypes();
         if ($model->load(Yii::$app->request->post())) {
 
             //Gestion de la company
@@ -190,7 +190,7 @@ class DevisController extends Controller implements ServiceInterface
         }
 
         return $this->render('create', [
-            'model' => $model, 'prestationtypelist' =>  $modeltypeprestation
+            'model' => $model, 'prestationtypelist' =>  $deliveryTypeModel
         ]);
     }
 
@@ -206,11 +206,11 @@ class DevisController extends Controller implements ServiceInterface
 
         $milestoneModels = [new Milestone];
         $modelDevis =  DevisUpdateForm::findOne($id);
-        $modeltypeprestation = Typeprestation::getlisteTypePrestation();
+        $deliveryTypeModel = DeliveryType::getDeliveryTypes();
         if (Yii::$app->request->post('addRow') == 'true') {
             echo 'kkklklklkl';
             return $this->render('update', [
-                'model' => $modelDevis, 'prestationtypelist' =>  $modeltypeprestation,
+                'model' => $modelDevis, 'prestationtypelist' =>  $deliveryTypeModel,
             ]);
         }
         $modelDevis =  DevisUpdateForm::findOne($id);
@@ -239,7 +239,7 @@ class DevisController extends Controller implements ServiceInterface
         }
 
         return $this->render('update', [
-            'model' => $modelDevis, 'prestationtypelist' =>  $modeltypeprestation,
+            'model' => $modelDevis, 'prestationtypelist' =>  $deliveryTypeModel,
             'milestoneModels' => (empty($milestoneModels)) ? [new Milestone] : $milestoneModels
         ]);
     }

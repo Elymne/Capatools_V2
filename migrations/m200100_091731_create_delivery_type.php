@@ -42,7 +42,7 @@ class m200100_091731_create_delivery_type extends Migration
 
     public function down()
     {
-        echo "m200219_091731_Ajout_typeprestation cannot be reverted.\n";
+        echo "m200219_091731_Ajout_deliveryType cannot be reverted.\n";
 
         return false;
     }

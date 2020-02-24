@@ -17,22 +17,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
 
-<?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(); ?>
 
 
-<?= $form->field($model, 'internal_name')->textInput(['maxlength' => true,])->label("Nom du projet") ?>
-<?= $form->field($model,'typeprestation_id')->dropDownList(ArrayHelper::map($prestationtypelist,'id','label'), ['text' => 'Please select'])->label('');   ?>
-   
-<?= $form->field($model, 'companyname')->textInput()->label("Nom du client") ?>
-<?= $form->field($model, 'companytva')->textInput()->label("TVA") ?>
- 
+    <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true,])->label("Nom du projet") ?>
+    <?= $form->field($model, 'delivery_type_id')->dropDownList(ArrayHelper::map($prestationtypelist, 'id', 'label'), ['text' => 'Please select'])->label('');   ?>
 
-<div class="form-group">
-    <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>
-    <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class'=>'btn btn-primary']) ?>
+    <?= $form->field($model, 'companyname')->textInput()->label("Nom du client") ?>
+    <?= $form->field($model, 'companytva')->textInput()->label("TVA") ?>
+
+
+    <div class="form-group">
+        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'btn btn-primary']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+
 </div>
-
-<?php ActiveForm::end(); ?>
-
-</div>
-

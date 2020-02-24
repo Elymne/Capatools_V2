@@ -23,12 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="card">
             <div class="card-content">
-            <span class="card-title"> <?= Html::encode($model->internal_name) ?></span>
-            <span class="card-title"> <?= Html::encode($model->id_laboxy) ?></span>
+                <span class="card-title"> <?= Html::encode($model->internal_name) ?></span>
+                <span class="card-title"> <?= Html::encode($model->id_laboxy) ?></span>
             </div>
             <div class="card-action">
                 <?= Html::a('Revenir <i class="material-icons right">keyboard_return</i>', ['index'], ['class' => 'waves-effect waves-light btn']) ?>
-                
+
             </div>
         </div>
 
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => 'Durée de la prestation',
                         ],
                         [
-                            'attribute' => 'typeprestation.label',
+                            'attribute' => 'deliveryType.label',
                             'format' => 'text',
                             'label' => 'Type de la prestation',
                         ],
@@ -91,11 +91,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'service_duration',
                             'format' => 'text',
                             'label' => 'Durée de la prestation (h)',
-                            'value'=>function($data){
-                                return $data->service_duration * Yii::$app->params['LaboxyTimeDay'] ;
+                            'value' => function ($data) {
+                                return $data->service_duration * Yii::$app->params['LaboxyTimeDay'];
                             }
                         ],
-                        
+
                     ],
                 ]) ?>
             </div>
@@ -119,8 +119,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'format' => 'html',
                             'label' => 'Visualiser',
-                            'value'=>function($data){
-                                return Html::a('Visualiser', ['viewpdf','id'=> $data->id,],['class'=>'btn btn-primary']) ;
+                            'value' => function ($data) {
+                                return Html::a('Visualiser', ['viewpdf', 'id' => $data->id,], ['class' => 'btn btn-primary']);
                             }
                         ],
                         [
