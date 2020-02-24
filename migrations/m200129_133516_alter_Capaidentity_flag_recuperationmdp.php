@@ -19,7 +19,6 @@ class m200129_133516_alter_Capaidentity_flag_recuperationmdp extends Migration
 
         ///Modification des données de test pour associer l'utilisateur toto à la cellule AROBO
         $this->update('capaidentity', ['flagPassword' => false], ['username' => 'toto']);
-
     }
 
     /**
@@ -27,7 +26,7 @@ class m200129_133516_alter_Capaidentity_flag_recuperationmdp extends Migration
      */
     public function safeDown()
     {
-       
+
         $this->dropColumn('capaidentity', 'flagPassword', $this->boolean());
         return true;
     }

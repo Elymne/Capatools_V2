@@ -2,10 +2,6 @@
 
 namespace app\controllers;
 
-use yii\bootstrap\Alert;
-
-use yii\bootstrap\Modal;
-
 use yii\filters\AccessControl;
 use Yii;
 use app\models\devis\Devis;
@@ -59,7 +55,7 @@ class DevisController extends Controller implements ServiceInterface
         $searchModelAvantContrat->statutsearch = 'Avant contrat';
         $dataProviderAvantContrat = $searchModelAvantContrat->search(Yii::$app->request->queryParams);
 
-       
+
         $searchModelAttenteop = new DevisSearch();
         $searchModelAttenteop->statutsearch = 'Attente validation Opérationel';
         $dataProviderAttenteop  = $searchModelAttenteop->search(Yii::$app->request->queryParams);
@@ -119,7 +115,7 @@ class DevisController extends Controller implements ServiceInterface
         ]);
     }
 
- /**
+    /**
      * Displays a single Devis model.
      * @param integer $id
      * @return mixed
@@ -128,24 +124,19 @@ class DevisController extends Controller implements ServiceInterface
     public function actionViewpdf($id)
     {
         $model =  $this->findModel($id);
-        if($model)
-        {
-        $filepath = 'uploads/'.$model->id_capa.'/'.$model->filename ;
-          if(file_exists($filepath))
-          {
-             
-              // Set up PDF headers 
-              header('Content-type: application/pdf');
-              header('Content-Disposition: inline; filename="' . $model->filename . '"');
-              // Render the file
-              readfile($filepath);
-          }
-          else
-          {
-             // PDF doesn't exist so throw an error or something
-          }
-        }
+        if ($model) {
+            $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
+            if (file_exists($filepath)) {
 
+                // Set up PDF headers 
+                header('Content-type: application/pdf');
+                header('Content-Disposition: inline; filename="' . $model->filename . '"');
+                // Render the file
+                readfile($filepath);
+            } else {
+                // PDF doesn't exist so throw an error or something
+            }
+        }
     }
 
     /**
@@ -176,24 +167,23 @@ class DevisController extends Controller implements ServiceInterface
         $model = new DevisCreateForm();
         $modeltypeprestation = Typeprestation::getlisteTypePrestation();
         if ($model->load(Yii::$app->request->post())) {
-          
+
             //Gestion de la company
-            $modelcompany = Company::find()->where(['name'=>$model->companyname,'tva'=> $model->companytva])->one();
-            
-            if($modelcompany == null)
-            {
+            $modelcompany = Company::find()->where(['name' => $model->companyname, 'tva' => $model->companytva])->one();
+
+            if ($modelcompany == null) {
                 $modelcompany = new Company();
-                $modelcompany->name=$model->companyname;
-                $modelcompany->tva=$model->companytva;
+                $modelcompany->name = $model->companyname;
+                $modelcompany->tva = $model->companytva;
                 $modelcompany->save();
             }
 
 
 
             ///Format ex : AROBOXXXX donc XXXX est fixe avec l'id
-            $model->id_capa = yii::$app->user->identity->cellule->identifiant.printf('%04d',$model->id) ;
-            $model->id_laboxy = $model->id_capa.' - '. $modelcompany->name ;
-            $model->company_id =  $modelcompany->id ;
+            $model->id_capa = yii::$app->user->identity->cellule->identifiant . printf('%04d', $model->id);
+            $model->id_laboxy = $model->id_capa . ' - ' . $modelcompany->name;
+            $model->company_id =  $modelcompany->id;
             $model->capaidentity_id = yii::$app->user->identity->id;
             $model->cellule_id =  yii::$app->user->identity->cellule->id;
             $model->statut_id = Devisstatut::AVANTPROJET;
@@ -203,7 +193,7 @@ class DevisController extends Controller implements ServiceInterface
 
 
         return $this->render('create', [
-            'model' => $model,'prestationtypelist' =>  $modeltypeprestation
+            'model' => $model, 'prestationtypelist' =>  $modeltypeprestation
         ]);
     }
 
@@ -223,40 +213,36 @@ class DevisController extends Controller implements ServiceInterface
         if (Yii::$app->request->post('addRow') == 'true') {
             echo 'kkklklklkl';
             return $this->render('update', [
-                'model' => $modelDevis,'prestationtypelist' =>  $modeltypeprestation,
+                'model' => $modelDevis, 'prestationtypelist' =>  $modeltypeprestation,
             ]);
         }
-       $modelDevis =  DevisUpdateForm::findOne($id);
-        if ($modelDevis->load(Yii::$app->request->post()))
-        {
+        $modelDevis =  DevisUpdateForm::findOne($id);
+        if ($modelDevis->load(Yii::$app->request->post())) {
             $modelDevis->upfilename = UploadedFile::getInstance($modelDevis, 'upfilename');
             $modelDevis->upload();
-            $modelDevis->upfilename='';
-               //Gestion de la company
-              // var_dump( $modelDevis);
-              $array = Yii::$app->request->post('DevisUpdateForm')['company'];
-              
+            $modelDevis->upfilename = '';
+            //Gestion de la company
+            // var_dump( $modelDevis);
+            $array = Yii::$app->request->post('DevisUpdateForm')['company'];
 
-               $modelcompany = Company::find()->where(['name'=>$array['name'],'tva'=>$array['tva']])->one();
-            
-               if($modelcompany == null)
-               {
-                   $modelcompany = new Company();
-                   $modelcompany->name=$array['name'];
-                   $modelcompany->tva=$array['tva'];
-                   $modelcompany->save();
 
-               }
-               $modelDevis->company_id=$modelcompany->id;
+            $modelcompany = Company::find()->where(['name' => $array['name'], 'tva' => $array['tva']])->one();
+
+            if ($modelcompany == null) {
+                $modelcompany = new Company();
+                $modelcompany->name = $array['name'];
+                $modelcompany->tva = $array['tva'];
+                $modelcompany->save();
+            }
+            $modelDevis->company_id = $modelcompany->id;
             $modelDevis->save(false);
 
-           
-           return $this->redirect(['view', 'id' => $modelDevis->id]);
-            
+
+            return $this->redirect(['view', 'id' => $modelDevis->id]);
         }
-  
+
         return $this->render('update', [
-            'model' => $modelDevis,'prestationtypelist' =>  $modeltypeprestation,
+            'model' => $modelDevis, 'prestationtypelist' =>  $modeltypeprestation,
             'modelsJalon' => (empty($modelsJalon)) ? [new Jalon] : $modelsJalon
         ]);
     }
@@ -280,9 +266,8 @@ class DevisController extends Controller implements ServiceInterface
 
             $model->save();
         }
-  
+
         return $this->redirect(['index']);
-       
     }
 
 
@@ -322,8 +307,8 @@ class DevisController extends Controller implements ServiceInterface
 
     public static function GetIndicateur($user)
     {
-        
-        return  ['label'=> 'NbDevis','value'=> Devis::getGroupbyStatus()];
+
+        return  ['label' => 'NbDevis', 'value' => Devis::getGroupbyStatus()];
     }
 
 
@@ -341,7 +326,4 @@ class DevisController extends Controller implements ServiceInterface
 
         return $result;
     }
-
-
-
 }

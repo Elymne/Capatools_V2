@@ -1,19 +1,21 @@
 <?php
 
 namespace app\models\User;
+
 use Yii;
 use yii\base\Security;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\data\ActiveDataProvider;
 use yii\base\Model;
+
 class Capaidentity extends ActiveRecord  implements IdentityInterface
 {
 
     public $celname;
     public static function tableName()
     {
-        return 'Capaidentity';
+        return 'capaidentity';
     }
 
 
@@ -28,18 +30,16 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
             ['email', 'required', 'message' => 'Veulliez renseigner l\'email de l\'utilisateur'],
             ['username', 'required', 'message' => 'Veulliez renseigner le nom de l\'utilisateur'],
             ['Celluleid', 'required', 'message' => 'Veulliez selectionner la cellule de l\'utilisateur'],
-            ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],  
-            ['Celluleid','validateCelid' , 'message' => 'Le nom de la cellule est inconnue'],
+            ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],
+            ['Celluleid', 'validateCelid', 'message' => 'Le nom de la cellule est inconnue'],
         ];
     }
 
     public function validateCelid($param)
     {
-        if(!Cellule::find()->where(['id'=>$this->Celluleid])->exists())
-        {
+        if (!Cellule::find()->where(['id' => $this->Celluleid])->exists()) {
             $this->addError($attribute, 'la cellule n\'existe pas');
         }
-
     }
     /**
      * Trouve une identité à partir de l'identifiant donné.
@@ -103,31 +103,30 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
     }
 
 
-  /**
+    /**
      * Generates new password
      * @return string le nouveau password
      */
     public function generatePasswordAndmail()
     {
 
-        $Newpassword = $this->generatePassword();        
+        $Newpassword = $this->generatePassword();
         $this->save();
         Yii::$app->mailer->compose()
-        ->setTo($this->email)
-        ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
-        ->setSubject('mot de passe')
-        ->setTextBody('Le nouveau mdp : '. $Newpassword)
-        ->send();
-
+            ->setTo($this->email)
+            ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
+            ->setSubject('mot de passe')
+            ->setTextBody('Le nouveau mdp : ' . $Newpassword)
+            ->send();
     }
-   /**
+    /**
      * Generates new password
      * @return string le nouveau password
      */
     public function generatePassword()
     {
         //Generate le nouveau mot de passe de 12 characteres
-        $Newpassword = Yii::$app->getSecurity()->generateRandomString(12) ;
+        $Newpassword = Yii::$app->getSecurity()->generateRandomString(12);
 
         $this->flagPassword = true;
 
@@ -135,17 +134,15 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
         $this->SetNewPassword($Newpassword);
 
         return $Newpassword;
-        
     }
 
-   /**
+    /**
      * Sauvegarde le hash du nouveau password
-      * @param string $password le mot de passe
-    */
+     * @param string $password le mot de passe
+     */
     public function SetNewPassword($password)
     {
         $this->password_hash = Yii::$app->getSecurity()->generatePasswordHash($password);
-        
     }
 
 
@@ -157,16 +154,13 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         $bresultat = false;
-        $userAuthkey = $this->getAuthKey() ;
-        if( $userAuthkey === $authKey)
-        {
-            if($userAuthkey == $authKey)
-            {
+        $userAuthkey = $this->getAuthKey();
+        if ($userAuthkey === $authKey) {
+            if ($userAuthkey == $authKey) {
                 $bresultat = true;
             }
         }
         return $bresultat;
-
     }
     /**
      * Validates password
@@ -177,14 +171,14 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
     public function validatePassword($pass)
     {
         //$this->password_hash = Yii::$app->getSecurity()->generatePasswordHash($pass);
-       // echo $this->password_hash;
+        // echo $this->password_hash;
         return Yii::$app->getSecurity()->validatePassword($pass, $this->password_hash);
     }
 
-    
+
     public function getuserrightapplication()
     {
-        
+
         return $this->hasMany(userrightapplication::className(), ['Userid' => 'id']);
     }
 
@@ -192,7 +186,4 @@ class Capaidentity extends ActiveRecord  implements IdentityInterface
     {
         return $this->hasOne(Cellule::className(), ['id' => 'Celluleid']);
     }
-
-
 }
-

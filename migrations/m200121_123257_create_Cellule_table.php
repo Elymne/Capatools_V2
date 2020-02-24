@@ -3,22 +3,23 @@
 use yii\db\Migration;
 
 /**
- * Class m200203_132918_ajoutNomCellule
+ * Handles the creation of table `{{%Cellule}}`.
  */
-class m200203_132918_ajoutNomCellule extends Migration
+class m200121_123257_create_Cellule_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        
-        $this->delete('Cellule');
+        $this->createTable('{{%Cellule}}', [
+            'id' => $this->primaryKey(),
+            'identifiant' => $this->string(),
+            'name' => $this->string(),
+        ]);
 
-        //Redémarre l'autoincrement à 1
         $this->execute('ALTER TABLE Cellule AUTO_INCREMENT = 1');
 
-        //Ajout de la cellule AROBO
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'AIERA',
             'name' => 'IREALITE'
@@ -67,12 +68,12 @@ class m200203_132918_ajoutNomCellule extends Migration
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'AINSI',
             'name' => 'INSILICO'
-        ]); 
+        ]);
 
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ABIOS',
             'name' => 'BIOSYS'
-        ]); 
+        ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'AKNOW',
             'name' => 'KNOWEDGE'
@@ -81,30 +82,30 @@ class m200203_132918_ajoutNomCellule extends Migration
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'AGEPR',
             'name' => 'GP'
-        ]); 
+        ]);
 
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ALTEN',
             'name' => 'LTN'
-        ]);    
+        ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'AVALI',
             'name' => 'VALINBTP'
-        ]); 
-        
+        ]);
+
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ASPEC',
             'name' => 'SPECTROMAITRISE'
-        ]); 
+        ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'APATR',
             'name' => 'PATRIMOINE'
         ]);
-            
+
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ADZYM',
             'name' => 'DZYME'
-        ]);  
+        ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ATHCL',
             'name' => 'THERASSAY CLM'
@@ -112,11 +113,11 @@ class m200203_132918_ajoutNomCellule extends Migration
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ATHPC',
             'name' => 'THERASSAY PC'
-        ]); 
+        ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'AEREL',
             'name' => 'ERELUEC'
-        ]);   
+        ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ACECO',
             'name' => 'ECONOMIE CIRCULAIRE'
@@ -124,7 +125,7 @@ class m200203_132918_ajoutNomCellule extends Migration
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'AEASI',
             'name' => 'EASI'
-        ]); 
+        ]);
         $this->insert('{{%Cellule}}', [
             'identifiant' => 'ATHAL',
             'name' => 'THALASSOMICS'
@@ -153,7 +154,6 @@ class m200203_132918_ajoutNomCellule extends Migration
             'identifiant' => 'AENFA',
             'name' => 'ENFANCE'
         ]);
-         
     }
 
     /**
@@ -161,23 +161,16 @@ class m200203_132918_ajoutNomCellule extends Migration
      */
     public function safeDown()
     {
-        $this->delete('Cellule');
 
-        return true;
+        // drop de la clé étrangère vers la table `user`
+        $this->dropForeignKey(
+            'fk-capaidentity_-Cellule',
+            '{{%capaidentity}}'
+        );
+
+
+        $this->dropColumn('capaidentity', 'Celluleid', $this->integer());
+
+        $this->dropTable('{{%Cellule}}');
     }
-
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m200203_132918_ajoutCellule cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }
