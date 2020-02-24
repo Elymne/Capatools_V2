@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m200219_091731_Ajout_typeprestation
+ * Class m200219_091731_create_delivery_type
  */
-class m200219_091731_Ajout_typeprestation extends Migration
+class m200100_091731_create_delivery_type extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,13 +13,13 @@ class m200219_091731_Ajout_typeprestation extends Migration
     public function safeUp()
     {
 
-        $this->createTable('{{%typeprestation}}', [
+        $this->createTable('{{%delivery_type}}', [
             'id' => $this->primaryKey(),
             'label' => $this->string(),
         ]);
 
         //Ajout Prestation delegué
-        $this->insert('{{%typeprestation}}', [
+        $this->insert('{{%delivery_type}}', [
             'label' => 'Délégué'
         ]);
     }
@@ -29,8 +29,7 @@ class m200219_091731_Ajout_typeprestation extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%typeprestation}}');
-        $this->dropColumn('devis', 'typeprestation_id');
+        $this->dropTable('{{%delivery_type}}');
         return true;
     }
 

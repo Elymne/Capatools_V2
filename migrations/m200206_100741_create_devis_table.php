@@ -26,7 +26,7 @@ class m200206_100741_create_devis_table extends Migration
             'company_id' => $this->integer()->notNull(),
             'capaidentity_id' => $this->integer()->notNull(),
             'price' => $this->double(),
-            'typeprestation_id' => $this->integer()
+            'delivery_type_id' => $this->integer()
         ]);
 
         $this->addForeignKey(
@@ -72,6 +72,8 @@ class m200206_100741_create_devis_table extends Migration
         $this->dropForeignKey('FK_devis_company', 'devis');
 
         $this->dropForeignKey('FK_devis_capaidentity', 'devis');
+
+        $this->dropColumn('devis', 'typeprestation_id');
 
         $this->dropTable('{{%devis}}');
     }
