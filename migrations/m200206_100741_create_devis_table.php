@@ -35,7 +35,7 @@ class m200206_100741_create_devis_table extends Migration
             'FK_devis_cellule',
             'devis',
             'cellule_id',
-            '{{%Cellule}}',
+            '{{%cellule}}',
             'id',
             $delete = null,
             $update = null

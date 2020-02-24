@@ -28,7 +28,7 @@ class m200123_162424_create_capaidentity_table extends Migration
             'fk-capaidentity_-Cellule',
             '{{%capaidentity}}',
             'Celluleid',
-            'Cellule',
+            'cellule',
             'id'
         );
 
