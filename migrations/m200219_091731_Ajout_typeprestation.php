@@ -22,19 +22,6 @@ class m200219_091731_Ajout_typeprestation extends Migration
         $this->insert('{{%typeprestation}}', [
             'label' => 'Délégué'
         ]);
-
-        //Ajout prestation 
-        $this->insert('{{%jalonstatut}}', [
-            'label' => 'Prestation'
-        ]);
-
-        //Ajout prestation interne
-        $this->insert('{{%jalonstatut}}', [
-            'label' => 'Prestation interne'
-        ]);
-
-        $this->addColumn('devis', 'typeprestation_id', $this->integer());
-
     }
 
     /**
@@ -42,10 +29,7 @@ class m200219_091731_Ajout_typeprestation extends Migration
      */
     public function safeDown()
     {
- 
-        
         $this->dropTable('{{%typeprestation}}');
-        
         $this->dropColumn('devis', 'typeprestation_id');
         return true;
     }

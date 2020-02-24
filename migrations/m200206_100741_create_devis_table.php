@@ -24,7 +24,9 @@ class m200206_100741_create_devis_table extends Migration
             'filename_last_upload' => $this->dateTime()->defaultValue(null),
             'cellule_id' => $this->integer()->notNull(),
             'company_id' => $this->integer()->notNull(),
-            'capaidentity_id' => $this->integer()->notNull()
+            'capaidentity_id' => $this->integer()->notNull(),
+            'price' => $this->double(),
+            'typeprestation_id' => $this->integer()
         ]);
 
         $this->addForeignKey(
