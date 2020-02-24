@@ -2,9 +2,6 @@
 
 use yii\db\Migration;
 
-/**
- * Handles the creation of table `{{%cellule}}`.
- */
 class m200121_123257_create_cellule_table extends Migration
 {
     /**
@@ -12,14 +9,24 @@ class m200121_123257_create_cellule_table extends Migration
      */
     public function safeUp()
     {
+
+        /**
+         * create table
+         */
         $this->createTable('{{%cellule}}', [
             'id' => $this->primaryKey(),
             'identity' => $this->string(),
             'name' => $this->string(),
         ]);
 
+        /**
+         * alter table
+         */
         $this->execute('ALTER TABLE cellule AUTO_INCREMENT = 1');
 
+        /**
+         * feed table
+         */
         $this->insert('{{%cellule}}', [
             'identity' => 'AIERA',
             'name' => 'IREALITE'
@@ -161,16 +168,12 @@ class m200121_123257_create_cellule_table extends Migration
      */
     public function safeDown()
     {
-
-        // drop de la clé étrangère vers la table `user`
         $this->dropForeignKey(
-            'fk-capaidentity_-cellule',
-            '{{%capaidentity}}'
+            'FK_capa_user_to_cellule',
+            '{{%capa_user}}'
         );
 
-
-        $this->dropColumn('capaidentity', 'celluleid', $this->integer());
-
+        $this->dropColumn('{{%capa_user}}', 'cellule_id', $this->integer());
         $this->dropTable('{{%cellule}}');
     }
 }

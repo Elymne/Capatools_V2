@@ -2,9 +2,6 @@
 
 use yii\db\Migration;
 
-/**
- * Handles the creation of table `{{%devis}}`.
- */
 class m200206_100741_create_devis_table extends Migration
 {
     /**
@@ -13,6 +10,9 @@ class m200206_100741_create_devis_table extends Migration
     public function safeUp()
     {
 
+        /**
+         * create table
+         */
         $this->createTable('{{%devis}}', [
             'id' => $this->primaryKey(),
             'id_capa' => $this->string(250)->notNull(),
@@ -31,9 +31,12 @@ class m200206_100741_create_devis_table extends Migration
             'status_id' => $this->integer()
         ]);
 
+        /**
+         * alter table
+         */
         $this->addForeignKey(
             'FK_devis_cellule',
-            'devis',
+            '{{%devis}}',
             'cellule_id',
             '{{%cellule}}',
             'id',
@@ -43,19 +46,19 @@ class m200206_100741_create_devis_table extends Migration
 
         $this->addForeignKey(
             'FK_devis_company',
-            'devis',
+            '{{%devis}}',
             'company_id',
-            'company',
+            '{{%company}}',
             'id',
             $delete = null,
             $update = null
         );
 
         $this->addForeignKey(
-            'FK_devis_capaidentity',
-            'devis',
+            'FK_devis_capa_user',
+            '{{%devis}}',
             'capaidentity_id',
-            'capaidentity',
+            '{{%capa_user}}',
             'id',
             $delete = null,
             $update = null
@@ -73,9 +76,9 @@ class m200206_100741_create_devis_table extends Migration
 
         $this->dropForeignKey('FK_devis_company', 'devis');
 
-        $this->dropForeignKey('FK_devis_capaidentity', 'devis');
+        $this->dropForeignKey('FK_devis_capa_user', 'devis');
 
-        $this->dropColumn('devis', 'delivery_type_id');
+        $this->dropColumn('{{%devis}}', 'delivery_type_id');
 
         $this->dropTable('{{%devis}}');
     }

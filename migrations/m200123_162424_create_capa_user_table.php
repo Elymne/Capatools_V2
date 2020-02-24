@@ -2,46 +2,58 @@
 
 use yii\db\Migration;
 
-use yii\base\Security;
-
 /**
- * Handles the creation of table `{{%capaidentity}}`.
+ * Handles the creation of table `{{%capa_user}}`.
  */
-class m200123_162424_create_capaidentity_table extends Migration
+class m200123_162424_create_capa_user_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%capaidentity}}', [
+
+        /**
+         * create table
+         */
+        $this->createTable('{{%capa_user}}', [
             'id' => $this->primaryKey(),
             'username' => $this->string(),
             'email' => $this->string(),
             'auth_key' => $this->string(),
             'password_hash' => $this->string(),
-            'Celluleid' => $this->integer()
+            'cellule_id' => $this->integer(),
+            'flag_password' => $this->boolean()
         ]);
 
-        // ajoute un clé étrangère`
+        /**
+         * alter table
+         */
         $this->addForeignKey(
-            'fk-capaidentity_-Cellule',
-            '{{%capaidentity}}',
-            'Celluleid',
-            'cellule',
+            'FK_capa_user_to_cellule',
+            '{{%capa_user}}',
+            'cellule_id',
+            '{{%cellule}}',
             'id'
         );
 
+        /**
+         * feed table
+         */
         $password_hash = Yii::$app->getSecurity()->generatePasswordHash('toto');
-
-        $this->insert('capaidentity', [
+        $this->insert('capa_user', [
             'id' => '1',
             'username' => 'toto',
             'email' => 'toto@gmail.com',
             'auth_key' => 'test100key',
             'password_hash' =>  $password_hash,
-            'Celluleid' => 1
+            'cellule_id' => 1
         ]);
+
+        /**
+         * update table
+         */
+        $this->update('capa_user', ['flag_password' => false], ['username' => 'toto']);
     }
 
     /**
@@ -49,6 +61,6 @@ class m200123_162424_create_capaidentity_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%capaidentity}}');
+        $this->dropTable('{{%capa_user}}');
     }
 }
