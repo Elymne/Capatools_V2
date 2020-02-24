@@ -178,19 +178,16 @@ class DevisController extends Controller implements ServiceInterface
                 $modelcompany->save();
             }
 
-
-
             ///Format ex : AROBOXXXX donc XXXX est fixe avec l'id
             $model->id_capa = yii::$app->user->identity->cellule->identifiant . printf('%04d', $model->id);
             $model->id_laboxy = $model->id_capa . ' - ' . $modelcompany->name;
             $model->company_id =  $modelcompany->id;
             $model->capaidentity_id = yii::$app->user->identity->id;
             $model->cellule_id =  yii::$app->user->identity->cellule->id;
-            $model->statut_id = Devisstatut::AVANTPROJET;
+            $model->statut_id = DevisStatut::AVANTPROJET;
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }
-
 
         return $this->render('create', [
             'model' => $model, 'prestationtypelist' =>  $modeltypeprestation

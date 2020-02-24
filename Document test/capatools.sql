@@ -7,10 +7,13 @@
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.4.0
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
+SET SQL_MODE
+= "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT
+= 0;
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone
+= "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -29,23 +32,37 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `capaidentity`;
-CREATE TABLE IF NOT EXISTS `capaidentity` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `auth_key` varchar(255) DEFAULT NULL,
-  `password_hash` varchar(255) DEFAULT NULL,
-  `Celluleid` int(11) DEFAULT NULL,
-  `flagPassword` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk-capaidentity_-Cellule` (`Celluleid`)
+CREATE TABLE
+IF NOT EXISTS `capaidentity`
+(
+  `id` int
+(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar
+(255) DEFAULT NULL,
+  `email` varchar
+(255) DEFAULT NULL,
+  `auth_key` varchar
+(255) DEFAULT NULL,
+  `password_hash` varchar
+(255) DEFAULT NULL,
+  `Celluleid` int
+(11) DEFAULT NULL,
+  `flagPassword` tinyint
+(1) DEFAULT NULL,
+  PRIMARY KEY
+(`id`),
+  KEY `fk-capaidentity_-Cellule`
+(`Celluleid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `capaidentity`
 --
 
-INSERT INTO `capaidentity` (`id`, `username`, `email`, `auth_key`, `password_hash`, `Celluleid`, `flagPassword`) VALUES
+INSERT INTO `capaidentity` (`
+id`,
+`username
+`, `email`, `auth_key`, `password_hash`, `Celluleid`, `flagPassword`) VALUES
 (1, 'toto', 'toto@gmail.com', NULL, '$2y$13$DIN4EEnhNkdFqXDSX57dO.64NGKjqPtx1Mi1dRBpPvPL/8zcv.hLe', 8, 0),
 (6, 'Viaud Julien', 'julien.viaud@capacites.fr', NULL, '$2y$13$tmb3EMcWa6G9reD4ZVfvw.V97sO8nnVXX6tcGnl/D5EYO0vmeLBju', 8, 0);
 
@@ -56,18 +73,27 @@ INSERT INTO `capaidentity` (`id`, `username`, `email`, `auth_key`, `password_has
 --
 
 DROP TABLE IF EXISTS `cellule`;
-CREATE TABLE IF NOT EXISTS `cellule` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `identifiant` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE
+IF NOT EXISTS `cellule`
+(
+  `id` int
+(11) NOT NULL AUTO_INCREMENT,
+  `identifiant` varchar
+(255) DEFAULT NULL,
+  `name` varchar
+(255) DEFAULT NULL,
+  PRIMARY KEY
+(`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `cellule`
 --
 
-INSERT INTO `cellule` (`id`, `identifiant`, `name`) VALUES
+INSERT INTO `cellule` (`
+id`,
+`identifiant
+`, `name`) VALUES
 (1, 'AIERA', 'IREALITE'),
 (2, 'ACMER', 'MER'),
 (3, 'ACAPT', 'CAPTEURS ET COMPOSITES'),
@@ -108,19 +134,29 @@ INSERT INTO `cellule` (`id`, `identifiant`, `name`) VALUES
 --
 
 DROP TABLE IF EXISTS `company`;
-CREATE TABLE IF NOT EXISTS `company` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `tva` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE
+IF NOT EXISTS `company`
+(
+  `id` int
+(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar
+(255) DEFAULT NULL,
+  `description` varchar
+(255) DEFAULT NULL,
+  `tva` varchar
+(255) DEFAULT NULL,
+  PRIMARY KEY
+(`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `company`
 --
 
-INSERT INTO `company` (`id`, `name`, `description`, `tva`) VALUES
+INSERT INTO `company` (`
+id`,
+`name
+`, `description`, `tva`) VALUES
 (13, 'CAPACITES', 'entreprise privée', 'FR 99999999999'),
 (14, 'Université de Nantes (labo GeM) ', 'organisme de recherche', 'FR 99999999999'),
 (12, 'CAPACITES', 'entreprise privée', 'FR 99999999999'),
@@ -136,32 +172,56 @@ INSERT INTO `company` (`id`, `name`, `description`, `tva`) VALUES
 --
 
 DROP TABLE IF EXISTS `devis`;
-CREATE TABLE IF NOT EXISTS `devis` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_capa` varchar(250) DEFAULT NULL,
-  `internal_name` varchar(250) DEFAULT NULL,
-  `service_duration` int(11) DEFAULT NULL,
-  `version` int(11) DEFAULT NULL,
-  `filename` varchar(250) DEFAULT NULL,
+CREATE TABLE
+IF NOT EXISTS `devis`
+(
+  `id` int
+(11) NOT NULL AUTO_INCREMENT,
+  `id_capa` varchar
+(250) DEFAULT NULL,
+  `internal_name` varchar
+(250) DEFAULT NULL,
+  `service_duration` int
+(11) DEFAULT NULL,
+  `version` int
+(11) DEFAULT NULL,
+  `filename` varchar
+(250) DEFAULT NULL,
   `filename_first_upload` datetime DEFAULT NULL,
   `filename_last_upload` datetime DEFAULT NULL,
-  `cellule_id` int(11) DEFAULT NULL,
-  `company_id` int(11) DEFAULT NULL,
-  `capaidentity_id` int(11) DEFAULT NULL,
-  `statut_id` int(11) DEFAULT NULL,
-  `id_laboxy` varchar(255) DEFAULT NULL,
+  `cellule_id` int
+(11) DEFAULT NULL,
+  `company_id` int
+(11) DEFAULT NULL,
+  `capaidentity_id` int
+(11) DEFAULT NULL,
+  `statut_id` int
+(11) DEFAULT NULL,
+  `id_laboxy` varchar
+(255) DEFAULT NULL,
   `prix` double DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_devis_cellule` (`cellule_id`),
-  KEY `FK_devis_company` (`company_id`),
-  KEY `FK_devis_capaidentity` (`capaidentity_id`)
+  PRIMARY KEY
+(`id`),
+  KEY `FK_devis_cellule`
+(`cellule_id`),
+  KEY `FK_devis_company`
+(`company_id`),
+  KEY `FK_devis_capaidentity`
+(`capaidentity_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `devis`
 --
 
-INSERT INTO `devis` (`id`, `id_capa`, `internal_name`, `service_duration`, `version`, `filename`, `filename_first_upload`, `filename_last_upload`, `cellule_id`, `company_id`, `capaidentity_id`, `statut_id`, `id_laboxy`, `prix`) VALUES
+INSERT INTO `devis` (`
+id`,
+`id_capa`,
+`internal_name`,
+`service_duration`,
+`version`,
+`filename
+`, `filename_first_upload`, `filename_last_upload`, `cellule_id`, `company_id`, `capaidentity_id`, `statut_id`, `id_laboxy`, `prix`) VALUES
 (12, 'AROBO00248', 'ROBO268CAPA02', 6, 6, 'AROBO-GeM IXEAD-CAPACITES_4500363078.pdf', '2019-03-12 16:33:59', '2019-04-05 15:58:40', 8, 14, 6, 0, 'AROBO00248 - Université de Nantes (labo GeM) ', NULL),
 (11, 'AROBO00215', 'ROBO268CAPA01', 36, 6, 'AROBO-CAPACITES-ROBO268CAPA01.pdf', '2019-03-07 15:32:30', '2019-09-09 15:29:28', 8, 13, 6, 1, NULL, NULL),
 (13, 'AROBO00248', 'ROBO268CAPA02', 6, 6, 'AROBO-GeM IXEAD-CAPACITES_4500363078.pdf', '2019-03-12 16:33:59', '2019-04-05 15:58:40', 8, 14, 6, 2, NULL, NULL),
@@ -179,17 +239,25 @@ INSERT INTO `devis` (`id`, `id_capa`, `internal_name`, `service_duration`, `vers
 --
 
 DROP TABLE IF EXISTS `devisstatut`;
-CREATE TABLE IF NOT EXISTS `devisstatut` (
-  `id` int(11) NOT NULL,
-  `label` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE
+IF NOT EXISTS `devisstatut`
+(
+  `id` int
+(11) NOT NULL,
+  `label` varchar
+(255) DEFAULT NULL,
+  PRIMARY KEY
+(`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `devisstatut`
 --
 
-INSERT INTO `devisstatut` (`id`, `label`) VALUES
+INSERT INTO `devisstatut` (`
+id`,
+`label
+`) VALUES
 (0, 'Avant contrat'),
 (1, 'Projet en cours'),
 (2, 'Projet annulé'),
@@ -204,15 +272,22 @@ INSERT INTO `devisstatut` (`id`, `label`) VALUES
 --
 
 DROP TABLE IF EXISTS `jalon`;
-CREATE TABLE IF NOT EXISTS `jalon` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `devis_id` int(11) DEFAULT NULL,
-  `label` varchar(255) DEFAULT NULL,
+CREATE TABLE
+IF NOT EXISTS `jalon`
+(
+  `id` int
+(11) NOT NULL AUTO_INCREMENT,
+  `devis_id` int
+(11) DEFAULT NULL,
+  `label` varchar
+(255) DEFAULT NULL,
   `prix_jalon` double DEFAULT NULL,
   `date_jalon` datetime DEFAULT NULL,
   `commentaires` text,
-  `statut_jalon_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `statut_jalon_id` int
+(11) DEFAULT NULL,
+  PRIMARY KEY
+(`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -222,17 +297,25 @@ CREATE TABLE IF NOT EXISTS `jalon` (
 --
 
 DROP TABLE IF EXISTS `jalonstatut`;
-CREATE TABLE IF NOT EXISTS `jalonstatut` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `label` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE
+IF NOT EXISTS `jalonstatut`
+(
+  `id` int
+(11) NOT NULL AUTO_INCREMENT,
+  `label` varchar
+(255) DEFAULT NULL,
+  PRIMARY KEY
+(`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `jalonstatut`
 --
 
-INSERT INTO `jalonstatut` (`id`, `label`) VALUES
+INSERT INTO `jalonstatut` (`
+id`,
+`label
+`) VALUES
 (1, 'En cours'),
 (2, 'Facturation en cours'),
 (3, 'Facturé');
@@ -244,17 +327,25 @@ INSERT INTO `jalonstatut` (`id`, `label`) VALUES
 --
 
 DROP TABLE IF EXISTS `migration`;
-CREATE TABLE IF NOT EXISTS `migration` (
-  `version` varchar(180) NOT NULL,
-  `apply_time` int(11) DEFAULT NULL,
-  PRIMARY KEY (`version`)
+CREATE TABLE
+IF NOT EXISTS `migration`
+(
+  `version` varchar
+(180) NOT NULL,
+  `apply_time` int
+(11) DEFAULT NULL,
+  PRIMARY KEY
+(`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `migration`
 --
 
-INSERT INTO `migration` (`version`, `apply_time`) VALUES
+INSERT INTO `migration` (`
+version`,
+`apply_time
+`) VALUES
 ('m000000_000000_base', 1579796925),
 ('m200123_162424_create_capaidentity_table', 1580746032),
 ('m200124_154824_create_UserRightApplication_table', 1580746032),
@@ -274,20 +365,31 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 --
 
 DROP TABLE IF EXISTS `userrightapplication`;
-CREATE TABLE IF NOT EXISTS `userrightapplication` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `Userid` int(11) NOT NULL,
-  `Application` varchar(255) DEFAULT NULL,
-  `Credential` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk-capaidentity_UserRightApplication` (`Userid`)
+CREATE TABLE
+IF NOT EXISTS `userrightapplication`
+(
+  `id` int
+(11) NOT NULL AUTO_INCREMENT,
+  `Userid` int
+(11) NOT NULL,
+  `Application` varchar
+(255) DEFAULT NULL,
+  `Credential` varchar
+(255) DEFAULT NULL,
+  PRIMARY KEY
+(`id`),
+  KEY `fk-capaidentity_UserRightApplication`
+(`Userid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `userrightapplication`
 --
 
-INSERT INTO `userrightapplication` (`id`, `Userid`, `Application`, `Credential`) VALUES
+INSERT INTO `userrightapplication` (`
+id`,
+`Userid
+`, `Application`, `Credential`) VALUES
 (1, 1, 'RH', 'Aucun'),
 (2, 1, 'Administration', 'Responsable');
 COMMIT;
