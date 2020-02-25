@@ -9,7 +9,7 @@ use yii\data\ActiveDataProvider;
 
 use app\models\user\userrightapplication;
 
-class UserRightApplicationSearch extends UserRightApplication
+class UserRoleSearch extends UserRole
 {
 
     /**
@@ -18,8 +18,8 @@ class UserRightApplicationSearch extends UserRightApplication
     public function rules()
     {
         return [
-            [['id', 'Userid'], 'integer'],
-            [['Application', 'Credential'], 'safe'],
+            [['id', 'user_id'], 'integer'],
+            [['role', 'credential'], 'safe'],
         ];
     }
 
@@ -41,9 +41,9 @@ class UserRightApplicationSearch extends UserRightApplication
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $userid)
+    public function search($params, $user_id)
     {
-        $query = userrightapplication::find()->where(['userid' => $userid]);
+        $query = UserRole::find()->where(['user_id' => $user_id]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -51,7 +51,7 @@ class UserRightApplicationSearch extends UserRightApplication
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'Application' => SORT_ASC,
+                    'role' => SORT_ASC,
                 ]
             ],
         ]);
@@ -67,7 +67,7 @@ class UserRightApplicationSearch extends UserRightApplication
 
 
         // grid filtering conditions      
-        $query->andFilterWhere(['like', 'Application', $this->Application]);
+        $query->andFilterWhere(['like', 'role', $this->role]);
         return $dataProvider;
     }
 }

@@ -5,7 +5,7 @@ namespace app\controllers;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\user\CapaUser;
-use app\models\user\userrightapplication;
+use app\models\user\UserRole;
 use app\models\user\CapaUserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -55,10 +55,10 @@ class AdministrationController extends Controller
         //Verifie les Behavior
         $result = parent::beforeAction($action);
         if ($result) {
-            $capidentityuser = Yii::$app->user->identity;
+            $capa_user = Yii::$app->user->identity;
 
-            if ($capidentityuser->getuserrightapplication()->where(['Application' => 'Administration'])->exists()) {
-                $rights = $capidentityuser->getuserrightapplication()->where(['Application' => 'Administration'])->select('Credential')->one();
+            if ($capa_user->getUserRole()->where(['Application' => 'Administration'])->exists()) {
+                $rights = $capa_user->getUserRole()->where(['Application' => 'Administration'])->select('Credential')->one();
                 if ($rights->Credential == 'Aucun') {
                     $result = false;
                 }

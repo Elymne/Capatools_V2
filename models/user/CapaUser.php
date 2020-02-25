@@ -9,7 +9,7 @@ use yii\web\IdentityInterface;
 class CapaUser extends ActiveRecord  implements IdentityInterface
 {
 
-    public $celname;
+    private $celluleName;
     public static function tableName()
     {
         return 'capa_user';
@@ -35,7 +35,10 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
     public function validateCelid($param)
     {
         if (!Cellule::find()->where(['id' => $this->cellule_id])->exists()) {
+
             $this->addError($attribute, 'la cellule n\'existe pas');
+            // What is $attribute ? It's undefinded.
+
         }
     }
     /**
@@ -171,10 +174,10 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
         return Yii::$app->getSecurity()->validatePassword($pass, $this->password_hash);
     }
 
-    public function getuserrightapplication()
+    public function getUserRole()
     {
 
-        return $this->hasMany(userrightapplication::className(), ['Userid' => 'id']);
+        return $this->hasMany(UserRole::className(), ['user_id' => 'id']);
     }
 
     public function getCellule()
