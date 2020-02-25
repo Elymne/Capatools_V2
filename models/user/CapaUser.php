@@ -176,7 +176,6 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
 
     public function getUserRole()
     {
-
         return $this->hasMany(UserRole::className(), ['user_id' => 'id']);
     }
 

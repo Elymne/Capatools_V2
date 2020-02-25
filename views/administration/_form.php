@@ -58,15 +58,15 @@ foreach ($services as $service) {
     foreach ($results as $result) {
         $stringpromp = 'none';
         //Je recherche la valeur de l'utilisateur pour l'application
-        $key = array_search($result['name'], array_column($model->UserRole, 'role'));
+        $key = array_search($result['name'], array_column($model->userRole, 'role'));
 
         if (!is_bool($key)) {
 
-            $stringpromp = $model->UserRole[$key]->credential;
+            $stringpromp = $model->userRole[$key]->credential;
         }
 
         //Je génére les différents champs pour l'affichage
-        $value = $form->field($model, 'UserRole[' . $result['name'] . ']')->dropDownList($result['right'], ['text' => 'Please select', 'options' => array($stringpromp => array('selected' => true))])->label('');
+        $value = $form->field($model, 'userRole[' . $result['name'] . ']')->dropDownList($result['right'], ['text' => 'Please select', 'options' => array($stringpromp => array('selected' => true))])->label('');
         $arr  = ['name' => $result['name'], 'link' => $value];
         array_unshift($data, $arr);
     }
