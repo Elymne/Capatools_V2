@@ -150,7 +150,7 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            $array = Yii::$app->request->post('CapaUser')['UserRole'];
+            $array = Yii::$app->request->post('CapaUser')['userRole'];
             $arrayKey = array_keys($array);
             foreach ($arrayKey as $key) {
 
