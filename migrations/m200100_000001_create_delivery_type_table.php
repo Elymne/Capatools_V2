@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200100_000001_create_delivery_type extends Migration
+class m200100_000001_create_delivery_type_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,10 +13,6 @@ class m200100_000001_create_delivery_type extends Migration
             'id' => $this->primaryKey(),
             'label' => $this->string(),
         ]);
-
-        $this->insert('{{%delivery_type}}', [
-            'label' => 'Délégué'
-        ]);
     }
 
     /**
@@ -25,6 +21,5 @@ class m200100_000001_create_delivery_type extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%delivery_type}}');
-        return true;
     }
 }

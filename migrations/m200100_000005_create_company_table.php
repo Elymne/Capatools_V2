@@ -9,10 +9,6 @@ class m200100_000005_create_company_table extends Migration
      */
     public function safeUp()
     {
-
-        /**
-         * create table
-         */
         $this->createTable('{{%company}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(),
