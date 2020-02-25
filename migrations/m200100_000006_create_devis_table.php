@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200206_100741_create_devis_table extends Migration
+class m200100_000006_create_devis_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -10,9 +10,6 @@ class m200206_100741_create_devis_table extends Migration
     public function safeUp()
     {
 
-        /**
-         * create table
-         */
         $this->createTable('{{%devis}}', [
             'id' => $this->primaryKey(),
             'id_capa' => $this->string(250)->notNull(),
@@ -31,9 +28,6 @@ class m200206_100741_create_devis_table extends Migration
             'status_id' => $this->integer()
         ]);
 
-        /**
-         * alter table
-         */
         $this->addForeignKey(
             'FK_devis_cellule',
             '{{%devis}}',
@@ -72,13 +66,11 @@ class m200206_100741_create_devis_table extends Migration
     public function safeDown()
     {
 
-        $this->dropForeignKey('FK_devis_unit', 'devis');
+        $this->dropForeignKey('FK_devis_unit', '{{%devis}}');
 
-        $this->dropForeignKey('FK_devis_company', 'devis');
+        $this->dropForeignKey('FK_devis_company', '{{%devis}}');
 
-        $this->dropForeignKey('FK_devis_capa_user', 'devis');
-
-        $this->dropColumn('{{%devis}}', 'delivery_type_id');
+        $this->dropForeignKey('FK_devis_capa_user', '{{%devis}}');
 
         $this->dropTable('{{%devis}}');
     }
