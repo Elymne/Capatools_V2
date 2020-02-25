@@ -235,12 +235,14 @@ class DevisController extends Controller implements ServiceInterface
             $modelDevis->save(false);
             foreach ($modelsJalon as $modelJalon) {
                 $modelsJalon->devis_id = $modelDevis->id;
-                if (! ($flag = $modelsJalon->save(false))) {
+                if (!($flag = $modelsJalon->save(false))) {
                     $transaction->rollBack();
                     break;
                 }
             }
-            $transaction->commit();
+
+            try {
+                $transaction->commit();
             } catch (Exception $e) {
                 $transaction->rollBack();
             }
