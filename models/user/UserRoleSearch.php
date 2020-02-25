@@ -2,14 +2,10 @@
 
 namespace app\models\user;
 
-use Yii;
-use yii\db\ActiveRecord;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-use app\models\user\userrightapplication;
-
-class userrightapplicationsearch extends userrightapplication
+class UserRoleSearch extends UserRole
 {
 
     /**
@@ -18,8 +14,8 @@ class userrightapplicationsearch extends userrightapplication
     public function rules()
     {
         return [
-            [['id', 'Userid'], 'integer'],
-            [['Application', 'Credential'], 'safe'],
+            [['id', 'user_id'], 'integer'],
+            [['role', 'credential'], 'safe'],
         ];
     }
 
@@ -41,9 +37,9 @@ class userrightapplicationsearch extends userrightapplication
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $userid)
+    public function search($params, $user_id)
     {
-        $query = userrightapplication::find()->where(['userid' => $userid]);
+        $query = UserRole::find()->where(['user_id' => $user_id]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -51,7 +47,7 @@ class userrightapplicationsearch extends userrightapplication
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'Application' => SORT_ASC,
+                    'role' => SORT_ASC,
                 ]
             ],
         ]);
@@ -67,7 +63,7 @@ class userrightapplicationsearch extends userrightapplication
 
 
         // grid filtering conditions      
-        $query->andFilterWhere(['like', 'Application', $this->Application]);
+        $query->andFilterWhere(['like', 'role', $this->role]);
         return $dataProvider;
     }
 }

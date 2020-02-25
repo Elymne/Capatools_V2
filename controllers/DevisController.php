@@ -306,7 +306,7 @@ class DevisController extends Controller implements ServiceInterface
         return  [
             'name' => 'Administration',
             'right' => [
-                'Aucun' => 'Aucun',
+                'none' => 'none',
                 'Responsable' => 'Responsable'
             ]
         ];

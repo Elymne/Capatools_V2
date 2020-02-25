@@ -20,7 +20,7 @@ class CapaUserSearch extends CapaUser
     {
         return [
             [['id', 'cellule_id', 'flag_password'], 'integer'],
-            [['username', 'email', 'auth_key', 'password_hash', 'cellule.name', 'userrightapplication'], 'safe'],
+            [['username', 'email', 'auth_key', 'password_hash', 'cellule.name', 'userRight'], 'safe'],
         ];
     }
 

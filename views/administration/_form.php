@@ -6,14 +6,13 @@ use app\models\user\Cellule;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use  yii\data\ArrayDataProvider;
-use app\models\user\userrightapplication;
 
 ///Récupère la liste des cellules
 
 $value = Cellule::find()->all();
 
-$Listcellule = ArrayHelper::map($value, 'id', 'name');
-asort($Listcellule);
+$cellules = ArrayHelper::map($value, 'id', 'name');
+asort($cellules);
 
 if ($model->cellule != null) {
     $comboxselect = $model->cellule->name;
@@ -24,13 +23,13 @@ if ($model->cellule != null) {
 //$model->userrightapplication['Administration'];
 //Pour chaque controller service on récupère la listes des droits possibles
 
-$Services = Yii::$app->DiscoverService->getServices();
-$ArrayserviceRight = array();
+$services = Yii::$app->DiscoverService->getServices();
+$roleServices = array();
 
-foreach ($Services as &$service) {
-    $ListRight = $service::GetRight();
-    if (!empty($ListRight) && $ListRight != null) {
-        $result[$ListRight['name']] = $ListRight;
+foreach ($services as $service) {
+    $rights = $service::GetRight();
+    if (!empty($rights) && $rights != null) {
+        $results[$rights['name']] = $rights;
     }
 }
 
@@ -52,35 +51,35 @@ foreach ($Services as &$service) {
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder' => 'Email capacités'])->label('Email :') ?>
 
-    <?= $form->field($model, 'cellule_id')->dropDownList($Listcellule, ['prompt' => $comboxselect])->label('Nom de la cellule :');   ?>
+    <?= $form->field($model, 'cellule_id')->dropDownList($cellules, ['prompt' => $comboxselect])->label('Nom de la cellule :');   ?>
 
     <?php
     $data = array();
-    foreach ($result as  $application) {
-        $stringpromp = 'Aucun';
+    foreach ($results as $result) {
+        $stringpromp = 'none';
         //Je recherche la valeur de l'utilisateur pour l'application
-        $key = array_search($application['name'], array_column($model->userrightapplication, 'Application'));
+        $key = array_search($result['name'], array_column($model->userRole, 'role'));
 
         if (!is_bool($key)) {
 
-            $stringpromp = $model->userrightapplication[$key]->Credential;
+            $stringpromp = $model->userRole[$key]->credential;
         }
 
         //Je génére les différents champs pour l'affichage
-        $value = $form->field($model, 'userrightapplication[' . $application['name'] . ']')->dropDownList($application['right'], ['text' => 'Please select', 'options' => array($stringpromp => array('selected' => true))])->label('');
-        $arr  = ['name' => $application['name'], 'link' => $value];
+        $value = $form->field($model, 'userRole[' . $result['name'] . ']')->dropDownList($result['right'], ['text' => 'Please select', 'options' => array($stringpromp => array('selected' => true))])->label('');
+        $arr  = ['name' => $result['name'], 'link' => $value];
         array_unshift($data, $arr);
     }
 
 
-    $Rightprovider = new ArrayDataProvider([
+    $rightProvider = new ArrayDataProvider([
         'allModels' => $data,
 
     ]);
 
     //J'affiche le tableau des éléments
     echo GridView::widget([
-        'dataProvider' => $Rightprovider,
+        'dataProvider' => $rightProvider,
         'columns' => [
             [
                 'label' => 'Service',
