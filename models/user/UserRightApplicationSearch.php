@@ -9,7 +9,7 @@ use yii\data\ActiveDataProvider;
 
 use app\models\user\userrightapplication;
 
-class userrightapplicationsearch extends userrightapplication
+class UserRightApplicationSearch extends UserRightApplication
 {
 
     /**
