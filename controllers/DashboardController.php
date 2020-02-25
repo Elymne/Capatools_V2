@@ -19,9 +19,9 @@ use app\models\ContactForm;
 
 
 //Model de données utilisateurs.
-use app\models\User\Capaidentity;
-use app\models\User\Cellule;
-use app\models\User\userrightapplication;
+use app\models\user\CapaUser;
+use app\models\user\Cellule;
+use app\models\user\userrightapplication;
 
 class DashboardController extends Controller
 {
@@ -32,23 +32,23 @@ class DashboardController extends Controller
     {
         return [
             'access' => [
-            'class' => AccessControl::className(),
-            'only' => ['logout','resetpassword','login'],
-            'rules' => [
-                [
-                    'actions' => ['logout'],
-                    'allow' => true,
-                    'roles' => ['@'],
-                ],
-                [
-                    'actions' => ['resetpassword','login'],
-                    'allow' => true,
-                    'roles' => ['?'],
+                'class' => AccessControl::className(),
+                'only' => ['logout', 'resetpassword', 'login'],
+                'rules' => [
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['resetpassword', 'login'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
                 ],
             ],
-        ],
 
-            ];
+        ];
     }
 
     /**
@@ -63,12 +63,12 @@ class DashboardController extends Controller
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-                
+
             ],
         ];
     }
 
- 
+
     /**
      * Displays homepage.
      *
@@ -85,20 +85,17 @@ class DashboardController extends Controller
 
         //Création du formulaire de login
         $model = new LoginForm();
-    
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-        
-                        //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
-           $capuser =  Yii::$app->user->getIdentity();
-           if($capuser->flagPassword)
-           {
-               //Lancement du formulaire de renouvellement de mot passe utilisateur
-               $this->redirect('dashboard/firstlogin');
-           }
-           else
-           {
-            return $this->render('index');
-           }
+
+            //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
+            $capuser =  Yii::$app->user->getIdentity();
+            if ($capuser->flag_password) {
+                //Lancement du formulaire de renouvellement de mot passe utilisateur
+                $this->redirect('dashboard/firstlogin');
+            } else {
+                return $this->render('index');
+            }
         }
 
         $model->password = '';
@@ -119,38 +116,27 @@ class DashboardController extends Controller
         //Dans le cas d'une action d'autologin
         if (!Yii::$app->user->isGuest) {
             //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
-           $capuser =  Yii::$app->user->getIdentity();
-            if($capuser->flagPassword)
-            {
+            $capuser =  Yii::$app->user->getIdentity();
+            if ($capuser->flag_password) {
                 //Lancement du formulaire de renouvellement de mot passe utilisateur
                 $this->redirect('firstlogin');
-            }
-            else
-            {
+            } else {
                 $resultat = $this->goHome();
             }
-        }
-        else
-        {
+        } else {
             $model = new LoginForm();
-            if ($model->load(Yii::$app->request->post()) && $model->login())
-            {
-                
-                
+            if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+
                 //Vérifie que l'utilisateur ne doit pas renouveller son mot de passe
-            $capuser =  Yii::$app->user->getIdentity();
-                if($capuser->flagPassword)
-                {
+                $capuser =  Yii::$app->user->getIdentity();
+                if ($capuser->flag_password) {
                     //Lancement du formulaire de renouvellement de mot passe utilisateur
                     $this->redirect('firstlogin');
-                }
-                else
-                {
+                } else {
                     $resultat = $this->goBack();
                 }
-            }
-            else
-            {
+            } else {
 
                 $model->password = '';
                 $resultat =  $this->render('login', [
@@ -159,7 +145,6 @@ class DashboardController extends Controller
             }
         }
         return $resultat;
-
     }
 
     /**
@@ -168,20 +153,17 @@ class DashboardController extends Controller
      * @return Response|string
      */
     public function actionResetpassword()
-    {
-
-       {
+    { {
             $model = new ForgetPasswordForm();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->generatednewpassword();  
+                $model->generatednewpassword();
                 return  $this->goHome();
-
             }
             $this->layout = "login";
             return $this->render('ForgetPassword', [
                 'model' => $model,
             ]);
-       }
+        }
     }
 
     /**
@@ -190,20 +172,17 @@ class DashboardController extends Controller
      * @return Response|string
      */
     public function actionFirstlogin()
-    {
-
-       {
+    { {
             $model = new FirstConnexionForm();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->SaveNewpassword();  
+                $model->SaveNewpassword();
                 return  $this->goHome();
-
             }
             $this->layout = "login";
             return $this->render('FirstConnexion', [
                 'model' => $model,
             ]);
-       }
+        }
     }
 
     /**

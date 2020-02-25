@@ -12,22 +12,22 @@ use app\models\devis\Devis;
 class DevisSearch extends Devis
 {
 
-    public $statutsearch='';
+    public $statusSearch = '';
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capaidentity_id', 'statut_id','typeprestation_id'], 'integer'],
-            [['id_capa', 'internal_name', 'filename', 'filename_first_upload', 'filename_last_upload', 'capaidentity.username', 'company.name', 'cellule.name', 'typeprestation.label'], 'safe'],
+            [['id', 'service_duration', 'version', 'cellule_id', 'company_id', 'capa_user_id', 'status_id', 'delivery_type_id'], 'integer'],
+            [['id_capa', 'internal_name', 'filename', 'filename_first_upload', 'filename_last_upload', 'capaUser.username', 'company.name', 'cellule.name', 'deliveryType.label'], 'safe'],
         ];
     }
 
     public function attributes()
     {
         // add related fields to searchable attributes
-        return array_merge(parent::attributes(), ['capaidentity.username', 'company.name', 'cellule.name','statut.label','typeprestation.label']);
+        return array_merge(parent::attributes(), ['capaUser.username', 'company.name', 'cellule.name', 'devis_status.label', 'deliveryType.label']);
     }
 
     /**
@@ -69,24 +69,24 @@ class DevisSearch extends Devis
             'desc' => ['company.name' => SORT_DESC],
         ];
 
-        $dataProvider->sort->attributes['capaidentity.username'] = [
-            'asc' => ['capaidentity.username' => SORT_ASC],
-            'desc' => ['capaidentity.username' => SORT_DESC],
+        $dataProvider->sort->attributes['capaUser.username'] = [
+            'asc' => ['capaUser.username' => SORT_ASC],
+            'desc' => ['capaUser.username' => SORT_DESC],
         ];
-        
 
-        $dataProvider->sort->attributes['typeprestation.label'] = [
-            'asc' => ['typeprestation.label' => SORT_ASC],
-            'desc' => ['typeprestation.label' => SORT_DESC],
+
+        $dataProvider->sort->attributes['deliveryType.label'] = [
+            'asc' => ['deliveryType.label' => SORT_ASC],
+            'desc' => ['deliveryType.label' => SORT_DESC],
         ];
-        
+
 
         $this->load($params);
-        $query->joinWith(['capaidentity']);
+        $query->joinWith(['capaUser']);
         $query->joinWith(['cellule']);
         $query->joinWith(['company']);
-        $query->joinWith(['statut']);
-        $query->joinWith(['typeprestation']);
+        $query->joinWith(['status']);
+        $query->joinWith(['deliveryType']);
 
         if (!$this->validate()) {
             return $dataProvider;
@@ -100,8 +100,8 @@ class DevisSearch extends Devis
             'filename_last_upload' => $this->filename_last_upload,
             'cellule_id' => $this->cellule_id,
             'company_id' => $this->company_id,
-            'capaidentity_id' => $this->capaidentity_id,
-            'typeprestation_id' => $this->typeprestation_id,
+            'capa_user_id' => $this->capa_user_id,
+            'delivery_type_id' => $this->delivery_type_id,
         ]);
 
         $query->andFilterWhere(['like', 'id_capa', $this->id_capa])
@@ -109,9 +109,9 @@ class DevisSearch extends Devis
             ->andFilterWhere(['like', 'filename', $this->filename])
             ->andFilterWhere(['like', 'cellule.name', $this->getAttribute('cellule.name')])
             ->andFilterWhere(['like', 'company.name', $this->getAttribute('company.name')])
-            ->andFilterWhere(['like', 'capaidentity.username', $this->getAttribute('capaidentity.username')])
-            ->andFilterWhere(['like', 'typeprestation.label', $this->getAttribute('typeprestation.label')])
-            ->andFilterWhere(['like', 'devisstatut.label', $this->statutsearch]);
+            ->andFilterWhere(['like', 'capaUser.username', $this->getAttribute('capaUser.username')])
+            ->andFilterWhere(['like', 'deliveryType.label', $this->getAttribute('deliveryType.label')])
+            ->andFilterWhere(['like', 'devis_status.label', $this->statusSearch]);
 
         return $dataProvider;
     }

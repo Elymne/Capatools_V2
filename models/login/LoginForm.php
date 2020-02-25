@@ -4,7 +4,8 @@ namespace app\models\login;
 
 use Yii;
 use yii\base\Model;
-use app\models\User\Capaidentity;
+use app\models\user\CapaUser;
+
 /**
  * LoginForm is the model behind the login form.
  *
@@ -32,7 +33,6 @@ class LoginForm extends Model
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
-     
     }
 
     /**
@@ -60,7 +60,7 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         }
         return false;
     }
@@ -73,13 +73,9 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = Capaidentity::findByemail($this->email);
+            $this->_user = CapaUser::findByemail($this->email);
         }
 
         return $this->_user;
     }
-
-
-
-    
 }

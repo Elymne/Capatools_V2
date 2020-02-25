@@ -11,7 +11,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    
+
     ///La route par défaut est le dashboard
     'defaultRoute' => 'dashboard/index',
     'components' => [
@@ -23,8 +23,8 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User\capaidentity',
-            'loginUrl'=>'index',
+            'identityClass' => 'app\models\user\CapaUser',
+            'loginUrl' => 'index',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -47,25 +47,24 @@ $config = [
             ],
         ],
         'db' => $db,
-        
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
+            'rules' => [],
         ],
         'DiscoverService' => [
-         
+
             'class' => 'app\components\DiscoverService',
 
-            ],
-        
+        ],
+
     ],
     'name' => 'CAPATOOLS V2.0',
 
     // définit la langue cible comme étant le français-France
     'language' => 'fr',
-    
+
     // définit la langue source comme étant l'anglais États-Unis
     'sourceLanguage' => 'en-US',
 

@@ -2,20 +2,16 @@
 
 namespace app\controllers;
 
-use yii\bootstrap\Alert;
-
-use yii\bootstrap\Modal;
-
 use yii\filters\AccessControl;
 use Yii;
 use app\models\devis\Devis;
-use app\models\devis\DevisStatut;
+use app\models\devis\DevisStatus;
 use app\models\devis\Company;
 use app\models\devis\DevisCreateForm;
 use app\models\devis\DevisUpdateForm;
 use app\models\devis\DevisSearch;
-use app\models\devis\Typeprestation;
-use app\models\devis\Jalon;
+use app\models\devis\DeliveryType;
+use app\models\devis\Milestone;
 
 
 use yii\web\UploadedFile;
@@ -56,30 +52,30 @@ class DevisController extends Controller implements ServiceInterface
     public function actionIndex()
     {
         $searchModelAvantContrat = new DevisSearch();
-        $searchModelAvantContrat->statutsearch = 'Avant contrat';
+        $searchModelAvantContrat->statusSearch = 'Avant contrat';
         $dataProviderAvantContrat = $searchModelAvantContrat->search(Yii::$app->request->queryParams);
 
-       
+
         $searchModelAttenteop = new DevisSearch();
-        $searchModelAttenteop->statutsearch = 'Attente validation Opérationel';
+        $searchModelAttenteop->statusSearch = 'Attente validation Opérationel';
         $dataProviderAttenteop  = $searchModelAttenteop->search(Yii::$app->request->queryParams);
 
         $searchModelAttenteClient = new DevisSearch();
-        $searchModelAttenteClient->statutsearch = 'Attente validation client';
+        $searchModelAttenteClient->statusSearch = 'Attente validation client';
         $dataProviderAttenteClient  = $searchModelAttenteClient->search(Yii::$app->request->queryParams);
 
 
         $searchModelEncours = new DevisSearch();
-        $searchModelEncours->statutsearch = 'Projet en cours';
+        $searchModelEncours->statusSearch = 'Projet en cours';
         $dataProviderEncours  = $searchModelEncours->search(Yii::$app->request->queryParams);
 
 
         $searchModelTerminer = new DevisSearch();
-        $searchModelTerminer->statutsearch = 'Projet terminé';
+        $searchModelTerminer->statusSearch = 'Projet terminé';
         $dataProviderTerminer  = $searchModelTerminer->search(Yii::$app->request->queryParams);
 
         $searchModelAnnule = new DevisSearch();
-        $searchModelAnnule->statutsearch = 'Projet annulé';
+        $searchModelAnnule->statusSearch = 'Projet annulé';
         $dataProviderAnnule  = $searchModelAnnule->search(Yii::$app->request->queryParams);
 
 
@@ -119,7 +115,7 @@ class DevisController extends Controller implements ServiceInterface
         ]);
     }
 
- /**
+    /**
      * Displays a single Devis model.
      * @param integer $id
      * @return mixed
@@ -128,24 +124,19 @@ class DevisController extends Controller implements ServiceInterface
     public function actionViewpdf($id)
     {
         $model =  $this->findModel($id);
-        if($model)
-        {
-        $filepath = 'uploads/'.$model->id_capa.'/'.$model->filename ;
-          if(file_exists($filepath))
-          {
-             
-              // Set up PDF headers 
-              header('Content-type: application/pdf');
-              header('Content-Disposition: inline; filename="' . $model->filename . '"');
-              // Render the file
-              readfile($filepath);
-          }
-          else
-          {
-             // PDF doesn't exist so throw an error or something
-          }
-        }
+        if ($model) {
+            $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
+            if (file_exists($filepath)) {
 
+                // Set up PDF headers 
+                header('Content-type: application/pdf');
+                header('Content-Disposition: inline; filename="' . $model->filename . '"');
+                // Render the file
+                readfile($filepath);
+            } else {
+                // PDF doesn't exist so throw an error or something
+            }
+        }
     }
 
     /**
@@ -174,36 +165,32 @@ class DevisController extends Controller implements ServiceInterface
     public function actionCreate()
     {
         $model = new DevisCreateForm();
-        $modeltypeprestation = Typeprestation::getlisteTypePrestation();
+        $deliveryTypeModel = DeliveryType::getDeliveryTypes();
         if ($model->load(Yii::$app->request->post())) {
-          
+
             //Gestion de la company
-            $modelcompany = Company::find()->where(['name'=>$model->companyname,'tva'=> $model->companytva])->one();
-            
-            if($modelcompany == null)
-            {
+            $modelcompany = Company::find()->where(['name' => $model->companyname, 'tva' => $model->companytva])->one();
+
+            if ($modelcompany == null) {
                 $modelcompany = new Company();
-                $modelcompany->name=$model->companyname;
-                $modelcompany->tva=$model->companytva;
+                $modelcompany->name = $model->companyname;
+                $modelcompany->tva = $model->companytva;
                 $modelcompany->save();
             }
 
-
-
             ///Format ex : AROBOXXXX donc XXXX est fixe avec l'id
-            $model->id_capa = yii::$app->user->identity->cellule->identifiant.printf('%04d',$model->id) ;
-            $model->id_laboxy = $model->id_capa.' - '. $modelcompany->name ;
-            $model->company_id =  $modelcompany->id ;
-            $model->capaidentity_id = yii::$app->user->identity->id;
+            $model->id_capa = yii::$app->user->identity->cellule->identity . printf('%04d', $model->id);
+            $model->id_laboxy = $model->id_capa . ' - ' . $modelcompany->name;
+            $model->company_id =  $modelcompany->id;
+            $model->capa_user_id = yii::$app->user->identity->id;
             $model->cellule_id =  yii::$app->user->identity->cellule->id;
-            $model->statut_id = Devisstatut::AVANTPROJET;
+            $model->status_id = DevisStatus::AVANTPROJET;
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }
 
-
         return $this->render('create', [
-            'model' => $model,'prestationtypelist' =>  $modeltypeprestation
+            'model' => $model, 'prestationtypelist' =>  $deliveryTypeModel
         ]);
     }
 
@@ -217,38 +204,34 @@ class DevisController extends Controller implements ServiceInterface
     public function actionUpdateavcontrat($id)
     {
 
-        $modelsJalon = [new Jalon];
+        $milestoneModels = [new Milestone];
         $modelDevis =  DevisUpdateForm::findOne($id);
-        $modeltypeprestation = Typeprestation::getlisteTypePrestation();
-
-        if ($modelDevis->load(Yii::$app->request->post()))
-        {
-            Model::loadMultiple($modelsJalon, Yii::$app->request->post());
-
+        $deliveryTypeModel = DeliveryType::getDeliveryTypes();
+        if (Yii::$app->request->post('addRow') == 'true') {
+            echo 'kkklklklkl';
+            return $this->render('update', [
+                'model' => $modelDevis, 'prestationtypelist' =>  $deliveryTypeModel,
+            ]);
+        }
+        $modelDevis =  DevisUpdateForm::findOne($id);
+        if ($modelDevis->load(Yii::$app->request->post())) {
             $modelDevis->upfilename = UploadedFile::getInstance($modelDevis, 'upfilename');
             $modelDevis->upload();
-            $modelDevis->upfilename='';
-               //Gestion de la company
-              // var_dump( $modelDevis);
-              $array = Yii::$app->request->post('DevisUpdateForm')['company'];
-              
-
-               $modelcompany = Company::find()->where(['name'=>$array['name'],'tva'=>$array['tva']])->one();
-            
-               if($modelcompany == null)
-               {
-                   $modelcompany = new Company();
-                   $modelcompany->name=$array['name'];
-                   $modelcompany->tva=$array['tva'];
-                   $modelcompany->save();
-
-               }
-               $modelDevis->company_id=$modelcompany->id;
+            $modelDevis->upfilename = '';
+            //Gestion de la company
+            // var_dump( $modelDevis);
+            $array = Yii::$app->request->post('DevisUpdateForm')['company'];
 
 
+            $modelcompany = Company::find()->where(['name' => $array['name'], 'tva' => $array['tva']])->one();
 
-            $transaction = \Yii::$app->db->beginTransaction();
-            try {
+            if ($modelcompany == null) {
+                $modelcompany = new Company();
+                $modelcompany->name = $array['name'];
+                $modelcompany->tva = $array['tva'];
+                $modelcompany->save();
+            }
+            $modelDevis->company_id = $modelcompany->id;
             $modelDevis->save(false);
             foreach ($modelsJalon as $modelJalon) {
                 $modelsJalon->devis_id = $modelDevis->id;
@@ -262,13 +245,13 @@ class DevisController extends Controller implements ServiceInterface
                 $transaction->rollBack();
             }
 
-           return $this->redirect(['view', 'id' => $modelDevis->id]);
-            
+
+            return $this->redirect(['view', 'id' => $modelDevis->id]);
         }
-  
+
         return $this->render('update', [
-            'model' => $modelDevis,'prestationtypelist' =>  $modeltypeprestation,
-            'modelsJalon' => (empty($modelsJalon)) ? [new Jalon] : $modelsJalon
+            'model' => $modelDevis, 'prestationtypelist' =>  $deliveryTypeModel,
+            'milestoneModels' => (empty($milestoneModels)) ? [new Milestone] : $milestoneModels
         ]);
     }
 
@@ -287,13 +270,12 @@ class DevisController extends Controller implements ServiceInterface
         if ($model) {
 
             //Attente validation Opérationel statut =4
-            $model->staut_id = Devisstatut::ATTENTEVALIDATIONOP;;
+            $model->staut_id = DevisStatus::ATTENTEVALIDATIONOP;;
 
             $model->save();
         }
-  
+
         return $this->redirect(['index']);
-       
     }
 
 
@@ -333,8 +315,8 @@ class DevisController extends Controller implements ServiceInterface
 
     public static function GetIndicateur($user)
     {
-        
-        return  ['label'=> 'NbDevis','value'=> Devis::getGroupbyStatus()];
+
+        return  ['label' => 'NbDevis', 'value' => Devis::getGroupbyStatus()];
     }
 
 
@@ -352,7 +334,4 @@ class DevisController extends Controller implements ServiceInterface
 
         return $result;
     }
-
-
-
 }

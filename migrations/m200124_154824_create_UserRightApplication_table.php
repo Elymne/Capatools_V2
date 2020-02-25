@@ -2,9 +2,6 @@
 
 use yii\db\Migration;
 
-/**
- * Handles the creation of table `{{%UserRightApplication}}`.
- */
 class m200124_154824_create_UserRightApplication_table extends Migration
 {
     /**
@@ -21,21 +18,21 @@ class m200124_154824_create_UserRightApplication_table extends Migration
 
         // ajoute un clé étrangère vers la table `user`
         $this->addForeignKey(
-        'fk-capaidentity_UserRightApplication',
-        '{{%UserRightApplication}}',
-        'Userid',
-        'capaidentity',
-        'id',
-        'CASCADE'
+            'fk_capa_user_to_UserRightApplication',
+            '{{%UserRightApplication}}',
+            'Userid',
+            '{{%capa_user}}',
+            'id',
+            'CASCADE'
         );
- 
-       
+
+
         $this->insert('{{%UserRightApplication}}', [
             'id' => '1',
             'Userid' => '1',
             'Application' => 'RH',
             'Credential' => 'Aucun'
-        ]);     
+        ]);
     }
 
     /**

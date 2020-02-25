@@ -2,9 +2,6 @@
 
 use yii\db\Migration;
 
-/**
- * Handles the creation of table `{{%devis}}`.
- */
 class m200206_100741_create_devis_table extends Migration
 {
     /**
@@ -13,6 +10,9 @@ class m200206_100741_create_devis_table extends Migration
     public function safeUp()
     {
 
+        /**
+         * create table
+         */
         $this->createTable('{{%devis}}', [
             'id' => $this->primaryKey(),
             'id_capa' => $this->string(250)->notNull(),
@@ -24,14 +24,21 @@ class m200206_100741_create_devis_table extends Migration
             'filename_last_upload' => $this->dateTime()->defaultValue(null),
             'cellule_id' => $this->integer()->notNull(),
             'company_id' => $this->integer()->notNull(),
-            'capaidentity_id' => $this->integer()->notNull()
+            'capa_user_id' => $this->integer()->notNull(),
+            'price' => $this->double(),
+            'delivery_type_id' => $this->integer(),
+            'id_laboxy' => $this->string(),
+            'status_id' => $this->integer()
         ]);
 
+        /**
+         * alter table
+         */
         $this->addForeignKey(
             'FK_devis_cellule',
-            'devis',
+            '{{%devis}}',
             'cellule_id',
-            '{{%Cellule}}',
+            '{{%cellule}}',
             'id',
             $delete = null,
             $update = null
@@ -39,19 +46,19 @@ class m200206_100741_create_devis_table extends Migration
 
         $this->addForeignKey(
             'FK_devis_company',
-            'devis',
+            '{{%devis}}',
             'company_id',
-            'company',
+            '{{%company}}',
             'id',
             $delete = null,
             $update = null
         );
 
         $this->addForeignKey(
-            'FK_devis_capaidentity',
-            'devis',
-            'capaidentity_id',
-            'capaidentity',
+            'FK_devis_capa_user',
+            '{{%devis}}',
+            'capa_user_id',
+            '{{%capa_user}}',
             'id',
             $delete = null,
             $update = null
@@ -69,7 +76,9 @@ class m200206_100741_create_devis_table extends Migration
 
         $this->dropForeignKey('FK_devis_company', 'devis');
 
-        $this->dropForeignKey('FK_devis_capaidentity', 'devis');
+        $this->dropForeignKey('FK_devis_capa_user', 'devis');
+
+        $this->dropColumn('{{%devis}}', 'delivery_type_id');
 
         $this->dropTable('{{%devis}}');
     }
