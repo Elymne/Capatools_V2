@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200124_154824_create_user_role_table extends Migration
+class m200100_000004_create_user_role_table extends Migration
 {
 
     /**

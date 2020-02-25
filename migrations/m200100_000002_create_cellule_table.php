@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200121_123257_create_cellule_table extends Migration
+class m200100_000002_create_cellule_table extends Migration
 {
     /**
      * {@inheritdoc}

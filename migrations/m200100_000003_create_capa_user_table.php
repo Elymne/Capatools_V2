@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%capa_user}}`.
  */
-class m200123_162424_create_capa_user_table extends Migration
+class m200100_000003_create_capa_user_table extends Migration
 {
     /**
      * {@inheritdoc}

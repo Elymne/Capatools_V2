@@ -2,25 +2,18 @@
 
 use yii\db\Migration;
 
-class m200100_091731_create_delivery_type extends Migration
+class m200100_000001_create_delivery_type extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-
-        /**
-         * create table
-         */
         $this->createTable('{{%delivery_type}}', [
             'id' => $this->primaryKey(),
             'label' => $this->string(),
         ]);
 
-        /**
-         * feed table
-         */
         $this->insert('{{%delivery_type}}', [
             'label' => 'Délégué'
         ]);

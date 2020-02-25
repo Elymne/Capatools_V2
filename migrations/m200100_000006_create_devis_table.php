@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200206_100741_create_devis_table extends Migration
+class m200100_000006_create_devis_table extends Migration
 {
     /**
      * {@inheritdoc}

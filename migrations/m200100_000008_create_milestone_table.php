@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200217_083859_create_milestone_table extends Migration
+class m200100_000008_create_milestone_table extends Migration
 {
     /**
      * {@inheritdoc}
