@@ -49,12 +49,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 [
                     'label' => 'Service',
-                    'attribute' => 'Application',
+                    'attribute' => 'role',
                 ],
                 [
 
                     'label' => 'Statut',
-                    'attribute' => 'Credential',
+                    'attribute' => 'credential',
                 ],
             ]
         ]);

@@ -3,11 +3,9 @@
 namespace app\controllers;
 
 use Yii;
-use yii\base\Application;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\filters\VerbFilter;
 
 //Model utile pour login
 use app\models\login\LoginForm;
@@ -16,12 +14,6 @@ use app\models\login\FirstConnexionForm;
 
 
 use app\models\ContactForm;
-
-
-//Model de données utilisateurs.
-use app\models\user\CapaUser;
-use app\models\user\Cellule;
-use app\models\user\userrightapplication;
 
 class DashboardController extends Controller
 {

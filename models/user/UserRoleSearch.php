@@ -2,12 +2,8 @@
 
 namespace app\models\user;
 
-use Yii;
-use yii\db\ActiveRecord;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-
-use app\models\user\userrightapplication;
 
 class UserRoleSearch extends UserRole
 {

@@ -38,10 +38,21 @@ class m200124_154824_create_user_role_table extends Migration
          * feed table
          */
         $this->insert('{{%user_role}}', [
-            'id' => '1',
             'role' => 'RH',
             'credential' => 'none',
-            'user_id' => '1'
+            'user_id' => 1
+        ]);
+
+        $this->insert('{{%user_role}}', [
+            'role' => 'RH',
+            'credential' => 'none',
+            'user_id' => 2
+        ]);
+
+        $this->insert('{{%user_role}}', [
+            'role' => 'Administration',
+            'credential' => 'Responsable',
+            'user_id' => 2
         ]);
     }
 

@@ -54,7 +54,7 @@ class AdministrationController extends Controller
         //Verifie les Behavior
         $result = parent::beforeAction($action);
         if ($result) {
-            $capa_user = Yii::$app->user;
+            $capa_user = Yii::$app->user->identity;
 
             if ($capa_user->getUserRole()->where(['role' => 'Administration'])->exists()) {
                 $userRole = $capa_user->getUserRole()->where(['role' => 'Administration'])->select('credential')->one();
@@ -162,7 +162,7 @@ class AdministrationController extends Controller
                     $userRole->user_id = $id;
                     $userRole->role = $key;
                 } else {
-                    $userRole =  UserRole::findOne(['Application' => $key, 'user_id' => $id]);
+                    $userRole = UserRole::findOne(['role' => $key, 'user_id' => $id]);
                 }
                 $userRole->credential = $array[$key];
                 $userRole->Save();
@@ -201,10 +201,13 @@ class AdministrationController extends Controller
      */
     public static function GetRight()
     {
-        return  ['name' => 'Administration', 'right' => [
-            'none' => 'none',
-            'Responsable' => 'Responsable'
-        ]];
+        return  [
+            'name' => 'Administration',
+            'right' => [
+                'none' => 'none',
+                'Responsable' => 'Responsable'
+            ]
+        ];
     }
 
     /**
@@ -224,7 +227,7 @@ class AdministrationController extends Controller
         //Je verifie qu'il possède au moin un droit sur le service administration
         if ($user->identity->GetUserRole()->where(['role' => 'Administration'])->exists()) {
             //Je récupère le service administration
-            $role = $user->identity->getUserRole()->where(['role    ' => 'Administration'])->select('credential')->one();
+            $role = $user->identity->getUserRole()->where(['role' => 'Administration'])->select('credential')->one();
 
             //Je verifie qu'il est reponsable
             if ($role->credential == 'Responsable') {
