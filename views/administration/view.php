@@ -45,16 +45,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?=
 
         GridView::widget([
-            'dataProvider' => $Rightprovider,
+            'dataProvider' => $rightProvider,
             'columns' => [
                 [
                     'label' => 'Service',
-                    'attribute' => 'Application',
+                    'attribute' => 'role',
                 ],
                 [
 
                     'label' => 'Statut',
-                    'attribute' => 'Credential',
+                    'attribute' => 'credential',
                 ],
             ]
         ]);

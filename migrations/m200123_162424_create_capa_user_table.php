@@ -42,7 +42,7 @@ class m200123_162424_create_capa_user_table extends Migration
          */
         $password_hash = Yii::$app->getSecurity()->generatePasswordHash('toto');
         $this->insert('capa_user', [
-            'id' => '1',
+            'id' => 1,
             'username' => 'toto',
             'email' => 'toto@gmail.com',
             'auth_key' => 'test100key',
@@ -50,10 +50,21 @@ class m200123_162424_create_capa_user_table extends Migration
             'cellule_id' => 1
         ]);
 
+        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('sacha');
+        $this->insert('capa_user', [
+            'id' => 2,
+            'username' => 'sacha',
+            'email' => 'sacha@gmail.com',
+            'auth_key' => 'test100key',
+            'password_hash' =>  $password_hash,
+            'cellule_id' => 3
+        ]);
+
         /**
          * update table
          */
-        $this->update('capa_user', ['flag_password' => false], ['username' => 'toto']);
+        $this->update('capa_user', ['flag_password' => false], ['id' => 1]);
+        $this->update('capa_user', ['flag_password' => false], ['id' => 2]);
     }
 
     /**

@@ -4,51 +4,54 @@ namespace app\controllers;
 
 use yii\web\Controller;
 
-class RHController extends Controller implements ServiceInterface {
+class RHController extends Controller implements ServiceInterface
+{
 
     /**
      * {@inheritdoc}
      */
-    public function behaviors() {
-        return [
-        ];
+    public function behaviors()
+    {
+        return [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function actions() {
+    public function actions()
+    {
         return [];
     }
 
     /**
      * Get list of the right
      */
-    public static function GetRight() {
+    public static function GetRight()
+    {
         return
-        [
-            'name'=>'RH',
-            'right'=>
             [
-                'Aucun'=>'Aucun',
-                'Responsable'=>'Responsable'
-            ]
-        ];
-        
+                'name' => 'RH',
+                'right' =>
+                [
+                    'none' => 'none',
+                    'Responsable' => 'Responsable'
+                ]
+            ];
     }
 
     /**
      * Get list of indicateur
      *
      */
-    public static function GetIndicateur($user) {
-        
+    public static function GetIndicateur($user)
+    {
     }
 
     /**
      * Get Action for the user
      */
-    public static function GetActionUser($user) {
+    public static function GetActionUser($user)
+    {
         return [
             'priorite' => 2,
             'name' => 'RH',
@@ -74,8 +77,7 @@ class RHController extends Controller implements ServiceInterface {
      *
      * @return string
      */
-    public function actionIndex() {
-        
+    public function actionIndex()
+    {
     }
-
 }
