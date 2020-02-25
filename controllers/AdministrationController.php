@@ -10,7 +10,6 @@ use app\models\user\CapaUserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\helpers\VarDumper;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -55,11 +54,11 @@ class AdministrationController extends Controller
         //Verifie les Behavior
         $result = parent::beforeAction($action);
         if ($result) {
-            $capa_user = Yii::$app->user->identity;
+            $capa_user = Yii::$app->user;
 
-            if ($capa_user->getUserRole()->where(['Application' => 'Administration'])->exists()) {
-                $rights = $capa_user->getUserRole()->where(['Application' => 'Administration'])->select('Credential')->one();
-                if ($rights->Credential == 'Aucun') {
+            if ($capa_user->getUserRole()->where(['role' => 'Administration'])->exists()) {
+                $userRole = $capa_user->getUserRole()->where(['role' => 'Administration'])->select('credential')->one();
+                if ($userRole->credential == 'none') {
                     $result = false;
                 }
             } else {
@@ -92,14 +91,14 @@ class AdministrationController extends Controller
      */
     public function actionView($id)
     {
-        $query = userrightapplication::find()->where(['Userid' => $id]);
+        $query = UserRole::find()->where(['user_id' => $id]);
 
-        $Rightprovider = new ActiveDataProvider([
+        $rightProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         return $this->render('view', [
-            'model' => $this->findModel($id), 'Rightprovider' => $Rightprovider,
+            'model' => $this->findModel($id), 'rightProvider' => $rightProvider,
         ]);
     }
 
@@ -113,19 +112,17 @@ class AdministrationController extends Controller
         $model = new CapaUser();
 
         if ($model->load(Yii::$app->request->post())) {
-            $array = Yii::$app->request->post('CapaUser')['userrightapplication'];
-            $arraykey = array_keys($array);
-            foreach ($arraykey as $Service) {
 
-                $Rightmodel = new userrightapplication();
+            $array = Yii::$app->request->post('CapaUser')['UserRole'];
+            $arrayKey = array_keys($array);
 
+            foreach ($arrayKey as $key) {
 
-                $Rightmodel = new userrightapplication();
-                $Rightmodel->Userid = $id;
-                $Rightmodel->Application = $Service;
+                $userRole = new UserRole();
 
-                $Rightmodel->Credential = $array[$Service];
-                $Rightmodel->Save();
+                $userRole->role = $key;
+                $userRole->credential = $array[$key];
+                $userRole->Save();
             }
 
             $model->generatePasswordAndmail();
@@ -151,27 +148,24 @@ class AdministrationController extends Controller
     {
         $model = $this->findModel($id);
 
-
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            $array = Yii::$app->request->post('CapaUser')['userrightapplication'];
-            $arraykey = array_keys($array);
-            foreach ($arraykey as $Service) {
+            $array = Yii::$app->request->post('CapaUser')['UserRole'];
+            $arrayKey = array_keys($array);
+            foreach ($arrayKey as $key) {
 
-                $Rightmodel = new userrightapplication();
-                $Existmodel = userrightapplication::find()->where(['Application' => $Service, 'Userid' => $id])->exists();
+                $hasUserRole = UserRole::find()->where(['role' => $key, 'user_id' => $id])->exists();
 
                 //Je vérifie si l'enregistrement existe sinon je le créé.
-                if (!$Existmodel) {
-                    $Rightmodel = new userrightapplication();
-                    $Rightmodel->Userid = $id;
-                    $Rightmodel->Application = $Service;
+                if (!$hasUserRole) {
+                    $userRole = new UserRole();
+                    $userRole->user_id = $id;
+                    $userRole->role = $key;
                 } else {
-                    $Rightmodel =  userrightapplication::findOne(['Application' => $Service, 'Userid' => $id]);
+                    $userRole =  UserRole::findOne(['Application' => $key, 'user_id' => $id]);
                 }
-                $Rightmodel->Credential = $array[$Service];
-                $Rightmodel->Save();
+                $userRole->credential = $array[$key];
+                $userRole->Save();
             }
 
             return $this->redirect(['view', 'id' => $model->id]);
@@ -193,9 +187,9 @@ class AdministrationController extends Controller
     {
         //on empêche l'auto suppression
         if (Yii::$app->user->identity->id != $id) {
-            $Rightmodels = userrightapplication::findAll(['Userid' => $id]);
-            foreach ($Rightmodels as $Rightmodel) {
-                $Rightmodel->delete();
+            $userRoles = UserRole::findAll(['user_id' => $id]);
+            foreach ($userRoles as $userRole) {
+                $userRole->delete();
             }
             $this->findModel($id)->delete();
         }
@@ -208,7 +202,7 @@ class AdministrationController extends Controller
     public static function GetRight()
     {
         return  ['name' => 'Administration', 'right' => [
-            'Aucun' => 'Aucun',
+            'none' => 'none',
             'Responsable' => 'Responsable'
         ]];
     }
@@ -228,12 +222,12 @@ class AdministrationController extends Controller
     {
         $result = [];
         //Je verifie qu'il possède au moin un droit sur le service administration
-        if ($user->identity->getuserrightapplication()->where(['Application' => 'Administration'])->exists()) {
+        if ($user->identity->GetUserRole()->where(['role' => 'Administration'])->exists()) {
             //Je récupère le service administration
-            $rights = $user->identity->getuserrightapplication()->where(['Application' => 'Administration'])->select('Credential')->one();
+            $role = $user->identity->getUserRole()->where(['role    ' => 'Administration'])->select('credential')->one();
 
             //Je verifie qu'il est reponsable
-            if ($rights->Credential == 'Responsable') {
+            if ($role->credential == 'Responsable') {
                 $result =
                     [
                         'priorite' => 1,

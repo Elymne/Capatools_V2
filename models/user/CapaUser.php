@@ -36,7 +36,7 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
     {
         if (!Cellule::find()->where(['id' => $this->cellule_id])->exists()) {
 
-            $this->addError($attribute, 'la cellule n\'existe pas');
+            //$this->addError($attribute, 'la cellule n\'existe pas');
             // What is $attribute ? It's undefinded.
 
         }
@@ -107,7 +107,7 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
      * Generates new password
      * @return string le nouveau password
      */
-    public function generatePasswordAndmail()
+    public function generatePasswordAndMail()
     {
 
         $Newpassword = $this->generatePassword();

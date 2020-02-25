@@ -57,7 +57,7 @@ foreach ($Services as &$service) {
     <?php
     $data = array();
     foreach ($result as  $application) {
-        $stringpromp = 'Aucun';
+        $stringpromp = 'none';
         //Je recherche la valeur de l'utilisateur pour l'application
         $key = array_search($application['name'], array_column($model->userrightapplication, 'Application'));
 
@@ -73,14 +73,14 @@ foreach ($Services as &$service) {
     }
 
 
-    $Rightprovider = new ArrayDataProvider([
+    $rightProvider = new ArrayDataProvider([
         'allModels' => $data,
 
     ]);
 
     //J'affiche le tableau des éléments
     echo GridView::widget([
-        'dataProvider' => $Rightprovider,
+        'dataProvider' => $rightProvider,
         'columns' => [
             [
                 'label' => 'Service',
