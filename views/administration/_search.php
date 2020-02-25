@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'celulle.name') ?>
 
 
-    <?php // echo $form->field($model, 'Celluleid') 
+    <?php // echo $form->field($model, 'cellule_id') 
     ?>
 
     <?php // echo $form->field($model, 'flag_password') 

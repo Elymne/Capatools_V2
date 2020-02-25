@@ -61,7 +61,7 @@ class LoadUserController extends Controller
                 $user->username =  $data[1] . ' ' . $data[0];
                 $user->email =  $data[2];
 
-                $user->Celluleid = Cellule::findByAXX($data[3])->id;
+                $user->cellule_id = Cellule::findByAXX($data[3])->id;
                 $user->generatePasswordAndmail();
                 $user->save();
             }

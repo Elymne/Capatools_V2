@@ -26,15 +26,15 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
             // email required
             ['email', 'required', 'message' => 'Veulliez renseigner l\'email de l\'utilisateur'],
             ['username', 'required', 'message' => 'Veulliez renseigner le nom de l\'utilisateur'],
-            ['Celluleid', 'required', 'message' => 'Veulliez selectionner la cellule de l\'utilisateur'],
+            ['cellule_id', 'required', 'message' => 'Veulliez selectionner la cellule de l\'utilisateur'],
             ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],
-            ['Celluleid', 'validateCelid', 'message' => 'Le nom de la cellule est inconnue'],
+            ['cellule_id', 'validateCelid', 'message' => 'Le nom de la cellule est inconnue'],
         ];
     }
 
     public function validateCelid($param)
     {
-        if (!Cellule::find()->where(['id' => $this->Celluleid])->exists()) {
+        if (!Cellule::find()->where(['id' => $this->cellule_id])->exists()) {
             $this->addError($attribute, 'la cellule n\'existe pas');
         }
     }
@@ -179,6 +179,6 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
 
     public function getCellule()
     {
-        return $this->hasOne(Cellule::className(), ['id' => 'Celluleid']);
+        return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
     }
 }

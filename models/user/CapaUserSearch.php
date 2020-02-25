@@ -19,7 +19,7 @@ class CapaUserSearch extends CapaUser
     public function rules()
     {
         return [
-            [['id', 'Celluleid', 'flag_password'], 'integer'],
+            [['id', 'cellule_id', 'flag_password'], 'integer'],
             [['username', 'email', 'auth_key', 'password_hash', 'cellule.name', 'userrightapplication'], 'safe'],
         ];
     }
@@ -85,7 +85,7 @@ class CapaUserSearch extends CapaUser
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'Celluleid' => $this->Celluleid,
+            'cellule_id' => $this->cellule_id,
             'flag_password' => $this->flag_password,
         ]);
 

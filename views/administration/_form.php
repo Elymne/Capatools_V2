@@ -52,7 +52,7 @@ foreach ($Services as &$service) {
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder' => 'Email capacités'])->label('Email :') ?>
 
-    <?= $form->field($model, 'Celluleid')->dropDownList($Listcellule, ['prompt' => $comboxselect])->label('Nom de la cellule :');   ?>
+    <?= $form->field($model, 'cellule_id')->dropDownList($Listcellule, ['prompt' => $comboxselect])->label('Nom de la cellule :');   ?>
 
     <?php
     $data = array();
