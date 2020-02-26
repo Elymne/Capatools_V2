@@ -15,7 +15,7 @@ class m200100_000007_create_devis_statut_table extends Migration
             'label' => $this->string(),
         ]);
 
-        $this->execute('ALTER TABLE devis_status AUTO_INCREMENT = 1');
+        $this->execute('ALTER TABLE devis_status AUTO_INCREMENT = 0');
     }
 
     /**
