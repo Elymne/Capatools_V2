@@ -55,7 +55,6 @@ class DevisController extends Controller implements ServiceInterface
         $searchModelAvantContrat->statusSearch = 'Avant contrat';
         $dataProviderAvantContrat = $searchModelAvantContrat->search(Yii::$app->request->queryParams);
 
-
         $searchModelAttenteop = new DevisSearch();
         $searchModelAttenteop->statusSearch = 'Attente validation Opérationel';
         $dataProviderAttenteop  = $searchModelAttenteop->search(Yii::$app->request->queryParams);
@@ -64,11 +63,9 @@ class DevisController extends Controller implements ServiceInterface
         $searchModelAttenteClient->statusSearch = 'Attente validation client';
         $dataProviderAttenteClient  = $searchModelAttenteClient->search(Yii::$app->request->queryParams);
 
-
         $searchModelEncours = new DevisSearch();
         $searchModelEncours->statusSearch = 'Projet en cours';
         $dataProviderEncours  = $searchModelEncours->search(Yii::$app->request->queryParams);
-
 
         $searchModelTerminer = new DevisSearch();
         $searchModelTerminer->statusSearch = 'Projet terminé';
@@ -77,9 +74,6 @@ class DevisController extends Controller implements ServiceInterface
         $searchModelAnnule = new DevisSearch();
         $searchModelAnnule->statusSearch = 'Projet annulé';
         $dataProviderAnnule  = $searchModelAnnule->search(Yii::$app->request->queryParams);
-
-
-
 
         return $this->render('index', [
             'searchModelAvantContrat' => $searchModelAvantContrat,
