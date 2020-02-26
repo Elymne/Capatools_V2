@@ -12,12 +12,12 @@ class DevisStatus extends ActiveRecord
         return 'devis_status';
     }
 
-    const AVANTPROJET = 0;
-    const PROJETENCOURS = 1;
-    const PROJETANNULE  = 2;
-    const PROJETTERMINE = 3;
-    const ATTENTEVALIDATIONOP = 4;
-    const ATTENTEVALIDATIONCL = 5;
+    const AVANTPROJET = 1;
+    const PROJETENCOURS = 2;
+    const PROJETANNULE  = 3;
+    const PROJETTERMINE = 4;
+    const ATTENTEVALIDATIONOP = 5;
+    const ATTENTEVALIDATIONCL = 6;
 
     public static function getAll()
     {
