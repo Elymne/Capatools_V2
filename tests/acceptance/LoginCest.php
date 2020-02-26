@@ -9,7 +9,7 @@ class LoginCest
         $I->amOnPage(Url::toRoute('/site/login'));
         $I->see('Login', 'h1');
 
-        $I->amGoingTo('try to login with correct credentials');
+        $I->amGoingTo('try to login with correct role');
         $I->fillField('input[name="LoginForm[username]"]', 'admin');
         $I->fillField('input[name="LoginForm[password]"]', 'admin');
         $I->click('login-button');
