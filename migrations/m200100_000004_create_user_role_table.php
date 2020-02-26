@@ -13,8 +13,8 @@ class m200100_000004_create_user_role_table extends Migration
 
         $this->createTable('{{%user_role}}', [
             'id' => $this->primaryKey(),
-            'role' => $this->string(),
-            'credential'   => $this->string(),
+            'service' => $this->string(),
+            'role'   => $this->string(),
             'user_id' => $this->integer()->notNull()
         ]);
 
