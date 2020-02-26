@@ -58,11 +58,11 @@ foreach ($services as $service) {
     foreach ($results as $result) {
         $stringpromp = 'none';
         //Je recherche la valeur de l'utilisateur pour l'application
-        $key = array_search($result['name'], array_column($model->userRole, 'role'));
+        $key = array_search($result['name'], array_column($model->userRole, 'service'));
 
         if (!is_bool($key)) {
 
-            $stringpromp = $model->userRole[$key]->credential;
+            $stringpromp = $model->userRole[$key]->role;
         }
 
         //Je génére les différents champs pour l'affichage

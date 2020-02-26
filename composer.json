@@ -1,17 +1,22 @@
 {
     "name": "capatools/v2",
     "description": "CAPATOLLSV2",
-    "keywords": ["CAPATOOLV2", "framework", "CAPATOOL", "project"],
+    "keywords": [
+        "CAPATOOLV2",
+        "framework",
+        "CAPATOOL",
+        "project"
+    ],
     "homepage": "http://www.capacites.fr/",
     "type": "project",
     "license": "BSD-3-Clause",
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.3.0 < 7.4.0",
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
-		"robregonm/yii2-pdf": "dev-master",
+        "robregonm/yii2-pdf": "dev-master",
         "richardfan1126/yii2-sortable-gridview": "*",
         "2amigos/yii2-chartjs-widget": "~2.0",
         "newerton/yii2-dynamicform": "*",

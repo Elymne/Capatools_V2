@@ -12,8 +12,8 @@ class m200200_000004_insert_into_user_role_table extends Migration
     {
 
         $this->insert('{{%user_role}}', [
-            'role' => 'RH',
-            'credential' => 'none',
+            'service' => 'RH',
+            'role' => 'none',
             'user_id' => 1
         ]);
 
@@ -30,8 +30,8 @@ class m200200_000004_insert_into_user_role_table extends Migration
         ]);
 
         $this->insert('{{%user_role}}', [
-            'role' => 'Administration',
-            'credential' => 'Responsable',
+            'service' => 'Administration',
+            'role' => 'Responsable',
             'user_id' => 2
         ]);
     }
