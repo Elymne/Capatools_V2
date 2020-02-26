@@ -49,7 +49,7 @@ class CapaUserSearch extends CapaUser
      */
     public function search($params)
     {
-        $query = CapaUser::find();
+        $query = CapaUser::find()->where(['flag_active'=> true]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -77,7 +77,7 @@ class CapaUserSearch extends CapaUser
             $query->joinWith(['cellule']);
             return $dataProvider;
         }
-        // filter by country name
+        // filter by cellule name
         $query->joinWith(['cellule' => function ($q) {
             $q->where('cellule.name LIKE "%' . $this->cellule . '%"');
         }]);

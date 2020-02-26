@@ -17,7 +17,8 @@ class m200100_000003_create_capa_user_table extends Migration
             'auth_key' => $this->string(),
             'password_hash' => $this->string(),
             'cellule_id' => $this->integer(),
-            'flag_password' => $this->boolean()
+            'flag_password' => $this->boolean(),
+            'flag_active' => $this->boolean()
         ]);
 
         $this->addForeignKey(

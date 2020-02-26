@@ -113,7 +113,7 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $array = Yii::$app->request->post('CapaUser')['UserRole'];
+            $array = Yii::$app->request->post('CapaUser')['userRole'];
             $arrayKey = array_keys($array);
 
             foreach ($arrayKey as $key) {
@@ -124,7 +124,7 @@ class AdministrationController extends Controller
                 $userRole->credential = $array[$key];
                 $userRole->Save();
             }
-
+            $model->flag_active= true;
             $model->generatePasswordAndmail();
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -187,11 +187,13 @@ class AdministrationController extends Controller
     {
         //on empêche l'auto suppression
         if (Yii::$app->user->identity->id != $id) {
-            $userRoles = UserRole::findAll(['user_id' => $id]);
+            $user =  $this->findModel($id);
+            $userRoles = $user->userRole;
             foreach ($userRoles as $userRole) {
                 $userRole->delete();
             }
-            $this->findModel($id)->delete();
+            $user->flag_active = false;
+            $user->save();
         }
         return $this->redirect(['index']);
     }
