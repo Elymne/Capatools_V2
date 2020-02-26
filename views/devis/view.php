@@ -105,38 +105,35 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="card">
             <div class="card-content teal white-text">
-                <span class="card-title"> Proposition technique</span>
+                <span class="card-title"> Jalon</span>
             </div>
             <div class="card-action white">
                 <?= DetailView::widget([
-                    'model' => $model,
+                    'model' => $model->milestones,
                     'attributes' => [
                         [
-                            'attribute' => 'filename',
+                            'attribute' => 'label',
                             'format' => 'text',
-                            'label' => 'Nom du fichier PDF',
+                            'label' => 'Nom du jalon',
                         ],
                         [
-                            'format' => 'html',
-                            'label' => 'Visualiser',
+                            'attribute' => 'price',
+                            'format' => 'text',
+                            'label' => 'Prix en (€)',
+                        ],
+                        [
+                            'attribute' => 'date',
+                            'format' => 'text',
+                            'label' => 'Date du jalon',
                             'value' => function ($data) {
-                                return Html::a('Visualiser', ['viewpdf', 'id' => $data->id,], ['class' => 'btn btn-primary']);
+                                $data->formatDateFromSql();
+                                return $data->delivery_date_view;
                             }
                         ],
                         [
-                            'attribute' => 'version',
+                            'attribute' => 'comments',
                             'format' => 'text',
-                            'label' => 'Version de fichier',
-                        ],
-                        [
-                            'attribute' => 'filename_first_upload',
-                            'format' => 'text',
-                            'label' => 'Date d\'upload du fichier',
-                        ],
-                        [
-                            'attribute' => 'filename_last_upload',
-                            'format' => 'text',
-                            'label' => 'Dernière modification du fichier',
+                            'label' => 'Commentaires',
                         ],
                     ],
                 ]) ?>

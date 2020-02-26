@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
-$this->title = 'Mise à jour du devis :' . $model->id_capa;
+$this->title = 'Mise à jour du devis :'. $model->id_capa ;
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Updateavcontrat';
@@ -18,61 +18,26 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="dartepicker">
 
-        <?=
-            DatePicker::widget(
-                [
-                    'name'  => 'from_date',
-                    // inline too, not bad
-                    'inline' => false,
-                    'id' => 'dtpicker',
-                    'language' => 'fr',
-                    'dateFormat' => 'DD, dd MM yyyy',
-                    'options' => [
-                        'autoclose' => true,
-                    ],
-                    // modify template for custom rendering
+    <?php $form = ActiveForm::begin(['id' => 'dynamic-form','options' => ['enctype' => 'multipart/form-data']]); ?>
 
 
-                ]
-            ); ?>
-    </div>
-
-    <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
+<?= $form->field($model, 'internal_name')->textInput(['maxlength' => true,'disabled'=>true])->label("Nom du projet") ?>
 
 
-    <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true, 'disabled' => true])->label("Nom du projet") ?>
+<?= $form->field($model,'delivery_type_id')->dropDownList(ArrayHelper::map($prestationtypelist,'id','label'), ['text' => 'Please select'])->label('');   ?>
 
+<?= $form->field($model, 'company[name]')->textInput()->label("Nom du client") ?>
+<?= $form->field($model, 'company[tva]')->textInput()->label("TVA") ?>
 
-    <?= $form->field($model, 'delivery_type_id')->dropDownList(ArrayHelper::map($prestationtypelist, 'id', 'label'), ['text' => 'Please select'])->label('');   ?>
-
-    <?= $form->field($model, 'company[name]')->textInput()->label("Nom du client") ?>
-    <?= $form->field($model, 'company[tva]')->textInput()->label("TVA") ?>
-
-    <?= $form->field($model, 'service_duration')->textInput()->label("Durée de la prestation (j)") ?>
+<?= $form->field($model, 'service_duration')->textInput()->label("Durée de la prestation (j)") ?>
 
 
 
-
-
-    <?= $form->field($model, 'filename')->textInput(['maxlength' => true, 'disabled' => true])->label('Proposition Technique') ?>
-    <?php
-    if ($model->filename != '') {
-        echo Html::a('Visualiser', ['viewpdf', 'id' => $model->id,], ['class' => 'btn btn-primary']);
-        echo $form->field($model, 'upfilename')->fileInput()->label('Remplacer le fichier:');
-    } else {
-        echo $form->field($model, 'upfilename')->fileInput()->label('Ajouter le fichier:');
-    }
-
-
-    ?>
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4><i class="glyphicon glyphicon-envelope"></i> Jalons</h4>
-        </div>
+        <div class="panel-heading"><h4><i class="glyphicon glyphicon-envelope"></i> Jalons</h4></div>
         <div class="panel-body">
-            <?php DynamicFormWidget::begin([
+             <?php DynamicFormWidget::begin([
                 'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                 'widgetBody' => '.container-items', // required: css class selector
                 'widgetItem' => '.item', // required: css class
@@ -84,54 +49,87 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
                 'formId' => 'dynamic-form',
                 'formFields' => [
                     'id',
-                    'price'
+                    'prix_jalon',
+                    'price',
+                    'delivery_date_view',
+                    'comments',
+
                 ],
             ]); ?>
 
-            <div class="container-items">
-                <!-- widgetContainer -->
-                <?php foreach ($milestoneModels as $i => $milestoneModel) : ?>
-                    <div class="item panel panel-default">
-                        <!-- widgetBody -->
-                        <div class="panel-heading">
-                            <h3 class="panel-title pull-left">Jalon</h3>
-                            <div class="pull-right">
-                                <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
-                                <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
-                            </div>
-                            <div class="clearfix"></div>
+            <div class="container-items"><!-- widgetContainer -->
+            <?php foreach ($milestoneModels as $i => $milestoneModel): ?>
+                <div class="item panel panel-default"><!-- widgetBody -->
+                    <div class="panel-heading">
+                        <h3 class="panel-title pull-left">Jalon </h3>
+                        <div class="pull-right">
+                            <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
+                            <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
                         </div>
-                        <div class="panel-body">
-                            <?php
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="panel-body">
+                        <?php
                             // necessary for update action.
-                            if (!$milestoneModel->isNewRecord) {
+                            if (! $milestoneModel->isNewRecord) {
                                 echo Html::activeHiddenInput($milestoneModel, "[{$i}]id");
                             }
-                            ?>
-
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <?= $form->field($milestoneModel, "[{$i}]price")->textInput(['maxlength' => true])->label('Priex') ?>
-
-                                </div>
-
-                            </div><!-- .row -->
-                        </div>
+                        ?>
+                         
+                        <div class="row">
+                            <div class="col-sm-4">
+                            <?= $form->field($milestoneModel, "[{$i}]label")->textInput(['maxlength' => true])->label('Label') ?> 
+                            <?= $form->field($milestoneModel, "[{$i}]price")->textInput(['maxlength' => true])->label('Prix') ?> 
+                            <?= $form->field($milestoneModel, "[{$i}]delivery_date_view")->widget(DatePicker::classname(), ['dateFormat' => 'dd-MM-yyyy','options' => ['class' => 'form-control picker']])->label('Date')?>
+                            <?= $form->field($milestoneModel, "[{$i}]comments")->textarea(['maxlength' => true])->label('Commentaires') ?> 
+                            </div>
+                            
+                        </div><!-- .row -->
                     </div>
-                <?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>
             </div>
             <?php DynamicFormWidget::end(); ?>
 
-        </div>
+                            </div>
+        
+                            </div>
+          <?= $form->field($model, 'price')->textInput()->label("Prix de la prestation ") ?>
 
-    </div>
-    <?= $form->field($model, 'price')->textInput()->label("Prix de la prestation ") ?>
+
+<div class="form-group">
+    <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Annuler', ['index'], ['class'=>'btn btn-primary']) ?>
+</div>
+
+<?php ActiveForm::end();
+
+///Script js qui permet de réinitiliser le date picker lors de l'ajout d'un jalon
+$this->registerJs(' 
+$(function () {
+    $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+         $( ".picker" ).each(function() {
+            $( this ).datepicker({
+            dateFormat: "dd-mm-yy",
+          });
+        });
+    });
+});
+$(function () {
+    $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
+        $( ".dob" ).each(function() {
+           $( this ).removeClass("hasDatepicker").datepicker({
+              dateFormat : "dd/mm/yy",
+              yearRange : "1925:+0",
+              maxDate : "-1D",
+              changeMonth: true,
+              changeYear: true
+           });
+      });          
+    });
+});
+');
 
 
-    <div class="form-group">
-        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Annuler', ['index'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::submitButton('Add row', ['name' => 'addRow', 'value' => 'true', 'class' => 'btn btn-info']) ?>
-    </div>
+?>
 
-    <?php ActiveForm::end(); ?>
