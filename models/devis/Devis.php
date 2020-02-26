@@ -127,4 +127,10 @@ class Devis extends ActiveRecord
     {
         return $this->hasOne(DeliveryType::className(), ['id' => 'delivery_type_id']);
     }
+
+    
+    public function getMilestones()
+    {
+        return $this->hasMany(Milestone::className(), ['devis_id' => 'id']);
+    }
 }

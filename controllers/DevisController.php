@@ -13,6 +13,7 @@ use app\models\devis\DevisSearch;
 use app\models\devis\DeliveryType;
 use app\models\devis\Milestone;
 
+use app\models\Model;
 
 use yii\web\UploadedFile;
 
@@ -204,22 +205,33 @@ class DevisController extends Controller implements ServiceInterface
     public function actionUpdateavcontrat($id)
     {
 
-        $milestoneModels = [new Milestone];
+       
         $modelDevis =  DevisUpdateForm::findOne($id);
-        $deliveryTypeModel = DeliveryType::getDeliveryTypes();
-        if (Yii::$app->request->post('addRow') == 'true') {
-            echo 'kkklklklkl';
-            return $this->render('update', [
-                'model' => $modelDevis, 'prestationtypelist' =>  $deliveryTypeModel,
-            ]);
+        $milestoneModels =  $modelDevis->milestones;
+        foreach ($milestoneModels as $milestoneModel) {
+            //Formatage de la date pour la sauvegar en sql
+            $milestoneModel->formatDateFromSql();
+ 
+        } 
+
+        if(empty($milestoneModels))
+        {
+            $milestoneModels = [];
         }
-        $modelDevis =  DevisUpdateForm::findOne($id);
+        $deliveryTypeModel = DeliveryType::getDeliveryTypes();
         if ($modelDevis->load(Yii::$app->request->post())) {
-            $modelDevis->upfilename = UploadedFile::getInstance($modelDevis, 'upfilename');
-            $modelDevis->upload();
-            $modelDevis->upfilename = '';
+
+            //JE cree l'array avec les éléments présent dans le post + les élements déjà présent
+            $milestoneModels = Model::createMultiple(Milestone::classname(),$milestoneModels );
+            //Charge les jalons
+
+            $tptp = Yii::$app->request->post();
+
+            //JE charge les données dans mon models
+            Model::loadMultiple( $milestoneModels, Yii::$app->request->post() );
+            
             //Gestion de la company
-            // var_dump( $modelDevis);
+          
             $array = Yii::$app->request->post('DevisUpdateForm')['company'];
 
 
@@ -232,25 +244,31 @@ class DevisController extends Controller implements ServiceInterface
                 $modelcompany->save();
             }
             $modelDevis->company_id = $modelcompany->id;
+          
+            $transaction = \Yii::$app->db->beginTransaction();
+            try {
+
+
             $modelDevis->save(false);
-            foreach ($modelsJalon as $modelJalon) {
-                $modelsJalon->devis_id = $modelDevis->id;
-                if (!($flag = $modelsJalon->save(false))) {
+            
+            foreach ($milestoneModels as $milestoneModel) {
+                //Formatage de la date pour la sauvegar en sql
+                $milestoneModel->formatDateToSql();
+                $milestoneModel->devis_id = $modelDevis->id;
+                if (! ($flag = $milestoneModel->save(false))) {
                     $transaction->rollBack();
                     break;
                 }
-            }
-
-            try {
-                $transaction->commit();
+            } 
+                
+            $transaction->commit();
             } catch (Exception $e) {
                 $transaction->rollBack();
             }
-
+            
 
             return $this->redirect(['view', 'id' => $modelDevis->id]);
         }
-
         return $this->render('update', [
             'model' => $modelDevis, 'prestationtypelist' =>  $deliveryTypeModel,
             'milestoneModels' => (empty($milestoneModels)) ? [new Milestone] : $milestoneModels
