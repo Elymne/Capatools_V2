@@ -14,7 +14,7 @@ class m200100_000008_create_milestone_table extends Migration
             'id' => $this->primaryKey(),
             'label' => $this->string(),
             'price' => $this->double(),
-            'delivery_date' => $this->dateTime(),
+            'delivery_date' => $this->date(),
             'comments' => $this->text(),
             'milestone_status_id' => $this->integer(),
             'devis_id' => $this->integer(),
