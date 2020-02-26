@@ -15,7 +15,7 @@ class UserRoleSearch extends UserRole
     {
         return [
             [['id', 'user_id'], 'integer'],
-            [['role', 'credential'], 'safe'],
+            [['service', 'role'], 'safe'],
         ];
     }
 
@@ -47,7 +47,7 @@ class UserRoleSearch extends UserRole
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'role' => SORT_ASC,
+                    'service' => SORT_ASC,
                 ]
             ],
         ]);
@@ -63,7 +63,7 @@ class UserRoleSearch extends UserRole
 
 
         // grid filtering conditions      
-        $query->andFilterWhere(['like', 'role', $this->role]);
+        $query->andFilterWhere(['like', 'service', $this->service]);
         return $dataProvider;
     }
 }

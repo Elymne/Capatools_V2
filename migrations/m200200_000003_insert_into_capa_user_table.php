@@ -32,6 +32,7 @@ class m200200_000003_insert_into_capa_user_table extends Migration
 
         $this->update('{{%capa_user}}', ['flag_password' => false], ['id' => 1]);
         $this->update('{{%capa_user}}', ['flag_password' => false], ['id' => 2]);
+        $this->update('{{%capa_user}}', ['flag_active' => true],[]);
     }
 
     /**

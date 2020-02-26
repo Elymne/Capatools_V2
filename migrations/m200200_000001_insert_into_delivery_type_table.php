@@ -12,6 +12,19 @@ class m200200_000001_insert_into_delivery_type_table extends Migration
         $this->insert('{{%delivery_type}}', [
             'label' => 'Délégué'
         ]);
+
+        $this->insert('{{%delivery_type}}', [
+            'label' => 'Prestation'
+        ]);
+
+        $this->insert('{{%delivery_type}}', [
+            'label' => 'Prestation interne'
+        ]);
+
+        $this->insert('{{%delivery_type}}', [
+            'label' => 'Projet interne'
+        ]);
+
     }
 
     /**

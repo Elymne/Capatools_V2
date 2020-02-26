@@ -56,9 +56,9 @@ class AdministrationController extends Controller
         if ($result) {
             $capa_user = Yii::$app->user->identity;
 
-            if ($capa_user->getUserRole()->where(['role' => 'Administration'])->exists()) {
-                $userRole = $capa_user->getUserRole()->where(['role' => 'Administration'])->select('credential')->one();
-                if ($userRole->credential == 'none') {
+            if ($capa_user->getUserRole()->where(['service' => 'Administration'])->exists()) {
+                $userRole = $capa_user->getUserRole()->where(['service' => 'Administration'])->select('role')->one();
+                if ($userRole->role == 'none') {
                     $result = false;
                 }
             } else {
@@ -113,7 +113,7 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $array = Yii::$app->request->post('CapaUser')['UserRole'];
+            $array = Yii::$app->request->post('CapaUser')['userRole'];
             $arrayKey = array_keys($array);
 
             foreach ($arrayKey as $key) {
@@ -121,10 +121,10 @@ class AdministrationController extends Controller
                 $userRole = new UserRole();
 
                 $userRole->role = $key;
-                $userRole->credential = $array[$key];
+                $userRole->role = $array[$key];
                 $userRole->Save();
             }
-
+            $model->flag_active= true;
             $model->generatePasswordAndmail();
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -164,7 +164,7 @@ class AdministrationController extends Controller
                 } else {
                     $userRole = UserRole::findOne(['role' => $key, 'user_id' => $id]);
                 }
-                $userRole->credential = $array[$key];
+                $userRole->role = $array[$key];
                 $userRole->Save();
             }
 
@@ -187,11 +187,13 @@ class AdministrationController extends Controller
     {
         //on empêche l'auto suppression
         if (Yii::$app->user->identity->id != $id) {
-            $userRoles = UserRole::findAll(['user_id' => $id]);
+            $user =  $this->findModel($id);
+            $userRoles = $user->userRole;
             foreach ($userRoles as $userRole) {
                 $userRole->delete();
             }
-            $this->findModel($id)->delete();
+            $user->flag_active = false;
+            $user->save();
         }
         return $this->redirect(['index']);
     }
@@ -225,12 +227,12 @@ class AdministrationController extends Controller
     {
         $result = [];
         //Je verifie qu'il possède au moin un droit sur le service administration
-        if ($user->identity->GetUserRole()->where(['role' => 'Administration'])->exists()) {
+        if ($user->identity->GetUserRole()->where(['service' => 'Administration'])->exists()) {
             //Je récupère le service administration
-            $role = $user->identity->getUserRole()->where(['role' => 'Administration'])->select('credential')->one();
+            $role = $user->identity->getUserRole()->where(['service' => 'Administration'])->select('role')->one();
 
             //Je verifie qu'il est reponsable
-            if ($role->credential == 'Responsable') {
+            if ($role->role == 'Responsable') {
                 $result =
                     [
                         'priorite' => 1,

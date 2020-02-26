@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200200_000008_insert_into_milestone_table extends Migration
+class m200200_000008_insert_into_milestone_statut_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -10,28 +10,21 @@ class m200200_000008_insert_into_milestone_table extends Migration
     public function safeUp()
     {
 
-        $this->insert('{{%milestone}}', [
+        $this->insert('{{%milestone_status}}', [
             'id' => '1',
             'label' => 'En cours'
         ]);
 
-        $this->insert('{{%milestone}}', [
+        $this->insert('{{%milestone_status}}', [
             'id' => '2',
             'label' => 'Facturation en cours'
         ]);
 
-        $this->insert('{{%milestone}}', [
+        $this->insert('{{%milestone_status}}', [
             'id' => '3',
             'label' => 'Facturé'
         ]);
 
-        $this->insert('{{%milestone}}', [
-            'label' => 'Prestation'
-        ]);
-
-        $this->insert('{{%milestone}}', [
-            'label' => 'Prestation interne'
-        ]);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200100_000007_create_devis_statut_table extends Migration
+class m200100_000009_create_milestone_statut_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -10,7 +10,7 @@ class m200100_000007_create_devis_statut_table extends Migration
     public function safeUp()
     {
 
-        $this->createTable('{{%devis_status}}', [
+        $this->createTable('{{%milestone_status}}', [
             'id' => $this->primaryKey(),
             'label' => $this->string(),
         ]);
@@ -24,6 +24,6 @@ class m200100_000007_create_devis_statut_table extends Migration
     public function safeDown()
     {
 
-        $this->dropTable('{{%devis_status}}');
+        $this->dropTable('{{%milestone_status}}');
     }
 }

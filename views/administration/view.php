@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
 
                     'label' => 'Statut',
-                    'attribute' => 'credential',
+                    'attribute' => 'role',
                 ],
             ]
         ]);
