@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 [
                     'label' => 'Service',
-                    'attribute' => 'role',
+                    'attribute' => 'service',
                 ],
                 [
 
