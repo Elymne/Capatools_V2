@@ -125,10 +125,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'date',
                             'format' => 'text',
                             'label' => 'Date du jalon',
-                            'value' => function ($data) {
-                                $data->formatDateFromSql();
-                                return $data->delivery_date_view;
-                            }
                         ],
                         [
                             'attribute' => 'comments',

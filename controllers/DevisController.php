@@ -12,14 +12,11 @@ use app\models\devis\DevisUpdateForm;
 use app\models\devis\DevisSearch;
 use app\models\devis\DeliveryType;
 use app\models\devis\Milestone;
-
+use app\helper\DateHelper;
 use app\models\Model;
-
-use yii\web\UploadedFile;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * DevisController implements the CRUD actions for Devis model.
@@ -164,19 +161,19 @@ class DevisController extends Controller implements ServiceInterface
         if ($model->load(Yii::$app->request->post())) {
 
             //Gestion de la company
-            $modelcompany = Company::find()->where(['name' => $model->companyname, 'tva' => $model->companytva])->one();
+            $company = Company::find()->where(['name' => $model->company_name, 'tva' => $model->company_tva])->one();
 
-            if ($modelcompany == null) {
-                $modelcompany = new Company();
-                $modelcompany->name = $model->companyname;
-                $modelcompany->tva = $model->companytva;
-                $modelcompany->save();
+            if ($company == null) {
+                $company = new Company();
+                $company->name = $model->company_name;
+                $company->tva = $model->company_tva;
+                $company->save();
             }
 
             ///Format ex : AROBOXXXX donc XXXX est fixe avec l'id
             $model->id_capa = yii::$app->user->identity->cellule->identity . printf('%04d', $model->id);
-            $model->id_laboxy = $model->id_capa . ' - ' . $modelcompany->name;
-            $model->company_id =  $modelcompany->id;
+            $model->id_laboxy = $model->id_capa . ' - ' . $company->name;
+            $model->company_id =  $company->id;
             $model->capa_user_id = yii::$app->user->identity->id;
             $model->cellule_id =  yii::$app->user->identity->cellule->id;
             $model->status_id = DevisStatus::AVANTPROJET;
@@ -199,73 +196,68 @@ class DevisController extends Controller implements ServiceInterface
     public function actionUpdateavcontrat($id)
     {
 
-       
-        $modelDevis =  DevisUpdateForm::findOne($id);
-        $milestoneModels =  $modelDevis->milestones;
-        foreach ($milestoneModels as $milestoneModel) {
-            //Formatage de la date pour la sauvegar en sql
-            $milestoneModel->formatDateFromSql();
- 
-        } 
 
-        if(empty($milestoneModels))
-        {
-            $milestoneModels = [];
+        $devis =  DevisUpdateForm::findOne($id);
+        $milestones =  $devis->milestones;
+
+        // if : empty(milestones) = true then milestones == [] = true.
+        // Don't know the use of this.
+        if (empty($milestones)) {
+            $milestones = [];
         }
-        $deliveryTypeModel = DeliveryType::getDeliveryTypes();
-        if ($modelDevis->load(Yii::$app->request->post())) {
 
-            //JE cree l'array avec les éléments présent dans le post + les élements déjà présent
-            $milestoneModels = Model::createMultiple(Milestone::classname(),$milestoneModels );
+        $deliveryTypeModel = DeliveryType::getDeliveryTypes();
+        if ($devis->load(Yii::$app->request->post())) {
+
+            //Je créer l'array avec les éléments présent dans le post + les élements déjà présent
+            $milestones = Model::createMultiple(Milestone::classname(), $milestones);
             //Charge les jalons
 
             $tptp = Yii::$app->request->post();
 
             //JE charge les données dans mon models
-            Model::loadMultiple( $milestoneModels, Yii::$app->request->post() );
-            
-            //Gestion de la company
-          
+            Model::loadMultiple($milestones, Yii::$app->request->post());
+
+            // Company management.
             $array = Yii::$app->request->post('DevisUpdateForm')['company'];
 
+            $company = Company::find()->where(['name' => $array['name'], 'tva' => $array['tva']])->one();
 
-            $modelcompany = Company::find()->where(['name' => $array['name'], 'tva' => $array['tva']])->one();
-
-            if ($modelcompany == null) {
-                $modelcompany = new Company();
-                $modelcompany->name = $array['name'];
-                $modelcompany->tva = $array['tva'];
-                $modelcompany->save();
+            if ($company == null) {
+                $company = new Company();
+                $company->name = $array['name'];
+                $company->tva = $array['tva'];
+                $company->save();
             }
-            $modelDevis->company_id = $modelcompany->id;
-          
+
+            $devis->company_id = $company->id;
             $transaction = \Yii::$app->db->beginTransaction();
+
             try {
+                $devis->save(false);
 
+                foreach ($milestones as $milestone) {
+                    // Format date for sql insertion.
+                    $milestone->devis_id = $devis->id;
+                    $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
 
-            $modelDevis->save(false);
-            
-            foreach ($milestoneModels as $milestoneModel) {
-                //Formatage de la date pour la sauvegar en sql
-                $milestoneModel->formatDateToSql();
-                $milestoneModel->devis_id = $modelDevis->id;
-                if (! ($flag = $milestoneModel->save(false))) {
-                    $transaction->rollBack();
-                    break;
+                    if (!($flag = $milestone->save(false))) {
+                        $transaction->rollBack();
+                        break;
+                    }
                 }
-            } 
-                
-            $transaction->commit();
+
+                $transaction->commit();
             } catch (Exception $e) {
                 $transaction->rollBack();
             }
-            
 
-            return $this->redirect(['view', 'id' => $modelDevis->id]);
+            return $this->redirect(['view', 'id' => $devis->id]);
         }
+
         return $this->render('update', [
-            'model' => $modelDevis, 'prestationtypelist' =>  $deliveryTypeModel,
-            'milestoneModels' => (empty($milestoneModels)) ? [new Milestone] : $milestoneModels
+            'model' => $devis, 'prestationtypelist' =>  $deliveryTypeModel,
+            'milestones' => (empty($milestones)) ? [new Milestone] : $milestones
         ]);
     }
 
