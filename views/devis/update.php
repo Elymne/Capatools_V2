@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true, 'disabled' => true])->label("Nom du projet") ?>
-    <?= $form->field($model, 'delivery_type_id')->dropDownList(ArrayHelper::map($prestationtypelist, 'id', 'label'), ['text' => 'Please select'])->label('');   ?>
+    <?= $form->field($model, 'delivery_type_id')->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'), ['text' => 'Please select'])->label('');   ?>
     <?= $form->field($model, 'company[name]')->textInput()->label("Nom du client") ?>
     <?= $form->field($model, 'company[tva]')->textInput()->label("TVA") ?>
     <?= $form->field($model, 'service_duration')->textInput()->label("Durée de la prestation (j)") ?>

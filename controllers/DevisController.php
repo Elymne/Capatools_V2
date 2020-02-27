@@ -14,12 +14,12 @@ use app\models\devis\DeliveryType;
 use app\models\devis\Milestone;
 use app\helper\DateHelper;
 use app\models\Model;
-
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * DevisController implements the CRUD actions for Devis model.
+ * Gestion des différentes routes liées au service Devis.
  */
 class DevisController extends Controller implements ServiceInterface
 {
@@ -157,10 +157,17 @@ class DevisController extends Controller implements ServiceInterface
     public function actionCreate()
     {
         $model = new DevisCreateForm();
-        $deliveryTypeModel = DeliveryType::getDeliveryTypes();
+
+        // Get data that we wish to use on our view.
+        $deliveryType = DeliveryType::getDeliveryTypes();
+        // Here we type a specific requets because we only want names of clients.
+        $companies = ArrayHelper::map(Company::find()->all(), 'id', 'name');
+        $companies = array_merge($companies);
+
+        // Validation du devis depuis la vue de création.
         if ($model->load(Yii::$app->request->post())) {
 
-            //Gestion de la company
+            // Vérification pour savoir si le client existe déjà en base de données, si il n'existe pas, on l'ajoute.
             $company = Company::find()->where(['name' => $model->company_name, 'tva' => $model->company_tva])->one();
 
             if ($company == null) {
@@ -170,20 +177,26 @@ class DevisController extends Controller implements ServiceInterface
                 $company->save();
             }
 
-            ///Format ex : AROBOXXXX donc XXXX est fixe avec l'id
+            // Préparation du modèle de devis à sauvegarder.
             $model->id_capa = yii::$app->user->identity->cellule->identity . printf('%04d', $model->id);
             $model->id_laboxy = $model->id_capa . ' - ' . $company->name;
             $model->company_id =  $company->id;
             $model->capa_user_id = yii::$app->user->identity->id;
             $model->cellule_id =  yii::$app->user->identity->cellule->id;
-            $model->status_id = DevisStatus::AVANTPROJET;
+            $model->status_id = DevisStatus::AVANT_PROJET;
+
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('create', [
-            'model' => $model, 'prestationtypelist' =>  $deliveryTypeModel
-        ]);
+        return $this->render(
+            'create',
+            [
+                'model' => $model,
+                'delivery_type' => $deliveryType,
+                'companies' => $companies
+            ]
+        );
     }
 
     /**
@@ -198,7 +211,7 @@ class DevisController extends Controller implements ServiceInterface
 
 
         $devis =  DevisUpdateForm::findOne($id);
-        $milestones =  $devis->milestones;
+        $milestones = $devis->milestones;
 
         // if : empty(milestones) = true then milestones == [] = true.
         // Don't know the use of this.
@@ -206,7 +219,8 @@ class DevisController extends Controller implements ServiceInterface
             $milestones = [];
         }
 
-        $deliveryTypeModel = DeliveryType::getDeliveryTypes();
+        $deliveryType = DeliveryType::getDeliveryTypes();
+
         if ($devis->load(Yii::$app->request->post())) {
 
             //Je créer l'array avec les éléments présent dans le post + les élements déjà présent
@@ -255,10 +269,13 @@ class DevisController extends Controller implements ServiceInterface
             return $this->redirect(['view', 'id' => $devis->id]);
         }
 
-        return $this->render('update', [
-            'model' => $devis, 'prestationtypelist' =>  $deliveryTypeModel,
-            'milestones' => (empty($milestones)) ? [new Milestone] : $milestones
-        ]);
+        return $this->render(
+            'update',
+            [
+                'model' => $devis, 'delivery_type' =>  $deliveryType,
+                'milestones' => (empty($milestones)) ? [new Milestone] : $milestones,
+            ]
+        );
     }
 
 
@@ -276,7 +293,7 @@ class DevisController extends Controller implements ServiceInterface
         if ($model) {
 
             //Attente validation Opérationel statut =4
-            $model->staut_id = DevisStatus::ATTENTEVALIDATIONOP;;
+            $model->staut_id = DevisStatus::ATTENTE_VALIDATION_OP;;
 
             $model->save();
         }

@@ -13,6 +13,7 @@ class DevisSearch extends Devis
 {
 
     public $statusSearch = '';
+
     /**
      * {@inheritdoc}
      */
