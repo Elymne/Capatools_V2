@@ -49,48 +49,12 @@ class DevisController extends Controller implements ServiceInterface
      */
     public function actionIndex()
     {
-        $searchModelAvantContrat = new DevisSearch();
-        $searchModelAvantContrat->statusSearch = 'Avant contrat';
-        $dataProviderAvantContrat = $searchModelAvantContrat->search(Yii::$app->request->queryParams);
-
-        $searchModelAttenteop = new DevisSearch();
-        $searchModelAttenteop->statusSearch = 'Attente validation Opérationel';
-        $dataProviderAttenteop  = $searchModelAttenteop->search(Yii::$app->request->queryParams);
-
-        $searchModelAttenteClient = new DevisSearch();
-        $searchModelAttenteClient->statusSearch = 'Attente validation client';
-        $dataProviderAttenteClient  = $searchModelAttenteClient->search(Yii::$app->request->queryParams);
-
-        $searchModelEncours = new DevisSearch();
-        $searchModelEncours->statusSearch = 'Projet en cours';
-        $dataProviderEncours  = $searchModelEncours->search(Yii::$app->request->queryParams);
-
-        $searchModelTerminer = new DevisSearch();
-        $searchModelTerminer->statusSearch = 'Projet terminé';
-        $dataProviderTerminer  = $searchModelTerminer->search(Yii::$app->request->queryParams);
-
-        $searchModelAnnule = new DevisSearch();
-        $searchModelAnnule->statusSearch = 'Projet annulé';
-        $dataProviderAnnule  = $searchModelAnnule->search(Yii::$app->request->queryParams);
+        $searchModel = new DevisSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModelAvantContrat' => $searchModelAvantContrat,
-            'dataProviderAvantContrat' => $dataProviderAvantContrat,
-
-            'searchModelAttenteop' => $searchModelAttenteop,
-            'dataProviderAttenteop' => $dataProviderAttenteop,
-
-            'searchModelAttenteClient' => $searchModelAttenteClient,
-            'dataProviderAttenteClient' => $dataProviderAttenteClient,
-
-            'searchModelEncours' => $searchModelEncours,
-            'dataProviderEncours' => $dataProviderEncours,
-
-            'searchModelTerminer' => $searchModelTerminer,
-            'dataProviderTerminer' => $dataProviderTerminer,
-
-            'searchModelAnnule' => $searchModelAnnule,
-            'dataProviderAnnule' => $dataProviderAnnule,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -300,12 +264,6 @@ class DevisController extends Controller implements ServiceInterface
 
         return $this->redirect(['index']);
     }
-
-
-    #endregion
-
-
-
 
     /**
      * Finds the Devis model based on its primary key value.
