@@ -124,7 +124,7 @@ class AdministrationController extends Controller
                 $userRole->role = $array[$key];
                 $userRole->Save();
             }
-            $model->flag_active= true;
+            $model->flag_active = true;
             $model->generatePasswordAndmail();
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);

@@ -10,7 +10,14 @@ use yii\widgets\Pjax;
 $this->title = 'Liste des devis';
 $this->params['breadcrumbs'][] = $this->title;
 
-$listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationnel', 2 => 'Attente validation client', 3 => 'Projet en cours', 4 => 'Projet terminé / annulé');
+$listeEtapes = [
+    0 => 'Avant Contrat',
+    1 => 'Attente validation Opérationnel',
+    2 => 'Attente validation client',
+    3 => 'Projet en cours',
+    4 => 'Projet terminé / annulé'
+];
+
 ?>
 <div class="timeline">
     <?php foreach ($listeEtapes as $uneEtape) { ?>
@@ -34,6 +41,7 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
 
 
     <h1> Devis en avant contrat :</h1>
+
     <?php Pjax::begin(['id' => '1']); ?>
     <div class="row">
         <?php echo Html::a('Créer un devis <i class="material-icons right">add_box</i>', ['devis/create'], ['class' => 'btn waves-effect waves-light']); ?>
@@ -61,7 +69,6 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                     'placeholder' => 'Filtre Nom Projet'
                 ]
             ],
-            //todo Remplacer par le vrai nom du project-manager.
             [
                 'attribute' => 'capaUser.username',
                 'format' => 'text',
@@ -135,7 +142,10 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                         $options = [
                             'class' => 'btn-floating red tooltipped',
                             'data-position' => 'bottom',
-                            'data-tooltip' => 'Supprimer'
+                            'data-tooltip' => 'Supprimer',
+                            'title' => Yii::t('app', 'Delete'),
+                            'data-confirm' => Yii::t('app', 'Voulez vous vraiment supprimer ce devis ?'),
+                            'data-method' => 'post'
                         ];
                         return Html::a('<i class="material-icons">delete</i>', ['devis/delete', 'id' => $model->id], $options);
                     }
@@ -571,6 +581,14 @@ $listeEtapes = array(0 => 'Avant Contrat', 1 => 'Attente validation Opérationne
                             'data-tooltip' => 'Voir'
                         ];
                         return Html::a('<i class="material-icons">search</i>', ['devis/view', 'id' => $model->id], $options);
+                    },
+                    'delete' => function ($url, $model) {
+                        $option = [
+                            'title' => Yii::t('app', 'Delete'),
+                            'data-confirm' => Yii::t('app', 'Voulez vous vraiment supprimer ce devis ?'),
+                            'data-method' => 'post'
+                        ];
+                        return Html::a('<i class="material-icons">search</i>', ['devis/delete', 'id' => $model->id, $option]);
                     }
                 ],
             ],
