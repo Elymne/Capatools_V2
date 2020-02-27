@@ -9,7 +9,6 @@ use yii\web\IdentityInterface;
 class CapaUser extends ActiveRecord  implements IdentityInterface
 {
 
-    private $celluleName;
     public static function tableName()
     {
         return 'capa_user';

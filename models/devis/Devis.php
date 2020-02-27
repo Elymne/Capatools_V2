@@ -16,15 +16,10 @@ class Devis extends ActiveRecord
         return 'devis';
     }
 
-
-    /**
-     * Récupère tous les devis.
-     */
     public static function getAll()
     {
         return static::find();
     }
-
 
     public static function getGroupbyStatus()
     {
@@ -91,7 +86,7 @@ class Devis extends ActiveRecord
             ],
 
         ]);
-        return  $string;
+        return $string;
     }
 
     public static function getOneById($id)
@@ -103,6 +98,9 @@ class Devis extends ActiveRecord
     {
         return static::find()->where(['id_capa' => $id_capa])->one();
     }
+
+
+    // Set the Object insertion from sql table relation.
 
     public function getCellule()
     {
@@ -118,12 +116,12 @@ class Devis extends ActiveRecord
         return $this->hasOne(DevisStatus::className(), ['id' => 'status_id']);
     }
 
-    public function getCapaUser()
+    public function getCapa_user()
     {
         return $this->hasOne(CapaUser::className(), ['id' => 'capa_user_id']);
     }
 
-    public function getDeliveryType()
+    public function getDelivery_type()
     {
         return $this->hasOne(DeliveryType::className(), ['id' => 'delivery_type_id']);
     }

@@ -15,8 +15,8 @@ class MilestoneStatus extends ActiveRecord
     const ENCOURS = 1;
     const FACTURATIONENCOUR  = 2;
     const FACTURE = 3;
-    const ATTENTEVALIDATIONOP = 4;
-    const ATTENTEVALIDATIONCL = 5;
+    const ATTENTE_VALIDATION_OP = 4;
+    const ATTENTE_VALIDATION_CL = 5;
 
     public static function getAll()
     {
