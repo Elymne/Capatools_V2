@@ -181,9 +181,13 @@ class DevisController extends Controller implements ServiceInterface
                 return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('create', [
-            'model' => $model, 'prestationtypelist' =>  $deliveryTypeModel
-        ]);
+        return $this->render(
+            'create',
+            [
+                'model' => $model,
+                'delivery_type' =>  $deliveryTypeModel
+            ]
+        );
     }
 
     /**
@@ -256,7 +260,7 @@ class DevisController extends Controller implements ServiceInterface
         }
 
         return $this->render('update', [
-            'model' => $devis, 'prestationtypelist' =>  $deliveryTypeModel,
+            'model' => $devis, 'delivery_type' =>  $deliveryTypeModel,
             'milestones' => (empty($milestones)) ? [new Milestone] : $milestones
         ]);
     }

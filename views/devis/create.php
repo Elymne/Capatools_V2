@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true,])->label("Nom du projet") ?>
-    <?= $form->field($model, 'delivery_type_id')->dropDownList(ArrayHelper::map($prestationtypelist, 'id', 'label'), ['text' => 'Please select'])->label('');   ?>
+    <?= $form->field($model, 'delivery_type_id')->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'), ['text' => 'Please select'])->label('');   ?>
 
     <?= $form->field($model, 'company_name')->textInput()->label("Nom du client") ?>
     <?= $form->field($model, 'company_tva')->textInput()->label("TVA") ?>
