@@ -12,7 +12,6 @@ $this->title = 'Création d\'un devis';
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-var_dump($companies);
 ?>
 <div class="devis-create">
 
@@ -38,8 +37,27 @@ var_dump($companies);
 
 
     <div class="form-group">
-        <?= Html::submitButton('Enregistrer', ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'btn btn-primary']) ?>
+
+        <?= Html::submitButton(
+            'Enregistrer',
+            [
+                'class' => 'btn btn-success',
+                'data' => [
+                    'confirm' => 'Ajouter ce devis ?'
+                ]
+            ]
+        ) ?>
+
+        <?= Html::a(
+            Yii::t('app', 'Annuler'),
+            [
+                'index'
+            ],
+            [
+                'class' => 'btn btn-primary'
+            ]
+        ) ?>
+
     </div>
 
     <?php ActiveForm::end(); ?>
