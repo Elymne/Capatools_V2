@@ -158,9 +158,11 @@ class DevisController extends Controller implements ServiceInterface
     {
         $model = new DevisCreateForm();
         $deliveryTypeModel = DeliveryType::getDeliveryTypes();
+
+        // Validation du devis depuis la vue de création.
         if ($model->load(Yii::$app->request->post())) {
 
-            //Gestion de la company
+            // Vérification pour savoir si le client existe déjà en base de données, si il n'existe pas, on l'ajoute.
             $company = Company::find()->where(['name' => $model->company_name, 'tva' => $model->company_tva])->one();
 
             if ($company == null) {
@@ -170,13 +172,14 @@ class DevisController extends Controller implements ServiceInterface
                 $company->save();
             }
 
-            ///Format ex : AROBOXXXX donc XXXX est fixe avec l'id
+            // Préparation du modèle de devis à sauvegarder.
             $model->id_capa = yii::$app->user->identity->cellule->identity . printf('%04d', $model->id);
             $model->id_laboxy = $model->id_capa . ' - ' . $company->name;
             $model->company_id =  $company->id;
             $model->capa_user_id = yii::$app->user->identity->id;
             $model->cellule_id =  yii::$app->user->identity->cellule->id;
-            $model->status_id = DevisStatus::AVANTPROJET;
+            $model->status_id = DevisStatus::AVANT_PROJET;
+
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -185,7 +188,7 @@ class DevisController extends Controller implements ServiceInterface
             'create',
             [
                 'model' => $model,
-                'delivery_type' =>  $deliveryTypeModel
+                'delivery_type' => $deliveryTypeModel
             ]
         );
     }
@@ -280,7 +283,7 @@ class DevisController extends Controller implements ServiceInterface
         if ($model) {
 
             //Attente validation Opérationel statut =4
-            $model->staut_id = DevisStatus::ATTENTEVALIDATIONOP;;
+            $model->staut_id = DevisStatus::ATTENTE_VALIDATION_OP;;
 
             $model->save();
         }
