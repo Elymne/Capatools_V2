@@ -12,7 +12,7 @@ use app\models\devis\DevisUpdateForm;
 use app\models\devis\DevisSearch;
 use app\models\devis\DeliveryType;
 use app\models\devis\Milestone;
-use app\helper\DateHelper;
+use app\helper\_clazz\DateHelper;
 use app\models\Model;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -109,10 +109,6 @@ class DevisController extends Controller implements ServiceInterface
         return $this->redirect(['index']);
     }
 
-
-    #region Devis Avant contrat
-
-
     /**
      * Creates a new Devis model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -124,6 +120,7 @@ class DevisController extends Controller implements ServiceInterface
 
         // Get data that we wish to use on our view.
         $deliveryType = DeliveryType::getDeliveryTypes();
+
         // Here we type a specific requets because we only want names of clients.
         $companies = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companies = array_merge($companies);
@@ -170,43 +167,40 @@ class DevisController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateavcontrat($id)
+    public function actionUpdate($id)
     {
 
-
         $devis =  DevisUpdateForm::findOne($id);
-        $milestones = $devis->milestones;
-
-        // if : empty(milestones) = true then milestones == [] = true.
-        // Don't know the use of this.
-        if (empty($milestones)) {
-            $milestones = [];
-        }
-
         $deliveryType = DeliveryType::getDeliveryTypes();
+
+        $milestones = $devis->milestones;
 
         if ($devis->load(Yii::$app->request->post())) {
 
-            //Je créer l'array avec les éléments présent dans le post + les élements déjà présent
+            // Map the new milestones with existants one.
             $milestones = Model::createMultiple(Milestone::classname(), $milestones);
-            //Charge les jalons
 
-            $tptp = Yii::$app->request->post();
-
-            //JE charge les données dans mon models
+            // Load milestones into model.
             Model::loadMultiple($milestones, Yii::$app->request->post());
 
-            // Company management.
-            $array = Yii::$app->request->post('DevisUpdateForm')['company'];
+            // Set the maximum price of all milestones to check values.
+            $totalMilestonesPrice = 0;
+            foreach ($milestones as $milestone) {
+                $totalMilestonesPrice += $milestone->price;
+            }
 
-            $company = Company::find()->where(['name' => $array['name'], 'tva' => $array['tva']])->one();
+            // Load data from company fields.
+            $companyData = Yii::$app->request->post('DevisUpdateForm')['company'];
+
+            $company = Company::find()->where(['name' => $companyData['name'], 'tva' => $companyData['tva']])->one();
 
             if ($company == null) {
                 $company = new Company();
-                $company->name = $array['name'];
-                $company->tva = $array['tva'];
-                $company->save();
+                $company->name = $companyData['name'];
+                $company->tva = $companyData['tva'];
             }
+
+            $company->save();
 
             $devis->company_id = $company->id;
             $transaction = \Yii::$app->db->beginTransaction();
@@ -215,9 +209,12 @@ class DevisController extends Controller implements ServiceInterface
                 $devis->save(false);
 
                 foreach ($milestones as $milestone) {
+
                     // Format date for sql insertion.
                     $milestone->devis_id = $devis->id;
                     $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
+
+                    // Verify the integrity of each Milestone.
 
                     if (!($flag = $milestone->save(false))) {
                         $transaction->rollBack();
@@ -244,21 +241,19 @@ class DevisController extends Controller implements ServiceInterface
 
 
     /**
-     * valide a devis and change state avantcontrat to Attente validation Opérationel
+     * Change the status of devis, not sure if this route should be used like this. We'll see.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
+     * @param integer $status Static value of DevisStatus
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionValidationavcontrat($id)
+    public function actionUpdateStatus($id, $status)
     {
         $model = $this->findModel($id);
 
         if ($model) {
-
-            //Attente validation Opérationel statut =4
-            $model->staut_id = DevisStatus::ATTENTE_VALIDATION_OP;;
-
+            $model->status_id = $status;
             $model->save();
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\helper\clazz;
+namespace app\helper\_clazz;
 
 class UUID
 {

@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 $this->title = 'Mise à jour du devis :' . $model->id_capa;
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Updateavcontrat';
+$this->params['breadcrumbs'][] = 'Update';
 
 ?>
 <div class="devis-update">
@@ -21,11 +21,12 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
 
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true, 'disabled' => true])->label("Nom du projet") ?>
+    <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])->label("Nom du projet") ?>
     <?= $form->field($model, 'delivery_type_id')->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'), ['text' => 'Please select'])->label('');   ?>
     <?= $form->field($model, 'company[name]')->textInput()->label("Nom du client") ?>
+    <?= $form->field($model, 'company[description]')->textInput()->label("Description du client") ?>
     <?= $form->field($model, 'company[tva]')->textInput()->label("TVA") ?>
-    <?= $form->field($model, 'service_duration')->textInput()->label("Durée de la prestation (j)") ?>
+    <?= $form->field($model, 'service_duration')->textInput(['autocomplete' => 'off'])->label("Durée de la prestation (j)") ?>
 
 
 
@@ -50,8 +51,7 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
                     'prix_jalon',
                     'price',
                     'delivery_date',
-                    'comments',
-
+                    'comments'
                 ],
             ]); ?>
 
@@ -78,10 +78,10 @@ $this->params['breadcrumbs'][] = 'Updateavcontrat';
 
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <?= $form->field($milestone, "[{$i}]label")->textInput(['maxlength' => true])->label('Label') ?>
-                                    <?= $form->field($milestone, "[{$i}]price")->textInput(['maxlength' => true])->label('Prix') ?>
-                                    <?= $form->field($milestone, "[{$i}]delivery_date")->widget(DatePicker::classname(), ['dateFormat' => 'dd-MM-yyyy', 'options' => ['class' => 'form-control picker']])->label('Date') ?>
-                                    <?= $form->field($milestone, "[{$i}]comments")->textarea(['maxlength' => true])->label('Commentaires') ?>
+                                    <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Label') ?>
+                                    <?= $form->field($milestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Prix') ?>
+                                    <?= $form->field($milestone, "[{$i}]delivery_date")->widget(DatePicker::classname(), ['dateFormat' => 'dd-MM-yyyy', 'options' => ['class' => 'form-control picker', 'autocomplete' => 'off']])->label('Date') ?>
+                                    <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaires') ?>
                                 </div>
 
                             </div><!-- .row -->
