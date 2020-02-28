@@ -170,10 +170,23 @@ class DevisController extends Controller implements ServiceInterface
 
         $model = new CompanyCreateForm();
 
+        if ($model->load(Yii::$app->request->post())) {
+
+            if ($model->validate()) {
+
+                $model->name = $model->name;
+                $model->tva =  $model->tva;
+                $model->description = $model->description;
+
+                $model->save();
+                return $this->redirect(['create']);
+            }
+        }
+
         return $this->render(
             'addClient',
             [
-                'data' => 'Y A PAS DE PANNEAUX'
+                'model' =>  $model
             ]
         );
     }

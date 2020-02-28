@@ -10,7 +10,6 @@ class CompanyCreateForm extends Company
     public function rules()
     {
         return [
-            ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire !'],
             [
                 'name',
                 'required',

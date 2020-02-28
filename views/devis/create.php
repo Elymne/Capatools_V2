@@ -48,7 +48,7 @@ AppAsset::register($this);
             [
                 'class' => 'btn btn-success',
                 'data' => [
-                    'confirm' => 'Ajouter ce devis ?'
+                    'confirm' => 'Créer ce devis ?'
                 ]
             ]
         ) ?>
