@@ -4,16 +4,17 @@ namespace app\controllers;
 
 use yii\filters\AccessControl;
 use Yii;
+use app\models\Model;
 use app\models\devis\Devis;
 use app\models\devis\DevisStatus;
 use app\models\devis\Company;
+use app\models\devis\DeliveryType;
 use app\models\devis\DevisCreateForm;
 use app\models\devis\DevisUpdateForm;
+use app\models\devis\CompanyCreateForm;
 use app\models\devis\DevisSearch;
-use app\models\devis\DeliveryType;
 use app\models\devis\Milestone;
 use app\helper\_clazz\DateHelper;
-use app\models\Model;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -31,10 +32,10 @@ class DevisController extends Controller implements ServiceInterface
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['Index', 'View', 'Create', 'Update', 'Delete'],
+                'only' => ['Index', 'View', 'Create', 'Update', 'Delete', 'AddClient'],
                 'rules' => [
                     [
-                        'actions' => ['Index', 'View', 'Create', 'Update', 'Delete'],
+                        'actions' => ['Index', 'View', 'Create', 'Update', 'Delete', 'AddClient'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -155,6 +156,24 @@ class DevisController extends Controller implements ServiceInterface
                 'model' => $model,
                 'delivery_type' => $deliveryType,
                 'companiesNames' => $companiesNames
+            ]
+        );
+    }
+
+    /**
+     * route : devis/add-client
+     * 
+     * @return mixed
+     */
+    public function actionAddClient()
+    {
+
+        $model = new CompanyCreateForm();
+
+        return $this->render(
+            'addClient',
+            [
+                'data' => 'Y A PAS DE PANNEAUX'
             ]
         );
     }

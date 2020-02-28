@@ -37,7 +37,7 @@ AppAsset::register($this);
         ])
         ->label("Nom du client") ?>
 
-    <?= Html::a('Ajouter un client', ['#'], ['class' => 'profile-link']) ?>
+    <?= Html::a('Ajouter un client', ['devis/add-client'], ['class' => 'profile-link']) ?>
 
     <br /><br /><br />
 
