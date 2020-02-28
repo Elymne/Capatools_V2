@@ -10,24 +10,7 @@ use yii\widgets\Pjax;
 $this->title = 'Liste des devis';
 $this->params['breadcrumbs'][] = $this->title;
 
-$listeEtapes = [
-    0 => 'Avant Contrat',
-    1 => 'Attente validation Opérationnel',
-    2 => 'Attente validation client',
-    3 => 'Projet en cours',
-    4 => 'Projet terminé / annulé'
-];
-
 ?>
-<div class="timeline">
-    <?php foreach ($listeEtapes as $uneEtape) { ?>
-
-        <div class="timeline-event">
-            <p class="event-label"><?php echo $uneEtape; ?></p>
-            <span class="point"><a href="#">&nbsp;&nbsp;</a></span>
-        </div>
-    <?php } ?>
-</div>
 
 <div class="devis-index">
 

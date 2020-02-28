@@ -14,7 +14,18 @@ $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
+$stages = [
+    1 => 'Avant Contrat',
+    2 => 'Attente validation Opérationnel',
+    3 => 'Attente validation client',
+    4 => 'Projet en cours',
+    5 => 'Projet terminé / annulé'
+];
+
+$indexStatus = getIndexStatus($model);
+
 ?>
+
 <div class="devis-view">
 
     <h2 style="color:#009688"> Devis : <?= Html::encode($this->title) ?> </h2>
@@ -28,7 +39,24 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="card-action">
                 <?= Html::a('Revenir <i class="material-icons right">keyboard_return</i>', ['index'], ['class' => 'waves-effect waves-light btn']) ?>
+            </div>
+        </div>
 
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Etat du contrat</span>
+
+                <div class="timeline">
+                    <?php foreach ($stages as $key => $stage) { ?>
+                        <div class="timeline-event">
+                            <p class="event-label"><?php echo $stage; ?></p>
+                            <?php
+                            if (isStatusPassed($indexStatus, $key)) echo '<span class="point-filled"></span>';
+                            else echo '<span class="point"></span>';
+                            ?>
+                        </div>
+                    <?php } ?>
+                </div>
             </div>
         </div>
 
@@ -49,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => 'Durée de la prestation',
                         ],
                         [
-                            'attribute' => 'deliveryType.label',
+                            'attribute' => 'delivery_type.label',
                             'format' => 'text',
                             'label' => 'Type de la prestation',
                         ],
@@ -64,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => 'Entreprise',
                         ],
                         [
-                            'attribute' => 'capaUser.username',
+                            'attribute' => 'capa_user.username',
                             'format' => 'text',
                             'label' => 'Responsable projet',
                         ]
@@ -139,7 +167,41 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-
-
-
 <?php
+
+function getIndexStatus($model)
+{
+
+    $indexStatus = -1;
+
+    switch ($model->status->id) {
+        case 1:
+            $indexStatus = 1;
+            break;
+        case 2:
+            $indexStatus = 2;
+            break;
+        case 3:
+            $indexStatus = 3;
+            break;
+        case 4:
+            $indexStatus = 4;
+            break;
+        case 5:
+            $indexStatus = 5;
+            break;
+        case 6:
+            $indexStatus = 5;
+            break;
+    }
+
+    return $indexStatus;
+}
+
+function isStatusPassed($indexStatus, $arrayKey)
+{
+    if ($indexStatus >= $arrayKey)
+        return true;
+    else
+        return false;
+}
