@@ -128,26 +128,25 @@ class DevisController extends Controller implements ServiceInterface
         // Validation du devis depuis la vue de création.
         if ($model->load(Yii::$app->request->post())) {
 
-            // Vérification pour savoir si le client existe déjà en base de données, si il n'existe pas, on l'ajoute.
-            $company = Company::find()->where(['name' => $model->company_name])->one();
+            if ($model->validate()) {
 
-            if ($company == null) {
-                $company = new Company();
-                $company->name = $model->company_name;
-                $company->tva = $model->company_tva;
-                $company->save();
-            }
+                // Vérification pour savoir si le client existe déjà en base de données, si il n'existe pas, on retourne une erreur.
+                $company = Company::find()->where(['name' => $model->company_name])->one();
+                if ($company == null) {
+                    return null;
+                }
 
-            // Préparation du modèle de devis à sauvegarder.
-            $model->id_capa = yii::$app->user->identity->cellule->identity . printf('%04d', $model->id);
-            $model->id_laboxy = $model->id_capa . ' - ' . $company->name;
-            $model->company_id =  $company->id;
-            $model->capa_user_id = yii::$app->user->identity->id;
-            $model->cellule_id =  yii::$app->user->identity->cellule->id;
-            $model->status_id = DevisStatus::AVANT_PROJET;
+                // Préparation du modèle de devis à sauvegarder.
+                $model->id_capa = yii::$app->user->identity->cellule->identity . printf('%04d', $model->id);
+                $model->id_laboxy = $model->id_capa . ' - ' . $company->name;
+                $model->company_id =  $company->id;
+                $model->capa_user_id = yii::$app->user->identity->id;
+                $model->cellule_id =  yii::$app->user->identity->cellule->id;
+                $model->status_id = DevisStatus::AVANT_PROJET;
 
-            if ($model->save())
+                $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render(
