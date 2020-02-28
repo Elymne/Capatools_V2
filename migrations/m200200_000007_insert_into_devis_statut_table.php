@@ -10,10 +10,16 @@ class m200200_000007_insert_into_devis_statut_table extends Migration
     public function safeUp()
     {
 
-        
-
         $this->insert('{{%devis_status}}', [
             'label' => 'Avant contrat'
+        ]);
+
+        $this->insert('{{%devis_status}}', [
+            'label' => 'Attente validation Opérationel'
+        ]);
+
+        $this->insert('{{%devis_status}}', [
+            'label' => 'Attente validation client'
         ]);
 
         $this->insert('{{%devis_status}}', [
@@ -26,14 +32,6 @@ class m200200_000007_insert_into_devis_statut_table extends Migration
 
         $this->insert('{{%devis_status}}', [
             'label' => 'Projet terminé'
-        ]);
-
-        $this->insert('{{%devis_status}}', [
-            'label' => 'Attente validation Opérationel'
-        ]);
-
-        $this->insert('{{%devis_status}}', [
-            'label' => 'Attente validation client'
         ]);
     }
 
