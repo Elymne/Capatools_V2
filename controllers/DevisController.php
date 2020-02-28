@@ -122,14 +122,14 @@ class DevisController extends Controller implements ServiceInterface
         $deliveryType = DeliveryType::getDeliveryTypes();
 
         // Here we type a specific requets because we only want names of clients.
-        $companies = ArrayHelper::map(Company::find()->all(), 'id', 'name');
-        $companies = array_merge($companies);
+        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
+        $companiesNames = array_merge($companiesNames);
 
         // Validation du devis depuis la vue de création.
         if ($model->load(Yii::$app->request->post())) {
 
             // Vérification pour savoir si le client existe déjà en base de données, si il n'existe pas, on l'ajoute.
-            $company = Company::find()->where(['name' => $model->company_name, 'tva' => $model->company_tva])->one();
+            $company = Company::find()->where(['name' => $model->company_name])->one();
 
             if ($company == null) {
                 $company = new Company();
@@ -155,7 +155,7 @@ class DevisController extends Controller implements ServiceInterface
             [
                 'model' => $model,
                 'delivery_type' => $deliveryType,
-                'companies' => $companies
+                'companiesNames' => $companiesNames
             ]
         );
     }

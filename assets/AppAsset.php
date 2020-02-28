@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -20,16 +21,18 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-       // 'css/dashboard.css',
+        // 'css/dashboard.css',
         'css/materialize.min.css',
         'css/style.css',
         'css/timeline.css',
         'https://fonts.googleapis.com/icon?family=Material+Icons',
     ];
-    public $js = [
 
+    public $js = [
         'js/materialize.min.custom.js',
+        'js/capatools;js'
     ];
+
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',

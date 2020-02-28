@@ -1,9 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use app\assets\AppAsset;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
@@ -11,6 +11,8 @@ use yii\widgets\ActiveForm;
 $this->title = 'Création d\'un devis';
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+AppAsset::register($this);
 
 ?>
 <div class="devis-create">
@@ -20,21 +22,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true, 'autocomplete' => 'off'])->label("Nom du projet") ?>
-    <?= $form->field($model, 'delivery_type_id')->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'), ['text' => 'Please select'])->label('');   ?>
-    <?=
-        $form
-            ->field($model, 'company_name')
-            ->textInput(['autocomplete' => 'off'])
-            ->widget(\yii\jui\AutoComplete::classname(), [
-                'clientOptions' => [
-                    'source' => [$companies],
-                    'autoFill' => false,
-                ],
-            ])
-            ->label("Nom du client")
-    ?>
-    <?= $form->field($model, 'company_tva')->textInput(['autocomplete' => 'off'])->label("TVA") ?>
 
+    <?= $form->field($model, 'delivery_type_id')->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'), ['text' => 'Please select'])->label('Type de livraison'); ?>
+
+    <?= $form->field($model, 'company_name')->widget(\yii\jui\AutoComplete::classname(), [
+        'clientOptions' => [
+            'source' => $companiesNames,
+        ],
+    ])->label("Nom du client") ?>
 
     <div class="form-group">
 
