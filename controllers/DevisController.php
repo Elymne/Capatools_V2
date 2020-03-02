@@ -36,13 +36,48 @@ class DevisController extends Controller implements ServiceInterface
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['Index', 'View', 'Create', 'Update', 'Delete', 'AddClient'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'add-client', 'update-status', 'validate-status'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'add-client'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'actions' => ['index'],
+                        'roles' => ['indexDevis'],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['createDevis'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'roles' => ['viewDevis'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['add-company'],
+                        'roles' => ['addCompanyDevis'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update'],
+                        'roles' => ['updateDevis'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['delete'],
+                        'roles' => ['deleteDevis'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update-status'],
+                        'roles' => ['updateStatusDevis'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['validate-status'],
+                        'roles' => ['validateStatusDevis'],
+                    ]
                 ],
             ],
         ];
@@ -66,14 +101,21 @@ class DevisController extends Controller implements ServiceInterface
     {
         $result = [];
 
-        $result = [
-            'priorite' => 3, 'name' => 'Devis',
-            'items' => [
-                ['Priorite' => 1, 'url' => 'devis/add-company', 'label' => 'Ajouter un client', 'icon' => 'show_chart'],
-                ['Priorite' => 2, 'url' => 'devis/create', 'label' => 'Créer un devis', 'icon' => 'show_chart'],
-                ['Priorite' => 3, 'url' => 'devis/index', 'label' => 'Liste des devis', 'icon' => 'show_chart'],
-            ]
-        ];
+        if (
+            Yii::$app->user->can('projectManagerDevis') ||
+            Yii::$app->user->can('operationalManagerDevis') ||
+            Yii::$app->user->can('accountingSupportDevis')
+        ) {
+
+            $result = [
+                'priorite' => 3, 'name' => 'Devis',
+                'items' => [
+                    ['Priorite' => 1, 'url' => 'devis/add-company', 'label' => 'Ajouter un client', 'icon' => 'show_chart'],
+                    ['Priorite' => 2, 'url' => 'devis/create', 'label' => 'Créer un devis', 'icon' => 'show_chart'],
+                    ['Priorite' => 3, 'url' => 'devis/index', 'label' => 'Liste des devis', 'icon' => 'show_chart'],
+                ]
+            ];
+        }
 
         return $result;
     }
