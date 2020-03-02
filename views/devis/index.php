@@ -125,9 +125,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-tooltip' => 'Supprimer',
                             'title' => Yii::t('app', 'Delete'),
                             'data-confirm' => Yii::t('app', 'Voulez vous vraiment supprimer ce devis ?'),
-                            'data-method' => 'post'
+                            'data-method' => 'post',
                         ];
-                        return Html::a('<i class="material-icons">delete</i>', ['devis/delete', 'id' => $model->id], $options);
+                        if (
+                            Yii::$app->user->can('operationalManagerDevis') ||
+                            Yii::$app->user->can('accountingSupportDevis')
+                        ) return Html::a('<i class="material-icons">delete</i>', ['devis/delete', 'id' => $model->id], $options);
                     }
                 ],
             ],
