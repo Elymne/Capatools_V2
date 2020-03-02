@@ -45,6 +45,37 @@ class DevisController extends Controller implements ServiceInterface
         ];
     }
 
+    public static function GetRight()
+    {
+        return  [
+            'name' => 'Administration',
+            'right' => [
+                'none' => 'none',
+                'Responsable' => 'Responsable'
+            ]
+        ];
+    }
+
+    /**
+     * Generate tabs in left menu view.
+     */
+    public static function GetActionUser($user)
+    {
+        $result = [];
+
+        $result = [
+            'priorite' => 3, 'name' => 'Devis',
+            'items' => [
+                ['Priorite' => 1, 'url' => 'devis/add-company', 'label' => 'Ajouter un client', 'icon' => 'show_chart'],
+                ['Priorite' => 2, 'url' => 'devis/create', 'label' => 'Créer un devis', 'icon' => 'show_chart'],
+                ['Priorite' => 3, 'url' => 'devis/index', 'label' => 'Liste des devis', 'icon' => 'show_chart'],
+            ]
+        ];
+
+        return $result;
+    }
+
+
     /**
      * Lists all Devis models.
      * @return mixed
@@ -95,20 +126,6 @@ class DevisController extends Controller implements ServiceInterface
                 // PDF doesn't exist so throw an error or something
             }
         }
-    }
-
-    /**
-     * Deletes an existing Devis model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**
@@ -166,7 +183,7 @@ class DevisController extends Controller implements ServiceInterface
      * 
      * @return mixed
      */
-    public function actionAddClient()
+    public function actionAddCompany()
     {
 
         $model = new CompanyCreateForm();
@@ -185,7 +202,7 @@ class DevisController extends Controller implements ServiceInterface
         }
 
         return $this->render(
-            'addClient',
+            'addCompany',
             [
                 'model' =>  $model
             ]
@@ -274,6 +291,20 @@ class DevisController extends Controller implements ServiceInterface
         );
     }
 
+    /**
+     * Deletes an existing Devis model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
 
     /**
      * Change the status of devis, not sure if this route should be used like this. We'll see.
@@ -312,37 +343,8 @@ class DevisController extends Controller implements ServiceInterface
     }
 
 
-    public static function GetRight()
-    {
-        return  [
-            'name' => 'Administration',
-            'right' => [
-                'none' => 'none',
-                'Responsable' => 'Responsable'
-            ]
-        ];
-    }
-
-
     public static function GetIndicateur($user)
     {
-
         return  ['label' => 'NbDevis', 'value' => Devis::getGroupbyStatus()];
-    }
-
-
-    public static function GetActionUser($user)
-    {
-        $result = [];
-
-        $result = [
-            'priorite' => 3, 'name' => 'Devis',
-            'items' => [
-                ['Priorite' => 1, 'url' => 'devis/index', 'label' => 'Liste des devis', 'icon' => 'show_chart'],
-                ['Priorite' => 2, 'url' => 'devis/create', 'label' => 'Ajouter un devis', 'icon' => 'show_chart']
-            ]
-        ];
-
-        return $result;
     }
 }

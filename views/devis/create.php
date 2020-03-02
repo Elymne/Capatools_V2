@@ -40,7 +40,7 @@ AppAsset::register($this);
         ->label("Nom du client")
     ?>
 
-    <?= Html::a('Ajouter un client', ['devis/add-client'], ['class' => 'profile-link']) ?>
+    <?= Html::a('Ajouter un client', ['devis/add-company'], ['class' => 'profile-link']) ?>
 
     <br /><br /><br />
 
@@ -59,7 +59,7 @@ AppAsset::register($this);
         <?= Html::a(
             Yii::t('app', 'Annuler'),
             [
-                'index'
+                'create'
             ],
             [
                 'class' => 'btn btn-primary'
