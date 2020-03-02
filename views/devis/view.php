@@ -6,6 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
+$id = $model->id;
 
 if ($model->id_capa) $this->title = $model->id_capa;
 else $this->title = "Modification d'un devis";
@@ -38,7 +39,8 @@ $indexStatus = getIndexStatus($model);
                 <span class="card-title"> <?= Html::encode($model->id_laboxy) ?></span>
             </div>
             <div class="card-action">
-                <?= Html::a('Revenir <i class="material-icons right">keyboard_return</i>', ['index'], ['class' => 'waves-effect waves-light btn']) ?>
+                <?= Html::a('Revenir <i class="material-icons right">keyboard_return</i>', ["index"], ['class' => 'waves-effect waves-light btn']) ?>
+                <?= Html::a('Modifier <i class="material-icons right">keyboard_return</i>', ["update?id=${id}"], ['class' => 'waves-effect orange waves-light btn']) ?>
             </div>
         </div>
 
