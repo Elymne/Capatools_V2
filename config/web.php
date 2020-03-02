@@ -14,6 +14,8 @@ $config = [
 
     ///La route par défaut est le dashboard
     'defaultRoute' => 'dashboard/index',
+
+    // Liste composants (c'est juste des alias qui font référence à des classes, fonctions ect ect)
     'components' => [
         // describe here.
         'request' => [

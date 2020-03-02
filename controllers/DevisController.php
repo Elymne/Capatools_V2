@@ -329,6 +329,18 @@ class DevisController extends Controller implements ServiceInterface
         return $this->redirect(['index']);
     }
 
+    public function actionValidateStatus($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model) {
+            $model->status_id = DevisStatus::PROJET_EN_COURS;
+            $model->save();
+        }
+
+        return $this->redirect(['index']);
+    }
+
     /**
      * Finds the Devis model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
