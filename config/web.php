@@ -34,7 +34,7 @@ $config = [
         ],
         // Role management.
         'authManager' => [
-            'class' => 'yii\rbac\PhpManager',
+            'class' => 'yii\rbac\PhpManager'
         ],
         // Error handler.
         'errorHandler' => [

@@ -1,7 +1,6 @@
 <?php
 
 use yii\db\Migration;
-use yii\rbac\PhpManager;
 
 /**
  * Generate all devis access for users.
@@ -14,7 +13,8 @@ class m200800_000000_devis_rbac extends Migration
      */
     public function safeUp()
     {
-        $auth = new PhpManager;
+
+        $auth = Yii::$app->authManager;
 
         // Index permission.
         $index = $auth->createPermission('indexDevis');
