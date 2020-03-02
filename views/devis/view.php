@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\devis\DevisStatus;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
@@ -29,8 +30,10 @@ $indexStatus = getIndexStatus($model);
 
 <div class="devis-view">
 
+    <!-- Title display -->
     <h2 style="color:#009688"> Devis : <?= Html::encode($this->title) ?> </h2>
 
+    <!-- Main information -->
     <div class="row">
 
         <div class="card">
@@ -39,8 +42,11 @@ $indexStatus = getIndexStatus($model);
                 <span class="card-title"> <?= Html::encode($model->id_laboxy) ?></span>
             </div>
             <div class="card-action">
-                <?= Html::a('Revenir <i class="material-icons right">keyboard_return</i>', ["index"], ['class' => 'waves-effect waves-light btn']) ?>
-                <?= Html::a('Modifier <i class="material-icons right">keyboard_return</i>', ["update?id=${id}"], ['class' => 'waves-effect orange waves-light btn']) ?>
+                <?= Html::a('Revenir <i class="material-icons right">keyboard_return</i>', ['index'], ['class' => 'waves-effect waves-light btn']) ?>
+                <?= Html::a('Modifier <i class="material-icons right">keyboard_return</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
+                <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('projectManagerDevis')) : ?>
+                    <?= Html::a('Revenir <i class="material-icons right">keyboard_return</i>', ['index'], ['class' => 'waves-effect waves-light btn']) ?>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -64,6 +70,7 @@ $indexStatus = getIndexStatus($model);
 
     </div>
 
+    <!-- Details informations -->
     <div class="row">
         <div class="card">
             <div class="card-content teal white-text">
@@ -103,6 +110,8 @@ $indexStatus = getIndexStatus($model);
             </div>
         </div>
     </div>
+
+    <!-- Laboxy informations -->
     <div class="row">
         <div class="card">
             <div class="card-content teal white-text">
@@ -132,6 +141,7 @@ $indexStatus = getIndexStatus($model);
         </div>
     </div>
 
+    <!-- Milestones informations -->
     <div class="row">
         <div class="card">
             <div class="card-content teal white-text">

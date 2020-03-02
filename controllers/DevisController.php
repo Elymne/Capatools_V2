@@ -72,25 +72,9 @@ class DevisController extends Controller implements ServiceInterface
                         'allow' => true,
                         'actions' => ['update-status'],
                         'roles' => ['updateStatusDevis'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['validate-status'],
-                        'roles' => ['validateStatusDevis'],
                     ]
                 ],
             ],
-        ];
-    }
-
-    public static function GetRight()
-    {
-        return  [
-            'name' => 'Administration',
-            'right' => [
-                'none' => 'none',
-                'Responsable' => 'Responsable'
-            ]
         ];
     }
 
@@ -350,7 +334,6 @@ class DevisController extends Controller implements ServiceInterface
         return $this->redirect(['index']);
     }
 
-
     /**
      * Change the status of devis, not sure if this route should be used like this. We'll see.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -363,24 +346,44 @@ class DevisController extends Controller implements ServiceInterface
     {
         $model = $this->findModel($id);
 
-        if ($model) {
-            $model->status_id = $status;
-            $model->save();
+        switch ($status) {
+            case 1:
+                $this->setStatus($model, $status);
+                break;
+            case 2:
+                $this->setStatus($model, $status);
+                break;
+            case 3:
+                if (
+                    Yii::$app->user->can('operationalManagerDevis') ||
+                    Yii::$app->user->can('accountingSupportDevis')
+                ) $this->setStatus($model, $status);
+                break;
+            case 4:
+                if (
+                    Yii::$app->user->can('operationalManagerDevis') ||
+                    Yii::$app->user->can('accountingSupportDevis')
+                ) $this->setStatus($model, $status);
+                break;
+            case 5 || 6:
+                if (
+                    Yii::$app->user->can('operationalManagerDevis') ||
+                    Yii::$app->user->can('accountingSupportDevis')
+                ) $this->setStatus($model, $status);
+                break;
         }
+
+
 
         return $this->redirect(['index']);
     }
 
-    public function actionValidateStatus($id)
+    private function setStatus($model, $status)
     {
-        $model = $this->findModel($id);
-
         if ($model) {
-            $model->status_id = DevisStatus::PROJET_EN_COURS;
+            $model->status_id = $status;
             $model->save();
         }
-
-        return $this->redirect(['index']);
     }
 
     /**

@@ -21,9 +21,6 @@ return [
     'updateStatusDevis' => [
         'type' => 2,
     ],
-    'validateStatusDevis' => [
-        'type' => 2,
-    ],
     'projectManagerDevis' => [
         'type' => 1,
         'children' => [
@@ -32,6 +29,7 @@ return [
             'viewDevis',
             'addCompanyDevis',
             'updateDevis',
+            'updateStatusDevis',
         ],
     ],
     'operationalManagerDevis' => [
@@ -43,7 +41,7 @@ return [
             'addCompanyDevis',
             'updateDevis',
             'deleteDevis',
-            'validateStatusDevis',
+            'updateStatusDevis',
         ],
     ],
     'accountingSupportDevis' => [

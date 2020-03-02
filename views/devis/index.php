@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{get}{update}{delete}',
+                'template' => '{get}{update}{delete}{validate-status}',
                 'header' => 'Action',
                 'buttons' => [
                     'get' => function ($url, $model, $key) {
@@ -123,7 +123,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'btn-floating red tooltipped',
                             'data-position' => 'bottom',
                             'data-tooltip' => 'Supprimer',
-                            'title' => Yii::t('app', 'Delete'),
                             'data-confirm' => Yii::t('app', 'Voulez vous vraiment supprimer ce devis ?'),
                             'data-method' => 'post',
                         ];
@@ -131,8 +130,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             Yii::$app->user->can('operationalManagerDevis') ||
                             Yii::$app->user->can('accountingSupportDevis')
                         ) return Html::a('<i class="material-icons">delete</i>', ['devis/delete', 'id' => $model->id], $options);
-                    }
-                ],
+                    },
+                ]
             ],
         ],
     ]); ?>

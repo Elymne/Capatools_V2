@@ -44,16 +44,11 @@ class m200800_000000_devis_rbac extends Migration
         $updateStatus = $auth->createPermission('updateStatusDevis');
         $auth->add($updateStatus);
 
-        // Update status permission.
-        $validateStatus = $auth->createPermission('validateStatusDevis');
-        $auth->add($validateStatus);
-
 
         // -- USERS PROLES -- \\
 
 
         // Project Manager permissions.
-
         $projectManagerPermission = $auth->createRole('projectManagerDevis');
         $auth->add($projectManagerPermission);
         $auth->addChild($projectManagerPermission, $index);
@@ -61,6 +56,7 @@ class m200800_000000_devis_rbac extends Migration
         $auth->addChild($projectManagerPermission, $view);
         $auth->addChild($projectManagerPermission, $addCompany);
         $auth->addChild($projectManagerPermission, $update);
+        $auth->addChild($projectManagerPermission, $updateStatus);
 
         // Responsable Operationnel permissions.
         $operationalManager = $auth->createRole('operationalManagerDevis');
@@ -71,7 +67,7 @@ class m200800_000000_devis_rbac extends Migration
         $auth->addChild($operationalManager, $addCompany);
         $auth->addChild($operationalManager, $update);
         $auth->addChild($operationalManager, $delete);
-        $auth->addChild($operationalManager, $validateStatus);
+        $auth->addChild($operationalManager, $updateStatus);
 
         // Responsable Operationnel permissions.
         $accountingSupport = $auth->createRole('accountingSupportDevis');
@@ -88,9 +84,9 @@ class m200800_000000_devis_rbac extends Migration
         // -- USERS ASSIGNEMENT -- \\
 
 
-        $auth->assign($projectManagerPermission, 2);
-        $auth->assign($operationalManager, 3);
-        $auth->assign($accountingSupport, 4);
+        $auth->assign($projectManagerPermission, 2); // sacha
+        $auth->assign($operationalManager, 3); // admin
+        $auth->assign($accountingSupport, 4); // balkany
     }
 
     /**
