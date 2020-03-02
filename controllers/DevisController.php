@@ -18,6 +18,7 @@ use app\helper\_clazz\DateHelper;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use Exception;
 
 /**
  * Gestion des différentes routes liées au service Devis.
@@ -122,7 +123,7 @@ class DevisController extends Controller implements ServiceInterface
         // Get data that we wish to use on our view.
         $deliveryType = DeliveryType::getDeliveryTypes();
 
-        // Here we type a specific requets because we only want names of clients.
+        // Here we type a specific requetst because we only want names of clients.
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
 
@@ -201,71 +202,74 @@ class DevisController extends Controller implements ServiceInterface
     public function actionUpdate($id)
     {
 
-        $devis =  DevisUpdateForm::findOne($id);
+        // Get the models values from devis.
+        $model =  DevisUpdateForm::findOne($id);
+        $model->company_name = $model->company->name;
+
+        // Get all delivery types.
         $deliveryType = DeliveryType::getDeliveryTypes();
 
-        $milestones = $devis->milestones;
+        // Seperate the relationnal object from devis.
+        $milestones = $model->milestones;
 
-        if ($devis->load(Yii::$app->request->post())) {
+        // Here we type a specific request because we only want names of clients.
+        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
+        $companiesNames = array_merge($companiesNames);
 
-            // Map the new milestones with existants one.
-            $milestones = Model::createMultiple(Milestone::classname(), $milestones);
 
-            // Load milestones into model.
-            Model::loadMultiple($milestones, Yii::$app->request->post());
+        if ($model->load(Yii::$app->request->post())) {
 
-            // Set the maximum price of all milestones to check values.
-            $totalMilestonesPrice = 0;
-            foreach ($milestones as $milestone) {
-                $totalMilestonesPrice += $milestone->price;
-            }
+            if ($model->validate()) {
 
-            // Load data from company fields.
-            $companyData = Yii::$app->request->post('DevisUpdateForm')['company'];
+                // Map the new milestones with existants one.
+                $milestones = Model::createMultiple(Milestone::classname(), $milestones);
 
-            $company = Company::find()->where(['name' => $companyData['name'], 'tva' => $companyData['tva']])->one();
+                // Load milestones into model.
+                Model::loadMultiple($milestones, Yii::$app->request->post());
 
-            if ($company == null) {
-                $company = new Company();
-                $company->name = $companyData['name'];
-                $company->tva = $companyData['tva'];
-            }
+                // Get the company data with name insert in field.
+                $company = Company::find()->where(['name' =>  $model->company_name])->one();
 
-            $company->save();
+                $transaction = \Yii::$app->db->beginTransaction();
 
-            $devis->company_id = $company->id;
-            $transaction = \Yii::$app->db->beginTransaction();
+                try {
 
-            try {
-                $devis->save(false);
+                    // Save the company inserted.
+                    $company->save(false);
+                    $model->company_id = $company->id;
 
-                foreach ($milestones as $milestone) {
+                    foreach ($milestones as $milestone) {
 
-                    // Format date for sql insertion.
-                    $milestone->devis_id = $devis->id;
-                    $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
+                        // Format date for sql insertion.
+                        $milestone->devis_id = $model->id;
+                        $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
 
-                    // Verify the integrity of each Milestone.
-
-                    if (!($flag = $milestone->save(false))) {
-                        $transaction->rollBack();
-                        break;
+                        // Insert the milestone.
+                        $milestone->save(false);
                     }
+
+                    // Save the Devis change.
+                    $model->save(false);
+
+                    // Confirm all the changes on db.
+                    $transaction->commit();
+
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } catch (Exception $e) {
+
+                    // If exception occur, rollback all changes.
+                    $transaction->rollBack();
                 }
-
-                $transaction->commit();
-            } catch (Exception $e) {
-                $transaction->rollBack();
             }
-
-            return $this->redirect(['view', 'id' => $devis->id]);
         }
 
         return $this->render(
             'update',
             [
-                'model' => $devis, 'delivery_type' =>  $deliveryType,
-                'milestones' => (empty($milestones)) ? [new Milestone] : $milestones,
+                'model' => $model,
+                'delivery_type' =>  $deliveryType,
+                'companiesNames' => $companiesNames,
+                'milestones' => (empty($milestones)) ? [new Milestone] : $milestones
             ]
         );
     }

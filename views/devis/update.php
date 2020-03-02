@@ -1,11 +1,12 @@
 <?php
 
-use app\helper\DateHelper;
 use yii\helpers\Html;
 use yii\jui\DatePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use app\assets\AppAsset;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
@@ -14,6 +15,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 
+AppAsset::register($this);
+
 ?>
 <div class="devis-update">
 
@@ -21,13 +24,29 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?= $form->field($model, 'internal_name')->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])->label("Nom du projet") ?>
-    <?= $form->field($model, 'delivery_type_id')->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'), ['text' => 'Please select'])->label('');   ?>
-    <?= $form->field($model, 'company[name]')->textInput()->label("Nom du client") ?>
-    <?= $form->field($model, 'company[description]')->textInput()->label("Description du client") ?>
-    <?= $form->field($model, 'company[tva]')->textInput()->label("TVA") ?>
-    <?= $form->field($model, 'service_duration')->textInput(['autocomplete' => 'off'])->label("Durée de la prestation (j)") ?>
+    <?= $form->field($model, 'internal_name')
+        ->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])
+        ->label("Nom du projet")
+    ?>
 
+    <?= $form->field($model, 'delivery_type_id')
+        ->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'), ['text' => 'Please select'])
+        ->label('');
+    ?>
+
+    <?= $form->field($model, 'company_name')
+        ->widget(\yii\jui\AutoComplete::classname(), [
+            'clientOptions' => [
+                'source' => $companiesNames,
+            ],
+        ])
+        ->label("Nom du client")
+    ?>
+
+    <?= $form->field($model, 'service_duration')
+        ->textInput(['autocomplete' => 'off'])
+        ->label("Durée de la prestation (j)")
+    ?>
 
 
     <div class="panel panel-default">

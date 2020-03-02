@@ -23,11 +23,13 @@ AppAsset::register($this);
 
     <?= $form->field($model, 'internal_name')
         ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-        ->label("Nom du projet") ?>
+        ->label("Nom du projet")
+    ?>
 
     <?= $form->field($model, 'delivery_type_id')
         ->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'), ['text' => 'Please select'])
-        ->label('Type de livraison'); ?>
+        ->label('Type de livraison');
+    ?>
 
     <?= $form->field($model, 'company_name')
         ->widget(\yii\jui\AutoComplete::classname(), [
@@ -35,7 +37,8 @@ AppAsset::register($this);
                 'source' => $companiesNames,
             ],
         ])
-        ->label("Nom du client") ?>
+        ->label("Nom du client")
+    ?>
 
     <?= Html::a('Ajouter un client', ['devis/add-client'], ['class' => 'profile-link']) ?>
 

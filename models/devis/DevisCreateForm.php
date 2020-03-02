@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 class DevisCreateForm extends Devis
 {
 
+    // This field is inserted here because it doesn't exist on Devis model. Tis a Company attribute.
     public $company_name;
 
     public function rules()
