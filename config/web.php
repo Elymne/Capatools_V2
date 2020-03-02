@@ -15,21 +15,30 @@ $config = [
     ///La route par défaut est le dashboard
     'defaultRoute' => 'dashboard/index',
     'components' => [
+        // describe here.
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '2Q1MQf8IHT0av7p3aPE_b4mUtwP4yxGh',
         ],
+        // Set cache folder.
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        // Set user model class for users management.
         'user' => [
             'identityClass' => 'app\models\user\CapaUser',
             'loginUrl' => 'index',
             'enableAutoLogin' => true,
         ],
+        // Role management.
+        'authManager' => [
+            'class' => 'yii\rbac\PhpManager',
+        ],
+        // Error handler.
         'errorHandler' => [
             'errorAction' => 'dashboard/error',
         ],
+        // Php mailer.
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             // send all mails to a file by default. You have to set
@@ -37,6 +46,7 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => false,
         ],
+        // Logger file.
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -46,6 +56,7 @@ $config = [
                 ],
             ],
         ],
+        // Database use.
         'db' => $db,
 
         'urlManager' => [

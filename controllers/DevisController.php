@@ -33,10 +33,13 @@ class DevisController extends Controller implements ServiceInterface
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new \Exception('You are not allowed to access this page');
+                },
                 'only' => ['Index', 'View', 'Create', 'Update', 'Delete', 'AddClient'],
                 'rules' => [
                     [
-                        'actions' => ['Index', 'View', 'Create', 'Update', 'Delete', 'AddClient'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'add-client'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

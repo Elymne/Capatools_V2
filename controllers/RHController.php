@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use yii\web\Controller;
+use yii\filters\AccessControl;
 
 class RHController extends Controller implements ServiceInterface
 {
@@ -12,15 +13,19 @@ class RHController extends Controller implements ServiceInterface
      */
     public function behaviors()
     {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function actions()
-    {
-        return [];
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'actions' => ['Index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -41,7 +46,6 @@ class RHController extends Controller implements ServiceInterface
 
     /**
      * Get list of indicateur
-     *
      */
     public static function GetIndicateur($user)
     {
@@ -79,5 +83,7 @@ class RHController extends Controller implements ServiceInterface
      */
     public function actionIndex()
     {
+
+        return [1 => "ok google"];
     }
 }

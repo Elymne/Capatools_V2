@@ -44,7 +44,58 @@ class AdministrationController extends Controller
         ];
     }
 
+    /**
+     * Get list of the right
+     */
+    public static function GetRight()
+    {
+        return  [
+            'name' => 'Administration',
+            'right' => [
+                'none' => 'none',
+                'Responsable' => 'Responsable'
+            ]
+        ];
+    }
 
+    /**
+     * Get Action for the user
+     */
+    public static function GetActionUser($user)
+    {
+        $result = [];
+        //Je verifie qu'il possède au moins un droit sur le service administration
+        if ($user->identity->GetUserRole()->where(['service' => 'Administration'])->exists()) {
+            //Je récupère le service administration
+            $role = $user->identity->getUserRole()->where(['service' => 'Administration'])->select('role')->one();
+
+            //Je verifie qu'il est reponsable
+            if ($role->role == 'Responsable') {
+                $result =
+                    [
+                        'priorite' => 1,
+                        'name' => 'Administration',
+                        'items' =>
+                        [
+                            [
+                                'priorite' => 1,
+                                'url' => 'administration/index',
+                                'label' => 'Liste des salariés',
+                                'icon' => 'show_chart'
+                            ],
+                            [
+                                'priorite' => 2,
+                                'url' => 'administration/userform',
+                                'label' => 'Ajouter un salarié',
+                                'icon' => 'show_chart'
+                            ]
+                        ]
+                    ];
+            }
+        }
+
+        return   $result;
+    }
 
     /**
      * before action for a controller
@@ -136,7 +187,6 @@ class AdministrationController extends Controller
         ]);
     }
 
-
     /**
      * Updates an existing CapaUser model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -199,20 +249,6 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Get list of the right
-     */
-    public static function GetRight()
-    {
-        return  [
-            'name' => 'Administration',
-            'right' => [
-                'none' => 'none',
-                'Responsable' => 'Responsable'
-            ]
-        ];
-    }
-
-    /**
      * Get list of indicateur
      *
      */
@@ -220,44 +256,7 @@ class AdministrationController extends Controller
     {
     }
 
-    /**
-     * Get Action for the user
-     */
-    public static function GetActionUser($user)
-    {
-        $result = [];
-        //Je verifie qu'il possède au moin un droit sur le service administration
-        if ($user->identity->GetUserRole()->where(['service' => 'Administration'])->exists()) {
-            //Je récupère le service administration
-            $role = $user->identity->getUserRole()->where(['service' => 'Administration'])->select('role')->one();
 
-            //Je verifie qu'il est reponsable
-            if ($role->role == 'Responsable') {
-                $result =
-                    [
-                        'priorite' => 1,
-                        'name' => 'Administration',
-                        'items' =>
-                        [
-                            [
-                                'priorite' => 1,
-                                'url' => 'administration/index',
-                                'label' => 'Liste des salariés',
-                                'icon' => 'show_chart'
-                            ],
-                            [
-                                'priorite' => 2,
-                                'url' => 'administration/userform',
-                                'label' => 'Ajouter un salarié',
-                                'icon' => 'show_chart'
-                            ]
-                        ]
-                    ];
-            }
-        }
-
-        return   $result;
-    }
     protected function findModel($id)
     {
         if (($model = CapaUser::findOne($id)) !== null) {
