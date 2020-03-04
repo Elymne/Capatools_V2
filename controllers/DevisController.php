@@ -15,6 +15,8 @@ use app\models\devis\CompanyCreateForm;
 use app\models\devis\DevisSearch;
 use app\models\devis\Milestone;
 use app\helper\_clazz\DateHelper;
+use app\helper\_enum\SubMenuEnum;
+use app\widgets\SubMenuBar;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -26,9 +28,9 @@ use Exception;
 class DevisController extends Controller implements ServiceInterface
 {
 
-    private $active_route_list = false;
-    private $active_route_create = false;
-    private $active_route_addCompany = false;
+    private $active_route_list = "DEVIS_LIST";
+    private $active_route_create = "DEVIS_CREATE";
+    private $active_route_addCompany = "DEVIS_ADD_COMPANY";
 
     /**
      * {@inheritdoc}
@@ -99,9 +101,9 @@ class DevisController extends Controller implements ServiceInterface
             $result = [
                 'priorite' => 3, 'name' => 'Devis',
                 'items' => [
-                    ['Priorite' => 1, 'url' => 'devis/add-company', 'label' => 'Ajouter un client'],
-                    ['Priorite' => 2, 'url' => 'devis/create', 'label' => 'Créer un devis'],
-                    ['Priorite' => 3, 'url' => 'devis/index', 'label' => 'Liste des devis'],
+                    ['Priorite' => 1, 'url' => 'devis/add-company', 'label' => 'Ajouter un client', 'active' => 'DEVIS_ADD_COMPANY'],
+                    ['Priorite' => 2, 'url' => 'devis/create', 'label' => 'Créer un devis', 'active' => 'DEVIS_CREATE'],
+                    ['Priorite' => 3, 'url' => 'devis/index', 'label' => 'Liste des devis', 'active' => 'DEVIS_LIST'],
                 ]
             ];
         }
@@ -116,9 +118,11 @@ class DevisController extends Controller implements ServiceInterface
      */
     public function actionIndex()
     {
+
         $searchModel = new DevisSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_LIST();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider
@@ -133,6 +137,8 @@ class DevisController extends Controller implements ServiceInterface
      */
     public function actionView($id)
     {
+
+        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_NONE();
         return $this->render('view', [
             'model' => $this->findModel($id),
             'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
@@ -147,6 +153,9 @@ class DevisController extends Controller implements ServiceInterface
      */
     public function actionViewpdf($id)
     {
+
+        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_NONE();
+
         $model =  $this->findModel($id);
         if ($model) {
             $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
@@ -170,6 +179,7 @@ class DevisController extends Controller implements ServiceInterface
      */
     public function actionCreate()
     {
+
         $model = new DevisCreateForm();
 
         // Get data that we wish to use on our view.
@@ -199,10 +209,12 @@ class DevisController extends Controller implements ServiceInterface
                 $model->status_id = DevisStatus::AVANT_PROJET;
 
                 $model->save();
+                Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_LIST();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
+        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_CREATE();
         return $this->render(
             'create',
             [
@@ -232,10 +244,12 @@ class DevisController extends Controller implements ServiceInterface
                 $model->description = $model->description;
 
                 $model->save();
+                Yii::$app->params['activeMenu'] = SubMenuEnum::CREATE();
                 return $this->redirect(['create']);
             }
         }
 
+        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_ADD_COMPANY();
         return $this->render(
             'addCompany',
             [
@@ -306,6 +320,7 @@ class DevisController extends Controller implements ServiceInterface
                     // Confirm all the changes on db.
                     $transaction->commit();
 
+                    Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_NONE();
                     return $this->redirect(['view', 'id' => $model->id]);
                 } catch (Exception $e) {
 
@@ -315,6 +330,7 @@ class DevisController extends Controller implements ServiceInterface
             }
         }
 
+        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_LIST();
         return $this->render(
             'update',
             [
@@ -337,6 +353,7 @@ class DevisController extends Controller implements ServiceInterface
     {
         $this->findModel($id)->delete();
 
+        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_LIST();
         return $this->redirect(['index']);
     }
 
@@ -379,8 +396,7 @@ class DevisController extends Controller implements ServiceInterface
                 break;
         }
 
-
-
+        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_LIST();
         return $this->redirect(['index']);
     }
 

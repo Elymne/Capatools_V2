@@ -11,6 +11,7 @@ class SubMenuBar extends Widget
 
     public $titleSub;
     public $subMenuList;
+    public $active;
 
     public function init()
     {
@@ -26,7 +27,7 @@ class SubMenuBar extends Widget
         foreach ($this->subMenuList as &$submenu) {
             $item =  [
                 'label' => $submenu['label'], 'url' => [$submenu['url']],
-                'template' => '<li><a href="{url}"><i class="material-icons">radio_button_unchecked</i><span>{label}</span></a></li>',
+                'template' => '<li><a  href="{url}"><i class="material-icons">radio_button_unchecked</i><span>{label}</span></a></li>',
             ];
             array_unshift($subitems, $item);
         }
@@ -47,9 +48,11 @@ class SubMenuBar extends Widget
             ]
         ]);
 
-
-
-
         return $string;
+    }
+
+    private function isActive()
+    {
+        return 'class="active"';
     }
 }

@@ -11,4 +11,5 @@ return [
 
     // ActualSubSidebar Activated.
     'activeMenu' => 'NONE',
+
 ];
