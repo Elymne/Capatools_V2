@@ -59,9 +59,9 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Get Action for the user
+     * Used to send to sideNavbar, informations about our router.
      */
-    public static function GetActionUser($user)
+    public static function getActionUser($user)
     {
         $result = [];
         //Je verifie qu'il possède au moins un droit sur le service administration

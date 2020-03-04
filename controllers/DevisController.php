@@ -19,13 +19,17 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use Exception;
-use yii\data\ActiveDataProvider;
 
 /**
  * Gestion des différentes routes liées au service Devis.
  */
 class DevisController extends Controller implements ServiceInterface
 {
+
+    private $active_route_list = false;
+    private $active_route_create = false;
+    private $active_route_addCompany = false;
+
     /**
      * {@inheritdoc}
      */
@@ -82,7 +86,7 @@ class DevisController extends Controller implements ServiceInterface
     /**
      * Generate tabs in left menu view.
      */
-    public static function GetActionUser($user)
+    public static function getActionUser($user)
     {
         $result = [];
 
@@ -95,9 +99,9 @@ class DevisController extends Controller implements ServiceInterface
             $result = [
                 'priorite' => 3, 'name' => 'Devis',
                 'items' => [
-                    ['Priorite' => 1, 'url' => 'devis/add-company', 'label' => 'Ajouter un client', 'icon' => 'show_chart'],
-                    ['Priorite' => 2, 'url' => 'devis/create', 'label' => 'Créer un devis', 'icon' => 'show_chart'],
-                    ['Priorite' => 3, 'url' => 'devis/index', 'label' => 'Liste des devis', 'icon' => 'show_chart'],
+                    ['Priorite' => 1, 'url' => 'devis/add-company', 'label' => 'Ajouter un client'],
+                    ['Priorite' => 2, 'url' => 'devis/create', 'label' => 'Créer un devis'],
+                    ['Priorite' => 3, 'url' => 'devis/index', 'label' => 'Liste des devis'],
                 ]
             ];
         }

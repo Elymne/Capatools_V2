@@ -26,12 +26,12 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         $logo_capa =  '' . Yii::$app->homeUrl . 'images/materialize-logo.png';
         $logo_capa_color =  '' . Yii::$app->homeUrl . 'images/materialize-logo-color.png';
 
-        $Ctrls =  Yii::$app->DiscoverService->getServices();
+        $ctrls =  Yii::$app->DiscoverService->getServices();
         $ActionsCtrl = array();
 
         //Pour chaque controller service on récupére la listes des actions filtrer par droit d'utilisateur (nom du service, priorité d'affichage, liste des actions)
-        foreach ($Ctrls as &$ctrl) {
-            $Action = $ctrl::GetActionUser(Yii::$app->user);
+        foreach ($ctrls as &$ctrl) {
+            $Action = $ctrl::getActionUser(Yii::$app->user);
             if (!empty($Action) && $Action != null) {
                 array_unshift($ActionsCtrl, $Action);
             }
@@ -39,8 +39,8 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         asort($ActionsCtrl);
         $stringSubmenu = "";
         //Création des menus et sous menus
-        foreach ($ActionsCtrl as &$Action) {
-            $stringSubmenu = $stringSubmenu . SubMenuBar::widget(['titleSub' => $Action['name'], 'Submenulist' => $Action['items']]);
+        foreach ($ActionsCtrl as $Action) {
+            $stringSubmenu = $stringSubmenu . SubMenuBar::widget(['titleSub' => $Action['name'], 'subMenuList' => $Action['items']]);
         }
 
         return <<<HTML

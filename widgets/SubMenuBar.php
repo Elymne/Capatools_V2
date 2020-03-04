@@ -10,18 +10,7 @@ class SubMenuBar extends Widget
 {
 
     public $titleSub;
-    public $Submenulist;
-
-    public function SettitleSub($title)
-    {
-        $this->titleSub = $title;
-    }
-
-    public function SetSubmenulist($Submenulist)
-    {
-        $this->Submenulist = $Submenulist;
-    }
-
+    public $subMenuList;
 
     public function init()
     {
@@ -31,10 +20,10 @@ class SubMenuBar extends Widget
     public function run()
     {
         $subitems = array();
-        asort($this->Submenulist);
+        asort($this->subMenuList);
 
 
-        foreach ($this->Submenulist as &$submenu) {
+        foreach ($this->subMenuList as &$submenu) {
             $item =  [
                 'label' => $submenu['label'], 'url' => [$submenu['url']],
                 'template' => '<li><a href="{url}"><i class="material-icons">radio_button_unchecked</i><span>{label}</span></a></li>',

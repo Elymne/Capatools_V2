@@ -54,7 +54,7 @@ class RHController extends Controller implements ServiceInterface
     /**
      * Get Action for the user
      */
-    public static function GetActionUser($user)
+    public static function getActionUser($user)
     {
         return [
             'priorite' => 2,

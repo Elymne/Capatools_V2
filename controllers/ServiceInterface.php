@@ -11,7 +11,7 @@ interface ServiceInterface
     public static  function GetIndicateur($user);
 
     /**
-     * GetActionUser Application récupère les actions possibles du service de l'utilisateur
+     * getActionUser Application récupère les actions possibles du service de l'utilisateur
      */
-    public static  function GetActionUser($user);
+    public static  function getActionUser($user);
 }
