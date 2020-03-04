@@ -21,7 +21,8 @@
         "richardfan1126/yii2-sortable-gridview": "*",
         "2amigos/yii2-chartjs-widget": "~2.0",
         "newerton/yii2-dynamicform": "*",
-        "bower-asset/jquery-ui": "^1.12"
+        "bower-asset/jquery-ui": "^1.12",
+        "yii-ui/yii2-materialize-select2": "~1.1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

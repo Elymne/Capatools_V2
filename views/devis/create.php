@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
+use yiiui\yii2materializeselect2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
@@ -38,8 +39,12 @@ AppAsset::register($this);
                         )
                     ?>
 
-                    <?= $form->field($model, 'delivery_type_id')
-                        ->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'));
+                    <?= $form->field($model, 'delivery_type_id')->widget(Select2::class, [
+                        'items' => ArrayHelper::map($delivery_type, 'id', 'label'),
+                        'clientOptions' => [
+                            'allowClear' => true
+                        ],
+                    ]);
                     ?>
 
                     <?= $form->field($model, 'company_name')
