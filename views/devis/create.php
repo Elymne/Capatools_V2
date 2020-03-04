@@ -17,57 +17,68 @@ AppAsset::register($this);
 ?>
 <div class="devis-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="row">
+        <div class="col s6 offset-s3">
+            <div class="card">
 
-    <?php $form = ActiveForm::begin(); ?>
+                <div class="card-content">
+                    <span class="card-title"><?= Html::encode($this->title) ?></span>
+                </div>
 
-    <?= $form->field($model, 'internal_name')
-        ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-        ->label("Nom du projet")
-    ?>
+                <div class="card-action">
+                    <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'delivery_type_id')
-        ->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'), ['text' => 'Please select'])
-        ->label('Type de livraison');
-    ?>
+                    <?= $form->field($model, 'internal_name')
+                        ->textInput(
+                            ['maxlength' => true, 'autocomplete' => 'off', 'id' => 'internal_name', 'type' => "text"]
+                        )
+                        ->label(
+                            "Nom du projet",
+                            ['for' => 'internal_name']
+                        )
+                    ?>
 
-    <?= $form->field($model, 'company_name')
-        ->widget(\yii\jui\AutoComplete::classname(), [
-            'clientOptions' => [
-                'source' => $companiesNames,
-            ],
-        ])
-        ->label("Nom du client")
-    ?>
+                    <?= $form->field($model, 'delivery_type_id')
+                        ->dropDownList(ArrayHelper::map($delivery_type, 'id', 'label'));
+                    ?>
 
-    <?= Html::a('Ajouter un client', ['devis/add-company'], ['class' => 'profile-link']) ?>
+                    <?= $form->field($model, 'company_name')
+                        ->widget(\yii\jui\AutoComplete::classname(), [
+                            'clientOptions' => [
+                                'source' => $companiesNames,
+                            ],
+                        ])
+                        ->label("Nom du client")
+                    ?>
 
-    <br /><br /><br />
+                    <?= Html::a('Ajouter un client', ['devis/add-company'], ['class' => 'profile-link']) ?>
 
-    <div class="form-group">
+                    <br /><br /><br />
 
-        <?= Html::submitButton(
-            'Enregistrer',
-            [
-                'class' => 'btn btn-success',
-                'data' => [
-                    'confirm' => 'Créer ce devis ?'
-                ]
-            ]
-        ) ?>
+                    <div class="form-group">
 
-        <?= Html::a(
-            Yii::t('app', 'Annuler'),
-            [
-                'create'
-            ],
-            [
-                'class' => 'btn btn-primary'
-            ]
-        ) ?>
+                        <?= Html::submitButton(
+                            'Enregistrer',
+                            [
+                                'class' => 'waves-effect waves-light btn',
+                                'data' => [
+                                    'confirm' => 'Créer ce devis ?'
+                                ]
+                            ]
+                        ) ?>
 
+                        <?= Html::a(
+                            Yii::t('app', 'Annuler'),
+                            ['index'],
+                            ['class' => 'waves-effect waves-light btn']
+                        ) ?>
+
+                    </div>
+                    <?php ActiveForm::end(); ?>
+                </div>
+
+            </div>
+        </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
 
 </div>
