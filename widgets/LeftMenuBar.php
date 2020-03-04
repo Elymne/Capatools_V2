@@ -4,54 +4,113 @@ namespace app\widgets;
 
 use Yii;
 
-/**
- * Cette classe permet de générer le menu utilisateur
- */
 class LeftMenuBar extends \yii\bootstrap\Widget
 {
-  /**
-   * Paramètre contenant l'ensemble des menus donnée par l'utilisateur    
-   */
-  public $Menus;
+    /**
+     * Paramètre contenant l'ensemble des menus donnée par l'utilisateur    
+     */
+    public $Menus;
+    public $title;
+    public $logo;
 
-  public $title;
-
-  public $logo;
-
-  public function init()
-  {
-    parent::init();
-  }
-
-  public function run()
-  {
-    $Ctrls =  Yii::$app->DiscoverService->getServices();
-    $ActionsCtrl = array();
-
-    //Pour chaque controller service on récupére la listes des actions filtrer par droit d'utilisateur (nom du service, priorité d'affichage, liste des actions)
-    foreach ($Ctrls as &$ctrl) {
-      $Action = $ctrl::GetActionUser(Yii::$app->user);
-      if (!empty($Action) && $Action != null) {
-        array_unshift($ActionsCtrl, $Action);
-      }
-    }
-    asort($ActionsCtrl);
-    $stringSubmenu = "";
-    //Création des menus et sous menus
-    foreach ($ActionsCtrl as &$Action) {
-
-      $stringSubmenu = $stringSubmenu . SubMenuBar::widget(['titleSub' => $Action['name'], 'Submenulist' => $Action['items']]);
+    public function init()
+    {
+        parent::init();
     }
 
-    $string =
-      '<ul id="sidenav-left" class="sidenav sidenav-fixed">
-        <li><a href="' . Yii::$app->homeUrl . '" class="logo-container">' . Yii::$app->name . '<i class="material-icons left"><img src="' . Yii::$app->homeUrl . 'images/logo.png"/></i></a></li>
-        <li class="no-padding">
-      ' . $stringSubmenu . '</li>
-        </ul>';
+    public function run()
+    {
+
+        $appName = Yii::$app->name;
+        $homeNav = '' . Yii::$app->homeUrl . '';
+        $logo =  '' . Yii::$app->homeUrl . 'images/avatar.png';
+
+        $logo_capa =  '' . Yii::$app->homeUrl . 'images/materialize-logo.png';
+        $logo_capa_color =  '' . Yii::$app->homeUrl . 'images/materialize-logo-color.png';
+
+        $Ctrls =  Yii::$app->DiscoverService->getServices();
+        $ActionsCtrl = array();
+
+        //Pour chaque controller service on récupére la listes des actions filtrer par droit d'utilisateur (nom du service, priorité d'affichage, liste des actions)
+        foreach ($Ctrls as &$ctrl) {
+            $Action = $ctrl::GetActionUser(Yii::$app->user);
+            if (!empty($Action) && $Action != null) {
+                array_unshift($ActionsCtrl, $Action);
+            }
+        }
+        asort($ActionsCtrl);
+        $stringSubmenu = "";
+        //Création des menus et sous menus
+        foreach ($ActionsCtrl as &$Action) {
+            $stringSubmenu = $stringSubmenu . SubMenuBar::widget(['titleSub' => $Action['name'], 'Submenulist' => $Action['items']]);
+        }
+
+        return <<<HTML
+            <aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-dark sidenav-active-rounded">
+
+                <!-- Title -->
+                <div class="brand-sidebar">
+                    <h1 class="logo-wrapper">
+                        <a class="brand-logo darken-1" href="${homeNav}">
+                            <img class="hide-on-med-and-down " src="${logo_capa}" alt="materialize logo" />
+                            <img class="show-on-medium-and-down hide-on-med-and-up" src="${logo_capa_color}" alt="materialize logo" />
+                            <span class="logo-text hide-on-med-and-down">CapaTools</span>
+                        </a>
+                        <a class="navbar-toggler" href="#"><i class="material-icons">radio_button_checked</i></a>
+                    </h1>
+                </div>
+
+                <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
+                    <li class="active bold">
+                        <li class="no-padding">${stringSubmenu}</li>
+                    </li>
+                </ul>
+                
+                <div class="navigation-background"></div>
+                <a class="sidenav-trigger btn-sidenav-toggle btn-floating btn-medium waves-effect waves-light hide-on-large-only" href="#" data-target="slide-out">
+                    <i class="material-icons">menu</i>
+                </a>
+            </aside>
+        HTML;
+    }
+}
 
 
+function ok()
+{
+    <<<HTML
+    
+                        <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)">
+                            <i class="material-icons">account_box</i>
+                            <span class="menu-title" data-i18n="Dashboard">Administration</span>
+                        </a>
 
-    return $string;
-  }
+                        <div class="collapsible-body">
+                            <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+
+                                <li class="active">
+                                    <a class="active" href="dashboard-modern.html">
+                                        <i class="material-icons">radio_button_unchecked</i>
+                                        <span data-i18n="Modern">Modern</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="dashboard-ecommerce.html">
+                                        <i class="material-icons">radio_button_unchecked</i>
+                                        <span data-i18n="eCommerce">eCommerce</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="dashboard-analytics.html">
+                                        <i class="material-icons">radio_button_unchecked</i>
+                                        <span data-i18n="Analytics">Analytics</span>
+                                    </a>
+                                </li>     
+                            </ul>
+                        </div>
+
+                    
+ HTML;
 }

@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 use app\models\devis\DevisStatus;
 
 /* @var $this yii\web\View */
@@ -30,23 +29,21 @@ $indexStatus = getIndexStatus($model);
 
 <div class="devis-view">
 
-    <!-- Title display -->
-    <h2 style="color:#009688"> Devis : <?= Html::encode($this->title) ?> </h2>
-
     <!-- Main information -->
     <div class="row">
 
         <div class="card">
             <div class="card-content">
-                <span class="card-title"> <?= Html::encode($model->internal_name) ?></span>
-                <span class="card-title"> <?= Html::encode($model->id_laboxy) ?></span>
+                <h3> <?= Html::encode("{$model->internal_name}") ?></h2>
             </div>
             <div class="card-action">
-                <?= Html::a('Revenir <i class="material-icons right">keyboard_return</i>', ['index'], ['class' => 'waves-effect waves-light btn']) ?>
-                <?= Html::a('Modifier <i class="material-icons right">keyboard_return</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
+                <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn blue']) ?>
+                <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
+
                 <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('projectManagerDevis')) : ?>
-                    <?= Html::a('Revenir <i class="material-icons right">keyboard_return</i>', ['index'], ['class' => 'waves-effect waves-light btn']) ?>
+                    <?= Html::a('Valider <i class="material-icons right">check</i>', ['index'], ['class' => 'waves-effect waves-light btn green']) ?>
                 <?php endif; ?>
+
             </div>
         </div>
 
@@ -58,10 +55,8 @@ $indexStatus = getIndexStatus($model);
                     <?php foreach ($stages as $key => $stage) { ?>
                         <div class="timeline-event">
                             <p class="event-label"><?php echo $stage; ?></p>
-                            <?php
-                            if (isStatusPassed($indexStatus, $key)) echo '<span class="point-filled"></span>';
-                            else echo '<span class="point"></span>';
-                            ?>
+                            <?php if (isStatusPassed($indexStatus, $key)) echo '<span class="point-filled"></span>';
+                            else echo '<span class="point"></span>'; ?>
                         </div>
                     <?php } ?>
                 </div>
@@ -73,106 +68,32 @@ $indexStatus = getIndexStatus($model);
     <!-- Details informations -->
     <div class="row">
         <div class="card">
-            <div class="card-content teal white-text">
-                <span class="card-title"> Détails devis </span>
-            </div>
-            <div class="card-action white">
-                <?= DetailView::widget([
-                    'model' => $model,
-                    'attributes' => [
-                        [
-                            'attribute' => 'service_duration',
-                            'format' => 'text',
-                            'label' => 'Durée de la prestation',
-                        ],
-                        [
-                            'attribute' => 'delivery_type.label',
-                            'format' => 'text',
-                            'label' => 'Type de la prestation',
-                        ],
-                        [
-                            'attribute' => 'cellule.name',
-                            'format' => 'text',
-                            'label' => 'Nom de cellule',
-                        ],
-                        [
-                            'attribute' => 'company.name',
-                            'format' => 'text',
-                            'label' => 'Entreprise',
-                        ],
-                        [
-                            'attribute' => 'capa_user.username',
-                            'format' => 'text',
-                            'label' => 'Responsable projet',
-                        ]
-                    ],
-                ]) ?>
-            </div>
-        </div>
-    </div>
 
-    <!-- Laboxy informations -->
-    <div class="row">
-        <div class="card">
-            <div class="card-content teal white-text">
-                <span class="card-title"> Information Laboxy </span>
+            <div class="card-content">
+                <span class="card-title"> Détails</span>
             </div>
-            <div class="card-action white">
-                <?= DetailView::widget([
-                    'model' => $model,
-                    'attributes' => [
-                        [
-                            'attribute' => 'id_laboxy',
-                            'format' => 'text',
-                            'label' => 'Identifiant laboxy',
-                        ],
-                        [
-                            'attribute' => 'service_duration',
-                            'format' => 'text',
-                            'label' => 'Durée de la prestation (h)',
-                            'value' => function ($data) {
-                                return $data->service_duration * Yii::$app->params['LaboxyTimeDay'];
-                            }
-                        ],
 
-                    ],
-                ]) ?>
+            <div class="card-action">
+
+                <?php echo createDataTable($model); ?>
+
             </div>
         </div>
     </div>
 
     <!-- Milestones informations -->
     <div class="row">
+
         <div class="card">
-            <div class="card-content teal white-text">
-                <span class="card-title"> Jalon</span>
+
+            <div class="card-content">
+                <span class="card-title">Jalon(s)</span>
             </div>
+
             <div class="card-action white">
-                <?= DetailView::widget([
-                    'model' => $model->milestones,
-                    'attributes' => [
-                        [
-                            'attribute' => 'label',
-                            'format' => 'text',
-                            'label' => 'Nom du jalon',
-                        ],
-                        [
-                            'attribute' => 'price',
-                            'format' => 'text',
-                            'label' => 'Prix en (€)',
-                        ],
-                        [
-                            'attribute' => 'date',
-                            'format' => 'text',
-                            'label' => 'Date du jalon',
-                        ],
-                        [
-                            'attribute' => 'comments',
-                            'format' => 'text',
-                            'label' => 'Commentaires',
-                        ],
-                    ],
-                ]) ?>
+
+                <?php echo createMilestonesTable($milestones); ?>
+
             </div>
         </div>
     </div>
@@ -181,12 +102,15 @@ $indexStatus = getIndexStatus($model);
 
 <?php
 
+/**
+ * 
+ */
 function getIndexStatus($model)
 {
 
     $indexStatus = -1;
 
-    switch ($model->status->id) {
+    switch ($model->devis_status->id) {
         case 1:
             $indexStatus = 1;
             break;
@@ -210,10 +134,169 @@ function getIndexStatus($model)
     return $indexStatus;
 }
 
+/**
+ * 
+ */
 function isStatusPassed($indexStatus, $arrayKey)
 {
     if ($indexStatus >= $arrayKey)
         return true;
     else
         return false;
+}
+
+/**
+ * Create table with all data.
+ * @param Devis $model : Model of Devis.
+ * 
+ * @return HTML table.
+ */
+function createDataTable($model)
+{
+
+    // You can't use object with <<<HTML HTML; so you have to create value like bellow.
+    $user_name = $model->capa_user->username;
+    $user_email = $model->capa_user->email;
+    $user_cellule = $model->capa_user->cellule->name;
+
+    $company_name = $model->company->name;
+    $company_description = $model->company->description;
+    $company_tva = $model->company->tva;
+
+    $delivery_type = $model->delivery_type->label;
+    $delivery_duration = $model->service_duration;
+
+    $laboxy_name = $model->id_laboxy;
+    $laboxy_prestation_duration = $model->service_duration * Yii::$app->params['LaboxyTimeDay'];
+
+    return <<<HTML
+        <table class="highlight">
+
+            <tbody>
+                <!-- Project manager data -->
+
+                <tr class='group'>
+                    <td class='header'>Chef de projet</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>nom / prénom</td>
+                    <td>${user_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>email</td>
+                    <td>${user_email}</td>
+                </tr>
+                <tr>
+                    <td class='header'>cellule capacité</td>
+                    <td>${user_cellule}</td>
+                </tr>
+
+                <!-- Company data -->
+
+                <tr class='group'>
+                    <td class='header'>Client</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>nom du client / société</td>
+                    <td>${company_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Durée de la prestation</td>
+                    <td>${company_description}</td>
+                </tr>
+                <tr>
+                    <td class='header'>tva</td>
+                    <td>${company_tva}</td>
+                </tr>
+
+                <!-- Delivery data -->
+
+                <tr class='group'>
+                    <td class='header'>Prestation</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>type de prestation</td>
+                    <td>${delivery_type}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Durée de la prestation</td>
+                    <td>${delivery_duration}</td>
+                </tr>
+
+                 <!-- Laboxy data -->
+
+                 <tr class='group'>
+                    <td class='header'>Information Laboxy</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>identitifant</td>
+                    <td>${laboxy_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>durée prestation</td>
+                    <td>${laboxy_prestation_duration}</td>
+                </tr>
+                
+
+            </tbody>
+
+        </table>
+    HTML;
+}
+
+/**
+ * Create table with all milestones.
+ * @param Array<Milestone> $model : List of milestones.
+ * 
+ * @return HTML table.
+ */
+function createMilestonesTable($milestones)
+{
+
+    if (empty($milestones)) {
+        return <<<HTML
+            <p> Il n'existe aucun jalon pour ce devis. </p>
+        HTML;
+    }
+
+    $headerTable = '
+    <table class="highlight">
+        <tbody>
+            <tr class="group">
+                <td class="header">Nom</td>
+                <td class="header">Prix</td>
+                <td class="header">Date</td>
+                <td class="header">Status</td>
+            </tr>';
+
+    $footerTable = '
+            </tr>
+        </tbody>
+    </table>';
+
+
+
+    $bodyTable = '';
+
+    foreach ($milestones as $milestone) {
+
+        $milestone_label = $milestone->label;
+        $milestone_price = $milestone->price;
+        $milestone_delivery_date = $milestone->delivery_date;
+        $milestone_status = '';
+
+        $bodyTable = $bodyTable . '
+        <tr>
+            <td>' . $milestone_label . '</td>
+            <td>' . $milestone_price . '</td>
+            <td>' . $milestone_delivery_date . '</td>
+            <td>' . $milestone_status . '</td>
+        </tr>';
+    }
+
+    return $headerTable . $bodyTable . $footerTable;
 }

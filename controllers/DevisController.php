@@ -19,6 +19,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use Exception;
+use yii\data\ActiveDataProvider;
 
 /**
  * Gestion des différentes routes liées au service Devis.
@@ -130,6 +131,7 @@ class DevisController extends Controller implements ServiceInterface
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
         ]);
     }
 

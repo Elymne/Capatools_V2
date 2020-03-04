@@ -1,0 +1,13 @@
+h2 {
+    color: #2196f3;
+    font-weight: bold;
+}
+
+h3 {
+    color: #424242;
+}
+
+td.header {
+    font-weight: bold;
+    width: 30%;
+}

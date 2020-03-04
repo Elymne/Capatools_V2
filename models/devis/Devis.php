@@ -21,6 +21,9 @@ class Devis extends ActiveRecord
         return static::find();
     }
 
+    /**
+     * Todo Déplacer cette fonction sur une section ui et non métier.
+     */
     public static function getGroupbyStatus()
     {
         //Je recherche l'ensemble des statuts d'un devis
@@ -111,7 +114,8 @@ class Devis extends ActiveRecord
     {
         return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
-    public function getStatus()
+
+    public function getDevis_status()
     {
         return $this->hasOne(DevisStatus::className(), ['id' => 'status_id']);
     }

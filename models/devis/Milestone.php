@@ -2,7 +2,6 @@
 
 namespace app\models\devis;
 
-use app\helper\DateHelper;
 use yii\db\ActiveRecord;
 
 class Milestone extends ActiveRecord
