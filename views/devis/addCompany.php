@@ -14,49 +14,44 @@ AppAsset::register($this);
 ?>
 
 <div class="company-create">
-    <div class="devis-create">
 
-        <h1><?= Html::encode($this->title) ?></h1>
+    <div class="row">
+        <div class="col s6 offset-s3">
+            <div class="card">
 
-        <?php $form = ActiveForm::begin(); ?>
+                <div class="card-content">
+                    <span class="card-title"><?= Html::encode($this->title) ?></span>
+                </div>
 
-        <?= $form->field($model, 'name')
-            ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-            ->label("Nom du client") ?>
+                <div class="card-action">
+                    <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'tva')
-            ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-            ->label("TVA") ?>
+                    <?= $form->field($model, 'name')
+                        ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
+                        ->label("Nom du client") ?>
 
-        <?= $form->field($model, 'description')
-            ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-            ->label("Description du projet") ?>
+                    <?= $form->field($model, 'tva')
+                        ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
+                        ->label("TVA") ?>
 
-        <br /><br /><br />
+                    <?= $form->field($model, 'description')
+                        ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
+                        ->label("Description du projet") ?>
 
-        <div class="form-group">
+                    <br /><br /><br />
 
-            <?= Html::submitButton(
-                'Enregistrer',
-                [
-                    'class' => 'btn btn-success',
-                    'data' => [
-                        'confirm' => 'Ajouter ce client ?'
-                    ]
-                ]
-            ) ?>
+                    <div class="form-group">
 
-            <?= Html::a(
-                Yii::t('app', 'Annuler'),
-                [
-                    'index'
-                ],
-                [
-                    'class' => 'btn btn-primary'
-                ]
-            ) ?>
+                        <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>
 
+                        <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn orange']) ?>
+
+                        <?php ActiveForm::end(); ?>
+                    </div>
+                </div>
+
+            </div>
         </div>
-
-        <?php ActiveForm::end(); ?>
     </div>
+
+</div>
