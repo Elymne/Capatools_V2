@@ -1,4 +1,5 @@
 <?php
+
 use dosamigos\chartjs\ChartJs;
 use yii\helpers\ArrayHelper;
 
@@ -7,18 +8,15 @@ use yii\helpers\ArrayHelper;
 $this->title = 'CAPATOOLS V2.0';
 
 
-$Ctrls =  Yii::$app->DiscoverService->getServices();
+$Ctrls =  Yii::$app->discoverService->getServices();
 $IndicateurCtrl = array();
 
 //Pour chaque controller service on récupére la listes des actions filtrer par droit d'utilisateur (nom du service, priorité d'affichage, liste des actions)
-foreach($Ctrls as &$ctrl)
-{
-    $Indicateur= $ctrl::GetIndicateur(Yii::$app->user);
-    if(!empty (  $Indicateur ) && $Indicateur != null)
-    {
-       array_unshift( $IndicateurCtrl, $Indicateur);
+foreach ($Ctrls as &$ctrl) {
+    $Indicateur = $ctrl::GetIndicateur(Yii::$app->user);
+    if (!empty($Indicateur) && $Indicateur != null) {
+        array_unshift($IndicateurCtrl, $Indicateur);
     }
-
 }
 
 
@@ -30,18 +28,17 @@ foreach($Ctrls as &$ctrl)
 
         <p class="lead">You are logged.</p>
         <p class="lead">TODO Show Dashboard</p>
-<p class="lead">
+        <p class="lead">
 
-<?php 
-    foreach( $IndicateurCtrl as $ind)
-    {
-        echo $ind['value'];
-    }
-?>
-   </p> 
-        </div>
-
-  
-
+            <?php
+            foreach ($IndicateurCtrl as $ind) {
+                echo $ind['value'];
+            }
+            ?>
+        </p>
     </div>
+
+
+
+</div>
 </div>

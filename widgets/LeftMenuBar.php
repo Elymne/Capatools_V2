@@ -26,7 +26,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         $logo_capa =  '' . Yii::$app->homeUrl . 'images/materialize-logo.png';
         $logo_capa_color =  '' . Yii::$app->homeUrl . 'images/materialize-logo-color.png';
 
-        $ctrls =  Yii::$app->DiscoverService->getServices();
+        $ctrls =  Yii::$app->discoverService->getServices();
         $ActionsCtrl = array();
 
         //Pour chaque controller service on récupére la listes des actions filtrer par droit d'utilisateur (nom du service, priorité d'affichage, liste des actions)

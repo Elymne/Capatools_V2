@@ -66,10 +66,9 @@ $config = [
             'showScriptName' => false,
             'rules' => [],
         ],
-        'DiscoverService' => [
 
+        'discoverService' => [
             'class' => 'app\components\DiscoverService',
-
         ],
 
     ],
