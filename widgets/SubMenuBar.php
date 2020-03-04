@@ -37,7 +37,7 @@ class SubMenuBar extends Widget
         foreach ($this->Submenulist as &$submenu) {
             $item =  [
                 'label' => $submenu['label'], 'url' => [$submenu['url']],
-                'template' => '<a href="{url}" class="waves-effect">{label}<i class="material-icons">' . $submenu['icon'] . '</i></a>'
+                'template' => '<li><a href="{url}"><i class="material-icons">radio_button_unchecked</i><span>{label}</span></a></li>',
             ];
             array_unshift($subitems, $item);
         }
@@ -47,13 +47,15 @@ class SubMenuBar extends Widget
                 [
                     'label' => $this->titleSub,
                     'options' => ['class' => 'bold waves-effect'],
-                    'template' => '<a  class="collapsible-header" >{label}<i class="material-icons chevron">chevron_left</i></a>',
+                    'template' => '<li class="active bold"><a class="collapsible-header waves-effect waves-cyan "href="JavaScript:void(0)"><i class="material-icons">settings_input_svideo</i><span class="menu-title">{label}</span></a>',
                     'items' => $subitems
 
                 ]
             ],
-            'submenuTemplate' => '<div class="collapsible-body"><ul>{items}</ul></div>',
-            'options' => array('class' => 'collapsible collapsible-accordion')
+            'submenuTemplate' => '<div class="collapsible-body"><ul class="collapsible collapsible-sub" data-collapsible="accordion">{items}</ul></div>',
+            'options' => [
+                'class' => 'collapsible collapsible-accordion'
+            ]
         ]);
 
 

@@ -13,8 +13,6 @@ AppAsset::register($this);
 
 ?>
 
-?>
-
 <div class="company-create">
     <div class="devis-create">
 

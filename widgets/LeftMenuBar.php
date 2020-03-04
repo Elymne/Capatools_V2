@@ -21,9 +21,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
     public function run()
     {
 
-        $appName = Yii::$app->name;
         $homeNav = '' . Yii::$app->homeUrl . '';
-        $logo =  '' . Yii::$app->homeUrl . 'images/avatar.png';
 
         $logo_capa =  '' . Yii::$app->homeUrl . 'images/materialize-logo.png';
         $logo_capa_color =  '' . Yii::$app->homeUrl . 'images/materialize-logo-color.png';
@@ -48,22 +46,15 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         return <<<HTML
             <aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-dark sidenav-active-rounded">
 
-                <!-- Title -->
+                <!-- Title, laissez le tag h1 sur une seule ligne. -->
                 <div class="brand-sidebar">
-                    <h1 class="logo-wrapper">
-                        <a class="brand-logo darken-1" href="${homeNav}">
-                            <img class="hide-on-med-and-down " src="${logo_capa}" alt="materialize logo" />
-                            <img class="show-on-medium-and-down hide-on-med-and-up" src="${logo_capa_color}" alt="materialize logo" />
-                            <span class="logo-text hide-on-med-and-down">CapaTools</span>
-                        </a>
-                        <a class="navbar-toggler" href="#"><i class="material-icons">radio_button_checked</i></a>
-                    </h1>
+                    <h1 class="logo-wrapper"><a class="brand-logo darken-1" href="${homeNav}"><img class="hide-on-med-and-down " src="${logo_capa}" alt="materialize logo" /><img class="show-on-medium-and-down hide-on-med-and-up" src="${logo_capa_color}" alt="materialize logo" /><span class="logo-text hide-on-med-and-down">CapaTools</span><a class="navbar-toggler" href="#"><i class="material-icons">radio_button_checked</i></a></h1>
                 </div>
 
                 <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
-                    <li class="active bold">
-                        <li class="no-padding">${stringSubmenu}</li>
-                    </li>
+                
+                    <li class="no-padding">${stringSubmenu}</li>
+                    
                 </ul>
                 
                 <div class="navigation-background"></div>
@@ -73,44 +64,4 @@ class LeftMenuBar extends \yii\bootstrap\Widget
             </aside>
         HTML;
     }
-}
-
-
-function ok()
-{
-    <<<HTML
-    
-                        <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)">
-                            <i class="material-icons">account_box</i>
-                            <span class="menu-title" data-i18n="Dashboard">Administration</span>
-                        </a>
-
-                        <div class="collapsible-body">
-                            <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-
-                                <li class="active">
-                                    <a class="active" href="dashboard-modern.html">
-                                        <i class="material-icons">radio_button_unchecked</i>
-                                        <span data-i18n="Modern">Modern</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="dashboard-ecommerce.html">
-                                        <i class="material-icons">radio_button_unchecked</i>
-                                        <span data-i18n="eCommerce">eCommerce</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="dashboard-analytics.html">
-                                        <i class="material-icons">radio_button_unchecked</i>
-                                        <span data-i18n="Analytics">Analytics</span>
-                                    </a>
-                                </li>     
-                            </ul>
-                        </div>
-
-                    
- HTML;
 }
