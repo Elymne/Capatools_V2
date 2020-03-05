@@ -10,6 +10,7 @@ use app\widgets\TopMenuBar;
 use app\widgets\LeftMenuBar;
 
 AppAsset::register($this);
+$bread =  '' . Yii::$app->homeUrl . 'images/breadcrumb.png';
 ?>
 
 <?php $this->beginPage() ?>
@@ -26,14 +27,13 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 
-<body class="has-fixed-sidenav">
+<body class="vertical-layout page-header-light vertical-menu-collapsible vertical-dark-menu preload-transitions 2-columns   " data-open="click" data-menu="vertical-dark-menu" data-col="2-columns">
     <?php $this->beginBody();
     if (!Yii::$app->user->isGuest && Yii::$app->controller->action->id != 'firstlogin') {
 
         TopMenuBar::begin();
         TopMenuBar::widget();
         TopMenuBar::end();
-
 
         LeftMenuBar::begin();
         LeftMenuBar::widget();
@@ -43,10 +43,8 @@ AppAsset::register($this);
 
     <div id="main">
         <div class="row">
-            <div class="container">
-                <?= Alert::widget() ?>
-                <?= $content ?>
-            </div>
+            <?= Alert::widget() ?>
+            <?= $content ?>
         </div>
     </div>
 
@@ -75,3 +73,5 @@ AppAsset::register($this);
 
 </html>
 <?php $this->endPage() ?>
+
+<?php

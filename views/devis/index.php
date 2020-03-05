@@ -1,5 +1,6 @@
 <?php
 
+use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -12,101 +13,105 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<div class="devis-index">
+<?= TopTitle::widget(['title' => $this->title]) ?>
 
-    <!-- New -->
+<div class="container">
+    <div class="devis-index">
 
-    <div class="row">
-        <div class="card">
+        <!-- New -->
 
-            <div class="card-content">
-                <span class="card-title"><?= Html::encode($this->title) ?></span>
-            </div>
+        <div class="row">
+            <div class="card">
 
-            <div class="card-action">
+                <div class="card-content">
+                    <span class="card-title"><?= Html::encode($this->title) ?></span>
+                </div>
 
-                <br />
+                <div class="card-action">
 
-                <?php Pjax::begin(['id' => '1']); ?>
+                    <br />
 
-                <?= GridView::widget([
-                    'id' => 'AvantContrat_id',
-                    'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
-                    'tableOptions' => [
-                        'class' => ['highlight']
-                    ],
-                    'columns' => [
-                        [
-                            'attribute' => 'id_capa',
-                            'format' => 'raw',
-                            'label' => 'Identifiant Capacites',
-                            'filterInputOptions' => [
-                                'class' => 'form-control',
-                                'placeholder' => 'Filtre CapaId'
+                    <?php Pjax::begin(['id' => '1']); ?>
+
+                    <?= GridView::widget([
+                        'id' => 'AvantContrat_id',
+                        'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
+                        'tableOptions' => [
+                            'class' => ['highlight']
+                        ],
+                        'columns' => [
+                            [
+                                'attribute' => 'id_capa',
+                                'format' => 'raw',
+                                'label' => 'Identifiant Capacites',
+                                'filterInputOptions' => [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Filtre CapaId'
+                                ],
+                                'value' => function ($data) {
+                                    return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']]);
+                                }
                             ],
-                            'value' => function ($data) {
-                                return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']]);
-                            }
-                        ],
-                        [
-                            'attribute' => 'internal_name',
-                            'format' => 'text',
-                            'label' => 'Nom du projet',
-                            'filterInputOptions' => [
-                                'class' => 'form-control',
-                                'placeholder' => 'Filtre Nom Projet'
-                            ]
-                        ],
-                        [
-                            'attribute' => 'capa_user.username',
-                            'format' => 'text',
-                            'label' => 'Responsable projet',
-                            'filterInputOptions' => [
-                                'class' => 'form-control',
-                                'placeholder' => 'Filtre Responsable'
-                            ]
-                        ],
-                        [
-                            'attribute' => 'version',
-                            'format' => 'text',
-                            'label' => 'Version du fichier',
-                            'filterInputOptions' => [
-                                'class' => 'form-control',
-                                'placeholder' => 'Filtre Version'
-                            ]
-                        ],
+                            [
+                                'attribute' => 'internal_name',
+                                'format' => 'text',
+                                'label' => 'Nom du projet',
+                                'filterInputOptions' => [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Filtre Nom Projet'
+                                ]
+                            ],
+                            [
+                                'attribute' => 'capa_user.username',
+                                'format' => 'text',
+                                'label' => 'Responsable projet',
+                                'filterInputOptions' => [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Filtre Responsable'
+                                ]
+                            ],
+                            [
+                                'attribute' => 'version',
+                                'format' => 'text',
+                                'label' => 'Version du fichier',
+                                'filterInputOptions' => [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Filtre Version'
+                                ]
+                            ],
 
-                        [
-                            'attribute' => 'cellule.name',
-                            'format' => 'text',
-                            'label' => 'Cellule',
-                            'filterInputOptions' => [
-                                'class' => 'form-control',
-                                'placeholder' => 'Filtre Cellule'
-                            ]
+                            [
+                                'attribute' => 'cellule.name',
+                                'format' => 'text',
+                                'label' => 'Cellule',
+                                'filterInputOptions' => [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Filtre Cellule'
+                                ]
+                            ],
+                            [
+                                'attribute' => 'company.name',
+                                'format' => 'text',
+                                'label' => 'Entreprise',
+                                'filterInputOptions' => [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Filtre Entreprise'
+                                ]
+                            ],
+                            [
+                                'attribute' => 'devis_status.label',
+                                'format' => 'text',
+                                'label' => 'Statut',
+                            ],
                         ],
-                        [
-                            'attribute' => 'company.name',
-                            'format' => 'text',
-                            'label' => 'Entreprise',
-                            'filterInputOptions' => [
-                                'class' => 'form-control',
-                                'placeholder' => 'Filtre Entreprise'
-                            ]
-                        ],
-                        [
-                            'attribute' => 'devis_status.label',
-                            'format' => 'text',
-                            'label' => 'Statut',
-                        ],
-                    ],
-                ]); ?>
+                    ]); ?>
 
-                <?php Pjax::end(); ?>
+                    <?php Pjax::end(); ?>
 
+                </div>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>

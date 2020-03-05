@@ -11,3 +11,8 @@ td.header {
     font-weight: bold;
     width: 30%;
 }
+
+#main {
+    padding-left: 250px;
+    margin-top: -18px;
+}
