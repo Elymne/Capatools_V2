@@ -52,7 +52,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
 
                 <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
                 
-                    <li class="no-padding">${stringSubmenu}</li>
+                    ${stringSubmenu}
                     
                 </ul>
                 
