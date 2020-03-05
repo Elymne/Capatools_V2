@@ -39,7 +39,7 @@ class SubMenuBar extends Widget
                 [
                     'label' => $this->titleSub,
                     'options' => ['class' => 'bold waves-effect'],
-                    'template' => '<li class="active bold"><a class="collapsible-header waves-effect waves-cyan "href="JavaScript:void(0)"><i class="material-icons">settings_input_svideo</i><span class="menu-title">{label}</span></a>',
+                    'template' => '<li><a class="collapsible-header waves-effect waves-cyan "href="JavaScript:void(0)"><i class="material-icons">settings_input_svideo</i><span class="menu-title">{label}</span></a>',
                     'items' => $subitems
 
                 ]

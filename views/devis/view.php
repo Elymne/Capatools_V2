@@ -45,6 +45,10 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a('Valider <i class="material-icons right">check</i>', ['index'], ['class' => 'waves-effect waves-light btn green']) ?>
                     <?php endif; ?>
 
+                    <?php if (Yii::$app->user->can('operationalManagerDevis') || Yii::$app->user->can('accountingSupportDevis')) : ?>
+                        <?= Html::a('Supprimer <i class="material-icons right">check</i>', ['delete', 'id' => $model->id], ['class' => 'waves-effect waves-light btn red']) ?>
+                    <?php endif; ?>
+
                 </div>
             </div>
 

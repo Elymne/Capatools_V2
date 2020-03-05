@@ -25,9 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <div class="card-content">
                     <p>
-                        <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'btn waves-effect waves-light']) ?>
+                        <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
                         <?= Html::a('Supprimer <i class="material-icons right">delete</i> ', ['delete', 'id' => $model->id], [
-                            'class' => 'btn waves-effect waves-light',
+                            'class' => 'waves-effect waves-light btn red',
                             'data' => [
                                 'confirm' => 'Etes vous sûr de vouloir supprimer ce salarié ?',
                                 'method' => 'post',
@@ -39,6 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="card-content">
                     <?= DetailView::widget([
                         'model' => $model,
+                        'options' => [
+                            'class' => ['highlight']
+                        ],
                         'attributes' => [
                             [                      // the owner name of the model
                                 'label' => 'Nom et prénom',
@@ -52,10 +55,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                     ]) ?>
 
+                    <br /><br /><br />
+
                     <?=
 
                         GridView::widget([
                             'dataProvider' => $rightProvider,
+                            'tableOptions' => [
+                                'class' => ['highlight']
+                            ],
                             'columns' => [
                                 [
                                     'label' => 'Service',
