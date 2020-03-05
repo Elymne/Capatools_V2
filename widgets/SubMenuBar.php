@@ -2,7 +2,6 @@
 
 namespace app\widgets;
 
-use yii\widgets\Menu;
 use yii\base\Widget;
 use Yii;
 
@@ -19,40 +18,53 @@ class SubMenuBar extends Widget
 
     public function run()
     {
-        $subitems = array();
-        asort($this->subMenuList);
-
-        foreach ($this->subMenuList as $submenu) {
-
-            $active = $this::isActive($submenu['active']);
-
-            $item = [
-                'label' => $submenu['label'],
-                'url' => [$submenu['url']],
-                'template' => '<li><a ' . $active . ' href="{url}"><i class="material-icons">radio_button_unchecked</i><span>{label}</span></a></li>',
-            ];
-            array_unshift($subitems, $item);
-        }
-
-        $string = Menu::widget([
-            'items' => [
-                [
-                    'label' => $this->titleSub,
-                    'options' => ['class' => 'bold waves-effect'],
-                    'template' => '<li><a class="collapsible-header waves-effect waves-cyan "href="JavaScript:void(0)"><i class="material-icons">settings_input_svideo</i><span class="menu-title">{label}</span></a>',
-                    'items' => $subitems
-
-                ]
-            ],
-            'submenuTemplate' => '<div class="collapsible-body"><ul class="collapsible collapsible-sub" data-collapsible="accordion">{items}</ul></div>',
-            'options' => [
-                'class' => 'collapsible collapsible-accordion'
-            ]
-        ]);
-
-        return $string;
+        return $this->header() . $this->body() . $this->footer();
     }
 
+    private function header()
+    {
+
+        $titleSub = $this->titleSub;
+
+        return <<<HTML
+            <li><a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)"><i class="material-icons">settings_input_svideo</i><span class="menu-title">${titleSub}</span></a>
+                <div class="collapsible-body">
+                    <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+        HTML;
+    }
+
+    private function body()
+    {
+
+        $body = '';
+
+        foreach ($this->subMenuList as $subMenu) {
+
+            $active = $this::isActive($subMenu['active']);
+            $label = $subMenu['label'];
+            $url = $subMenu['url'];
+
+            $body = $body . <<<HTML
+                <li ${active}>
+                    <a ${active} href="/${url}">
+                        <i class="material-icons">radio_button_unchecked</i>
+                        <span>${label}</span>
+                    </a>
+                </li>
+            HTML;
+        }
+
+        return $body;
+    }
+
+    private function footer()
+    {
+        return <<<HTML
+                    </ul>
+                </div>
+            </li>
+        HTML;
+    }
 
     private function isActive($string)
     {
