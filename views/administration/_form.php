@@ -20,18 +20,6 @@ if ($model->cellule != null) {
     $comboxselect = 'Choisir la cellule ...';
 }
 
-//$model->userrightapplication['Administration'];
-//Pour chaque controller service on récupère la listes des droits possibles
-
-$services = Yii::$app->discoverService->getServices();
-$roleServices = array();
-
-foreach ($services as $service) {
-    $rights = $service::GetRight();
-    if (!empty($rights) && $rights != null) {
-        $results[$rights['name']] = $rights;
-    }
-}
 
 /* @var $this yii\web\View */
 /* @var $model app\models\user\CapaUser */
@@ -61,7 +49,6 @@ foreach ($services as $service) {
         $key = array_search($result['name'], array_column($model->userRole, 'service'));
 
         if (!is_bool($key)) {
-
             $stringpromp = $model->userRole[$key]->role;
         }
 

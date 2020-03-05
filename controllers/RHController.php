@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\helper\_enum\SubMenuEnum;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 
@@ -27,22 +26,6 @@ class RHController extends Controller implements ServiceInterface
                 ],
             ],
         ];
-    }
-
-    /**
-     * Get list of the right
-     */
-    public static function GetRight()
-    {
-        return
-            [
-                'name' => 'RH',
-                'right' =>
-                [
-                    'none' => 'none',
-                    'Responsable' => 'Responsable'
-                ]
-            ];
     }
 
     /**

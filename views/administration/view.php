@@ -43,12 +43,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => ['highlight']
                         ],
                         'attributes' => [
-                            [                      // the owner name of the model
+                            [
                                 'label' => 'Nom et prénom',
                                 'attribute' => 'username',
                             ],
                             'email:email',
-                            [                      // the owner name of the model
+                            [
                                 'label' => 'Nom de la cellule',
                                 'attribute' => 'cellule.name',
                             ],
@@ -57,31 +57,52 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <br /><br /><br />
 
-                    <?=
+                    <?php echo createRolesTable($userRoles); ?>
 
-                        GridView::widget([
-                            'dataProvider' => $rightProvider,
-                            'tableOptions' => [
-                                'class' => ['highlight']
-                            ],
-                            'columns' => [
-                                [
-                                    'label' => 'Service',
-                                    'attribute' => 'service',
-                                ],
-                                [
-
-                                    'label' => 'Statut',
-                                    'attribute' => 'role',
-                                ],
-                            ]
-                        ]);
-                    ?>
                 </div>
+
             </div>
-
         </div>
-    </div>
 
+    </div>
 </div>
-</div>
+
+<?php
+
+function createRolesTable($userRoles)
+{
+
+    $head = <<<HTML
+
+        <table class="highlight">
+            <tbody>
+                <tr>
+                    <td class='header'>Rôles</td>
+                    <td class='header'>Description</td>
+                </tr>
+
+            
+    HTML;
+
+    $body = '';
+
+    foreach ($userRoles as $userRole) {
+
+        $roleName = $userRole->name;
+        $roleDescription = $userRole->description;
+
+        $body = $body . <<<HTML
+            <tr>
+                <td>${roleName}</td>
+                <td>${roleDescription}</td>
+            </tr>
+        HTML;
+    }
+
+    $foot = <<<HTML
+            </tbody>
+        </table>
+    HTML;
+
+    return $head . $body . $foot;
+}

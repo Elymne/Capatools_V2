@@ -126,14 +126,10 @@ class AdministrationController extends Controller
      */
     public function actionView($id)
     {
-        $query = UserRole::find()->where(['user_id' => $id]);
-
-        $rightProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        $userRoles = Yii::$app->authManager->getRolesByUser($id);
 
         return $this->render('view', [
-            'model' => $this->findModel($id), 'rightProvider' => $rightProvider,
+            'model' => $this->findModel($id), 'userRoles' => $userRoles,
         ]);
     }
 
