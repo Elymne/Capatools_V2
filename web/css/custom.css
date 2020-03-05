@@ -16,3 +16,8 @@ td.header {
     padding-left: 250px;
     margin-top: -18px;
 }
+
+#body-login {
+    background-image: url("../images/capa-login-bg.png");
+    background-size: cover;
+}

@@ -5,18 +5,19 @@
 
 use app\widgets\Alert;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
-use app\widgets\TopMenuBar;
-use app\widgets\LeftMenuBar;
 
 AppAsset::register($this);
+
+$backgroundImage = '' . Yii::$app->homeUrl . '';
+
+var_dump($backgroundImage);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
+
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,35 +26,31 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="has-fixed-sidenav welcomeBg">
-<?php $this->beginBody();
 
-?>
+<body class="has-fixed-sidenav welcomeBg" id="body-login">
+    <?php $this->beginBody(); ?>
 
     <div class="container">
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
 
-
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; Capacites <?= date('Y') ?></p>
-    </div>
-</footer>
-
-<?php $this->endBody() ?>
+    <?php $this->endBody() ?>
 
 
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('.collapsible').collapsible();
-	$('.sidenav').sidenav();
-	$('.dropdown-trigger').dropdown({constrainWidth: false, alignment: 'left'});
-	$('.fixed-action-btn').floatingActionButton();
-	$('.tooltipped').tooltip();
-  });
-</script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.collapsible').collapsible();
+            $('.sidenav').sidenav();
+            $('.dropdown-trigger').dropdown({
+                constrainWidth: false,
+                alignment: 'left'
+            });
+            $('.fixed-action-btn').floatingActionButton();
+            $('.tooltipped').tooltip();
+        });
+    </script>
 </body>
+
 </html>
 <?php $this->endPage() ?>
