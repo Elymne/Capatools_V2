@@ -1,6 +1,6 @@
 <?php
 
-namespace app\helper;
+namespace app\helper\_clazz;
 
 class DateHelper
 {

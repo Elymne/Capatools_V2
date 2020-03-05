@@ -23,7 +23,7 @@ if ($model->cellule != null) {
 //$model->userrightapplication['Administration'];
 //Pour chaque controller service on récupère la listes des droits possibles
 
-$services = Yii::$app->DiscoverService->getServices();
+$services = Yii::$app->discoverService->getServices();
 $roleServices = array();
 
 foreach ($services as $service) {

@@ -11,9 +11,9 @@ class m200100_000005_create_company_table extends Migration
     {
         $this->createTable('{{%company}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(),
+            'name' => $this->string()->unique(),
             'description' => $this->string(),
-            'tva' => $this->string()
+            'tva' => $this->string()->unique()
         ]);
     }
 

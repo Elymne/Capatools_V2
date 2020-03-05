@@ -12,8 +12,6 @@ use app\models\devis\Devis;
 class DevisSearch extends Devis
 {
 
-    public $statusSearch = '';
-
     /**
      * {@inheritdoc}
      */
@@ -28,7 +26,7 @@ class DevisSearch extends Devis
     public function attributes()
     {
         // add related fields to searchable attributes
-        return array_merge(parent::attributes(), ['capa_user.username', 'company.name', 'cellule.name', 'devisStatus.label', 'delivery_type.label']);
+        return array_merge(parent::attributes(), ['capa_user.username', 'company.name', 'cellule.name', 'devis_status.label', 'delivery_type.label']);
     }
 
     /**
@@ -56,7 +54,7 @@ class DevisSearch extends Devis
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 10,
             ]
         ]);
 
@@ -81,12 +79,17 @@ class DevisSearch extends Devis
             'desc' => ['delivery_type.label' => SORT_DESC],
         ];
 
+        $dataProvider->sort->attributes['devis_status.label'] = [
+            'asc' => ['devis_status.label' => SORT_ASC],
+            'desc' => ['devis_status.label' => SORT_DESC],
+        ];
+
 
         $this->load($params);
         $query->joinWith(['capa_user']);
         $query->joinWith(['cellule']);
         $query->joinWith(['company']);
-        $query->joinWith(['status']);
+        $query->joinWith(['devis_status']);
         $query->joinWith(['delivery_type']);
 
         if (!$this->validate()) {
@@ -112,7 +115,7 @@ class DevisSearch extends Devis
             ->andFilterWhere(['like', 'company.name', $this->getAttribute('company.name')])
             ->andFilterWhere(['like', 'capa_user.username', $this->getAttribute('capa_user.username')])
             ->andFilterWhere(['like', 'delivery_type.label', $this->getAttribute('delivery_type.label')])
-            ->andFilterWhere(['like', 'devis_status.label', $this->statusSearch]);
+            ->andFilterWhere(['like', 'devis_status.label', $this->getAttribute('devis_status.label')]);
 
         return $dataProvider;
     }

@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\helper\_enum\SubMenuEnum;
 use yii\web\Controller;
+use yii\filters\AccessControl;
 
 class RHController extends Controller implements ServiceInterface
 {
@@ -12,15 +14,19 @@ class RHController extends Controller implements ServiceInterface
      */
     public function behaviors()
     {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function actions()
-    {
-        return [];
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'actions' => ['Index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -41,16 +47,15 @@ class RHController extends Controller implements ServiceInterface
 
     /**
      * Get list of indicateur
-     *
      */
-    public static function GetIndicateur($user)
+    public static function getIndicator($user)
     {
     }
 
     /**
      * Get Action for the user
      */
-    public static function GetActionUser($user)
+    public static function getActionUser($user)
     {
         return [
             'priorite' => 2,
@@ -60,13 +65,15 @@ class RHController extends Controller implements ServiceInterface
                     'priorite' => 2,
                     'url' => 'RH/nn',
                     'label' => 'Demande de congé',
-                    'icon' => 'show_chart'
+                    'icon' => 'show_chart',
+                    'active' => ''
                 ],
                 [
                     'priorite' => 1,
                     'url' => 'RH/ActionName',
                     'label' => 'Etat des congés',
-                    'icon' => 'show_chart'
+                    'icon' => 'show_chart',
+                    'active' => ''
                 ],
             ]
         ];
@@ -79,5 +86,7 @@ class RHController extends Controller implements ServiceInterface
      */
     public function actionIndex()
     {
+
+        return [1 => "ok google"];
     }
 }

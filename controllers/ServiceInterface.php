@@ -2,23 +2,16 @@
 
 namespace app\controllers;
 
+interface ServiceInterface
+{
 
-use yii\web\Controller;
-
-
-interface ServiceInterface 
-{   
     /**
-     * GetRight Application récupère les droits de l'application
+     * getIndicator Application récupère les indicateurs du service en fonction de l'utilisateur
      */
-    public static  function GetRight();
+    public static  function getIndicator($user);
+
     /**
-     * GetIndicateur Application récupère les indicateurs du service en fonction de l'utilisateur
-     */    
-    public static  function GetIndicateur($user);
-    
-    /**
-     * GetActionUser Application récupère les actions possibles du service de l'utilisateur
-     */ 
-    public static  function GetActionUser($user);
+     * getActionUser Application récupère les actions possibles du service de l'utilisateur
+     */
+    public static  function getActionUser($user);
 }
