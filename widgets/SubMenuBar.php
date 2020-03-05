@@ -11,7 +11,6 @@ class SubMenuBar extends Widget
 
     public $titleSub;
     public $subMenuList;
-    public $active;
 
     public function init()
     {
@@ -23,11 +22,14 @@ class SubMenuBar extends Widget
         $subitems = array();
         asort($this->subMenuList);
 
+        foreach ($this->subMenuList as $submenu) {
 
-        foreach ($this->subMenuList as &$submenu) {
-            $item =  [
-                'label' => $submenu['label'], 'url' => [$submenu['url']],
-                'template' => '<li><a  href="{url}"><i class="material-icons">radio_button_unchecked</i><span>{label}</span></a></li>',
+            $active = $this::isActive($submenu['active']);
+
+            $item = [
+                'label' => $submenu['label'],
+                'url' => [$submenu['url']],
+                'template' => '<li><a ' . $active . ' href="{url}"><i class="material-icons">radio_button_unchecked</i><span>{label}</span></a></li>',
             ];
             array_unshift($subitems, $item);
         }
@@ -51,8 +53,12 @@ class SubMenuBar extends Widget
         return $string;
     }
 
-    private function isActive()
+
+    private function isActive($string)
     {
-        return 'class="active"';
+        if (Yii::$app->params['activeMenu'] == $string)
+            return 'class="active"';
+        else
+            return '';
     }
 }

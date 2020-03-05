@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\helper\_enum\SubMenuEnum;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 
@@ -64,13 +65,15 @@ class RHController extends Controller implements ServiceInterface
                     'priorite' => 2,
                     'url' => 'RH/nn',
                     'label' => 'Demande de congé',
-                    'icon' => 'show_chart'
+                    'icon' => 'show_chart',
+                    'active' => ''
                 ],
                 [
                     'priorite' => 1,
                     'url' => 'RH/ActionName',
                     'label' => 'Etat des congés',
-                    'icon' => 'show_chart'
+                    'icon' => 'show_chart',
+                    'active' => ''
                 ],
             ]
         ];

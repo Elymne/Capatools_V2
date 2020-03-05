@@ -28,10 +28,6 @@ use Exception;
 class DevisController extends Controller implements ServiceInterface
 {
 
-    private $active_route_list = "DEVIS_LIST";
-    private $active_route_create = "DEVIS_CREATE";
-    private $active_route_addCompany = "DEVIS_ADD_COMPANY";
-
     /**
      * {@inheritdoc}
      */
@@ -101,9 +97,24 @@ class DevisController extends Controller implements ServiceInterface
             $result = [
                 'priorite' => 3, 'name' => 'Devis',
                 'items' => [
-                    ['Priorite' => 1, 'url' => 'devis/add-company', 'label' => 'Ajouter un client', 'active' => 'DEVIS_ADD_COMPANY'],
-                    ['Priorite' => 2, 'url' => 'devis/create', 'label' => 'Créer un devis', 'active' => 'DEVIS_CREATE'],
-                    ['Priorite' => 3, 'url' => 'devis/index', 'label' => 'Liste des devis', 'active' => 'DEVIS_LIST'],
+                    [
+                        'Priorite' => 1,
+                        'url' => 'devis/add-company',
+                        'label' => 'Ajouter un client',
+                        'active' => SubMenuEnum::DEVIS_ADD_COMPANY()
+                    ],
+                    [
+                        'Priorite' => 2,
+                        'url' => 'devis/create',
+                        'label' => 'Créer un devis',
+                        'active' => SubMenuEnum::DEVIS_CREATE()
+                    ],
+                    [
+                        'Priorite' => 3,
+                        'url' => 'devis/index',
+                        'label' => 'Liste des devis',
+                        'active' => SubMenuEnum::DEVIS_LIST()
+                    ],
                 ]
             ];
         }

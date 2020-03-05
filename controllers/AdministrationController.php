@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\helper\_enum\SubMenuEnum;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\user\CapaUser;
@@ -81,13 +82,15 @@ class AdministrationController extends Controller
                                 'priorite' => 1,
                                 'url' => 'administration/index',
                                 'label' => 'Liste des salariés',
-                                'icon' => 'show_chart'
+                                'icon' => 'show_chart',
+                                'active' => SubMenuEnum::USER_LIST()
                             ],
                             [
                                 'priorite' => 2,
                                 'url' => 'administration/userform',
                                 'label' => 'Ajouter un salarié',
-                                'icon' => 'show_chart'
+                                'icon' => 'show_chart',
+                                'active' => SubMenuEnum::USER_CREATE()
                             ]
                         ]
                     ];
