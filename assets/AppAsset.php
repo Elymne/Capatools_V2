@@ -47,11 +47,6 @@ class AppAsset extends AssetBundle
         'app-assets/js/search.min.js',
         'app-assets/js/custom/custom-script.js',
 
-        // Materialize js.
-        //'js/materialize.min.custom.js',
-
-        // Js file.
-        //'js/capatools.js'
     ];
 
     public $depends = [

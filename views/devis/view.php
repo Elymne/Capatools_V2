@@ -263,6 +263,8 @@ function createDataTable($model)
 function createMilestonesTable($milestones)
 {
 
+    // Utiliser <<<HTML HTML; PLEEEASE
+
     if (empty($milestones)) {
         return <<<HTML
             <p> Il n'existe aucun jalon pour ce devis. </p>
