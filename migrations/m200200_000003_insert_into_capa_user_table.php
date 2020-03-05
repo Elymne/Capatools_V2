@@ -40,16 +40,6 @@ class m200200_000003_insert_into_capa_user_table extends Migration
             'cellule_id' => 3
         ]);
 
-        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('balkany');
-        $this->insert('{{%capa_user}}', [
-            'id' => 4,
-            'username' => 'balkany',
-            'email' => 'balkany@gmail.com',
-            'auth_key' => 'test100key',
-            'password_hash' =>  $password_hash,
-            'cellule_id' => 3
-        ]);
-
         $password_hash = Yii::$app->getSecurity()->generatePasswordHash('test');
         $this->insert('{{%capa_user}}', [
             'id' => 5,

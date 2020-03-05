@@ -33,29 +33,38 @@ class AdministrationController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['Index', 'View', 'Create', 'Update', 'Delete'],
+                'denyCallback' => function ($rule, $action) {
+                    throw new \Exception('You are not allowed to access this page');
+                },
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['Index', 'View', 'Create', 'Update', 'Delete'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'actions' => ['index'],
+                        'roles' => ['indexAdmin'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['createAdmin'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'roles' => ['viewAdmin'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update'],
+                        'roles' => ['updateAdmin'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['delete'],
+                        'roles' => ['deleteAdmin'],
                     ],
                 ],
             ],
-        ];
-    }
-
-    /**
-     * Get list of the right
-     */
-    public static function GetRight()
-    {
-        return  [
-            'name' => 'Administration',
-            'right' => [
-                'none' => 'none',
-                'Responsable' => 'Responsable'
-            ]
         ];
     }
 
@@ -65,63 +74,35 @@ class AdministrationController extends Controller
     public static function getActionUser($user)
     {
         $result = [];
-        //Je verifie qu'il possède au moins un droit sur le service administration
-        if ($user->identity->GetUserRole()->where(['service' => 'Administration'])->exists()) {
-            //Je récupère le service administration
-            $role = $user->identity->getUserRole()->where(['service' => 'Administration'])->select('role')->one();
 
-            //Je verifie qu'il est reponsable
-            if ($role->role == 'Responsable') {
-                $result =
+        if (Yii::$app->user->can('administrator')) {
+            $result =
+                [
+                    'priorite' => 1,
+                    'name' => 'Administration',
+                    'items' =>
                     [
-                        'priorite' => 1,
-                        'name' => 'Administration',
-                        'items' =>
                         [
-                            [
-                                'priorite' => 1,
-                                'url' => 'administration/index',
-                                'label' => 'Liste des salariés',
-                                'icon' => 'show_chart',
-                                'active' => SubMenuEnum::USER_LIST()
-                            ],
-                            [
-                                'priorite' => 2,
-                                'url' => 'administration/userform',
-                                'label' => 'Ajouter un salarié',
-                                'icon' => 'show_chart',
-                                'active' => SubMenuEnum::USER_CREATE()
-                            ]
+                            'priorite' => 1,
+                            'url' => 'administration/index',
+                            'label' => 'Liste des salariés',
+                            'icon' => 'show_chart',
+                            'active' => SubMenuEnum::USER_LIST()
+                        ],
+                        [
+                            'priorite' => 2,
+                            'url' => 'administration/userform',
+                            'label' => 'Ajouter un salarié',
+                            'icon' => 'show_chart',
+                            'active' => SubMenuEnum::USER_CREATE()
                         ]
-                    ];
-            }
+                    ]
+                ];
         }
 
         return   $result;
     }
 
-    /**
-     * before action for a controller
-     */
-    public function beforeAction($action)
-    {
-        //Verifie les Behavior
-        $result = parent::beforeAction($action);
-        if ($result) {
-            $capa_user = Yii::$app->user->identity;
-
-            if ($capa_user->getUserRole()->where(['service' => 'Administration'])->exists()) {
-                $userRole = $capa_user->getUserRole()->where(['service' => 'Administration'])->select('role')->one();
-                if ($userRole->role == 'none') {
-                    $result = false;
-                }
-            } else {
-                $result = false;
-            }
-        }
-
-        return $result;
-    }
     /**
      * Lists all CapaUser models.
      * @return mixed
@@ -252,10 +233,9 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Get list of indicateur
-     *
+     * Get list of indicateur.
      */
-    public static function GetIndicateur($user)
+    public static function getIndicator($user)
     {
     }
 

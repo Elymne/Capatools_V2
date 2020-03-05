@@ -16,6 +16,7 @@ use app\models\devis\DevisSearch;
 use app\models\devis\Milestone;
 use app\helper\_clazz\DateHelper;
 use app\helper\_enum\SubMenuEnum;
+use app\helper\_enum\UserRoleEnum;
 use app\widgets\SubMenuBar;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -29,7 +30,8 @@ class DevisController extends Controller implements ServiceInterface
 {
 
     /**
-     * {@inheritdoc}
+     * Manage each controller access for users's role.
+     * Check, for more information, the migrate file : m200800_000000_devis_rbac.
      */
     public function behaviors()
     {
@@ -436,7 +438,7 @@ class DevisController extends Controller implements ServiceInterface
     }
 
 
-    public static function GetIndicateur($user)
+    public static function getIndicator($user)
     {
         return  ['label' => 'NbDevis', 'value' => Devis::getGroupbyStatus()];
     }

@@ -84,9 +84,10 @@ class m200800_000000_devis_rbac extends Migration
         // -- USERS ASSIGNEMENT -- \\
 
 
+        $auth->assign($accountingSupport, 1); // toto
         $auth->assign($projectManagerPermission, 2); // sacha
         $auth->assign($operationalManager, 3); // admin
-        $auth->assign($accountingSupport, 4); // balkany
+
     }
 
     /**
@@ -98,19 +99,4 @@ class m200800_000000_devis_rbac extends Migration
 
         return false;
     }
-
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m200302_123949_init_rbac cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }

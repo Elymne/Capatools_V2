@@ -48,7 +48,7 @@ class RHController extends Controller implements ServiceInterface
     /**
      * Get list of indicateur
      */
-    public static function GetIndicateur($user)
+    public static function getIndicator($user)
     {
     }
 
