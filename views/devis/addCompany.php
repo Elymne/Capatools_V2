@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
+use app\widgets\TopTitle;
 
 $this->title = 'Ajout d\'un client';
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
@@ -13,45 +14,45 @@ AppAsset::register($this);
 
 ?>
 
-<div class="company-create">
+<?= TopTitle::widget(['title' => $this->title]) ?>
 
-    <div class="row">
-        <div class="col s6 offset-s3">
-            <div class="card">
+<div class="container">
+    <div class="company-create">
 
-                <div class="card-content">
-                    <span class="card-title"><?= Html::encode($this->title) ?></span>
-                </div>
+        <div class="row">
+            <div class="col s6 offset-s3">
+                <div class="card">
 
-                <div class="card-action">
-                    <?php $form = ActiveForm::begin(); ?>
+                    <div class="card-content">
+                        <?php $form = ActiveForm::begin(); ?>
 
-                    <?= $form->field($model, 'name')
-                        ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-                        ->label("Nom du client") ?>
+                        <?= $form->field($model, 'name')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
+                            ->label("Nom du client") ?>
 
-                    <?= $form->field($model, 'tva')
-                        ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-                        ->label("TVA") ?>
+                        <?= $form->field($model, 'tva')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
+                            ->label("TVA") ?>
 
-                    <?= $form->field($model, 'description')
-                        ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-                        ->label("Description du projet") ?>
+                        <?= $form->field($model, 'description')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
+                            ->label("Description du projet") ?>
 
-                    <br /><br /><br />
+                        <br /><br /><br />
 
-                    <div class="form-group">
+                        <div class="form-group">
 
-                        <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>
+                            <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>
 
-                        <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn orange']) ?>
+                            <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn orange']) ?>
 
-                        <?php ActiveForm::end(); ?>
+                            <?php ActiveForm::end(); ?>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>

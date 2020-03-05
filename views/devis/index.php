@@ -24,10 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="card">
 
                 <div class="card-content">
-                    <span class="card-title"><?= Html::encode($this->title) ?></span>
-                </div>
-
-                <div class="card-action">
 
                     <br />
 

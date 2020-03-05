@@ -255,7 +255,7 @@ class DevisController extends Controller implements ServiceInterface
                 $model->description = $model->description;
 
                 $model->save();
-                Yii::$app->params['activeMenu'] = SubMenuEnum::CREATE();
+                Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_CREATE();
                 return $this->redirect(['create']);
             }
         }
