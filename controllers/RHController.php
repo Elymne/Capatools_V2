@@ -36,30 +36,33 @@ class RHController extends Controller implements ServiceInterface
     }
 
     /**
-     * Get Action for the user
+     * Deleted for now.
+     * 
      */
     public static function getActionUser($user)
     {
-        return [
-            'priorite' => 2,
-            'name' => 'RH',
-            'items' => [
-                [
-                    'priorite' => 2,
-                    'url' => 'RH/nn',
-                    'label' => 'Demande de congé',
-                    'icon' => 'show_chart',
-                    'active' => ''
-                ],
-                [
-                    'priorite' => 1,
-                    'url' => 'RH/ActionName',
-                    'label' => 'Etat des congés',
-                    'icon' => 'show_chart',
-                    'active' => ''
-                ],
-            ]
-        ];
+        if (false) {
+            return [
+                'priorite' => 2,
+                'name' => 'RH',
+                'items' => [
+                    [
+                        'priorite' => 2,
+                        'url' => 'RH/nn',
+                        'label' => 'Demande de congé',
+                        'icon' => 'show_chart',
+                        'active' => ''
+                    ],
+                    [
+                        'priorite' => 1,
+                        'url' => 'RH/ActionName',
+                        'label' => 'Etat des congés',
+                        'icon' => 'show_chart',
+                        'active' => ''
+                    ],
+                ]
+            ];
+        }
     }
 
     /**
