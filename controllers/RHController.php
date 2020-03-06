@@ -45,20 +45,21 @@ class RHController extends Controller implements ServiceInterface
             return [
                 'priorite' => 2,
                 'name' => 'RH',
+                'serviceMenuActive' => '',
                 'items' => [
                     [
                         'priorite' => 2,
                         'url' => 'RH/nn',
                         'label' => 'Demande de congé',
                         'icon' => 'show_chart',
-                        'active' => ''
+                        'subServiceMenuActive' => ''
                     ],
                     [
                         'priorite' => 1,
                         'url' => 'RH/ActionName',
                         'label' => 'Etat des congés',
                         'icon' => 'show_chart',
-                        'active' => ''
+                        'subServiceMenuActive' => ''
                     ],
                 ]
             ];

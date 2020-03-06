@@ -12,7 +12,6 @@ use app\models\user\CapaUserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\ActiveDataProvider;
 
 /**
  * AdministrationController implements the CRUD actions for CapaUser model.
@@ -85,6 +84,7 @@ class AdministrationController extends Controller
                 [
                     'priorite' => 1,
                     'name' => 'Administration',
+                    'serviceMenuActive' => SubMenuEnum::USER,
                     'items' =>
                     [
                         [
@@ -92,7 +92,14 @@ class AdministrationController extends Controller
                             'url' => 'administration/index',
                             'label' => 'Liste des salariés',
                             'icon' => 'show_chart',
-                            'active' => SubMenuEnum::USER_LIST
+                            'subServiceMenuActive' => SubMenuEnum::USER_LIST
+                        ],
+                        [
+                            'priorite' => 2,
+                            'url' => 'administration/create',
+                            'label' => 'Ajouter un salarié',
+                            'icon' => 'show_chart',
+                            'subServiceMenuActive' => SubMenuEnum::USER_CREATE
                         ]
                     ]
                 ];
@@ -112,6 +119,8 @@ class AdministrationController extends Controller
         $searchModel = new CapaUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_LIST;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -131,6 +140,8 @@ class AdministrationController extends Controller
     {
         $userRoles = Yii::$app->authManager->getRolesByUser($id);
 
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
         return $this->render('view', [
             'model' => $this->findModel($id), 'userRoles' => $userRoles,
         ]);
@@ -162,10 +173,15 @@ class AdministrationController extends Controller
             $model->flag_active = true;
             $model->generatePasswordAndmail();
             if ($model->save()) {
+
+                Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_NONE;
+                Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_CREATE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
         return $this->render('create', [
             'model' => $model,
         ]);

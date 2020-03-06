@@ -14,11 +14,15 @@ class SubMenuEnum extends Enum
     const NONE = 'NONE';
 
     // Sub title.
+    const USER = 'USER';
+
     const USER_NONE = 'USER_NONE';
     const USER_CREATE = 'USER_CREATE';
     const USER_LIST = 'USER_LIST';
 
     // Sub title.
+    const DEVIS = 'DEVIS';
+
     const DEVIS_NONE = 'DEVIS_NONE';
     const DEVIS_CREATE = 'DEVIS_CREATE';
     const DEVIS_LIST = 'DEVIS_LIST';

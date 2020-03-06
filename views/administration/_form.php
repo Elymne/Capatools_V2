@@ -42,7 +42,9 @@ if ($model->cellule != null) {
     <?= $form->field($model, 'cellule_id')->dropDownList($cellules, ['prompt' => $comboxselect])->label('Nom de la cellule :');   ?>
 
     <?php
+
     $data = array();
+
     foreach ($results as $result) {
         $stringpromp = 'none';
         //Je recherche la valeur de l'utilisateur pour l'application
@@ -83,6 +85,7 @@ if ($model->cellule != null) {
 
     ]);
     ?>
+
     <div class="form-group">
         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'btn waves-effect waves-light']) ?>
     </div>
