@@ -18,6 +18,7 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "yiisoft/yii2-jui": "^2.0",
         "robregonm/yii2-pdf": "dev-master",
+        "kartik-v/yii2-mpdf": "dev-master",
         "richardfan1126/yii2-sortable-gridview": "*",
         "2amigos/yii2-chartjs-widget": "~2.0",
         "newerton/yii2-dynamicform": "*",

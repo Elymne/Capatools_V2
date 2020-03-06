@@ -7,6 +7,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -17,6 +18,7 @@ $config = [
 
     // Liste composants (c'est juste des alias qui font référence à des classes, fonctions ect ect)
     'components' => [
+
         // describe here.
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -58,18 +60,26 @@ $config = [
                 ],
             ],
         ],
-        // Database use.
+        // Database connection.
         'db' => $db,
-
+        // ... unknow (write the use here)
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [],
         ],
-
+        // ... unknow (write the use here)
         'discoverService' => [
             'class' => 'app\components\DiscoverService',
         ],
+
+        'response' => [
+            'formatters' => [
+                'pdf' => [
+                    'class' => 'robregonm\pdf\PdfResponseFormatter',
+                ],
+            ]
+        ]
 
     ],
     'name' => 'CAPATOOLS V2.0',

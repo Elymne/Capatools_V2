@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74b6ada4125dbe176db0e139979992f9",
+    "content-hash": "f40707bc63d917cabe9ca9f3c768e2ca",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -69,7 +69,7 @@
             "version": "v3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twbs/bootstrap.git",
+                "url": "git@github.com:twbs/bootstrap.git",
                 "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
             },
             "dist": {
@@ -129,7 +129,7 @@
             "version": "3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "dist": {
@@ -443,6 +443,58 @@
                 "html"
             ],
             "time": "2019-10-28T03:44:26+00:00"
+        },
+        {
+            "name": "kartik-v/yii2-mpdf",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-mpdf.git",
+                "reference": "e513d17e8b1a5e063475f332e726845dba8f32b5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-mpdf/zipball/e513d17e8b1a5e063475f332e726845dba8f32b5",
+                "reference": "e513d17e8b1a5e063475f332e726845dba8f32b5",
+                "shasum": ""
+            },
+            "require": {
+                "mpdf/mpdf": "~8.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\mpdf\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "A Yii2 wrapper component for the mPDF library which generates PDF files from UTF-8 encoded HTML.",
+            "homepage": "https://github.com/kartik-v/yii2-mpdf",
+            "keywords": [
+                "component",
+                "extension",
+                "html",
+                "mpdf",
+                "pdf",
+                "utf8",
+                "yii2"
+            ],
+            "time": "2019-09-03T03:11:44+00:00"
         },
         {
             "name": "mpdf/mpdf",
@@ -2824,16 +2876,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "v1.10.2",
+            "version": "v1.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "b4400efc9d206e83138e2bb97ed7f5b14b831cd9"
+                "reference": "451c3cd1418cf640de218914901e51b064abb093"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/b4400efc9d206e83138e2bb97ed7f5b14b831cd9",
-                "reference": "b4400efc9d206e83138e2bb97ed7f5b14b831cd9",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/451c3cd1418cf640de218914901e51b064abb093",
+                "reference": "451c3cd1418cf640de218914901e51b064abb093",
                 "shasum": ""
             },
             "require": {
@@ -2883,7 +2935,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2020-01-20T15:57:02+00:00"
+            "time": "2020-03-05T15:02:03+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4753,7 +4805,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "robregonm/yii2-pdf": 20
+        "robregonm/yii2-pdf": 20,
+        "kartik-v/yii2-mpdf": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

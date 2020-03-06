@@ -20,6 +20,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use Exception;
+use kartik\mpdf\Pdf;
 
 /**
  * Gestion des différentes routes liées au service Devis.
@@ -114,7 +115,7 @@ class DevisController extends Controller implements ServiceInterface
                         'url' => 'devis/index',
                         'label' => 'Liste des devis',
                         'active' => SubMenuEnum::DEVIS_LIST()
-                    ],
+                    ]
                 ]
             ];
         }
@@ -156,6 +157,49 @@ class DevisController extends Controller implements ServiceInterface
         ]);
     }
 
+    public function actionPdf($id)
+    {
+
+        $model = $this->findModel($id);
+
+        $css = [
+            '' . Yii::getAlias('@web') . 'app-assets/vendors/vendors.min.css',
+            '' . Yii::getAlias('@web') . 'app-assets/css/themes/vertical-dark-menu-template/materialize.min.css',
+            '' . Yii::getAlias('@web') . 'app-assets/css/themes/vertical-dark-menu-template/style.min.css',
+            '' . Yii::getAlias('@web') . 'app-assets/css/pages/dashboard.min.css',
+            '' . Yii::getAlias('@web') . 'css/custom.css'
+        ];
+
+        $filename = $model->internal_name . '_pdf_' . date("r");
+
+        $content = $this->renderPartial('pdf', [
+            'model' => $model,
+            'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
+        ]);
+
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_CORE,
+            'format' => Pdf::FORMAT_LEDGER,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $content,
+            'filename' => $filename,
+            'cssFile' => $css,
+
+            'options' => [
+                // any mpdf options you wish to set
+            ],
+            'methods' => [
+                'SetTitle' => 'Fiche de devis - TEST',
+                'SetSubject' => 'Generating PDF files',
+                'SetHeader' => ['Fiche Devis - ' . $model->internal_name . ' || Generated On: ' . date("r")],
+                'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
+            ]
+        ]);
+
+        return $pdf->render();
+    }
+
     /**
      * Displays a single Devis model.
      * @param integer $id
@@ -167,7 +211,7 @@ class DevisController extends Controller implements ServiceInterface
 
         Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_NONE();
 
-        $model =  $this->findModel($id);
+        $model = $this->findModel($id);
         if ($model) {
             $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
             if (file_exists($filepath)) {
@@ -432,7 +476,7 @@ class DevisController extends Controller implements ServiceInterface
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('Le devis n\'existe pas.');
     }
 
 

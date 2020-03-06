@@ -16,14 +16,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
-$stages = [
-    1 => 'Avant Contrat',
-    2 => 'Attente validation Opérationnel',
-    3 => 'Attente validation client',
-    4 => 'Projet en cours',
-    5 => 'Projet terminé / annulé'
-];
-
 $indexStatus = getIndexStatus($model);
 
 ?>
@@ -32,45 +24,6 @@ $indexStatus = getIndexStatus($model);
 
 <div class="container">
     <div class="devis-view">
-
-        <!-- Main information -->
-        <div class="row">
-            <div class="card">
-
-                <div class="card-content">
-                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn blue']) ?>
-                    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
-
-                    <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('projectManagerDevis')) : ?>
-                        <?= Html::a('Valider <i class="material-icons right">check</i>', ['index'], ['class' => 'waves-effect waves-light btn green']) ?>
-                    <?php endif; ?>
-
-                    <?php if (Yii::$app->user->can('operationalManagerDevis') || Yii::$app->user->can('accountingSupportDevis')) : ?>
-                        <?= Html::a('Supprimer <i class="material-icons right">delete</i>', ['delete', 'id' => $model->id], ['class' => 'waves-effect waves-light btn red']) ?>
-                    <?php endif; ?>
-
-                    <?= Html::a('Générer un pdf <i class="material-icons right">build</i>', ['pdf', 'id' => $model->id], ['class' => 'waves-effect purple waves-light btn']) ?>
-
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Etat du contrat</span>
-
-                    <div class="timeline">
-                        <?php foreach ($stages as $key => $stage) { ?>
-                            <div class="timeline-event">
-                                <p class="event-label"><?php echo $stage; ?></p>
-                                <?php if (isStatusPassed($indexStatus, $key)) echo '<span class="point-filled"></span>';
-                                else echo '<span class="point"></span>'; ?>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-            </div>
-
-        </div>
 
         <!-- Details informations -->
         <div class="row">
