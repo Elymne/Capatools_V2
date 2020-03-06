@@ -73,14 +73,6 @@ $config = [
             'class' => 'app\components\DiscoverService',
         ],
 
-        'response' => [
-            'formatters' => [
-                'pdf' => [
-                    'class' => 'robregonm\pdf\PdfResponseFormatter',
-                ],
-            ]
-        ]
-
     ],
     'name' => 'CAPATOOLS V2.0',
 
