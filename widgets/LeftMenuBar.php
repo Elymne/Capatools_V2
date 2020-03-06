@@ -39,7 +39,12 @@ class LeftMenuBar extends \yii\bootstrap\Widget
         $stringSubmenu = "";
         //Création des menus et sous menus
         foreach ($actionsCtrl as $action) {
-            $stringSubmenu = $stringSubmenu . SubMenuBar::widget(['titleSub' => $action['name'], 'subMenuList' => $action['items']]);
+            $stringSubmenu =
+                $stringSubmenu . SubMenuBar::widget([
+                    'title' => $action['name'],
+                    'subMenuList' => $action['items'],
+                    'serviceMenuActive' => $action['serviceMenuActive']
+                ]);
         }
 
         return <<<HTML

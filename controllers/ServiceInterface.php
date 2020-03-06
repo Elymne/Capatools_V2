@@ -5,13 +5,13 @@ namespace app\controllers;
 interface ServiceInterface
 {
 
-    /**
-     * getIndicator Application récupère les indicateurs du service en fonction de l'utilisateur
-     */
     public static  function getIndicator($user);
 
     /**
-     * getActionUser Application récupère les actions possibles du service de l'utilisateur
+     * Use to create sub-menu in the LeftMenuBar widget.
+     * 
+     * @param User $user : Not used anymore.
+     * @return Array All data about sub menu links. Used in LeftMenuBar widget.
      */
     public static  function getActionUser($user);
 }

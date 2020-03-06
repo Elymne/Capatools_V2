@@ -10,6 +10,7 @@ return [
     'LaboxyTimeDay' => 7.7,
 
     // ActualSubSidebar Activated.
-    'activeMenu' => 'NONE',
+    'serviceMenuActive' => 'NONE',
+    'subServiceMenuActive' => 'NONE',
 
 ];

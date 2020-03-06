@@ -49,8 +49,6 @@ class DevisSearch extends Devis
     {
         $query = Devis::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [

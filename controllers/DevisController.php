@@ -16,6 +16,7 @@ use app\models\devis\DevisSearch;
 use app\models\devis\Milestone;
 use app\helper\_clazz\DateHelper;
 use app\helper\_enum\SubMenuEnum;
+use app\helper\_enum\UserRoleEnum;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -29,8 +30,10 @@ class DevisController extends Controller implements ServiceInterface
 {
 
     /**
-     * Manage each controller access for users's role.
-     * Check, for more information, the migrate file : m200800_000000_devis_rbac.
+     * Manage each controller access for current users's role.
+     * Check the migrate file : m200800_000000_devis_rbac for more information.
+     * 
+     * @return Array All data with router access permission.
      */
     public function behaviors()
     {
@@ -83,38 +86,44 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Generate tabs in left menu view.
+     * Implemented by : ServiceInterface.
+     * Use to create sub-menu in the LeftMenuBar widget.
+     * 
+     * @param User $user : Not used anymore.
+     * @return Array All data about sub menu links. Used in LeftMenuBar widget.
      */
     public static function getActionUser($user)
     {
         $result = [];
 
         if (
-            Yii::$app->user->can('projectManagerDevis') ||
-            Yii::$app->user->can('operationalManagerDevis') ||
-            Yii::$app->user->can('accountingSupportDevis')
+            Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) ||
+            Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) ||
+            Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)
         ) {
 
             $result = [
-                'priorite' => 3, 'name' => 'Devis',
+                'priorite' => 3,
+                'name' => 'Devis',
+                'serviceMenuActive' => SubMenuEnum::DEVIS,
                 'items' => [
                     [
                         'Priorite' => 1,
                         'url' => 'devis/add-company',
                         'label' => 'Ajouter un client',
-                        'active' => SubMenuEnum::DEVIS_ADD_COMPANY()
+                        'subServiceMenuActive' => SubMenuEnum::DEVIS_ADD_COMPANY
                     ],
                     [
                         'Priorite' => 2,
                         'url' => 'devis/create',
                         'label' => 'Créer un devis',
-                        'active' => SubMenuEnum::DEVIS_CREATE()
+                        'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
                     ],
                     [
                         'Priorite' => 3,
                         'url' => 'devis/index',
                         'label' => 'Liste des devis',
-                        'active' => SubMenuEnum::DEVIS_LIST()
+                        'subServiceMenuActive' => SubMenuEnum::DEVIS_LIST
                     ]
                 ]
             ];
@@ -125,8 +134,10 @@ class DevisController extends Controller implements ServiceInterface
 
 
     /**
-     * Lists all Devis models.
-     * @return mixed
+     * Render view : devis/index
+     * List of all Devis in devis/index view.
+     * 
+     * @return mixed 
      */
     public function actionIndex()
     {
@@ -134,7 +145,8 @@ class DevisController extends Controller implements ServiceInterface
         $searchModel = new DevisSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_LIST();
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider
@@ -142,21 +154,32 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Displays a single Devis model.
+     * Render view : devis/view?id=?
+     * Single Devis in devis/view view get by ID.
+     * 
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException If the model is not found.
      */
     public function actionView($id)
     {
 
-        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_NONE();
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
         return $this->render('view', [
             'model' => $this->findModel($id),
             'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
         ]);
     }
 
+    /**
+     * Render view : devis/pdf?id=?
+     * Generate PDF and show it.
+     * 
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException If the model is not found.
+     */
     public function actionPdf($id)
     {
 
@@ -186,9 +209,7 @@ class DevisController extends Controller implements ServiceInterface
             'filename' => $filename,
             'cssFile' => $css,
 
-            'options' => [
-                // any mpdf options you wish to set
-            ],
+            'options' => [],
             'methods' => [
                 'SetTitle' => 'Fiche de devis - TEST',
                 'SetSubject' => 'Generating PDF files',
@@ -197,39 +218,16 @@ class DevisController extends Controller implements ServiceInterface
             ]
         ]);
 
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
         return $pdf->render();
     }
 
-    /**
-     * Displays a single Devis model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionViewpdf($id)
-    {
 
-        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_NONE();
-
-        $model = $this->findModel($id);
-        if ($model) {
-            $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
-            if (file_exists($filepath)) {
-
-                // Set up PDF headers 
-                header('Content-type: application/pdf');
-                header('Content-Disposition: inline; filename="' . $model->filename . '"');
-                // Render the file
-                readfile($filepath);
-            } else {
-                // PDF doesn't exist so throw an error or something
-            }
-        }
-    }
 
     /**
-     * Creates a new Devis model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Render view : devis/create.
+     * Creates a new devis.
+     * 
      * @return mixed
      */
     public function actionCreate()
@@ -264,12 +262,15 @@ class DevisController extends Controller implements ServiceInterface
                 $model->status_id = DevisStatus::AVANT_PROJET;
 
                 $model->save();
-                Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_LIST();
+
+                Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+                Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
-        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_CREATE();
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_CREATE;
         return $this->render(
             'create',
             [
@@ -281,7 +282,9 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * route : devis/add-client
+     * Render view : devis/add-company.
+     * Create a new Company.
+     * Directed view : devis/view?id=?.
      * 
      * @return mixed
      */
@@ -299,12 +302,15 @@ class DevisController extends Controller implements ServiceInterface
                 $model->description = $model->description;
 
                 $model->save();
-                Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_CREATE();
+
+                Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+                Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_CREATE;
                 return $this->redirect(['create']);
             }
         }
 
-        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_ADD_COMPANY();
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_ADD_COMPANY;
         return $this->render(
             'addCompany',
             [
@@ -314,11 +320,13 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Updates an existing Devis avant contrat devis models.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Render view : devis/update.
+     * Update a devis.
+     * Directed view : devis/index.
+     * 
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException If the model cannot be found.
      */
     public function actionUpdate($id)
     {
@@ -375,7 +383,8 @@ class DevisController extends Controller implements ServiceInterface
                     // Confirm all the changes on db.
                     $transaction->commit();
 
-                    Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_NONE();
+                    Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+                    Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
                     return $this->redirect(['view', 'id' => $model->id]);
                 } catch (Exception $e) {
 
@@ -385,7 +394,8 @@ class DevisController extends Controller implements ServiceInterface
             }
         }
 
-        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_LIST();
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
         return $this->render(
             'update',
             [
@@ -398,8 +408,10 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Deletes an existing Devis model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Render view : 
+     * Deletes an existing devis.
+     * Redirected view : devis/index.
+     * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -408,13 +420,16 @@ class DevisController extends Controller implements ServiceInterface
     {
         $this->findModel($id)->delete();
 
-        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_LIST();
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
         return $this->redirect(['index']);
     }
 
     /**
-     * Change the status of devis, not sure if this route should be used like this. We'll see.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Render view :
+     * Change the status of devis.
+     * Redirected view : devis/index.
+     * 
      * @param integer $id
      * @param integer $status Static value of DevisStatus
      * @return mixed
@@ -433,27 +448,29 @@ class DevisController extends Controller implements ServiceInterface
                 break;
             case 3:
                 if (
-                    Yii::$app->user->can('operationalManagerDevis') ||
-                    Yii::$app->user->can('accountingSupportDevis')
+                    Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) ||
+                    Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)
                 ) $this->setStatus($model, $status);
                 break;
             case 4:
                 if (
-                    Yii::$app->user->can('operationalManagerDevis') ||
-                    Yii::$app->user->can('accountingSupportDevis')
+                    Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) ||
+                    Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)
                 ) $this->setStatus($model, $status);
                 break;
             case 5 || 6:
                 if (
-                    Yii::$app->user->can('operationalManagerDevis') ||
-                    Yii::$app->user->can('accountingSupportDevis')
+                    Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) ||
+                    Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)
                 ) $this->setStatus($model, $status);
                 break;
         }
 
-        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_LIST();
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
         return $this->redirect(['index']);
     }
+
 
     private function setStatus($model, $status)
     {
@@ -466,6 +483,7 @@ class DevisController extends Controller implements ServiceInterface
     /**
      * Finds the Devis model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     * 
      * @param integer $id
      * @return Devis the loaded model
      * @throws NotFoundHttpException if the model cannot be found
@@ -479,9 +497,35 @@ class DevisController extends Controller implements ServiceInterface
         throw new NotFoundHttpException('Le devis n\'existe pas.');
     }
 
-
+    /**
+     * NOT USED.
+     */
     public static function getIndicator($user)
     {
         return  ['label' => 'NbDevis', 'value' => Devis::getGroupbyStatus()];
+    }
+
+    /**
+     * NOT USED.
+     */
+    public function actionViewpdf($id)
+    {
+
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS_NONE;
+
+        $model = $this->findModel($id);
+        if ($model) {
+            $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
+            if (file_exists($filepath)) {
+
+                // Set up PDF headers 
+                header('Content-type: application/pdf');
+                header('Content-Disposition: inline; filename="' . $model->filename . '"');
+                // Render the file
+                readfile($filepath);
+            } else {
+                // PDF doesn't exist so throw an error or something
+            }
+        }
     }
 }

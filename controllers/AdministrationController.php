@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\helper\_enum\SubMenuEnum;
+use app\helper\_enum\UserRoleEnum;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\user\CapaUser;
@@ -11,7 +12,6 @@ use app\models\user\CapaUserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\ActiveDataProvider;
 
 /**
  * AdministrationController implements the CRUD actions for CapaUser model.
@@ -69,17 +69,22 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Used to send to sideNavbar, informations about our router.
+     * Implemented by : ServiceInterface.
+     * Use to create sub-menu in the LeftMenuBar widget.
+     * 
+     * @param User $user : Not used anymore.
+     * @return Array All data about sub menu links. Used in LeftMenuBar widget.
      */
     public static function getActionUser($user)
     {
         $result = [];
 
-        if (Yii::$app->user->can('administrator')) {
+        if (Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR)) {
             $result =
                 [
                     'priorite' => 1,
                     'name' => 'Administration',
+                    'serviceMenuActive' => SubMenuEnum::USER,
                     'items' =>
                     [
                         [
@@ -87,7 +92,14 @@ class AdministrationController extends Controller
                             'url' => 'administration/index',
                             'label' => 'Liste des salariés',
                             'icon' => 'show_chart',
-                            'active' => SubMenuEnum::USER_LIST()
+                            'subServiceMenuActive' => SubMenuEnum::USER_LIST
+                        ],
+                        [
+                            'priorite' => 2,
+                            'url' => 'administration/create',
+                            'label' => 'Ajouter un salarié',
+                            'icon' => 'show_chart',
+                            'subServiceMenuActive' => SubMenuEnum::USER_CREATE
                         ]
                     ]
                 ];
@@ -97,38 +109,48 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Lists all CapaUser models.
-     * @return mixed
+     * Render view : administration/index
+     * List of all User in administration/index view.
+     * 
+     * @return mixed 
      */
     public function actionIndex()
     {
         $searchModel = new CapaUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_LIST;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
+
     /**
-     * Displays a single CapaUser model.
+     * Render view : administration/view?id=?
+     * Single User in administration/view view get by ID.
+     * 
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException If the model is not found.
      */
     public function actionView($id)
     {
         $userRoles = Yii::$app->authManager->getRolesByUser($id);
 
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
         return $this->render('view', [
             'model' => $this->findModel($id), 'userRoles' => $userRoles,
         ]);
     }
 
     /**
-     * Creates a new CapaUser model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Render view : administration/create.
+     * Creates a new user.
+     * 
      * @return mixed
      */
     public function actionCreate()
@@ -151,21 +173,28 @@ class AdministrationController extends Controller
             $model->flag_active = true;
             $model->generatePasswordAndmail();
             if ($model->save()) {
+
+                Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_NONE;
+                Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_CREATE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
         return $this->render('create', [
             'model' => $model,
         ]);
     }
 
     /**
-     * Updates an existing CapaUser model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Render view : administration/update.
+     * Update a user.
+     * Directed view : administration/index.
+     * 
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException If the model cannot be found.
      */
     public function actionUpdate($id)
     {
@@ -200,8 +229,10 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Deletes an existing CapaidCapaUserentity model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Render view : 
+     * Deletes an existing user..
+     * Redirected view : administration/index.
+     * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -222,13 +253,13 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Get list of indicateur.
+     * Finds the User model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * 
+     * @param integer $id
+     * @return Devis the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
      */
-    public static function getIndicator($user)
-    {
-    }
-
-
     protected function findModel($id)
     {
         if (($model = CapaUser::findOne($id)) !== null) {
@@ -236,5 +267,12 @@ class AdministrationController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * NOT USED.
+     */
+    public static function getIndicator($user)
+    {
     }
 }
