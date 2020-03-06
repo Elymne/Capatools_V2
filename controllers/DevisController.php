@@ -29,8 +29,10 @@ class DevisController extends Controller implements ServiceInterface
 {
 
     /**
-     * Manage each controller access for users's role.
-     * Check, for more information, the migrate file : m200800_000000_devis_rbac.
+     * Manage each controller access for current users's role.
+     * Check the migrate file : m200800_000000_devis_rbac for more information.
+     * 
+     * @return Array All data with router access permission.
      */
     public function behaviors()
     {
@@ -83,7 +85,11 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Generate tabs in left menu view.
+     * Implemented by : ServiceInterface.
+     * Use to create sub-menu in the LeftMenuBar widget.
+     * 
+     * @param User $user : Not used anymore.
+     * @return Array All data about sub menu links. Used in LeftMenuBar widget.
      */
     public static function getActionUser($user)
     {
@@ -125,8 +131,10 @@ class DevisController extends Controller implements ServiceInterface
 
 
     /**
-     * Lists all Devis models.
-     * @return mixed
+     * Render view : devis/index
+     * List of all Devis in devis/index view.
+     * 
+     * @return mixed 
      */
     public function actionIndex()
     {
@@ -142,10 +150,12 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Displays a single Devis model.
+     * Render view : devis/view?id=?
+     * Single Devis in devis/view view get by ID.
+     * 
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException If the model is not found.
      */
     public function actionView($id)
     {
@@ -157,6 +167,14 @@ class DevisController extends Controller implements ServiceInterface
         ]);
     }
 
+    /**
+     * Render view : devis/pdf?id=?
+     * Generate PDF and show it.
+     * 
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException If the model is not found.
+     */
     public function actionPdf($id)
     {
 
@@ -186,9 +204,7 @@ class DevisController extends Controller implements ServiceInterface
             'filename' => $filename,
             'cssFile' => $css,
 
-            'options' => [
-                // any mpdf options you wish to set
-            ],
+            'options' => [],
             'methods' => [
                 'SetTitle' => 'Fiche de devis - TEST',
                 'SetSubject' => 'Generating PDF files',
@@ -200,36 +216,12 @@ class DevisController extends Controller implements ServiceInterface
         return $pdf->render();
     }
 
-    /**
-     * Displays a single Devis model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionViewpdf($id)
-    {
 
-        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_NONE();
-
-        $model = $this->findModel($id);
-        if ($model) {
-            $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
-            if (file_exists($filepath)) {
-
-                // Set up PDF headers 
-                header('Content-type: application/pdf');
-                header('Content-Disposition: inline; filename="' . $model->filename . '"');
-                // Render the file
-                readfile($filepath);
-            } else {
-                // PDF doesn't exist so throw an error or something
-            }
-        }
-    }
 
     /**
-     * Creates a new Devis model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Render view : devis/create.
+     * Creates a new devis.
+     * 
      * @return mixed
      */
     public function actionCreate()
@@ -281,7 +273,9 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * route : devis/add-client
+     * Render view : devis/add-company.
+     * Create a new Company.
+     * Directed view : devis/view?id=?.
      * 
      * @return mixed
      */
@@ -314,11 +308,13 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Updates an existing Devis avant contrat devis models.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Render view : devis/update.
+     * Update a devis.
+     * Directed view : devis/index.
+     * 
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException If the model cannot be found.
      */
     public function actionUpdate($id)
     {
@@ -398,8 +394,10 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Deletes an existing Devis model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Render view : 
+     * Deletes an existing devis.
+     * Redirected view : devis/index.
+     * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -413,8 +411,10 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Change the status of devis, not sure if this route should be used like this. We'll see.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Render view :
+     * Change the status of devis.
+     * Redirected view : devis/index.
+     * 
      * @param integer $id
      * @param integer $status Static value of DevisStatus
      * @return mixed
@@ -455,6 +455,7 @@ class DevisController extends Controller implements ServiceInterface
         return $this->redirect(['index']);
     }
 
+
     private function setStatus($model, $status)
     {
         if ($model) {
@@ -466,6 +467,7 @@ class DevisController extends Controller implements ServiceInterface
     /**
      * Finds the Devis model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     * 
      * @param integer $id
      * @return Devis the loaded model
      * @throws NotFoundHttpException if the model cannot be found
@@ -479,9 +481,35 @@ class DevisController extends Controller implements ServiceInterface
         throw new NotFoundHttpException('Le devis n\'existe pas.');
     }
 
-
+    /**
+     * NOT USED.
+     */
     public static function getIndicator($user)
     {
         return  ['label' => 'NbDevis', 'value' => Devis::getGroupbyStatus()];
+    }
+
+    /**
+     * NOT USED.
+     */
+    public function actionViewpdf($id)
+    {
+
+        Yii::$app->params['activeMenu'] = SubMenuEnum::DEVIS_NONE();
+
+        $model = $this->findModel($id);
+        if ($model) {
+            $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
+            if (file_exists($filepath)) {
+
+                // Set up PDF headers 
+                header('Content-type: application/pdf');
+                header('Content-Disposition: inline; filename="' . $model->filename . '"');
+                // Render the file
+                readfile($filepath);
+            } else {
+                // PDF doesn't exist so throw an error or something
+            }
+        }
     }
 }
