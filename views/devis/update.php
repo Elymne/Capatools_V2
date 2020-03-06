@@ -61,87 +61,94 @@ AppAsset::register($this);
                             ->label("Durée de la prestation (j)")
                         ?>
 
+                    </div>
+                </div>
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4><i class="glyphicon glyphicon-envelope"></i> Jalons</h4>
-                            </div>
-                            <div class="panel-body">
+                <div class="card">
 
-                                <?php DynamicFormWidget::begin([
-                                    'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-                                    'widgetBody' => '.container-items', // required: css class selector
-                                    'widgetItem' => '.item', // required: css class
-                                    'limit' => 4, // the maximum times, an element can be cloned (default 999)
-                                    'min' => 1, // 0 or 1 (default 1)
-                                    'insertButton' => '.add-item', // css class
-                                    'deleteButton' => '.remove-item', // css class
-                                    'model' => $milestones[0],
-                                    'formId' => 'dynamic-form',
-                                    'formFields' => [
-                                        'id',
-                                        'prix_jalon',
-                                        'price',
-                                        'delivery_date',
-                                        'comments'
-                                    ],
-                                ]); ?>
+                    <div class="card-content">
+                        <span>Jalons</span>
+                    </div>
 
-                                <div class="container-items">
-                                    <!-- widgetContainer -->
-                                    <?php foreach ($milestones as $i => $milestone) : ?>
-                                        <div class="item panel panel-default">
-                                            <!-- widgetBody -->
-                                            <div class="panel-heading">
-                                                <h3 class="panel-title pull-left">Jalon </h3>
-                                                <div class="pull-right">
-                                                    <button type="button" class="add-item waves-effect waves-light btn blue"><i class="glyphicon glyphicon-plus"></i></button>
-                                                    <button type="button" class="remove-item waves-effect waves-light btn blue"><i class="glyphicon glyphicon-minus"></i></button>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                            <div class="panel-body">
-                                                <?php
-                                                // necessary for update action.
-                                                if (!$milestone->isNewRecord) {
-                                                    echo Html::activeHiddenInput($milestone, "[{$i}]id");
-                                                }
-                                                ?>
+                    <div class="card-action">
 
-                                                <div class="row">
-                                                    <div class="col-sm-4">
-                                                        <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Label') ?>
-                                                        <?= $form->field($milestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Prix') ?>
-                                                        <?= $form->field($milestone, "[{$i}]delivery_date")->widget(DatePicker::classname(), ['dateFormat' => 'dd-MM-yyyy', 'options' => ['class' => 'form-control picker', 'autocomplete' => 'off']])->label('Date') ?>
-                                                        <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaires') ?>
-                                                    </div>
 
-                                                </div><!-- .row -->
-                                            </div>
+                        <?php DynamicFormWidget::begin([
+                            'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                            'widgetBody' => '.container-items', // required: css class selector
+                            'widgetItem' => '.item', // required: css class
+                            'limit' => 4, // the maximum times, an element can be cloned (default 999)
+                            'min' => 1, // 0 or 1 (default 1)
+                            'insertButton' => '.add-item', // css class
+                            'deleteButton' => '.remove-item', // css class
+                            'model' => $milestones[0],
+                            'formId' => 'dynamic-form',
+                            'formFields' => [
+                                'id',
+                                'prix_jalon',
+                                'price',
+                                'delivery_date',
+                                'comments'
+                            ],
+                        ]); ?>
+
+                        <div class="container-items">
+                            <!-- widgetContainer -->
+                            <?php foreach ($milestones as $i => $milestone) : ?>
+                                <div class="item panel panel-default">
+                                    <!-- widgetBody -->
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title pull-left">Jalon </h3>
+                                        <div class="pull-right">
+                                            <button type="button" class="add-item waves-effect waves-light btn blue"><i class="glyphicon glyphicon-plus"></i></button>
+                                            <button type="button" class="remove-item waves-effect waves-light btn blue"><i class="glyphicon glyphicon-minus"></i></button>
                                         </div>
-                                    <?php endforeach; ?>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <?php
+                                        // necessary for update action.
+                                        if (!$milestone->isNewRecord) {
+                                            echo Html::activeHiddenInput($milestone, "[{$i}]id");
+                                        }
+                                        ?>
+
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Label') ?>
+                                                <?= $form->field($milestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Prix') ?>
+                                                <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaires') ?>
+                                            </div>
+
+                                        </div><!-- .row -->
+                                    </div>
                                 </div>
-                                <?php DynamicFormWidget::end(); ?>
-
-                            </div>
-
+                            <?php endforeach; ?>
                         </div>
-                        <?= $form->field($model, 'price')->textInput()->label("Prix de la prestation ") ?>
+                        <?php DynamicFormWidget::end(); ?>
 
-
-                        <div class="form-group">
-                            <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue']) ?>
-                            <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn orange']) ?>
-                        </div>
-
-                        <?php ActiveForm::end(); ?>
                     </div>
 
                 </div>
+                <?= $form->field($model, 'price')->textInput()->label("Prix de la prestation ") ?>
+                <div class="form-group">
+                    <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue']) ?>
+                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn orange']) ?>
+                </div>
+
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
 
+
+
     </div>
+
+</div>
+</div>
+</div>
+
+</div>
 </div>
 
 <?php
@@ -171,3 +178,11 @@ $(function () {
     });
 });
 '); ?>
+
+
+<?php
+
+/**
+ * Keep safe.
+ *  <?= $form->field($milestone, "[{$i}]delivery_date")->widget(DatePicker::classname(), ['dateFormat' => 'dd-MM-yyyy', 'options' => ['class' => 'form-control picker', 'autocomplete' => 'off']])->label('Date') ?>
+ */

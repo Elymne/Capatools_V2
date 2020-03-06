@@ -14,7 +14,8 @@ class Milestone extends ActiveRecord
             ['price', 'required', 'message' => 'Indiquer le prix du jalon.'],
             ['price', 'double', 'min' => 1, 'tooSmall' => 'Le prix du jalon doit être supérieur à 0.', 'message' => 'Le prix du jalon doit être positif.'],
             ['label', 'required', 'message' => 'Un nom de jalon est obligatoire'],
-            ['delivery_date', 'required', 'message' => 'une date de jalon doit être estimée'],
+            // waiting for input.
+            //['delivery_date', 'required', 'message' => 'une date de jalon doit être estimée'],
 
         ];
     }
