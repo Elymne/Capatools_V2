@@ -42,7 +42,11 @@ class m200800_000001_administration_rbac extends Migration
 
         // Project Manager permissions.
         $administratorPermission = $auth->createRole('administrator');
+
+        // Add a new role.
         $auth->add($administratorPermission);
+
+        // Associate permissions to role.
         $auth->addChild($administratorPermission, $index);
         $auth->addChild($administratorPermission, $create);
         $auth->addChild($administratorPermission, $view);
