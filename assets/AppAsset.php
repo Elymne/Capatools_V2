@@ -28,11 +28,10 @@ class AppAsset extends AssetBundle
         'fonts/favicon-32x32.png',
         'https://fonts.googleapis.com/icon?family=Material+Icons',
 
-        // Design Admin Template Html.
-        'css/vendors.min.css',
-        'css/materialize.css',
-        'css/style.css',
-        'css/dashboard.css',
+        'app-assets/vendors/vendors.min.css',
+        'app-assets/css/themes/vertical-dark-menu-template/materialize.min.css',
+        'app-assets/css/themes/vertical-dark-menu-template/style.min.css',
+        'app-assets/css/pages/dashboard.min.css',
         'css/custom.css',
 
         // Timeline item css.
@@ -43,16 +42,11 @@ class AppAsset extends AssetBundle
     public $js = [
 
         // JS Admin Template Html.
-        'js/vendors.min.js',
-        'js/plugins.js',
-        'js/search.js',
-        'js/custom-script.js',
+        'app-assets/js/vendors.min.js',
+        'app-assets/js/plugins.min.js',
+        'app-assets/js/search.min.js',
+        'app-assets/js/custom/custom-script.js',
 
-        // Materialize js.
-        //'js/materialize.min.custom.js',
-
-        // Js file.
-        //'js/capatools.js'
     ];
 
     public $depends = [

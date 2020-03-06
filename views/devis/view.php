@@ -45,6 +45,12 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a('Valider <i class="material-icons right">check</i>', ['index'], ['class' => 'waves-effect waves-light btn green']) ?>
                     <?php endif; ?>
 
+                    <?php if (Yii::$app->user->can('operationalManagerDevis') || Yii::$app->user->can('accountingSupportDevis')) : ?>
+                        <?= Html::a('Supprimer <i class="material-icons right">delete</i>', ['delete', 'id' => $model->id], ['class' => 'waves-effect waves-light btn red']) ?>
+                    <?php endif; ?>
+
+                    <?= Html::a('Générer un pdf <i class="material-icons right">build</i>', ['pdf', 'id' => $model->id], ['class' => 'waves-effect purple waves-light btn']) ?>
+
                 </div>
             </div>
 
@@ -258,6 +264,8 @@ function createDataTable($model)
  */
 function createMilestonesTable($milestones)
 {
+
+    // Utiliser <<<HTML HTML; PLEEEASE
 
     if (empty($milestones)) {
         return <<<HTML

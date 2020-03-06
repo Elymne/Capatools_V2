@@ -24,56 +24,84 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="card">
 
                 <div class="card-content">
-                    <p>
-                        <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'btn waves-effect waves-light']) ?>
-                        <?= Html::a('Supprimer <i class="material-icons right">delete</i> ', ['delete', 'id' => $model->id], [
-                            'class' => 'btn waves-effect waves-light',
-                            'data' => [
-                                'confirm' => 'Etes vous sûr de vouloir supprimer ce salarié ?',
-                                'method' => 'post',
-                            ],
-                        ]) ?>
-                    </p>
+                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn blue']) ?>
+                    <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
+                    <?= Html::a('Supprimer <i class="material-icons right">delete</i> ', ['delete', 'id' => $model->id], [
+                        'class' => 'waves-effect waves-light btn red',
+                        'data' => [
+                            'confirm' => 'Etes vous sûr de vouloir supprimer ce salarié ?',
+                            'method' => 'post',
+                        ],
+                    ]) ?>
                 </div>
 
                 <div class="card-content">
                     <?= DetailView::widget([
                         'model' => $model,
+                        'options' => [
+                            'class' => ['highlight']
+                        ],
                         'attributes' => [
-                            [                      // the owner name of the model
+                            [
                                 'label' => 'Nom et prénom',
                                 'attribute' => 'username',
                             ],
                             'email:email',
-                            [                      // the owner name of the model
+                            [
                                 'label' => 'Nom de la cellule',
                                 'attribute' => 'cellule.name',
                             ],
                         ],
                     ]) ?>
 
-                    <?=
+                    <br /><br /><br />
 
-                        GridView::widget([
-                            'dataProvider' => $rightProvider,
-                            'columns' => [
-                                [
-                                    'label' => 'Service',
-                                    'attribute' => 'service',
-                                ],
-                                [
+                    <?php echo createRolesTable($userRoles); ?>
 
-                                    'label' => 'Statut',
-                                    'attribute' => 'role',
-                                ],
-                            ]
-                        ]);
-                    ?>
                 </div>
+
             </div>
-
         </div>
-    </div>
 
+    </div>
 </div>
-</div>
+
+<?php
+
+function createRolesTable($userRoles)
+{
+
+    $head = <<<HTML
+
+        <table class="highlight">
+            <tbody>
+                <tr>
+                    <td class='header'>Rôles</td>
+                    <td class='header'>Description</td>
+                </tr>
+
+            
+    HTML;
+
+    $body = '';
+
+    foreach ($userRoles as $userRole) {
+
+        $roleName = $userRole->name;
+        $roleDescription = $userRole->description;
+
+        $body = $body . <<<HTML
+            <tr>
+                <td>${roleName}</td>
+                <td>${roleDescription}</td>
+            </tr>
+        HTML;
+    }
+
+    $foot = <<<HTML
+            </tbody>
+        </table>
+    HTML;
+
+    return $head . $body . $foot;
+}

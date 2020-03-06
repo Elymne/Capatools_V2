@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\helper\_enum\SubMenuEnum;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 
@@ -30,22 +29,6 @@ class RHController extends Controller implements ServiceInterface
     }
 
     /**
-     * Get list of the right
-     */
-    public static function GetRight()
-    {
-        return
-            [
-                'name' => 'RH',
-                'right' =>
-                [
-                    'none' => 'none',
-                    'Responsable' => 'Responsable'
-                ]
-            ];
-    }
-
-    /**
      * Get list of indicateur
      */
     public static function getIndicator($user)
@@ -53,30 +36,33 @@ class RHController extends Controller implements ServiceInterface
     }
 
     /**
-     * Get Action for the user
+     * Deleted for now.
+     * 
      */
     public static function getActionUser($user)
     {
-        return [
-            'priorite' => 2,
-            'name' => 'RH',
-            'items' => [
-                [
-                    'priorite' => 2,
-                    'url' => 'RH/nn',
-                    'label' => 'Demande de congé',
-                    'icon' => 'show_chart',
-                    'active' => ''
-                ],
-                [
-                    'priorite' => 1,
-                    'url' => 'RH/ActionName',
-                    'label' => 'Etat des congés',
-                    'icon' => 'show_chart',
-                    'active' => ''
-                ],
-            ]
-        ];
+        if (false) {
+            return [
+                'priorite' => 2,
+                'name' => 'RH',
+                'items' => [
+                    [
+                        'priorite' => 2,
+                        'url' => 'RH/nn',
+                        'label' => 'Demande de congé',
+                        'icon' => 'show_chart',
+                        'active' => ''
+                    ],
+                    [
+                        'priorite' => 1,
+                        'url' => 'RH/ActionName',
+                        'label' => 'Etat des congés',
+                        'icon' => 'show_chart',
+                        'active' => ''
+                    ],
+                ]
+            ];
+        }
     }
 
     /**

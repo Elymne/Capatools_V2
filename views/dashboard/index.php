@@ -21,23 +21,22 @@ foreach ($Ctrls as &$ctrl) {
 
 
 ?>
-<div class="materialize-index">
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+<div class="container">
+    <div class="materialize-index">
+        <div class="row">
 
-        <p class="lead">You are logged.</p>
-        <p class="lead">TODO Show Dashboard</p>
-        <p class="lead">
-            <?php
-            foreach ($IndicateurCtrl as $ind) {
-                echo $ind['value'];
-            }
-            ?>
-        </p>
+            <div class="card">
+                <p class="lead"></p>
+                <p class="lead">
+                    <?php
+                    foreach ($IndicateurCtrl as $ind) {
+                        echo $ind['value'];
+                    }
+                    ?>
+                </p>
+            </div>
+
+        </div>
     </div>
-
-
-
-</div>
 </div>
