@@ -12,6 +12,12 @@ td.header {
     width: 30%;
 }
 
+.card {
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
 #main {
     padding-left: 250px;
     margin-top: -18px;
