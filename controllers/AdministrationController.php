@@ -69,7 +69,11 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Used to send to sideNavbar, informations about our router.
+     * Implemented by : ServiceInterface.
+     * Use to create sub-menu in the LeftMenuBar widget.
+     * 
+     * @param User $user : Not used anymore.
+     * @return Array All data about sub menu links. Used in LeftMenuBar widget.
      */
     public static function getActionUser($user)
     {
@@ -97,8 +101,10 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Lists all CapaUser models.
-     * @return mixed
+     * Render view : administration/index
+     * List of all User in administration/index view.
+     * 
+     * @return mixed 
      */
     public function actionIndex()
     {
@@ -111,11 +117,14 @@ class AdministrationController extends Controller
         ]);
     }
 
+
     /**
-     * Displays a single CapaUser model.
+     * Render view : administration/view?id=?
+     * Single User in administration/view view get by ID.
+     * 
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException If the model is not found.
      */
     public function actionView($id)
     {
@@ -127,8 +136,9 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Creates a new CapaUser model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Render view : administration/create.
+     * Creates a new user.
+     * 
      * @return mixed
      */
     public function actionCreate()
@@ -161,11 +171,13 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Updates an existing CapaUser model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Render view : administration/update.
+     * Update a user.
+     * Directed view : administration/index.
+     * 
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException If the model cannot be found.
      */
     public function actionUpdate($id)
     {
@@ -200,8 +212,10 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Deletes an existing CapaidCapaUserentity model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Render view : 
+     * Deletes an existing user..
+     * Redirected view : administration/index.
+     * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -222,13 +236,13 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Get list of indicateur.
+     * Finds the User model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * 
+     * @param integer $id
+     * @return Devis the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
      */
-    public static function getIndicator($user)
-    {
-    }
-
-
     protected function findModel($id)
     {
         if (($model = CapaUser::findOne($id)) !== null) {
@@ -236,5 +250,12 @@ class AdministrationController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * NOT USED.
+     */
+    public static function getIndicator($user)
+    {
     }
 }
