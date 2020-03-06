@@ -11,16 +11,16 @@ class SubMenuEnum extends Enum
 {
 
     // None.
-    private const NONE = 'NONE';
+    const NONE = 'NONE';
 
     // Sub title.
-    private const USER_NONE = 'USER_NONE';
-    private const USER_CREATE = 'USER_CREATE';
-    private const USER_LIST = 'USER_LIST';
+    const USER_NONE = 'USER_NONE';
+    const USER_CREATE = 'USER_CREATE';
+    const USER_LIST = 'USER_LIST';
 
     // Sub title.
-    private const DEVIS_NONE = 'DEVIS_NONE';
-    private const DEVIS_CREATE = 'DEVIS_CREATE';
-    private const DEVIS_LIST = 'DEVIS_LIST';
-    private const DEVIS_ADD_COMPANY = 'DEVIS_ADD_COMPANY';
+    const DEVIS_NONE = 'DEVIS_NONE';
+    const DEVIS_CREATE = 'DEVIS_CREATE';
+    const DEVIS_LIST = 'DEVIS_LIST';
+    const DEVIS_ADD_COMPANY = 'DEVIS_ADD_COMPANY';
 }

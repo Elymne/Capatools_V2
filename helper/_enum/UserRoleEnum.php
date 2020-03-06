@@ -10,9 +10,9 @@ use MyCLabs\Enum\Enum;
 class UserRoleEnum extends Enum
 {
 
-    private const PROJECT_MANAGER_DEVIS = 'projectManagerDevis';
-    private const OPERATIONAL_MANAGER_DEVIS = 'operationalManagerDevis';
-    private const ACCOUNTING_SUPPORT_DEVIS = 'accountingSupportDevis';
+    const PROJECT_MANAGER_DEVIS = 'projectManagerDevis';
+    const OPERATIONAL_MANAGER_DEVIS = 'operationalManagerDevis';
+    const ACCOUNTING_SUPPORT_DEVIS = 'accountingSupportDevis';
 
-    private const ADMINISTRATOR = 'administrator';
+    const ADMINISTRATOR = 'administrator';
 }

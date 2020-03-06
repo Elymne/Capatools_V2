@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\helper\_enum\SubMenuEnum;
+use app\helper\_enum\UserRoleEnum;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\user\CapaUser;
@@ -79,7 +80,7 @@ class AdministrationController extends Controller
     {
         $result = [];
 
-        if (Yii::$app->user->can('administrator')) {
+        if (Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR)) {
             $result =
                 [
                     'priorite' => 1,
@@ -91,7 +92,7 @@ class AdministrationController extends Controller
                             'url' => 'administration/index',
                             'label' => 'Liste des salariés',
                             'icon' => 'show_chart',
-                            'active' => SubMenuEnum::USER_LIST()
+                            'active' => SubMenuEnum::USER_LIST
                         ]
                     ]
                 ];
