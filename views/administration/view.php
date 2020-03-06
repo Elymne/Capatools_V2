@@ -25,14 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <div class="card-content">
                     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn blue']) ?>
-                    <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
-                    <?= Html::a('Supprimer <i class="material-icons right">delete</i> ', ['delete', 'id' => $model->id], [
-                        'class' => 'waves-effect waves-light btn red',
-                        'data' => [
-                            'confirm' => 'Etes vous sûr de vouloir supprimer ce salarié ?',
-                            'method' => 'post',
-                        ],
-                    ]) ?>
+
                 </div>
 
                 <div class="card-content">
@@ -105,3 +98,17 @@ function createRolesTable($userRoles)
 
     return $head . $body . $foot;
 }
+
+
+/*
+
+<?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
+                    <?= Html::a('Supprimer <i class="material-icons right">delete</i> ', ['delete', 'id' => $model->id], [
+                        'class' => 'waves-effect waves-light btn red',
+                        'data' => [
+                            'confirm' => 'Etes vous sûr de vouloir supprimer ce salarié ?',
+                            'method' => 'post',
+                        ],
+                    ]) ?>
+
+                    */

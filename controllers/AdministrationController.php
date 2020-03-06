@@ -88,13 +88,6 @@ class AdministrationController extends Controller
                             'label' => 'Liste des salariés',
                             'icon' => 'show_chart',
                             'active' => SubMenuEnum::USER_LIST()
-                        ],
-                        [
-                            'priorite' => 2,
-                            'url' => 'administration/userform',
-                            'label' => 'Ajouter un salarié',
-                            'icon' => 'show_chart',
-                            'active' => SubMenuEnum::USER_CREATE()
                         ]
                     ]
                 ];
