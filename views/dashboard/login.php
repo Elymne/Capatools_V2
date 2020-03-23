@@ -6,9 +6,11 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use app\assets\LoginAsset;
 
 $this->title = Yii::$app->name;
 $this->params['breadcrumbs'][] = $this->title;
+LoginAsset::register($this);
 
 ?>
 <div class="row">
@@ -39,8 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
 
-                <div class="card-action blue lighten-5">
-                    <?= Html::a('<b>Mot de passe perdu ?</b>', ['resetpassword'], ['class' => 'red-text']) ?>
+                <div class="lighten-5 lostpassword">
+                    <?= Html::a('Mot de passe perdu ?', ['resetpassword']) ?>
                 </div>
                 <?php ActiveForm::end(); ?>
             </div>

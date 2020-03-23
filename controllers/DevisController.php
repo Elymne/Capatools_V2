@@ -47,7 +47,9 @@ class DevisController extends Controller implements ServiceInterface
                 'rules' => [
                     [
                         'allow' => true,
+                        // Nom de la route, (actionIndex).
                         'actions' => ['index'],
+                        // Nom du rôle que tu as créé.
                         'roles' => ['indexDevis'],
                     ],
                     [
@@ -96,6 +98,11 @@ class DevisController extends Controller implements ServiceInterface
     {
         $result = [];
 
+        // Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) retourne un booléen.
+        // Si il retourne true, c'est que ton user local possède le droit.
+        // UserRoleEnum::PROJECT_MANAGER_DEVIS est une ENUM, il retourne le nom du rôle que j'ai créé dans le dossier migrate.
+        // Ca permet d'avoir un code plus robuste.
+
         if (
             Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) ||
             Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) ||
@@ -105,6 +112,8 @@ class DevisController extends Controller implements ServiceInterface
             $result = [
                 'priorite' => 3,
                 'name' => 'Devis',
+                // serviceMenuActive est à un moyen très peu efficace, je vais essayer de l'oter, j'ai fais ça car je savais pas trop comment gérer
+                // les actives bar du menu à gauche.
                 'serviceMenuActive' => SubMenuEnum::DEVIS,
                 'items' => [
                     [

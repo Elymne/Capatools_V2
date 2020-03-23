@@ -91,7 +91,11 @@ class DashboardController extends Controller
         }
 
         $model->password = '';
+        
+        // layout in /layouts folder (here login.php)
         $this->layout = "login";
+        
+        // render in Controller name folder (here dashboard/login.php)
         return $this->render('login', [
             'model' => $model,
         ]);

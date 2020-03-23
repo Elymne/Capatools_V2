@@ -44,13 +44,20 @@ class m200800_000000_devis_rbac extends Migration
         $updateStatus = $auth->createPermission('updateStatusDevis');
         $auth->add($updateStatus);
 
+        // Pdf permission.
+        $pdf = $auth->createPermission('updateStatusDevis');
+        $auth->add($pdf);
 
         // -- USERS PROLES -- \\
 
 
         // Project Manager permissions.
         $projectManagerPermission = $auth->createRole('projectManagerDevis');
+
+        // Add a new role.
         $auth->add($projectManagerPermission);
+
+        // Associate permissions to role.
         $auth->addChild($projectManagerPermission, $index);
         $auth->addChild($projectManagerPermission, $create);
         $auth->addChild($projectManagerPermission, $view);
@@ -60,7 +67,11 @@ class m200800_000000_devis_rbac extends Migration
 
         // Responsable Operationnel permissions.
         $operationalManager = $auth->createRole('operationalManagerDevis');
+
+        // Add a new role.
         $auth->add($operationalManager);
+
+        // Associate permissions to role.
         $auth->addChild($operationalManager, $index);
         $auth->addChild($operationalManager, $create);
         $auth->addChild($operationalManager, $view);
@@ -71,7 +82,11 @@ class m200800_000000_devis_rbac extends Migration
 
         // Responsable Operationnel permissions.
         $accountingSupport = $auth->createRole('accountingSupportDevis');
+
+        // Add a new role.
         $auth->add($accountingSupport);
+
+        // Associate permissions to role.
         $auth->addChild($accountingSupport, $index);
         $auth->addChild($accountingSupport, $create);
         $auth->addChild($accountingSupport, $view);
@@ -81,12 +96,12 @@ class m200800_000000_devis_rbac extends Migration
         $auth->addChild($accountingSupport, $updateStatus);
 
 
-        // -- USERS ASSIGNEMENT -- \\
+        // -- USERS ASSIGNEMENT (for testing) -- \\
 
 
-        $auth->assign($accountingSupport, 1); // toto
-        $auth->assign($projectManagerPermission, 2); // sacha
-        $auth->assign($operationalManager, 3); // admin
+        $auth->assign($accountingSupport, 1); // id 1 = toto
+        $auth->assign($projectManagerPermission, 2); // id 2 = sacha
+        $auth->assign($operationalManager, 3); // id 3 = admin
 
     }
 

@@ -6,12 +6,12 @@
 use app\widgets\Alert;
 use yii\helpers\Html;
 use app\assets\AppAsset;
+use app\assets\LoginAsset;
 
 AppAsset::register($this);
+LoginAsset::register($this);
 
 $backgroundImage = '' . Yii::$app->homeUrl . '';
-
-var_dump($backgroundImage);
 
 ?>
 <?php $this->beginPage() ?>
