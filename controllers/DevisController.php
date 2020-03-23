@@ -382,6 +382,9 @@ class DevisController extends Controller implements ServiceInterface
                         $milestone->devis_id = $model->id;
                         $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
 
+                        // Set default milestone status (in progress).
+                        $milestone->milestone_status_id = 1;
+
                         // Insert the milestone.
                         $milestone->save(false);
                     }

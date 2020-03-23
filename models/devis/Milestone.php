@@ -29,4 +29,12 @@ class Milestone extends ActiveRecord
     {
         return static::find();
     }
+
+    /**
+     * @return MilestoneStatus The actual milestone status.
+     */
+    public function getMilestoneStatus()
+    {
+        return $this->hasOne(MilestoneStatus::className(), ['id' => 'milestone_status_id']);
+    }
 }

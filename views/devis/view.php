@@ -257,6 +257,7 @@ function createDataTable($model)
 }
 
 /**
+ * TODO utiliser l'option HTML pour gérérer cette partie (plus visible).
  * Create table with all milestones.
  * @param Array<Milestone> $model : List of milestones.
  * 
@@ -297,7 +298,7 @@ function createMilestonesTable($milestones)
         $milestone_label = $milestone->label;
         $milestone_price = $milestone->price;
         $milestone_delivery_date = $milestone->delivery_date;
-        $milestone_status = '';
+        $milestone_status = $milestone->milestoneStatus->label;
 
         $bodyTable = $bodyTable . '
         <tr>

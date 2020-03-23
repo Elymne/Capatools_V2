@@ -22,7 +22,7 @@ class m200100_000003_create_capa_user_table extends Migration
         ]);
 
         $this->addForeignKey(
-            'FK_capa_user_to_cellule',
+            'FK_capa_user-cellule',
             '{{%capa_user}}',
             'cellule_id',
             '{{%cellule}}',
@@ -36,7 +36,7 @@ class m200100_000003_create_capa_user_table extends Migration
     public function safeDown()
     {
         $this->dropForeignKey(
-            'FK_capa_user_to_cellule',
+            'FK_capa_user-cellule',
             '{{%capa_user}}'
         );
 
