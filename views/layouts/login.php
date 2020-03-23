@@ -13,8 +13,6 @@ LoginAsset::register($this);
 
 $backgroundImage = '' . Yii::$app->homeUrl . '';
 
-var_dump($backgroundImage);
-
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
