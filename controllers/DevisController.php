@@ -492,6 +492,18 @@ class DevisController extends Controller implements ServiceInterface
         }
     }
 
+    public function setMilestoneStatus($id, $status)
+    {
+
+        if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+            Milestone::setStatusById($id, $status);
+        }
+
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
+        return $this->redirect(['index']);
+    }
+
     /**
      * Finds the Devis model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

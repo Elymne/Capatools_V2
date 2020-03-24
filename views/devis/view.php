@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use app\models\devis\DevisStatus;
+use app\models\devis\Milestone;
+use app\models\devis\MilestoneStatus;
 use app\widgets\TopTitle;
 
 /* @var $this yii\web\View */
@@ -38,7 +40,9 @@ $indexStatus = getIndexStatus($model);
             <div class="card">
 
                 <div class="card-content">
+                    <!-- Actions on devis -->
                     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn blue']) ?>
+
                     <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
 
                     <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('projectManagerDevis')) : ?>
@@ -266,7 +270,6 @@ function createDataTable($model)
 function createMilestonesTable($milestones)
 {
 
-    // Utiliser <<<HTML HTML; PLEEEASE
 
     if (empty($milestones)) {
         return <<<HTML
@@ -274,22 +277,23 @@ function createMilestonesTable($milestones)
         HTML;
     }
 
-    $headerTable = '
-    <table class="highlight">
-        <tbody>
-            <tr class="group">
-                <td class="header">Nom</td>
-                <td class="header">Prix</td>
-                <td class="header">Date</td>
-                <td class="header">Status</td>
-            </tr>';
+    $headerTable = <<<HTML
+        <table class="highlight">
+            <tbody>
+                <tr class="group">
+                    <td class="header">Nom</td>
+                    <td class="header">Prix</td>
+                    <td class="header">Date</td>
+                    <td class="header">Status</td>
+                    <td class="header">Mis à jour Status</td>
+                </tr>
+    HTML;
 
-    $footerTable = '
-            </tr>
-        </tbody>
-    </table>';
-
-
+    $footerTable = <<<HTML
+                </tr>
+            </tbody>
+        </table>
+    HTML;
 
     $bodyTable = '';
 
@@ -300,14 +304,34 @@ function createMilestonesTable($milestones)
         $milestone_delivery_date = $milestone->delivery_date;
         $milestone_status = $milestone->milestoneStatus->label;
 
-        $bodyTable = $bodyTable . '
-        <tr>
-            <td>' . $milestone_label . '</td>
-            <td>' . $milestone_price . '</td>
-            <td>' . $milestone_delivery_date . '</td>
-            <td>' . $milestone_status . '</td>
-        </tr>';
+        $bodyTable = $bodyTable . <<<HTML
+            <tr>
+                <td>${milestone_label}</td>
+                <td>${milestone_price}</td>
+                <td>${milestone_delivery_date}</td>
+                <td>${milestone_status}</td>
+            HTML . updateStatus(10) . <<<HTML
+            </tr>   
+        HTML;
     }
 
     return $headerTable . $bodyTable . $footerTable;
+}
+
+function updateStatus($status)
+{
+    $row = '';
+
+    switch ($status) {
+        case MilestoneStatus::ENCOURS:
+            $row = <<<HTML
+                <td><a>OK</a></td>
+            HTML;
+        default:
+            $row = <<<HTML
+                <td><a>DEFAULT</a></td>
+            HTML;
+    }
+
+    return $row;
 }
