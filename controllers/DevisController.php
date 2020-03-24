@@ -2,8 +2,12 @@
 
 namespace app\controllers;
 
-use yii\filters\AccessControl;
 use Yii;
+use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+
 use app\models\Model;
 use app\models\devis\Devis;
 use app\models\devis\DevisStatus;
@@ -17,9 +21,9 @@ use app\models\devis\Milestone;
 use app\helper\_clazz\DateHelper;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
-use yii\helpers\ArrayHelper;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+
+use app\models\devis\MilestoneStatus;
+
 use Exception;
 use kartik\mpdf\Pdf;
 
@@ -483,7 +487,6 @@ class DevisController extends Controller implements ServiceInterface
         return $this->redirect(['index']);
     }
 
-
     private function setStatus($model, $status)
     {
         if ($model) {
@@ -492,15 +495,20 @@ class DevisController extends Controller implements ServiceInterface
         }
     }
 
-    public function setMilestoneStatus($id, $status)
+    public function actionUpdateMilestoneStatus($id, $status)
     {
 
         if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
-            Milestone::setStatusById($id, $status);
+
+            switch ($status) {
+                case MilestoneStatus::ENCOURS:
+                    Milestone::setStatusById($id, $status);
+
+                case MilestoneStatus::FACTURATIONENCOURS:
+                    Milestone::setStatusById($id, $status);
+            }
         }
 
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
         return $this->redirect(['index']);
     }
 

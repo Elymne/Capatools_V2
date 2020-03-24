@@ -304,13 +304,16 @@ function createMilestonesTable($milestones)
         $milestone_delivery_date = $milestone->delivery_date;
         $milestone_status = $milestone->milestoneStatus->label;
 
+        // Update milestone status.
+        $milestone_update = $milestone->milestoneStatus->id;
+
         $bodyTable = $bodyTable . <<<HTML
             <tr>
                 <td>${milestone_label}</td>
                 <td>${milestone_price}</td>
                 <td>${milestone_delivery_date}</td>
                 <td>${milestone_status}</td>
-            HTML . updateStatus(10) . <<<HTML
+            HTML . updateStatus($milestone->id, $milestone_update) . <<<HTML
             </tr>   
         HTML;
     }
@@ -318,20 +321,23 @@ function createMilestonesTable($milestones)
     return $headerTable . $bodyTable . $footerTable;
 }
 
-function updateStatus($status)
+function updateStatus($id, $status)
 {
     $row = '';
 
-    switch ($status) {
-        case MilestoneStatus::ENCOURS:
-            $row = <<<HTML
-                <td><a>OK</a></td>
-            HTML;
-        default:
-            $row = <<<HTML
-                <td><a>DEFAULT</a></td>
-            HTML;
+    if ($status == MilestoneStatus::ENCOURS) {
+        return <<<HTML
+            <td><a href="update-milestone-status?id=${id}&status=${status}">Passer en status envoyé</a></td>
+        HTML;
     }
 
-    return $row;
+    if ($status == MilestoneStatus::ENCOURS) {
+        return <<<HTML
+            <td><a href="update-milestone-status?id=${id}&status=${status}">Passer en status réglé</a></td>
+        HTML;
+    }
+
+    return <<<HTML
+        <td>ok</td>
+    HTML;
 }
