@@ -23,6 +23,7 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '2Q1MQf8IHT0av7p3aPE_b4mUtwP4yxGh',
+            'baseUrl' => ''
         ],
         // Set cache folder.
         'cache' => [
@@ -66,7 +67,10 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [],
+            'rules' => [
+                '' => 'site/index',
+                '<controller:\w+>/<action:\w+>/' => '<controller>/<action>',
+            ],
         ],
         // ... unknow (write the use here)
         'discoverService' => [
