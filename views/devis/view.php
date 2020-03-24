@@ -1,5 +1,6 @@
 <?php
 
+use app\helper\_enum\UserRoleEnum;
 use yii\helpers\Html;
 use app\models\devis\DevisStatus;
 use app\models\devis\Milestone;
@@ -270,10 +271,18 @@ function createDataTable($model)
 function createMilestonesTable($milestones)
 {
 
+    $statusRowHeader = '';
+    $statusRowBody = '';
 
     if (empty($milestones)) {
         return <<<HTML
             <p> Il n'existe aucun jalon pour ce devis. </p>
+        HTML;
+    }
+
+    if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+        $statusRowHeader = <<<HTML
+            <td class="header">Mis à jour Status</td>
         HTML;
     }
 
@@ -285,7 +294,7 @@ function createMilestonesTable($milestones)
                     <td class="header">Prix</td>
                     <td class="header">Date</td>
                     <td class="header">Status</td>
-                    <td class="header">Mis à jour Status</td>
+                    ${statusRowHeader}
                 </tr>
     HTML;
 
@@ -305,7 +314,10 @@ function createMilestonesTable($milestones)
         $milestone_status = $milestone->milestoneStatus->label;
 
         // Update milestone status.
-        $milestone_update = $milestone->milestoneStatus->id;
+        if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+            $milestone_update = $milestone->milestoneStatus->id;
+            $statusRowBody = updateStatus($milestone->id, $milestone_update);
+        }
 
         $bodyTable = $bodyTable . <<<HTML
             <tr>
@@ -313,7 +325,7 @@ function createMilestonesTable($milestones)
                 <td>${milestone_price}</td>
                 <td>${milestone_delivery_date}</td>
                 <td>${milestone_status}</td>
-            HTML . updateStatus($milestone->id, $milestone_update) . <<<HTML
+                ${statusRowBody}
             </tr>   
         HTML;
     }
@@ -326,7 +338,7 @@ function updateStatus($id, $status)
     $row = '';
 
     if ($status == MilestoneStatus::ENCOURS) {
-        return <<<HTML
+        <<<HTML
             <td><a href="update-milestone-status?id=${id}&status=${status}">Passer en status envoyé</a></td>
         HTML;
     }
