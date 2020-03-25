@@ -19,14 +19,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $stages = [
     1 => 'Avant Contrat',
-    2 => 'Attente validation Opérationnel',
-    3 => 'Attente validation client',
+    2 => 'Validation resp opérationnel',
+    3 => 'Signature client',
     4 => 'Projet en cours',
     5 => 'Projet terminé / annulé'
 ];
 
 $indexStatus = getIndexStatus($model);
-
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
