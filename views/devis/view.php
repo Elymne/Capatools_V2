@@ -10,8 +10,6 @@ use app\widgets\TopTitle;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
-$id = $model->id;
-
 if ($model->id_capa) $this->title = $model->id_capa;
 else $this->title = "Modification d'un devis";
 
@@ -104,7 +102,7 @@ $indexStatus = getIndexStatus($model);
 
                 <div class="card-action white">
 
-                    <?php echo createMilestonesTable($milestones); ?>
+                    <?php echo createMilestonesTable($milestones, $model->id); ?>
 
                 </div>
             </div>
@@ -268,7 +266,7 @@ function createDataTable($model)
  * 
  * @return HTML table.
  */
-function createMilestonesTable($milestones)
+function createMilestonesTable($milestones, $idDevis)
 {
 
     // Used to display or not tab for milestone management.
@@ -321,7 +319,7 @@ function createMilestonesTable($milestones)
         // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone body tab.
         if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
             $milestone_update = $milestone->milestoneStatus->id;
-            $statusRowBody = updateStatus($milestone->id, $milestone_update);
+            $statusRowBody = updateStatus($milestone->id, $milestone_update, $idDevis);
         }
 
         $bodyTable = $bodyTable . <<<HTML
@@ -343,18 +341,18 @@ function createMilestonesTable($milestones)
  * 
  * @return HTML cell of Milestone table.
  */
-function updateStatus($id, $status)
+function updateStatus($id, $status, $idDevis)
 {
 
     if ($status == MilestoneStatus::ENCOURS) {
-        <<<HTML
-            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis =${id}" class="waves-effect purple waves-light btn">Status : ${status}</a></td>
+        return <<<HTML
+            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="waves-effect purple waves-light btn">Mettre à jour</a></td>
         HTML;
     }
 
     if ($status == MilestoneStatus::FACTURATIONENCOURS) {
         return <<<HTML
-            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${id}" class="waves-effect purple waves-light btn">Status : ${status}</a></td>
+            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="waves-effect purple waves-light btn">Mettre à jour</a></td>
         HTML;
     }
 
