@@ -335,22 +335,20 @@ function createMilestonesTable($milestones)
 
 function updateStatus($id, $status)
 {
-    $row = '';
-    $statusUpdated = $status + 1;
 
     if ($status == MilestoneStatus::ENCOURS) {
         <<<HTML
-            <td><a href="update-milestone-status?id=${id}&status=${statusUpdated}">Passer en status envoyé</a></td>
+            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${id}">Status : ${status}</a></td>
         HTML;
     }
 
     if ($status == MilestoneStatus::FACTURATIONENCOURS) {
         return <<<HTML
-            <td><a href="update-milestone-status?id=${id}&status=${statusUpdated}">Passer en status réglé</a></td>
+            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${id}">Status : ${status}</a></td>
         HTML;
     }
 
     return <<<HTML
-        <td>ok</td>
+        <td>Jalon réglé</td>
     HTML;
 }

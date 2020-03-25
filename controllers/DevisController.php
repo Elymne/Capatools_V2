@@ -495,21 +495,21 @@ class DevisController extends Controller implements ServiceInterface
         }
     }
 
-    public function actionUpdateMilestoneStatus($id, $status)
+    public function actionUpdateMilestoneStatus($id, $status, $id_devis)
     {
 
         if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
-
-            switch ($status) {
-                case MilestoneStatus::ENCOURS:
-                    Milestone::setStatusById($id, $status);
-
-                case MilestoneStatus::FACTURATIONENCOURS:
-                    Milestone::setStatusById($id, $status);
+            if ($status == MilestoneStatus::ENCOURS || $status == MilestoneStatus::FACTURATIONENCOURS) {
+                Milestone::setStatusById($id, $status + 1);
             }
         }
 
-        return $this->redirect(['index']);
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        return $this->render('view', [
+            'model' => $this->findModel($id_devis),
+            'milestones' => Milestone::find()->where(['devis_id' => $id_devis])->all()
+        ]);
     }
 
     /**
