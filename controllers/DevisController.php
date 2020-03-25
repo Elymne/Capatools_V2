@@ -121,10 +121,10 @@ class DevisController extends Controller implements ServiceInterface
                 'serviceMenuActive' => SubMenuEnum::DEVIS,
                 'items' => [
                     [
-                        'Priorite' => 1,
-                        'url' => 'devis/add-company',
-                        'label' => 'Ajouter un client',
-                        'subServiceMenuActive' => SubMenuEnum::DEVIS_ADD_COMPANY
+                        'Priorite' => 3,
+                        'url' => 'devis/index',
+                        'label' => 'Liste des devis',
+                        'subServiceMenuActive' => SubMenuEnum::DEVIS_LIST
                     ],
                     [
                         'Priorite' => 2,
@@ -133,10 +133,10 @@ class DevisController extends Controller implements ServiceInterface
                         'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
                     ],
                     [
-                        'Priorite' => 3,
-                        'url' => 'devis/index',
-                        'label' => 'Liste des devis',
-                        'subServiceMenuActive' => SubMenuEnum::DEVIS_LIST
+                        'Priorite' => 1,
+                        'url' => 'devis/add-company',
+                        'label' => 'Ajouter un client',
+                        'subServiceMenuActive' => SubMenuEnum::DEVIS_ADD_COMPANY
                     ]
                 ]
             ];
