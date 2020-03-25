@@ -9,22 +9,18 @@ class m200200_000001_insert_into_delivery_type_table extends Migration
      */
     public function safeUp()
     {
+
         $this->insert('{{%delivery_type}}', [
-            'label' => 'Délégué'
+            'label' => 'Prestation externe'
         ]);
 
         $this->insert('{{%delivery_type}}', [
-            'label' => 'Prestation'
+            'label' => 'Activité délégué'
         ]);
 
         $this->insert('{{%delivery_type}}', [
             'label' => 'Prestation interne'
         ]);
-
-        $this->insert('{{%delivery_type}}', [
-            'label' => 'Projet interne'
-        ]);
-
     }
 
     /**
