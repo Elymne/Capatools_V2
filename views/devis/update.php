@@ -28,11 +28,14 @@ AppAsset::register($this);
 
         <div class="row">
             <div class="col s6 offset-s3">
+
+                <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
+
                 <div class="card">
 
                     <div class="card-content">
 
-                        <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
+
 
                         <?= $form->field($model, 'internal_name')
                             ->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])
@@ -62,6 +65,7 @@ AppAsset::register($this);
                         ?>
 
                     </div>
+
                 </div>
 
                 <div class="card">
@@ -71,7 +75,6 @@ AppAsset::register($this);
                     </div>
 
                     <div class="card-action">
-
 
                         <?php DynamicFormWidget::begin([
                             'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
@@ -114,19 +117,19 @@ AppAsset::register($this);
                                         ?>
 
                                         <div class="row">
-                                            <div class="col-sm-4">
+                                            <div>
                                                 <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Label') ?>
                                                 <?= $form->field($milestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Prix') ?>
                                                 <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaires') ?>
                                             </div>
-
                                         </div><!-- .row -->
+
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                        <?php DynamicFormWidget::end(); ?>
 
+                        <?php DynamicFormWidget::end(); ?>
                     </div>
 
                 </div>
