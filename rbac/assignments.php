@@ -1,7 +1,7 @@
 <?php
 return [
     1 => [
-        'accountingSupportDevis',
+        'projectManagerDevis',
     ],
     2 => [
         'projectManagerDevis',
@@ -10,5 +10,8 @@ return [
     3 => [
         'operationalManagerDevis',
         'administrator',
+    ],
+    4 => [
+        'accountingSupportDevis',
     ],
 ];
