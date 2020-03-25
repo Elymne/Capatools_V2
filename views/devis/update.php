@@ -101,7 +101,7 @@ AppAsset::register($this);
                                         <h3 class="panel-title pull-left">Jalon </h3>
                                         <div class="pull-right">
                                             <button type="button" class="add-item waves-effect waves-light btn blue"><i class="glyphicon glyphicon-plus"></i></button>
-                                            <button type="button" class="remove-item waves-effect waves-light btn blue"><i class="glyphicon glyphicon-minus"></i></button>
+                                            <button type="button" class="remove-item waves-effect waves-light btn red"><i class="glyphicon glyphicon-minus"></i></button>
                                         </div>
                                         <div class="clearfix"></div>
                                     </div>
@@ -140,20 +140,14 @@ AppAsset::register($this);
             </div>
         </div>
 
-
-
     </div>
-
-</div>
-</div>
-</div>
-
-</div>
 </div>
 
 <?php
+
 ///Script js qui permet de réinitiliser le date picker lors de l'ajout d'un jalon
 $this->registerJs(' 
+
 $(function () {
     $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
          $( ".picker" ).each(function() {

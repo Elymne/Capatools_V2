@@ -271,21 +271,25 @@ function createDataTable($model)
 function createMilestonesTable($milestones)
 {
 
+    // Used to display or not tab for milestone management.
     $statusRowHeader = '';
     $statusRowBody = '';
 
+    // When no milestone has been created.
     if (empty($milestones)) {
         return <<<HTML
             <p> Il n'existe aucun jalon pour ce devis. </p>
         HTML;
     }
 
+    // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone header tab.
     if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
         $statusRowHeader = <<<HTML
             <td class="header">Mis à jour Status</td>
         HTML;
     }
 
+    // Create the header of milestone table.
     $headerTable = <<<HTML
         <table class="highlight">
             <tbody>
@@ -298,14 +302,15 @@ function createMilestonesTable($milestones)
                 </tr>
     HTML;
 
+    // Create the footer of milestone table.
     $footerTable = <<<HTML
                 </tr>
             </tbody>
         </table>
     HTML;
 
+    // Create the body of milestone table with data.
     $bodyTable = '';
-
     foreach ($milestones as $milestone) {
 
         $milestone_label = $milestone->label;
@@ -313,7 +318,7 @@ function createMilestonesTable($milestones)
         $milestone_delivery_date = $milestone->delivery_date;
         $milestone_status = $milestone->milestoneStatus->label;
 
-        // Update milestone status.
+        // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone body tab.
         if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
             $milestone_update = $milestone->milestoneStatus->id;
             $statusRowBody = updateStatus($milestone->id, $milestone_update);
@@ -333,18 +338,23 @@ function createMilestonesTable($milestones)
     return $headerTable . $bodyTable . $footerTable;
 }
 
+/**
+ * Used to generate HTML cell of a specific milestone.
+ * 
+ * @return HTML cell of Milestone table.
+ */
 function updateStatus($id, $status)
 {
 
     if ($status == MilestoneStatus::ENCOURS) {
         <<<HTML
-            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${id}">Status : ${status}</a></td>
+            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis =${id}" class="waves-effect purple waves-light btn">Status : ${status}</a></td>
         HTML;
     }
 
     if ($status == MilestoneStatus::FACTURATIONENCOURS) {
         return <<<HTML
-            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${id}">Status : ${status}</a></td>
+            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${id}" class="waves-effect purple waves-light btn">Status : ${status}</a></td>
         HTML;
     }
 
