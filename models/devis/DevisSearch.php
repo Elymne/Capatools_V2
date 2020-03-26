@@ -2,9 +2,11 @@
 
 namespace app\models\devis;
 
+use app\helper\_enum\UserRoleEnum;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\devis\Devis;
+use Yii;
 
 /**
  * DevisSearch represents the model behind the search form of `app\models\devis\Devis`.
@@ -47,7 +49,14 @@ class DevisSearch extends Devis
      */
     public function search($params)
     {
-        $query = Devis::find();
+        // Prepare query.
+        $query = null;
+
+        if (Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+            $query = Devis::find();
+        } else {
+            $query = Devis::getAllByCellule(Yii::$app->user->identity->cellule->id);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

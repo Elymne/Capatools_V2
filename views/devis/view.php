@@ -1,13 +1,14 @@
 <?php
 
+use app\helper\_enum\UserRoleEnum;
 use yii\helpers\Html;
 use app\models\devis\DevisStatus;
+use app\models\devis\Milestone;
+use app\models\devis\MilestoneStatus;
 use app\widgets\TopTitle;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
-
-$id = $model->id;
 
 if ($model->id_capa) $this->title = $model->id_capa;
 else $this->title = "Modification d'un devis";
@@ -18,14 +19,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $stages = [
     1 => 'Avant Contrat',
-    2 => 'Attente validation Opérationnel',
-    3 => 'Attente validation client',
+    2 => 'Validation resp opérationnel',
+    3 => 'Signature client',
     4 => 'Projet en cours',
     5 => 'Projet terminé / annulé'
 ];
 
 $indexStatus = getIndexStatus($model);
-
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -38,7 +38,9 @@ $indexStatus = getIndexStatus($model);
             <div class="card">
 
                 <div class="card-content">
+                    <!-- Actions on devis -->
                     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn blue']) ?>
+
                     <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
 
                     <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('projectManagerDevis')) : ?>
@@ -99,7 +101,7 @@ $indexStatus = getIndexStatus($model);
 
                 <div class="card-action white">
 
-                    <?php echo createMilestonesTable($milestones); ?>
+                    <?php echo createMilestonesTable($milestones, $model->id); ?>
 
                 </div>
             </div>
@@ -257,56 +259,103 @@ function createDataTable($model)
 }
 
 /**
+ * TODO utiliser l'option HTML pour gérérer cette partie (plus visible).
  * Create table with all milestones.
  * @param Array<Milestone> $model : List of milestones.
  * 
  * @return HTML table.
  */
-function createMilestonesTable($milestones)
+function createMilestonesTable($milestones, $idDevis)
 {
 
-    // Utiliser <<<HTML HTML; PLEEEASE
+    // Used to display or not tab for milestone management.
+    $statusRowHeader = '';
+    $statusRowBody = '';
 
+    // When no milestone has been created.
     if (empty($milestones)) {
         return <<<HTML
             <p> Il n'existe aucun jalon pour ce devis. </p>
         HTML;
     }
 
-    $headerTable = '
-    <table class="highlight">
-        <tbody>
-            <tr class="group">
-                <td class="header">Nom</td>
-                <td class="header">Prix</td>
-                <td class="header">Date</td>
-                <td class="header">Status</td>
-            </tr>';
+    // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone header tab.
+    if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+        $statusRowHeader = <<<HTML
+            <td class="header">Mis à jour Status</td>
+        HTML;
+    }
 
-    $footerTable = '
-            </tr>
-        </tbody>
-    </table>';
+    // Create the header of milestone table.
+    $headerTable = <<<HTML
+        <table class="highlight">
+            <tbody>
+                <tr class="group">
+                    <td class="header">Nom</td>
+                    <td class="header">Prix</td>
+                    <td class="header">Date</td>
+                    <td class="header">Status</td>
+                    ${statusRowHeader}
+                </tr>
+    HTML;
 
+    // Create the footer of milestone table.
+    $footerTable = <<<HTML
+                </tr>
+            </tbody>
+        </table>
+    HTML;
 
-
+    // Create the body of milestone table with data.
     $bodyTable = '';
-
     foreach ($milestones as $milestone) {
 
         $milestone_label = $milestone->label;
         $milestone_price = $milestone->price;
         $milestone_delivery_date = $milestone->delivery_date;
-        $milestone_status = '';
+        $milestone_status = $milestone->milestoneStatus->label;
 
-        $bodyTable = $bodyTable . '
-        <tr>
-            <td>' . $milestone_label . '</td>
-            <td>' . $milestone_price . '</td>
-            <td>' . $milestone_delivery_date . '</td>
-            <td>' . $milestone_status . '</td>
-        </tr>';
+        // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone body tab.
+        if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+            $milestone_update = $milestone->milestoneStatus->id;
+            $statusRowBody = updateStatus($milestone->id, $milestone_update, $idDevis);
+        }
+
+        $bodyTable = $bodyTable . <<<HTML
+            <tr>
+                <td>${milestone_label}</td>
+                <td>${milestone_price}</td>
+                <td>${milestone_delivery_date}</td>
+                <td>${milestone_status}</td>
+                ${statusRowBody}
+            </tr>   
+        HTML;
     }
 
     return $headerTable . $bodyTable . $footerTable;
+}
+
+/**
+ * Used to generate HTML cell of a specific milestone.
+ * 
+ * @return HTML cell of Milestone table.
+ */
+function updateStatus($id, $status, $idDevis)
+{
+
+    if ($status == MilestoneStatus::ENCOURS) {
+        return <<<HTML
+            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="waves-effect purple waves-light btn">Mettre à jour</a></td>
+        HTML;
+    }
+
+    if ($status == MilestoneStatus::FACTURATIONENCOURS) {
+        return <<<HTML
+            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="waves-effect purple waves-light btn">Mettre à jour</a></td>
+        HTML;
+    }
+
+    return <<<HTML
+        <td>Jalon réglé</td>
+    HTML;
 }

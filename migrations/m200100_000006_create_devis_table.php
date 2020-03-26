@@ -29,7 +29,7 @@ class m200100_000006_create_devis_table extends Migration
         ]);
 
         $this->addForeignKey(
-            'FK_devis_cellule',
+            'FK_devis-cellule',
             '{{%devis}}',
             'cellule_id',
             '{{%cellule}}',
@@ -39,7 +39,7 @@ class m200100_000006_create_devis_table extends Migration
         );
 
         $this->addForeignKey(
-            'FK_devis_company',
+            'FK_devis-company',
             '{{%devis}}',
             'company_id',
             '{{%company}}',
@@ -49,7 +49,7 @@ class m200100_000006_create_devis_table extends Migration
         );
 
         $this->addForeignKey(
-            'FK_devis_capa_user',
+            'FK_devis-capa_user',
             '{{%devis}}',
             'capa_user_id',
             '{{%capa_user}}',
@@ -66,11 +66,11 @@ class m200100_000006_create_devis_table extends Migration
     public function safeDown()
     {
 
-        $this->dropForeignKey('FK_devis_unit', '{{%devis}}');
+        $this->dropForeignKey('FK_devis-cellule', '{{%devis}}');
 
-        $this->dropForeignKey('FK_devis_company', '{{%devis}}');
+        $this->dropForeignKey('FK_devis-company', '{{%devis}}');
 
-        $this->dropForeignKey('FK_devis_capa_user', '{{%devis}}');
+        $this->dropForeignKey('FK_devis-capa_user', '{{%devis}}');
 
         $this->dropTable('{{%devis}}');
     }

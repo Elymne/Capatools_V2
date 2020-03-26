@@ -29,4 +29,24 @@ class Milestone extends ActiveRecord
     {
         return static::find();
     }
+
+    public static function getOneById($id)
+    {
+        return static::find()->where(['id' => $id])->one();
+    }
+
+    public static function setStatusById($id, $status)
+    {
+        $milestone = static::find()->where(['id' => $id])->one();
+        $milestone->milestone_status_id = $status;
+        $milestone->save();
+    }
+
+
+    // Milestone Status Constraint.
+
+    public function getMilestoneStatus()
+    {
+        return $this->hasOne(MilestoneStatus::className(), ['id' => 'milestone_status_id']);
+    }
 }

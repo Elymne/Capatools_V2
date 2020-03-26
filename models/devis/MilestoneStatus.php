@@ -13,8 +13,10 @@ class MilestoneStatus extends ActiveRecord
     }
 
     const ENCOURS = 1;
-    const FACTURATIONENCOUR  = 2;
+    const FACTURATIONENCOURS  = 2;
     const FACTURE = 3;
+
+    // Not used.
     const ATTENTE_VALIDATION_OP = 4;
     const ATTENTE_VALIDATION_CL = 5;
 

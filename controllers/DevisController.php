@@ -2,8 +2,12 @@
 
 namespace app\controllers;
 
-use yii\filters\AccessControl;
 use Yii;
+use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+
 use app\models\Model;
 use app\models\devis\Devis;
 use app\models\devis\DevisStatus;
@@ -17,9 +21,9 @@ use app\models\devis\Milestone;
 use app\helper\_clazz\DateHelper;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
-use yii\helpers\ArrayHelper;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+
+use app\models\devis\MilestoneStatus;
+
 use Exception;
 use kartik\mpdf\Pdf;
 
@@ -117,10 +121,10 @@ class DevisController extends Controller implements ServiceInterface
                 'serviceMenuActive' => SubMenuEnum::DEVIS,
                 'items' => [
                     [
-                        'Priorite' => 1,
-                        'url' => 'devis/add-company',
-                        'label' => 'Ajouter un client',
-                        'subServiceMenuActive' => SubMenuEnum::DEVIS_ADD_COMPANY
+                        'Priorite' => 3,
+                        'url' => 'devis/index',
+                        'label' => 'Liste des devis',
+                        'subServiceMenuActive' => SubMenuEnum::DEVIS_LIST
                     ],
                     [
                         'Priorite' => 2,
@@ -129,10 +133,10 @@ class DevisController extends Controller implements ServiceInterface
                         'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
                     ],
                     [
-                        'Priorite' => 3,
-                        'url' => 'devis/index',
-                        'label' => 'Liste des devis',
-                        'subServiceMenuActive' => SubMenuEnum::DEVIS_LIST
+                        'Priorite' => 1,
+                        'url' => 'devis/add-company',
+                        'label' => 'Ajouter un client',
+                        'subServiceMenuActive' => SubMenuEnum::DEVIS_ADD_COMPANY
                     ]
                 ]
             ];
@@ -382,6 +386,9 @@ class DevisController extends Controller implements ServiceInterface
                         $milestone->devis_id = $model->id;
                         $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
 
+                        // Set default milestone status (in progress).
+                        $milestone->milestone_status_id = 1;
+
                         // Insert the milestone.
                         $milestone->save(false);
                     }
@@ -480,13 +487,29 @@ class DevisController extends Controller implements ServiceInterface
         return $this->redirect(['index']);
     }
 
-
     private function setStatus($model, $status)
     {
         if ($model) {
             $model->status_id = $status;
             $model->save();
         }
+    }
+
+    public function actionUpdateMilestoneStatus($id, $status, $id_devis)
+    {
+
+        if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+            if ($status == MilestoneStatus::ENCOURS || $status == MilestoneStatus::FACTURATIONENCOURS) {
+                Milestone::setStatusById($id, $status + 1);
+            }
+        }
+
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        return $this->render('view', [
+            'model' => $this->findModel($id_devis),
+            'milestones' => Milestone::find()->where(['devis_id' => $id_devis])->all()
+        ]);
     }
 
     /**

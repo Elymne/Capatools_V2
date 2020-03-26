@@ -210,6 +210,7 @@ function createDataTable($model)
 }
 
 /**
+ * TODO utiliser l'option HTML pour gérérer cette partie (plus visible).
  * Create table with all milestones.
  * @param Array<Milestone> $model : List of milestones.
  * 
@@ -226,22 +227,22 @@ function createMilestonesTable($milestones)
         HTML;
     }
 
-    $headerTable = '
-    <table class="highlight">
-        <tbody>
-            <tr class="group">
-                <td class="header">Nom</td>
-                <td class="header">Prix</td>
-                <td class="header">Date</td>
-                <td class="header">Status</td>
-            </tr>';
+    $headerTable = <<<HTML
+        <table class="highlight">
+            <tbody>
+                <tr class="group">
+                    <td class="header">Nom</td>
+                    <td class="header">Prix</td>
+                    <td class="header">Date</td>
+                    <td class="header">Status</td>
+                </tr>
+    HTML;
 
-    $footerTable = '
-            </tr>
-        </tbody>
-    </table>';
-
-
+    $footerTable = <<<HTML
+                </tr>
+            </tbody>
+        </table>
+    HTML;
 
     $bodyTable = '';
 
@@ -250,16 +251,21 @@ function createMilestonesTable($milestones)
         $milestone_label = $milestone->label;
         $milestone_price = $milestone->price;
         $milestone_delivery_date = $milestone->delivery_date;
-        $milestone_status = '';
+        $milestone_status = $milestone->milestoneStatus->label;
 
-        $bodyTable = $bodyTable . '
-        <tr>
-            <td>' . $milestone_label . '</td>
-            <td>' . $milestone_price . '</td>
-            <td>' . $milestone_delivery_date . '</td>
-            <td>' . $milestone_status . '</td>
-        </tr>';
+        $bodyTable = $bodyTable . <<<HTML
+            <tr>
+                <td>${milestone_label}</td>
+                <td>${milestone_price}</td>
+                <td>${milestone_delivery_date}</td>
+                <td>${milestone_status}</td>
+            </tr>   
+        HTML;
     }
 
     return $headerTable . $bodyTable . $footerTable;
+}
+
+function statusUpdate()
+{
 }

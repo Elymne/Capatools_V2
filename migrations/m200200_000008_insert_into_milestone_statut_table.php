@@ -24,7 +24,6 @@ class m200200_000008_insert_into_milestone_statut_table extends Migration
             'id' => '3',
             'label' => 'Facturé'
         ]);
-
     }
 
     /**

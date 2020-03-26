@@ -45,7 +45,10 @@ AppAsset::register($this);
                             'clientOptions' => [
                                 'allowClear' => true
                             ],
-                        ]);
+                        ])->label(
+                            "Type de projet",
+                            ['for' => 'delivery_type_id']
+                        );
                         ?>
 
                         <?= $form->field($model, 'company_name')

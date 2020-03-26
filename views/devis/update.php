@@ -28,11 +28,14 @@ AppAsset::register($this);
 
         <div class="row">
             <div class="col s6 offset-s3">
+
+                <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
+
                 <div class="card">
 
                     <div class="card-content">
 
-                        <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
+
 
                         <?= $form->field($model, 'internal_name')
                             ->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])
@@ -62,6 +65,7 @@ AppAsset::register($this);
                         ?>
 
                     </div>
+
                 </div>
 
                 <div class="card">
@@ -71,7 +75,6 @@ AppAsset::register($this);
                     </div>
 
                     <div class="card-action">
-
 
                         <?php DynamicFormWidget::begin([
                             'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
@@ -101,7 +104,7 @@ AppAsset::register($this);
                                         <h3 class="panel-title pull-left">Jalon </h3>
                                         <div class="pull-right">
                                             <button type="button" class="add-item waves-effect waves-light btn blue"><i class="glyphicon glyphicon-plus"></i></button>
-                                            <button type="button" class="remove-item waves-effect waves-light btn blue"><i class="glyphicon glyphicon-minus"></i></button>
+                                            <button type="button" class="remove-item waves-effect waves-light btn red"><i class="glyphicon glyphicon-minus"></i></button>
                                         </div>
                                         <div class="clearfix"></div>
                                     </div>
@@ -114,19 +117,19 @@ AppAsset::register($this);
                                         ?>
 
                                         <div class="row">
-                                            <div class="col-sm-4">
+                                            <div>
                                                 <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Label') ?>
-                                                <?= $form->field($milestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Prix') ?>
-                                                <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaires') ?>
+                                                <?= $form->field($milestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Prix HT') ?>
+                                                <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaire') ?>
                                             </div>
-
                                         </div><!-- .row -->
+
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                        <?php DynamicFormWidget::end(); ?>
 
+                        <?php DynamicFormWidget::end(); ?>
                     </div>
 
                 </div>
@@ -140,20 +143,14 @@ AppAsset::register($this);
             </div>
         </div>
 
-
-
     </div>
-
-</div>
-</div>
-</div>
-
-</div>
 </div>
 
 <?php
+
 ///Script js qui permet de réinitiliser le date picker lors de l'ajout d'un jalon
 $this->registerJs(' 
+
 $(function () {
     $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
          $( ".picker" ).each(function() {

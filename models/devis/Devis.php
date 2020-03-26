@@ -21,6 +21,53 @@ class Devis extends ActiveRecord
         return static::find();
     }
 
+    public static function getOneById($id)
+    {
+        return static::find()->where(['id' => $id])->one();
+    }
+
+    public static function getOneByName($id_capa)
+    {
+        return static::find()->where(['id_capa' => $id_capa])->one();
+    }
+
+    public static function getAllByCellule($idCellule)
+    {
+        return static::find()->where(['devis.cellule_id' => $idCellule]);
+    }
+
+    // Set the Object insertion from sql table relation.
+
+    public function getCellule()
+    {
+        return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
+    }
+
+    public function getCompany()
+    {
+        return $this->hasOne(Company::className(), ['id' => 'company_id']);
+    }
+
+    public function getDevis_status()
+    {
+        return $this->hasOne(DevisStatus::className(), ['id' => 'status_id']);
+    }
+
+    public function getCapa_user()
+    {
+        return $this->hasOne(CapaUser::className(), ['id' => 'capa_user_id']);
+    }
+
+    public function getDelivery_type()
+    {
+        return $this->hasOne(DeliveryType::className(), ['id' => 'delivery_type_id']);
+    }
+
+    public function getMilestones()
+    {
+        return $this->hasMany(Milestone::className(), ['devis_id' => 'id']);
+    }
+
     /**
      * Todo Déplacer cette fonction sur une section ui et non métier.
      */
@@ -90,48 +137,5 @@ class Devis extends ActiveRecord
 
         ]);
         return $string;
-    }
-
-    public static function getOneById($id)
-    {
-        return static::find()->where(['id' => $id])->one();
-    }
-
-    public static function getOneByName($id_capa)
-    {
-        return static::find()->where(['id_capa' => $id_capa])->one();
-    }
-
-
-    // Set the Object insertion from sql table relation.
-
-    public function getCellule()
-    {
-        return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
-    }
-
-    public function getCompany()
-    {
-        return $this->hasOne(Company::className(), ['id' => 'company_id']);
-    }
-
-    public function getDevis_status()
-    {
-        return $this->hasOne(DevisStatus::className(), ['id' => 'status_id']);
-    }
-
-    public function getCapa_user()
-    {
-        return $this->hasOne(CapaUser::className(), ['id' => 'capa_user_id']);
-    }
-
-    public function getDelivery_type()
-    {
-        return $this->hasOne(DeliveryType::className(), ['id' => 'delivery_type_id']);
-    }
-
-    public function getMilestones()
-    {
-        return $this->hasMany(Milestone::className(), ['devis_id' => 'id']);
     }
 }

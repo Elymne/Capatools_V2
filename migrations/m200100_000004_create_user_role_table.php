@@ -21,7 +21,7 @@ class m200100_000004_create_user_role_table extends Migration
         $this->execute('ALTER TABLE cellule AUTO_INCREMENT = 1');
 
         $this->addForeignKey(
-            'FK_capa_user_to_user_role',
+            'FK_capa_user-user_role',
             '{{%user_role}}',
             'user_id',
             '{{%capa_user}}',
@@ -36,7 +36,7 @@ class m200100_000004_create_user_role_table extends Migration
     {
 
         $this->dropForeignKey(
-            'FK_capa_user_to_user_role',
+            'FK_capa_user-user_role',
             '{{%user_role}}'
         );
 
