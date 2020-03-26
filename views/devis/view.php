@@ -44,14 +44,26 @@ $indexStatus = getIndexStatus($model);
                     <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
 
                     <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
-                        <?= Html::a('Valider <i class="material-icons right">check</i>', ['index'], ['class' => 'waves-effect waves-light btn green']) ?>
+                        <?= Html::a('Passer en validation opérationnelle <i class="material-icons right">check</i>', ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_OP,], ['class' => 'waves-effect waves-light btn green']) ?>
                     <?php endif; ?>
 
                     <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_OP &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
-                        <?= Html::a('Valider <i class="material-icons right">check</i>', ['index'], ['class' => 'waves-effect waves-light btn green']) ?>
+                        <?= Html::a('Valider la signature client <i class="material-icons right">check</i>', ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_CL,], ['class' => 'waves-effect waves-light btn green']) ?>
                     <?php endif; ?>
 
-                    <?php if (Yii::$app->user->can('operationalManagerDevis') || Yii::$app->user->can('accountingSupportDevis')) : ?>
+                    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_CL &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
+                        <?= Html::a('Passer en projet en cours <i class="material-icons right">check</i>', ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_EN_COURS,], ['class' => 'waves-effect waves-light btn green']) ?>
+                    <?php endif; ?>
+
+                    <?php if ($model->status_id == DevisStatus::PROJET_EN_COURS &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
+                        <?= Html::a('Passer en projet terminé <i class="material-icons right">check</i>', ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJETTERMINE,], ['class' => 'waves-effect waves-light btn green']) ?>
+                    <?php endif; ?>
+
+                    <?php if (Yii::$app->user->can('operationalManagerDevis') && $model->status_id < DevisStatus::PROJET_ANNULE) : ?>
+                        <?= Html::a('Annuler le projet <i class="material-icons right">delete</i>', ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,], ['class' => 'waves-effect waves-light btn red']) ?>
+                    <?php endif; ?>
+
+                    <?php if ((Yii::$app->user->can('operationalManagerDevis') || Yii::$app->user->can('accountingSupportDevis')) && $model->status_id == DevisStatus::PROJET_ANNULE) : ?>
                         <?= Html::a('Supprimer <i class="material-icons right">delete</i>', ['delete', 'id' => $model->id], ['class' => 'waves-effect waves-light btn red']) ?>
                     <?php endif; ?>
 
@@ -292,7 +304,7 @@ function createMilestonesTable($milestones, $idDevis)
     // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone header tab.
     if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
         $statusRowHeader = <<<HTML
-            <td class="header">Mis à jour Status</td>
+            <td class="header"></td>
         HTML;
     }
 
@@ -355,13 +367,21 @@ function updateStatus($id, $status, $idDevis)
 
     if ($status == MilestoneStatus::ENCOURS) {
         return <<<HTML
-            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="waves-effect purple waves-light btn">Mettre à jour</a></td>
+            <td>
+                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating btn-large waves-effect waves-light blue">
+                    <i class="material-icons right">system_update_alt</i>
+                </a>
+            </td>
         HTML;
     }
 
     if ($status == MilestoneStatus::FACTURATIONENCOURS) {
         return <<<HTML
-            <td><a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="waves-effect purple waves-light btn">Mettre à jour</a></td>
+            <td>
+                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating btn-large waves-effect waves-light blue">
+                    <i class="material-icons right">system_update_alt</i>
+                </a>
+            </td>
         HTML;
     }
 

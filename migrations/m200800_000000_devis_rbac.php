@@ -45,8 +45,12 @@ class m200800_000000_devis_rbac extends Migration
         $auth->add($updateStatus);
 
         // Pdf permission.
-        $pdf = $auth->createPermission('updateStatusDevis');
+        $pdf = $auth->createPermission('pdfDevis');
         $auth->add($pdf);
+
+        // Pdf permission.
+        $updateMilestoneStatus = $auth->createPermission('updateMilestoneStatusDevis');
+        $auth->add($updateMilestoneStatus);
 
         // -- USERS PROLES -- \\
 
@@ -64,6 +68,8 @@ class m200800_000000_devis_rbac extends Migration
         $auth->addChild($projectManagerPermission, $addCompany);
         $auth->addChild($projectManagerPermission, $update);
         $auth->addChild($projectManagerPermission, $updateStatus);
+        $auth->addChild($projectManagerPermission, $pdf);
+        $auth->addChild($projectManagerPermission, $updateMilestoneStatus);
 
         // Responsable Operationnel permissions.
         $operationalManager = $auth->createRole('operationalManagerDevis');
@@ -79,6 +85,8 @@ class m200800_000000_devis_rbac extends Migration
         $auth->addChild($operationalManager, $update);
         $auth->addChild($operationalManager, $delete);
         $auth->addChild($operationalManager, $updateStatus);
+        $auth->addChild($projectManagerPermission, $pdf);
+        $auth->addChild($projectManagerPermission, $updateMilestoneStatus);
 
         // Responsable Operationnel permissions.
         $accountingSupport = $auth->createRole('accountingSupportDevis');
@@ -94,6 +102,8 @@ class m200800_000000_devis_rbac extends Migration
         $auth->addChild($accountingSupport, $update);
         $auth->addChild($accountingSupport, $delete);
         $auth->addChild($accountingSupport, $updateStatus);
+        $auth->addChild($projectManagerPermission, $pdf);
+        $auth->addChild($projectManagerPermission, $updateMilestoneStatus);
 
 
         // -- USERS ASSIGNEMENT (for testing) -- \\
