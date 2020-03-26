@@ -173,6 +173,8 @@ function createDataTable($model)
     $company_description = $model->company->description;
     $company_tva = $model->company->tva;
 
+    $devis_price = $model->price;
+
     $delivery_type = $model->delivery_type->label;
     $delivery_duration = $model->service_duration;
 
@@ -234,6 +236,10 @@ function createDataTable($model)
                 <tr>
                     <td class='header'>Durée de la prestation</td>
                     <td>${delivery_duration}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Prix de la prestation total</td>
+                    <td>${devis_price} €</td>
                 </tr>
 
                  <!-- Laboxy data -->
@@ -324,7 +330,7 @@ function createMilestonesTable($milestones, $idDevis)
         $bodyTable = $bodyTable . <<<HTML
             <tr>
                 <td>${milestone_label}</td>
-                <td>${milestone_price}</td>
+                <td>${milestone_price} €</td>
                 <td>${milestone_delivery_date}</td>
                 <td>${milestone_status}</td>
                 ${statusRowBody}

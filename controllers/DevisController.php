@@ -358,6 +358,9 @@ class DevisController extends Controller implements ServiceInterface
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
 
+        // Setup the total price HT.
+        $max_price = 0;
+
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -389,9 +392,15 @@ class DevisController extends Controller implements ServiceInterface
                         // Set default milestone status (in progress).
                         $milestone->milestone_status_id = 1;
 
+                        // Cumulate the max priceHt.
+                        $max_price = $max_price + $milestone->price;
+
                         // Insert the milestone.
                         $milestone->save(false);
                     }
+
+                    // Set all milestones prices to devis price.
+                    $model->price = $max_price;
 
                     // Save the Devis change.
                     $model->save(false);

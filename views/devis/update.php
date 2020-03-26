@@ -119,7 +119,7 @@ AppAsset::register($this);
                                         <div class="row">
                                             <div>
                                                 <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Label') ?>
-                                                <?= $form->field($milestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Prix HT') ?>
+                                                <?= $form->field($milestone, "[{$i}]price")->textInput(['class' => 'priceHt', 'autocomplete' => 'off', 'maxlength' => true])->label('Prix HT') ?>
                                                 <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaire') ?>
                                             </div>
                                         </div><!-- .row -->
@@ -133,7 +133,6 @@ AppAsset::register($this);
                     </div>
 
                 </div>
-                <?= $form->field($model, 'price')->textInput()->label("Prix de la prestation ") ?>
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue']) ?>
                     <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn orange']) ?>
@@ -152,14 +151,19 @@ AppAsset::register($this);
 $this->registerJs(' 
 
 $(function () {
+
     $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
-         $( ".picker" ).each(function() {
-            $( this ).datepicker({
-            dateFormat: "dd-mm-yy",
-          });
+        $( ".picker" ).each(function() {
+            $( this ).datepicker({ 
+                dateFormat: "dd-mm-yy",
+            });
         });
+
+        var maxPriceHt = $(".priceHt").val();
+        console.log(maxPriceHt);
     });
 });
+
 
 $(function () {
     $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
@@ -182,4 +186,9 @@ $(function () {
 /**
  * Keep safe.
  *  <?= $form->field($milestone, "[{$i}]delivery_date")->widget(DatePicker::classname(), ['dateFormat' => 'dd-MM-yyyy', 'options' => ['class' => 'form-control picker', 'autocomplete' => 'off']])->label('Date') ?>
+ * 
+ * 
+ * 
+ * 
+ * <?= $form->field($model, 'price')->textInput()->label("Prix de la prestation ") ?>
  */
