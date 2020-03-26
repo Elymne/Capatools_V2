@@ -36,7 +36,7 @@ AppAsset::register($this);
 
                         <?= $form->field($model, 'description')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-                            ->label("Description du projet") ?>
+                            ->label("Description du client") ?>
 
                         <br /><br /><br />
 

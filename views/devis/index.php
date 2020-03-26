@@ -4,6 +4,7 @@ use app\helper\_enum\UserRoleEnum;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\devis\DevisSearch */
@@ -66,6 +67,9 @@ function getCollumnArray()
     }
     array_push($result, getCompanyArray());
     array_push($result, getStatusArray());
+    array_push($result, getUpdateButtonData());
+    array_push($result, getDocumentButtonData());
+    array_push($result, getPdfButtonData());
 
     return $result;
 }
@@ -158,5 +162,62 @@ function getStatusArray()
         'attribute' => 'devis_status.label',
         'format' => 'text',
         'label' => 'Statut',
+    ];
+}
+
+function getUpdateButtonData()
+{
+    return [
+        'format' => 'raw',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons right">build</i>',
+                Url::to(['devis/update', 'id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'action' => Url::to(['devis/update', 'id' => $model->id]),
+                    'class' => 'btn-floating btn-large waves-effect waves-light orange',
+                ]
+            );
+        }
+    ];
+}
+
+function getDocumentButtonData()
+{
+    return [
+        'format' => 'raw',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons right">cloud_download</i>',
+                Url::to(['devis/view', 'id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'action' => Url::to(['devis/update', 'id' => $model->id]),
+                    'class' => 'btn-floating btn-large waves-effect waves-light blue',
+                ]
+            );
+        }
+    ];
+}
+
+function getPdfButtonData()
+{
+    return [
+        'format' => 'raw',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons right">picture_as_pdf</i>',
+                Url::to(['devis/pdf', 'id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'action' => Url::to(['devis/pdf', 'id' => $model->id]),
+                    'class' => 'btn-floating btn-large waves-effect waves-light purple',
+                ]
+            );
+        }
     ];
 }

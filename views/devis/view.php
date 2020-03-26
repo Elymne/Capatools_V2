@@ -43,7 +43,11 @@ $indexStatus = getIndexStatus($model);
 
                     <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
 
-                    <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('projectManagerDevis')) : ?>
+                    <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
+                        <?= Html::a('Valider <i class="material-icons right">check</i>', ['index'], ['class' => 'waves-effect waves-light btn green']) ?>
+                    <?php endif; ?>
+
+                    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_OP &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
                         <?= Html::a('Valider <i class="material-icons right">check</i>', ['index'], ['class' => 'waves-effect waves-light btn green']) ?>
                     <?php endif; ?>
 

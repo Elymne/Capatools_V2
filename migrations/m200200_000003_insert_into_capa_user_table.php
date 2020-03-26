@@ -40,11 +40,11 @@ class m200200_000003_insert_into_capa_user_table extends Migration
             'cellule_id' => 3
         ]);
 
-        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('test');
+        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('support');
         $this->insert('{{%capa_user}}', [
-            'id' => 5,
-            'username' => 'test',
-            'email' => 'test@gmail.com',
+            'id' => 4,
+            'username' => 'support',
+            'email' => 'support@gmail.com',
             'auth_key' => 'test100key',
             'password_hash' =>  $password_hash,
             'cellule_id' => 3

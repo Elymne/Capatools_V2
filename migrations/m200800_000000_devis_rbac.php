@@ -102,7 +102,7 @@ class m200800_000000_devis_rbac extends Migration
         $auth->assign($projectManagerPermission, 1); // id 1 = toto
         $auth->assign($projectManagerPermission, 2); // id 2 = sacha
         $auth->assign($operationalManager, 3); // id 3 = admin
-        $auth->assign($accountingSupport, 4); // id 3 = admin
+        $auth->assign($accountingSupport, 4); // id 4 = test
 
     }
 
