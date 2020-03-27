@@ -16,6 +16,8 @@ class m200100_000009_create_milestone_statut_table extends Migration
         ]);
 
         $this->execute('ALTER TABLE devis_status AUTO_INCREMENT = 0');
+
+        $this->execute("ALTER TABLE `milestone` CHANGE `milestone_status_id` `milestone_status_id` INT(11) NULL DEFAULT '1'");
     }
 
     /**

@@ -85,6 +85,16 @@ class DevisController extends Controller implements ServiceInterface
                         'allow' => true,
                         'actions' => ['update-status'],
                         'roles' => ['updateStatusDevis'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['pdf'],
+                        'roles' => ['pdfDevis'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update-milestone-status'],
+                        'roles' => ['updateMilestoneStatusDevis'],
                     ]
                 ],
             ],
@@ -358,6 +368,9 @@ class DevisController extends Controller implements ServiceInterface
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
 
+        // Setup the total price HT.
+        $max_price = 0;
+
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -386,12 +399,15 @@ class DevisController extends Controller implements ServiceInterface
                         $milestone->devis_id = $model->id;
                         $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
 
-                        // Set default milestone status (in progress).
-                        $milestone->milestone_status_id = 1;
+                        // Cumulate the max priceHt.
+                        $max_price = $max_price + $milestone->price;
 
                         // Insert the milestone.
                         $milestone->save(false);
                     }
+
+                    // Set all milestones prices to devis price.
+                    $model->price = $max_price;
 
                     // Save the Devis change.
                     $model->save(false);
@@ -455,36 +471,16 @@ class DevisController extends Controller implements ServiceInterface
     {
         $model = $this->findModel($id);
 
-        switch ($status) {
-            case 1:
-                $this->setStatus($model, $status);
-                break;
-            case 2:
-                $this->setStatus($model, $status);
-                break;
-            case 3:
-                if (
-                    Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) ||
-                    Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)
-                ) $this->setStatus($model, $status);
-                break;
-            case 4:
-                if (
-                    Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) ||
-                    Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)
-                ) $this->setStatus($model, $status);
-                break;
-            case 5 || 6:
-                if (
-                    Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) ||
-                    Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)
-                ) $this->setStatus($model, $status);
-                break;
-        }
+        if (Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS))
+            $this->setStatus($model, $status);
 
+
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
-        return $this->redirect(['index']);
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+            'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
+        ]);
     }
 
     private function setStatus($model, $status)
