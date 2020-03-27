@@ -44,30 +44,70 @@ $indexStatus = getIndexStatus($model);
                     <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
 
                     <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
-                        <?= Html::a('Passer en validation opérationnelle <i class="material-icons right">check</i>', ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_OP,], ['class' => 'waves-effect waves-light btn green']) ?>
+                        <?= Html::a(
+                            'Passer en validation opérationnelle <i class="material-icons right">check</i>',
+                            ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_OP,],
+                            ['class' => 'waves-effect waves-light btn green', 'data' => [
+                                'confirm' => 'Valider ce devis en tant que responsable opérationnel ?'
+                            ]]
+                        ) ?>
                     <?php endif; ?>
 
                     <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_OP &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
-                        <?= Html::a('Valider la signature client <i class="material-icons right">check</i>', ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_CL,], ['class' => 'waves-effect waves-light btn green']) ?>
+                        <?= Html::a(
+                            'Valider la signature client <i class="material-icons right">check</i>',
+                            ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_CL,],
+                            ['class' => 'waves-effect waves-light btn green', 'data' => [
+                                'confirm' => 'Le client à signé le contrat ?'
+                            ]]
+                        ) ?>
                     <?php endif; ?>
 
                     <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_CL &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
-                        <?= Html::a('Passer en projet en cours <i class="material-icons right">check</i>', ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_EN_COURS,], ['class' => 'waves-effect waves-light btn green']) ?>
+                        <?= Html::a(
+                            'Passer en projet en cours <i class="material-icons right">check</i>',
+                            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_EN_COURS,],
+                            ['class' => 'waves-effect waves-light btn green', 'data' => [
+                                'confirm' => 'Passer ce projet en cours ?'
+                            ]]
+                        ) ?>
                     <?php endif; ?>
 
                     <?php if ($model->status_id == DevisStatus::PROJET_EN_COURS &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
-                        <?= Html::a('Passer en projet terminé <i class="material-icons right">check</i>', ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJETTERMINE,], ['class' => 'waves-effect waves-light btn green']) ?>
+                        <?= Html::a(
+                            'Passer en projet terminé <i class="material-icons right">check</i>',
+                            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJETTERMINE,],
+                            ['class' => 'waves-effect waves-light btn green', 'data' => [
+                                'confirm' => 'Ce projet est terminé ?'
+                            ]]
+                        ) ?>
                     <?php endif; ?>
 
                     <?php if (Yii::$app->user->can('operationalManagerDevis') && $model->status_id < DevisStatus::PROJET_ANNULE) : ?>
-                        <?= Html::a('Annuler le projet <i class="material-icons right">delete</i>', ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,], ['class' => 'waves-effect waves-light btn red']) ?>
+                        <?= Html::a(
+                            'Annuler le projet <i class="material-icons right">delete</i>',
+                            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,],
+                            ['class' => 'waves-effect waves-light btn red', 'data' => [
+                                'confirm' => 'Annuler ce projet ?'
+                            ]]
+                        ) ?>
                     <?php endif; ?>
 
                     <?php if ((Yii::$app->user->can('operationalManagerDevis') || Yii::$app->user->can('accountingSupportDevis')) && $model->status_id == DevisStatus::PROJET_ANNULE) : ?>
-                        <?= Html::a('Supprimer <i class="material-icons right">delete</i>', ['delete', 'id' => $model->id], ['class' => 'waves-effect waves-light btn red']) ?>
+                        <?= Html::a(
+                            'Supprimer <i class="material-icons right">delete</i>',
+                            ['delete', 'id' => $model->id],
+                            ['class' => 'waves-effect waves-light btn red', 'data' => [
+                                'confirm' => 'Supprimer ce projet ?'
+                            ]]
+                        ) ?>
                     <?php endif; ?>
 
-                    <?= Html::a('Générer un pdf <i class="material-icons right">build</i>', ['pdf', 'id' => $model->id], ['class' => 'waves-effect purple waves-light btn']) ?>
+                    <?= Html::a(
+                        'Générer un pdf <i class="material-icons right">build</i>',
+                        ['pdf', 'id' => $model->id],
+                        ['class' => 'waves-effect purple waves-light btn']
+                    ) ?>
 
                 </div>
             </div>
