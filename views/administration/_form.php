@@ -1,25 +1,15 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use app\assets\AppAsset;
 use app\models\user\Cellule;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
-use  yii\data\ArrayDataProvider;
+use yii\data\ArrayDataProvider;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use yiiui\yii2materializeselect2\Select2;
 
-///Récupère la liste des cellules
-
-$value = Cellule::find()->all();
-
-$cellules = ArrayHelper::map($value, 'id', 'name');
-asort($cellules);
-
-if ($model->cellule != null) {
-    $comboxselect = $model->cellule->name;
-} else {
-    $comboxselect = 'Choisir la cellule ...';
-}
-
+AppAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model app\models\user\CapaUser */
@@ -34,18 +24,30 @@ if ($model->cellule != null) {
         ],
     ]); ?>
 
-
     <?= $form->field($model, 'username')->textInput(['maxlength' => true, 'placeholder' => 'Nom et prénom'])->label('Nom de l\'utilisateur :') ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder' => 'Email capacités'])->label('Email :') ?>
 
-    <?= $form->field($model, 'cellule_id')->dropDownList($cellules, ['prompt' => $comboxselect])->label('Nom de la cellule :');   ?>
+    <?= $form->field($model, 'cellule_id')->widget(Select2::class, [
+        'items' => $cellules,
+        'value' => 2,
+        'clientOptions' => [
+            'allowClear' => true,
+            'theme' => 'default'
+        ]
+    ])->label(
+        "Cellules",
+        ['for' => 'cellule_id']
+    );
+    ?>
 
     <?php
 
     $data = array();
+    $results = [];
 
     foreach ($results as $result) {
+
         $stringpromp = 'none';
         //Je recherche la valeur de l'utilisateur pour l'application
         $key = array_search($result['name'], array_column($model->userRole, 'service'));

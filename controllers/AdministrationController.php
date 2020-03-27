@@ -9,9 +9,11 @@ use Yii;
 use app\models\user\CapaUser;
 use app\models\user\UserRole;
 use app\models\user\CapaUserSearch;
+use app\models\user\Cellule;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * AdministrationController implements the CRUD actions for CapaUser model.
@@ -157,6 +159,10 @@ class AdministrationController extends Controller
     {
         $model = new CapaUser();
 
+        // Get cellule data used for our form.
+        $cellules = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
+        $cellules = array_merge($cellules);
+
         if ($model->load(Yii::$app->request->post())) {
 
             $array = Yii::$app->request->post('CapaUser')['userRole'];
@@ -184,6 +190,7 @@ class AdministrationController extends Controller
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
         return $this->render('create', [
             'model' => $model,
+            'cellules' => $cellules
         ]);
     }
 
