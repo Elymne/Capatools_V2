@@ -16,24 +16,26 @@ class UserRoleEnum extends Enum
     const OPERATIONAL_MANAGER_DEVIS = 'operationalManagerDevis';
     const ACCOUNTING_SUPPORT_DEVIS = 'accountingSupportDevis';
     const DEVIS_ROLE = [
+        UserRoleEnum::NONE,
         UserRoleEnum::PROJECT_MANAGER_DEVIS,
         UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
         UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
     ];
     const DEVIS_ROLE_STRING = [
+        'Aucun',
         'Chef de projet',
         'Responsable opérationnel',
-        'Support comptable',
-        'Aucun'
+        'Support comptable'
     ];
 
     const ADMINISTRATOR = 'administrator';
     const ADMINISTRATION_ROLE = [
+        UserRoleEnum::NONE,
         UserRoleEnum::ADMINISTRATOR
     ];
     const ADMINISTRATOR_ROLE_STRING = [
-        'Administrateur',
-        'Aucun'
+        'Aucun',
+        'Administrateur'
     ];
 
     public static function getRoleString(string $role): string

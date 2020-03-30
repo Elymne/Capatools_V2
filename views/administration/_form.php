@@ -6,11 +6,19 @@ use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-//AppAsset::register($this);
+AppAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model app\models\user\CapaUser */
 /* @var $form yii\widgets\ActiveForm */
+
+// Get user roles.
+$userRoles = null;
+if ($model->id != null) $userRoles = Yii::$app->authManager->getRolesByUser($model->id);
+else $userRoles = [];
+
+//Get user cellule if it exists.
+
 ?>
 
 <div class="capa_user-form">
@@ -28,52 +36,41 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder' => 'Email capacités'])->label('Email :') ?>
 
     <!-- cellule dropdown field -->
-    <?= $form->field($model, 'cellule_id')->widget(Select2::class, [
+    <?= $form->field($model, 'cellule_id')->widget(Select2::classname(), [
         'data' => $cellules,
-        'value' => 2
-    ])->label(
-        "Cellules",
-        ['for' => 'cellule_id']
-    );
-    ?>
-
-    <?php
-
-    // Get user roles.
-    $userRoles = null;
-    if ($model->id != null)
-        $userRoles = Yii::$app->authManager->getRolesByUser($model->id);
-    else
-        $userRoles = [];
-
-    // Check if user has a devis role and store it for selector.
-
-    $devisRoleTranslated;
-    foreach (UserRoleEnum::DEVIS_ROLE as $role) {
-        $selectorDevis = 'none';
-
-        $key = array_search($role, $userRoles);
-        if (is_bool($key)) {
-            $selectorDevis = $role;
-        }
-    }
-
-    // Create dropdown devis.
-    echo $form->field($model, 'stored_role_devis')->widget(Select2::classname(), [
-        'data' => UserRoleEnum::DEVIS_ROLE_STRING,
-        'options' => ['placeholder' => 'Select a state ...'],
+        'options' => ['value' => 0],
+        'theme' => Select2::THEME_MATERIAL,
+        'pluginLoading' => false,
         'pluginOptions' => [
             'allowClear' => true
         ],
-    ]);
+    ])->label(
+        "Cellule"
+    ); ?>
 
-    foreach (UserRoleEnum::ADMINISTRATION_ROLE as $role) {
+    <!-- devis role dropdown field -->
+    <?= $form->field($model, 'stored_role_devis')->widget(Select2::classname(), [
+        'data' => UserRoleEnum::DEVIS_ROLE_STRING,
+        'options' => ['value' => getSelectedDevisRoleKey($userRoles)],
+        'pluginLoading' => false,
+        'pluginOptions' => [
+            'allowClear' => false
+        ],
+    ])->label(
+        "Rôle service devis"
+    ); ?>
 
-        $key = array_search($role, $userRoles);
-    }
-
-
-    ?>
+    <!-- admin role dropdown field -->
+    <?= $form->field($model, 'stored_role_admin')->widget(Select2::classname(), [
+        'data' => UserRoleEnum::ADMINISTRATOR_ROLE_STRING,
+        'options' => ['value' => getSelectedDevisRoleKey($userRoles)],
+        'pluginLoading' => false,
+        'pluginOptions' => [
+            'allowClear' => false
+        ],
+    ])->label(
+        "Rôle service Administration"
+    );; ?>
 
     <div class="form-group">
         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'btn waves-effect waves-light']) ?>
@@ -82,3 +79,33 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+
+function getSelectedDevisRoleKey($userRoles): int
+{
+    $selectedKey = 0;
+    foreach (UserRoleEnum::DEVIS_ROLE as $key => $role) {
+
+        $exists = array_search($role, $userRoles);
+        if ($exists) {
+            $selectedKey = $key;
+        }
+    }
+
+    return $selectedKey;
+}
+
+function getSelectedAdminRoleKey($userRoles): int
+{
+    $selectedKey = 0;
+    foreach (UserRoleEnum::ADMINISTRATION_ROLE as $key => $role) {
+
+        $exists = array_search($role, $userRoles);
+        if ($exists) {
+            $selectedKey = $key;
+        }
+    }
+
+    return $selectedKey;
+}
