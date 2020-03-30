@@ -3,9 +3,8 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
-use app\assets\AppAsset;
 use app\widgets\TopTitle;
-use yiiui\yii2materializeselect2\Select2;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
@@ -14,7 +13,7 @@ $this->title = 'Création d\'un devis';
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-AppAsset::register($this);
+//AppAsset::register($this);
 
 ?>
 
@@ -41,15 +40,15 @@ AppAsset::register($this);
                         ?>
 
                         <?= $form->field($model, 'delivery_type_id')->widget(Select2::class, [
-                            'items' => ArrayHelper::map($delivery_type, 'id', 'label'),
-                            'clientOptions' => [
+                            'data' => ArrayHelper::map($delivery_type, 'id', 'label'),
+                            'pluginLoading' => false,
+                            'pluginOptions' => [
                                 'allowClear' => true
                             ],
                         ])->label(
                             "Type de projet",
                             ['for' => 'delivery_type_id']
-                        );
-                        ?>
+                        ); ?>
 
                         <?= $form->field($model, 'company_name')
                             ->widget(\yii\jui\AutoComplete::classname(), [

@@ -6,7 +6,7 @@ use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-AppAsset::register($this);
+//AppAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model app\models\user\CapaUser */
@@ -16,8 +16,6 @@ AppAsset::register($this);
 $userRoles = null;
 if ($model->id != null) $userRoles = Yii::$app->authManager->getRolesByUser($model->id);
 else $userRoles = [];
-
-//Get user cellule if it exists.
 
 ?>
 
@@ -39,7 +37,6 @@ else $userRoles = [];
     <?= $form->field($model, 'cellule_id')->widget(Select2::classname(), [
         'data' => $cellules,
         'options' => ['value' => 0],
-        'theme' => Select2::THEME_MATERIAL,
         'pluginLoading' => false,
         'pluginOptions' => [
             'allowClear' => true
