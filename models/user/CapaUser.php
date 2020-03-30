@@ -9,6 +9,10 @@ use yii\web\IdentityInterface;
 class CapaUser extends ActiveRecord  implements IdentityInterface
 {
 
+    // Used to store roles when validation in controller.
+    public $stored_role_devis;
+    public $stored_role_admin;
+
     public static function tableName()
     {
         return 'capa_user';

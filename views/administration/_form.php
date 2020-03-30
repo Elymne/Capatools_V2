@@ -2,13 +2,11 @@
 
 use app\assets\AppAsset;
 use app\helper\_enum\UserRoleEnum;
-use yii\grid\GridView;
-use yii\data\ArrayDataProvider;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yiiui\yii2materializeselect2\Select2;
 
-AppAsset::register($this);
+//AppAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model app\models\user\CapaUser */
@@ -31,12 +29,8 @@ AppAsset::register($this);
 
     <!-- cellule dropdown field -->
     <?= $form->field($model, 'cellule_id')->widget(Select2::class, [
-        'items' => $cellules,
-        'value' => 2,
-        'clientOptions' => [
-            'allowClear' => true,
-            'theme' => 'default'
-        ]
+        'data' => $cellules,
+        'value' => 2
     ])->label(
         "Cellules",
         ['for' => 'cellule_id']
@@ -45,17 +39,17 @@ AppAsset::register($this);
 
     <?php
 
-
+    // Get user roles.
     $userRoles = null;
     if ($model->id != null)
         $userRoles = Yii::$app->authManager->getRolesByUser($model->id);
     else
         $userRoles = [];
 
-    //var_dump($userRoles);
+    // Check if user has a devis role and store it for selector.
 
+    $devisRoleTranslated;
     foreach (UserRoleEnum::DEVIS_ROLE as $role) {
-
         $selectorDevis = 'none';
 
         $key = array_search($role, $userRoles);
@@ -64,13 +58,12 @@ AppAsset::register($this);
         }
     }
 
-    echo '<label class="control-label">Droit devis</label>';
-    echo Select2::widget([
-        'name' => 'state_10',
-        'items' => UserRoleEnum::DEVIS_ROLE,
-        'options' => [
-            'placeholder' => 'Select provinces ...',
-            'multiple' => true
+    // Create dropdown devis.
+    echo $form->field($model, 'stored_role_devis')->widget(Select2::classname(), [
+        'data' => UserRoleEnum::DEVIS_ROLE_STRING,
+        'options' => ['placeholder' => 'Select a state ...'],
+        'pluginOptions' => [
+            'allowClear' => true
         ],
     ]);
 
