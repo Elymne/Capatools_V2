@@ -10,11 +10,21 @@ use MyCLabs\Enum\Enum;
 class UserRoleEnum extends Enum
 {
 
+    const NONE = 'none';
+
     const PROJECT_MANAGER_DEVIS = 'projectManagerDevis';
     const OPERATIONAL_MANAGER_DEVIS = 'operationalManagerDevis';
     const ACCOUNTING_SUPPORT_DEVIS = 'accountingSupportDevis';
+    const DEVIS_ROLE = [
+        UserRoleEnum::PROJECT_MANAGER_DEVIS,
+        UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
+        UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
+    ];
 
     const ADMINISTRATOR = 'administrator';
+    const ADMINISTRATION_ROLE = [
+        UserRoleEnum::ADMINISTRATOR
+    ];
 
     public static function getRoleString(string $role): string
     {
@@ -27,8 +37,28 @@ class UserRoleEnum extends Enum
                 return 'Support comptable';
             case self::ADMINISTRATOR:
                 return 'Administrateur';
+            case self::NONE:
+                return 'Aucun';
             default:
                 return 'Aucun';
+        }
+    }
+
+    public static function getRoleEnum(string $roleString): string
+    {
+        switch ($roleString) {
+            case 'Chef de projet':
+                return self::PROJECT_MANAGER_DEVIS;
+            case 'Responsable opérationnel':
+                return self::OPERATIONAL_MANAGER_DEVIS;
+            case 'Support comptable':
+                return self::ACCOUNTING_SUPPORT_DEVIS;
+            case 'Administrateur':
+                return self::ADMINISTRATOR;
+            case 'Aucun':
+                return self::NONE;
+            default:
+                return self::NONE;
         }
     }
 }
