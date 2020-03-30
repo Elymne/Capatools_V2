@@ -1,14 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-use yii\jui\DatePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
-use yiiui\yii2materializeselect2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
 use app\helper\_enum\UserRoleEnum;
 use app\widgets\TopTitle;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
@@ -36,29 +35,30 @@ AppAsset::register($this);
 
                     <div class="card-content">
 
-
-
                         <?= $form->field($model, 'internal_name')
                             ->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])
                             ->label("Nom du projet")
                         ?>
 
                         <?= $form->field($model, 'delivery_type_id')->widget(Select2::class, [
-                            'items' => ArrayHelper::map($delivery_type, 'id', 'label'),
-                            'clientOptions' => [
+                            'data' => ArrayHelper::map($delivery_types, 'id', 'label'),
+                            'pluginLoading' => false,
+                            'pluginOptions' => [
                                 'allowClear' => true
                             ],
-                        ]);
-                        ?>
+                        ])->label(
+                            "Type de projet",
+                            ['for' => 'delivery_type_id']
+                        ); ?>
 
                         <?= $form->field($model, 'company_name')
                             ->widget(\yii\jui\AutoComplete::classname(), [
                                 'clientOptions' => [
                                     'source' => $companiesNames,
                                 ],
-                            ])
-                            ->label("Nom du client")
-                        ?>
+                            ])->label(
+                                "Client"
+                            ); ?>
 
                         <?= $form->field($model, 'service_duration')
                             ->textInput(['autocomplete' => 'off'])

@@ -165,21 +165,13 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $array = Yii::$app->request->post('CapaUser')['userRole'];
-            $arrayKey = array_keys($array);
 
-            foreach ($arrayKey as $key) {
+            var_dump($model->stored_role_devis);
+            var_dump($model->stored_role_admin);
 
-                $userRole = new UserRole();
-
-                $userRole->role = $key;
-                $userRole->role = $array[$key];
-                $userRole->Save();
-            }
             $model->flag_active = true;
             $model->generatePasswordAndmail();
             if ($model->save()) {
-
                 Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_NONE;
                 Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
                 return $this->redirect(['view', 'id' => $model->id]);

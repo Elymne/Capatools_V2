@@ -1,5 +1,6 @@
 <?php
 
+use app\assets\AppAsset;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
@@ -13,7 +14,7 @@ $this->title = 'Création d\'un devis';
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-//AppAsset::register($this);
+AppAsset::register($this);
 
 ?>
 
@@ -40,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ?>
 
                         <?= $form->field($model, 'delivery_type_id')->widget(Select2::class, [
-                            'data' => ArrayHelper::map($delivery_type, 'id', 'label'),
+                            'data' => ArrayHelper::map($delivery_types, 'id', 'label'),
                             'pluginLoading' => false,
                             'pluginOptions' => [
                                 'allowClear' => true
