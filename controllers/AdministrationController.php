@@ -206,6 +206,10 @@ class AdministrationController extends Controller
     {
         $model = $this->findModel($id);
 
+        // Get cellule data used for our form.
+        $cellules = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
+        $cellules = array_merge($cellules);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
             $array = Yii::$app->request->post('CapaUser')['userRole'];
@@ -233,6 +237,7 @@ class AdministrationController extends Controller
         MenuSelectorHelper::setMenuAdminNone();
         return $this->render('update', [
             'model' => $model,
+            'cellules' => $cellules
         ]);
     }
 

@@ -2,8 +2,6 @@
 
 use app\widgets\TopTitle;
 
-
-
 /* @var $this yii\web\View */
 /* @var $model app\models\user\CapaUser */
 

@@ -1,6 +1,7 @@
 <?php
 
 use app\assets\AppAsset;
+use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -13,9 +14,11 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 
 // Get user roles.
-$userRoles = null;
-if ($model->id != null) $userRoles = Yii::$app->authManager->getRolesByUser($model->id);
-else $userRoles = [];
+
+echo $model->id;
+
+$userRoles = [];
+if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
 ?>
 
@@ -60,7 +63,7 @@ else $userRoles = [];
     <!-- admin role dropdown field -->
     <?= $form->field($model, 'stored_role_admin')->widget(Select2::classname(), [
         'data' => UserRoleEnum::ADMINISTRATOR_ROLE_STRING,
-        'options' => ['value' => getSelectedDevisRoleKey($userRoles)],
+        'options' => ['value' => getSelectedAdminRoleKey($userRoles)],
         'pluginLoading' => false,
         'pluginOptions' => [
             'allowClear' => false
@@ -84,13 +87,11 @@ function getSelectedDevisRoleKey($userRoles): int
     $selectedKey = 0;
     foreach (UserRoleEnum::DEVIS_ROLE as $key => $role) {
 
-        $exists = array_search($role, $userRoles);
-        if ($exists) {
-            $selectedKey = $key;
+        $value = array_search($role, $userRoles);
+        if ($value != null) {
+            return $key;
         }
     }
-
-    return $selectedKey;
 }
 
 function getSelectedAdminRoleKey($userRoles): int
@@ -98,11 +99,9 @@ function getSelectedAdminRoleKey($userRoles): int
     $selectedKey = 0;
     foreach (UserRoleEnum::ADMINISTRATION_ROLE as $key => $role) {
 
-        $exists = array_search($role, $userRoles);
-        if ($exists) {
-            $selectedKey = $key;
+        $value = array_search($role, $userRoles);
+        if ($value != null) {
+            return $key;
         }
     }
-
-    return $selectedKey;
 }

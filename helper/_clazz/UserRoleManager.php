@@ -3,9 +3,22 @@
 namespace app\helper\_clazz;
 
 use app\helper\_enum\UserRoleEnum;
+use Yii;
 
 class UserRoleManager
 {
+
+    static function getUserRoles(int $id)
+    {
+        $userRoles = Yii::$app->authManager->getAssignments($id);
+
+        // Map this array, we just want names role. Not objects.
+        $func = function ($userRole) {
+            return $userRole->roleName;
+        };
+
+        return array_map($func, $userRoles);
+    }
 
     static function removeRoleFromUser(int $id)
     {
