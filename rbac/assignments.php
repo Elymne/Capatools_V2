@@ -18,4 +18,8 @@ return [
         'projectManagerDevis',
         'administrator',
     ],
+    12 => [
+        'operationalManagerDevis',
+        'administrator',
+    ],
 ];
