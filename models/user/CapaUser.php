@@ -32,6 +32,8 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
             ['cellule_id', 'required', 'message' => 'Veulliez selectionner la cellule de l\'utilisateur'],
             ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],
             ['cellule_id', 'validateCelid', 'message' => 'Le nom de la cellule est inconnue'],
+            ['stored_role_devis', 'safe'],
+            ['stored_role_admin', 'safe']
         ];
     }
 

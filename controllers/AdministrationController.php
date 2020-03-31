@@ -165,7 +165,7 @@ class AdministrationController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             var_dump($model->stored_role_devis);
-            var_dump($model->stored_role_admin);
+            return var_dump($model->stored_role_admin);
 
             $model->flag_active = true;
             $model->generatePasswordAndmail();
