@@ -1,9 +1,10 @@
 <?php
 
+use app\helper\_clazz\UserRoleManager;
+use app\helper\_enum\UserRoleEnum;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\user\CapaUser */
@@ -12,6 +13,10 @@ $this->title = "Détail du salarié: " . $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
+// Get user roles.
+$userRoles = [];
+if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
 ?>
 
@@ -76,27 +81,31 @@ function createRolesTable($userRoles)
         <table class="highlight">
             <tbody>
                 <tr>
-                    <td class='header'>Rôles</td>
-                    <td class='header'>Description</td>
-                </tr>
-
-            
+                    <td class='header'>Service</td>
+                    <td class='header'>Rôle</td>
+                </tr>    
     HTML;
 
     $body = '';
 
-    foreach ($userRoles as $userRole) {
+    $adminRole = UserRoleEnum::ADMINISTRATOR_ROLE_STRING[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
+    $devisRole = UserRoleEnum::DEVIS_ROLE_STRING[UserRoleManager::getSelectedDevisRoleKey($userRoles)];
 
-        $roleName = $userRole->name;
-        $roleDescription = $userRole->description;
+    // Admin row.
+    $body = $body . <<<HTML
+        <tr>
+            <td>Administration</td>
+            <td>${adminRole}</td>
+        </tr>
+    HTML;
 
-        $body = $body . <<<HTML
-            <tr>
-                <td>${roleName}</td>
-                <td>${roleDescription}</td>
-            </tr>
-        HTML;
-    }
+    // Devis row.
+    $body = $body . <<<HTML
+        <tr>
+            <td>Devis</td>
+            <td>${devisRole}</td>
+        </tr>
+    HTML;
 
     $foot = <<<HTML
             </tbody>

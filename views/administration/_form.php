@@ -13,9 +13,6 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 
 // Get user roles.
-
-echo $model->id;
-
 $userRoles = [];
 if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
@@ -50,7 +47,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     <!-- devis role dropdown field -->
     <?= $form->field($model, 'stored_role_devis')->widget(Select2::classname(), [
         'data' => UserRoleEnum::DEVIS_ROLE_STRING,
-        'options' => ['value' => getSelectedDevisRoleKey($userRoles)],
+        'options' => ['value' => UserRoleManager::getSelectedDevisRoleKey($userRoles)],
         'pluginLoading' => false,
         'pluginOptions' => [
             'allowClear' => false
@@ -62,7 +59,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     <!-- admin role dropdown field -->
     <?= $form->field($model, 'stored_role_admin')->widget(Select2::classname(), [
         'data' => UserRoleEnum::ADMINISTRATOR_ROLE_STRING,
-        'options' => ['value' => getSelectedAdminRoleKey($userRoles)],
+        'options' => ['value' => UserRoleManager::getSelectedAdminRoleKey($userRoles)],
         'pluginLoading' => false,
         'pluginOptions' => [
             'allowClear' => false
@@ -78,32 +75,3 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     <?php ActiveForm::end(); ?>
 
 </div>
-
-<?php
-
-function getSelectedDevisRoleKey($userRoles): int
-{
-    $selectedKey = 0;
-    foreach (UserRoleEnum::DEVIS_ROLE as $key => $role) {
-
-        $value = array_search($role, $userRoles);
-        if ($value != null) {
-            return $key;
-        }
-
-        return 0;
-    }
-}
-
-function getSelectedAdminRoleKey($userRoles): int
-{
-    foreach (UserRoleEnum::ADMINISTRATION_ROLE as $key => $role) {
-
-        $value = array_search($role, $userRoles);
-        if ($value != null) {
-            return $key;
-        }
-
-        return 0;
-    }
-}

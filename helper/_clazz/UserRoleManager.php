@@ -56,4 +56,33 @@ class UserRoleManager
         $authorRole = $auth->getRole($role);
         $auth->assign($authorRole, $id);
     }
+
+    static function getSelectedDevisRoleKey($userRoles): int
+    {
+        $result = 0;
+
+        foreach (UserRoleEnum::DEVIS_ROLE as $key => $role) {
+            $value = array_search($role, $userRoles);
+            if ($value != null) {
+                $result =  $key;
+            }
+        }
+
+        return $result;
+    }
+
+    static function getSelectedAdminRoleKey($userRoles): int
+    {
+
+        $result = 0;
+
+        foreach (UserRoleEnum::ADMINISTRATION_ROLE as $key => $role) {
+            $value = array_search($role, $userRoles);
+            if ($value != null) {
+                $result = $key;
+            }
+        }
+
+        return $result;
+    }
 }
