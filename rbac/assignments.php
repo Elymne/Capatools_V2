@@ -19,7 +19,7 @@ return [
         'administrator',
     ],
     12 => [
-        'operationalManagerDevis',
+        'accountingSupportDevis',
         'administrator',
     ],
 ];

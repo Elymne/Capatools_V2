@@ -20,7 +20,7 @@ class UserRoleManager
         return array_map($func, $userRoles);
     }
 
-    static function removeRoleFromUser(int $id)
+    static function removeRolesFromUser(int $id)
     {
         $auth = \Yii::$app->authManager;
         $auth->revokeAll($id);

@@ -172,7 +172,7 @@ class AdministrationController extends Controller
             // Set hash password.
             $model->setNewPassword($model->username);
 
-            // Because dropdownlist is an array.
+            // Because dropdownlist is an array and begin at 0.
             $model->cellule_id += 1;
 
             if ($model->save()) {
@@ -210,24 +210,22 @@ class AdministrationController extends Controller
         $cellules = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
         $cellules = array_merge($cellules);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            $array = Yii::$app->request->post('CapaUser')['userRole'];
-            $arrayKey = array_keys($array);
-            foreach ($arrayKey as $key) {
+            // Because dropdownlist is an array.
+            $model->cellule_id += 1;
 
-                $hasUserRole = UserRole::find()->where(['role' => $key, 'user_id' => $id])->exists();
+            if ($model->save()) {
 
-                //Je vérifie si l'enregistrement existe sinon je le créé.
-                if (!$hasUserRole) {
-                    $userRole = new UserRole();
-                    $userRole->user_id = $id;
-                    $userRole->role = $key;
-                } else {
-                    $userRole = UserRole::findOne(['role' => $key, 'user_id' => $id]);
-                }
-                $userRole->role = $array[$key];
-                $userRole->Save();
+                // Remove all roles.
+                UserRoleManager::removeRolesFromUser($model->id);
+
+                // And then, we set updated roles for the user.
+                UserRoleManager::setDevisRole($model->id, UserRoleEnum::DEVIS_ROLE[$model->stored_role_devis]);
+                UserRoleManager::setAdministrationRole($model->id, UserRoleEnum::ADMINISTRATION_ROLE[$model->stored_role_admin]);
+
+                MenuSelectorHelper::setMenuAdminNone();
+                return $this->redirect(['view', 'id' => $model->id]);
             }
 
             MenuSelectorHelper::setMenuAdminNone();
