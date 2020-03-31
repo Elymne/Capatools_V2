@@ -9,7 +9,6 @@ use app\helper\_enum\UserRoleEnum;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\user\CapaUser;
-use app\models\user\UserRole;
 use app\models\user\CapaUserSearch;
 use app\models\user\Cellule;
 use yii\web\Controller;

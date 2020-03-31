@@ -1,6 +1,5 @@
 <?php
 
-use app\assets\AppAsset;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use kartik\select2\Select2;
@@ -91,17 +90,20 @@ function getSelectedDevisRoleKey($userRoles): int
         if ($value != null) {
             return $key;
         }
+
+        return 0;
     }
 }
 
 function getSelectedAdminRoleKey($userRoles): int
 {
-    $selectedKey = 0;
     foreach (UserRoleEnum::ADMINISTRATION_ROLE as $key => $role) {
 
         $value = array_search($role, $userRoles);
         if ($value != null) {
             return $key;
         }
+
+        return 0;
     }
 }
