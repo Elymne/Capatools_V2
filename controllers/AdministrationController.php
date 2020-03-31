@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\helper\_clazz\MenuSelectorHelper;
+use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 use yii\filters\AccessControl;
@@ -164,12 +165,18 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            var_dump($model->stored_role_devis);
-            return var_dump($model->stored_role_admin);
-
             $model->flag_active = true;
-            $model->generatePasswordAndmail();
+            //todo Pensez à remettre ceci.
+            //$model->generatePasswordAndmail();
+
+            $model->setNewPassword($model->username);
+
             if ($model->save()) {
+
+                // Save roles for new user.
+                UserRoleManager::setUserRole($model->id, UserRoleEnum::DEVIS_ROLE[$model->stored_role_devis]);
+                UserRoleManager::setUserRole($model->id, UserRoleEnum::ADMINISTRATION_ROLE[$model->stored_role_admin]);
+
                 MenuSelectorHelper::setMenuAdminNone();
                 return $this->redirect(['view', 'id' => $model->id]);
             }

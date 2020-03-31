@@ -16,16 +16,16 @@ class UserRoleEnum extends Enum
     const OPERATIONAL_MANAGER_DEVIS = 'operationalManagerDevis';
     const ACCOUNTING_SUPPORT_DEVIS = 'accountingSupportDevis';
     const DEVIS_ROLE = [
-        UserRoleEnum::NONE,
-        UserRoleEnum::PROJECT_MANAGER_DEVIS,
-        UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
-        UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
+        0 => UserRoleEnum::NONE,
+        1 => UserRoleEnum::PROJECT_MANAGER_DEVIS,
+        2 => UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
+        3 => UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
     ];
     const DEVIS_ROLE_STRING = [
-        'Aucun',
-        'Chef de projet',
-        'Responsable opérationnel',
-        'Support comptable'
+        0 => 'Aucun',
+        1 => 'Chef de projet',
+        2 => 'Responsable opérationnel',
+        3 => 'Support comptable'
     ];
 
     const ADMINISTRATOR = 'administrator';
