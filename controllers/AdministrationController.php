@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 use yii\filters\AccessControl;
@@ -121,8 +122,7 @@ class AdministrationController extends Controller
         $searchModel = new CapaUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_LIST;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+        MenuSelectorHelper::setMenuAdminIndex();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -142,8 +142,7 @@ class AdministrationController extends Controller
     {
         $userRoles = Yii::$app->authManager->getRolesByUser($id);
 
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_NONE;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+        MenuSelectorHelper::setMenuAdminNone();
         return $this->render('view', [
             'model' => $this->findModel($id), 'userRoles' => $userRoles,
         ]);
@@ -163,8 +162,7 @@ class AdministrationController extends Controller
         $cellules = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
         $cellules = array_merge($cellules);
 
-        if ($model->load(Yii::$app->request->post())) {
-
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             var_dump($model->stored_role_devis);
             var_dump($model->stored_role_admin);
@@ -172,14 +170,12 @@ class AdministrationController extends Controller
             $model->flag_active = true;
             $model->generatePasswordAndmail();
             if ($model->save()) {
-                Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_NONE;
-                Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+                MenuSelectorHelper::setMenuAdminNone();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_CREATE;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+        MenuSelectorHelper::setMenuAdminCreate();
         return $this->render('create', [
             'model' => $model,
             'cellules' => $cellules
@@ -219,9 +215,11 @@ class AdministrationController extends Controller
                 $userRole->Save();
             }
 
+            MenuSelectorHelper::setMenuAdminNone();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        MenuSelectorHelper::setMenuAdminNone();
         return $this->render('update', [
             'model' => $model,
         ]);
@@ -248,6 +246,8 @@ class AdministrationController extends Controller
             $user->flag_active = false;
             $user->save();
         }
+
+        MenuSelectorHelper::setMenuAdminIndex();
         return $this->redirect(['index']);
     }
 
