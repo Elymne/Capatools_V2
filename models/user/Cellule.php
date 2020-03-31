@@ -13,6 +13,11 @@ class Cellule extends ActiveRecord
         return 'cellule';
     }
 
+    public static function getAll()
+    {
+        return static::find()->all();
+    }
+
     public function getCapaUser()
     {
         return $this->hasMany(CapaUser::className(), ['cellule_id' => 'id']);

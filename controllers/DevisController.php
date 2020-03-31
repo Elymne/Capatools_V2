@@ -259,7 +259,7 @@ class DevisController extends Controller implements ServiceInterface
         $model = new DevisCreateForm();
 
         // Get data that we wish to use on our view.
-        $deliveryType = DeliveryType::getDeliveryTypes();
+        $delivery_types = DeliveryType::getDeliveryTypes();
 
         // Here we type a specific requetst because we only want names of clients.
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
@@ -298,7 +298,7 @@ class DevisController extends Controller implements ServiceInterface
             'create',
             [
                 'model' => $model,
-                'delivery_type' => $deliveryType,
+                'delivery_types' => $delivery_types,
                 'companiesNames' => $companiesNames
             ]
         );
@@ -359,7 +359,7 @@ class DevisController extends Controller implements ServiceInterface
         $model->company_name = $model->company->name;
 
         // Get all delivery types.
-        $deliveryType = DeliveryType::getDeliveryTypes();
+        $deliveryTypes = DeliveryType::getDeliveryTypes();
 
         // Seperate the relationnal object from devis.
         $milestones = $model->milestones;
@@ -385,44 +385,33 @@ class DevisController extends Controller implements ServiceInterface
                 // Get the company data with name insert in field.
                 $company = Company::find()->where(['name' =>  $model->company_name])->one();
 
-                $transaction = \Yii::$app->db->beginTransaction();
+                // Save each milestone.
+                foreach ($milestones as $milestone) {
 
-                try {
+                    // Format date for sql insertion.
+                    $milestone->devis_id = $model->id;
+                    $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
 
-                    // Save the company inserted.
-                    $company->save(false);
-                    $model->company_id = $company->id;
+                    // Cumulate the max priceHt.
+                    $max_price = $max_price + $milestone->price;
 
-                    foreach ($milestones as $milestone) {
-
-                        // Format date for sql insertion.
-                        $milestone->devis_id = $model->id;
-                        $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
-
-                        // Cumulate the max priceHt.
-                        $max_price = $max_price + $milestone->price;
-
-                        // Insert the milestone.
-                        $milestone->save(false);
-                    }
-
-                    // Set all milestones prices to devis price.
-                    $model->price = $max_price;
-
-                    // Save the Devis change.
-                    $model->save(false);
-
-                    // Confirm all the changes on db.
-                    $transaction->commit();
-
-                    Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-                    Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
-                    return $this->redirect(['view', 'id' => $model->id]);
-                } catch (Exception $e) {
-
-                    // If exception occur, rollback all changes.
-                    $transaction->rollBack();
+                    // Insert the milestone.
+                    $milestone->save();
                 }
+
+                // Set all milestones prices to devis price.
+                $model->price = $max_price;
+                $model->company_id = $company->id;
+
+                // Save the Devis change.
+                $model->save();
+
+
+
+                Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+                Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
+                //return var_dump($model->delivery_type->label);
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
@@ -432,7 +421,7 @@ class DevisController extends Controller implements ServiceInterface
             'update',
             [
                 'model' => $model,
-                'delivery_type' =>  $deliveryType,
+                'delivery_types' =>  $deliveryTypes,
                 'companiesNames' => $companiesNames,
                 'milestones' => (empty($milestones)) ? [new Milestone] : $milestones
             ]

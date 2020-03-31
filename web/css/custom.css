@@ -27,3 +27,10 @@ td.header {
     background-image: url("../images/capa-login-bg.png");
     background-size: cover;
 }
+
+input.select-dropdown.dropdown-trigger {
+    display: none;
+}
+svg.caret {
+    display: none;
+}

@@ -2,16 +2,19 @@
 
 namespace app\controllers;
 
+use app\helper\_clazz\MenuSelectorHelper;
+use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 use yii\filters\AccessControl;
 use Yii;
 use app\models\user\CapaUser;
-use app\models\user\UserRole;
 use app\models\user\CapaUserSearch;
+use app\models\user\Cellule;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * AdministrationController implements the CRUD actions for CapaUser model.
@@ -119,8 +122,7 @@ class AdministrationController extends Controller
         $searchModel = new CapaUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_LIST;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+        MenuSelectorHelper::setMenuAdminIndex();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -140,8 +142,7 @@ class AdministrationController extends Controller
     {
         $userRoles = Yii::$app->authManager->getRolesByUser($id);
 
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_NONE;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+        MenuSelectorHelper::setMenuAdminNone();
         return $this->render('view', [
             'model' => $this->findModel($id), 'userRoles' => $userRoles,
         ]);
@@ -157,33 +158,37 @@ class AdministrationController extends Controller
     {
         $model = new CapaUser();
 
-        if ($model->load(Yii::$app->request->post())) {
+        // Get cellule data used for our form.
+        $cellules = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
+        $cellules = array_merge($cellules);
 
-            $array = Yii::$app->request->post('CapaUser')['userRole'];
-            $arrayKey = array_keys($array);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            foreach ($arrayKey as $key) {
-
-                $userRole = new UserRole();
-
-                $userRole->role = $key;
-                $userRole->role = $array[$key];
-                $userRole->Save();
-            }
             $model->flag_active = true;
-            $model->generatePasswordAndmail();
+            //todo Pensez à remettre ceci.
+            //$model->generatePasswordAndmail();
+
+            // Set hash password.
+            $model->setNewPassword($model->username);
+
+            // Because dropdownlist is an array and begin at 0.
+            $model->cellule_id += 1;
+
             if ($model->save()) {
 
-                Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_NONE;
-                Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+                // Set roles for the new user.
+                UserRoleManager::setDevisRole($model->id, UserRoleEnum::DEVIS_ROLE[$model->stored_role_devis]);
+                UserRoleManager::setAdministrationRole($model->id, UserRoleEnum::ADMINISTRATION_ROLE[$model->stored_role_admin]);
+
+                MenuSelectorHelper::setMenuAdminNone();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_CREATE;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+        MenuSelectorHelper::setMenuAdminCreate();
         return $this->render('create', [
             'model' => $model,
+            'cellules' => $cellules
         ]);
     }
 
@@ -200,31 +205,36 @@ class AdministrationController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        // Get cellule data used for our form.
+        $cellules = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
+        $cellules = array_merge($cellules);
 
-            $array = Yii::$app->request->post('CapaUser')['userRole'];
-            $arrayKey = array_keys($array);
-            foreach ($arrayKey as $key) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-                $hasUserRole = UserRole::find()->where(['role' => $key, 'user_id' => $id])->exists();
+            // Because dropdownlist is an array.
+            $model->cellule_id += 1;
 
-                //Je vérifie si l'enregistrement existe sinon je le créé.
-                if (!$hasUserRole) {
-                    $userRole = new UserRole();
-                    $userRole->user_id = $id;
-                    $userRole->role = $key;
-                } else {
-                    $userRole = UserRole::findOne(['role' => $key, 'user_id' => $id]);
-                }
-                $userRole->role = $array[$key];
-                $userRole->Save();
+            if ($model->save()) {
+
+                // Remove all roles.
+                UserRoleManager::removeRolesFromUser($model->id);
+
+                // And then, we set updated roles for the user.
+                UserRoleManager::setDevisRole($model->id, UserRoleEnum::DEVIS_ROLE[$model->stored_role_devis]);
+                UserRoleManager::setAdministrationRole($model->id, UserRoleEnum::ADMINISTRATION_ROLE[$model->stored_role_admin]);
+
+                MenuSelectorHelper::setMenuAdminNone();
+                return $this->redirect(['view', 'id' => $model->id]);
             }
 
+            MenuSelectorHelper::setMenuAdminNone();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        MenuSelectorHelper::setMenuAdminNone();
         return $this->render('update', [
             'model' => $model,
+            'cellules' => $cellules
         ]);
     }
 
@@ -249,6 +259,8 @@ class AdministrationController extends Controller
             $user->flag_active = false;
             $user->save();
         }
+
+        MenuSelectorHelper::setMenuAdminIndex();
         return $this->redirect(['index']);
     }
 

@@ -14,4 +14,12 @@ return [
     4 => [
         'accountingSupportDevis',
     ],
+    5 => [
+        'projectManagerDevis',
+        'administrator',
+    ],
+    12 => [
+        'accountingSupportDevis',
+        'administrator',
+    ],
 ];

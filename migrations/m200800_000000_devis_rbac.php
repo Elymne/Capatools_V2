@@ -1,5 +1,6 @@
 <?php
 
+use app\helper\_enum\UserRoleEnum;
 use yii\db\Migration;
 
 /**
@@ -56,7 +57,7 @@ class m200800_000000_devis_rbac extends Migration
 
 
         // Project Manager permissions.
-        $projectManagerPermission = $auth->createRole('projectManagerDevis');
+        $projectManagerPermission = $auth->createRole(UserRoleEnum::PROJECT_MANAGER_DEVIS);
 
         // Add a new role.
         $auth->add($projectManagerPermission);
@@ -72,7 +73,7 @@ class m200800_000000_devis_rbac extends Migration
         $auth->addChild($projectManagerPermission, $updateMilestoneStatus);
 
         // Responsable Operationnel permissions.
-        $operationalManager = $auth->createRole('operationalManagerDevis');
+        $operationalManager = $auth->createRole(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS);
 
         // Add a new role.
         $auth->add($operationalManager);
@@ -89,7 +90,7 @@ class m200800_000000_devis_rbac extends Migration
         $auth->addChild($projectManagerPermission, $updateMilestoneStatus);
 
         // Responsable Operationnel permissions.
-        $accountingSupport = $auth->createRole('accountingSupportDevis');
+        $accountingSupport = $auth->createRole(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS);
 
         // Add a new role.
         $auth->add($accountingSupport);

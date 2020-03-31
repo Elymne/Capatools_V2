@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use app\widgets\TopTitle;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\user\CapaUser */
@@ -9,12 +9,28 @@ $this->title = 'Création d\'un salarié';
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="capa_user-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<?= TopTitle::widget(['title' => $this->title]) ?>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+<div class="container">
+    <div class="capa_user-create">
 
+        <div class="row">
+            <div class="col s6 offset-s3">
+
+                <div class="card">
+                    <div class="card-content">
+
+                        <?= $this->render('_form', [
+                            'model' => $model,
+                            'cellules' => $cellules
+                        ]) ?>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
 </div>

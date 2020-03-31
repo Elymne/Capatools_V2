@@ -9,6 +9,10 @@ use yii\web\IdentityInterface;
 class CapaUser extends ActiveRecord  implements IdentityInterface
 {
 
+    // Used to store index roles when validation in controller.
+    public $stored_role_devis;
+    public $stored_role_admin;
+
     public static function tableName()
     {
         return 'capa_user';
@@ -25,9 +29,12 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
             // email required
             ['email', 'required', 'message' => 'Veulliez renseigner l\'email de l\'utilisateur'],
             ['username', 'required', 'message' => 'Veulliez renseigner le nom de l\'utilisateur'],
+            ['cellule_id', 'safe'],
             ['cellule_id', 'required', 'message' => 'Veulliez selectionner la cellule de l\'utilisateur'],
             ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],
             ['cellule_id', 'validateCelid', 'message' => 'Le nom de la cellule est inconnue'],
+            ['stored_role_devis', 'safe'],
+            ['stored_role_admin', 'safe']
         ];
     }
 
@@ -101,7 +108,6 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
         return $this->auth_key;
     }
 
-
     /**
      * Generates new password
      * @return string le nouveau password
@@ -125,21 +131,21 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
     public function generatePassword()
     {
         //Generate le nouveau mot de passe de 12 characteres
-        $Newpassword = Yii::$app->getSecurity()->generateRandomString(12);
+        $newPassword = Yii::$app->getSecurity()->generateRandomString(12);
 
         $this->flag_password = true;
 
         //Save Hash du nouveau password
-        $this->SetNewPassword($Newpassword);
+        $this->setNewPassword($newPassword);
 
-        return $Newpassword;
+        return $newPassword;
     }
 
     /**
      * Sauvegarde le hash du nouveau password
      * @param string $password le mot de passe
      */
-    public function SetNewPassword($password)
+    public function setNewPassword($password)
     {
         $this->password_hash = Yii::$app->getSecurity()->generatePasswordHash($password);
     }
