@@ -278,7 +278,9 @@ class DevisController extends Controller implements ServiceInterface
                 }
 
                 // Préparation du modèle de devis à sauvegarder.
+                //TODO fix this.
                 $model->id_capa = yii::$app->user->identity->cellule->identity . printf('%04d', $model->id);
+
                 $model->id_laboxy = $model->id_capa . ' - ' . $company->name;
                 $model->company_id =  $company->id;
                 $model->capa_user_id = yii::$app->user->identity->id;
