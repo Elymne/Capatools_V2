@@ -9,7 +9,7 @@ class m200100_000010_create_upload_file extends Migration
     {
         $this->createTable('{{%upload_file}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(),
+            'name' => $this->string()->unique(),
             'devis_id' => $this->integer()->notNull()
         ]);
 

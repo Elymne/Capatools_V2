@@ -30,19 +30,58 @@ class UploadFile extends ActiveRecord
         return static::find();
     }
 
+    public static function getAllByDevis($devis_id): ActiveQuery
+    {
+        return static::find()->where(['devis_id' => $devis_id]);
+    }
+
     /**
      * Save the file stocked in $file attribute.
      * Save the file in app/web/uploads
      * 
      * @return bool Result.
      */
-    public function upload(): bool
+    public function upload(int $id): bool
     {
+        $result = true;
+
+        if (self::fileAlreadyExists()) {
+            if (self::uploadFile()) {
+                $this->devis_id = $id;
+                $this->name = $this->file->baseName;
+                $this->save();
+            } else {
+                $result = false;
+            }
+        } else {
+            $result = false;
+        }
+
+        return $result;
+    }
+
+    private function fileAlreadyExists(): bool
+    {
+        $result = true;
+        $file = $this->find()->where(['name' => $this->file->baseName])->one();
+
+        if ($file == null)
+            $result =  false;
+
+        return $result;
+    }
+
+    private function uploadFile(): bool
+    {
+
+        $result = true;
+
         if ($this->validate() && $this->file != null) {
             $this->file->saveAs('uploads/' . $this->file->baseName . '.' . $this->file->extension);
-            return true;
         } else {
-            return false;
+            $result = false;
         }
+
+        return $result;
     }
 }

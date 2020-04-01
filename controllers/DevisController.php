@@ -405,12 +405,7 @@ class DevisController extends Controller implements ServiceInterface
 
                 // Store the file in uploads folder and his name in db.
                 $fileModel->file = UploadedFile::getInstance($fileModel, 'file');
-                if ($fileModel->upload()) {
-                    $fileModel->devis_id = $model->id;
-                    $fileModel->name = $fileModel->file->baseName;
-                    $fileModel->save();
-                }
-
+                $fileModel->upload($model->id);
 
                 // Set all milestones prices to devis price.
                 $model->price = $max_price;
