@@ -23,9 +23,10 @@ use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 
 use app\models\devis\MilestoneStatus;
-
+use app\models\devis\UploadFile;
 use Exception;
 use kartik\mpdf\Pdf;
+use yii\web\UploadedFile;
 
 /**
  * Gestion des différentes routes liées au service Devis.
@@ -358,6 +359,9 @@ class DevisController extends Controller implements ServiceInterface
         $model =  DevisUpdateForm::findOne($id);
         $model->company_name = $model->company->name;
 
+        // Get file model.
+        $fileModel = new UploadFile();
+
         // Get all delivery types.
         $deliveryTypes = DeliveryType::getDeliveryTypes();
 
@@ -399,6 +403,11 @@ class DevisController extends Controller implements ServiceInterface
                     $milestone->save();
                 }
 
+                if (Yii::$app->request->isPost) {
+                    $fileModel->file = UploadedFile::getInstance($fileModel, 'file');
+                    $fileModel->upload();
+                }
+
                 // Set all milestones prices to devis price.
                 $model->price = $max_price;
                 $model->company_id = $company->id;
@@ -423,7 +432,8 @@ class DevisController extends Controller implements ServiceInterface
                 'model' => $model,
                 'delivery_types' =>  $deliveryTypes,
                 'companiesNames' => $companiesNames,
-                'milestones' => (empty($milestones)) ? [new Milestone] : $milestones
+                'milestones' => (empty($milestones)) ? [new Milestone] : $milestones,
+                'fileModel' => $fileModel
             ]
         );
     }
@@ -480,7 +490,16 @@ class DevisController extends Controller implements ServiceInterface
         }
     }
 
-    public function actionUpdateMilestoneStatus($id, $status, $id_devis)
+    /**
+     * Set a status for a milestone.
+     * Redirect view : devis/view.
+     * 
+     * @param int $id
+     * @param string $status
+     * @param int $id_devis
+     * @return View
+     */
+    public function actionUpdateMilestoneStatus(int $id, string $status, int $id_devis)
     {
 
         if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {

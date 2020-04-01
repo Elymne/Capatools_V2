@@ -70,7 +70,20 @@ AppAsset::register($this);
                 </div>
 
                 <?php if (Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS)) { ?>
+                    <div class="card">
 
+                        <div class="card-content">
+                            <span>Uploader un fichier</span>
+                        </div>
+
+                        <div class="card-action">
+                            <?= $form->field($fileModel, 'file')->fileInput() ?>
+                        </div>
+
+                    </div>
+                <?php } ?>
+
+                <?php if (Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS)) { ?>
                     <div class="card">
 
                         <div class="card-content">
@@ -78,7 +91,6 @@ AppAsset::register($this);
                         </div>
 
                         <div class="card-action">
-
                             <?php DynamicFormWidget::begin([
                                 'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                 'widgetBody' => '.container-items', // required: css class selector
@@ -136,6 +148,7 @@ AppAsset::register($this);
                         </div>
                     </div>
                 <?php } ?>
+
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue']) ?>
                     <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn orange']) ?>
