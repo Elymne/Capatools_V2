@@ -403,10 +403,14 @@ class DevisController extends Controller implements ServiceInterface
                     $milestone->save();
                 }
 
-                if (Yii::$app->request->isPost) {
-                    $fileModel->file = UploadedFile::getInstance($fileModel, 'file');
-                    $fileModel->upload();
+                // Store the file in uploads folder and his name in db.
+                $fileModel->file = UploadedFile::getInstance($fileModel, 'file');
+                if ($fileModel->upload()) {
+                    $fileModel->devis_id = $model->id;
+                    $fileModel->name = $fileModel->file->baseName;
+                    $fileModel->save();
                 }
+
 
                 // Set all milestones prices to devis price.
                 $model->price = $max_price;

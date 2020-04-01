@@ -86,8 +86,8 @@ class m200800_000000_devis_rbac extends Migration
         $auth->addChild($operationalManager, $update);
         $auth->addChild($operationalManager, $delete);
         $auth->addChild($operationalManager, $updateStatus);
-        $auth->addChild($projectManagerPermission, $pdf);
-        $auth->addChild($projectManagerPermission, $updateMilestoneStatus);
+        $auth->addChild($operationalManager, $pdf);
+        $auth->addChild($operationalManager, $updateMilestoneStatus);
 
         // Responsable Operationnel permissions.
         $accountingSupport = $auth->createRole(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS);
@@ -103,8 +103,8 @@ class m200800_000000_devis_rbac extends Migration
         $auth->addChild($accountingSupport, $update);
         $auth->addChild($accountingSupport, $delete);
         $auth->addChild($accountingSupport, $updateStatus);
-        $auth->addChild($projectManagerPermission, $pdf);
-        $auth->addChild($projectManagerPermission, $updateMilestoneStatus);
+        $auth->addChild($accountingSupport, $pdf);
+        $auth->addChild($accountingSupport, $updateMilestoneStatus);
 
 
         // -- USERS ASSIGNEMENT (for testing) -- \\
