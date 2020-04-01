@@ -16,7 +16,7 @@ class UploadFile extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['file'], 'file', 'skipOnEmpty' => true]
+            [['file'], 'file', 'skipOnEmpty' => false]
         ];
     }
 
@@ -39,13 +39,13 @@ class UploadFile extends ActiveRecord
      * Save the file stocked in $file attribute.
      * Save the file in app/web/uploads
      * 
-     * @return bool Result.
+     * @return bool Result if you wish to manage errors.
      */
     public function upload(int $id): bool
     {
         $result = true;
 
-        if (self::fileAlreadyExists()) {
+        if (!self::doesFileAlreadyExists()) {
             if (self::uploadFile()) {
                 $this->devis_id = $id;
                 $this->name = $this->file->baseName;
@@ -60,7 +60,12 @@ class UploadFile extends ActiveRecord
         return $result;
     }
 
-    private function fileAlreadyExists(): bool
+    /**
+     * Return true if file already exists, else false.
+     * 
+     * @return bool
+     */
+    private function doesFileAlreadyExists(): bool
     {
         $result = true;
         $file = $this->find()->where(['name' => $this->file->baseName])->one();
