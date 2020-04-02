@@ -67,7 +67,7 @@ function getCollumnArray()
     }
     array_push($result, getCompanyArray());
     array_push($result, getStatusArray());
-    array_push($result, getUpdateButtonData());
+    //array_push($result, getUpdateButtonData());
     array_push($result, getDocumentButtonData());
     array_push($result, getPdfButtonData());
 
