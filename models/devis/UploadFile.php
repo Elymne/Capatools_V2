@@ -16,7 +16,7 @@ class UploadFile extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['file'], 'file', 'skipOnEmpty' => false]
+            [['file'], 'file', 'skipOnEmpty' => true]
         ];
     }
 
@@ -49,5 +49,10 @@ class UploadFile extends ActiveRecord
             $result =  false;
 
         return $result;
+    }
+
+    public function getFullFilename(): string
+    {
+        return $this->name . '.' . $this->type;
     }
 }

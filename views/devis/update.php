@@ -74,6 +74,7 @@ AppAsset::register($this);
 
                         <div class="card-content">
                             <span>Uploader un fichier</span>
+                            <p>Fichier stocké : <?php echo getFileName($fileModel) ?></p>
                         </div>
 
                         <div class="card-action">
@@ -199,12 +200,12 @@ $(function () {
 
 <?php
 
-/**
- * Keep safe.
- *  <?= $form->field($milestone, "[{$i}]delivery_date")->widget(DatePicker::classname(), ['dateFormat' => 'dd-MM-yyyy', 'options' => ['class' => 'form-control picker', 'autocomplete' => 'off']])->label('Date') ?>
- * 
- * 
- * 
- * 
- * <?= $form->field($model, 'price')->textInput()->label("Prix de la prestation ") ?>
- */
+function getFileName($fileModel): string
+{
+
+    if ($fileModel->id == null) {
+        return 'aucun';
+    } else {
+        return $fileModel->getFullFilename();
+    }
+}

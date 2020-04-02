@@ -362,7 +362,11 @@ class DevisController extends Controller implements ServiceInterface
         $model->company_name = $model->company->name;
 
         // Get file model.
-        $fileModel = new UploadFile();
+        $fileModel = UploadFile::getByDevis($id);
+        if ($fileModel == null) {
+            $fileModel = new UploadFile();
+        }
+
 
         // Get all delivery types.
         $deliveryTypes = DeliveryType::getDeliveryTypes();
@@ -416,8 +420,6 @@ class DevisController extends Controller implements ServiceInterface
 
                 // Save the Devis change.
                 $model->save();
-
-
 
                 Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
                 Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
