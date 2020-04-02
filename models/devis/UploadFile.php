@@ -25,14 +25,14 @@ class UploadFile extends ActiveRecord
      * 
      * @return ActiveQuery Result of query.
      */
-    public static function getAll(): ActiveQuery
+    public static function getAll()
     {
         return static::find();
     }
 
-    public static function getAllByDevis($devis_id): ActiveQuery
+    public static function getByDevis($devis_id)
     {
-        return static::find()->where(['devis_id' => $devis_id]);
+        return static::find()->where(['devis_id' => $devis_id])->One();
     }
 
     public static function getFileByIdCapa(string $idCapa)

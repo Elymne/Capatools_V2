@@ -3,6 +3,7 @@
 namespace app\helper\_clazz;
 
 use app\models\devis\UploadFile;
+use Yii;
 
 class UploadFileHelper
 {
@@ -54,5 +55,14 @@ class UploadFileHelper
         }
 
         return $result;
+    }
+
+    public static function downloadFile(string $file)
+    {
+        $path = Yii::getAlias('@webroot') . '/uploads/' . $file;
+
+        if (file_exists($path)) {
+            return Yii::$app->response->sendFile($path, $file);
+        }
     }
 }

@@ -25,7 +25,6 @@ use app\helper\_enum\UserRoleEnum;
 
 use app\models\devis\MilestoneStatus;
 use app\models\devis\UploadFile;
-use Exception;
 use kartik\mpdf\Pdf;
 use yii\web\UploadedFile;
 
@@ -246,8 +245,6 @@ class DevisController extends Controller implements ServiceInterface
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
         return $pdf->render();
     }
-
-
 
     /**
      * Render view : devis/create.
@@ -519,6 +516,17 @@ class DevisController extends Controller implements ServiceInterface
             'model' => $this->findModel($id_devis),
             'milestones' => Milestone::find()->where(['devis_id' => $id_devis])->all()
         ]);
+    }
+
+    public function actionDownloadFile(int $id)
+    {
+
+        $fileModel = UploadFile::getByDevis($id);
+
+        if ($fileModel != null) {
+            $pathFile = $fileModel->name . '.' . $fileModel->type;
+            UploadFileHelper::downloadFile($pathFile);
+        }
     }
 
     /**

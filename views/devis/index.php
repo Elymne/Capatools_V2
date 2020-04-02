@@ -172,7 +172,7 @@ function getUpdateButtonData()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">build</i>',
-                Url::to(['devis/update', 'id' => $model->id]),
+                Url::to(['devis/upload', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
@@ -191,7 +191,7 @@ function getDocumentButtonData()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">cloud_download</i>',
-                Url::to(['devis/view', 'id' => $model->id]),
+                Url::to(['devis/download-file', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
