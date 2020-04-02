@@ -19,6 +19,7 @@ use app\models\devis\CompanyCreateForm;
 use app\models\devis\DevisSearch;
 use app\models\devis\Milestone;
 use app\helper\_clazz\DateHelper;
+use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_clazz\UploadFileHelper;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
@@ -169,8 +170,7 @@ class DevisController extends Controller implements ServiceInterface
         $searchModel = new DevisSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        MenuSelectorHelper::setMenuDevisIndex();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider
@@ -188,8 +188,7 @@ class DevisController extends Controller implements ServiceInterface
     public function actionView($id)
     {
 
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        MenuSelectorHelper::setMenuDevisNone();
         return $this->render('view', [
             'model' => $this->findModel($id),
             'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
@@ -289,14 +288,12 @@ class DevisController extends Controller implements ServiceInterface
                 $model->id_capa = yii::$app->user->identity->cellule->identity . $model->id;
                 $model->save();
 
-                Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-                Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
+                MenuSelectorHelper::setMenuDevisIndex();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_CREATE;
+        MenuSelectorHelper::setMenuDevisCreate();
         return $this->render(
             'create',
             [
@@ -329,14 +326,12 @@ class DevisController extends Controller implements ServiceInterface
 
                 $model->save();
 
-                Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-                Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_CREATE;
+                MenuSelectorHelper::setMenuDevisCreate();
                 return $this->redirect(['create']);
             }
         }
 
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_ADD_COMPANY;
+        MenuSelectorHelper::setMenuDevisAddCompany();
         return $this->render(
             'addCompany',
             [
@@ -421,15 +416,12 @@ class DevisController extends Controller implements ServiceInterface
                 // Save the Devis change.
                 $model->save();
 
-                Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-                Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
-                //return var_dump($model->delivery_type->label);
+                MenuSelectorHelper::setMenuDevisNone();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
+        MenuSelectorHelper::setMenuDevisNone();
         return $this->render(
             'update',
             [
@@ -455,8 +447,7 @@ class DevisController extends Controller implements ServiceInterface
     {
         $this->findModel($id)->delete();
 
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
+        MenuSelectorHelper::setMenuDevisNone();
         return $this->redirect(['index']);
     }
 
@@ -478,8 +469,7 @@ class DevisController extends Controller implements ServiceInterface
             $this->setStatus($model, $status);
 
 
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        MenuSelectorHelper::setMenuDevisNone();
         return $this->render('view', [
             'model' => $this->findModel($id),
             'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
@@ -512,8 +502,7 @@ class DevisController extends Controller implements ServiceInterface
             }
         }
 
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        MenuSelectorHelper::setMenuDevisNone();
         return $this->render('view', [
             'model' => $this->findModel($id_devis),
             'milestones' => Milestone::find()->where(['devis_id' => $id_devis])->all()
