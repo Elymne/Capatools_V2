@@ -19,6 +19,7 @@ use app\models\devis\CompanyCreateForm;
 use app\models\devis\DevisSearch;
 use app\models\devis\Milestone;
 use app\helper\_clazz\DateHelper;
+use app\helper\_clazz\UploadFileHelper;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 
@@ -409,7 +410,8 @@ class DevisController extends Controller implements ServiceInterface
 
                 // Store the file in uploads folder and his name in db.
                 $fileModel->file = UploadedFile::getInstance($fileModel, 'file');
-                $fileModel->upload($model->id);
+                $generatedFileName = (string) $model->id_capa;
+                UploadFileHelper::upload($fileModel, $generatedFileName, $model->id);
 
                 // Set all milestones prices to devis price.
                 $model->price = $max_price;
