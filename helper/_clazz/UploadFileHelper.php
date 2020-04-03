@@ -36,14 +36,14 @@ class UploadFileHelper
             // If it exists, we just update extension file and versionning.
             // TODO Fix ici, je suis obligé de supprimé pour fichier en db pour l'update, sinon rien ne se produit. Yii2 Behiavior.
             if (self::uploadFile($filename, $fileModel)) {
-                $version = $fileModel->version + 1;
+                $version = $fileModelCheck->version + 1;
 
-                $fileModelCheck->delete();
-                $fileModel->devis_id = $devis_id;
-                $fileModel->name = $filename;
-                $fileModel->type = $fileModel->file->extension;
-                $fileModel->version = $version;
-                $fileModel->save();
+                //$fileModelCheck->delete();
+                $fileModelCheck->devis_id = $devis_id;
+                $fileModelCheck->name = $filename;
+                $fileModelCheck->type = $fileModel->file->extension;
+                $fileModelCheck->version = $version;
+                $fileModelCheck->save();
             } else {
                 $result = false;
             }

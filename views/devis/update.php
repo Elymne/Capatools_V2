@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
 use app\helper\_enum\UserRoleEnum;
+use app\models\devis\UploadFile;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 
@@ -74,7 +75,7 @@ AppAsset::register($this);
 
                         <div class="card-content">
                             <span>Uploader un fichier</span>
-                            <p>Fichier actuellement stocké : <?php echo getFileName($fileModel) ?></p>
+                            <p>Fichier actuellement stocké : <?php echo getFileName($model->id) ?></p>
                         </div>
 
                         <div class="card-action">
@@ -203,12 +204,17 @@ $(function () {
 
 <?php
 
-function getFileName($fileModel): string
+/**
+ * Get filename if it exists, else return "none" value.
+ */
+function getFileName(int $id): string
 {
 
-    if ($fileModel->id == null) {
+    $file = UploadFile::getByDevis($id);
+
+    if ($file == null) {
         return 'aucun';
     } else {
-        return $fileModel->getFullFilename();
+        return $file->getFullFilename();
     }
 }

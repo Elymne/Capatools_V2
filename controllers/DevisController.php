@@ -358,11 +358,7 @@ class DevisController extends Controller implements ServiceInterface
         $model->company_name = $model->company->name;
 
         // Get file model.
-        $fileModel = UploadFile::getByDevis($id);
-        if ($fileModel == null) {
-            $fileModel = new UploadFile();
-        }
-
+        $fileModel = new UploadFile();
 
         // Get all delivery types.
         $deliveryTypes = DeliveryType::getDeliveryTypes();
@@ -407,8 +403,7 @@ class DevisController extends Controller implements ServiceInterface
 
                 // Store the file in uploads folder and his name in db.
                 $fileModel->file = UploadedFile::getInstance($fileModel, 'file');
-                $generatedFileName = (string) $model->id_capa;
-                UploadFileHelper::upload($fileModel, $generatedFileName, $model->id);
+                UploadFileHelper::upload($fileModel, (string) $model->id_capa, $model->id);
 
                 // Set all milestones prices to devis price.
                 $model->price = $max_price;
