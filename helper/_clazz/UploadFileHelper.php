@@ -10,7 +10,8 @@ class UploadFileHelper
 
     /**
      * Save the file stocked in $file attribute.
-     * Save the file in app/web/uploads
+     * Save the file in app/web/uploads.
+     * Save the data file in db.
      * 
      * @return bool Result if you wish to manage errors.
      */
@@ -20,21 +21,24 @@ class UploadFileHelper
         $fileModelCheck = UploadFile::getFileByIdCapa($filename);
 
         if ($fileModelCheck == null) {
+            // If file does not exists, we add it to database and set version to 1.
             if (self::uploadFile($filename, $fileModel)) {
                 $fileModel->devis_id = $devis_id;
                 $fileModel->name = $filename;
                 $fileModel->type = $fileModel->file->extension;
+                $fileModel->version = 1;
                 $fileModel->save();
             } else {
                 $result = false;
             }
         } else {
-            // TODO update file versioning.
+            // =If it exists, we just update extension file and versionning.
             if (self::uploadFile($filename, $fileModel)) {
                 $fileModelCheck->delete();
                 $fileModel->devis_id = $devis_id;
                 $fileModel->name = $filename;
                 $fileModel->type = $fileModel->file->extension;
+                $fileModel->version += $fileModel->version;
                 $fileModel->save();
             } else {
                 $result = false;

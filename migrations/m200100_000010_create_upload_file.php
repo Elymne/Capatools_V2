@@ -11,6 +11,7 @@ class m200100_000010_create_upload_file extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string()->unique(),
             'type' => $this->string(),
+            'version' => $this->integer()->notNull(),
             'devis_id' => $this->integer()->notNull()
         ]);
 
