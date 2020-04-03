@@ -74,11 +74,14 @@ AppAsset::register($this);
 
                         <div class="card-content">
                             <span>Uploader un fichier</span>
-                            <p>Fichier stocké : <?php echo getFileName($fileModel) ?></p>
+                            <p>Fichier actuellement stocké : <?php echo getFileName($fileModel) ?></p>
                         </div>
 
                         <div class="card-action">
-                            <?= $form->field($fileModel, 'file')->fileInput() ?>
+                            <?= $form->field($fileModel, 'file')
+                                ->label('Télécharger', ['class' => 'waves-effect waves-light btn'])
+                                ->fileInput(['class' => 'sr-only'])
+                            ?>
                         </div>
 
                     </div>
