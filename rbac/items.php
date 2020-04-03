@@ -21,6 +21,12 @@ return [
     'updateStatusDevis' => [
         'type' => 2,
     ],
+    'pdfDevis' => [
+        'type' => 2,
+    ],
+    'updateMilestoneStatusDevis' => [
+        'type' => 2,
+    ],
     'projectManagerDevis' => [
         'type' => 1,
         'children' => [
@@ -30,6 +36,8 @@ return [
             'addCompanyDevis',
             'updateDevis',
             'updateStatusDevis',
+            'pdfDevis',
+            'updateMilestoneStatusDevis',
         ],
     ],
     'operationalManagerDevis' => [
@@ -42,6 +50,8 @@ return [
             'updateDevis',
             'deleteDevis',
             'updateStatusDevis',
+            'pdfDevis',
+            'updateMilestoneStatusDevis',
         ],
     ],
     'accountingSupportDevis' => [
@@ -54,6 +64,8 @@ return [
             'updateDevis',
             'deleteDevis',
             'updateStatusDevis',
+            'pdfDevis',
+            'updateMilestoneStatusDevis',
         ],
     ],
     'indexAdmin' => [

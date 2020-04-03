@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
 use app\helper\_enum\UserRoleEnum;
+use app\models\devis\UploadFile;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 
@@ -70,7 +71,24 @@ AppAsset::register($this);
                 </div>
 
                 <?php if (Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS)) { ?>
+                    <div class="card">
 
+                        <div class="card-content">
+                            <span>Uploader un fichier</span>
+                            <p>Fichier actuellement stocké : <?php echo getFileName($model->id) ?></p>
+                        </div>
+
+                        <div class="card-action">
+                            <?= $form->field($fileModel, 'file')
+                                ->label('Upload un fichier', [])
+                                ->fileInput([])
+                            ?>
+                        </div>
+
+                    </div>
+                <?php } ?>
+
+                <?php if (Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS)) { ?>
                     <div class="card">
 
                         <div class="card-content">
@@ -78,7 +96,6 @@ AppAsset::register($this);
                         </div>
 
                         <div class="card-action">
-
                             <?php DynamicFormWidget::begin([
                                 'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                 'widgetBody' => '.container-items', // required: css class selector
@@ -136,6 +153,7 @@ AppAsset::register($this);
                         </div>
                     </div>
                 <?php } ?>
+
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue']) ?>
                     <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn orange']) ?>
@@ -187,11 +205,16 @@ $(function () {
 <?php
 
 /**
- * Keep safe.
- *  <?= $form->field($milestone, "[{$i}]delivery_date")->widget(DatePicker::classname(), ['dateFormat' => 'dd-MM-yyyy', 'options' => ['class' => 'form-control picker', 'autocomplete' => 'off']])->label('Date') ?>
- * 
- * 
- * 
- * 
- * <?= $form->field($model, 'price')->textInput()->label("Prix de la prestation ") ?>
+ * Get filename if it exists, else return "none" value.
  */
+function getFileName(int $id): string
+{
+
+    $file = UploadFile::getByDevis($id);
+
+    if ($file == null) {
+        return 'aucun';
+    } else {
+        return $file->getFullFilename();
+    }
+}

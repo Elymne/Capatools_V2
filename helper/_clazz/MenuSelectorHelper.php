@@ -25,4 +25,28 @@ class MenuSelectorHelper
         Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_CREATE;
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
     }
+
+    static function setMenuDevisNone()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+    }
+
+    static function setMenuDevisIndex()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+    }
+
+    static function setMenuDevisCreate()
+    {
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_CREATE;
+    }
+
+    static function setMenuDevisAddCompany()
+    {
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_ADD_COMPANY;
+    }
 }
