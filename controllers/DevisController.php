@@ -461,6 +461,7 @@ class DevisController extends Controller implements ServiceInterface
     {
         $model = $this->findModel($id);
 
+
         if (Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS))
             $this->setStatus($model, $status);
 
@@ -468,7 +469,8 @@ class DevisController extends Controller implements ServiceInterface
         MenuSelectorHelper::setMenuDevisNone();
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
+            'milestones' => Milestone::find()->where(['devis_id' => $id])->all(),
+            'fileModel' => UploadFile::getByDevis($id)
         ]);
     }
 
@@ -501,7 +503,8 @@ class DevisController extends Controller implements ServiceInterface
         MenuSelectorHelper::setMenuDevisNone();
         return $this->render('view', [
             'model' => $this->findModel($id_devis),
-            'milestones' => Milestone::find()->where(['devis_id' => $id_devis])->all()
+            'milestones' => Milestone::find()->where(['devis_id' => $id_devis])->all(),
+            'fileModel' => UploadFile::getByDevis($id)
         ]);
     }
 
