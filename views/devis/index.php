@@ -1,6 +1,8 @@
 <?php
 
 use app\helper\_enum\UserRoleEnum;
+use app\models\devis\Devis;
+use app\models\devis\UploadFile;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -16,6 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
+
+
 
 <div class="container">
     <div class="devis-index">
@@ -67,8 +71,10 @@ function getCollumnArray()
     }
     array_push($result, getCompanyArray());
     array_push($result, getStatusArray());
-    //array_push($result, getUpdateButtonData());
+
     array_push($result, getDocumentButtonData());
+
+
     array_push($result, getPdfButtonData());
 
     return $result;
@@ -189,16 +195,30 @@ function getDocumentButtonData()
     return [
         'format' => 'raw',
         'value' => function ($model, $key, $index, $column) {
-            return Html::a(
-                '<i class="material-icons right">cloud_download</i>',
-                Url::to(['devis/download-file', 'id' => $model->id]),
-                [
-                    'id' => 'grid-custom-button',
-                    'data-pjax' => true,
-                    'action' => Url::to(['devis/update', 'id' => $model->id]),
-                    'class' => 'btn-floating btn-large waves-effect waves-light blue',
-                ]
-            );
+
+            if (UploadFile::getByDevis($model->id) != null) {
+                return Html::a(
+                    '<i class="material-icons right">cloud_download</i>',
+                    Url::to(['devis/download-file', 'id' => $model->id]),
+                    [
+                        'id' => 'grid-custom-button',
+                        'data-pjax' => true,
+                        'action' => Url::to(['devis/update', 'id' => $model->id]),
+                        'class' => 'btn-floating btn-large waves-effect waves-light blue',
+                    ]
+                );
+            } else {
+                return Html::a(
+                    '<i class="material-icons right">cloud_download</i>',
+                    Url::to(['devis/download-file', 'id' => $model->id]),
+                    [
+                        'id' => 'grid-custom-button',
+                        'data-pjax' => true,
+                        'action' => Url::to(['devis/update', 'id' => $model->id]),
+                        'class' => 'btn-floating btn-large disabled',
+                    ]
+                );
+            }
         }
     ];
 }
