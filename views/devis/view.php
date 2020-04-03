@@ -140,7 +140,7 @@ $indexStatus = getIndexStatus($model);
 
                 <div class="card-action">
 
-                    <?php echo createDataTable($model); ?>
+                    <?php echo createDataTable($model, $fileModel); ?>
 
                 </div>
             </div>
@@ -217,7 +217,7 @@ function isStatusPassed($indexStatus, $arrayKey)
  * 
  * @return HTML table.
  */
-function createDataTable($model)
+function createDataTable($model, $fileModel)
 {
 
     // You can't use object with <<<HTML HTML; so you have to create value like bellow.
@@ -236,6 +236,15 @@ function createDataTable($model)
 
     $laboxy_name = $model->id_laboxy;
     $laboxy_prestation_duration = $model->service_duration * Yii::$app->params['LaboxyTimeDay'];
+
+    if ($fileModel == null) {
+        $file_name = 'Aucun fichier';
+        $file_version = '';
+    } else {
+        $file_name = $fileModel->name . '.' . $fileModel->type;
+        $file_version = $fileModel->version;
+    }
+
 
     return <<<HTML
         <table class="highlight">
@@ -312,8 +321,22 @@ function createDataTable($model)
                     <td class='header'>durée prestation</td>
                     <td>${laboxy_prestation_duration}</td>
                 </tr>
-                
 
+                 <!-- Fichier uploadé -->
+
+                 <tr class='group'>
+                    <td class='header'>Fichier uploadé</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>nom</td>
+                    <td>${file_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>version</td>
+                    <td>${file_version}</td>
+                </tr>
+                
             </tbody>
 
         </table>

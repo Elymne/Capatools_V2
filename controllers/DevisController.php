@@ -191,7 +191,8 @@ class DevisController extends Controller implements ServiceInterface
         MenuSelectorHelper::setMenuDevisNone();
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
+            'milestones' => Milestone::find()->where(['devis_id' => $id])->all(),
+            'fileModel' => UploadFile::getByDevis($id)
         ]);
     }
 
@@ -554,6 +555,7 @@ class DevisController extends Controller implements ServiceInterface
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS_NONE;
 
         $model = $this->findModel($id);
+
         if ($model) {
             $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
             if (file_exists($filepath)) {

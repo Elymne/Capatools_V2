@@ -79,8 +79,8 @@ AppAsset::register($this);
 
                         <div class="card-action">
                             <?= $form->field($fileModel, 'file')
-                                ->label('Télécharger', ['class' => 'waves-effect waves-light btn'])
-                                ->fileInput(['class' => 'sr-only'])
+                                ->label('Upload un fichier', [])
+                                ->fileInput([])
                             ?>
                         </div>
 
