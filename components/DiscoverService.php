@@ -2,7 +2,6 @@
 
 namespace app\components;
 
-
 use yii\helpers\FileHelper;
 use Yii;
 use yii\base\Component;
