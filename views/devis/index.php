@@ -72,10 +72,10 @@ function getCollumnArray()
     array_push($result, getCompanyArray());
     array_push($result, getStatusArray());
 
+    // Buttons displaying.
     array_push($result, getDocumentButtonData());
-
-
     array_push($result, getPdfButtonData());
+    array_push($result, getExcelButtonData());
 
     return $result;
 }
@@ -210,11 +210,11 @@ function getDocumentButtonData()
             } else {
                 return Html::a(
                     '<i class="material-icons right">cloud_download</i>',
-                    Url::to(['devis/download-file', 'id' => $model->id]),
+                    Url::to(['#', 'id' => $model->id]),
                     [
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
-                        'action' => Url::to(['devis/update', 'id' => $model->id]),
+                        'action' => Url::to(['#', 'id' => $model->id]),
                         'class' => 'btn-floating btn-large disabled',
                     ]
                 );
@@ -236,6 +236,25 @@ function getPdfButtonData()
                     'data-pjax' => true,
                     'action' => Url::to(['devis/pdf', 'id' => $model->id]),
                     'class' => 'btn-floating btn-large waves-effect waves-light purple',
+                ]
+            );
+        }
+    ];
+}
+
+function getExcelButtonData()
+{
+    return [
+        'format' => 'raw',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons right">picture_as_pdf</i>',
+                Url::to(['devis/download-excel', 'id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'action' => Url::to(['devis/update', 'id' => $model->id]),
+                    'class' => 'btn-floating btn-large waves-effect waves-light green',
                 ]
             );
         }

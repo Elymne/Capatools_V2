@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\ExcelExportService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -23,6 +24,8 @@ use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_clazz\UploadFileHelper;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
+
+use arturoliveira\ExcelView;
 
 use app\models\devis\MilestoneStatus;
 use app\models\devis\UploadFile;
@@ -194,56 +197,6 @@ class DevisController extends Controller implements ServiceInterface
             'milestones' => Milestone::find()->where(['devis_id' => $id])->all(),
             'fileModel' => UploadFile::getByDevis($id)
         ]);
-    }
-
-    /**
-     * Render view : devis/pdf?id=?
-     * Generate PDF and show it.
-     * 
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException If the model is not found.
-     */
-    public function actionPdf($id)
-    {
-
-        $model = $this->findModel($id);
-
-        $css = [
-            '' . Yii::getAlias('@web') . 'app-assets/vendors/vendors.min.css',
-            '' . Yii::getAlias('@web') . 'app-assets/css/themes/vertical-dark-menu-template/materialize.min.css',
-            '' . Yii::getAlias('@web') . 'app-assets/css/themes/vertical-dark-menu-template/style.min.css',
-            '' . Yii::getAlias('@web') . 'app-assets/css/pages/dashboard.min.css',
-            '' . Yii::getAlias('@web') . 'css/custom.css'
-        ];
-
-        $filename = $model->internal_name . '_pdf_' . date("r");
-
-        $content = $this->renderPartial('pdf', [
-            'model' => $model,
-            'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
-        ]);
-
-        $pdf = new Pdf([
-            'mode' => Pdf::MODE_CORE,
-            'format' => Pdf::FORMAT_LEDGER,
-            'orientation' => Pdf::ORIENT_PORTRAIT,
-            'destination' => Pdf::DEST_BROWSER,
-            'content' => $content,
-            'filename' => $filename,
-            'cssFile' => $css,
-
-            'options' => [],
-            'methods' => [
-                'SetTitle' => 'Fiche de devis - TEST',
-                'SetSubject' => 'Generating PDF files',
-                'SetHeader' => ['Fiche Devis - ' . $model->internal_name . ' || Generated On: ' . date("r")],
-                'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
-            ]
-        ]);
-
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-        return $pdf->render();
     }
 
     /**
@@ -508,9 +461,13 @@ class DevisController extends Controller implements ServiceInterface
         ]);
     }
 
+    /**
+     * Download file.
+     * 
+     * @param int $id
+     */
     public function actionDownloadFile(int $id)
     {
-
         $fileModel = UploadFile::getByDevis($id);
 
         if ($fileModel != null) {
@@ -518,6 +475,69 @@ class DevisController extends Controller implements ServiceInterface
             UploadFileHelper::downloadFile($pathFile);
         }
     }
+
+    /**
+     * Generate excel file and download it.
+     * 
+     * @param int $id
+     */
+    public function actionDownloadExcel($id)
+    {
+        $model = $this->findModel($id);
+        if ($model != null) ExcelExportService::exportModelDataToExcel($model, ExcelExportService::DEVIS_TYPE);
+    }
+
+    /**
+     * Render view : devis/pdf?id=?
+     * Generate PDF and show it.
+     * 
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException If the model is not found.
+     */
+    public function actionPdf($id)
+    {
+
+        $model = $this->findModel($id);
+
+        $css = [
+            '' . Yii::getAlias('@web') . 'app-assets/vendors/vendors.min.css',
+            '' . Yii::getAlias('@web') . 'app-assets/css/themes/vertical-dark-menu-template/materialize.min.css',
+            '' . Yii::getAlias('@web') . 'app-assets/css/themes/vertical-dark-menu-template/style.min.css',
+            '' . Yii::getAlias('@web') . 'app-assets/css/pages/dashboard.min.css',
+            '' . Yii::getAlias('@web') . 'css/custom.css'
+        ];
+
+        $filename = $model->internal_name . '_pdf_' . date("r");
+
+        $content = $this->renderPartial('pdf', [
+            'model' => $model,
+            'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
+        ]);
+
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_CORE,
+            'format' => Pdf::FORMAT_LEDGER,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $content,
+            'filename' => $filename,
+            'cssFile' => $css,
+
+            'options' => [],
+            'methods' => [
+                'SetTitle' => 'Fiche de devis - TEST',
+                'SetSubject' => 'Generating PDF files',
+                'SetHeader' => ['Fiche Devis - ' . $model->internal_name . ' || Generated On: ' . date("r")],
+                'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
+            ]
+        ]);
+
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        return $pdf->render();
+    }
+
+
 
     /**
      * Finds the Devis model based on its primary key value.
