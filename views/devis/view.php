@@ -431,8 +431,8 @@ function updateStatus($id, $status, $idDevis)
     if ($status == MilestoneStatus::ENCOURS) {
         return <<<HTML
             <td>
-                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating btn-large waves-effect waves-light blue">
-                    <i class="material-icons right">system_update_alt</i>
+                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating waves-effect waves-light blue">
+                    <i class="material-icons right">check_circle</i>
                 </a>
             </td>
         HTML;
@@ -441,8 +441,8 @@ function updateStatus($id, $status, $idDevis)
     if ($status == MilestoneStatus::FACTURATIONENCOURS) {
         return <<<HTML
             <td>
-                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating btn-large waves-effect waves-light blue">
-                    <i class="material-icons right">system_update_alt</i>
+                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating waves-effect waves-light blue">
+                    <i class="material-icons right">check_circle</i>
                 </a>
             </td>
         HTML;

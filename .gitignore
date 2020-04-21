@@ -34,3 +34,6 @@ tests/_support/_generated
 /config/db.php
 
 /web/uploads/*
+
+# rbac ignores files
+/rbac/*
