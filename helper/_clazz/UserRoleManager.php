@@ -71,6 +71,9 @@ class UserRoleManager
             case UserRoleEnum::ADMINISTRATOR:
                 self::setRole($id, $role);
                 break;
+            case UserRoleEnum::SUPER_ADMINISTRATOR:
+                self::setRole($id, $role);
+                break;
         }
     }
 

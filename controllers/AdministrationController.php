@@ -84,7 +84,7 @@ class AdministrationController extends Controller
     {
         $result = [];
 
-        if (Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR)) {
+        if (Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) || Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR)) {
             $result =
                 [
                     'priorite' => 1,

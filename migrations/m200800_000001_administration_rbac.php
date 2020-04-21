@@ -1,5 +1,6 @@
 <?php
 
+use app\helper\_enum\UserRoleEnum;
 use yii\db\Migration;
 
 /**
@@ -41,8 +42,7 @@ class m200800_000001_administration_rbac extends Migration
 
 
         // Project Manager permissions.
-        $administratorPermission = $auth->createRole('administrator');
-        $superAdministratorPermission = $auth->createRole('superAdministrator');
+        $administratorPermission = $auth->createRole(UserRoleEnum::ADMINISTRATOR);
 
         // Add a new role.
         $auth->add($administratorPermission);
@@ -53,6 +53,9 @@ class m200800_000001_administration_rbac extends Migration
         $auth->addChild($administratorPermission, $view);
         $auth->addChild($administratorPermission, $update);
         $auth->addChild($administratorPermission, $delete);
+
+        // Super administrator
+        $superAdministratorPermission = $auth->createRole(UserRoleEnum::SUPER_ADMINISTRATOR);
 
         // Add a new role.
         $auth->add($superAdministratorPermission);
