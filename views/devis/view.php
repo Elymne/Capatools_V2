@@ -344,7 +344,6 @@ function createDataTable($model, $fileModel)
 }
 
 /**
- * TODO utiliser l'option HTML pour gérérer cette partie (plus visible).
  * Create table with all milestones.
  * @param Array<Milestone> $model : List of milestones.
  * 

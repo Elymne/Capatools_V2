@@ -18,6 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
 $userRoles = [];
 if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
+// Get role by service.
+$adminRole = UserRoleEnum::ADMINISTRATOR_ROLE_STRING[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
+$devisRole = UserRoleEnum::DEVIS_ROLE_STRING[UserRoleManager::getSelectedDevisRoleKey($userRoles)];
+
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -30,7 +34,13 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
                 <div class="card-content">
                     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn blue']) ?>
-                    <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
+
+                    <?php if ($adminRole === UserRoleEnum::ADMINISTRATOR && !Yii::$app->user->can('superAdministrator')) : ?>
+                        <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['#', -1], ['class' => 'btn disabled']) ?>
+                    <?php else : ?>
+                        <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
+                    <?php endif ?>
+
                     <?= Html::a('Supprimer <i class="material-icons right">delete</i> ', ['delete', 'id' => $model->id], [
                         'class' => 'waves-effect waves-light btn red',
                         'data' => [
@@ -61,7 +71,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
                     <br /><br /><br />
 
-                    <?php echo createRolesTable($userRoles); ?>
+                    <?php echo createRolesTable($adminRole, $devisRole); ?>
 
                 </div>
 
@@ -73,7 +83,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
 <?php
 
-function createRolesTable($userRoles)
+function createRolesTable(string $adminRole, string $devisRole): string
 {
 
     $head = <<<HTML
@@ -88,8 +98,7 @@ function createRolesTable($userRoles)
 
     $body = '';
 
-    $adminRole = UserRoleEnum::ADMINISTRATOR_ROLE_STRING[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
-    $devisRole = UserRoleEnum::DEVIS_ROLE_STRING[UserRoleManager::getSelectedDevisRoleKey($userRoles)];
+
 
     // Admin row.
     $body = $body . <<<HTML

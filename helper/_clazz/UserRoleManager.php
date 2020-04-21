@@ -5,10 +5,20 @@ namespace app\helper\_clazz;
 use app\helper\_enum\UserRoleEnum;
 use Yii;
 
+/**
+ * Classe permettant de gérer la gestion des droits de Yii2.
+ * Cette classe fonctionne de paire avec la classe UserRoleEnum.
+ */
 class UserRoleManager
 {
 
-    static function getUserRoles(int $id)
+    /**
+     * Récupère tous les droits d'un utilisateur depuis sont id.
+     * @param int $id : identifiant utilisateur.
+     * 
+     * @return array La liste sous forme de string de tous les rôles de l'utilisateur.
+     */
+    static function getUserRoles(int $id): array
     {
         $userRoles = Yii::$app->authManager->getAssignments($id);
 
@@ -20,12 +30,21 @@ class UserRoleManager
         return array_map($func, $userRoles);
     }
 
+    /**
+     * Retire tous les droits d'un utilisateur.
+     * @param int $id : identifiant utilisateur.
+     */
     static function removeRolesFromUser(int $id)
     {
         $auth = \Yii::$app->authManager;
         $auth->revokeAll($id);
     }
 
+    /**
+     * Attribue un droit à un utilisateur sur le service des devis.
+     * @param int $id : identifiant utilisateur.
+     * @param string $role : UserRoleEnum.
+     */
     static function setDevisRole(int $id, string $role)
     {
         switch ($role) {
@@ -41,6 +60,11 @@ class UserRoleManager
         }
     }
 
+    /**
+     * Attribue un droit à un utilisateur sur le service d'administration.
+     * @param int $id : identifiant utilisateur.
+     * @param string $role : UserRoleEnum.
+     */
     static function setAdministrationRole(int $id, string $role)
     {
         switch ($role) {
@@ -57,7 +81,12 @@ class UserRoleManager
         $auth->assign($authorRole, $id);
     }
 
-    static function getSelectedDevisRoleKey($userRoles): int
+    /**
+     * Récupère l'index l'index du droit d'un utilisateur sur le service devis.
+     * L'utilité de cette fonction réside dans le fait de pouvoir lister les droits dans une liste selectionnable.
+     * @param array $userRole : Liste de tous les droits d'un utilisateur.
+     */
+    static function getSelectedDevisRoleKey(array $userRoles): int
     {
         $result = 0;
 
@@ -71,6 +100,11 @@ class UserRoleManager
         return $result;
     }
 
+    /**
+     * Récupère l'index l'index du droit d'un utilisateur sur le service d'administration.
+     * L'utilité de cette fonction réside dans le fait de pouvoir lister les droits dans une liste selectionnable.
+     * @param array $userRole : Liste de tous les droits d'un utilisateur.
+     */
     static function getSelectedAdminRoleKey($userRoles): int
     {
 
