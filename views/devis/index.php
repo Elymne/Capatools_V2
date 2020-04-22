@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'tableOptions' => [
                             'class' => ['highlight']
                         ],
-                        'columns' => getCollumnArray()
+                        'columns' => getCollumnsArray()
                     ]); ?>
 
                     <?php Pjax::end(); ?>
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
  * 
  * @return Array All data for table.
  */
-function getCollumnArray()
+function getCollumnsArray()
 {
     $result = [];
     array_push($result, getIdArray());
@@ -73,9 +73,9 @@ function getCollumnArray()
     array_push($result, getStatusArray());
 
     // Buttons displaying.
-    array_push($result, getDocumentButtonData());
-    array_push($result, getPdfButtonData());
-    array_push($result, getExcelButtonData());
+    array_push($result, getDocumentButtonArray());
+    array_push($result, getPdfButtonArray());
+    array_push($result, getExcelButtonArray());
 
     return $result;
 }
@@ -170,7 +170,7 @@ function getStatusArray()
     ];
 }
 
-function getUpdateButtonData()
+function getUpdateButtonArray()
 {
     return [
         'format' => 'raw',
@@ -189,7 +189,7 @@ function getUpdateButtonData()
     ];
 }
 
-function getDocumentButtonData()
+function getDocumentButtonArray()
 {
     return [
         'format' => 'raw',
@@ -222,7 +222,7 @@ function getDocumentButtonData()
     ];
 }
 
-function getPdfButtonData()
+function getPdfButtonArray()
 {
     return [
         'format' => 'raw',
@@ -241,7 +241,7 @@ function getPdfButtonData()
     ];
 }
 
-function getExcelButtonData()
+function getExcelButtonArray()
 {
     return [
         'format' => 'raw',
