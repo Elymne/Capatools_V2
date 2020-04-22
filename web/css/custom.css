@@ -33,6 +33,10 @@ input.select-dropdown.dropdown-trigger {
     display: none;
 }
 
+.navbar .navbar-light .header-search-wrapper input.header-search-input:focus::placeholder {
+    color: transparent;
+}
+
 svg.caret {
     display: none;
 }
