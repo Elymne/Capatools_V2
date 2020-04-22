@@ -110,7 +110,7 @@ class AdministrationController extends Controller
                 ];
         }
 
-        return   $result;
+        return $result;
     }
 
     /**

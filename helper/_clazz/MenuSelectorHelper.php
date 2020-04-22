@@ -5,6 +5,11 @@ namespace app\helper\_clazz;
 use app\helper\_enum\SubMenuEnum;
 use Yii;
 
+/**
+ * Classe utilisé pour définir quel obglet du menu est actif.
+ * Si vous ajouter de nouveau onglet, pensez à créer une nouvelle émthode dans cette classe ainsi.
+ * Pensez aussi à ajouter une nouvelle énumération dans la classe SubMenuEnum.
+ */
 class MenuSelectorHelper
 {
 
