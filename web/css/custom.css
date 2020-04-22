@@ -34,3 +34,8 @@ input.select-dropdown.dropdown-trigger {
 svg.caret {
     display: none;
 }
+
+.backbutton {
+    background-color: #333333;
+    color: white;
+}

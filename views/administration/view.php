@@ -32,7 +32,7 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
             <div class="card">
 
                 <div class="card-content">
-                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn blue']) ?>
+                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn backbutton']) ?>
 
                     <?php if (canUpdateUser($adminRole)) : ?>
                         <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>

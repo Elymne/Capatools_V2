@@ -156,7 +156,7 @@ AppAsset::register($this);
 
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue']) ?>
-                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn orange']) ?>
+                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn backbutton']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>
