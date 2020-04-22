@@ -47,7 +47,7 @@ class TopMenuBar extends \yii\bootstrap\Widget
                     <div class="nav-wrapper">
 
                         <div class="header-search-wrapper hide-on-med-and-down"><i class="material-icons">search</i>
-                            <input class="header-search-input z-depth-2" type="text" name="Search" placeholder="Explore Capatools" data-search="template-list">
+                            <input class="header-search-input z-depth-2" type="text" name="Search" placeholder="Rechercher" data-search="template-list">
                             <ul class="search-list collection display-none"></ul>
                         </div>
 

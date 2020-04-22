@@ -46,6 +46,10 @@ td.header {
     margin-top: 20px;
 }
 
+.navbar input.header-search-input {
+    width: 40%;
+}
+
 /* new id css class */
 
 #main {
