@@ -39,9 +39,9 @@ $indexStatus = getIndexStatus($model);
 
                 <div class="card-content">
                     <!-- Actions on devis -->
-                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn backbutton']) ?>
+                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-back']) ?>
 
-                    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
+                    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-update']) ?>
 
                     <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
                         <?= Html::a(
@@ -87,7 +87,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Annuler le projet <i class="material-icons right">delete</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,],
-                            ['class' => 'waves-effect waves-light btn red', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-delete', 'data' => [
                                 'confirm' => 'Annuler ce projet ?'
                             ]]
                         ) ?>
@@ -97,7 +97,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Supprimer <i class="material-icons right">delete</i>',
                             ['delete', 'id' => $model->id],
-                            ['class' => 'waves-effect waves-light btn red', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-delete', 'data' => [
                                 'confirm' => 'Supprimer ce projet ?'
                             ]]
                         ) ?>

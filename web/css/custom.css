@@ -1,3 +1,6 @@
+/* TODO créer un fichier css par type de classe, ex : custom_button.css */
+
+/* html tag css */
 h2 {
     color: #2196f3;
     font-weight: bold;
@@ -12,11 +15,35 @@ td.header {
     width: 30%;
 }
 
+label {
+    color: #666666;
+}
+
+body {
+    color: #666666;
+}
+
+a {
+    color: #078aca;
+}
+
+/* overrided materialize css class */
+
 .card {
     margin-top: 20px;
     margin-left: 40px;
     margin-right: 40px;
 }
+
+input.select-dropdown.dropdown-trigger {
+    display: none;
+}
+
+svg.caret {
+    display: none;
+}
+
+/* new id css class */
 
 #main {
     padding-left: 250px;
@@ -28,14 +55,61 @@ td.header {
     background-size: cover;
 }
 
-input.select-dropdown.dropdown-trigger {
-    display: none;
-}
-svg.caret {
-    display: none;
+/* cutom button class */
+
+.btn-save {
+    background-color: #078aca;
+    color: white;
 }
 
-.backbutton {
+.btn-save:hover {
+    background-color: #07ca48;
+    color: #333333;
+}
+
+.btn-update {
+    background-color: #ff9800;
+    color: white;
+}
+
+.btn-update:hover {
+    background-color: #07ca48;
+    color: #333333;
+}
+
+.btn-back {
     background-color: #333333;
     color: white;
+}
+
+.btn-back:hover {
+    background-color: #777777;
+    color: #333333;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #ff6666;
+    color: #333333;
+}
+
+/* custom color class */
+
+.grey-custom {
+    background-color: #333333;
+    color: white;
+}
+
+.blue-custom {
+    background-color: #078aca;
+    color: white;
+}
+
+.green-custom {
+    background-color: #07ca48;
+    color: #333333;
 }

@@ -70,7 +70,7 @@ AppAsset::register($this);
                             <?= Html::submitButton(
                                 'Enregistrer',
                                 [
-                                    'class' => 'waves-effect waves-light btn blue',
+                                    'class' => 'waves-effect waves-light btn btn-save ',
                                     'data' => [
                                         'confirm' => 'Créer ce devis ?'
                                     ]
@@ -80,7 +80,7 @@ AppAsset::register($this);
                             <?= Html::a(
                                 Yii::t('app', 'Annuler'),
                                 ['index'],
-                                ['class' => 'waves-effect waves-light btn backbutton']
+                                ['class' => 'waves-effect waves-light btn btn-back']
                             ) ?>
 
                         </div>

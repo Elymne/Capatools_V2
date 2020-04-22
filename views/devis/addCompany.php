@@ -42,9 +42,9 @@ AppAsset::register($this);
 
                         <div class="form-group">
 
-                            <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>
+                            <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-save ', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>
 
-                            <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn backbutton']) ?>
+                            <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-back']) ?>
 
                             <?php ActiveForm::end(); ?>
                         </div>
