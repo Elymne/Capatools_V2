@@ -43,7 +43,7 @@ class TopMenuBar extends \yii\bootstrap\Widget
         return <<<HTML
         <header class="page-topbar" id="header">
                 <div class="navbar navbar-fixed">
-                <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-light">
+                <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark">
                     <div class="nav-wrapper">
 
                         <div class="header-search-wrapper hide-on-med-and-down"><i class="material-icons">search</i>

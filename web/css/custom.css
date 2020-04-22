@@ -23,6 +23,15 @@ a {
 
 /* overrided materialize css class */
 
+.page-topbar {
+    background-color: #333333;
+    padding-bottom: 1px;
+}
+
+.navbar .navbar-dark {
+    background-color: #333333;
+}
+
 .card {
     margin-top: 20px;
     margin-left: 40px;

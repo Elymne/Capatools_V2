@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
-                        'filterModel' => $searchModel,
+                        //'filterModel' => $searchModel,
                         'tableOptions' => [
                             'class' => ['highlight']
                         ],
@@ -34,34 +34,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'username',
                                 'format' => 'raw',
-                                'label' => 'Salarié',
-                                'filterInputOptions' => [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'filtre salarié'
-                                ],
+                                'label' => '<span class="material-icons">arrow_drop_down</span> Salarier',
+                                'encodeLabel' => false,
                                 'value' => function ($data) {
                                     return Html::a($data['username'], ['administration/view', 'id' => $data['id']]);
                                 }
                             ],
                             [
-                                'label' => 'Email',
+                                'label' => '<span class="material-icons">arrow_drop_down</span> Email',
+                                'encodeLabel' => false,
                                 'format' => 'ntext',
                                 'attribute' => 'email',
-                                'filterInputOptions' => [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Filtre Email'
-                                ]
-
                             ],
                             [
-                                'label' => 'Cellule',
+                                'label' => '<span class="material-icons">arrow_drop_down</span> Cellule',
+                                'encodeLabel' => false,
                                 'format' => 'ntext',
                                 'attribute' => 'cellule.name',
-                                'filterInputOptions' => [
-                                    'class' => 'form-control',
-                                    'placeholder' => 'Filtre Cellule'
-                                ]
-
                             ],
                             /*
  [

@@ -160,7 +160,6 @@ class AdministrationController extends Controller
         ]);
     }
 
-
     /**
      * Render view : administration/view?id=?
      * Single User in administration/view view get by ID.
