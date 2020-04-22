@@ -28,14 +28,21 @@ class AppAsset extends AssetBundle
         'fonts/favicon-32x32.png',
         'https://fonts.googleapis.com/icon?family=Material+Icons',
 
+        // Dark forest theme.
         'app-assets/vendors/vendors.min.css',
         'app-assets/css/themes/vertical-dark-menu-template/materialize.min.css',
         'app-assets/css/themes/vertical-dark-menu-template/style.min.css',
         'app-assets/css/pages/dashboard.min.css',
-        'css/custom.css',
 
         // Timeline item css.
         'css/timeline.css',
+
+        // Generic custom.
+        'css/custom.css',
+        // Custom button.
+        'css/custom-button.css',
+        // Custom colors.
+        'css/custom-color.css',
 
     ];
 

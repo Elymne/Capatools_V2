@@ -2,6 +2,7 @@
 
 namespace app\models\devis;
 
+use app\models\companies\Company;
 use yii\helpers\ArrayHelper;
 
 class DevisCreateForm extends Devis

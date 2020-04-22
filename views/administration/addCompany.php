@@ -1,13 +1,12 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
 use app\widgets\TopTitle;
 
 $this->title = 'Ajout d\'un client';
-$this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'User', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 AppAsset::register($this);

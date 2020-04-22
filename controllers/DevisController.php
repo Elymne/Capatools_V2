@@ -2,35 +2,33 @@
 
 namespace app\controllers;
 
-use app\components\ExcelExportService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 use app\models\Model;
 use app\models\devis\Devis;
 use app\models\devis\DevisStatus;
-use app\models\devis\Company;
+use app\models\companies\Company;
 use app\models\devis\DeliveryType;
 use app\models\devis\DevisCreateForm;
 use app\models\devis\DevisUpdateForm;
-use app\models\devis\CompanyCreateForm;
 use app\models\devis\DevisSearch;
 use app\models\devis\Milestone;
+use app\models\devis\MilestoneStatus;
+use app\models\devis\UploadFile;
 use app\helper\_clazz\DateHelper;
 use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_clazz\UploadFileHelper;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
+use app\components\ExcelExportService;
 
-use arturoliveira\ExcelView;
-
-use app\models\devis\MilestoneStatus;
-use app\models\devis\UploadFile;
 use kartik\mpdf\Pdf;
-use yii\web\UploadedFile;
+
 
 /**
  * Gestion des différentes routes liées au service Devis.
@@ -70,11 +68,6 @@ class DevisController extends Controller implements ServiceInterface
                         'allow' => true,
                         'actions' => ['view'],
                         'roles' => ['viewDevis'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['add-company'],
-                        'roles' => ['addCompanyDevis'],
                     ],
                     [
                         'allow' => true,
@@ -146,12 +139,6 @@ class DevisController extends Controller implements ServiceInterface
                         'url' => 'devis/create',
                         'label' => 'Créer un devis',
                         'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
-                    ],
-                    [
-                        'Priorite' => 1,
-                        'url' => 'devis/add-company',
-                        'label' => 'Ajouter un client',
-                        'subServiceMenuActive' => SubMenuEnum::DEVIS_ADD_COMPANY
                     ]
                 ]
             ];
@@ -254,42 +241,6 @@ class DevisController extends Controller implements ServiceInterface
                 'model' => $model,
                 'delivery_types' => $delivery_types,
                 'companiesNames' => $companiesNames
-            ]
-        );
-    }
-
-    /**
-     * Render view : devis/add-company.
-     * Create a new Company.
-     * Directed view : devis/view?id=?.
-     * 
-     * @return mixed
-     */
-    public function actionAddCompany()
-    {
-
-        $model = new CompanyCreateForm();
-
-        if ($model->load(Yii::$app->request->post())) {
-
-            if ($model->validate()) {
-
-                $model->name = $model->name;
-                $model->tva =  $model->tva;
-                $model->description = $model->description;
-
-                $model->save();
-
-                MenuSelectorHelper::setMenuDevisCreate();
-                return $this->redirect(['create']);
-            }
-        }
-
-        MenuSelectorHelper::setMenuDevisAddCompany();
-        return $this->render(
-            'addCompany',
-            [
-                'model' =>  $model
             ]
         );
     }

@@ -19,6 +19,7 @@ class SubMenuEnum extends Enum
     const USER_NONE = 'USER_NONE';
     const USER_CREATE = 'USER_CREATE';
     const USER_LIST = 'USER_LIST';
+    const USER_ADD_COMPANY = 'USER_ADD_COMPANY';
 
     // Sub title.
     const DEVIS = 'DEVIS';
@@ -26,5 +27,4 @@ class SubMenuEnum extends Enum
     const DEVIS_NONE = 'DEVIS_NONE';
     const DEVIS_CREATE = 'DEVIS_CREATE';
     const DEVIS_LIST = 'DEVIS_LIST';
-    const DEVIS_ADD_COMPANY = 'DEVIS_ADD_COMPANY';
 }

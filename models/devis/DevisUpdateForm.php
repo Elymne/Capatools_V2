@@ -3,6 +3,7 @@
 namespace app\models\devis;
 
 use yii\helpers\ArrayHelper;
+use app\models\companies\Company;
 
 class DevisUpdateForm extends Devis
 {
