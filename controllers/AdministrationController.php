@@ -92,29 +92,51 @@ class AdministrationController extends Controller
     {
         $result = [];
 
-        if (Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) || Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR)) {
+        if (
+            Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) ||
+            Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR) ||
+            Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS)
+        ) {
             $result =
                 [
                     'priorite' => 1,
                     'name' => 'Administration',
                     'serviceMenuActive' => SubMenuEnum::USER,
-                    'items' =>
-                    [
-                        [
-                            'priorite' => 2,
-                            'url' => 'administration/index',
-                            'label' => 'Salariés',
-                            'icon' => 'show_chart',
-                            'subServiceMenuActive' => SubMenuEnum::USER_LIST
-                        ],
-                        [
-                            'Priorite' => 1,
-                            'url' => 'administration/add-company',
-                            'label' => 'Ajouter un client',
-                            'subServiceMenuActive' => SubMenuEnum::USER_ADD_COMPANY
-                        ]
-                    ]
+                    'items' => self::getSubActionUser()
                 ];
+        }
+
+        return $result;
+    }
+
+    private static function getSubActionUser(): array
+    {
+        $result = [];
+
+        if (
+            Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) ||
+            Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR)
+        ) {
+            array_push($result, [
+                'priorite' => 2,
+                'url' => 'administration/index',
+                'label' => 'Salariés',
+                'icon' => 'show_chart',
+                'subServiceMenuActive' => SubMenuEnum::USER_LIST
+            ]);
+        }
+
+        if (
+            Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) ||
+            Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR) ||
+            Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS)
+        ) {
+            array_push($result, [
+                'Priorite' => 1,
+                'url' => 'administration/add-company',
+                'label' => 'Ajouter un client',
+                'subServiceMenuActive' => SubMenuEnum::USER_ADD_COMPANY
+            ]);
         }
 
         return $result;
