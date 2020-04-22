@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models\devis;
+namespace app\models\companies;
 
 use yii\db\ActiveRecord;
 

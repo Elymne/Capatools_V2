@@ -1,3 +1,4 @@
+/* html tag css */
 h2 {
     color: #2196f3;
     font-weight: bold;
@@ -7,9 +8,28 @@ h3 {
     color: #424242;
 }
 
-td.header {
-    font-weight: bold;
-    width: 30%;
+label {
+    color: #333333;
+    font-size: 1em;
+}
+
+body {
+    color: #666666;
+}
+
+a {
+    color: #078aca;
+}
+
+/* overrided materialize css class */
+
+.page-topbar {
+    background-color: #333333;
+    padding-bottom: 1px;
+}
+
+.navbar .navbar-dark {
+    background-color: #333333;
 }
 
 .card {
@@ -17,6 +37,33 @@ td.header {
     margin-left: 40px;
     margin-right: 40px;
 }
+
+input.select-dropdown.dropdown-trigger {
+    display: none;
+}
+
+.navbar .navbar-light .header-search-wrapper input.header-search-input:focus::placeholder {
+    color: transparent;
+}
+
+svg.caret {
+    display: none;
+}
+
+td.header {
+    font-weight: bold;
+    width: 30%;
+}
+
+.footer {
+    margin-top: 20px;
+}
+
+.navbar input.header-search-input {
+    width: 40%;
+}
+
+/* new id css class */
 
 #main {
     padding-left: 250px;
@@ -26,11 +73,4 @@ td.header {
 #body-login {
     background-image: url("../images/capa-login-bg.png");
     background-size: cover;
-}
-
-input.select-dropdown.dropdown-trigger {
-    display: none;
-}
-svg.caret {
-    display: none;
 }

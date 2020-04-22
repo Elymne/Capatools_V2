@@ -39,9 +39,9 @@ $indexStatus = getIndexStatus($model);
 
                 <div class="card-content">
                     <!-- Actions on devis -->
-                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn blue']) ?>
+                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-back']) ?>
 
-                    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
+                    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-update']) ?>
 
                     <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
                         <?= Html::a(
@@ -87,7 +87,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Annuler le projet <i class="material-icons right">delete</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,],
-                            ['class' => 'waves-effect waves-light btn red', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-delete', 'data' => [
                                 'confirm' => 'Annuler ce projet ?'
                             ]]
                         ) ?>
@@ -97,7 +97,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Supprimer <i class="material-icons right">delete</i>',
                             ['delete', 'id' => $model->id],
-                            ['class' => 'waves-effect waves-light btn red', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-delete', 'data' => [
                                 'confirm' => 'Supprimer ce projet ?'
                             ]]
                         ) ?>
@@ -344,7 +344,6 @@ function createDataTable($model, $fileModel)
 }
 
 /**
- * TODO utiliser l'option HTML pour gérérer cette partie (plus visible).
  * Create table with all milestones.
  * @param Array<Milestone> $model : List of milestones.
  * 
@@ -431,8 +430,8 @@ function updateStatus($id, $status, $idDevis)
     if ($status == MilestoneStatus::ENCOURS) {
         return <<<HTML
             <td>
-                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating btn-large waves-effect waves-light blue">
-                    <i class="material-icons right">system_update_alt</i>
+                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating waves-effect waves-light blue">
+                    <i class="material-icons right">check_circle</i>
                 </a>
             </td>
         HTML;
@@ -441,8 +440,8 @@ function updateStatus($id, $status, $idDevis)
     if ($status == MilestoneStatus::FACTURATIONENCOURS) {
         return <<<HTML
             <td>
-                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating btn-large waves-effect waves-light blue">
-                    <i class="material-icons right">system_update_alt</i>
+                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating waves-effect waves-light blue">
+                    <i class="material-icons right">check_circle</i>
                 </a>
             </td>
         HTML;

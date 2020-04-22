@@ -1,0 +1,16 @@
+/* custom color class */
+
+.grey-custom {
+    background-color: #333333;
+    color: white;
+}
+
+.blue-custom {
+    background-color: #078aca;
+    color: white;
+}
+
+.green-custom {
+    background-color: #07ca48;
+    color: #333333;
+}

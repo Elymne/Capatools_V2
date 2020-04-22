@@ -13,7 +13,7 @@ use yii\console\ExitCode;
 
 use app\models\user\Cellule;
 use app\models\Devis\Devis;
-use app\models\Devis\Company;
+use app\models\companies\Company;
 
 
 /**

@@ -3,6 +3,7 @@
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use app\widgets\TopTitle;
+use phpDocumentor\Reflection\Types\Boolean;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -18,6 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
 $userRoles = [];
 if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
+$adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
+
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -29,10 +32,16 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
             <div class="card">
 
                 <div class="card-content">
-                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn blue']) ?>
-                    <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect orange waves-light btn']) ?>
+                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-back']) ?>
+
+                    <?php if (canUpdateUser($adminRole)) : ?>
+                        <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-update']) ?>
+                    <?php else : ?>
+                        <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['#', -1], ['class' => 'btn disabled']) ?>
+                    <?php endif ?>
+
                     <?= Html::a('Supprimer <i class="material-icons right">delete</i> ', ['delete', 'id' => $model->id], [
-                        'class' => 'waves-effect waves-light btn red',
+                        'class' => 'waves-effect waves-light btn btn-delete',
                         'data' => [
                             'confirm' => 'Etes vous sûr de vouloir supprimer ce salarié ?',
                             'method' => 'post',
@@ -73,8 +82,12 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
 <?php
 
-function createRolesTable($userRoles)
+function createRolesTable(array $userRoles): string
 {
+
+    // Get role by service.
+    $adminStringRole = UserRoleEnum::ADMINISTRATOR_ROLE_STRING[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
+    $devisStringRole = UserRoleEnum::DEVIS_ROLE_STRING[UserRoleManager::getSelectedDevisRoleKey($userRoles)];
 
     $head = <<<HTML
 
@@ -88,14 +101,13 @@ function createRolesTable($userRoles)
 
     $body = '';
 
-    $adminRole = UserRoleEnum::ADMINISTRATOR_ROLE_STRING[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
-    $devisRole = UserRoleEnum::DEVIS_ROLE_STRING[UserRoleManager::getSelectedDevisRoleKey($userRoles)];
+
 
     // Admin row.
     $body = $body . <<<HTML
         <tr>
             <td>Administration</td>
-            <td>${adminRole}</td>
+            <td>${adminStringRole}</td>
         </tr>
     HTML;
 
@@ -103,7 +115,7 @@ function createRolesTable($userRoles)
     $body = $body . <<<HTML
         <tr>
             <td>Devis</td>
-            <td>${devisRole}</td>
+            <td>${devisStringRole}</td>
         </tr>
     HTML;
 
@@ -113,4 +125,22 @@ function createRolesTable($userRoles)
     HTML;
 
     return $head . $body . $foot;
+}
+
+function canUpdateUser($adminRole): bool
+{
+    $result = true;
+
+    if (
+        !Yii::$app->user->can('superAdministrator') &&
+        ($adminRole == UserRoleEnum::ADMINISTRATOR || $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
+    ) {
+        $result = false;
+    }
+
+    if (Yii::$app->user->can('superAdministrator') && $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR) {
+        $result = false;
+    }
+
+    return $result;
 }

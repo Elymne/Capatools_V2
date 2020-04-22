@@ -69,7 +69,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     );; ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'btn waves-effect waves-light']) ?>
+        <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-save ']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

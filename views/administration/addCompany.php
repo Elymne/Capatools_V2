@@ -1,13 +1,12 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
 use app\widgets\TopTitle;
 
 $this->title = 'Ajout d\'un client';
-$this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'User', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 AppAsset::register($this);
@@ -42,9 +41,9 @@ AppAsset::register($this);
 
                         <div class="form-group">
 
-                            <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn blue', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>
+                            <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-save ', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>
 
-                            <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn orange']) ?>
+                            <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-back']) ?>
 
                             <?php ActiveForm::end(); ?>
                         </div>

@@ -29,12 +29,15 @@ class UserRoleEnum extends Enum
     ];
 
     const ADMINISTRATOR = 'administrator';
+    const SUPER_ADMINISTRATOR = 'superAdministrator';
     const ADMINISTRATION_ROLE = [
         0 => UserRoleEnum::NONE,
-        1 => UserRoleEnum::ADMINISTRATOR
+        1 => UserRoleEnum::ADMINISTRATOR,
+        2 => UserRoleEnum::SUPER_ADMINISTRATOR
     ];
     const ADMINISTRATOR_ROLE_STRING = [
         0 => 'Aucun',
-        1 => 'Administrateur'
+        1 => 'Administrateur',
+        2 => 'Super Administrateur'
     ];
 }

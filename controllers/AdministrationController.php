@@ -2,21 +2,24 @@
 
 namespace app\controllers;
 
+use yii\filters\AccessControl;
+use Yii;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+
 use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
-use yii\filters\AccessControl;
-use Yii;
 use app\models\user\CapaUser;
 use app\models\user\CapaUserCreateForm;
 use app\models\user\CapaUserSearch;
 use app\models\user\CapaUserUpdateForm;
 use app\models\user\Cellule;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
+use app\models\companies\CompanyCreateForm;
+
 
 /**
  * AdministrationController implements the CRUD actions for CapaUser model.
@@ -68,6 +71,11 @@ class AdministrationController extends Controller
                         'actions' => ['delete'],
                         'roles' => ['deleteAdmin'],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['add-company'],
+                        'roles' => ['addCompanyDevis'],
+                    ]
                 ],
             ],
         ];
@@ -84,33 +92,54 @@ class AdministrationController extends Controller
     {
         $result = [];
 
-        if (Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR)) {
+        if (
+            Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) ||
+            Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR) ||
+            Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS)
+        ) {
             $result =
                 [
                     'priorite' => 1,
                     'name' => 'Administration',
                     'serviceMenuActive' => SubMenuEnum::USER,
-                    'items' =>
-                    [
-                        [
-                            'priorite' => 1,
-                            'url' => 'administration/index',
-                            'label' => 'Liste des salariés',
-                            'icon' => 'show_chart',
-                            'subServiceMenuActive' => SubMenuEnum::USER_LIST
-                        ],
-                        [
-                            'priorite' => 2,
-                            'url' => 'administration/create',
-                            'label' => 'Ajouter un salarié',
-                            'icon' => 'show_chart',
-                            'subServiceMenuActive' => SubMenuEnum::USER_CREATE
-                        ]
-                    ]
+                    'items' => self::getSubActionUser()
                 ];
         }
 
-        return   $result;
+        return $result;
+    }
+
+    private static function getSubActionUser(): array
+    {
+        $result = [];
+
+        if (
+            Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) ||
+            Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR)
+        ) {
+            array_push($result, [
+                'priorite' => 2,
+                'url' => 'administration/index',
+                'label' => 'Salariés',
+                'icon' => 'show_chart',
+                'subServiceMenuActive' => SubMenuEnum::USER_LIST
+            ]);
+        }
+
+        if (
+            Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) ||
+            Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR) ||
+            Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS)
+        ) {
+            array_push($result, [
+                'Priorite' => 1,
+                'url' => 'administration/add-company',
+                'label' => 'Ajouter un client',
+                'subServiceMenuActive' => SubMenuEnum::USER_ADD_COMPANY
+            ]);
+        }
+
+        return $result;
     }
 
     /**
@@ -130,7 +159,6 @@ class AdministrationController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
 
     /**
      * Render view : administration/view?id=?
@@ -187,7 +215,7 @@ class AdministrationController extends Controller
             }
         }
 
-        MenuSelectorHelper::setMenuAdminCreate();
+        MenuSelectorHelper::setMenuAdminNone();
         return $this->render('create', [
             'model' => $model,
             'cellules' => $cellules
@@ -264,6 +292,41 @@ class AdministrationController extends Controller
 
         MenuSelectorHelper::setMenuAdminIndex();
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Render view : devis/add-company.
+     * Create a new Company.
+     * Directed view : devis/view?id=?.
+     * 
+     * @return mixed
+     */
+    public function actionAddCompany()
+    {
+        $model = new CompanyCreateForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            if ($model->validate()) {
+
+                $model->name = $model->name;
+                $model->tva =  $model->tva;
+                $model->description = $model->description;
+
+                $model->save();
+
+                MenuSelectorHelper::setMenuDevisCreate();
+                return $this->redirect(['devis/create']);
+            }
+        }
+
+        MenuSelectorHelper::setMenuAdminAddCompany();
+        return $this->render(
+            'addCompany',
+            [
+                'model' =>  $model
+            ]
+        );
     }
 
     /**

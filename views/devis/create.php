@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\widgets\TopTitle;
+use Codeception\PHPUnit\ResultPrinter\HTML as ResultPrinterHTML;
 use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
@@ -69,7 +70,7 @@ AppAsset::register($this);
                             <?= Html::submitButton(
                                 'Enregistrer',
                                 [
-                                    'class' => 'waves-effect waves-light btn blue',
+                                    'class' => 'waves-effect waves-light btn btn-save ',
                                     'data' => [
                                         'confirm' => 'Créer ce devis ?'
                                     ]
@@ -79,7 +80,7 @@ AppAsset::register($this);
                             <?= Html::a(
                                 Yii::t('app', 'Annuler'),
                                 ['index'],
-                                ['class' => 'waves-effect waves-light btn orange']
+                                ['class' => 'waves-effect waves-light btn btn-back']
                             ) ?>
 
                         </div>
