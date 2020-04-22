@@ -80,7 +80,6 @@ function getCollumnArray()
     return $result;
 }
 
-
 function getIdArray()
 {
     return [

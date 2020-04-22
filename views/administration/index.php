@@ -51,40 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'encodeLabel' => false,
                                 'format' => 'ntext',
                                 'attribute' => 'cellule.name',
-                            ],
-                            /*
- [
-                                'class' => 'yii\grid\ActionColumn',
-                                'template' => '{update} {delete} {link}',
-                                'header' => 'Actions',
-                                'buttons' => [
-                                    'update' => function ($url, $model, $key) {
-                                        $options = [
-                                            'class' => 'btn-floating orange tooltipped',
-                                            'data-position' => 'bottom',
-                                            'data-tooltip' => 'Mettre à jour'
-                                        ];
-                                        return Html::a('<i class="material-icons">mode_edit</i>', $url, $options);
-                                    },
-                                    'delete' => function ($url, $model, $key) {
-                                        $options = [
-                                            'class' => 'btn-floating red tooltipped',
-                                            'data-position' => 'bottom',
-                                            'data-tooltip' => 'Supprimer'
-                                        ];
-                                        return Html::a('<i class="material-icons">delete</i>', $url, $options);
-                                    },
-                                    'link' => function ($url, $model, $key) {
-                                        $options = [
-                                            'class' => 'btn-floating green tooltipped',
-                                            'data-position' => 'bottom',
-                                            'data-tooltip' => 'Réinitialiser'
-                                        ];
-                                        return Html::a('<i class="material-icons">sync</i>', $url, $options);
-                                    }
-                                ],
                             ]
-                            */
                         ],
                     ]); ?>
 
@@ -96,3 +63,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
 </div>
+
+<?php
+
+function getCollumnArray()
+{
+}
