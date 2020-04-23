@@ -124,7 +124,7 @@ AppAsset::register($this);
                                         <div class="panel-heading">
                                             <h3 class="panel-title pull-left">Jalon </h3>
                                             <div class="pull-right">
-                                                <button type="button" class="add-item waves-effect waves-light btn btn-save "><i class="glyphicon glyphicon-plus"></i></button>
+                                                <button type="button" class="add-item waves-effect waves-light btn btn-green"><i class="glyphicon glyphicon-plus"></i></button>
                                                 <button type="button" class="remove-item waves-effect waves-light btn red"><i class="glyphicon glyphicon-minus"></i></button>
                                             </div>
                                             <div class="clearfix"></div>
@@ -156,8 +156,8 @@ AppAsset::register($this);
                 <?php } ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-save ']) ?>
-                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-delete']) ?>
+                    <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-green ']) ?>
+                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-red']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>

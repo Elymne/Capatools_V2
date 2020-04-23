@@ -40,9 +40,9 @@ $indexStatus = getIndexStatus($model);
 
                 <div class="card-content">
                     <!-- Actions on devis -->
-                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-back rightspace-15px leftspace-15px']) ?>
+                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey rightspace-15px leftspace-15px']) ?>
 
-                    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-update rightspace-15px leftspace-15px']) ?>
+                    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px']) ?>
 
                     <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
                         <?= Html::a(
@@ -88,7 +88,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'annuler projet <i class="material-icons right">delete</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,],
-                            ['class' => 'waves-effect waves-light btn btn-cancel rightspace-15px leftspace-15px', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-orange rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Annuler ce projet ?'
                             ]]
                         ) ?>
@@ -98,7 +98,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Supprimer <i class="material-icons right">delete</i>',
                             ['delete', 'id' => $model->id],
-                            ['class' => 'waves-effect waves-light btn btn-delete rightspace-15px leftspace-15px', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-red rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Supprimer ce projet ?'
                             ]]
                         ) ?>

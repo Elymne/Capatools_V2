@@ -33,16 +33,16 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
             <div class="card">
 
                 <div class="card-content">
-                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-back']) ?>
+                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
 
                     <?php if (canUpdateUser($adminRole)) : ?>
-                        <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-update']) ?>
+                        <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-green']) ?>
                     <?php else : ?>
                         <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['#', -1], ['class' => 'btn disabled']) ?>
                     <?php endif ?>
 
                     <?= Html::a('Supprimer <i class="material-icons right">delete</i> ', ['delete', 'id' => $model->id], [
-                        'class' => 'waves-effect waves-light btn btn-delete',
+                        'class' => 'waves-effect waves-light btn btn-red',
                         'data' => [
                             'confirm' => 'Etes vous sûr de vouloir supprimer ce salarié ?',
                             'method' => 'post',

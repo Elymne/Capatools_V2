@@ -116,7 +116,7 @@ function getHelperCardContent(): string
 {
     return <<<HTML
         <div>
-            <a class="btn-floating waves-effect waves-light btn-update rightspace-10px no-click"><i class="material-icons right">cloud_download</i></a>
+            <a class="btn-floating waves-effect waves-light btn-green rightspace-10px no-click"><i class="material-icons right">cloud_download</i></a>
             <p style="display: inline-block">Modifier le devis</p>
 
             <a class="btn-floating waves-effect waves-light blue rightspace-10px leftspace-20px no-click"><i class="material-icons right">cloud_download</i></a>
@@ -233,12 +233,12 @@ function getUpdateButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">build</i>',
-                Url::to(['devis/upload', 'id' => $model->id]),
+                Url::to(['devis/update', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-update',
+                    'class' => 'btn-floating waves-effect waves-light btn-green',
                 ]
             );
         }

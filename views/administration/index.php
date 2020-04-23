@@ -118,7 +118,7 @@ function getUpdateButtonArray()
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['administration/update', 'id' => $model->id]),
-                    'class' => 'btn waves-effect waves-light update-button btn-update',
+                    'class' => 'btn waves-effect waves-light update-button btn-green',
                 ]
             );
         }
