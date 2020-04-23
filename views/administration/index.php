@@ -77,7 +77,7 @@ function getUsernameArray(): array
     return [
         'attribute' => 'username',
         'format' => 'raw',
-        'label' => '<span class="material-icons">arrow_drop_down</span> Salarier',
+        'label' => '<span class="material-icons">arrow_drop_down</span> Salarié',
         'encodeLabel' => false,
         'value' => function ($data) {
             return Html::a($data['username'], ['administration/view', 'id' => $data['id']]);
