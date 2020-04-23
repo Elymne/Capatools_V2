@@ -8,13 +8,9 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\devis\DevisSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Liste des devis';
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -32,6 +28,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="card-content">
                     <p> Filtres </p>
                 </div>
+                <div class="card-content">
+                    <?php echo getFilterCardContent() ?>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <p> Filtres </p>
+                </div>
             </div>
 
             <div class="card">
@@ -44,7 +49,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= GridView::widget([
                         'id' => 'AvantContrat_id',
                         'dataProvider' => $dataProvider,
-                        //'filterModel' => $searchModel,
                         'tableOptions' => [
                             'class' => ['highlight']
                         ],
@@ -61,6 +65,41 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php
+
+/**
+ * Used to display combobox.
+ * 
+ * @return string HTML content.
+ */
+function getFilterCardContent(): string
+{
+    return <<<HTML
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="capaid-checkbox" />
+            <span>CapaID</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="projectname-checkbox"/>
+            <span>Nom du projet</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="projectmanager-checkbox"/>
+            <span>Resp projet</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="cellule-checkbox"/>
+            <span>Cellule</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="company-checkbox"/>
+            <span>Client</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="status-checkbox"/>
+            <span>Status</span>
+        </label>
+    HTML;
+}
 
 /**
  * Used to display all data needed for the table.
@@ -93,10 +132,8 @@ function getIdArray()
         'attribute' => 'id_capa',
         'format' => 'raw',
         'label' => 'CapaID',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'placeholder' => 'Filtre CapaId'
-        ],
+        'contentOptions' => ['class' => 'capaid-row'],
+        'headerOptions' => ['class' => 'capaid-row'],
         'value' => function ($data) {
             return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']]);
         }
@@ -109,10 +146,8 @@ function getInternalNameArray()
         'attribute' => 'internal_name',
         'format' => 'text',
         'label' => 'Nom du projet',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'placeholder' => 'Filtre Nom Projet'
-        ]
+        'contentOptions' => ['class' => 'projectname-row'],
+        'headerOptions' => ['class' => 'projectname-row'],
     ];
 }
 
@@ -122,23 +157,8 @@ function getUsernameArray()
         'attribute' => 'capa_user.username',
         'format' => 'text',
         'label' => 'Resp projet',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'placeholder' => 'Filtre Responsable'
-        ]
-    ];
-}
-
-function getVersionArray()
-{
-    return [
-        'attribute' => 'version',
-        'format' => 'text',
-        'label' => 'Version du fichier',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'placeholder' => 'Filtre Version'
-        ]
+        'contentOptions' => ['class' => 'projectmanager-row'],
+        'headerOptions' => ['class' => 'projectmanager-row'],
     ];
 }
 
@@ -148,10 +168,8 @@ function getCelluleArray()
         'attribute' => 'cellule.name',
         'format' => 'text',
         'label' => 'Cellule',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'placeholder' => 'Filtre Cellule'
-        ]
+        'contentOptions' => ['class' => 'cellule-row'],
+        'headerOptions' => ['class' => 'cellule-row'],
     ];
 }
 
@@ -160,11 +178,9 @@ function getCompanyArray()
     return [
         'attribute' => 'company.name',
         'format' => 'text',
-        'label' => 'Entreprise',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'placeholder' => 'Filtre Entreprise'
-        ]
+        'label' => 'Client',
+        'contentOptions' => ['class' => 'company-row'],
+        'headerOptions' => ['class' => 'company-row'],
     ];
 }
 
@@ -174,6 +190,8 @@ function getStatusArray()
         'attribute' => 'devis_status.label',
         'format' => 'text',
         'label' => 'Statut',
+        'contentOptions' => ['class' => 'status-row'],
+        'headerOptions' => ['class' => 'status-row'],
     ];
 }
 

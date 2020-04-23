@@ -54,6 +54,9 @@ class AppAsset extends AssetBundle
         'app-assets/js/search.min.js',
         'app-assets/js/custom/custom-script.js',
 
+        // Jquery views.
+        'js/devis/index.js'
+
     ];
 
     public $depends = [

@@ -62,7 +62,17 @@ td.header {
     width: 40%;
 }
 
-/* new id css class */
+/* new css class */
+
+.rightspace-10px {
+    margin-right: 10px;
+}
+
+.rigthspace-20px {
+    margin-right: 20px;
+}
+
+/* id css */
 
 #main {
     padding-left: 250px;
