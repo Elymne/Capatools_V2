@@ -15,8 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 
-
-
 <div class="container">
     <div class="devis-index">
 
