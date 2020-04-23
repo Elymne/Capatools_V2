@@ -7,7 +7,6 @@ use app\models\devis\DevisStatus;
 use app\models\devis\Milestone;
 use app\models\devis\MilestoneStatus;
 use app\widgets\TopTitle;
-
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
@@ -37,79 +36,8 @@ $indexStatus = getIndexStatus($model);
         <!-- Main information -->
         <div class="row">
             <div class="card">
-
                 <div class="card-content">
-                    <!-- Actions on devis -->
-                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey rightspace-15px leftspace-15px']) ?>
-
-                    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px']) ?>
-
-                    <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
-                        <?= Html::a(
-                            'Passer en validation opérationnelle <i class="material-icons right">check</i>',
-                            ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_OP,],
-                            ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px', 'data' => [
-                                'confirm' => 'Valider ce devis en tant que responsable opérationnel ?'
-                            ]]
-                        ) ?>
-                    <?php endif; ?>
-
-                    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_OP &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
-                        <?= Html::a(
-                            'Valider la signature client <i class="material-icons right">check</i>',
-                            ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_CL,],
-                            ['class' => 'waves-effect waves-light btn btn-green  rightspace-15px leftspace-15px', 'data' => [
-                                'confirm' => 'Le client à signé le contrat ?'
-                            ]]
-                        ) ?>
-                    <?php endif; ?>
-
-                    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_CL &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
-                        <?= Html::a(
-                            'Passer en projet en cours <i class="material-icons right">check</i>',
-                            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_EN_COURS,],
-                            ['class' => 'waves-effect waves-light btn btn-green  rightspace-15px leftspace-15px', 'data' => [
-                                'confirm' => 'Passer ce projet en cours ?'
-                            ]]
-                        ) ?>
-                    <?php endif; ?>
-
-                    <?php if ($model->status_id == DevisStatus::PROJET_EN_COURS &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
-                        <?= Html::a(
-                            'Passer en projet terminé <i class="material-icons right">check</i>',
-                            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJETTERMINE,],
-                            ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px', 'data' => [
-                                'confirm' => 'Ce projet est terminé ?'
-                            ]]
-                        ) ?>
-                    <?php endif; ?>
-
-                    <?php if ($model->status_id < DevisStatus::PROJET_ANNULE && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
-                        <?= Html::a(
-                            'annuler projet <i class="material-icons right">delete</i>',
-                            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,],
-                            ['class' => 'waves-effect waves-light btn btn-orange rightspace-15px leftspace-15px', 'data' => [
-                                'confirm' => 'Annuler ce projet ?'
-                            ]]
-                        ) ?>
-                    <?php endif; ?>
-
-                    <?php if ($model->status_id == DevisStatus::PROJET_ANNULE && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS, UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) : ?>
-                        <?= Html::a(
-                            'Supprimer <i class="material-icons right">delete</i>',
-                            ['delete', 'id' => $model->id],
-                            ['class' => 'waves-effect waves-light btn btn-red rightspace-15px leftspace-15px', 'data' => [
-                                'confirm' => 'Supprimer ce projet ?'
-                            ]]
-                        ) ?>
-                    <?php endif; ?>
-
-                    <?= Html::a(
-                        'Créer un pdf <i class="material-icons right">picture_as_pdf</i>',
-                        ['pdf', 'id' => $model->id],
-                        ['class' => 'waves-effect btn-purple waves-light btn']
-                    ) ?>
-
+                    <?php echo displayActionButtons($model) ?>
                 </div>
             </div>
 
@@ -140,26 +68,29 @@ $indexStatus = getIndexStatus($model);
                 </div>
 
                 <div class="card-action">
-
                     <?php echo createDataTable($model, $fileModel); ?>
-
                 </div>
             </div>
         </div>
 
         <!-- Milestones informations -->
         <div class="row">
-
             <div class="card">
-
                 <div class="card-content">
                     <span class="card-title">Jalon(s)</span>
                 </div>
 
                 <div class="card-action white">
-
                     <?php echo createMilestonesTable($milestones, $model->id); ?>
+                </div>
+            </div>
+        </div>
 
+        <!-- Display list button -->
+        <div class="row">
+            <div class="card">
+                <div class="card-content">
+                    <?php echo displayActionButtons($model) ?>
                 </div>
             </div>
         </div>
@@ -172,7 +103,7 @@ $indexStatus = getIndexStatus($model);
 /**
  * 
  */
-function getIndexStatus($model)
+function getIndexStatus($model): int
 {
 
     $indexStatus = -1;
@@ -204,7 +135,7 @@ function getIndexStatus($model)
 /**
  * 
  */
-function isStatusPassed($indexStatus, $arrayKey)
+function isStatusPassed($indexStatus, $arrayKey): bool
 {
     if ($indexStatus >= $arrayKey)
         return true;
@@ -218,7 +149,7 @@ function isStatusPassed($indexStatus, $arrayKey)
  * 
  * @return HTML table.
  */
-function createDataTable($model, $fileModel)
+function createDataTable($model, $fileModel): string
 {
 
     // You can't use object with <<<HTML HTML; so you have to create value like bellow.
@@ -306,7 +237,7 @@ function createDataTable($model, $fileModel)
                     <td>${delivery_duration_hour} heures ${delivery_duration_day} jours</td>
                 </tr>
                 <tr>
-                    <td class='header'>Prix de la prestation(HT)</td>
+                    <td class='header'>Prix de la prestation (HT)</td>
                     <td>${devis_price} €</td>
                 </tr>
 
@@ -352,7 +283,7 @@ function createDataTable($model, $fileModel)
  * 
  * @return HTML table.
  */
-function createMilestonesTable($milestones, $idDevis)
+function createMilestonesTable($milestones, $idDevis): string
 {
 
     // Used to display or not tab for milestone management.
@@ -427,7 +358,7 @@ function createMilestonesTable($milestones, $idDevis)
  * 
  * @return HTML cell of Milestone table.
  */
-function updateStatus($id, $status, $idDevis)
+function updateStatus($id, $status, $idDevis): string
 {
 
     if ($status == MilestoneStatus::ENCOURS) {
@@ -453,4 +384,85 @@ function updateStatus($id, $status, $idDevis)
     return <<<HTML
         <td>Jalon réglé</td>
     HTML;
+}
+
+/**
+ * Display all buttons.
+ * 
+ * @return HTML cell of Milestone table.
+ */
+function displayActionButtons($model)
+{
+?>
+    <!-- Actions on devis -->
+    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey rightspace-15px leftspace-15px']) ?>
+
+    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px']) ?>
+
+    <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
+        <?= Html::a(
+            'Passer en validation opérationnelle <i class="material-icons right">check</i>',
+            ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_OP,],
+            ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Valider ce devis en tant que responsable opérationnel ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
+
+    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_OP &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
+        <?= Html::a(
+            'Valider la signature client <i class="material-icons right">check</i>',
+            ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_CL,],
+            ['class' => 'waves-effect waves-light btn btn-green  rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Le client à signé le contrat ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
+
+    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_CL &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
+        <?= Html::a(
+            'Passer en projet en cours <i class="material-icons right">check</i>',
+            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_EN_COURS,],
+            ['class' => 'waves-effect waves-light btn btn-green  rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Passer ce projet en cours ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
+
+    <?php if ($model->status_id == DevisStatus::PROJET_EN_COURS &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
+        <?= Html::a(
+            'Passer en projet terminé <i class="material-icons right">check</i>',
+            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJETTERMINE,],
+            ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Ce projet est terminé ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
+
+    <?php if ($model->status_id < DevisStatus::PROJET_ANNULE && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
+        <?= Html::a(
+            'annuler projet <i class="material-icons right">delete</i>',
+            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,],
+            ['class' => 'waves-effect waves-light btn btn-orange rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Annuler ce projet ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
+
+    <?php if ($model->status_id == DevisStatus::PROJET_ANNULE && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS, UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) : ?>
+        <?= Html::a(
+            'Supprimer <i class="material-icons right">delete</i>',
+            ['delete', 'id' => $model->id],
+            ['class' => 'waves-effect waves-light btn btn-red rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Supprimer ce projet ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
+
+    <?= Html::a(
+        'Créer un pdf <i class="material-icons right">picture_as_pdf</i>',
+        ['pdf', 'id' => $model->id],
+        ['class' => 'waves-effect btn-purple waves-light btn']
+    ) ?>
+<?php
 }

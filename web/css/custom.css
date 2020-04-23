@@ -63,6 +63,10 @@ td.header {
     width: 40%;
 }
 
+.span-combobox {
+    font-size: 0.4em;
+}
+
 /* id css */
 
 #main {

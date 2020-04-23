@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="card">
                 <div class="card-content">
-                    <h5> Filtres </h5>
+                    <span>Filtres</span>
                 </div>
                 <div class="card-content">
                     <?php echo getFilterCardContent() ?>
