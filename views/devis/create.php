@@ -80,7 +80,7 @@ AppAsset::register($this);
                             <?= Html::a(
                                 Yii::t('app', 'Annuler'),
                                 ['index'],
-                                ['class' => 'waves-effect waves-light btn btn-back']
+                                ['class' => 'waves-effect waves-light btn btn-delete']
                             ) ?>
 
                         </div>

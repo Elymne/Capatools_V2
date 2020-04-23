@@ -2,6 +2,7 @@
 
 namespace app\models\devis;
 
+use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -52,7 +53,12 @@ class DevisSearch extends Devis
         // Prepare query.
         $query = null;
 
-        if (Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+        if (
+            UserRoleManager::hasRoles([
+                UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
+                UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
+            ])
+        ) {
             $query = Devis::find();
         } else {
             $query = Devis::getAllByCellule(Yii::$app->user->identity->cellule->id);

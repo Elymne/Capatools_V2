@@ -5,6 +5,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
+use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use app\models\devis\UploadFile;
 use app\widgets\TopTitle;
@@ -70,7 +71,7 @@ AppAsset::register($this);
 
                 </div>
 
-                <?php if (Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS)) { ?>
+                <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) { ?>
                     <div class="card">
 
                         <div class="card-content">
@@ -88,7 +89,7 @@ AppAsset::register($this);
                     </div>
                 <?php } ?>
 
-                <?php if (Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS)) { ?>
+                <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) { ?>
                     <div class="card">
 
                         <div class="card-content">
@@ -156,7 +157,7 @@ AppAsset::register($this);
 
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-save ']) ?>
-                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-back']) ?>
+                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-delete']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>

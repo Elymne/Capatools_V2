@@ -43,6 +43,8 @@ class AppAsset extends AssetBundle
         'css/custom-button.css',
         // Custom colors.
         'css/custom-color.css',
+        // Custom spacing.
+        'css/spacing.css'
 
     ];
 
@@ -53,6 +55,9 @@ class AppAsset extends AssetBundle
         'app-assets/js/plugins.min.js',
         'app-assets/js/search.min.js',
         'app-assets/js/custom/custom-script.js',
+
+        // Jquery views.
+        'js/devis/index.js'
 
     ];
 

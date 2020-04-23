@@ -151,15 +151,12 @@ function canUpdateUser($adminRole): bool
     $result = true;
 
     if (
-        !Yii::$app->user->can('superAdministrator') &&
+        !UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) &&
         ($adminRole == UserRoleEnum::ADMINISTRATOR || $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
-    ) {
-        $result = false;
-    }
+    )  $result = false;
 
-    if (Yii::$app->user->can('superAdministrator') && $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR) {
+    if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) && $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
         $result = false;
-    }
 
     return $result;
 }

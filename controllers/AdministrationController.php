@@ -92,11 +92,11 @@ class AdministrationController extends Controller
     {
         $result = [];
 
-        if (
-            Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) ||
-            Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR) ||
-            Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS)
-        ) {
+        if (UserRoleManager::hasRoles([
+            UserRoleEnum::ADMINISTRATOR,
+            UserRoleEnum::SUPER_ADMINISTRATOR,
+            UserRoleEnum::PROJECT_MANAGER_DEVIS
+        ])) {
             $result =
                 [
                     'priorite' => 1,
@@ -114,8 +114,10 @@ class AdministrationController extends Controller
         $result = [];
 
         if (
-            Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) ||
-            Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR)
+            UserRoleManager::hasRoles([
+                UserRoleEnum::ADMINISTRATOR,
+                UserRoleEnum::SUPER_ADMINISTRATOR
+            ])
         ) {
             array_push($result, [
                 'priorite' => 2,
@@ -127,9 +129,11 @@ class AdministrationController extends Controller
         }
 
         if (
-            Yii::$app->user->can(UserRoleEnum::ADMINISTRATOR) ||
-            Yii::$app->user->can(UserRoleEnum::SUPER_ADMINISTRATOR) ||
-            Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS)
+            UserRoleManager::hasRoles([
+                UserRoleEnum::ADMINISTRATOR,
+                UserRoleEnum::SUPER_ADMINISTRATOR,
+                UserRoleEnum::PROJECT_MANAGER_DEVIS
+            ])
         ) {
             array_push($result, [
                 'Priorite' => 1,

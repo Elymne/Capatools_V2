@@ -53,7 +53,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
             'allowClear' => false
         ],
     ])->label(
-        "Rôle service devis"
+        "Permission pour les devis"
     ); ?>
 
     <!-- admin role dropdown field -->
@@ -65,11 +65,13 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
             'allowClear' => false
         ],
     ])->label(
-        "Rôle service Administration"
+        "Permission d'administration"
     );; ?>
 
     <div class="form-group">
         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-save ']) ?>
+
+        <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-delete']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

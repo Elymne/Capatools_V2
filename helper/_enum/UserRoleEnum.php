@@ -22,7 +22,7 @@ class UserRoleEnum extends Enum
         3 => UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
     ];
     const DEVIS_ROLE_STRING = [
-        0 => 'Aucun',
+        0 => 'Aucunes',
         1 => 'Chef de projet',
         2 => 'Responsable opérationnel',
         3 => 'Support comptable'
@@ -36,7 +36,7 @@ class UserRoleEnum extends Enum
         2 => UserRoleEnum::SUPER_ADMINISTRATOR
     ];
     const ADMINISTRATOR_ROLE_STRING = [
-        0 => 'Aucun',
+        0 => 'Aucunes',
         1 => 'Administrateur',
         2 => 'Super Administrateur'
     ];
