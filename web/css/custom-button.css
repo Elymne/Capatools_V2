@@ -1,64 +1,78 @@
 /* cutom button class */
 
-.btn-save {
-    background-color: #06ac3e;
+.btn-green {
+    background-color: #07ca48;
     color: white;
 }
 
-.btn-save:hover {
-    background-color: #07ca48;
+.btn-green:hover {
+    background-color: #22f769;
     color: #333333;
 }
 
-.btn-confirm {
+.btn-green-darker {
+    background-color: #008000;
+    color: white;
+}
+
+.btn-green-darker:hover {
+    background-color: #00cc00;
+    color: #333333;
+}
+
+.btn-blue {
     background-color: #078aca;
 }
 
-.btn-confirm {
-    background-color: #07ca48;
+.btn-blue {
+    background-color: #22b0f7;
     color: #333333;
 }
 
-.btn-save:hover {
-    background-color: #07ca48;
-    color: #333333;
-}
-
-.btn-update {
-    background-color: #06ac3e;
+.btn-yellow {
+    background-color: #ffcc00;
     color: white;
 }
 
-.btn-update:hover {
-    background-color: #07ca48;
+.btn-yellow:hover {
+    background-color: #ffdb4d;
     color: #333333;
 }
 
-.btn-back {
+.btn-grey {
     background-color: #333333;
     color: white;
 }
 
-.btn-back:hover {
+.btn-grey:hover {
     background-color: #777777;
     color: #333333;
 }
 
-.btn-delete {
-    background-color: #f44336;
+.btn-red {
+    background-color: #ff3333;
     color: white;
 }
 
-.btn-delete:hover {
-    background-color: #ff6666;
+.btn-red:hover {
+    background-color: #ff8080;
     color: #333333;
 }
 
-.btn-cancel {
-    background-color: #ff6600;
+.btn-orange {
+    background-color: #ff8533;
 }
 
-.btn-cancel:hover {
-    background-color: #ffa366;
+.btn-orange:hover {
+    background-color: #ffb380;
+    color: #333333;
+}
+
+.btn-purple {
+    background-color: #7300e6;
+}
+
+.btn-purple:hover {
+    background-color: #9933ff;
     color: #333333;
 }

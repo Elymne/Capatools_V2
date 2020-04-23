@@ -69,9 +69,9 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     );; ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-save ']) ?>
+        <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-green']) ?>
 
-        <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-delete']) ?>
+        <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-red']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

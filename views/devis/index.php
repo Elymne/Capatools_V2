@@ -15,8 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 
-
-
 <div class="container">
     <div class="devis-index">
 
@@ -26,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="card">
                 <div class="card-content">
-                    <h5> Filtres </h5>
+                    <span>Filtres</span>
                 </div>
                 <div class="card-content">
                     <?php echo getFilterCardContent() ?>
@@ -116,16 +114,16 @@ function getHelperCardContent(): string
 {
     return <<<HTML
         <div>
-            <a class="btn-floating waves-effect waves-light btn-update rightspace-10px no-click"><i class="material-icons right">cloud_download</i></a>
+            <a class="btn-floating waves-effect waves-light btn-green rightspace-10px no-click"><i class="material-icons right">cloud_download</i></a>
             <p style="display: inline-block">Modifier le devis</p>
 
-            <a class="btn-floating waves-effect waves-light blue rightspace-10px leftspace-20px no-click"><i class="material-icons right">cloud_download</i></a>
+            <a class="btn-floating waves-effect waves-light btn-blue rightspace-10px leftspace-20px no-click"><i class="material-icons right">cloud_download</i></a>
             <p style="display: inline-block">Upload du fichier</p>
 
-            <a class="btn-floating waves-effect waves-light purple rightspace-10px leftspace-20px no-click"><i class="material-icons right">picture_as_pdf</i></a>
+            <a class="btn-floating waves-effect waves-light btn-purple rightspace-10px leftspace-20px no-click"><i class="material-icons right">picture_as_pdf</i></a>
             <p style="display: inline-block">Générer le pdf</p>
 
-            <a class="btn-floating waves-effect waves-light green rightspace-10px leftspace-20px no-click"><i class="material-icons right">grid_on</i></a>
+            <a class="btn-floating waves-effect waves-light btn-green-darker rightspace-10px leftspace-20px no-click"><i class="material-icons right">grid_on</i></a>
             <p style="display: inline-block">Générer le fichier excel</p>
         </div>
     HTML;
@@ -233,12 +231,12 @@ function getUpdateButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">build</i>',
-                Url::to(['devis/upload', 'id' => $model->id]),
+                Url::to(['devis/update', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-update',
+                    'class' => 'btn-floating waves-effect waves-light btn-green',
                 ]
             );
         }
@@ -259,7 +257,7 @@ function getDocumentButtonArray()
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
                         'action' => Url::to(['devis/update', 'id' => $model->id]),
-                        'class' => 'btn-floating waves-effect waves-light blue',
+                        'class' => 'btn-floating waves-effect waves-light btn-blue',
                     ]
                 );
             } else {
@@ -290,7 +288,7 @@ function getPdfButtonArray()
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/pdf', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light purple',
+                    'class' => 'btn-floating waves-effect waves-light btn-purple',
                 ]
             );
         }
@@ -309,7 +307,7 @@ function getExcelButtonArray()
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light green',
+                    'class' => 'btn-floating waves-effect waves-light btn-green-darker',
                 ]
             );
         }
