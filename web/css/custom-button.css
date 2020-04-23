@@ -10,6 +10,16 @@
     color: #333333;
 }
 
+.btn-green-darker {
+    background-color: #008000;
+    color: white;
+}
+
+.btn-green-darker:hover {
+    background-color: #00cc00;
+    color: #333333;
+}
+
 .btn-blue {
     background-color: #078aca;
 }
@@ -59,10 +69,10 @@
 }
 
 .btn-purple {
-    background-color: #b366ff;
+    background-color: #7300e6;
 }
 
 .btn-purple:hover {
-    background-color: #d9b3ff;
+    background-color: #9933ff;
     color: #333333;
 }

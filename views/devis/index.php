@@ -119,13 +119,13 @@ function getHelperCardContent(): string
             <a class="btn-floating waves-effect waves-light btn-green rightspace-10px no-click"><i class="material-icons right">cloud_download</i></a>
             <p style="display: inline-block">Modifier le devis</p>
 
-            <a class="btn-floating waves-effect waves-light blue rightspace-10px leftspace-20px no-click"><i class="material-icons right">cloud_download</i></a>
+            <a class="btn-floating waves-effect waves-light btn-blue rightspace-10px leftspace-20px no-click"><i class="material-icons right">cloud_download</i></a>
             <p style="display: inline-block">Upload du fichier</p>
 
-            <a class="btn-floating waves-effect waves-light purple rightspace-10px leftspace-20px no-click"><i class="material-icons right">picture_as_pdf</i></a>
+            <a class="btn-floating waves-effect waves-light btn-purple rightspace-10px leftspace-20px no-click"><i class="material-icons right">picture_as_pdf</i></a>
             <p style="display: inline-block">Générer le pdf</p>
 
-            <a class="btn-floating waves-effect waves-light green rightspace-10px leftspace-20px no-click"><i class="material-icons right">grid_on</i></a>
+            <a class="btn-floating waves-effect waves-light btn-green-darker rightspace-10px leftspace-20px no-click"><i class="material-icons right">grid_on</i></a>
             <p style="display: inline-block">Générer le fichier excel</p>
         </div>
     HTML;
@@ -259,7 +259,7 @@ function getDocumentButtonArray()
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
                         'action' => Url::to(['devis/update', 'id' => $model->id]),
-                        'class' => 'btn-floating waves-effect waves-light blue',
+                        'class' => 'btn-floating waves-effect waves-light btn-blue',
                     ]
                 );
             } else {
@@ -290,7 +290,7 @@ function getPdfButtonArray()
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/pdf', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light purple',
+                    'class' => 'btn-floating waves-effect waves-light btn-purple',
                 ]
             );
         }
@@ -309,7 +309,7 @@ function getExcelButtonArray()
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light green',
+                    'class' => 'btn-floating waves-effect waves-light btn-green-darker',
                 ]
             );
         }

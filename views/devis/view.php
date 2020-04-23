@@ -48,7 +48,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Passer en validation opérationnelle <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_OP,],
-                            ['class' => 'waves-effect waves-light btn green rightspace-15px leftspace-15px', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Valider ce devis en tant que responsable opérationnel ?'
                             ]]
                         ) ?>
@@ -58,7 +58,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Valider la signature client <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_CL,],
-                            ['class' => 'waves-effect waves-light btn green rightspace-15px leftspace-15px', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-green  rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Le client à signé le contrat ?'
                             ]]
                         ) ?>
@@ -68,7 +68,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Passer en projet en cours <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_EN_COURS,],
-                            ['class' => 'waves-effect waves-light btn green rightspace-15px leftspace-15px', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-green  rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Passer ce projet en cours ?'
                             ]]
                         ) ?>
@@ -78,7 +78,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Passer en projet terminé <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJETTERMINE,],
-                            ['class' => 'waves-effect waves-light btn green rightspace-15px leftspace-15px', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Ce projet est terminé ?'
                             ]]
                         ) ?>
@@ -105,9 +105,9 @@ $indexStatus = getIndexStatus($model);
                     <?php endif; ?>
 
                     <?= Html::a(
-                        'Créer un pdf <i class="material-icons right">build</i>',
+                        'Créer un pdf <i class="material-icons right">picture_as_pdf</i>',
                         ['pdf', 'id' => $model->id],
-                        ['class' => 'waves-effect purple waves-light btn']
+                        ['class' => 'waves-effect btn-purple waves-light btn']
                     ) ?>
 
                 </div>
