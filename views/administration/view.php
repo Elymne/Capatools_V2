@@ -3,10 +3,7 @@
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use app\widgets\TopTitle;
-use phpDocumentor\Reflection\Types\Boolean;
 use yii\helpers\Html;
-use yii\widgets\DetailView;
-
 /* @var $this yii\web\View */
 /* @var $model app\models\user\CapaUser */
 
@@ -85,15 +82,15 @@ function createUserDataTable($model): string
         <table class="highlight">
             <tbody>
                 <tr>
-                    <td class='header'>Nom / prénom</td>
+                    <td width="30%" class="table-font-bold">Nom / prénom</td>
                     <td>${username}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Email</td>
+                    <td width="30%" class="table-font-bold">Email</td>
                     <td>${email}</td>
                 </tr>  
                 <tr>
-                    <td class='header'>Cellule</td>
+                    <td width="30%" class="table-font-bold">Cellule</td>
                     <td>${cellule}</td>
                 </tr>  
             </tbody>
@@ -112,9 +109,9 @@ function createRolesTable(array $userRoles): string
 
         <table class="highlight">
             <tbody>
-                <tr class="group">
-                    <td class='header'>Service</td>
-                    <td>Rôle</td>
+                <tr>
+                    <td class="table-font-bold">Service</td>
+                    <td class="table-font-bold">Rôle</td>
                 </tr>    
     HTML;
 
@@ -125,7 +122,7 @@ function createRolesTable(array $userRoles): string
     // Admin row.
     $body = $body . <<<HTML
         <tr>
-            <td>Administration</td>
+            <td width="30%">Administration</td>
             <td>${adminStringRole}</td>
         </tr>
     HTML;
@@ -133,7 +130,7 @@ function createRolesTable(array $userRoles): string
     // Devis row.
     $body = $body . <<<HTML
         <tr>
-            <td>Devis</td>
+            <td width="30%">Devis</td>
             <td>${devisStringRole}</td>
         </tr>
     HTML;
