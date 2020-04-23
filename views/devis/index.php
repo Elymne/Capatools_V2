@@ -35,16 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="card">
                 <div class="card-content">
-                    <div>
-                        <a class="btn-floating waves-effect waves-light blue rightspace-10px no-click"><i class="material-icons right">cloud_download</i></a>
-                        <p style="display: inline-block">Upload du fichier</p>
-
-                        <a class="btn-floating waves-effect waves-light purple rightspace-10px leftspace-20px no-click"><i class="material-icons right">picture_as_pdf</i></a>
-                        <p style="display: inline-block">Générer le pdf</p>
-
-                        <a class="btn-floating waves-effect waves-light green rightspace-10px leftspace-20px no-click"><i class="material-icons right">grid_on</i></a>
-                        <p style="display: inline-block">Générer le fichier excel</p>
-                    </div>
+                    <?php echo getHelperCardContent() ?>
                 </div>
             </div>
 
@@ -117,6 +108,30 @@ function getFilterCardContent(): string
 }
 
 /**
+ * Used to display combobox.
+ * 
+ * @return string HTML content.
+ */
+function getHelperCardContent(): string
+{
+    return <<<HTML
+        <div>
+            <a class="btn-floating waves-effect waves-light btn-update rightspace-10px no-click"><i class="material-icons right">cloud_download</i></a>
+            <p style="display: inline-block">Modifier le devis</p>
+
+            <a class="btn-floating waves-effect waves-light blue rightspace-10px leftspace-20px no-click"><i class="material-icons right">cloud_download</i></a>
+            <p style="display: inline-block">Upload du fichier</p>
+
+            <a class="btn-floating waves-effect waves-light purple rightspace-10px leftspace-20px no-click"><i class="material-icons right">picture_as_pdf</i></a>
+            <p style="display: inline-block">Générer le pdf</p>
+
+            <a class="btn-floating waves-effect waves-light green rightspace-10px leftspace-20px no-click"><i class="material-icons right">grid_on</i></a>
+            <p style="display: inline-block">Générer le fichier excel</p>
+        </div>
+    HTML;
+}
+
+/**
  * Used to display all data needed for the table.
  * 
  * @return Array All data for table.
@@ -134,6 +149,7 @@ function getCollumnsArray()
     array_push($result, getStatusArray());
 
     // Buttons displaying.
+    array_push($result, getUpdateButtonArray());
     array_push($result, getDocumentButtonArray());
     array_push($result, getPdfButtonArray());
     array_push($result, getExcelButtonArray());
@@ -222,7 +238,7 @@ function getUpdateButtonArray()
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
-                    'class' => 'btn-floating btn-large waves-effect waves-light orange',
+                    'class' => 'btn-floating waves-effect waves-light btn-update',
                 ]
             );
         }
