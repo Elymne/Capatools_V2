@@ -1,8 +1,22 @@
 /* cutom button class */
 
 .btn-save {
-    background-color: #078aca;
+    background-color: #06ac3e;
     color: white;
+}
+
+.btn-save:hover {
+    background-color: #07ca48;
+    color: #333333;
+}
+
+.btn-confirm {
+    background-color: #078aca;
+}
+
+.btn-confirm {
+    background-color: #07ca48;
+    color: #333333;
 }
 
 .btn-save:hover {
