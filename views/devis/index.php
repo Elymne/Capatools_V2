@@ -35,12 +35,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="card">
                 <div class="card-content">
-                    <p> Filtres </p>
+                    <div>
+                        <a class="btn-floating waves-effect waves-light blue rightspace-10px no-click"><i class="material-icons right">cloud_download</i></a>
+                        <p style="display: inline-block">Upload du fichier</p>
+
+                        <a class="btn-floating waves-effect waves-light purple rightspace-10px leftspace-20px no-click"><i class="material-icons right">picture_as_pdf</i></a>
+                        <p style="display: inline-block">Générer le pdf</p>
+
+                        <a class="btn-floating waves-effect waves-light green rightspace-10px leftspace-20px no-click"><i class="material-icons right">grid_on</i></a>
+                        <p style="display: inline-block">Générer le fichier excel</p>
+                    </div>
                 </div>
             </div>
 
             <div class="card">
-
                 <div class="card-content">
 
                     <br />
@@ -49,7 +57,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= GridView::widget([
                         'id' => 'AvantContrat_id',
                         'dataProvider' => $dataProvider,
+                        'rowOptions' => [
+                            'style' => 'height:20px;',
+                            //                'width:20px;',
+                            'text-overflow:ellipsis;'
+                        ],
                         'tableOptions' => [
+                            'style' => 'height: 50px',
                             'class' => ['highlight']
                         ],
                         'columns' => getCollumnsArray()
@@ -59,6 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 </div>
             </div>
+
         </div>
 
     </div>
@@ -132,7 +147,7 @@ function getIdArray()
         'attribute' => 'id_capa',
         'format' => 'raw',
         'label' => 'CapaID',
-        'contentOptions' => ['class' => 'capaid-row'],
+        'contentOptions' => ['class' => 'capaid-row table-reduced', 'style' => 'width:75'],
         'headerOptions' => ['class' => 'capaid-row'],
         'value' => function ($data) {
             return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']]);
@@ -228,7 +243,7 @@ function getDocumentButtonArray()
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
                         'action' => Url::to(['devis/update', 'id' => $model->id]),
-                        'class' => 'btn-floating btn-large waves-effect waves-light blue',
+                        'class' => 'btn-floating waves-effect waves-light blue',
                     ]
                 );
             } else {
@@ -239,7 +254,7 @@ function getDocumentButtonArray()
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
                         'action' => Url::to(['#', 'id' => $model->id]),
-                        'class' => 'btn-floating btn-large disabled',
+                        'class' => 'btn-floating disabled',
                     ]
                 );
             }
@@ -259,7 +274,7 @@ function getPdfButtonArray()
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/pdf', 'id' => $model->id]),
-                    'class' => 'btn-floating btn-large waves-effect waves-light purple',
+                    'class' => 'btn-floating waves-effect waves-light purple',
                 ]
             );
         }
@@ -272,13 +287,13 @@ function getExcelButtonArray()
         'format' => 'raw',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
-                '<i class="material-icons right">picture_as_pdf</i>',
+                '<i class="material-icons right">grid_on</i>',
                 Url::to(['devis/download-excel', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
-                    'class' => 'btn-floating btn-large waves-effect waves-light green',
+                    'class' => 'btn-floating waves-effect waves-light green',
                 ]
             );
         }

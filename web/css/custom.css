@@ -62,16 +62,6 @@ td.header {
     width: 40%;
 }
 
-/* new css class */
-
-.rightspace-10px {
-    margin-right: 10px;
-}
-
-.rigthspace-20px {
-    margin-right: 20px;
-}
-
 /* id css */
 
 #main {
@@ -82,4 +72,8 @@ td.header {
 #body-login {
     background-image: url("../images/capa-login-bg.png");
     background-size: cover;
+}
+
+.no-click {
+    pointer-events: none;
 }
