@@ -25,7 +25,7 @@
 }
 
 .btn-update {
-    background-color: #ff9800;
+    background-color: #06ac3e;
     color: white;
 }
 
@@ -51,5 +51,14 @@
 
 .btn-delete:hover {
     background-color: #ff6666;
+    color: #333333;
+}
+
+.btn-cancel {
+    background-color: #ff6600;
+}
+
+.btn-cancel:hover {
+    background-color: #ffa366;
     color: #333333;
 }

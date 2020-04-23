@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'text-overflow:ellipsis;'
                         ],
                         'tableOptions' => [
-                            'style' => 'height: 50px',
+                            'style' => 'height: 20px',
                             'class' => ['highlight']
                         ],
                         'columns' => getCollumnsArray()

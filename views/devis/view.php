@@ -6,7 +6,6 @@ use yii\helpers\Html;
 use app\models\devis\DevisStatus;
 use app\models\devis\Milestone;
 use app\models\devis\MilestoneStatus;
-use app\models\user\UserRole;
 use app\widgets\TopTitle;
 
 /* @var $this yii\web\View */
@@ -41,15 +40,15 @@ $indexStatus = getIndexStatus($model);
 
                 <div class="card-content">
                     <!-- Actions on devis -->
-                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-back']) ?>
+                    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-back rightspace-15px leftspace-15px']) ?>
 
-                    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-update']) ?>
+                    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-update rightspace-15px leftspace-15px']) ?>
 
                     <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
                         <?= Html::a(
                             'Passer en validation opérationnelle <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_OP,],
-                            ['class' => 'waves-effect waves-light btn green', 'data' => [
+                            ['class' => 'waves-effect waves-light btn green rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Valider ce devis en tant que responsable opérationnel ?'
                             ]]
                         ) ?>
@@ -59,7 +58,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Valider la signature client <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_CL,],
-                            ['class' => 'waves-effect waves-light btn green', 'data' => [
+                            ['class' => 'waves-effect waves-light btn green rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Le client à signé le contrat ?'
                             ]]
                         ) ?>
@@ -69,7 +68,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Passer en projet en cours <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_EN_COURS,],
-                            ['class' => 'waves-effect waves-light btn green', 'data' => [
+                            ['class' => 'waves-effect waves-light btn green rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Passer ce projet en cours ?'
                             ]]
                         ) ?>
@@ -79,7 +78,7 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Passer en projet terminé <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJETTERMINE,],
-                            ['class' => 'waves-effect waves-light btn green', 'data' => [
+                            ['class' => 'waves-effect waves-light btn green rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Ce projet est terminé ?'
                             ]]
                         ) ?>
@@ -87,9 +86,9 @@ $indexStatus = getIndexStatus($model);
 
                     <?php if ($model->status_id < DevisStatus::PROJET_ANNULE && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
                         <?= Html::a(
-                            'Annuler le projet <i class="material-icons right">delete</i>',
+                            'annuler projet <i class="material-icons right">delete</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,],
-                            ['class' => 'waves-effect waves-light btn btn-delete', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-cancel rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Annuler ce projet ?'
                             ]]
                         ) ?>
@@ -99,14 +98,14 @@ $indexStatus = getIndexStatus($model);
                         <?= Html::a(
                             'Supprimer <i class="material-icons right">delete</i>',
                             ['delete', 'id' => $model->id],
-                            ['class' => 'waves-effect waves-light btn btn-delete', 'data' => [
+                            ['class' => 'waves-effect waves-light btn btn-delete rightspace-15px leftspace-15px', 'data' => [
                                 'confirm' => 'Supprimer ce projet ?'
                             ]]
                         ) ?>
                     <?php endif; ?>
 
                     <?= Html::a(
-                        'Générer un pdf <i class="material-icons right">build</i>',
+                        'Créer un pdf <i class="material-icons right">build</i>',
                         ['pdf', 'id' => $model->id],
                         ['class' => 'waves-effect purple waves-light btn']
                     ) ?>
@@ -137,7 +136,7 @@ $indexStatus = getIndexStatus($model);
             <div class="card">
 
                 <div class="card-content">
-                    <span class="card-title"> Détails</span>
+                    <span class="card-title">Détails du projet</span>
                 </div>
 
                 <div class="card-action">
@@ -225,7 +224,8 @@ function createDataTable($model, $fileModel)
     // You can't use object with <<<HTML HTML; so you have to create value like bellow.
     $user_name = $model->capa_user->username;
     $user_email = $model->capa_user->email;
-    $user_cellule = $model->capa_user->cellule->name;
+    $user_cellule = strtolower($model->capa_user->cellule->name);
+
 
     $company_name = $model->company->name;
     $company_description = $model->company->description;
@@ -234,14 +234,15 @@ function createDataTable($model, $fileModel)
     $devis_price = $model->price;
 
     $delivery_type = $model->delivery_type->label;
-    $delivery_duration = $model->service_duration;
+    $delivery_duration_hour = $model->service_duration;
+    $delivery_duration_day = (int) $model->service_duration / 7.4;
 
     $laboxy_name = $model->id_laboxy;
     $laboxy_prestation_duration = $model->service_duration * Yii::$app->params['LaboxyTimeDay'];
 
     if ($fileModel == null) {
         $file_name = 'Aucun fichier';
-        $file_version = '';
+        $file_version = 'Pas de fichier';
     } else {
         $file_name = $fileModel->name . '.' . $fileModel->type;
         $file_version = $fileModel->version;
@@ -259,15 +260,15 @@ function createDataTable($model, $fileModel)
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>nom / prénom</td>
+                    <td class='header'>Nom / prénom</td>
                     <td>${user_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>email</td>
+                    <td class='header'>Email</td>
                     <td>${user_email}</td>
                 </tr>
                 <tr>
-                    <td class='header'>cellule capacité</td>
+                    <td class='header'>Cellule capacité</td>
                     <td>${user_cellule}</td>
                 </tr>
 
@@ -278,7 +279,7 @@ function createDataTable($model, $fileModel)
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>nom du client / société</td>
+                    <td class='header'>Nom du client / société</td>
                     <td>${company_name}</td>
                 </tr>
                 <tr>
@@ -286,7 +287,7 @@ function createDataTable($model, $fileModel)
                     <td>${company_description}</td>
                 </tr>
                 <tr>
-                    <td class='header'>tva</td>
+                    <td class='header'>Tva</td>
                     <td>${company_tva}</td>
                 </tr>
 
@@ -297,15 +298,15 @@ function createDataTable($model, $fileModel)
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>type de prestation</td>
+                    <td class='header'>Type de prestation</td>
                     <td>${delivery_type}</td>
                 </tr>
                 <tr>
                     <td class='header'>Durée de la prestation</td>
-                    <td>${delivery_duration}</td>
+                    <td>${delivery_duration_hour} heures ${delivery_duration_day} jours</td>
                 </tr>
                 <tr>
-                    <td class='header'>Prix de la prestation total</td>
+                    <td class='header'>Prix de la prestation(HT)</td>
                     <td>${devis_price} €</td>
                 </tr>
 
@@ -316,12 +317,12 @@ function createDataTable($model, $fileModel)
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>identitifant</td>
+                    <td class='header'>Identitifant</td>
                     <td>${laboxy_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>durée prestation</td>
-                    <td>${laboxy_prestation_duration}</td>
+                    <td class='header'>Durée prestation laboxy</td>
+                    <td>${laboxy_prestation_duration} heures</td>
                 </tr>
 
                  <!-- Fichier uploadé -->
@@ -331,11 +332,11 @@ function createDataTable($model, $fileModel)
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>nom</td>
+                    <td class='header'>Nom</td>
                     <td>${file_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>version</td>
+                    <td class='header'>Version</td>
                     <td>${file_version}</td>
                 </tr>
                 
@@ -366,7 +367,7 @@ function createMilestonesTable($milestones, $idDevis)
     }
 
     // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone header tab.
-    if (UserRoleManager::hasRole([UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) {
+    if (UserRoleManager::hasRoles([UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) {
         $statusRowHeader = <<<HTML
             <td class="header"></td>
         HTML;

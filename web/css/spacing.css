@@ -2,11 +2,19 @@
     margin-right: 10px;
 }
 
+.rightspace-15px {
+    margin-right: 10px;
+}
+
 .rigthspace-20px {
     margin-right: 20px;
 }
 
 .leftspace-10px {
+    margin-left: 10px;
+}
+
+.leftspace-15px {
     margin-left: 10px;
 }
 
