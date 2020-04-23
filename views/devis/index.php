@@ -1,7 +1,7 @@
 <?php
 
+use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
-use app\models\devis\Devis;
 use app\models\devis\UploadFile;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
@@ -27,6 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- New -->
 
         <div class="row">
+
+            <div class="card">
+                <div class="card-content">
+                    <p> Filtres </p>
+                </div>
+            </div>
+
             <div class="card">
 
                 <div class="card-content">
@@ -37,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= GridView::widget([
                         'id' => 'AvantContrat_id',
                         'dataProvider' => $dataProvider,
-                        'filterModel' => $searchModel,
+                        //'filterModel' => $searchModel,
                         'tableOptions' => [
                             'class' => ['highlight']
                         ],
@@ -66,7 +73,7 @@ function getCollumnsArray()
     array_push($result, getIdArray());
     array_push($result, getInternalNameArray());
     array_push($result, getUsernameArray());
-    if (Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+    if (UserRoleManager::hasRoles([UserRoleEnum::ADMINISTRATOR, UserRoleEnum::SUPER_ADMINISTRATOR])) {
         array_push($result, getCelluleArray());
     }
     array_push($result, getCompanyArray());

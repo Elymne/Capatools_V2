@@ -26,7 +26,7 @@ use app\helper\_clazz\UploadFileHelper;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 use app\components\ExcelExportService;
-
+use app\helper\_clazz\UserRoleManager;
 use kartik\mpdf\Pdf;
 
 
@@ -109,16 +109,12 @@ class DevisController extends Controller implements ServiceInterface
     public static function getActionUser($user)
     {
         $result = [];
-
-        // Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) retourne un booléen.
-        // Si il retourne true, c'est que ton user local possède le droit.
-        // UserRoleEnum::PROJECT_MANAGER_DEVIS est une ENUM, il retourne le nom du rôle que j'ai créé dans le dossier migrate.
-        // Ca permet d'avoir un code plus robuste.
-
         if (
-            Yii::$app->user->can(UserRoleEnum::PROJECT_MANAGER_DEVIS) ||
-            Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) ||
-            Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)
+            UserRoleManager::hasRoles([
+                UserRoleEnum::PROJECT_MANAGER_DEVIS,
+                UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
+                UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
+            ])
         ) {
 
             $result = [
@@ -366,8 +362,12 @@ class DevisController extends Controller implements ServiceInterface
         $model = $this->findModel($id);
 
 
-        if (Yii::$app->user->can(UserRoleEnum::OPERATIONAL_MANAGER_DEVIS) || Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS))
-            $this->setStatus($model, $status);
+        if (
+            UserRoleManager::hasRoles([
+                UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
+                UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
+            ])
+        ) $this->setStatus($model, $status);
 
 
         MenuSelectorHelper::setMenuDevisNone();
@@ -398,7 +398,7 @@ class DevisController extends Controller implements ServiceInterface
     public function actionUpdateMilestoneStatus(int $id, string $status, int $id_devis)
     {
 
-        if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+        if (UserRoleManager::hasRoles([UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) {
             if ($status == MilestoneStatus::ENCOURS || $status == MilestoneStatus::FACTURATIONENCOURS) {
                 Milestone::setStatusById($id, $status + 1);
             }

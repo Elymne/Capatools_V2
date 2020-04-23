@@ -1,10 +1,12 @@
 <?php
 
+use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use yii\helpers\Html;
 use app\models\devis\DevisStatus;
 use app\models\devis\Milestone;
 use app\models\devis\MilestoneStatus;
+use app\models\user\UserRole;
 use app\widgets\TopTitle;
 
 /* @var $this yii\web\View */
@@ -43,7 +45,7 @@ $indexStatus = getIndexStatus($model);
 
                     <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-update']) ?>
 
-                    <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
+                    <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
                         <?= Html::a(
                             'Passer en validation opérationnelle <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_OP,],
@@ -53,7 +55,7 @@ $indexStatus = getIndexStatus($model);
                         ) ?>
                     <?php endif; ?>
 
-                    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_OP &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
+                    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_OP &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
                         <?= Html::a(
                             'Valider la signature client <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_CL,],
@@ -63,7 +65,7 @@ $indexStatus = getIndexStatus($model);
                         ) ?>
                     <?php endif; ?>
 
-                    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_CL &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
+                    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_CL &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
                         <?= Html::a(
                             'Passer en projet en cours <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_EN_COURS,],
@@ -73,7 +75,7 @@ $indexStatus = getIndexStatus($model);
                         ) ?>
                     <?php endif; ?>
 
-                    <?php if ($model->status_id == DevisStatus::PROJET_EN_COURS &&  Yii::$app->user->can('operationalManagerDevis')) : ?>
+                    <?php if ($model->status_id == DevisStatus::PROJET_EN_COURS &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
                         <?= Html::a(
                             'Passer en projet terminé <i class="material-icons right">check</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJETTERMINE,],
@@ -83,7 +85,7 @@ $indexStatus = getIndexStatus($model);
                         ) ?>
                     <?php endif; ?>
 
-                    <?php if (Yii::$app->user->can('operationalManagerDevis') && $model->status_id < DevisStatus::PROJET_ANNULE) : ?>
+                    <?php if ($model->status_id < DevisStatus::PROJET_ANNULE && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
                         <?= Html::a(
                             'Annuler le projet <i class="material-icons right">delete</i>',
                             ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,],
@@ -93,7 +95,7 @@ $indexStatus = getIndexStatus($model);
                         ) ?>
                     <?php endif; ?>
 
-                    <?php if ((Yii::$app->user->can('operationalManagerDevis') || Yii::$app->user->can('accountingSupportDevis')) && $model->status_id == DevisStatus::PROJET_ANNULE) : ?>
+                    <?php if ($model->status_id == DevisStatus::PROJET_ANNULE && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS, UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) : ?>
                         <?= Html::a(
                             'Supprimer <i class="material-icons right">delete</i>',
                             ['delete', 'id' => $model->id],
@@ -364,7 +366,7 @@ function createMilestonesTable($milestones, $idDevis)
     }
 
     // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone header tab.
-    if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+    if (UserRoleManager::hasRole([UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) {
         $statusRowHeader = <<<HTML
             <td class="header"></td>
         HTML;
@@ -400,7 +402,7 @@ function createMilestonesTable($milestones, $idDevis)
         $milestone_status = $milestone->milestoneStatus->label;
 
         // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone body tab.
-        if (Yii::$app->user->can(UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS)) {
+        if (UserRoleManager::hasRoles([UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) {
             $milestone_update = $milestone->milestoneStatus->id;
             $statusRowBody = updateStatus($milestone->id, $milestone_update, $idDevis);
         }

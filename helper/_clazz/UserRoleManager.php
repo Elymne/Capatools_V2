@@ -122,4 +122,35 @@ class UserRoleManager
 
         return $result;
     }
+
+    /**
+     * Retourne vrai si l'utilisateur connecté a le droit passé en paramètre.
+     * L'utilité de cette fonction est de pouvoir filtrer l'affichage et l'accès à certaines fonctionnalité en fonction des utilisateurs.
+     * @param string $userRole : Utilisation de l'énumération UserRoleEnum.
+     * 
+     * @return bool Retourne vrai si l'utilisateur a le droit rentré en paramètre, sinon false.
+     */
+    static function hasRole(string $userRole): bool
+    {
+        return Yii::$app->user->can($userRole);
+    }
+
+    /**
+     * Retourne vrai si l'utilisateur connecté a au moins un des droits passés en paramètre.
+     * L'utilité de cette fonction est de pouvoir filtrer l'affichage et l'accès à certaines fonctionnalité en fonction des utilisateurs.
+     * @param string $userRole : Utilisation de l'énumération UserRoleEnum.
+     * 
+     * @return bool Retourne vrai si l'utilisateur a au moins un des droits rentrés en paramètre, sinon false.
+     */
+    static function hasRoles(array $userRoles): bool
+    {
+        $result = false;
+        foreach ($userRoles as $userRole) {
+            if (Yii::$app->user->can($userRole)) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
 }
