@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="card">
                 <div class="card-content">
-                    <p> Filtres </p>
+                    <h5> Filtres </h5>
                 </div>
                 <div class="card-content">
                     <?php echo getFilterCardContent() ?>
@@ -166,7 +166,7 @@ function getIdArray()
         'contentOptions' => ['class' => 'capaid-row table-reduced', 'style' => 'width:75'],
         'headerOptions' => ['class' => 'capaid-row'],
         'value' => function ($data) {
-            return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']]);
+            return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']], ['target' => '_blank']);
         }
     ];
 }
