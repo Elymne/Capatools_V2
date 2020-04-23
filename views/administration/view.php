@@ -29,6 +29,7 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
     <div class="capa_user-view">
 
         <div class="row">
+
             <div class="card">
 
                 <div class="card-content">
@@ -50,37 +51,55 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
                 </div>
 
                 <div class="card-content">
-                    <?= DetailView::widget([
-                        'model' => $model,
-                        'options' => [
-                            'class' => ['highlight']
-                        ],
-                        'attributes' => [
-                            [
-                                'label' => 'Nom et prénom',
-                                'attribute' => 'username',
-                            ],
-                            'email:email',
-                            [
-                                'label' => 'Nom de la cellule',
-                                'attribute' => 'cellule.name',
-                            ],
-                        ],
-                    ]) ?>
-
-                    <br /><br /><br />
-
-                    <?php echo createRolesTable($userRoles); ?>
-
+                    <?php echo createUserDataTable($model) ?>
                 </div>
 
             </div>
+
+            <div class="card">
+
+                <div class="card-content">
+                    <p> Droits utilisateur </p>
+                </div>
+
+                <div class="card-content">
+                    <?php echo createRolesTable($userRoles) ?>
+                </div>
+
+            </div>
+
         </div>
 
     </div>
 </div>
 
 <?php
+
+function createUserDataTable($model): string
+{
+    $username = $model->username;
+    $email = $model->email;
+    $cellule = $model->cellule->name;
+
+    return <<<HTML
+        <table class="highlight">
+            <tbody>
+                <tr>
+                    <td class='header'>Nom / prénom</td>
+                    <td>${username}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Email</td>
+                    <td>${email}</td>
+                </tr>  
+                <tr>
+                    <td class='header'>Cellule</td>
+                    <td>${cellule}</td>
+                </tr>  
+            </tbody>
+        </table>
+    HTML;
+}
 
 function createRolesTable(array $userRoles): string
 {
@@ -93,9 +112,9 @@ function createRolesTable(array $userRoles): string
 
         <table class="highlight">
             <tbody>
-                <tr>
+                <tr class="group">
                     <td class='header'>Service</td>
-                    <td class='header'>Rôle</td>
+                    <td>Rôle</td>
                 </tr>    
     HTML;
 
