@@ -23,10 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
 
             <div class="card">
-                <div class="card-content">
-                    <label>Filtres</label>
+                <div class="card-content bottomspace-15px-invert">
+                    <label class="">Filtres</label>
                 </div>
-                <div class="card-content">
+                <div class="card-action topspace-15px-invert">
                     <?php echo getFilterCardContent() ?>
                 </div>
             </div>
