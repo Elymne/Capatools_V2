@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
 
 use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_clazz\UserRoleManager;
+use app\helper\_enum\CompanyTypeEnum;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 use app\models\user\CapaUser;
@@ -313,9 +314,8 @@ class AdministrationController extends Controller
 
             if ($model->validate()) {
 
-                $model->name = $model->name;
-                $model->tva =  $model->tva;
-                $model->description = $model->description;
+                // Transform data from droplist for database.
+                $model->type = CompanyTypeEnum::COMPANY_TYPE[$model->type];
 
                 $model->save();
 

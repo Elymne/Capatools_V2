@@ -3,7 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
+use app\helper\_enum\CompanyTypeEnum;
 use app\widgets\TopTitle;
+use kartik\select2\Select2;
 
 $this->title = 'Ajout d\'un client';
 $this->params['breadcrumbs'][] = ['label' => 'User', 'url' => ['index']];
@@ -29,8 +31,20 @@ AppAsset::register($this);
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
                             ->label("Nom du client") ?>
 
+                        <?= $form->field($model, 'type')->widget(Select2::classname(), [
+                            'data' => CompanyTypeEnum::COMPANY_TYPE_STRING,
+                            'pluginLoading' => false,
+                            'pluginOptions' => [
+                                'allowClear' => false
+                            ],
+                            'pluginEvents' => [
+                                "select2:select" => "(data) => { console.log(data); }",
+                            ]
+                        ])->label("Type de client"); ?>
+
                         <?= $form->field($model, 'tva')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
+                            ->hiddenInput(['id' => 'tva-field'])
                             ->label("TVA") ?>
 
                         <?= $form->field($model, 'description')

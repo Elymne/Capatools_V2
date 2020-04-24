@@ -1,6 +1,7 @@
 <?php
 
 use app\helper\_clazz\UserRoleManager;
+use app\helper\_enum\CompanyTypeEnum;
 use app\helper\_enum\UserRoleEnum;
 use yii\helpers\Html;
 use app\models\devis\DevisStatus;
@@ -100,9 +101,6 @@ $indexStatus = getIndexStatus($model);
 
 <?php
 
-/**
- * 
- */
 function getIndexStatus($model): int
 {
 
@@ -132,9 +130,6 @@ function getIndexStatus($model): int
     return $indexStatus;
 }
 
-/**
- * 
- */
 function isStatusPassed($indexStatus, $arrayKey): bool
 {
     if ($indexStatus >= $arrayKey)
@@ -159,6 +154,7 @@ function createDataTable($model, $fileModel): string
 
 
     $company_name = $model->company->name;
+    $company_type = CompanyTypeEnum::getTypeCompanyString($model->company->type);
     $company_description = $model->company->description;
     $company_tva = $model->company->tva;
 
@@ -212,6 +208,10 @@ function createDataTable($model, $fileModel): string
                 <tr>
                     <td class='header'>Nom du client / société</td>
                     <td>${company_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Type d'entreprise/td>
+                    <td>${company_type}</td>
                 </tr>
                 <tr>
                     <td class='header'>Durée de la prestation</td>
