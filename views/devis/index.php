@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="card">
                 <div class="card-content">
-                    <span>Filtres</span>
+                    <label>Filtres</label>
                 </div>
                 <div class="card-content">
                     <?php echo getFilterCardContent() ?>
@@ -80,27 +80,27 @@ function getFilterCardContent(): string
     return <<<HTML
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="capaid-checkbox" />
-            <span>CapaID</span>
+            <span class="span-combobox">CapaID</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="projectname-checkbox"/>
-            <span>Nom du projet</span>
+            <span class="span-combobox">Nom du projet</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" id="projectmanager-checkbox"/>
-            <span>Resp projet</span>
+            <span class="span-combobox">Resp projet</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="cellule-checkbox"/>
-            <span>Cellule</span>
+            <span class="span-combobox">Cellule</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="company-checkbox"/>
-            <span>Client</span>
+            <span class="span-combobox">Client</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="status-checkbox"/>
-            <span>Status</span>
+            <span class="span-combobox">Status</span>
         </label>
     HTML;
 }
