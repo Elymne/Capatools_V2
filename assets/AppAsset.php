@@ -59,7 +59,8 @@ class AppAsset extends AssetBundle
         'app-assets/js/custom/custom-script.js',
 
         // Jquery views.
-        'js/devis/index.js'
+        'js/devis/index.js',
+        'js/companies/create.js'
 
     ];
 

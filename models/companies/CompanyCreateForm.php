@@ -22,9 +22,15 @@ class CompanyCreateForm extends Company
                 'skipOnError' => false
             ],
             [
-                'tva',
+                'type',
                 'required',
-                'message' => 'Indiquez la TVA !'
+                'message' => 'Il doit y avoir un type de sélectionné !'
+            ],
+            [
+                'tva',
+                'tvaRequired',
+                'skipOnEmpty' => false,
+                'skipOnError' => false
             ],
             [
                 'tva',
@@ -42,6 +48,15 @@ class CompanyCreateForm extends Company
 
         if (in_array($this->$attribute, $companiesNames)) {
             $this->addError($attribute, 'Ce client existe déjà !');
+        }
+    }
+
+    public function tvaRequired($attribute, $params)
+    {
+        $companyType = $this->type;
+
+        if ($companyType == 0) {
+            if ($this->tva == null) $this->addError($attribute, 'Vous devez préciser la tva !');
         }
     }
 
