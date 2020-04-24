@@ -15,7 +15,7 @@ class m200200_000001_insert_into_delivery_type_table extends Migration
         ]);
 
         $this->insert('{{%delivery_type}}', [
-            'label' => 'Activité délégué'
+            'label' => 'Activité déléguée'
         ]);
 
         $this->insert('{{%delivery_type}}', [

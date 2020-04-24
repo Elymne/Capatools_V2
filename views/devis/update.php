@@ -46,7 +46,7 @@ AppAsset::register($this);
                             'data' => ArrayHelper::map($delivery_types, 'id', 'label'),
                             'pluginLoading' => false,
                             'pluginOptions' => [
-                                'allowClear' => true
+                                'allowClear' => false
                             ],
                         ])->label(
                             "Type de projet",

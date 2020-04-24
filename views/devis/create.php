@@ -26,7 +26,6 @@ AppAsset::register($this);
 <div class="container">
     <div class="devis-create">
 
-
         <div class="row">
             <div class="col s6 offset-s3">
 
@@ -34,6 +33,7 @@ AppAsset::register($this);
 
                 <div class="card">
                     <div class="card-content">
+
                         <?= $form->field($model, 'internal_name')
                             ->textInput(
                                 ['maxlength' => true, 'autocomplete' => 'off', 'id' => 'internal_name', 'type' => "text"]
@@ -48,7 +48,7 @@ AppAsset::register($this);
                             'data' => ArrayHelper::map($delivery_types, 'id', 'label'),
                             'pluginLoading' => false,
                             'pluginOptions' => [
-                                'allowClear' => true
+                                'allowClear' => false
                             ],
                         ])->label(
                             "Type de projet",
@@ -64,10 +64,31 @@ AppAsset::register($this);
                             ->label("Nom du client")
                         ?>
 
-                        <?= $form->field($model, 'service_duration')
-                            ->textInput(['autocomplete' => 'off'])
-                            ->label("Durée de la prestation (j)")
-                        ?>
+                        <?php if (UserRoleManager::hasRoles([
+                            UserRoleEnum::PROJECT_MANAGER_DEVIS,
+                            UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
+                            UserRoleEnum::ADMINISTRATOR,
+                            UserRoleEnum::SUPER_ADMINISTRATOR
+                        ])) { ?>
+                            <?= Html::a("Ajouter un client", ["administration/add-company"], ["class" => "profile-link"]) ?>
+                            <br /><br /><br />
+                        <?php } ?>
+
+                        <div class="row">
+                            <div class="col s12">
+
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <?= $form->field($model, 'service_duration')
+                                            ->textInput(['autocomplete' => 'off'])
+                                            ->label("Durée de la prestation (j)")
+                                        ?>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -150,16 +171,11 @@ AppAsset::register($this);
                     </div>
                 <?php } ?>
 
-                <div class="form-group">
 
+                <div class="form-group">
                     <?= Html::submitButton(
                         'Enregistrer',
-                        [
-                            'class' => 'waves-effect waves-light btn btn-green',
-                            'data' => [
-                                'confirm' => 'Créer ce devis ?'
-                            ]
-                        ]
+                        ['class' => 'waves-effect waves-light btn btn-green', 'data' => ['confirm' => 'Créer ce devis ?']]
                     ) ?>
 
                     <?= Html::a(
@@ -167,14 +183,12 @@ AppAsset::register($this);
                         ['index'],
                         ['class' => 'waves-effect waves-light btn btn-red']
                     ) ?>
-
                 </div>
 
+                <?php ActiveForm::end(); ?>
+
             </div>
-
-            <?php ActiveForm::end(); ?>
         </div>
-
 
     </div>
 </div>
@@ -182,6 +196,7 @@ AppAsset::register($this);
 
 <?php
 
+///Script js qui permet de réinitiliser le date picker lors de l'ajout d'un jalon
 $this->registerJs(' 
 
 $(function () {
@@ -212,4 +227,4 @@ $(function () {
       });          
     });
 });
-');
+'); ?>
