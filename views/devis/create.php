@@ -84,6 +84,12 @@ AppAsset::register($this);
                                             ->label("Durée de la prestation (j)")
                                         ?>
                                     </div>
+                                    <div class="input-field col s6">
+                                        <?= $form->field($model, 'service_duration')
+                                            ->textInput(['autocomplete' => 'off'])
+                                            ->label("Durée de la prestation (j)")
+                                        ?>
+                                    </div>
                                 </div>
 
                             </div>

@@ -87,7 +87,7 @@ function getFilterCardContent(): string
             <span>Nom du projet</span>
         </label>
         <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="projectmanager-checkbox"/>
+            <input type="checkbox" class="filled-in" id="projectmanager-checkbox"/>
             <span>Resp projet</span>
         </label>
         <label class="rigthspace-20px">
@@ -186,8 +186,8 @@ function getUsernameArray()
         'attribute' => 'capa_user.username',
         'format' => 'text',
         'label' => 'Resp projet',
-        'contentOptions' => ['class' => 'projectmanager-row'],
-        'headerOptions' => ['class' => 'projectmanager-row'],
+        'contentOptions' => ['class' => 'projectmanager-row', 'style' => 'display: none'],
+        'headerOptions' => ['class' => 'projectmanager-row', 'style' => 'display: none'],
     ];
 }
 
