@@ -8,30 +8,50 @@ use yii\helpers\ArrayHelper;
 class DevisCreateForm extends Devis
 {
 
-    // This field is inserted here because it doesn't exist on Devis model. Tis a Company attribute.
+    public $upfilename;
+    public $pathfile;
+    public $datept;
+
     public $company_name;
 
     public function rules()
     {
         return [
-            ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire !'],
-            [
-                'company_name',
-                'required',
-                'message' => 'Indiquer le nom du client !'
-            ],
-            [
-                'company_name',
-                'noClientFound',
-                'skipOnEmpty' => false,
-                'skipOnError' => false
-            ],
-            [
-                'delivery_type_id',
-                'required', 'message' => 'Indiquer le type de la prestation !'
-            ],
-
+            [['upfilename'], 'file', 'skipOnEmpty' => true, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros {formattedLimit}', 'message' => 'Une proposition technique doit être associée au devis.'],
+            ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
+            ['service_duration', 'required', 'message' => 'Indiquer le temps du projet.'],
+            ['company_name', 'required', 'message' => 'Indiquer le nom du client.'],
+            ['company_name', 'noClientFound', 'skipOnEmpty' => false, 'skipOnError' => false],
+            ['service_duration', 'integer', 'min' => 0, 'tooSmall' => 'La durée de la prestation doit être supérieur à 0.', 'message' => 'La durée de la prestation doit être un entier positif.'],
+            ['delivery_type_id', 'required', 'message' => 'Indiquer le type de la prestation !'],
         ];
+    }
+
+
+    public function upload()
+    {
+        if ($this->upfilename) {
+
+            //J Save the file into upload path.
+            $path = 'uploads/' . $this->id_capa;
+            if (!is_dir($path)) {
+                mkdir($path);
+            }
+            $pathfile = $path . '/' . $this->upfilename->baseName . '.' . $this->upfilename->extension;
+            $result = true;
+            //if(file_exists(pathfile))
+            {
+                ////Overright :)
+
+            }
+            if ($result) {
+
+                $this->filename = $this->upfilename;
+
+                $this->upfilename->saveAs($pathfile);
+            }
+            return true;
+        }
     }
 
     /**
