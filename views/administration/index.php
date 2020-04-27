@@ -1,6 +1,7 @@
 <?php
 
 use app\widgets\TopTitle;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -19,15 +20,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="capa_user-index">
 
         <div class="row">
-            <div class="card">
 
+            <div class="card">
+                <div class="card-content">
+                    <span>
+                        Filtres
+                    </span>
+                </div>
+                <div class="card-action">
+                    <?php getCellulesFilter($cellulesNames) ?>
+                </div>
+            </div>
+
+            <div class="card">
                 <div class="card-content">
 
                     <?php Pjax::begin(); ?>
 
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
-                        //'filterModel' => $searchModel,
                         'tableOptions' => [
                             'class' => ['highlight']
                         ],
@@ -38,9 +49,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 </div>
             </div>
+
         </div>
 
-        <div style="top: 120px; right: 25px;" class="fixed-action-btn direction-top">
+        <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
             <a href="/administration/create" class="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow">
                 <i class="material-icons">add</i>
             </a>
@@ -50,6 +62,31 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php
+
+
+function getCellulesFilter(array $cellules)
+{
+
+    echo Html::beginForm(['administration/index'], 'post', ['enctype' => 'multipart/form-data']);
+
+    echo Select2::widget([
+        'name' => 'droplist_cellule',
+        'data' => $cellules,
+        'pluginLoading' => false,
+
+        'options' => ['value' => 0, 'style' => 'width:350px', 'placeholder' => 'Selectionner une cellule ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+
+    echo Html::input('text', 'textinput_user', '', ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px']);
+
+    echo '<br />';
+
+    //echo Html::a('Filtrer', ['administration/index-filtered'], ['class' => 'btn waves-effect waves-light update-button btn-blue']);
+    echo Html::submitButton('Submit', ['class' => 'btn waves-effect waves-light update-button btn-blue']);
+}
 
 /**
  * Used to display all data needed for the table.

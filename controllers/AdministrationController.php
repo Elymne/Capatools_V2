@@ -155,14 +155,37 @@ class AdministrationController extends Controller
      */
     public function actionIndex()
     {
+
         $searchModel = new CapaUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $cellulesName = array_map(function ($value) {
+            return $value->name;
+        }, Cellule::getAll());
+
+        // If filtered used.
+        if (Yii::$app->request->post()) {
+
+            $filteredQueryArray = ['flag_active' => true];
+
+            $droplistCellule = Yii::$app->request->post('droplist_cellule');
+            if ($droplistCellule != null) $filteredQueryArray = $filteredQueryArray + ['cellule.name' => $cellulesName[Yii::$app->request->post('droplist_cellule')]];
+
+            $textinputUser = Yii::$app->request->post('textinput_user');
+            if ($textinputUser != null) $filteredQueryArray = $filteredQueryArray + ['username' => $textinputUser];
+
+            $dataProvider = $searchModel->searchFilter(Yii::$app->request->queryParams, $filteredQueryArray);
+        }
 
         MenuSelectorHelper::setMenuAdminIndex();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'cellulesNames' => $cellulesName
         ]);
+    }
+
+    public function actionIndexFiltered($celluleName, $userName)
+    {
     }
 
     /**

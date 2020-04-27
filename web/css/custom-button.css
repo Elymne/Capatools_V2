@@ -24,7 +24,7 @@
     background-color: #078aca;
 }
 
-.btn-blue {
+.btn-blue:hover {
     background-color: #22b0f7;
     color: #333333;
 }
