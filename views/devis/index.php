@@ -82,7 +82,7 @@ function getFilterCardContent(): string
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="projectname-checkbox"/>
-            <span class="span-combobox">Nom du projet</span>
+            <span class="span-combobox">Nom interne</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" id="projectmanager-checkbox"/>
@@ -172,7 +172,7 @@ function getInternalNameArray()
     return [
         'attribute' => 'internal_name',
         'format' => 'text',
-        'label' => 'Nom du projet',
+        'label' => 'Nom interne',
         'contentOptions' => ['class' => 'projectname-row'],
         'headerOptions' => ['class' => 'projectname-row'],
     ];
