@@ -46,15 +46,26 @@ $indexStatus = getIndexStatus($model);
                 <div class="card-content">
                     <span class="card-title">Etat du contrat</span>
 
-                    <div class="timeline">
-                        <?php foreach ($stages as $key => $stage) { ?>
-                            <div class="timeline-event">
-                                <p class="event-label"><?php echo $stage; ?></p>
-                                <?php if (isStatusPassed($indexStatus, $key)) echo '<span class="point-filled"></span>';
-                                else echo '<span class="point"></span>'; ?>
+                    <div class="row">
+                        <div class="col s12">
+                            <div class="row">
+                                <div class="col s8">
+                                    <div class="timeline">
+                                        <?php foreach ($stages as $key => $stage) { ?>
+                                            <div class="timeline-event">
+                                                <p class="event-label"><?php echo $stage; ?></p>
+                                                <?php if (isStatusPassed($indexStatus, $key)) echo '<span class="point-filled"></span>';
+                                                else echo '<span class="point"></span>'; ?>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
                             </div>
-                        <?php } ?>
+
+                        </div>
+
                     </div>
+
                 </div>
             </div>
 
