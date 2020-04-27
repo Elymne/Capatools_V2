@@ -37,12 +37,6 @@ DevisIndexAsset::register($this);
 
             <div class="card">
                 <div class="card-content">
-                    <?php echo getHelperCardContent() ?>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
 
                     <br />
                     <?php Pjax::begin(['id' => '1']); ?>
@@ -232,6 +226,7 @@ function getUpdateButtonArray()
 {
     return [
         'format' => 'raw',
+        'label' => 'Edit',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">build</i>',
@@ -251,6 +246,7 @@ function getDocumentButtonArray()
 {
     return [
         'format' => 'raw',
+        'label' => 'upload',
         'value' => function ($model, $key, $index, $column) {
 
             if (UploadFile::getByDevis($model->id) != null) {
@@ -284,12 +280,14 @@ function getPdfButtonArray()
 {
     return [
         'format' => 'raw',
+        'label' => 'PDF',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">picture_as_pdf</i>',
-                Url::to(['devis/pdf', 'id' => $model->id]),
+                Url::to(['devis/pdf', 'id' => $model->id,]),
                 [
                     'id' => 'grid-custom-button',
+                    'target' => '_blank',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/pdf', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-purple',
@@ -303,6 +301,7 @@ function getExcelButtonArray()
 {
     return [
         'format' => 'raw',
+        'label' => 'XLS',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">grid_on</i>',
