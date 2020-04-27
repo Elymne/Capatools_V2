@@ -158,9 +158,13 @@ class AdministrationController extends Controller
 
         $searchModel = new CapaUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $cellulesName = array_map(function ($value) {
+        $cellulesName = [0 => 'Aucune'] + array_map(function ($value) {
             return $value->name;
         }, Cellule::getAll());
+
+        // Prepare filtered variables.
+        $droplistCellule = null;
+        $textinputUser = null;
 
         // If filtered used.
         if (Yii::$app->request->post()) {
@@ -168,7 +172,7 @@ class AdministrationController extends Controller
             $filteredQueryArray = ['flag_active' => true];
 
             $droplistCellule = Yii::$app->request->post('droplist_cellule');
-            if ($droplistCellule != null) $filteredQueryArray = $filteredQueryArray + ['cellule.name' => $cellulesName[Yii::$app->request->post('droplist_cellule')]];
+            if ($droplistCellule != 0) $filteredQueryArray = $filteredQueryArray + ['cellule.name' => $cellulesName[$droplistCellule]];
 
             $textinputUser = Yii::$app->request->post('textinput_user');
             if ($textinputUser != null) $filteredQueryArray = $filteredQueryArray + ['username' => $textinputUser];
@@ -180,7 +184,11 @@ class AdministrationController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'cellulesNames' => $cellulesName
+            'cellulesNames' => $cellulesName,
+
+            // saved filtering.
+            'savedDroplistCellule' => $droplistCellule,
+            'savedTextinputUser' => $textinputUser
         ]);
     }
 

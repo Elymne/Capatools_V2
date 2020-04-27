@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </label>
                 </div>
                 <div class="card-action">
-                    <?php getSearchFilter($cellulesNames) ?>
+                    <?php getSearchFilter($cellulesNames, $savedDroplistCellule, $savedTextinputUser) ?>
                 </div>
             </div>
 
@@ -63,23 +63,25 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 
 
-function getSearchFilter(array $cellules)
+function getSearchFilter(array $cellules, $savedDroplistCellule, $savedTextinputUser)
 {
 
     echo Html::beginForm(['administration/index'], 'post', ['enctype' => 'multipart/form-data']);
+
+    if ($savedTextinputUser == null) $savedTextinputUser = "";
 
     echo Select2::widget([
         'name' => 'droplist_cellule',
         'data' => $cellules,
         'pluginLoading' => false,
-
-        'options' => ['value' => 0, 'style' => 'width:350px', 'placeholder' => 'Selectionner une cellule ...'],
+        'value' => $savedDroplistCellule,
+        'options' => ['style' => 'width:350px'],
         'pluginOptions' => [
             'allowClear' => true
         ],
     ]);
 
-    echo Html::input('text', 'textinput_user', '', ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un nom d\'utilisateur']);
+    echo Html::input('text', 'textinput_user', $savedTextinputUser, ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un nom d\'utilisateur']);
 
     echo '<br />';
 
