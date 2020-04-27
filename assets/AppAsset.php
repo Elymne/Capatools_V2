@@ -56,12 +56,7 @@ class AppAsset extends AssetBundle
         'app-assets/js/vendors.min.js',
         'app-assets/js/plugins.min.js',
         'app-assets/js/search.min.js',
-        'app-assets/js/custom/custom-script.js',
-
-        // Jquery views.
-        'js/devis/index.js',
-        'js/companies/create.js'
-
+        'app-assets/js/custom/custom-script.js'
     ];
 
     public $depends = [

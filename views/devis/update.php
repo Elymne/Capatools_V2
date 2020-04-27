@@ -5,6 +5,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
+use app\assets\devis\DevisCreateAsset;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use app\models\devis\UploadFile;
@@ -20,6 +21,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' 
 $this->params['breadcrumbs'][] = 'Update';
 
 AppAsset::register($this);
+DevisCreateAsset::register($this);
 
 ?>
 
@@ -166,42 +168,6 @@ AppAsset::register($this);
 
     </div>
 </div>
-
-<?php
-
-///Script js qui permet de réinitiliser le date picker lors de l'ajout d'un jalon
-$this->registerJs(' 
-
-$(function () {
-
-    $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
-        $( ".picker" ).each(function() {
-            $( this ).datepicker({ 
-                dateFormat: "dd-mm-yy",
-            });
-        });
-
-        var maxPriceHt = $(".priceHt").val();
-        console.log(maxPriceHt);
-    });
-});
-
-
-$(function () {
-    $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
-        $( ".dob" ).each(function() {
-           $( this ).removeClass("hasDatepicker").datepicker({
-              dateFormat : "dd/mm/yy",
-              yearRange : "1925:+0",
-              maxDate : "-1D",
-              changeMonth: true,
-              changeYear: true
-           });
-      });          
-    });
-});
-'); ?>
-
 
 <?php
 

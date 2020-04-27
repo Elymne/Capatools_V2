@@ -1,5 +1,6 @@
 <?php
 
+use app\assets\devis\DevisIndexAsset;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use app\models\devis\UploadFile;
@@ -11,6 +12,9 @@ use yii\widgets\Pjax;
 
 $this->title = 'Liste des devis';
 $this->params['breadcrumbs'][] = $this->title;
+
+DevisIndexAsset::register($this);
+
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>

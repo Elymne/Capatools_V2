@@ -21,6 +21,11 @@ a {
     color: #078aca;
 }
 
+.blue-card {
+    background-color: #006699;
+    color: white;
+}
+
 /* overrided materialize css class */
 
 .page-topbar {
