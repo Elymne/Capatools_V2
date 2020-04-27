@@ -158,7 +158,7 @@ class AdministrationController extends Controller
 
         $searchModel = new CapaUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $cellulesName = [0 => 'Aucune'] + array_map(function ($value) {
+        $cellulesName = [0 => 'Selectioner une cellule..'] + array_map(function ($value) {
             return $value->name;
         }, Cellule::getAll());
 
