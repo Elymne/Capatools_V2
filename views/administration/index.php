@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </span>
                 </div>
                 <div class="card-action">
-                    <?php getCellulesFilter($cellulesNames) ?>
+                    <?php getSearchFilter($cellulesNames) ?>
                 </div>
             </div>
 
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 
 
-function getCellulesFilter(array $cellules)
+function getSearchFilter(array $cellules)
 {
 
     echo Html::beginForm(['administration/index'], 'post', ['enctype' => 'multipart/form-data']);
@@ -80,12 +80,12 @@ function getCellulesFilter(array $cellules)
         ],
     ]);
 
-    echo Html::input('text', 'textinput_user', '', ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px']);
+    echo Html::input('text', 'textinput_user', '', ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un nom d\'utilisateur']);
 
     echo '<br />';
 
     //echo Html::a('Filtrer', ['administration/index-filtered'], ['class' => 'btn waves-effect waves-light update-button btn-blue']);
-    echo Html::submitButton('Submit', ['class' => 'btn waves-effect waves-light update-button btn-blue']);
+    echo Html::submitButton('Rechercher', ['class' => 'btn waves-effect waves-light update-button btn-blue']);
 }
 
 /**
