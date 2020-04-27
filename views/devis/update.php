@@ -38,6 +38,10 @@ DevisCreateAsset::register($this);
                 <div class="card">
 
                     <div class="card-content">
+                        <label>Informations générales</label>
+                    </div>
+
+                    <div class="card-action">
 
                         <?= $form->field($model, 'internal_name')
                             ->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])
@@ -75,19 +79,12 @@ DevisCreateAsset::register($this);
 
                 <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) { ?>
                     <div class="card">
-
-                        <div class="card-content">
-                            <span>Uploader un fichier</span>
-                            <p>Fichier actuellement stocké : <?php echo getFileName($model->id) ?></p>
-                        </div>
-
                         <div class="card-action">
                             <?= $form->field($fileModel, 'file')
                                 ->label('Upload un fichier', [])
                                 ->fileInput([])
                             ?>
                         </div>
-
                     </div>
                 <?php } ?>
 
@@ -95,7 +92,7 @@ DevisCreateAsset::register($this);
                     <div class="card">
 
                         <div class="card-content">
-                            <span>Jalons</span>
+                            <label>Echéancier de paiement</label>
                         </div>
 
                         <div class="card-action">
@@ -156,6 +153,19 @@ DevisCreateAsset::register($this);
                         </div>
                     </div>
                 <?php } ?>
+
+                <div class="card">
+
+                    <div class="card-content">
+                        <label>CGU</label>
+                    </div>
+
+                    <div class="card-action">
+
+                    </div>
+
+                </div>
+
 
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-green ']) ?>

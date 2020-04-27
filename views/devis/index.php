@@ -37,13 +37,16 @@ DevisIndexAsset::register($this);
             </div>
 
             <div class="card">
+                <div class="card-content bottomspace-15px-invert">
+                    <label>Réglage du tableau</label>
+                </div>
                 <div class="card-action topspace-15px-invert">
                     <?php echo getFilterCardContent() ?>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-content">
+                <div class="card-action">
 
                     <br />
                     <?php Pjax::begin(['id' => '1']); ?>
