@@ -21,3 +21,11 @@
 .leftspace-20px {
     margin-left: 20px;
 }
+
+.bottomspace-15px-invert {
+    margin-bottom: -15px;
+}
+
+.topspace-15px-invert {
+    margin-top: -15px;
+}

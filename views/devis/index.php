@@ -1,5 +1,6 @@
 <?php
 
+use app\assets\devis\DevisIndexAsset;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use app\models\devis\UploadFile;
@@ -11,6 +12,9 @@ use yii\widgets\Pjax;
 
 $this->title = 'Liste des devis';
 $this->params['breadcrumbs'][] = $this->title;
+
+DevisIndexAsset::register($this);
+
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -23,10 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
 
             <div class="card">
-                <div class="card-content">
-                    <span>Filtres</span>
+                <div class="card-content bottomspace-15px-invert">
+                    <label class="">Filtres</label>
                 </div>
-                <div class="card-content">
+                <div class="card-action topspace-15px-invert">
                     <?php echo getFilterCardContent() ?>
                 </div>
             </div>
@@ -80,27 +84,27 @@ function getFilterCardContent(): string
     return <<<HTML
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="capaid-checkbox" />
-            <span>CapaID</span>
+            <span class="span-combobox">CapaID</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="projectname-checkbox"/>
-            <span>Nom du projet</span>
+            <span class="span-combobox">Nom du projet</span>
         </label>
         <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="projectmanager-checkbox"/>
-            <span>Resp projet</span>
+            <input type="checkbox" class="filled-in" id="projectmanager-checkbox"/>
+            <span class="span-combobox">Resp projet</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="cellule-checkbox"/>
-            <span>Cellule</span>
+            <span class="span-combobox">Cellule</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="company-checkbox"/>
-            <span>Client</span>
+            <span class="span-combobox">Client</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="status-checkbox"/>
-            <span>Status</span>
+            <span class="span-combobox">Status</span>
         </label>
     HTML;
 }
@@ -186,8 +190,8 @@ function getUsernameArray()
         'attribute' => 'capa_user.username',
         'format' => 'text',
         'label' => 'Resp projet',
-        'contentOptions' => ['class' => 'projectmanager-row'],
-        'headerOptions' => ['class' => 'projectmanager-row'],
+        'contentOptions' => ['class' => 'projectmanager-row', 'style' => 'display: none'],
+        'headerOptions' => ['class' => 'projectmanager-row', 'style' => 'display: none'],
     ];
 }
 

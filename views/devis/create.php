@@ -1,47 +1,46 @@
 <?php
 
-use app\assets\AppAsset;
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
 use yii\helpers\Html;
+use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use app\assets\AppAsset;
+use app\assets\devis\DevisCreateAsset;
+use app\helper\_clazz\UserRoleManager;
+use app\helper\_enum\UserRoleEnum;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
-use wbraganca\dynamicform\DynamicFormWidget;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
-$this->title = 'Création d\'un devis';
+$this->title = 'Création';
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Update';
 
 AppAsset::register($this);
+DevisCreateAsset::register($this);
 
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 
 <div class="container">
-    <div class="devis-create">
+    <div class="devis-update">
 
         <div class="row">
             <div class="col s6 offset-s3">
 
-                <?php $form = ActiveForm::begin(); ?>
+                <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
 
                 <div class="card">
+
                     <div class="card-content">
 
                         <?= $form->field($model, 'internal_name')
-                            ->textInput(
-                                ['maxlength' => true, 'autocomplete' => 'off', 'id' => 'internal_name', 'type' => "text"]
-                            )
-                            ->label(
-                                "Nom du projet",
-                                ['for' => 'internal_name']
-                            )
+                            ->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])
+                            ->label("Nom du projet")
                         ?>
 
                         <?= $form->field($model, 'delivery_type_id')->widget(Select2::class, [
@@ -60,24 +59,20 @@ AppAsset::register($this);
                                 'clientOptions' => [
                                     'source' => $companiesNames,
                                 ],
-                            ])
-                            ->label("Nom du client")
-                        ?>
-
-                        <?php if (UserRoleManager::hasRoles([
-                            UserRoleEnum::PROJECT_MANAGER_DEVIS,
-                            UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
-                            UserRoleEnum::ADMINISTRATOR,
-                            UserRoleEnum::SUPER_ADMINISTRATOR
-                        ])) { ?>
-                            <?= Html::a("Ajouter un client", ["administration/add-company"], ["class" => "profile-link"]) ?>
-                            <br /><br /><br />
-                        <?php } ?>
+                            ])->label(
+                                "Client"
+                            ); ?>
 
                         <div class="row">
                             <div class="col s12">
 
                                 <div class="row">
+                                    <div class="input-field col s6">
+                                        <?= $form->field($model, 'service_duration')
+                                            ->textInput(['autocomplete' => 'off'])
+                                            ->label("Durée de la prestation (j)")
+                                        ?>
+                                    </div>
                                     <div class="input-field col s6">
                                         <?= $form->field($model, 'service_duration')
                                             ->textInput(['autocomplete' => 'off'])
@@ -90,6 +85,7 @@ AppAsset::register($this);
                         </div>
 
                     </div>
+
                 </div>
 
                 <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) { ?>
@@ -109,7 +105,7 @@ AppAsset::register($this);
                     <div class="card">
 
                         <div class="card-content">
-                            <span>Jalons</span>
+                            <span>Echéancier de paiement</span>
                         </div>
 
                         <div class="card-action">
@@ -138,10 +134,10 @@ AppAsset::register($this);
                                     <div class="item panel panel-default">
                                         <!-- widgetBody -->
                                         <div class="panel-heading">
-                                            <h3 class="panel-title pull-left">Jalon </h3>
+                                            <h3 class="panel-title pull-left">Jalon</h3>
                                             <div class="pull-right">
-                                                <button type="button" class="add-item waves-effect waves-light btn btn-green"><i class="glyphicon glyphicon-plus"></i></button>
-                                                <button type="button" class="remove-item waves-effect waves-light btn red"><i class="glyphicon glyphicon-minus"></i></button>
+                                                <button type="button" class="add-item waves-effect waves-light btn btn-black"><i class="glyphicon glyphicon-plus"></i></button>
+                                                <button type="button" class="remove-item waves-effect waves-light btn btn-black"><i class="glyphicon glyphicon-minus"></i></button>
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
@@ -155,7 +151,8 @@ AppAsset::register($this);
 
                                             <div class="row">
                                                 <div>
-                                                    <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Label') ?>
+                                                    <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => 'A livraison du projet sous 30 jours'])->label('Nom du jalon') ?>
+                                                    <?= $form->field($milestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => '100%', 'disabled' => true])->label('Pourcentage de la prestation') ?>
                                                     <?= $form->field($milestone, "[{$i}]price")->textInput(['class' => 'priceHt', 'autocomplete' => 'off', 'maxlength' => true])->label('Prix HT') ?>
                                                     <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaire') ?>
                                                 </div>
@@ -171,60 +168,26 @@ AppAsset::register($this);
                     </div>
                 <?php } ?>
 
+                <div class="card">
+
+                    <div class="card-content">
+                        <span>CGU</span>
+                    </div>
+
+                    <div class="card-content">
+
+                    </div>
+
+                </div>
 
                 <div class="form-group">
-                    <?= Html::submitButton(
-                        'Enregistrer',
-                        ['class' => 'waves-effect waves-light btn btn-green', 'data' => ['confirm' => 'Créer ce devis ?']]
-                    ) ?>
-
-                    <?= Html::a(
-                        Yii::t('app', 'Annuler'),
-                        ['index'],
-                        ['class' => 'waves-effect waves-light btn btn-red']
-                    ) ?>
+                    <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-green ']) ?>
+                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-red']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>
-
             </div>
         </div>
 
     </div>
 </div>
-
-
-<?php
-
-///Script js qui permet de réinitiliser le date picker lors de l'ajout d'un jalon
-$this->registerJs(' 
-
-$(function () {
-
-    $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
-        $( ".picker" ).each(function() {
-            $( this ).datepicker({ 
-                dateFormat: "dd-mm-yy",
-            });
-        });
-
-        var maxPriceHt = $(".priceHt").val();
-        console.log(maxPriceHt);
-    });
-});
-
-
-$(function () {
-    $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
-        $( ".dob" ).each(function() {
-           $( this ).removeClass("hasDatepicker").datepicker({
-              dateFormat : "dd/mm/yy",
-              yearRange : "1925:+0",
-              maxDate : "-1D",
-              changeMonth: true,
-              changeYear: true
-           });
-      });          
-    });
-});
-'); ?>

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
+use app\assets\companies\CompanyCreateAsset;
 use app\helper\_enum\CompanyTypeEnum;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
@@ -12,6 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => 'User', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 AppAsset::register($this);
+CompanyCreateAsset::register($this);
 
 ?>
 

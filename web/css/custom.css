@@ -21,6 +21,11 @@ a {
     color: #078aca;
 }
 
+.blue-card {
+    background-color: #006699;
+    color: white;
+}
+
 /* overrided materialize css class */
 
 .page-topbar {
@@ -63,8 +68,8 @@ td.header {
     width: 40%;
 }
 
-.span-combobox {
-    font-size: 0.4em;
+span.span-combobox {
+    font-weight: lighter;
 }
 
 /* id css */
