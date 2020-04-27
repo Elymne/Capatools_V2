@@ -27,10 +27,10 @@ DevisIndexAsset::register($this);
         <div class="row">
 
             <div class="card">
-                <div class="card-content bottomspace-15px-invert">
+                <div class="card-content">
                     <label>Filtres</label>
                 </div>
-                <div class="card-action topspace-15px-invert">
+                <div class="card-action">
                     <?php getSearchFilter($companiesName, $savedDroplistCompany, $savedTextinputUser) ?>
                 </div>
             </div>
