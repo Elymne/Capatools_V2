@@ -37,15 +37,16 @@ $indexStatus = getIndexStatus($model);
         <!-- Main information -->
         <div class="row">
             <div class="card">
-                <div class="card-content">
+                <div class="card-action">
                     <?php echo displayActionButtons($model) ?>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title">Etat du contrat</span>
-
+                    <label>Etat du contrat</label>
+                </div>
+                <div class="card-action">
                     <div class="row">
                         <div class="col s12">
                             <div class="row">
@@ -61,14 +62,10 @@ $indexStatus = getIndexStatus($model);
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
             </div>
-
         </div>
 
         <!-- Details informations -->
@@ -76,7 +73,7 @@ $indexStatus = getIndexStatus($model);
             <div class="card">
 
                 <div class="card-content">
-                    <span class="card-title">Détails du projet</span>
+                    <label>Détails du projet</label>
                 </div>
 
                 <div class="card-action">
@@ -89,10 +86,10 @@ $indexStatus = getIndexStatus($model);
         <div class="row">
             <div class="card">
                 <div class="card-content">
-                    <span class="card-title">Jalon(s)</span>
+                    <label>Jalon(s)</label>
                 </div>
 
-                <div class="card-action white">
+                <div class="card-action">
                     <?php echo createMilestonesTable($milestones, $model->id); ?>
                 </div>
             </div>
@@ -101,7 +98,7 @@ $indexStatus = getIndexStatus($model);
         <!-- Display list button -->
         <div class="row">
             <div class="card">
-                <div class="card-content">
+                <div class="card-action">
                     <?php echo displayActionButtons($model) ?>
                 </div>
             </div>

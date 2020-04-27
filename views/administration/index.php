@@ -18,22 +18,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="container">
     <div class="capa_user-index">
-
         <div class="row">
 
             <div class="card">
                 <div class="card-content">
-                    <span>
+                    <label>
                         Filtres
-                    </span>
+                    </label>
                 </div>
                 <div class="card-action">
-                    <?php getSearchFilter($cellulesNames) ?>
+                    <?php getSearchFilter($cellulesNames, $savedDroplistCellule, $savedTextinputUser) ?>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-content">
+                <div class="card-action">
 
                     <?php Pjax::begin(); ?>
 
@@ -64,23 +63,26 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 
 
-function getSearchFilter(array $cellules)
+function getSearchFilter(array $cellules, $savedDroplistCellule, $savedTextinputUser)
 {
 
     echo Html::beginForm(['administration/index'], 'post', ['enctype' => 'multipart/form-data']);
+
+    if ($savedDroplistCellule == null) $savedDroplistCellule = -1;
+    if ($savedTextinputUser == null) $savedTextinputUser = "";
 
     echo Select2::widget([
         'name' => 'droplist_cellule',
         'data' => $cellules,
         'pluginLoading' => false,
-
-        'options' => ['value' => 0, 'style' => 'width:350px', 'placeholder' => 'Selectionner une cellule ...'],
+        'value' => $savedDroplistCellule,
+        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner une cellule ...'],
         'pluginOptions' => [
             'allowClear' => true
         ],
     ]);
 
-    echo Html::input('text', 'textinput_user', '', ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un nom d\'utilisateur']);
+    echo Html::input('text', 'textinput_user', $savedTextinputUser, ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un nom d\'utilisateur']);
 
     echo '<br />';
 

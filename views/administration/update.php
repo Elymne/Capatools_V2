@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = 'Update';
             <div class="col s6 offset-s3">
 
                 <div class="card">
-                    <div class="card-content">
+                    <div class="card-action">
                         <?= $this->render('_form', [
                             'model' => $model,
                             'cellules' => $cellules

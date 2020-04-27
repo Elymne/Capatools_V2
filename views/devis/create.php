@@ -37,6 +37,10 @@ DevisCreateAsset::register($this);
                 <div class="card">
 
                     <div class="card-content">
+                        <label>Informations générales</label>
+                    </div>
+
+                    <div class="card-action">
 
                         <?= $form->field($model, 'internal_name')
                             ->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])
@@ -105,7 +109,7 @@ DevisCreateAsset::register($this);
                     <div class="card">
 
                         <div class="card-content">
-                            <span>Echéancier de paiement</span>
+                            <label>Echéancier de paiement</label>
                         </div>
 
                         <div class="card-action">
@@ -171,10 +175,10 @@ DevisCreateAsset::register($this);
                 <div class="card">
 
                     <div class="card-content">
-                        <span>CGU</span>
+                        <label>CGU</label>
                     </div>
 
-                    <div class="card-content">
+                    <div class="card-action">
 
                     </div>
 

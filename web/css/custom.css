@@ -28,6 +28,14 @@ a {
 
 /* overrided materialize css class */
 
+.card-content {
+    background-color: #078aca;
+}
+
+.card-content label {
+    color: white;
+}
+
 .page-topbar {
     background-color: #333333;
 }

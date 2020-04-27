@@ -24,26 +24,28 @@ DevisIndexAsset::register($this);
     <div class="devis-index">
 
         <!-- New -->
-
         <div class="row">
 
             <div class="card">
-                <div class="card-content bottomspace-15px-invert">
+                <div class="card-content">
                     <label>Filtres</label>
                 </div>
-                <div class="card-action topspace-15px-invert">
-                    <?php getSearchFilter($companiesName) ?>
+                <div class="card-action">
+                    <?php getSearchFilter($companiesName, $savedDroplistCompany, $savedTextinputUser) ?>
                 </div>
             </div>
 
             <div class="card">
+                <div class="card-content bottomspace-15px-invert">
+                    <label>Réglage du tableau</label>
+                </div>
                 <div class="card-action topspace-15px-invert">
                     <?php echo getFilterCardContent() ?>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-content">
+                <div class="card-action">
 
                     <br />
                     <?php Pjax::begin(['id' => '1']); ?>
@@ -76,22 +78,26 @@ DevisIndexAsset::register($this);
 <?php
 
 
-function getSearchFilter($companiesName)
+function getSearchFilter($companiesName, $savedDroplistCompany, $savedTextinputUser)
 {
+
+    if ($savedDroplistCompany == null) $savedDroplistCompany = -1;
+    if ($savedTextinputUser == null) $savedTextinputUser = "";
+
     echo Html::beginForm(['devis/index'], 'post', ['enctype' => 'multipart/form-data']);
 
     echo Select2::widget([
         'name' => 'droplist_company',
         'data' => $companiesName,
         'pluginLoading' => false,
-
-        'options' => ['value' => 0, 'style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
+        'value' => $savedDroplistCompany,
+        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
         'pluginOptions' => [
             'allowClear' => true
         ],
     ]);
 
-    echo Html::input('text', 'textinput_capaid', '', ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un capa id']);
+    echo Html::input('text', 'textinput_capaid', $savedTextinputUser, ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un capa id']);
 
     echo '<br />';
 
