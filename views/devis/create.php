@@ -134,7 +134,7 @@ DevisCreateAsset::register($this);
                                     <div class="item panel panel-default">
                                         <!-- widgetBody -->
                                         <div class="panel-heading">
-                                            <h3 class="panel-title pull-left">Nom du jalon</h3>
+                                            <h3 class="panel-title pull-left">Jalon</h3>
                                             <div class="pull-right">
                                                 <button type="button" class="add-item waves-effect waves-light btn btn-black"><i class="glyphicon glyphicon-plus"></i></button>
                                                 <button type="button" class="remove-item waves-effect waves-light btn btn-black"><i class="glyphicon glyphicon-minus"></i></button>
@@ -151,7 +151,8 @@ DevisCreateAsset::register($this);
 
                                             <div class="row">
                                                 <div>
-                                                    <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Nom du jalon') ?>
+                                                    <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => 'A livraison du projet sous 30 jours'])->label('Nom du jalon') ?>
+                                                    <?= $form->field($milestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => '100%', 'disabled' => true])->label('Pourcentage de la prestation') ?>
                                                     <?= $form->field($milestone, "[{$i}]price")->textInput(['class' => 'priceHt', 'autocomplete' => 'off', 'maxlength' => true])->label('Prix HT') ?>
                                                     <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaire') ?>
                                                 </div>
@@ -166,6 +167,18 @@ DevisCreateAsset::register($this);
                         </div>
                     </div>
                 <?php } ?>
+
+                <div class="card">
+
+                    <div class="card-content">
+                        <span>CGU</span>
+                    </div>
+
+                    <div class="card-content">
+
+                    </div>
+
+                </div>
 
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-green ']) ?>

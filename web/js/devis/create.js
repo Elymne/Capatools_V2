@@ -1,4 +1,6 @@
 $(() => {
+    var maxPrice = 0;
+
     $(".dynamicform_wrapper").on("afterInsert", (e, item) => {
         $(".picker").each(function () {
             $(this).datepicker({
