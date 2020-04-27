@@ -5,6 +5,7 @@ use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use app\models\devis\UploadFile;
 use app\widgets\TopTitle;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -28,8 +29,14 @@ DevisIndexAsset::register($this);
 
             <div class="card">
                 <div class="card-content bottomspace-15px-invert">
-                    <label class="">Filtres</label>
+                    <label>Filtres</label>
                 </div>
+                <div class="card-action topspace-15px-invert">
+                    <?php getSearchFilter($companiesName) ?>
+                </div>
+            </div>
+
+            <div class="card">
                 <div class="card-action topspace-15px-invert">
                     <?php echo getFilterCardContent() ?>
                 </div>
@@ -67,6 +74,30 @@ DevisIndexAsset::register($this);
 </div>
 
 <?php
+
+
+function getSearchFilter($companiesName)
+{
+    echo Html::beginForm(['devis/index'], 'post', ['enctype' => 'multipart/form-data']);
+
+    echo Select2::widget([
+        'name' => 'droplist_company',
+        'data' => $companiesName,
+        'pluginLoading' => false,
+
+        'options' => ['value' => 0, 'style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+
+    echo Html::input('text', 'textinput_capaid', '', ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un capa id']);
+
+    echo '<br />';
+
+    //echo Html::a('Filtrer', ['administration/index-filtered'], ['class' => 'btn waves-effect waves-light update-button btn-blue']);
+    echo Html::submitButton('Rechercher', ['class' => 'btn waves-effect waves-light update-button btn-blue']);
+}
 
 /**
  * Used to display combobox.
@@ -162,7 +193,7 @@ function getIdArray()
         'contentOptions' => ['class' => 'capaid-row table-reduced', 'style' => 'width:75'],
         'headerOptions' => ['class' => 'capaid-row'],
         'value' => function ($data) {
-            return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']], ['target' => '_blank']);
+            return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']]);
         }
     ];
 }

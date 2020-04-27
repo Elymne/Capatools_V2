@@ -23,12 +23,10 @@ $this->params['breadcrumbs'][] = 'Update';
 
                 <div class="card">
                     <div class="card-content">
-
                         <?= $this->render('_form', [
                             'model' => $model,
                             'cellules' => $cellules
                         ]) ?>
-
                     </div>
                 </div>
 
