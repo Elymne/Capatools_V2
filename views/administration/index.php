@@ -18,14 +18,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="container">
     <div class="capa_user-index">
-
         <div class="row">
 
             <div class="card">
                 <div class="card-content">
-                    <span>
+                    <label>
                         Filtres
-                    </span>
+                    </label>
                 </div>
                 <div class="card-action">
                     <?php getSearchFilter($cellulesNames) ?>
@@ -33,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <div class="card">
-                <div class="card-content">
+                <div class="card-action">
 
                     <?php Pjax::begin(); ?>
 

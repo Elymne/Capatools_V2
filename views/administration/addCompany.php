@@ -26,7 +26,7 @@ CompanyCreateAsset::register($this);
             <div class="col s6 offset-s3">
                 <div class="card">
 
-                    <div class="card-content">
+                    <div class="card-action">
                         <?php $form = ActiveForm::begin(); ?>
 
                         <?= $form->field($model, 'name')

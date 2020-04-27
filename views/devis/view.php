@@ -44,7 +44,7 @@ $indexStatus = getIndexStatus($model);
 
             <div class="card">
                 <div class="card-content">
-                    <label class="card-title">Etat du contrat</label>
+                    <label>Etat du contrat</label>
                 </div>
                 <div class="card-action">
                     <div class="row">
@@ -73,7 +73,7 @@ $indexStatus = getIndexStatus($model);
             <div class="card">
 
                 <div class="card-content">
-                    <label class="card-title">Détails du projet</label>
+                    <label>Détails du projet</label>
                 </div>
 
                 <div class="card-action">
@@ -86,7 +86,7 @@ $indexStatus = getIndexStatus($model);
         <div class="row">
             <div class="card">
                 <div class="card-content">
-                    <label class="card-title">Jalon(s)</label>
+                    <label>Jalon(s)</label>
                 </div>
 
                 <div class="card-action">

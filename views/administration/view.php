@@ -24,12 +24,10 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
 
 <div class="container">
     <div class="capa_user-view">
-
         <div class="row">
 
             <div class="card">
-
-                <div class="card-content">
+                <div class="card-action">
                     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
 
                     <?php if (canUpdateUser($adminRole)) : ?>
@@ -47,22 +45,19 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
                     ]) ?>
                 </div>
 
-                <div class="card-content">
+                <div class="card-action">
                     <?php echo createUserDataTable($model) ?>
                 </div>
-
             </div>
 
             <div class="card">
-
                 <div class="card-content">
-                    <p> Droits utilisateur </p>
+                    <label> Droits utilisateur </label>
                 </div>
 
-                <div class="card-content">
+                <div class="card-action">
                     <?php echo createRolesTable($userRoles) ?>
                 </div>
-
             </div>
 
         </div>
