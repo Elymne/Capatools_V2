@@ -158,12 +158,12 @@ class AdministrationController extends Controller
 
         $searchModel = new CapaUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $cellulesName = [0 => 'Selectioner une cellule..'] + array_map(function ($value) {
+        $cellulesName = array_map(function ($value) {
             return $value->name;
         }, Cellule::getAll());
 
         // Prepare filtered variables.
-        $droplistCellule = null;
+        $droplistCellule = 0;
         $textinputUser = null;
 
         // If filtered used.
@@ -172,7 +172,7 @@ class AdministrationController extends Controller
             $filteredQueryArray = ['flag_active' => true];
 
             $droplistCellule = Yii::$app->request->post('droplist_cellule');
-            if ($droplistCellule != 0) $filteredQueryArray = $filteredQueryArray + ['cellule.name' => $cellulesName[$droplistCellule]];
+            if ($droplistCellule != null) $filteredQueryArray = $filteredQueryArray + ['cellule.name' => $cellulesName[$droplistCellule]];
 
             $textinputUser = Yii::$app->request->post('textinput_user');
             if ($textinputUser != null) $filteredQueryArray = $filteredQueryArray + ['username' => $textinputUser];

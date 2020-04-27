@@ -68,6 +68,7 @@ function getSearchFilter(array $cellules, $savedDroplistCellule, $savedTextinput
 
     echo Html::beginForm(['administration/index'], 'post', ['enctype' => 'multipart/form-data']);
 
+    if ($savedDroplistCellule == null) $savedDroplistCellule = -1;
     if ($savedTextinputUser == null) $savedTextinputUser = "";
 
     echo Select2::widget([
@@ -75,7 +76,7 @@ function getSearchFilter(array $cellules, $savedDroplistCellule, $savedTextinput
         'data' => $cellules,
         'pluginLoading' => false,
         'value' => $savedDroplistCellule,
-        'options' => ['style' => 'width:350px'],
+        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner une cellule ...'],
         'pluginOptions' => [
             'allowClear' => true
         ],

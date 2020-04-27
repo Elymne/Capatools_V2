@@ -161,6 +161,9 @@ class DevisController extends Controller implements ServiceInterface
             return $value->company->name;
         }, Devis::find('company.name')->all()));
 
+        $droplistCompany = null;
+        $textinputCapaId = null;
+
         if (Yii::$app->request->post()) {
 
             $filteredQueryArray = [];
@@ -178,7 +181,11 @@ class DevisController extends Controller implements ServiceInterface
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'companiesName' => $companiesName
+            'companiesName' => $companiesName,
+
+            // saved filters values.
+            'savedDroplistCompany' => $droplistCompany,
+            'savedTextinputUser' => $textinputCapaId
         ]);
     }
 
