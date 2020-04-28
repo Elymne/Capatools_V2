@@ -87,13 +87,14 @@ function getSearchFilter($companiesName)
     echo Html::beginForm(['devis/index'], 'post', ['enctype' => 'multipart/form-data']);
 
     echo Select2::widget([
+        'id' => 'company-name-search',
         'name' => 'droplist_company',
         'data' => $companiesName,
         'pluginLoading' => false,
         'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
         'pluginOptions' => [
             'allowClear' => true
-        ],
+        ]
     ]);
 
     echo Html::input('text', 'textinput_capaid', "", [
