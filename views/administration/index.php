@@ -1,6 +1,8 @@
 <?php
 
 use app\assets\administration\AdminIndexAsset;
+use app\helper\_clazz\UserRoleManager;
+use app\helper\_enum\UserRoleEnum;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -160,6 +162,17 @@ function getUpdateButtonArray()
         'format' => 'raw',
         'label' => 'Modification',
         'value' => function ($model, $key, $index, $column) {
+
+            // Get user roles.
+            $userRoles = [];
+            if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
+
+            $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
+
+            $buttonClass = "";
+            if (canUpdateUser($adminRole)) $buttonClass = "waves-effect waves-light btn btn-green";
+            else $buttonClass = "btn disabled";
+
             return Html::a(
                 '<i class="material-icons right">edit</i> Modifier',
                 Url::to(['administration/update', 'id' => $model->id]),
@@ -167,9 +180,24 @@ function getUpdateButtonArray()
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['administration/update', 'id' => $model->id]),
-                    'class' => 'btn waves-effect waves-light update-button btn-green',
+                    'class' => $buttonClass
                 ]
             );
         }
     ];
+}
+
+function canUpdateUser($adminRole): bool
+{
+    $result = true;
+
+    if (
+        !UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) &&
+        ($adminRole == UserRoleEnum::ADMINISTRATOR || $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
+    )  $result = false;
+
+    if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) && $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
+        $result = false;
+
+    return $result;
 }
