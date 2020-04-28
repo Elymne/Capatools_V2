@@ -1,3 +1,6 @@
+/**
+ * Manage table checkbox displaying.
+ */
 $(() => {
     /**
      * Attributes
@@ -19,8 +22,6 @@ $(() => {
 
     const statusCheckbox = document.querySelector('input[id="status-checkbox"]');
     const statusField = $(".status-row");
-
-    const companyNameSelector = $("#company-name-search");
 
     capaIdCheckbox.onchange = () => {
         if (capaIdCheckbox.checked) {
@@ -69,23 +70,50 @@ $(() => {
             statusField.hide();
         }
     };
+});
+
+/**
+ * Manage searching data.
+ */
+$(() => {
+    const companyNameSelector = $("#company-name-search");
+
+    const bcCheckbox = document.querySelector('input[id="bc-checkbox"]');
+    const bcVal = "AVANT CONTRAT";
+
+    bcCheckbox.onchange = () => {
+        const table = document.getElementById("devis_table");
+        const tbody = table.getElementsByTagName("tbody")[0];
+        const tr = tbody.getElementsByTagName("tr");
+
+        // Loop through all list items, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByClassName("status-row")[0];
+            txtValue = td.textContent || td.innerText;
+            if (!bcCheckbox.checked && txtValue.toUpperCase() == bcVal) {
+                tr[i].style.display = "none";
+            } else {
+                tr[i].style.display = "";
+            }
+        }
+    };
 
     // Filter data from company name.
     companyNameSelector.on("change", () => {
-        var selectedCompany = companyNameSelector.children("option:selected").html();
-        var selectedIndex = companyNameSelector.children("option:selected").val();
+        const selectedCompany = companyNameSelector.children("option:selected").html();
+        const selectedIndex = companyNameSelector.children("option:selected").val();
 
         console.log(selectedIndex);
 
-        filter = selectedCompany.toUpperCase();
-        table = document.getElementById("devis_table");
-        tbody = table.getElementsByTagName("tbody")[0];
-        tr = tbody.getElementsByTagName("tr");
+        const filter = selectedCompany.toUpperCase();
+        const table = document.getElementById("devis_table");
+        const tbody = table.getElementsByTagName("tbody")[0];
+        const tr = tbody.getElementsByTagName("tr");
 
         // Loop through all list items, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByClassName("company-row")[0];
-            txtValue = td.textContent || td.innerText;
+            let txtValue = td.textContent || td.innerText;
             if (txtValue.toUpperCase().indexOf(filter) > -1 || selectedIndex == "") {
                 tr[i].style.display = "";
             } else {
@@ -117,9 +145,4 @@ function capaidFilterSearch() {
             tr[i].style.display = "none";
         }
     }
-}
-
-function test() {
-    var selectedCountry = document.getElementById("company-name-search").children("option:selected").val();
-    console.log(`${selectedCountry} selected`);
 }

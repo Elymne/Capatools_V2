@@ -84,8 +84,6 @@ DevisIndexAsset::register($this);
 function getSearchFilter($companiesName)
 {
 
-    echo Html::beginForm(['devis/index'], 'post', ['enctype' => 'multipart/form-data']);
-
     echo Select2::widget([
         'id' => 'company-name-search',
         'name' => 'droplist_company',
@@ -97,6 +95,8 @@ function getSearchFilter($companiesName)
         ]
     ]);
 
+    echo '<br />';
+
     echo Html::input('text', 'textinput_capaid', "", [
         'id' => 'capa-id-search',
         'maxlength' => 10,
@@ -104,6 +104,28 @@ function getSearchFilter($companiesName)
         'placeholder' => 'Rechercher un capa id',
         'onkeyup' => 'capaidFilterSearch()'
     ]);
+
+    echo '<br />';
+    echo '<br />';
+
+    echo <<<HTML
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
+            <span class="span-combobox">Avant-contrats</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox"/>
+            <span class="span-combobox">Projets en cours</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" id="pt-checkbox"/>
+            <span class="span-combobox">Projets terminés</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" id="pa-checkbox"/>
+            <span class="span-combobox">Projets annulés</span>
+        </label>
+    HTML;
 }
 
 /**
