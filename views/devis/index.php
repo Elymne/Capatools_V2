@@ -31,7 +31,7 @@ DevisIndexAsset::register($this);
                     <label>Filtres</label>
                 </div>
                 <div class="card-action">
-                    <?php getSearchFilter($companiesName, $savedDroplistCompany, $savedTextinputUser) ?>
+                    <?php getSearchFilter($companiesName) ?>
                 </div>
             </div>
 
@@ -59,6 +59,7 @@ DevisIndexAsset::register($this);
                             'text-overflow:ellipsis;'
                         ],
                         'tableOptions' => [
+                            'id' => 'devis_table',
                             'style' => 'height: 20px',
                             'class' => ['highlight']
                         ],
@@ -75,34 +76,56 @@ DevisIndexAsset::register($this);
     </div>
 </div>
 
+
+
 <?php
 
 
-function getSearchFilter($companiesName, $savedDroplistCompany, $savedTextinputUser)
+function getSearchFilter($companiesName)
 {
 
-    if ($savedDroplistCompany == null) $savedDroplistCompany = -1;
-    if ($savedTextinputUser == null) $savedTextinputUser = "";
-
-    echo Html::beginForm(['devis/index'], 'post', ['enctype' => 'multipart/form-data']);
-
     echo Select2::widget([
+        'id' => 'company-name-search',
         'name' => 'droplist_company',
         'data' => $companiesName,
         'pluginLoading' => false,
-        'value' => $savedDroplistCompany,
         'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
         'pluginOptions' => [
             'allowClear' => true
-        ],
+        ]
     ]);
-
-    echo Html::input('text', 'textinput_capaid', $savedTextinputUser, ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un capa id']);
 
     echo '<br />';
 
-    //echo Html::a('Filtrer', ['administration/index-filtered'], ['class' => 'btn waves-effect waves-light update-button btn-blue']);
-    echo Html::submitButton('Rechercher', ['class' => 'btn waves-effect waves-light update-button btn-blue']);
+    echo Html::input('text', 'textinput_capaid', "", [
+        'id' => 'capa-id-search',
+        'maxlength' => 10,
+        'style' => 'width:350px',
+        'placeholder' => 'Rechercher un capa id',
+        'onkeyup' => 'capaidFilterSearch()'
+    ]);
+
+    echo '<br />';
+    echo '<br />';
+
+    echo <<<HTML
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
+            <span class="span-combobox">Avant-contrats</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox"/>
+            <span class="span-combobox">Projets en cours</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" id="pt-checkbox"/>
+            <span class="span-combobox">Projets terminés</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" id="pa-checkbox"/>
+            <span class="span-combobox">Projets annulés</span>
+        </label>
+    HTML;
 }
 
 /**

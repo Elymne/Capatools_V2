@@ -162,33 +162,11 @@ class AdministrationController extends Controller
             return $value->name;
         }, Cellule::getAll());
 
-        // Prepare filtered variables.
-        $droplistCellule = 0;
-        $textinputUser = null;
-
-        // If filtered used.
-        if (Yii::$app->request->post()) {
-
-            $filteredQueryArray = ['flag_active' => true];
-
-            $droplistCellule = Yii::$app->request->post('droplist_cellule');
-            if ($droplistCellule != null) $filteredQueryArray = $filteredQueryArray + ['cellule.name' => $cellulesName[$droplistCellule]];
-
-            $textinputUser = Yii::$app->request->post('textinput_user');
-            if ($textinputUser != null) $filteredQueryArray = $filteredQueryArray + ['username' => $textinputUser];
-
-            $dataProvider = $searchModel->searchFilter(Yii::$app->request->queryParams, $filteredQueryArray);
-        }
-
         MenuSelectorHelper::setMenuAdminIndex();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'cellulesNames' => $cellulesName,
-
-            // saved filtering.
-            'savedDroplistCellule' => $droplistCellule,
-            'savedTextinputUser' => $textinputUser
+            'cellulesNames' => $cellulesName
         ]);
     }
 
