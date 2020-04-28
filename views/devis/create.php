@@ -43,7 +43,7 @@ DevisCreateAsset::register($this);
                     <div class="card-action">
 
                         <?= $form->field($model, 'internal_name')
-                            ->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])
+                            ->textInput(['maxlength' => true], ['autocomplete' => 'off'])
                             ->label("Nom du projet")
                         ?>
 
@@ -71,12 +71,6 @@ DevisCreateAsset::register($this);
                             <div class="col s12">
 
                                 <div class="row">
-                                    <div class="input-field col s6">
-                                        <?= $form->field($model, 'service_duration')
-                                            ->textInput(['autocomplete' => 'off'])
-                                            ->label("Durée de la prestation (j)")
-                                        ?>
-                                    </div>
                                     <div class="input-field col s6">
                                         <?= $form->field($model, 'service_duration')
                                             ->textInput(['autocomplete' => 'off'])
