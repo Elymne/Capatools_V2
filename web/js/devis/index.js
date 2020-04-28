@@ -20,6 +20,8 @@ $(() => {
     const statusCheckbox = document.querySelector('input[id="status-checkbox"]');
     const statusField = $(".status-row");
 
+    const companyNameSelector = $("#company-name-search");
+
     capaIdCheckbox.onchange = () => {
         if (capaIdCheckbox.checked) {
             capaIdField.show();
@@ -69,8 +71,12 @@ $(() => {
     };
 
     // Filter data from company name.
-    $("#company-name-search").on("change", () => {
-        var selectedCompany = $("#company-name-search").children("option:selected").html();
+    companyNameSelector.on("change", () => {
+        var selectedCompany = companyNameSelector.children("option:selected").html();
+        var selectedIndex = companyNameSelector.children("option:selected").val();
+
+        console.log(selectedIndex);
+
         filter = selectedCompany.toUpperCase();
         table = document.getElementById("devis_table");
         tbody = table.getElementsByTagName("tbody")[0];
@@ -80,7 +86,7 @@ $(() => {
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByClassName("company-row")[0];
             txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            if (txtValue.toUpperCase().indexOf(filter) > -1 || selectedIndex == "") {
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";
