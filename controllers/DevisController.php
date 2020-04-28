@@ -161,31 +161,11 @@ class DevisController extends Controller implements ServiceInterface
             return $value->company->name;
         }, Devis::find('company.name')->all()));
 
-        $droplistCompany = null;
-        $textinputCapaId = null;
-
-        if (Yii::$app->request->post()) {
-
-            $filteredQueryArray = [];
-
-            $droplistCompany = Yii::$app->request->post('droplist_company');
-            if ($droplistCompany != null) $filteredQueryArray = $filteredQueryArray + ['company.name' => $companiesName[Yii::$app->request->post('droplist_company')]];
-
-            $textinputCapaId = Yii::$app->request->post('textinput_capaid');
-            if ($textinputCapaId != null) $filteredQueryArray = $filteredQueryArray + ['id_capa' => $textinputCapaId];
-
-            $dataProvider = $searchModel->searchFilter(Yii::$app->request->queryParams, $filteredQueryArray);
-        }
-
         MenuSelectorHelper::setMenuDevisIndex();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'companiesName' => $companiesName,
-
-            // saved filters values.
-            'savedDroplistCompany' => $droplistCompany,
-            'savedTextinputUser' => $textinputCapaId
+            'companiesName' => $companiesName
         ]);
     }
 

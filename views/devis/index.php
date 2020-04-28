@@ -31,7 +31,7 @@ DevisIndexAsset::register($this);
                     <label>Filtres</label>
                 </div>
                 <div class="card-action">
-                    <?php getSearchFilter($companiesName, $savedDroplistCompany, $savedTextinputUser) ?>
+                    <?php getSearchFilter($companiesName) ?>
                 </div>
             </div>
 
@@ -59,6 +59,7 @@ DevisIndexAsset::register($this);
                             'text-overflow:ellipsis;'
                         ],
                         'tableOptions' => [
+                            'id' => 'devis_table',
                             'style' => 'height: 20px',
                             'class' => ['highlight']
                         ],
@@ -75,14 +76,13 @@ DevisIndexAsset::register($this);
     </div>
 </div>
 
+
+
 <?php
 
 
-function getSearchFilter($companiesName, $savedDroplistCompany, $savedTextinputUser)
+function getSearchFilter($companiesName)
 {
-
-    if ($savedDroplistCompany == null) $savedDroplistCompany = -1;
-    if ($savedTextinputUser == null) $savedTextinputUser = "";
 
     echo Html::beginForm(['devis/index'], 'post', ['enctype' => 'multipart/form-data']);
 
@@ -90,19 +90,19 @@ function getSearchFilter($companiesName, $savedDroplistCompany, $savedTextinputU
         'name' => 'droplist_company',
         'data' => $companiesName,
         'pluginLoading' => false,
-        'value' => $savedDroplistCompany,
         'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
         'pluginOptions' => [
             'allowClear' => true
         ],
     ]);
 
-    echo Html::input('text', 'textinput_capaid', $savedTextinputUser, ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un capa id']);
-
-    echo '<br />';
-
-    //echo Html::a('Filtrer', ['administration/index-filtered'], ['class' => 'btn waves-effect waves-light update-button btn-blue']);
-    echo Html::submitButton('Rechercher', ['class' => 'btn waves-effect waves-light update-button btn-blue']);
+    echo Html::input('text', 'textinput_capaid', "", [
+        'id' => 'capa-id-search',
+        'maxlength' => 10,
+        'style' => 'width:350px',
+        'placeholder' => 'Rechercher un capa id',
+        'onkeyup' => 'capaidFilterSearch()'
+    ]);
 }
 
 /**
