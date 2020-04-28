@@ -1,5 +1,6 @@
 <?php
 
+use app\assets\administration\AdminIndexAsset;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -12,6 +13,9 @@ use yii\widgets\Pjax;
 
 $this->title = 'Liste des salariés';
 $this->params['breadcrumbs'][] = $this->title;
+
+AdminIndexAsset::register($this);
+
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -27,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </label>
                 </div>
                 <div class="card-action">
-                    <?php getSearchFilter($cellulesNames, $savedDroplistCellule, $savedTextinputUser) ?>
+                    <?php getSearchFilter($cellulesNames) ?>
                 </div>
             </div>
 
@@ -39,6 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'tableOptions' => [
+                            'id' => 'admin_table',
+                            'style' => 'height: 20px',
                             'class' => ['highlight']
                         ],
                         'columns' => getCollumnArray(),
@@ -63,31 +69,31 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 
 
-function getSearchFilter(array $cellules, $savedDroplistCellule, $savedTextinputUser)
+function getSearchFilter(array $cellules)
 {
-
-    echo Html::beginForm(['administration/index'], 'post', ['enctype' => 'multipart/form-data']);
-
-    if ($savedDroplistCellule == null) $savedDroplistCellule = -1;
-    if ($savedTextinputUser == null) $savedTextinputUser = "";
 
     echo Select2::widget([
         'name' => 'droplist_cellule',
         'data' => $cellules,
         'pluginLoading' => false,
-        'value' => $savedDroplistCellule,
         'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner une cellule ...'],
         'pluginOptions' => [
             'allowClear' => true
         ],
     ]);
 
-    echo Html::input('text', 'textinput_user', $savedTextinputUser, ['class' => 'form-control', 'maxlength' => 10, 'style' => 'width:350px', 'placeholder' => 'Rechercher un nom d\'utilisateur']);
-
     echo '<br />';
 
-    //echo Html::a('Filtrer', ['administration/index-filtered'], ['class' => 'btn waves-effect waves-light update-button btn-blue']);
-    echo Html::submitButton('Rechercher', ['class' => 'btn waves-effect waves-light update-button btn-blue']);
+    echo Html::input('text', 'textinput_user', '', [
+        'id' => 'username-search',
+        'class' => 'form-control',
+        'maxlength' => 10,
+        'style' => 'width:350px',
+        'placeholder' => 'Rechercher un nom d\'utilisateur',
+        'onkeyup' => 'usernameFilterSearch()'
+    ]);
+
+    echo '<br />';
 }
 
 /**
@@ -117,6 +123,7 @@ function getUsernameArray(): array
         'attribute' => 'username',
         'format' => 'raw',
         'label' => '<span class="material-icons">arrow_drop_down</span> Salarié',
+        'contentOptions' => ['class' => 'username-row'],
         'encodeLabel' => false,
         'value' => function ($data) {
             return Html::a($data['username'], ['administration/view', 'id' => $data['id']]);
