@@ -19,7 +19,7 @@ LoginAsset::register($this);
             <p class="center-align">
                 <img src="<?= Html::encode(Yii::$app->homeUrl) ?>images/logo.png" alt="" />
             </p>
-            <div class="card-content">
+            <div class="card-action">
                 <?php $form = ActiveForm::begin([
                     'id' => 'login-form',
                     'layout' => 'horizontal',
