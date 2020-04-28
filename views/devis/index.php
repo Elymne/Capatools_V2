@@ -60,7 +60,7 @@ DevisIndexAsset::register($this);
                         ],
                         'tableOptions' => [
                             'id' => 'devis_table',
-                            'style' => 'height: 20px',
+                            'style' => 'height: 10px',
                             'class' => ['highlight']
                         ],
                         'columns' => getCollumnsArray()
@@ -219,7 +219,7 @@ function getIdArray()
         'attribute' => 'id_capa',
         'format' => 'raw',
         'label' => 'CapaID',
-        'contentOptions' => ['class' => 'capaid-row table-reduced', 'style' => 'width:75'],
+        'contentOptions' => ['class' => 'capaid-row'],
         'headerOptions' => ['class' => 'capaid-row'],
         'value' => function ($data) {
             return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']]);

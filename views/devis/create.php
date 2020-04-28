@@ -157,7 +157,6 @@ DevisCreateAsset::register($this);
                                             <div class="row">
                                                 <div>
                                                     <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => 'A livraison du projet sous 30 jours'])->label('Nom du jalon') ?>
-                                                    <?= $form->field($milestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => '100%', 'disabled' => true])->label('Pourcentage de la prestation') ?>
                                                     <?= $form->field($milestone, "[{$i}]price")->textInput(['class' => 'priceHt', 'autocomplete' => 'off', 'maxlength' => true])->label('Prix HT') ?>
                                                     <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaire') ?>
                                                 </div>
@@ -172,18 +171,6 @@ DevisCreateAsset::register($this);
                         </div>
                     </div>
                 <?php } ?>
-
-                <div class="card">
-
-                    <div class="card-content">
-                        <label>CGU</label>
-                    </div>
-
-                    <div class="card-action">
-
-                    </div>
-
-                </div>
 
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue ']) ?>
