@@ -37,16 +37,12 @@ CompanyCreateAsset::register($this);
                             'data' => CompanyTypeEnum::COMPANY_TYPE_STRING,
                             'pluginLoading' => false,
                             'pluginOptions' => [
-                                'allowClear' => false
+                                'allowClear' => true
                             ],
-                            'pluginEvents' => [
-                                "select2:select" => "(data) => { console.log(data); }",
-                            ]
                         ])->label("Type de client"); ?>
 
                         <?= $form->field($model, 'tva')
-                            ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-                            ->hiddenInput(['id' => 'tva-field'])
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'tva-field'])
                             ->label("TVA") ?>
 
                         <?= $form->field($model, 'description')
