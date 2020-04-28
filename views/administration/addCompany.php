@@ -37,7 +37,7 @@ CompanyCreateAsset::register($this);
                             'data' => CompanyTypeEnum::COMPANY_TYPE_STRING,
                             'pluginLoading' => false,
                             'pluginOptions' => [
-                                'allowClear' => true
+                                'allowClear' => false
                             ],
                         ])->label("Type de client"); ?>
 
