@@ -126,7 +126,8 @@ $(() => {
             txtValue = td.textContent || td.innerText;
             if (!bcCheckbox.checked && (txtValue.toUpperCase() == bcVal || txtValue.toUpperCase() == bcVal_2 || txtValue.toUpperCase() == bcVal_3)) {
                 tr[i].style.display = "none";
-            } else {
+            }
+            if (bcCheckbox.checked && (txtValue.toUpperCase() == bcVal || txtValue.toUpperCase() == bcVal_2 || txtValue.toUpperCase() == bcVal_3)) {
                 tr[i].style.display = "";
             }
         }
@@ -144,7 +145,8 @@ $(() => {
 
             if (!pcCheckbox.checked && txtValue.toUpperCase() == pcVal) {
                 tr[i].style.display = "none";
-            } else {
+            }
+            if (pcCheckbox.checked && txtValue.toUpperCase() == pcVal) {
                 tr[i].style.display = "";
             }
         }
@@ -161,7 +163,8 @@ $(() => {
             txtValue = td.textContent || td.innerText;
             if (!tcCheckbox.checked && txtValue.toUpperCase() == tcVal) {
                 tr[i].style.display = "none";
-            } else {
+            }
+            if (tcCheckbox.checked && txtValue.toUpperCase() == tcVal) {
                 tr[i].style.display = "";
             }
         }
@@ -178,7 +181,8 @@ $(() => {
             txtValue = td.textContent || td.innerText;
             if (!paCheckbox.checked && txtValue.toUpperCase() == paVal) {
                 tr[i].style.display = "none";
-            } else {
+            }
+            if (paCheckbox.checked && txtValue.toUpperCase() == paVal) {
                 tr[i].style.display = "";
             }
         }
