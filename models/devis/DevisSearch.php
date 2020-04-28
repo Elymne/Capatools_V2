@@ -66,9 +66,7 @@ class DevisSearch extends Devis
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pageSize' => 10,
-            ]
+            'pagination' => false
         ]);
 
         $dataProvider->sort->attributes['cellule.name'] = [

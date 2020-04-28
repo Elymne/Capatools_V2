@@ -185,7 +185,7 @@ DevisCreateAsset::register($this);
                 </div>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-green ']) ?>
+                    <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue ']) ?>
                     <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-red']) ?>
                 </div>
 

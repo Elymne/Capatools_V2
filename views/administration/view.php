@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\user\CapaUser */
 
-$this->title = "Détail du salarié: " . $model->username;
+$this->title = "Détail du salarié : " . $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
