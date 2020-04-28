@@ -164,13 +164,14 @@ function createDataTable($model, $fileModel): string
     $company_name = $model->company->name;
     $company_type = CompanyTypeEnum::getTypeCompanyString($model->company->type);
     $company_description = $model->company->description;
+    if ($company_description == null) $company_description = "Aucune description";
     $company_tva = $model->company->tva;
 
     $devis_price = $model->price;
 
     $delivery_type = $model->delivery_type->label;
     $delivery_duration_hour = $model->service_duration;
-    $delivery_duration_day = (int) $model->service_duration / 7.4;
+    $delivery_duration_day = intval($model->service_duration / 7.4);
 
     $laboxy_name = $model->id_laboxy;
     $laboxy_prestation_duration = $model->service_duration * Yii::$app->params['LaboxyTimeDay'];
@@ -218,12 +219,12 @@ function createDataTable($model, $fileModel): string
                     <td>${company_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Type d'entreprise/td>
-                    <td>${company_type}</td>
+                    <td class='header'>Description</td>
+                    <td>${company_description}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Durée de la prestation</td>
-                    <td>${company_description}</td>
+                    <td class='header'>Type d'entreprise</td>
+                    <td>${company_type}</td>
                 </tr>
                 <tr>
                     <td class='header'>Tva</td>
@@ -241,9 +242,14 @@ function createDataTable($model, $fileModel): string
                     <td>${delivery_type}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Durée de la prestation</td>
-                    <td>${delivery_duration_hour} heures ${delivery_duration_day} jours</td>
+                    <td class='header'>Durée de la prestation (h)</td>
+                    <td>${delivery_duration_hour} heure(s)</td>
                 </tr>
+                <tr>
+                    <td class='header'>Durée de la prestation (j)</td>
+                    <td>${delivery_duration_day} jour(s)</td>
+                </tr>
+                
                 <tr>
                     <td class='header'>Prix de la prestation (HT)</td>
                     <td>${devis_price} €</td>

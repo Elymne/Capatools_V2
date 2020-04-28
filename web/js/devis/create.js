@@ -1,6 +1,7 @@
+/**
+ * Milestones management.
+ */
 $(() => {
-    var maxPrice = 0;
-
     $(".dynamicform_wrapper").on("afterInsert", (e, item) => {
         $(".picker").each(function () {
             $(this).datepicker({
@@ -24,3 +25,20 @@ $(() => {
         });
     });
 });
+
+/**
+ * Prestation management.
+ */
+$(() => {});
+
+/**
+ * Filter from capaid.
+ */
+function prestaDurationCalcul() {
+    const prestationDurationInput = document.getElementById("deviscreateform-service_duration");
+    const prestationDurationDayInput = document.getElementById("service-duration-day");
+    console.log(prestationDurationInput.value);
+
+    const result = parseInt(prestationDurationInput.value / 7.7);
+    prestationDurationDayInput.value = result;
+}

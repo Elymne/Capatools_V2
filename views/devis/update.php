@@ -68,10 +68,21 @@ DevisCreateAsset::register($this);
                                 "Client"
                             ); ?>
 
-                        <?= $form->field($model, 'service_duration')
-                            ->textInput(['autocomplete' => 'off'])
-                            ->label("Durée de la prestation (j)")
-                        ?>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <?= $form->field($model, 'service_duration')
+                                    ->textInput(['autocomplete' => 'off'])
+                                    ->label("Durée de la prestation en heure")
+                                ?>
+                            </div>
+                            <div class="input-field col s6">
+                                <?= Html::input('text', 'textinput_service_duration_daytype', "", [
+                                    'id' => 'service-duration-day',
+                                    'maxlength' => 10,
+                                    'placeholder' => 'Calcul en durée jour',
+                                ]); ?>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -81,7 +92,7 @@ DevisCreateAsset::register($this);
                     <div class="card">
                         <div class="card-action">
                             <?= $form->field($fileModel, 'file')
-                                ->label('Upload un fichier', [])
+                                ->label('Ajouter un document annexe', [])
                                 ->fileInput([])
                             ?>
                         </div>
