@@ -73,6 +73,7 @@ function getSearchFilter(array $cellules)
 {
 
     echo Select2::widget([
+        'id' => 'cellule-name-search',
         'name' => 'droplist_cellule',
         'data' => $cellules,
         'pluginLoading' => false,
@@ -138,6 +139,7 @@ function getEmailArray(): array
         'encodeLabel' => false,
         'format' => 'ntext',
         'attribute' => 'email',
+        'contentOptions' => ['class' => 'email-row'],
     ];
 }
 
@@ -148,6 +150,7 @@ function getCelluleArray(): array
         'encodeLabel' => false,
         'format' => 'ntext',
         'attribute' => 'cellule.name',
+        'contentOptions' => ['class' => 'cellule-row'],
     ];
 }
 
