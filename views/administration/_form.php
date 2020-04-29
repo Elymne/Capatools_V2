@@ -71,7 +71,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     <div class="form-group">
         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
 
-        <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-red']) ?>
+        <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

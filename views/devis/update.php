@@ -69,18 +69,25 @@ DevisCreateAsset::register($this);
                             ); ?>
 
                         <div class="row">
-                            <div class="input-field col s6">
-                                <?= $form->field($model, 'service_duration')
-                                    ->textInput(['autocomplete' => 'off'])
-                                    ->label("Durée de la prestation en heure")
-                                ?>
-                            </div>
-                            <div class="input-field col s6">
-                                <?= Html::input('text', 'textinput_service_duration_daytype', "", [
-                                    'id' => 'service-duration-day',
-                                    'maxlength' => 10,
-                                    'placeholder' => 'Calcul en durée jour',
-                                ]); ?>
+                            <div class="col s12">
+
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <?= $form->field($model, 'service_duration')
+                                            ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off', 'onkeyup' => 'prestaDurationCalculUpdateview()'])
+                                            ->label("Durée de la prestation en heure")
+                                        ?>
+                                    </div>
+                                    <div class="input-field col s6">
+                                        <?= Html::input('text', 'textinput_service_duration_daytype', "", [
+                                            'id' => 'service-duration-day',
+                                            'maxlength' => 10,
+                                            'placeholder' => 'Calcul en durée jour',
+                                            'disabled' => true
+                                        ]); ?>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
@@ -134,8 +141,8 @@ DevisCreateAsset::register($this);
                                         <div class="panel-heading">
                                             <h3 class="panel-title pull-left">Jalon </h3>
                                             <div class="pull-right">
-                                                <button type="button" class="add-item waves-effect waves-light btn btn-green"><i class="glyphicon glyphicon-plus"></i></button>
-                                                <button type="button" class="remove-item waves-effect waves-light btn red"><i class="glyphicon glyphicon-minus"></i></button>
+                                                <button type="button" class="add-item waves-effect waves-light btn btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                <button type="button" class="remove-item waves-effect waves-light btn btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
@@ -149,7 +156,7 @@ DevisCreateAsset::register($this);
 
                                             <div class="row">
                                                 <div>
-                                                    <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Label') ?>
+                                                    <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Nom du jalon') ?>
                                                     <?= $form->field($milestone, "[{$i}]price")->textInput(['class' => 'priceHt', 'autocomplete' => 'off', 'maxlength' => true])->label('Prix HT') ?>
                                                     <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaire') ?>
                                                 </div>
@@ -167,7 +174,7 @@ DevisCreateAsset::register($this);
 
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue ']) ?>
-                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-red']) ?>
+                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>

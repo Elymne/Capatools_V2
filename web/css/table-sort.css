@@ -11,11 +11,11 @@ a.desc:after {
 }
 
 a.asc:after {
-    content: "\e093";
+    content: "\e094";
 }
 
 a.desc:after {
-    content: "\e094";
+    content: "\e093";
 }
 
 .sort-numerical a.asc:after {
