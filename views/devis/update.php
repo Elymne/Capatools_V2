@@ -165,19 +165,6 @@ DevisCreateAsset::register($this);
                     </div>
                 <?php } ?>
 
-                <div class="card">
-
-                    <div class="card-content">
-                        <label>CGU</label>
-                    </div>
-
-                    <div class="card-action">
-
-                    </div>
-
-                </div>
-
-
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue ']) ?>
                     <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-red']) ?>

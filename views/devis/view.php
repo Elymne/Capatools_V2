@@ -47,23 +47,9 @@ $indexStatus = getIndexStatus($model);
                     <label>Etat du contrat</label>
                 </div>
                 <div class="card-action">
-                    <div class="row">
-                        <div class="col s12">
-                            <div class="row">
-                                <div class="col s8">
-                                    <div class="timeline">
-                                        <?php foreach ($stages as $key => $stage) { ?>
-                                            <div class="timeline-event">
-                                                <p class="event-label"><?php echo $stage; ?></p>
-                                                <?php if (isStatusPassed($indexStatus, $key)) echo '<span class="point-filled"></span>';
-                                                else echo '<span class="point"></span>'; ?>
-                                            </div>
-                                        <?php } ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+                    <?php echo createTimeline($stages, $indexStatus) ?>
+
                 </div>
             </div>
         </div>
@@ -108,6 +94,21 @@ $indexStatus = getIndexStatus($model);
 </div>
 
 <?php
+
+function createTimeline($stages, $indexStatus)
+{
+?>
+    <div class="timeline">
+        <?php foreach ($stages as $key => $stage) { ?>
+            <div class="timeline-event">
+                <p class="event-label"><?php echo $stage; ?></p>
+                <?php if (isStatusPassed($indexStatus, $key)) echo '<span class="point-filled"></span>';
+                else echo '<span class="point"></span>'; ?>
+            </div>
+        <?php } ?>
+    </div>
+<?php
+}
 
 function getIndexStatus($model): int
 {
