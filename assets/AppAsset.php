@@ -46,7 +46,9 @@ class AppAsset extends AssetBundle
         // Custom table.
         'css/custom-table.css',
         // Custom spacing.
-        'css/spacing.css'
+        'css/spacing.css',
+        // Table sort.
+        'css/table-sort.css'
 
     ];
 

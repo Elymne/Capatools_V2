@@ -125,7 +125,7 @@ function getUsernameArray(): array
     return [
         'attribute' => 'username',
         'format' => 'raw',
-        'label' => '<span class="material-icons">arrow_drop_down</span> Salarié',
+        'label' => 'Salarié',
         'contentOptions' => ['class' => 'username-row'],
         'encodeLabel' => false,
         'value' => function ($data) {
@@ -137,7 +137,7 @@ function getUsernameArray(): array
 function getEmailArray(): array
 {
     return [
-        'label' => '<span class="material-icons">arrow_drop_down</span> Email',
+        'label' => 'Email',
         'encodeLabel' => false,
         'format' => 'ntext',
         'attribute' => 'email',
@@ -148,7 +148,7 @@ function getEmailArray(): array
 function getCelluleArray(): array
 {
     return [
-        'label' => '<span class="material-icons">arrow_drop_down</span> Cellule',
+        'label' => 'Cellule',
         'encodeLabel' => false,
         'format' => 'ntext',
         'attribute' => 'cellule.name',
