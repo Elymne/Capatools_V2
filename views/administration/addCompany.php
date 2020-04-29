@@ -55,7 +55,7 @@ CompanyCreateAsset::register($this);
 
                             <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>
 
-                            <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-red']) ?>
+                            <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
 
                             <?php ActiveForm::end(); ?>
                         </div>

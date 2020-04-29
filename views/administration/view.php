@@ -37,7 +37,7 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
                     <?php endif ?>
 
                     <?= Html::a('Supprimer <i class="material-icons right">delete</i> ', ['delete', 'id' => $model->id], [
-                        'class' => 'waves-effect waves-light btn btn-red',
+                        'class' => 'waves-effect waves-light btn btn-grey',
                         'data' => [
                             'confirm' => 'Etes vous sûr de vouloir supprimer ce salarié ?',
                             'method' => 'post',

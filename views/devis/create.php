@@ -82,6 +82,7 @@ DevisCreateAsset::register($this);
                                             'id' => 'service-duration-day',
                                             'maxlength' => 10,
                                             'placeholder' => 'Calcul en durée jour',
+                                            'disabled' => true
                                         ]); ?>
                                     </div>
                                 </div>
@@ -174,7 +175,7 @@ DevisCreateAsset::register($this);
 
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue ']) ?>
-                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-red']) ?>
+                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>
