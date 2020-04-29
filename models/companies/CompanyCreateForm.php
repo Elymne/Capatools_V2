@@ -65,7 +65,7 @@ class CompanyCreateForm extends Company
         $companiesTva = ArrayHelper::map(Company::find()->all(), 'id', 'tva');
         $companiesTva = array_merge($companiesTva);
 
-        if (in_array($this->$attribute, $companiesTva)) {
+        if (in_array($this->$attribute, $companiesTva) && $this->$attribute != null) {
             $this->addError($attribute, 'Cette tva existe déjà !');
         }
     }
