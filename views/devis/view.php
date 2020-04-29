@@ -164,8 +164,10 @@ function createDataTable($model, $fileModel): string
 
     $company_name = $model->company->name;
     $company_type = CompanyTypeEnum::getTypeCompanyString($model->company->type);
-    $company_description = $model->company->description;
-    if ($company_description == null) $company_description = "Aucune description";
+    $company_address = $model->company->address;
+    $company_phone = $model->company->phone;
+    $company_email = $model->company->email;
+    $company_siret = $model->company->siret;
     $company_tva = $model->company->tva;
 
     $devis_price = $model->price;
@@ -220,12 +222,24 @@ function createDataTable($model, $fileModel): string
                     <td>${company_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Description</td>
-                    <td>${company_description}</td>
-                </tr>
-                <tr>
                     <td class='header'>Type d'entreprise</td>
                     <td>${company_type}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Addresse</td>
+                    <td>${company_address}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Téléphone</td>
+                    <td>${company_phone}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Email</td>
+                    <td>${company_email}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Siret</td>
+                    <td>${company_siret}</td>
                 </tr>
                 <tr>
                     <td class='header'>Tva</td>
