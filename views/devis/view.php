@@ -160,9 +160,6 @@ function createDataTable($model, $fileModel): string
     $devis_date = $model->creation_date;
     $devis_labotory_proposal = $model->laboratory_proposal;
 
-    echo $devis_labotory_proposal;
-    echo var_dump($devis_labotory_proposal);
-
     $user_name = $model->capa_user->username;
     $user_email = $model->capa_user->email;
     $user_cellule = strtolower($model->capa_user->cellule->name);
@@ -175,11 +172,16 @@ function createDataTable($model, $fileModel): string
     $company_siret = $model->company->siret;
     $company_tva = $model->company->tva;
 
-    $devis_price = $model->price;
 
     $delivery_type = $model->delivery_type->label;
     $delivery_duration_hour = $model->service_duration;
     $delivery_duration_day = intval($model->service_duration / 7.4);
+    $delivery_validity_duration = $model->validity_duration;
+    $delivery_payment_conditions = $model->payment_conditions;
+    $delivery_price = $model->price;
+    $delivery_payment_details = $model->payment_details;
+
+
 
     $laboxy_name = $model->id_laboxy;
     $laboxy_prestation_duration = $model->service_duration * Yii::$app->params['LaboxyTimeDay'];
@@ -233,10 +235,8 @@ function createDataTable($model, $fileModel): string
                     <td class='header'>Cellule capacité</td>
                     <td>${user_cellule}</td>
                 </tr>
-            
 
                 <!-- Company data -->
-
                 <tr class='group'>
                     <td class='header'>Client</td>
                     <td></td>
@@ -290,12 +290,24 @@ function createDataTable($model, $fileModel): string
                 </tr>
                 
                 <tr>
+                    <td class='header'>Validité du devis</td>
+                    <td>${delivery_validity_duration} jour(s)</td>
+                </tr>
+
+                <tr>
+                    <td class='header'>Conditions de paiement</td>
+                    <td>${delivery_payment_conditions}</td>
+                </tr>
+                <tr>
                     <td class='header'>Prix de la prestation (HT)</td>
-                    <td>${devis_price} €</td>
+                    <td>${delivery_price} €</td>
+                </tr>
+                <tr>
+                    <td class='header'>Echéancier</td>
+                    <td>${delivery_payment_details}</td>
                 </tr>
 
                  <!-- Laboxy data -->
-
                  <tr class='group'>
                     <td class='header'>Information Laboxy</td>
                     <td></td>

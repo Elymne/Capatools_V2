@@ -47,17 +47,6 @@ DevisCreateAsset::register($this);
                             ->label("Nom du projet")
                         ?>
 
-                        <?= $form->field($model, 'delivery_type_id')->widget(Select2::class, [
-                            'data' => ArrayHelper::map($delivery_types, 'id', 'label'),
-                            'pluginLoading' => false,
-                            'pluginOptions' => [
-                                'allowClear' => false
-                            ],
-                        ])->label(
-                            "Type de projet",
-                            ['for' => 'delivery_type_id']
-                        ); ?>
-
                         <?= $form->field($model, 'laboratory_proposal')
                             ->textarea(['maxlength' => true, 'rows' => 6])
                             ->label("Proposition du laboratoire")
@@ -73,6 +62,8 @@ DevisCreateAsset::register($this);
                             );
                         ?>
 
+                        <?= Html::a('Ajouter un client', ['administration/add-company'], ['class' => '']) ?>
+
                     </div>
 
                 </div>
@@ -84,6 +75,17 @@ DevisCreateAsset::register($this);
                     </div>
 
                     <div class="card-action">
+
+                        <?= $form->field($model, 'delivery_type_id')->widget(Select2::class, [
+                            'data' => ArrayHelper::map($delivery_types, 'id', 'label'),
+                            'pluginLoading' => false,
+                            'pluginOptions' => [
+                                'allowClear' => false
+                            ],
+                        ])->label(
+                            "Type de projet",
+                            ['for' => 'delivery_type_id']
+                        ); ?>
 
                         <div class="row">
                             <div class="col s12">

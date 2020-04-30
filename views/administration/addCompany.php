@@ -29,9 +29,21 @@ CompanyCreateAsset::register($this);
                     <div class="card-action">
                         <?php $form = ActiveForm::begin(); ?>
 
+
+
                         <?= $form->field($model, 'name')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'name-field'])
                             ->label("Nom du client") ?>
+
+                        <?= $form->field($model, 'type')->widget(Select2::classname(), [
+                            'data' => CompanyTypeEnum::COMPANY_TYPE_STRING,
+                            'pluginLoading' => false,
+                            'pluginOptions' => [
+                                'allowClear' => false
+                            ],
+                        ])->label("Type de client"); ?>
+
+                        <br />
 
                         <?= $form->field($model, 'address')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'address-field'])
@@ -53,18 +65,9 @@ CompanyCreateAsset::register($this);
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'tva-field'])
                             ->label("TVA") ?>
 
-                        <br />
 
-                        <?= $form->field($model, 'type')->widget(Select2::classname(), [
-                            'data' => CompanyTypeEnum::COMPANY_TYPE_STRING,
-                            'pluginLoading' => false,
-                            'pluginOptions' => [
-                                'allowClear' => false
-                            ],
-                        ])->label("Type de client"); ?>
 
                         <br />
-
                         <div class="form-group">
 
                             <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>
