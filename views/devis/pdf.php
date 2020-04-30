@@ -1,5 +1,6 @@
 <?php
 
+use app\helper\_enum\CompanyTypeEnum;
 use yii\helpers\Html;
 use app\models\devis\DevisStatus;
 use app\widgets\TopTitle;
@@ -14,8 +15,6 @@ else $this->title = "Modification d'un devis";
 
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
-
 $indexStatus = getIndexStatus($model);
 
 ?>
@@ -30,13 +29,11 @@ $indexStatus = getIndexStatus($model);
             <div class="card">
 
                 <div class="card-content">
-                    <span class="card-title"> Détails</span>
+                    <span style="color:white">Détails</span>
                 </div>
 
                 <div class="card-action">
-
-                    <?php echo createDataTable($model); ?>
-
+                    <?php echo createDataTable($model, $fileModel); ?>
                 </div>
             </div>
         </div>
@@ -47,13 +44,11 @@ $indexStatus = getIndexStatus($model);
             <div class="card">
 
                 <div class="card-content">
-                    <span class="card-title">Jalon(s)</span>
+                    <span style="color:white">Jalon(s)</span>
                 </div>
 
-                <div class="card-action white">
-
+                <div class="card-action">
                     <?php echo createMilestonesTable($milestones); ?>
-
                 </div>
             </div>
         </div>
@@ -112,63 +107,120 @@ function isStatusPassed($indexStatus, $arrayKey)
  * 
  * @return HTML table.
  */
-function createDataTable($model)
+function createDataTable($model, $fileModel): string
 {
 
-    // You can't use object with <<<HTML HTML; so you have to create value like bellow.
+    $devis_name = $model->internal_name;
+    $devis_date = $model->creation_date;
+    $devis_labotory_proposal = $model->laboratory_proposal;
+
     $user_name = $model->capa_user->username;
     $user_email = $model->capa_user->email;
-    $user_cellule = $model->capa_user->cellule->name;
+    $user_cellule = strtolower($model->capa_user->cellule->name);
 
     $company_name = $model->company->name;
-    $company_description = $model->company->description;
+    $company_type = CompanyTypeEnum::getTypeCompanyString($model->company->type);
+    $company_address = $model->company->address;
+    $company_phone = $model->company->phone;
+    $company_email = $model->company->email;
+    $company_siret = $model->company->siret;
     $company_tva = $model->company->tva;
 
+
     $delivery_type = $model->delivery_type->label;
-    $delivery_duration = $model->service_duration;
+    $delivery_duration_hour = $model->service_duration;
+    $delivery_duration_day = intval($model->service_duration / 7.4);
+    $delivery_validity_duration = $model->validity_duration;
+    $delivery_payment_conditions = $model->payment_conditions;
+    $delivery_price = $model->price;
+    $delivery_payment_details = $model->payment_details;
+
+
 
     $laboxy_name = $model->id_laboxy;
     $laboxy_prestation_duration = $model->service_duration * Yii::$app->params['LaboxyTimeDay'];
+
+    if ($fileModel == null) {
+        $file_name = 'Aucun fichier';
+        $file_version = 'Pas de fichier';
+    } else {
+        $file_name = $fileModel->name . '.' . $fileModel->type;
+        $file_version = $fileModel->version;
+    }
+
 
     return <<<HTML
         <table class="highlight">
 
             <tbody>
-                <!-- Project manager data -->
 
+                <!-- Devis details -->
+                <tr class='group'>
+                    <td class='header'>Informations générale</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>Nom du projet</td>
+                    <td>${devis_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Date</td>
+                    <td>${devis_date}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Proposition de laboratoire</td>
+                    <td>${devis_labotory_proposal}</td>
+                </tr>
+
+                <!-- Project manager data -->
                 <tr class='group'>
                     <td class='header'>Chef de projet</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>nom / prénom</td>
+                    <td class='header'>Nom / prénom</td>
                     <td>${user_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>email</td>
+                    <td class='header'>Email</td>
                     <td>${user_email}</td>
                 </tr>
                 <tr>
-                    <td class='header'>cellule capacité</td>
+                    <td class='header'>Cellule capacité</td>
                     <td>${user_cellule}</td>
                 </tr>
 
                 <!-- Company data -->
-
                 <tr class='group'>
                     <td class='header'>Client</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>nom du client / société</td>
+                    <td class='header'>Nom du client / société</td>
                     <td>${company_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Durée de la prestation</td>
-                    <td>${company_description}</td>
+                    <td class='header'>Type d'entreprise</td>
+                    <td>${company_type}</td>
                 </tr>
                 <tr>
-                    <td class='header'>tva</td>
+                    <td class='header'>Addresse</td>
+                    <td>${company_address}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Téléphone</td>
+                    <td>${company_phone}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Email</td>
+                    <td>${company_email}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Siret</td>
+                    <td>${company_siret}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Tva</td>
                     <td>${company_tva}</td>
                 </tr>
 
@@ -179,32 +231,68 @@ function createDataTable($model)
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>type de prestation</td>
+                    <td class='header'>Type de prestation</td>
                     <td>${delivery_type}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Durée de la prestation</td>
-                    <td>${delivery_duration}</td>
+                    <td class='header'>Durée de la prestation (h)</td>
+                    <td>${delivery_duration_hour} heure(s)</td>
+                </tr>
+                <tr>
+                    <td class='header'>Durée de la prestation (j)</td>
+                    <td>${delivery_duration_day} jour(s)</td>
+                </tr>
+                
+                <tr>
+                    <td class='header'>Validité du devis</td>
+                    <td>${delivery_validity_duration} jour(s)</td>
+                </tr>
+
+                <tr>
+                    <td class='header'>Conditions de paiement</td>
+                    <td>${delivery_payment_conditions}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Prix de la prestation (HT)</td>
+                    <td>${delivery_price} €</td>
+                </tr>
+                <tr>
+                    <td class='header'>Echéancier</td>
+                    <td>${delivery_payment_details}</td>
                 </tr>
 
                  <!-- Laboxy data -->
-
                  <tr class='group'>
                     <td class='header'>Information Laboxy</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>identitifant</td>
+                    <td class='header'>Identitifant</td>
                     <td>${laboxy_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>durée prestation</td>
-                    <td>${laboxy_prestation_duration}</td>
+                    <td class='header'>Durée prestation laboxy</td>
+                    <td>${laboxy_prestation_duration} heures</td>
                 </tr>
-                
-
             </tbody>
-
+        </table>
+        <br />
+        <table class="highlight">
+            <tbody>
+                <!-- Fichier uploadé -->
+                <tr class='group'>
+                    <td class='header'>Fichier uploadé</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>Nom</td>
+                    <td>${file_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Version</td>
+                    <td>${file_version}</td>
+                </tr>
+            </tbody>
         </table>
     HTML;
 }

@@ -199,6 +199,9 @@ class DevisController extends Controller implements ServiceInterface
 
         $model = new DevisCreateForm();
 
+        $model->payment_details = " - 30% à la commande";
+        $model->payment_details .= " - 70% à la livraison des résultats";
+
         // Get data that we wish to use on our view.
         $delivery_types = DeliveryType::getDeliveryTypes();
 
@@ -479,7 +482,8 @@ class DevisController extends Controller implements ServiceInterface
 
         $content = $this->renderPartial('pdf', [
             'model' => $model,
-            'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
+            'milestones' => Milestone::find()->where(['devis_id' => $id])->all(),
+            'fileModel' => UploadFile::getByDevis($id)
         ]);
 
         $pdf = new Pdf([
