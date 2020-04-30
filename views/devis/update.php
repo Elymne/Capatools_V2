@@ -44,9 +44,36 @@ DevisCreateAsset::register($this);
                     <div class="card-action">
 
                         <?= $form->field($model, 'internal_name')
-                            ->textInput(['maxlength' => true, 'disabled' => true], ['autocomplete' => 'off'])
+                            ->textInput(['maxlength' => true], ['autocomplete' => 'off'])
                             ->label("Nom du projet")
                         ?>
+
+                        <?= $form->field($model, 'laboratory_proposal')
+                            ->textarea(['maxlength' => true, 'rows' => 6])
+                            ->label("Proposition du laboratoire")
+                        ?>
+
+                        <?= $form->field($model, 'company_name')
+                            ->widget(\yii\jui\AutoComplete::classname(), [
+                                'clientOptions' => [
+                                    'source' => $companiesNames,
+                                ],
+                            ])->label(
+                                "Client"
+                            );
+                        ?>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-content">
+                        <label>Informations de la prestation</label>
+                    </div>
+
+                    <div class="card-action">
 
                         <?= $form->field($model, 'delivery_type_id')->widget(Select2::class, [
                             'data' => ArrayHelper::map($delivery_types, 'id', 'label'),
@@ -59,23 +86,14 @@ DevisCreateAsset::register($this);
                             ['for' => 'delivery_type_id']
                         ); ?>
 
-                        <?= $form->field($model, 'company_name')
-                            ->widget(\yii\jui\AutoComplete::classname(), [
-                                'clientOptions' => [
-                                    'source' => $companiesNames,
-                                ],
-                            ])->label(
-                                "Client"
-                            ); ?>
-
                         <div class="row">
                             <div class="col s12">
 
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <?= $form->field($model, 'service_duration')
-                                            ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off', 'onkeyup' => 'prestaDurationCalculUpdateview()'])
-                                            ->label("Durée de la prestation en heure")
+                                            ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off', 'onkeyup' => 'prestaDurationCalcul()'])
+                                            ->label("Durée de la prestation (h)")
                                         ?>
                                     </div>
                                     <div class="input-field col s6">
@@ -90,6 +108,26 @@ DevisCreateAsset::register($this);
 
                             </div>
                         </div>
+
+                        <?= $form->field($model, 'validity_duration')
+                            ->input('number', ['min' => 0, 'max' => 100000, 'step' => 1, 'autocomplete' => 'off'])
+                            ->label("Validité du devis (j)")
+                        ?>
+
+                        <?= $form->field($model, 'payment_conditions')
+                            ->textarea(['maxlength' => true, 'rows' => 6])
+                            ->label("Conditions de paiement")
+                        ?>
+
+                        <?= $form->field($model, 'price')
+                            ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
+                            ->label("Prix")
+                        ?>
+
+                        <?= $form->field($model, 'payment_details')
+                            ->textarea(['maxlength' => true, 'rows' => 6])
+                            ->label("Détails de paiement")
+                        ?>
 
                     </div>
 
