@@ -156,23 +156,32 @@ function isStatusPassed($indexStatus, $arrayKey): bool
 function createDataTable($model, $fileModel): string
 {
 
-    // You can't use object with <<<HTML HTML; so you have to create value like bellow.
+    $devis_name = $model->internal_name;
+    $devis_date = $model->creation_date;
+    $devis_labotory_proposal = $model->laboratory_proposal;
+
     $user_name = $model->capa_user->username;
     $user_email = $model->capa_user->email;
     $user_cellule = strtolower($model->capa_user->cellule->name);
 
-
     $company_name = $model->company->name;
     $company_type = CompanyTypeEnum::getTypeCompanyString($model->company->type);
-    $company_description = $model->company->description;
-    if ($company_description == null) $company_description = "Aucune description";
+    $company_address = $model->company->address;
+    $company_phone = $model->company->phone;
+    $company_email = $model->company->email;
+    $company_siret = $model->company->siret;
     $company_tva = $model->company->tva;
 
-    $devis_price = $model->price;
 
     $delivery_type = $model->delivery_type->label;
     $delivery_duration_hour = $model->service_duration;
     $delivery_duration_day = intval($model->service_duration / 7.4);
+    $delivery_validity_duration = $model->validity_duration;
+    $delivery_payment_conditions = $model->payment_conditions;
+    $delivery_price = $model->price;
+    $delivery_payment_details = $model->payment_details;
+
+
 
     $laboxy_name = $model->id_laboxy;
     $laboxy_prestation_duration = $model->service_duration * Yii::$app->params['LaboxyTimeDay'];
@@ -190,8 +199,26 @@ function createDataTable($model, $fileModel): string
         <table class="highlight">
 
             <tbody>
-                <!-- Project manager data -->
 
+                <!-- Devis details -->
+                <tr class='group'>
+                    <td class='header'>Informations générale</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>Nom du projet</td>
+                    <td>${devis_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Date</td>
+                    <td>${devis_date}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Proposition de laboratoire</td>
+                    <td>${devis_labotory_proposal}</td>
+                </tr>
+
+                <!-- Project manager data -->
                 <tr class='group'>
                     <td class='header'>Chef de projet</td>
                     <td></td>
@@ -210,7 +237,6 @@ function createDataTable($model, $fileModel): string
                 </tr>
 
                 <!-- Company data -->
-
                 <tr class='group'>
                     <td class='header'>Client</td>
                     <td></td>
@@ -220,12 +246,24 @@ function createDataTable($model, $fileModel): string
                     <td>${company_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Description</td>
-                    <td>${company_description}</td>
-                </tr>
-                <tr>
                     <td class='header'>Type d'entreprise</td>
                     <td>${company_type}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Addresse</td>
+                    <td>${company_address}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Téléphone</td>
+                    <td>${company_phone}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Email</td>
+                    <td>${company_email}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Siret</td>
+                    <td>${company_siret}</td>
                 </tr>
                 <tr>
                     <td class='header'>Tva</td>
@@ -252,12 +290,24 @@ function createDataTable($model, $fileModel): string
                 </tr>
                 
                 <tr>
+                    <td class='header'>Validité du devis</td>
+                    <td>${delivery_validity_duration} jour(s)</td>
+                </tr>
+
+                <tr>
+                    <td class='header'>Conditions de paiement</td>
+                    <td>${delivery_payment_conditions}</td>
+                </tr>
+                <tr>
                     <td class='header'>Prix de la prestation (HT)</td>
-                    <td>${devis_price} €</td>
+                    <td>${delivery_price} €</td>
+                </tr>
+                <tr>
+                    <td class='header'>Echéancier</td>
+                    <td>${delivery_payment_details}</td>
                 </tr>
 
                  <!-- Laboxy data -->
-
                  <tr class='group'>
                     <td class='header'>Information Laboxy</td>
                     <td></td>

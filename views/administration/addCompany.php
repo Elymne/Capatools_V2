@@ -29,8 +29,10 @@ CompanyCreateAsset::register($this);
                     <div class="card-action">
                         <?php $form = ActiveForm::begin(); ?>
 
+
+
                         <?= $form->field($model, 'name')
-                            ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'name-field'])
                             ->label("Nom du client") ?>
 
                         <?= $form->field($model, 'type')->widget(Select2::classname(), [
@@ -41,16 +43,31 @@ CompanyCreateAsset::register($this);
                             ],
                         ])->label("Type de client"); ?>
 
+                        <br />
+
+                        <?= $form->field($model, 'address')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'address-field'])
+                            ->label("Adresse") ?>
+
+                        <?= $form->field($model, 'phone')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'phone-field'])
+                            ->label("Téléphone") ?>
+
+                        <?= $form->field($model, 'email')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'email-field'])
+                            ->label("E-mail") ?>
+
+                        <?= $form->field($model, 'siret')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'siret-field'])
+                            ->label("SIRET") ?>
+
                         <?= $form->field($model, 'tva')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'tva-field'])
                             ->label("TVA") ?>
 
-                        <?= $form->field($model, 'description')
-                            ->textInput(['maxlength' => true, 'autocomplete' => 'off'])
-                            ->label("Description du client") ?>
 
-                        <br /><br /><br />
 
+                        <br />
                         <div class="form-group">
 
                             <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>

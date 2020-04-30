@@ -11,21 +11,37 @@ class m200100_000006_create_devis_table extends Migration
     {
 
         $this->createTable('{{%devis}}', [
+            // Auto-generated.
             'id' => $this->primaryKey(),
             'id_capa' => $this->string(250)->notNull(),
+
+            // Generated when created.
+            'creation_date' => $this->date()->notNull(),
+
             'internal_name' => $this->string(250)->notNull(),
+            'laboratory_proposal' => $this->string(250),
+
             'service_duration' => $this->integer()->defaultValue(0),
+            'validity_duration' => $this->integer()->defaultValue(0),
+            'payment_conditions' => $this->string(250),
+            'payment_details' => $this->string(250),
+            'price' => $this->double(),
+
+            'delivery_type_id' => $this->integer(),
+
+            'id_laboxy' => $this->string(),
+            'status_id' => $this->integer(),
+
+            // FK - devis
+            'cellule_id' => $this->integer()->notNull(),
+            'company_id' => $this->integer()->notNull(),
+            'capa_user_id' => $this->integer()->notNull(),
+
+            // File management.
             'version' => $this->integer()->defaultValue(0),
             'filename' => $this->string(250)->defaultValue(null),
             'filename_first_upload' => $this->dateTime()->defaultValue(null),
             'filename_last_upload' => $this->dateTime()->defaultValue(null),
-            'cellule_id' => $this->integer()->notNull(),
-            'company_id' => $this->integer()->notNull(),
-            'capa_user_id' => $this->integer()->notNull(),
-            'price' => $this->double(),
-            'delivery_type_id' => $this->integer(),
-            'id_laboxy' => $this->string(),
-            'status_id' => $this->integer()
         ]);
 
         $this->addForeignKey(
