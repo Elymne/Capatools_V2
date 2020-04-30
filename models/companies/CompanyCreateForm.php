@@ -26,10 +26,11 @@ class CompanyCreateForm extends Company
             ['siret', 'required', 'message' => 'Indiquer le siret du client !'],
             ['siret', 'siretAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
 
-
             ['type', 'required',  'message' => 'Il doit y avoir un type de sélectionné !'],
+
             ['tva', 'tvaRequired', 'skipOnEmpty' => false, 'skipOnError' => false],
             ['tva', 'tvaAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
+            ['tva', 'tvaChecker', 'skipOnEmpty' => false, 'skipOnError' => false],
         ];
     }
 
@@ -83,6 +84,15 @@ class CompanyCreateForm extends Company
         }
     }
 
+    //TODO don't work.
+    public function tvaChecker($attribute, $params)
+    {
+        $ok = preg_match("^[A-Za-z]{2,4}(?=.{2,12}$)[-_\s0-9]*(?:[a-zA-Z][-_\s0-9]*){0,2}^", $params);
+        if ($ok) {
+            $this->addError($attribute, 'Mauvaise numéro de tva');
+        }
+    }
+
     public function tvaRequired($attribute, $params)
     {
         $companyType = $this->type;
@@ -100,10 +110,5 @@ class CompanyCreateForm extends Company
         if (in_array($this->$attribute, $companiesTva) && $this->$attribute != null) {
             $this->addError($attribute, 'Cette tva existe déjà !');
         }
-    }
-
-    public function wrongTvaFormat($attribute, $params)
-    {
-        // Promis, j'le fais bientôt.
     }
 }

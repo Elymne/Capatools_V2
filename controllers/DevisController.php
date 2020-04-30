@@ -482,7 +482,8 @@ class DevisController extends Controller implements ServiceInterface
 
         $content = $this->renderPartial('pdf', [
             'model' => $model,
-            'milestones' => Milestone::find()->where(['devis_id' => $id])->all()
+            'milestones' => Milestone::find()->where(['devis_id' => $id])->all(),
+            'fileModel' => UploadFile::getByDevis($id)
         ]);
 
         $pdf = new Pdf([
