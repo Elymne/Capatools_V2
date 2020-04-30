@@ -47,11 +47,6 @@ DevisCreateAsset::register($this);
                             ->label("Nom du projet")
                         ?>
 
-                        <?= $form->field($model, 'laboratory_proposal')
-                            ->textarea(['maxlength' => true, 'rows' => 6])
-                            ->label("Proposition du laboratoire")
-                        ?>
-
                         <?= $form->field($model, 'company_name')
                             ->widget(\yii\jui\AutoComplete::classname(), [
                                 'clientOptions' => [
@@ -61,8 +56,14 @@ DevisCreateAsset::register($this);
                                 "Client"
                             );
                         ?>
+
+                        <?= $form->field($model, 'task_description')
+                            ->textarea(['maxlength' => true, 'rows' => 6])
+                            ->label("Description des tâches")
+                        ?>
+
                         <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::ADMINISTRATOR, UserRoleEnum::SUPER_ADMINISTRATOR])) { ?>
-                            <?= Html::a('Ajouter un client', ['administration/add-company'], ['class' => '']) ?>
+                            <?= Html::a('Créer un client', ['administration/add-company'], ['class' => '']) ?>
                         <?php } ?>
 
                     </div>
@@ -72,7 +73,7 @@ DevisCreateAsset::register($this);
                 <div class="card">
 
                     <div class="card-content">
-                        <label>Informations de la prestation</label>
+                        <label>Informations sur la prestation</label>
                     </div>
 
                     <div class="card-action">
@@ -94,17 +95,15 @@ DevisCreateAsset::register($this);
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <?= $form->field($model, 'service_duration')
-                                            ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off', 'onkeyup' => 'prestaDurationCalcul()'])
-                                            ->label("Durée de la prestation (h)")
+                                            ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off'])
+                                            ->label("Durée de la prestation (heures)")
                                         ?>
                                     </div>
                                     <div class="input-field col s6">
-                                        <?= Html::input('text', 'textinput_service_duration_daytype', "", [
-                                            'id' => 'service-duration-day',
-                                            'maxlength' => 10,
-                                            'placeholder' => 'Calcul en durée jour',
-                                            'disabled' => true
-                                        ]); ?>
+                                        <?= $form->field($model, 'service_duration_day')
+                                            ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off'])
+                                            ->label("Durée de la prestation (jours)")
+                                        ?>
                                     </div>
                                 </div>
 
@@ -112,22 +111,22 @@ DevisCreateAsset::register($this);
                         </div>
 
                         <?= $form->field($model, 'validity_duration')
-                            ->input('number', ['min' => 0, 'max' => 100000, 'step' => 1, 'autocomplete' => 'off'])
-                            ->label("Validité du devis (j)")
+                            ->input('number', ['min' => 0, 'max' => 100000, 'step' => 1, 'autocomplete' => 'off', 'disabled' => true])
+                            ->label("Validité du devis (jours)")
                         ?>
 
                         <?= $form->field($model, 'payment_conditions')
-                            ->textarea(['maxlength' => true, 'rows' => 6])
+                            ->textarea(['maxlength' => true, 'rows' => 3, 'disabled' => true])
                             ->label("Conditions de paiement")
                         ?>
 
                         <?= $form->field($model, 'price')
                             ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
-                            ->label("Prix")
+                            ->label("Prix (HT)")
                         ?>
 
                         <?= $form->field($model, 'payment_details')
-                            ->textarea(['maxlength' => true, 'rows' => 6])
+                            ->textarea(['maxlength' => true, 'rows' => 3, 'disabled' => true])
                             ->label("Détails de paiement")
                         ?>
 
@@ -140,7 +139,7 @@ DevisCreateAsset::register($this);
 
                         <div class="card-action">
                             <?= $form->field($fileModel, 'file')
-                                ->label('Ajouter un document annexe', [])
+                                ->label('Ajouter un document annexe (descriptif technique, cahier des charges)', [])
                                 ->fileInput([])
                             ?>
                         </div>

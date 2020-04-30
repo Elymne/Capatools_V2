@@ -19,9 +19,10 @@ class m200100_000006_create_devis_table extends Migration
             'creation_date' => $this->date()->notNull(),
 
             'internal_name' => $this->string(250)->notNull(),
-            'laboratory_proposal' => $this->string(250),
+            'task_description' => $this->string(250),
 
             'service_duration' => $this->integer()->defaultValue(0),
+            'service_duration_day' => $this->integer()->defaultValue(0),
             'validity_duration' => $this->integer()->defaultValue(0),
             'payment_conditions' => $this->string(250),
             'payment_details' => $this->string(250),

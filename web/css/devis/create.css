@@ -2,6 +2,11 @@
     margin-top: 25px;
 }
 
+a {
+    position: sticky;
+    right: 0;
+}
+
 textarea {
-    resize: vertical;
+    resize: none;
 }

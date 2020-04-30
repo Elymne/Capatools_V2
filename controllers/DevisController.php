@@ -27,6 +27,7 @@ use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 use app\components\ExcelExportService;
 use app\helper\_clazz\UserRoleManager;
+use app\helper\_enum\StringData;
 use kartik\mpdf\Pdf;
 
 
@@ -199,8 +200,10 @@ class DevisController extends Controller implements ServiceInterface
 
         $model = new DevisCreateForm();
 
-        $model->payment_details = " - 30% à la commande";
-        $model->payment_details .= " - 70% à la livraison des résultats";
+        // preload data variable for form.
+        $model->payment_details = StringData::DEVIS_PAYMENT_DETAILS;
+        $model->payment_conditions = StringData::DEVIS_PAYMENT_CONDITIONS;
+        $model->validity_duration = 30;
 
         // Get data that we wish to use on our view.
         $delivery_types = DeliveryType::getDeliveryTypes();
