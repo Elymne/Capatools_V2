@@ -120,12 +120,12 @@ DevisCreateAsset::register($this);
 
                         <?= $form->field($model, 'price')
                             ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
-                            ->label("Validité du devis (j)")
+                            ->label("Prix")
                         ?>
 
                         <?= $form->field($model, 'payment_details')
                             ->textarea(['maxlength' => true, 'rows' => 6])
-                            ->label("Conditions de paiement")
+                            ->label("Détails de paiement")
                         ?>
 
                     </div>

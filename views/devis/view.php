@@ -156,11 +156,16 @@ function isStatusPassed($indexStatus, $arrayKey): bool
 function createDataTable($model, $fileModel): string
 {
 
-    // You can't use object with <<<HTML HTML; so you have to create value like bellow.
+    $devis_name = $model->internal_name;
+    $devis_date = $model->creation_date;
+    $devis_labotory_proposal = $model->laboratory_proposal;
+
+    echo $devis_labotory_proposal;
+    echo var_dump($devis_labotory_proposal);
+
     $user_name = $model->capa_user->username;
     $user_email = $model->capa_user->email;
     $user_cellule = strtolower($model->capa_user->cellule->name);
-
 
     $company_name = $model->company->name;
     $company_type = CompanyTypeEnum::getTypeCompanyString($model->company->type);
@@ -192,8 +197,26 @@ function createDataTable($model, $fileModel): string
         <table class="highlight">
 
             <tbody>
-                <!-- Project manager data -->
 
+                <!-- Devis details -->
+                <tr class='group'>
+                    <td class='header'>Informations générale</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>Nom du projet</td>
+                    <td>${devis_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Date</td>
+                    <td>${devis_date}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Proposition de laboratoire</td>
+                    <td>${devis_labotory_proposal}</td>
+                </tr>
+
+                <!-- Project manager data -->
                 <tr class='group'>
                     <td class='header'>Chef de projet</td>
                     <td></td>
@@ -210,6 +233,7 @@ function createDataTable($model, $fileModel): string
                     <td class='header'>Cellule capacité</td>
                     <td>${user_cellule}</td>
                 </tr>
+            
 
                 <!-- Company data -->
 
