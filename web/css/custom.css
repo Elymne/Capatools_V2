@@ -28,6 +28,10 @@ a {
 
 /* overrided materialize css class */
 
+.centrage {
+    text-align: center;
+}
+
 .card-content {
     background-color: #333333;
 }

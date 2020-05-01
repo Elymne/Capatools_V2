@@ -21,7 +21,12 @@ class DevisCreateAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
 
-    public $css = ['css/devis/create.css'];
+    public $css = [
+        // Formjs.
+        'css/step-form.css',
+
+        'css/devis/create.css',
+    ];
 
     public $js = ['js/devis/create.js'];
 
