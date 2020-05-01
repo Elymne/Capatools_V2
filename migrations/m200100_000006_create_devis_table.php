@@ -26,6 +26,9 @@ class m200100_000006_create_devis_table extends Migration
             'validity_duration' => $this->integer()->defaultValue(0),
             'payment_conditions' => $this->string(250),
             'payment_details' => $this->string(250),
+
+            'quantity' => $this->integer()->defaultValue(0),
+            'unit_price' => $this->integer()->defaultValue(0),
             'price' => $this->double(),
 
             'delivery_type_id' => $this->integer(),

@@ -48,9 +48,9 @@ DevisCreateAsset::register($this);
                             ->label("Nom du projet")
                         ?>
 
-                        <?= $form->field($model, 'laboratory_proposal')
+                        <?= $form->field($model, 'task_description')
                             ->textarea(['maxlength' => true, 'rows' => 6])
-                            ->label("Proposition du laboratoire")
+                            ->label("Description des tâches")
                         ?>
 
                         <?= $form->field($model, 'company_name')
@@ -92,17 +92,15 @@ DevisCreateAsset::register($this);
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <?= $form->field($model, 'service_duration')
-                                            ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off', 'onkeyup' => 'prestaDurationCalcul()'])
-                                            ->label("Durée de la prestation (h)")
+                                            ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off'])
+                                            ->label("Durée de la prestation (heures)")
                                         ?>
                                     </div>
                                     <div class="input-field col s6">
-                                        <?= Html::input('text', 'textinput_service_duration_daytype', "", [
-                                            'id' => 'service-duration-day',
-                                            'maxlength' => 10,
-                                            'placeholder' => 'Calcul en durée jour',
-                                            'disabled' => true
-                                        ]); ?>
+                                        <?= $form->field($model, 'service_duration_day')
+                                            ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off'])
+                                            ->label("Durée de la prestation (jours)")
+                                        ?>
                                     </div>
                                 </div>
 
@@ -119,7 +117,12 @@ DevisCreateAsset::register($this);
                             ->label("Conditions de paiement")
                         ?>
 
-                        <?= $form->field($model, 'price')
+                        <?= $form->field($model, 'quantity')
+                            ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
+                            ->label("Quantité")
+                        ?>
+
+                        <?= $form->field($model, 'unit_price')
                             ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
                             ->label("Prix")
                         ?>

@@ -33,6 +33,7 @@ DevisCreateAsset::register($this);
         <div class="row">
 
             <div id="stepform" class="col s8 offset-s2">
+
                 <h3>Informations générales</h3>
                 <section>
                     <?= $form->field($model, 'internal_name')
@@ -80,7 +81,7 @@ DevisCreateAsset::register($this);
                             <div class="row">
                                 <div class="input-field col s6">
                                     <?= $form->field($model, 'service_duration')
-                                        ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off'])
+                                        ->input('number', ['min' => 0, 'max' => 23, 'step' => 1, 'autocomplete' => 'off'])
                                         ->label("Durée de la prestation (heures)")
                                     ?>
                                 </div>
@@ -95,25 +96,16 @@ DevisCreateAsset::register($this);
                         </div>
                     </div>
 
-                    <?= $form->field($model, 'validity_duration')
-                        ->input('number', ['min' => 0, 'max' => 100000, 'step' => 1, 'autocomplete' => 'off', 'disabled' => true])
-                        ->label("Validité du devis (jours)")
-                    ?>
-
-                    <?= $form->field($model, 'payment_conditions')
-                        ->textarea(['maxlength' => true, 'rows' => 3, 'disabled' => true])
-                        ->label("Conditions de paiement")
-                    ?>
-
-                    <?= $form->field($model, 'price')
+                    <?= $form->field($model, 'quantity')
                         ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
-                        ->label("Prix (HT)")
+                        ->label("Quantité")
                     ?>
 
-                    <?= $form->field($model, 'payment_details')
-                        ->textarea(['maxlength' => true, 'rows' => 3, 'disabled' => true])
-                        ->label("Détails de paiement")
+                    <?= $form->field($model, 'unit_price')
+                        ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
+                        ->label("Prix unitaire")
                     ?>
+
                 </section>
 
                 <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) { ?>
