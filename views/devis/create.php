@@ -26,136 +26,109 @@ DevisCreateAsset::register($this);
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 
+
 <div class="container">
     <div class="devis-update">
-
+        <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
         <div class="row">
-            <div class="col s6 offset-s3">
 
-                <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
+            <div id="stepform" class="col s8 offset-s2">
 
-                <div class="card">
+                <h3>Informations générales</h3>
+                <section>
+                    <?= $form->field($model, 'internal_name')
+                        ->textInput(['maxlength' => true], ['autocomplete' => 'off'])
+                        ->label("Nom du projet")
+                    ?>
 
-                    <div class="card-content">
-                        <label>Informations générales</label>
-                    </div>
-
-                    <div class="card-action">
-
-                        <?= $form->field($model, 'internal_name')
-                            ->textInput(['maxlength' => true], ['autocomplete' => 'off'])
-                            ->label("Nom du projet")
-                        ?>
-
-                        <?= $form->field($model, 'laboratory_proposal')
-                            ->textarea(['maxlength' => true, 'rows' => 6])
-                            ->label("Proposition du laboratoire")
-                        ?>
-
-                        <?= $form->field($model, 'company_name')
-                            ->widget(\yii\jui\AutoComplete::classname(), [
-                                'clientOptions' => [
-                                    'source' => $companiesNames,
-                                ],
-                            ])->label(
-                                "Client"
-                            );
-                        ?>
-                        <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::ADMINISTRATOR, UserRoleEnum::SUPER_ADMINISTRATOR])) { ?>
-                            <?= Html::a('Ajouter un client', ['administration/add-company'], ['class' => '']) ?>
-                        <?php } ?>
-
-                    </div>
-
-                </div>
-
-                <div class="card">
-
-                    <div class="card-content">
-                        <label>Informations de la prestation</label>
-                    </div>
-
-                    <div class="card-action">
-
-                        <?= $form->field($model, 'delivery_type_id')->widget(Select2::class, [
-                            'data' => ArrayHelper::map($delivery_types, 'id', 'label'),
-                            'pluginLoading' => false,
-                            'pluginOptions' => [
-                                'allowClear' => false
+                    <?= $form->field($model, 'company_name')
+                        ->widget(\yii\jui\AutoComplete::classname(), [
+                            'clientOptions' => [
+                                'source' => $companiesNames,
                             ],
                         ])->label(
-                            "Type de projet",
-                            ['for' => 'delivery_type_id']
-                        ); ?>
+                            "Client"
+                        );
+                    ?>
 
-                        <div class="row">
-                            <div class="col s12">
+                    <?= $form->field($model, 'task_description')
+                        ->textarea(['maxlength' => true, 'rows' => 6])
+                        ->label("Description des tâches")
+                    ?>
 
-                                <div class="row">
-                                    <div class="input-field col s6">
-                                        <?= $form->field($model, 'service_duration')
-                                            ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off', 'onkeyup' => 'prestaDurationCalcul()'])
-                                            ->label("Durée de la prestation (h)")
-                                        ?>
-                                    </div>
-                                    <div class="input-field col s6">
-                                        <?= Html::input('text', 'textinput_service_duration_daytype', "", [
-                                            'id' => 'service-duration-day',
-                                            'maxlength' => 10,
-                                            'placeholder' => 'Calcul en durée jour',
-                                            'disabled' => true
-                                        ]); ?>
-                                    </div>
+                    <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::ADMINISTRATOR, UserRoleEnum::SUPER_ADMINISTRATOR])) { ?>
+                        <?= Html::a('Créer un client', ['administration/add-company'], ['class' => '']) ?>
+                    <?php } ?>
+
+                </section>
+
+                <h3>Informations sur la prestation</h3>
+                <section>
+                    <?= $form->field($model, 'delivery_type_id')->widget(Select2::class, [
+                        'data' => ArrayHelper::map($delivery_types, 'id', 'label'),
+                        'pluginLoading' => false,
+                        'pluginOptions' => [
+                            'allowClear' => false
+                        ],
+                    ])->label(
+                        "Type de projet",
+                        ['for' => 'delivery_type_id']
+                    ); ?>
+
+                    <div class="row">
+                        <div class="col s12">
+
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <?= $form->field($model, 'service_duration')
+                                        ->input('number', ['min' => 0, 'max' => 23, 'step' => 1, 'autocomplete' => 'off'])
+                                        ->label("Durée de la prestation (heures)")
+                                    ?>
                                 </div>
-
+                                <div class="input-field col s6">
+                                    <?= $form->field($model, 'service_duration_day')
+                                        ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off'])
+                                        ->label("Durée de la prestation (jours)")
+                                    ?>
+                                </div>
                             </div>
+
                         </div>
-
-                        <?= $form->field($model, 'validity_duration')
-                            ->input('number', ['min' => 0, 'max' => 100000, 'step' => 1, 'autocomplete' => 'off'])
-                            ->label("Validité du devis (j)")
-                        ?>
-
-                        <?= $form->field($model, 'payment_conditions')
-                            ->textarea(['maxlength' => true, 'rows' => 6])
-                            ->label("Conditions de paiement")
-                        ?>
-
-                        <?= $form->field($model, 'price')
-                            ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
-                            ->label("Prix")
-                        ?>
-
-                        <?= $form->field($model, 'payment_details')
-                            ->textarea(['maxlength' => true, 'rows' => 6])
-                            ->label("Détails de paiement")
-                        ?>
-
                     </div>
 
-                </div>
+                    <?= $form->field($model, 'quantity')
+                        ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
+                        ->label("Quantité")
+                    ?>
+
+                    <?= $form->field($model, 'unit_price')
+                        ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
+                        ->label("Prix unitaire")
+                    ?>
+
+                </section>
 
                 <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) { ?>
-                    <div class="card">
-
-                        <div class="card-action">
-                            <?= $form->field($fileModel, 'file')
-                                ->label('Ajouter un document annexe', [])
-                                ->fileInput([])
-                            ?>
-                        </div>
-
-                    </div>
+                    <h3>Importation de fichier</h3>
+                    <section>
+                        <?= $form->field($fileModel, 'file')
+                            ->label('Ajouter un document annexe (descriptif technique, cahier des charges)', [])
+                            ->fileInput([])
+                        ?>
+                    </section>
                 <?php } ?>
 
-                <div class="form-group">
-                    <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue ']) ?>
-                    <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
-                </div>
-
-                <?php ActiveForm::end(); ?>
+                <h3>Finalisation du devis</h3>
+                <section>
+                    <br />
+                    <div class="form-group centrage">
+                        <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue ']) ?>
+                        <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
+                    </div>
+                </section>
             </div>
-        </div>
 
+        </div>
+        <?php ActiveForm::end(); ?>
     </div>
 </div>

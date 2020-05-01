@@ -27,9 +27,15 @@ $(() => {
 });
 
 /**
- * Prestation management.
+ * Form steps.
  */
-$(() => {});
+$(() => {
+    $("#stepform").steps({
+        headerTag: "h3",
+        bodyTag: "section",
+        transitionEffect: "slideLeft",
+    });
+});
 
 /**
  * Filter from capaid.

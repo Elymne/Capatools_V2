@@ -158,7 +158,7 @@ function createDataTable($model, $fileModel): string
 
     $devis_name = $model->internal_name;
     $devis_date = $model->creation_date;
-    $devis_labotory_proposal = $model->laboratory_proposal;
+    $devis_labotory_proposal = $model->task_description;
 
     $user_name = $model->capa_user->username;
     $user_email = $model->capa_user->email;

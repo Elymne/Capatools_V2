@@ -17,13 +17,15 @@ class DevisCreateForm extends Devis
     public function rules()
     {
         return [
-            [['laboratory_proposal', 'payment_conditions', 'payment_details'], 'safe'],
+            [['payment_conditions', 'payment_details', 'unit_price', 'quantity', 'task_description'], 'safe'],
             [['upfilename'], 'file', 'skipOnEmpty' => true, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros {formattedLimit}', 'message' => 'Une proposition technique doit être associée au devis.'],
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
-            ['service_duration', 'required', 'message' => 'Indiquer le temps du projet.'],
+            ['service_duration', 'required', 'message' => 'Indiquer le temps en heure du projet.'],
+            ['service_duration_day', 'required', 'message' => 'Indiquer le en jour temps du projet.'],
             ['company_name', 'required', 'message' => 'Indiquer le nom du client.'],
             ['company_name', 'noClientFound', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['service_duration', 'integer', 'min' => 0, 'tooSmall' => 'La durée de la prestation doit être supérieur à 0.', 'message' => 'La durée de la prestation doit être un entier positif.'],
+            ['service_duration', 'integer', 'min' => 0, 'tooSmall' => 'La durée en heure de la prestation doit être supérieur à 0.', 'message' => 'La durée en heure de la prestation doit être un entier positif.'],
+            ['service_duration_day', 'integer', 'min' => 0, 'tooSmall' => 'La durée en jour de la prestation doit être supérieur à 0.', 'message' => 'La durée en jour de la prestation doit être un entier positif.'],
             ['validity_duration', 'integer', 'min' => 0, 'tooSmall' => 'La durée de validité doit être supérieur à 0.', 'message' => 'La durée de validité doit être un entier positif.'],
             ['price', 'integer', 'min' => 0, 'tooSmall' => 'Le prix doit être supérieur à 0.', 'message' => 'Le prix doit être un entier positif.'],
             ['delivery_type_id', 'required', 'message' => 'Indiquer le type de la prestation !'],

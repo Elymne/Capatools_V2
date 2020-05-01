@@ -48,17 +48,18 @@ class AppAsset extends AssetBundle
         // Custom spacing.
         'css/spacing.css',
         // Table sort.
-        'css/table-sort.css'
-
+        'css/table-sort.css',
     ];
 
     public $js = [
-
         // JS Admin Template Html.
         'app-assets/js/vendors.min.js',
         'app-assets/js/plugins.min.js',
         'app-assets/js/search.min.js',
-        'app-assets/js/custom/custom-script.js'
+        'app-assets/js/custom/custom-script.js',
+
+        // Form js.
+        'js/jquery.steps.js',
     ];
 
     public $depends = [
