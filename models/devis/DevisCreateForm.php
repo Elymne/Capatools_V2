@@ -17,7 +17,7 @@ class DevisCreateForm extends Devis
     public function rules()
     {
         return [
-            [['payment_conditions', 'payment_details', 'unit_price', 'quantity'], 'safe'],
+            [['payment_conditions', 'payment_details', 'unit_price', 'quantity', 'task_description'], 'safe'],
             [['upfilename'], 'file', 'skipOnEmpty' => true, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros {formattedLimit}', 'message' => 'Une proposition technique doit être associée au devis.'],
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
             ['service_duration', 'required', 'message' => 'Indiquer le temps en heure du projet.'],
