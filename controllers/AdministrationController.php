@@ -139,7 +139,7 @@ class AdministrationController extends Controller
             array_push($result, [
                 'Priorite' => 1,
                 'url' => 'administration/add-company',
-                'label' => 'Ajouter un client',
+                'label' => 'Créer un client',
                 'subServiceMenuActive' => SubMenuEnum::USER_ADD_COMPANY
             ]);
         }
