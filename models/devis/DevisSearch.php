@@ -10,13 +10,25 @@ use app\models\devis\Devis;
 use Yii;
 
 /**
- * DevisSearch represents the model behind the search form of `app\models\devis\Devis`.
+ * Cette classe permet de gérer différentes fonctionnalité à travers un objet GridView qui sert à afficher les données
+ * d'un modèle sous la forme d'un tableau.
+ * Il permet entre autre :
+ * - De filtrer les modèles à afficher (inutilisé ici).
+ * - D'ordonner les données par ordre ASC/DESC.
+ * 
+ * Il faut utiliser cette classe lorsque vous voulez récupérer toutes les données des devis et les afficher dans un GridView.
+ * Etant donné que cette classe hérite de la classe Devis, vous pouvez utiliser toutes les fonctions ORM (getAll ect...).
+ * 
+ * Notons que dans cette classe, nous faisons une grosses jointures avec les tables associés à la table devis (les cellules, nom de société ect..).
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
  */
 class DevisSearch extends Devis
 {
 
     /**
-     * {@inheritdoc}
+     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {

@@ -174,6 +174,7 @@ class DevisController extends Controller implements ServiceInterface
         }, Devis::find('company.name')->all()));
 
         MenuSelectorHelper::setMenuDevisIndex();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

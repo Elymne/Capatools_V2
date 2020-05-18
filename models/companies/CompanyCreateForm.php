@@ -4,6 +4,14 @@ namespace app\models\companies;
 
 use yii\helpers\ArrayHelper;
 
+/**
+ * Classe relative au modèle métier des sociétés.
+ * Celle-ci permet lorsque l'on souhaite ajouter une nouvelle société, de vérifier la validité des données rentrées et de créer un formulaire à partir
+ * des champs de la table.
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
+ */
 class CompanyCreateForm extends Company
 {
 

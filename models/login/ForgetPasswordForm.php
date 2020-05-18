@@ -7,10 +7,11 @@ use yii\base\Model;
 use app\models\user\CapaUser;
 
 /**
- * LoginForm is the model behind the login form.
- *
- * @property User|null $user This property is read-only.
- *
+ * Classe permettant de créer un formulaire relatif à l'oubli de mot de passe.
+ * //TODO classe inchangé depuis la génération du projet, à revoir.
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
  */
 class ForgetPasswordForm extends Model
 {

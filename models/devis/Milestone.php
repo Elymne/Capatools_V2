@@ -4,9 +4,20 @@ namespace app\models\devis;
 
 use yii\db\ActiveRecord;
 
+/**
+ * Classe modèle métier des jalons d'un devis..
+ * Permet de faire des requêtes depuis la table milestone de la db associé à l'app.
+ * Marche de la même manière qu'un ORM (voir la fonction getAll par l'exemple).
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
+ */
 class Milestone extends ActiveRecord
 {
 
+    /**
+     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
+     */
     public function rules()
     {
         return [
@@ -44,7 +55,6 @@ class Milestone extends ActiveRecord
 
 
     // Milestone Status Constraint.
-
     public function getMilestoneStatus()
     {
         return $this->hasOne(MilestoneStatus::className(), ['id' => 'milestone_status_id']);

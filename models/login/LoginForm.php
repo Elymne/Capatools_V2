@@ -7,10 +7,11 @@ use yii\base\Model;
 use app\models\user\CapaUser;
 
 /**
- * LoginForm is the model behind the login form.
- *
- * @property User|null $user This property is read-only.
- *
+ * Classe permettant de créer le formulaire de login sur l'application Capatools.
+ * Elle permet entre autre de vérifier l'intégrité des données dans le formulaire, de vérifier si le mot de passe rentré est correct ect..
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
  */
 class LoginForm extends Model
 {
@@ -22,7 +23,7 @@ class LoginForm extends Model
 
 
     /**
-     * @return array the validation rules.
+     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
