@@ -8,6 +8,9 @@ use Yii;
 /**
  * Classe permettant de gérer la gestion des droits de Yii2.
  * Cette classe fonctionne de paire avec la classe UserRoleEnum.
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
  */
 class UserRoleManager
 {
