@@ -12,6 +12,7 @@ use yii\web\AssetBundle;
 
 /**
  * Login application asset bundle.
+ * Permet de charger du css pour la vue du login.
  *
  * @author Sebastien Ceylan
  * @since 2.0
@@ -25,8 +26,7 @@ class LoginAsset extends AssetBundle
         'css/login/login.css',
     ];
 
-    public $js = [
-    ];
+    public $js = [];
 
     public $depends = [
         'yii\web\YiiAsset',

@@ -23,13 +23,19 @@ use app\models\companies\CompanyCreateForm;
 
 
 /**
- * AdministrationController implements the CRUD actions for CapaUser model.
+ * Classe contrôleur des vues et des actions de la partie adminitration.
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
  */
 class AdministrationController extends Controller
 {
 
     /**
-     * {@inheritdoc}
+     * Utilisé pour déterminer les droits sur chaque action du contrôleur.
+     * Dans la clé "rules", on défini un ou plusieurs rôles à une action du contrôleur.
+     * 
+     * @return array Un tableau de droits tel que Yii2 le défini.
      */
     public function behaviors()
     {
@@ -84,12 +90,18 @@ class AdministrationController extends Controller
 
     /**
      * Implemented by : ServiceInterface.
-     * Use to create sub-menu in the LeftMenuBar widget.
+     * Permet de créer les sous menus et d'associer chaque sous menu à une action du contrôleur.
+     * Cette méthode est utilisé par le composant suivant : widgets/LeftMenuBar.
      * 
-     * @param User $user : Not used anymore.
-     * @return Array All data about sub menu links. Used in LeftMenuBar widget.
+     * - priotite : L'ordre de priorité de position du menu Administration.
+     * - name : Texte du menu Administration.
+     * - serviceMenuActive : Paramètre utilisé pour permettre de déplier le menu administration 
+     * lorsque l'utilisateur est actuellement sur une vue administration.
+     * - items : Les sous-menus.
+     * 
+     * @return Array Un tableau de données relatif au menu Administration.
      */
-    public static function getActionUser($user)
+    public static function getActionUser()
     {
         $result = [];
 
@@ -110,6 +122,13 @@ class AdministrationController extends Controller
         return $result;
     }
 
+    /**
+     * Utilisé dans la fonction getActionUser.
+     * Retourne tous les sous-menus.
+     * On utilise cette fonction pour permettre de filtrer les sous-menus visible selon les droits de l'utilisateur connecté.
+     * 
+     * @return Array Un tableau de données relatif aux sous-menus.
+     */
     private static function getSubActionUser(): array
     {
         $result = [];
@@ -149,7 +168,8 @@ class AdministrationController extends Controller
 
     /**
      * Render view : administration/index
-     * List of all User in administration/index view.
+     * Retourne la vue de l'index Administration.
+     * Liste de tous les utilisateurs présent dans la base de données.
      * 
      * @return mixed 
      */
@@ -176,13 +196,13 @@ class AdministrationController extends Controller
 
     /**
      * Render view : administration/view?id=?
-     * Single User in administration/view view get by ID.
+     * Retourne la vue détaillé d'un utilisateur par rapport à l'id rentré en paramètre.
      * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException If the model is not found.
      */
-    public function actionView($id)
+    public function actionView(int $id)
     {
         $userRoles = Yii::$app->authManager->getRolesByUser($id);
 
@@ -194,7 +214,10 @@ class AdministrationController extends Controller
 
     /**
      * Render view : administration/create.
-     * Creates a new user.
+     * Méthode en deux temps :
+     * - Si pas de méthode POST de trouvé, retourne la vue de la création d'un utilisateur.
+     * - Sinon, à partir de la méthode POST, on récupère toutes les informations du nouvel utilisateur rentrées, et suite à la vérification,
+     * on les stocke en base de données.
      * 
      * @return mixed
      */
@@ -202,14 +225,13 @@ class AdministrationController extends Controller
     {
         $model = new CapaUserCreateForm();
 
-        // Get cellule data used for our form.
         $cellules = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
         $cellules = array_merge($cellules);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $model->flag_active = true;
-            //todo Pensez à remettre ceci.
+            //TODO Pensez à remettre ceci.
             //$model->generatePasswordAndmail();
 
             // Set hash password.
@@ -219,7 +241,6 @@ class AdministrationController extends Controller
             $model->cellule_id += 1;
 
             if ($model->save()) {
-
                 // Set roles for the new user.
                 UserRoleManager::setDevisRole($model->id, UserRoleEnum::DEVIS_ROLE[$model->stored_role_devis]);
                 UserRoleManager::setAdministrationRole($model->id, UserRoleEnum::ADMINISTRATION_ROLE[$model->stored_role_admin]);
@@ -238,14 +259,17 @@ class AdministrationController extends Controller
 
     /**
      * Render view : administration/update.
-     * Update a user.
-     * Directed view : administration/index.
+     * Redirected view : administration/index.
+     * Méthode en deux temps :
+     * - Si pas de méthode POST de trouvé, on retourne la vue de la modification d'un utilisateur.
+     * - Sinon, à partir de la méthode POST, on récupère toutes les informations de l'utilisateur, et ensuite à la vérification,
+     * on modifie celui-ci.
      * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException If the model cannot be found.
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = CapaUserUpdateForm::findOne($id);
 
@@ -283,15 +307,15 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Render view : 
-     * Deletes an existing user..
+     * Render view : none.
      * Redirected view : administration/index.
+     * Utilisé pour effacer un utilisateur de la base de données.
      * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id)
     {
         //on empêche l'auto suppression
         if (Yii::$app->user->identity->id != $id) {
@@ -310,8 +334,10 @@ class AdministrationController extends Controller
 
     /**
      * Render view : devis/add-company.
-     * Create a new Company.
-     * Directed view : devis/view?id=?.
+     * Méthode en deux temps :
+     * - Si pas de méthode POST de trouvé, on retourne la vue de la création d'une société.
+     * - Sinon, à partir de la méthode POST, on récupère toutes les informations de la nouvelle société, et ensuite à la vérification,
+     * on créer celle-ci.
      * 
      * @return mixed
      */
@@ -343,8 +369,8 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Méthode générale pour le contrôleur permettant de retourner un utilisateur.
+     * Cette méthode est utilisé pour gérer le cas où l'utilisateur recherché n'existe pas, et donc gérer l'exception.
      * 
      * @param integer $id
      * @return Devis the loaded model
@@ -360,9 +386,10 @@ class AdministrationController extends Controller
     }
 
     /**
-     * NOT USED.
+     * @deprecated Cette fonction n'est plus utilisé
+     * 
      */
-    public static function getIndicator($user)
+    public static function getIndicator(CapaUser $user)
     {
     }
 }

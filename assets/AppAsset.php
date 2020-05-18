@@ -12,6 +12,8 @@ use yii\web\AssetBundle;
 
 /**
  * Main application asset bundle.
+ * Permet d'ajouter du css et du js sur chaque vue.
+ * Cette classe est chargé par défaut.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0

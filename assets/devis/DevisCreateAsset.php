@@ -1,19 +1,12 @@
 <?php
 
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace app\assets\devis;
 
 use yii\web\AssetBundle;
 
 /**
- * Main application asset bundle.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
+ * Asset bundle pour la vue de la création d'un devis.
+ * 
  * @since 2.0
  */
 class DevisCreateAsset extends AssetBundle
@@ -24,7 +17,6 @@ class DevisCreateAsset extends AssetBundle
     public $css = [
         // Formjs.
         'css/step-form.css',
-
         'css/devis/create.css',
     ];
 

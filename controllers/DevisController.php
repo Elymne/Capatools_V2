@@ -107,7 +107,7 @@ class DevisController extends Controller implements ServiceInterface
      * @param User $user : Not used anymore.
      * @return Array All data about sub menu links. Used in LeftMenuBar widget.
      */
-    public static function getActionUser($user)
+    public static function getActionUser()
     {
         $result = [];
         if (

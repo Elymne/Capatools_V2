@@ -30,7 +30,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
 
         //Pour chaque controller service on récupére la listes des actions filtrer par droit d'utilisateur (nom du service, priorité d'affichage, liste des actions)
         foreach ($ctrls as &$ctrl) {
-            $action = $ctrl::getActionUser(Yii::$app->user);
+            $action = $ctrl::getActionUser();
             if (!empty($action) && $action != null) {
                 array_unshift($actionsCtrl, $action);
             }

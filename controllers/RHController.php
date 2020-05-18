@@ -39,7 +39,7 @@ class RHController extends Controller implements ServiceInterface
      * Deleted for now.
      * 
      */
-    public static function getActionUser($user)
+    public static function getActionUser()
     {
         if (false) {
             return [
