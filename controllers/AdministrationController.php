@@ -91,6 +91,7 @@ class AdministrationController extends Controller
     /**
      * Implemented by : ServiceInterface.
      * Permet de créer les sous menus et d'associer chaque sous menu à une action du contrôleur.
+     * Si l'utilisateur connecté ne possède pas les bons droits, on retourne un tableau vide.
      * Cette méthode est utilisé par le composant suivant : widgets/LeftMenuBar.
      * 
      * - priotite : L'ordre de priorité de position du menu Administration.
@@ -373,7 +374,7 @@ class AdministrationController extends Controller
      * Cette méthode est utilisé pour gérer le cas où l'utilisateur recherché n'existe pas, et donc gérer l'exception.
      * 
      * @param integer $id
-     * @return Devis the loaded model
+     * @return CapaUser the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
@@ -387,7 +388,6 @@ class AdministrationController extends Controller
 
     /**
      * @deprecated Cette fonction n'est plus utilisé
-     * 
      */
     public static function getIndicator(CapaUser $user)
     {

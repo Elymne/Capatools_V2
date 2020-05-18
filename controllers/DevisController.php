@@ -32,16 +32,19 @@ use kartik\mpdf\Pdf;
 
 
 /**
- * Gestion des différentes routes liées au service Devis.
+ * Classe contrôleur des vues et des actions de la partie devis.
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
  */
 class DevisController extends Controller implements ServiceInterface
 {
 
     /**
-     * Manage each controller access for current users's role.
-     * Check the migrate file : m200800_000000_devis_rbac for more information.
+     * Utilisé pour déterminer les droits sur chaque action du contrôleur.
+     * Dans la clé "rules", on défini un ou plusieurs rôles à une action du contrôleur.
      * 
-     * @return Array All data with router access permission.
+     * @return array Un tableau de droits tel que Yii2 le défini.
      */
     public function behaviors()
     {
@@ -102,10 +105,17 @@ class DevisController extends Controller implements ServiceInterface
 
     /**
      * Implemented by : ServiceInterface.
-     * Use to create sub-menu in the LeftMenuBar widget.
+     * Permet de créer les sous menus et d'associer chaque sous menu à une action du contrôleur.
+     * Si l'utilisateur connecté ne possède pas les bons droits, on retourne un tableau vide.
+     * Cette méthode est utilisé par le composant suivant : widgets/LeftMenuBar.
      * 
-     * @param User $user : Not used anymore.
-     * @return Array All data about sub menu links. Used in LeftMenuBar widget.
+     * - priotite : L'ordre de priorité de position du menu Devis.
+     * - name : Texte du menu Devis.
+     * - serviceMenuActive : Paramètre utilisé pour permettre de déplier le menu Devis 
+     * lorsque l'utilisateur est actuellement sur une vue Devis.
+     * - items : Les sous-menus.
+     * 
+     * @return Array Un tableau de données relatif au menu Devis.
      */
     public static function getActionUser()
     {
@@ -147,7 +157,8 @@ class DevisController extends Controller implements ServiceInterface
 
     /**
      * Render view : devis/index
-     * List of all Devis in devis/index view.
+     * Retourne la vue de l'index Devis.
+     * Liste de tous les devis présent dans la base de données.
      * 
      * @return mixed 
      */
@@ -172,13 +183,13 @@ class DevisController extends Controller implements ServiceInterface
 
     /**
      * Render view : devis/view?id=?
-     * Single Devis in devis/view view get by ID.
+     * Retourne la vue détaillé d'un devis par rapport à l'id rentré en paramètre.
      * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException If the model is not found.
      */
-    public function actionView($id)
+    public function actionView(int $id)
     {
 
         MenuSelectorHelper::setMenuDevisNone();
@@ -191,7 +202,10 @@ class DevisController extends Controller implements ServiceInterface
 
     /**
      * Render view : devis/create.
-     * Creates a new devis.
+     * Méthode en deux temps :
+     * - Si pas de méthode POST de trouvé, retourne la vue de la création d'un devis.
+     * - Sinon, à partir de la méthode POST, on récupère toutes les informations du nouvel devis rentrées, et suite à la vérification,
+     * on les stocke en base de données.
      * 
      * @return mixed
      */
@@ -266,14 +280,17 @@ class DevisController extends Controller implements ServiceInterface
 
     /**
      * Render view : devis/update.
-     * Update a devis.
-     * Directed view : devis/index.
+     * Redirected view : devis/index.
+     * Méthode en deux temps :
+     * - Si pas de méthode POST de trouvé, on retourne la vue de la modification d'un devis.
+     * - Sinon, à partir de la méthode POST, on récupère toutes les informations du devis, et ensuite à la vérification,
+     * on modifie celui-ci.
      * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException If the model cannot be found.
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
 
         // Get the models values from devis.
@@ -354,15 +371,15 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Render view : 
-     * Deletes an existing devis.
+     * Render view : none.
      * Redirected view : devis/index.
+     * Utilisé pour effacer un devis de la base de données.
      * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id)
     {
         $this->findModel($id)->delete();
 
@@ -371,16 +388,16 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Render view :
-     * Change the status of devis.
+     * Render view : none
      * Redirected view : devis/index.
+     * Modifie le status d'un devis.
      * 
      * @param integer $id
      * @param integer $status Static value of DevisStatus
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateStatus($id, $status)
+    public function actionUpdateStatus(int $id, int $status)
     {
         $model = $this->findModel($id);
 
@@ -401,7 +418,14 @@ class DevisController extends Controller implements ServiceInterface
         ]);
     }
 
-    private function setStatus($model, $status)
+    /**
+     * Utilisé pour modifier le devis d'un objet Devis.
+     * On sauvgarde/modifie ensuite cet objet dans la base de données.
+     * 
+     * @param Devis Un objet devis dont on veut modifier le status.
+     * @param integer Le type de status du devis à modifier.
+     */
+    private function setStatus(Devis $model, int $status)
     {
         if ($model) {
             $model->status_id = $status;
@@ -410,7 +434,7 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Set a status for a milestone.
+     * Utilisé pour attribuer un status à un jalon de devis.
      * Redirect view : devis/view.
      * 
      * @param int $id
@@ -436,7 +460,7 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Download file.
+     * Utilisé pour télécharger le fichier uploadé d'un devis.
      * 
      * @param int $id
      */
@@ -451,11 +475,11 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Generate excel file and download it.
+     * Utilisé pour générer sous format excel les informations d'un devis.
      * 
      * @param int $id
      */
-    public function actionDownloadExcel($id)
+    public function actionDownloadExcel(int $id)
     {
         $model = $this->findModel($id);
         if ($model != null) ExcelExportService::exportModelDataToExcel($model, ExcelExportService::DEVIS_TYPE);
@@ -463,13 +487,13 @@ class DevisController extends Controller implements ServiceInterface
 
     /**
      * Render view : devis/pdf?id=?
-     * Generate PDF and show it.
+     * Permet de générer une vue html sous format pdf des informations d'un devis, permet aussi de le télécharger.
      * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException If the model is not found.
      */
-    public function actionPdf($id)
+    public function actionPdf(int $id)
     {
 
         $model = $this->findModel($id);
@@ -515,8 +539,8 @@ class DevisController extends Controller implements ServiceInterface
 
 
     /**
-     * Finds the Devis model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Méthode générale pour le contrôleur permettant de retourner un devis.
+     * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
      * 
      * @param integer $id
      * @return Devis the loaded model
@@ -532,7 +556,7 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * NOT USED.
+     * @deprecated Cette fonction n'est plus utilisé
      */
     public static function getIndicator($user)
     {
@@ -540,7 +564,7 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * NOT USED.
+     * @deprecated Cette fonction n'est plus utilisé
      */
     public function actionViewpdf($id)
     {
