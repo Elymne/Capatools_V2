@@ -8,7 +8,7 @@ use app\helper\_enum\CompanyTypeEnum;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 
-$this->title = 'Ajout d\'un client';
+$this->title = 'Créer un client';
 $this->params['breadcrumbs'][] = ['label' => 'User', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -70,7 +70,7 @@ CompanyCreateAsset::register($this);
                         <br />
                         <div class="form-group">
 
-                            <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue', 'data' => ['confirm' => 'Ajouter ce client ?']]) ?>
+                            <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue', 'data' => ['confirm' => 'Créer ce client ?']]) ?>
 
                             <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
 
