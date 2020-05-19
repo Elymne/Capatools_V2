@@ -24,6 +24,11 @@ use app\models\companies\CompanyCreateForm;
 
 /**
  * Classe contrôleur des vues et des actions de la partie adminitration.
+ * Attention au nom du contrôleur, il détermine le point d'entré de la route.
+ * ex : pour notre contrôleur AdministrationController -> administration/[*]
+ * Chaque route généré par le controller provient des fonctions dont le nom commence par action******.
+ * ex : actionIndex donnera la route suivante -> administration/index
+ * ex : actionIndexDetails donnera la route suivante -> administration/index-details.
  * 
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
@@ -389,7 +394,7 @@ class AdministrationController extends Controller
     /**
      * @deprecated Cette fonction n'est plus utilisé
      */
-    public static function getIndicator(CapaUser $user)
+    public static function getIndicator($user)
     {
     }
 }

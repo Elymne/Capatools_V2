@@ -33,6 +33,11 @@ use kartik\mpdf\Pdf;
 
 /**
  * Classe contrôleur des vues et des actions de la partie devis.
+ * Attention au nom du contrôleur, il détermine le point d'entré de la route.
+ * ex : pour notre contrôleur DevisController -> devis/[*]
+ * Chaque route généré par le controller provient des fonctions dont le nom commence par action******.
+ * ex : actionIndex donnera la route suivante -> devis/index
+ * ex : actionIndexDetails donnera la route suivante -> devis/index-details.
  * 
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0

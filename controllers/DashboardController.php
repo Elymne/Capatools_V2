@@ -6,19 +6,32 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
-
-//Model utile pour login
 use app\models\login\LoginForm;
 use app\models\login\ForgetPasswordForm;
 use app\models\login\FirstConnexionForm;
-
-
 use app\models\ContactForm;
 
+/**
+ * Classe contrôleur des vues et des actions de la partie Dashboard.
+ * Attention au nom du contrôleur, il détermine le point d'entré de la route.
+ * ex : pour notre contrôleur DashboardController -> dashboard/[*]
+ * Chaque route généré par le controller provient des fonctions dont le nom commence par action******.
+ * ex : actionIndex donnera la route suivante -> dashboard/index
+ * ex : actionIndexDetails donnera la route suivante -> dashboard/index-details.
+ * 
+ * Ce contrôleur n'est actuellement pas fonctionnel et non prévu pour la v2.0 de capatools.
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
+ */
 class DashboardController extends Controller
 {
+
     /**
-     * {@inheritdoc}
+     * Utilisé pour déterminer les droits sur chaque action du contrôleur.
+     * Dans la clé "rules", on défini un ou plusieurs rôles à une action du contrôleur.
+     * 
+     * @return array Un tableau de droits tel que Yii2 le défini.
      */
     public function behaviors()
     {
@@ -62,20 +75,19 @@ class DashboardController extends Controller
 
 
     /**
-     * Displays homepage.
-     *
-     * @return string
+     * Cette route est tout simplement la page d'accueil.
+     * Si l'utilisateur est déjà loggé à l'application, elle redirige vers la page principale.
+     * 
+     * @return mixed
      */
     public function actionIndex()
     {
-
-        //Si l'utilisateur est logger alors affiche la page principal
+        // Si l'utilisateur est logger alors affiche la page principal, isGuest retourne true si personne n'est log sur l'app.
         if (!Yii::$app->user->isGuest) {
-
             return $this->render('index');
         }
 
-        //Création du formulaire de login
+        // Création du formulaire de login
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
@@ -91,10 +103,10 @@ class DashboardController extends Controller
         }
 
         $model->password = '';
-        
+
         // layout in /layouts folder (here login.php)
         $this->layout = "login";
-        
+
         // render in Controller name folder (here dashboard/login.php)
         return $this->render('login', [
             'model' => $model,
