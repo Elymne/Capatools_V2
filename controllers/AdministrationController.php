@@ -389,7 +389,7 @@ class AdministrationController extends Controller
     /**
      * @deprecated Cette fonction n'est plus utilisé
      */
-    public static function getIndicator(CapaUser $user)
+    public static function getIndicator($user)
     {
     }
 }
