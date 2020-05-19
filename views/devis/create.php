@@ -29,6 +29,7 @@ DevisCreateAsset::register($this);
 
 <div class="container">
     <div class="devis-update">
+
         <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
         <div class="row">
 
@@ -105,7 +106,6 @@ DevisCreateAsset::register($this);
                         ->input('number', ['min' => 0, 'max' => 1000000000, 'step' => 1, 'autocomplete' => 'off'])
                         ->label("Prix unitaire")
                     ?>
-
                 </section>
 
                 <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) { ?>
@@ -126,9 +126,11 @@ DevisCreateAsset::register($this);
                         <?= Html::a('Annuler', ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                     </div>
                 </section>
+
             </div>
 
         </div>
         <?php ActiveForm::end(); ?>
+
     </div>
 </div>
