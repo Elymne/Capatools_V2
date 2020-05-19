@@ -2,6 +2,12 @@
 
 namespace app\helper\_clazz;
 
+/**
+ * Classe utilisé pour générer des UUID car php et sql ne le font pas nativement.
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
+ */
 class UUID
 {
 

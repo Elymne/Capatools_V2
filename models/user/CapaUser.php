@@ -6,6 +6,16 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
+/**
+ * Classe modèle métier des utilisateurs.
+ * Permet de faire des requêtes depuis la table capa_user de la db associé à l'app.
+ * Marche de la même manière qu'un ORM (voir la fonction getAll par l'exemple).
+ * 
+ * Cette classe implémente l'interface IDentityInterface qui permet de gérer les utiliseurs et la sécurité à la manière de Yii2.
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
+ */
 class CapaUser extends ActiveRecord  implements IdentityInterface
 {
 
@@ -14,15 +24,6 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
         return 'capa_user';
     }
 
-    public function validateCelid($param)
-    {
-        if (!Cellule::find()->where(['id' => $this->cellule_id])->exists()) {
-
-            //$this->addError($attribute, 'la cellule n\'existe pas');
-            // What is $attribute ? It's undefinded.
-
-        }
-    }
     /**
      * Trouve une identité à partir de l'identifiant donné.
      *
@@ -35,7 +36,7 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
     }
 
     /**
-     * Trouve une identité à partir de l'identifiant donné.
+     * Trouve une identité à partir d'un nom d'utilisateur donné.
      *
      * @param string|int $id l'identifiant à rechercher
      * @return username|null l'objet identité qui correspond à l'identifiant donné
@@ -55,7 +56,6 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
     {
         return static::findOne(['email' => $email]);
     }
-
 
     /**
      * Trouve une identité à partir du jeton donné
@@ -85,12 +85,10 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
     }
 
     /**
-     * Generates new password
-     * @return string le nouveau password
+     * Generates new password and mails
      */
     public function generatePasswordAndMail()
     {
-
         $Newpassword = $this->generatePassword();
         $this->save();
         Yii::$app->mailer->compose()
@@ -100,6 +98,7 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
             ->setTextBody('Le nouveau mdp : ' . $Newpassword)
             ->send();
     }
+
     /**
      * Generates new password
      * @return string le nouveau password
@@ -163,5 +162,18 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
     public function getCellule()
     {
         return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
+    }
+
+    /**
+     * @deprecated
+     * Fonction inutile pour l'instant, je ne connais pas son but.
+     */
+    public function validateCelid($param)
+    {
+        if (!Cellule::find()->where(['id' => $this->cellule_id])->exists()) {
+
+            //$this->addError($attribute, 'la cellule n\'existe pas');
+            // What is $attribute ? It's undefinded.
+        }
     }
 }

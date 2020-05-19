@@ -5,6 +5,19 @@ namespace app\models\devis;
 use yii\helpers\ArrayHelper;
 use app\models\companies\Company;
 
+/**
+ * Classe relative au modèle métier des devis.
+ * Celle-ci permet de créer un formulaire de modification de devis et de vérifier la validité des données inscrites dans les champs.
+ * Elle permet aussi lorsque l'on veut créer un formulaire pour modifier un devis, d'ajouter des champs qui n'existe pas dans la bdd.
+ * Cette classe ressemble exactement à DevisCreateForm mais nous la gardons tout de même dans le cas où le formulaire changerait par rapport
+ * à celle de la création d'un devis.
+ * 
+ * Cette classe est a utiliser lorsque vous voulez créer une vue avec un formulaire depuis le contrôleur (contrôleur Devis ici).
+ * ex : upfilename, pathfile, datept.
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
+ */
 class DevisUpdateForm extends Devis
 {
 
@@ -14,6 +27,9 @@ class DevisUpdateForm extends Devis
 
     public $company_name;
 
+    /**
+     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
+     */
     public function rules()
     {
         return [

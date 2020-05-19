@@ -5,13 +5,12 @@ namespace app\controllers;
 interface ServiceInterface
 {
 
-    public static  function getIndicator($user);
+    public static function getIndicator($user);
 
     /**
-     * Use to create sub-menu in the LeftMenuBar widget.
+     * Fonction abstraite php permettant de gérer l'affichage des menus à partir des contrôleurs.
      * 
-     * @param User $user : Not used anymore.
      * @return Array All data about sub menu links. Used in LeftMenuBar widget.
      */
-    public static  function getActionUser($user);
+    public static  function getActionUser();
 }

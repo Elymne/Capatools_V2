@@ -5,6 +5,16 @@ namespace app\models\devis;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
+/**
+ * Classe modèle métier d'un fichier lié à un devis..
+ * Permet de faire des requêtes depuis la table upload_file de la db associé à l'app.
+ * Marche de la même manière qu'un ORM (voir la fonction getAll par l'exemple).
+ * 
+ * Cette table sert à sauvegarder les données informatives quant à un fichier stocké dans l'application (et non dans la bdd).
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
+ */
 class UploadFile extends ActiveRecord
 {
 

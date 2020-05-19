@@ -2,16 +2,21 @@
 
 namespace app\models\devis;
 
-
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
-
 use app\models\user\Cellule;
 use app\models\user\CapaUser;
 use app\models\companies\Company;
-
 use dosamigos\chartjs\ChartJs;
 
+/**
+ * Classe modèle métier des devis.
+ * Permet de faire des requêtes depuis la table devis de la db associé à l'app.
+ * Marche de la même manière qu'un ORM (voir la fonction getAll par l'exemple).
+ * 
+ * @version Capatools v2.0
+ * @since Classe existante depuis la Release v2.0
+ */
 class Devis extends ActiveRecord
 {
 
@@ -40,8 +45,7 @@ class Devis extends ActiveRecord
         return static::find()->where(['devis.cellule_id' => $idCellule]);
     }
 
-    // Set the Object insertion from sql table relation.
-
+    //TODO Déplacer cette fonction.
     public function getCellule()
     {
         return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
@@ -73,7 +77,7 @@ class Devis extends ActiveRecord
     }
 
     /**
-     * Todo Déplacer cette fonction sur une section ui et non métier.
+     * //TODO Déplacer cette fonction sur une section ui et non métier.
      */
     public static function getGroupbyStatus()
     {
