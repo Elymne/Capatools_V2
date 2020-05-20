@@ -27,7 +27,6 @@ class Milestone extends ActiveRecord
             ['label', 'required', 'message' => 'Un nom de jalon est obligatoire'],
             // waiting for input.
             //['delivery_date', 'required', 'message' => 'une date de jalon doit être estimée'],
-
         ];
     }
 
@@ -53,8 +52,9 @@ class Milestone extends ActiveRecord
         $milestone->save();
     }
 
-
-    // Milestone Status Constraint.
+    /**
+     * Relation oneToMany.
+     */
     public function getMilestoneStatus()
     {
         return $this->hasOne(MilestoneStatus::className(), ['id' => 'milestone_status_id']);

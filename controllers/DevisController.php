@@ -28,6 +28,8 @@ use app\helper\_enum\UserRoleEnum;
 use app\components\ExcelExportService;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\StringData;
+use app\models\devis\Contributor;
+use app\models\user\CapaUser;
 use kartik\mpdf\Pdf;
 
 
@@ -202,6 +204,7 @@ class DevisController extends Controller implements ServiceInterface
         return $this->render('view', [
             'model' => $this->findModel($id),
             'milestones' => Milestone::find()->where(['devis_id' => $id])->all(),
+            'contributors' => Contributor::find()->where(['devis_id' => $id])->all(),
             'fileModel' => UploadFile::getByDevis($id)
         ]);
     }
@@ -312,9 +315,20 @@ class DevisController extends Controller implements ServiceInterface
         // Seperate the relationnal object from devis.
         $milestones = $model->milestones;
 
+        // Separation de l'entité contributors du model devis.
+        $contributors = $model->contributors;
+
+        foreach ($contributors as $contributor) {
+            $contributor->username = CapaUser::findOne(['id' => $contributor->capa_user_id])->username;
+        }
+
         // Here we type a specific request because we only want names of clients.
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
+
+        // Here we type a specific request because we only want names of users.
+        $usersNames = ArrayHelper::map(CapaUser::find()->all(), 'id', 'username');
+        $usersNames = array_merge($usersNames);
 
         // Setup the total price HT.
         $max_price = 0;
@@ -330,21 +344,33 @@ class DevisController extends Controller implements ServiceInterface
                 // Load milestones into model.
                 Model::loadMultiple($milestones, Yii::$app->request->post());
 
+                // Map the new contributors with existants one.
+                $contributors = Model::createMultiple(Contributor::classname(), $contributors);
+
+                // Load contributors into model.
+                Model::loadMultiple($contributors, Yii::$app->request->post());
+
                 // Get the company data with name insert in field.
                 $company = Company::find()->where(['name' =>  $model->company_name])->one();
 
                 // Save each milestone.
                 foreach ($milestones as $milestone) {
 
-                    // Format date for sql insertion.
                     $milestone->devis_id = $model->id;
-                    $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
-
                     // Cumulate the max priceHt.
                     $max_price = $max_price + $milestone->price;
 
                     // Insert the milestone.
                     $milestone->save();
+                }
+
+                // Save each contributor.
+                foreach ($contributors as $contributor) {
+
+                    $contributor->devis_id = $model->id;
+                    $contributor->capa_user_id = CapaUser::findByUsername($contributor->username)->id;
+
+                    $contributor->save();
                 }
 
                 // Store the file in uploads folder and his name in db.
@@ -370,7 +396,9 @@ class DevisController extends Controller implements ServiceInterface
                 'model' => $model,
                 'delivery_types' =>  $deliveryTypes,
                 'companiesNames' => $companiesNames,
+                'usersNames' => $usersNames,
                 'milestones' => (empty($milestones)) ? [new Milestone] : $milestones,
+                'contributors' => (empty($contributors)) ? [new Contributor()] : $contributors,
                 'fileModel' => $fileModel
             ]
         );

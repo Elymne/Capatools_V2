@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use app\models\devis\DevisStatus;
 use app\models\devis\Milestone;
 use app\models\devis\MilestoneStatus;
+use app\models\user\CapaUser;
 use app\widgets\TopTitle;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
@@ -77,6 +78,19 @@ $indexStatus = getIndexStatus($model);
 
                 <div class="card-action">
                     <?php echo createMilestonesTable($milestones, $model->id); ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contributors informations -->
+        <div class="row">
+            <div class="card">
+                <div class="card-content">
+                    <label>Liste des intervenants</label>
+                </div>
+
+                <div class="card-action">
+                    <?php echo createContributorsTable($contributors, $model->id); ?>
                 </div>
             </div>
         </div>
@@ -410,6 +424,70 @@ function createMilestonesTable($milestones, $idDevis): string
                 <td>${milestone_price} €</td>
                 <td>${milestone_delivery_date}</td>
                 <td>${milestone_status}</td>
+                ${statusRowBody}
+            </tr>   
+        HTML;
+    }
+
+    return $headerTable . $bodyTable . $footerTable;
+}
+
+/**
+ * Create table with all milestones.
+ * @param Array<Milestone> $model : List of milestones.
+ * 
+ * @return HTML table.
+ */
+function createContributorsTable($contributors, $idDevis): string
+{
+
+    // Used to display or not tab for milestone management.
+    $statusRowHeader = '';
+    $statusRowBody = '';
+
+    // When no milestone has been created.
+    if (empty($contributors)) {
+        return <<<HTML
+            <p> Il n'existe aucuns intervenants pour ce devis. </p>
+        HTML;
+    }
+
+    // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone header tab.
+    if (UserRoleManager::hasRoles([UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) {
+        $statusRowHeader = <<<HTML
+            <td class="header"></td>
+        HTML;
+    }
+
+    // Create the header of milestone table.
+    $headerTable = <<<HTML
+        <table class="highlight">
+            <tbody>
+                <tr class="group">
+                    <td class="header">Nom utilisateur</td>
+                    <td class="header">Nombre de jours</td>
+                    ${statusRowHeader}
+                </tr>
+    HTML;
+
+    // Create the footer of milestone table.
+    $footerTable = <<<HTML
+                </tr>
+            </tbody>
+        </table>
+    HTML;
+
+    // Create the body of milestone table with data.
+    $bodyTable = '';
+    foreach ($contributors as $contributor) {
+
+        $contributor_username = CapaUser::findOne(['id' => $contributor->capa_user_id])->username;;
+        $contributor_nb_day = $contributor->nb_day;
+
+        $bodyTable = $bodyTable . <<<HTML
+            <tr>
+                <td>${contributor_username}</td>
+                <td>${contributor_nb_day} jours</td>
                 ${statusRowBody}
             </tr>   
         HTML;

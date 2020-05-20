@@ -45,7 +45,10 @@ class Devis extends ActiveRecord
         return static::find()->where(['devis.cellule_id' => $idCellule]);
     }
 
-    //TODO Déplacer cette fonction.
+    /**
+     * Fonctions permettant de faire la relation oneToMany d'autres tables.
+     * En d'autres termes, ceci va nous permettre de récupérer la cellule, client, status ect d'un devis.
+     */
     public function getCellule()
     {
         return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
@@ -71,9 +74,18 @@ class Devis extends ActiveRecord
         return $this->hasOne(DeliveryType::className(), ['id' => 'delivery_type_id']);
     }
 
+
+    /**
+     * Fonctions de relations ManyToMany.
+     */
     public function getMilestones()
     {
         return $this->hasMany(Milestone::className(), ['devis_id' => 'id']);
+    }
+
+    public function getContributors()
+    {
+        return $this->hasMany(Contributor::className(), ['devis_id' => 'id']);
     }
 
     /**
