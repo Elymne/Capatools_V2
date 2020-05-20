@@ -317,6 +317,10 @@ class DevisController extends Controller implements ServiceInterface
         // Separation de l'entité contributors du model devis.
         $contributors = $model->contributors;
 
+        foreach ($contributors as $contributor) {
+            $contributor->username = CapaUser::findOne(['id' => $contributor->capa_user_id])->username;
+        }
+
         // Here we type a specific request because we only want names of clients.
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
@@ -351,10 +355,7 @@ class DevisController extends Controller implements ServiceInterface
                 // Save each milestone.
                 foreach ($milestones as $milestone) {
 
-                    // Format date for sql insertion.
                     $milestone->devis_id = $model->id;
-                    $milestone->delivery_date = DateHelper::formatDateTo_Ymd($milestone->delivery_date);
-
                     // Cumulate the max priceHt.
                     $max_price = $max_price + $milestone->price;
 
@@ -364,7 +365,11 @@ class DevisController extends Controller implements ServiceInterface
 
                 // Save each contributor.
                 foreach ($contributors as $contributor) {
-                    //TODO sauvegarder les intervenants
+
+                    $contributor->devis_id = $model->id;
+                    $contributor->capa_user_id = array_search($contributor->username, $usersNames);
+
+                    $contributor->save();
                 }
 
                 // Store the file in uploads folder and his name in db.
