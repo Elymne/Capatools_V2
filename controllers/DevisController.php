@@ -204,6 +204,7 @@ class DevisController extends Controller implements ServiceInterface
         return $this->render('view', [
             'model' => $this->findModel($id),
             'milestones' => Milestone::find()->where(['devis_id' => $id])->all(),
+            'contributors' => Contributor::find()->where(['devis_id' => $id])->all(),
             'fileModel' => UploadFile::getByDevis($id)
         ]);
     }
@@ -367,7 +368,7 @@ class DevisController extends Controller implements ServiceInterface
                 foreach ($contributors as $contributor) {
 
                     $contributor->devis_id = $model->id;
-                    $contributor->capa_user_id = array_search($contributor->username, $usersNames);
+                    $contributor->capa_user_id = CapaUser::findByUsername($contributor->username)->id;
 
                     $contributor->save();
                 }
