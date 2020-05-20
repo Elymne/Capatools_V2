@@ -58,7 +58,9 @@ DevisCreateAsset::register($this);
                     ?>
 
                     <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::ADMINISTRATOR, UserRoleEnum::SUPER_ADMINISTRATOR])) { ?>
-                        <?= Html::a('Créer un client', ['administration/add-company'], ['class' => '']) ?>
+                        <div class="col s2 offset-s10">
+                            <?= Html::a('Créer un client', ['administration/add-company'], ['class' => '']) ?>
+                        </div>
                     <?php } ?>
 
                 </section>
