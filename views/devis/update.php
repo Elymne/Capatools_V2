@@ -222,36 +222,34 @@ DevisUpdateAsset::register($this);
                     <div class="card">
 
                         <div class="card-content">
-                            <label>Echéancier de paiement</label>
+                            <label>Ajouter des Intervenants</label>
                         </div>
 
                         <div class="card-action">
                             <?php DynamicFormWidget::begin([
                                 'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-                                'widgetBody' => '.container-items', // required: css class selector
+                                'widgetBody' => '.container-items-two', // required: css class selector
                                 'widgetItem' => '.item', // required: css class
-                                'limit' => 4, // the maximum times, an element can be cloned (default 999)
+                                'limit' => 5, // the maximum times, an element can be cloned (default 999)
                                 'min' => 1, // 0 or 1 (default 1)
                                 'insertButton' => '.add-item', // css class
                                 'deleteButton' => '.remove-item', // css class
-                                'model' => $milestones[0],
+                                'model' => $contributors[0],
                                 'formId' => 'dynamic-form',
                                 'formFields' => [
                                     'id',
-                                    'prix_jalon',
-                                    'price',
-                                    'delivery_date',
-                                    'comments'
+                                    'username',
+                                    'nb_day',
                                 ],
                             ]); ?>
 
-                            <div class="container-items">
+                            <div class="container-items-two">
                                 <!-- widgetContainer -->
-                                <?php foreach ($milestones as $i => $milestone) : ?>
+                                <?php foreach ($contributors as $i => $contributor) : ?>
                                     <div class="item panel panel-default">
                                         <!-- widgetBody -->
                                         <div class="panel-heading">
-                                            <h3 class="panel-title pull-left">Jalon </h3>
+                                            <h3 class="panel-title pull-left">Intervenant</h3>
                                             <div class="pull-right">
                                                 <button type="button" class="add-item waves-effect waves-light btn btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
                                                 <button type="button" class="remove-item waves-effect waves-light btn btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
@@ -261,16 +259,15 @@ DevisUpdateAsset::register($this);
                                         <div class="panel-body">
                                             <?php
                                             // necessary for update action.
-                                            if (!$milestone->isNewRecord) {
-                                                echo Html::activeHiddenInput($milestone, "[{$i}]id");
+                                            if (!$contributor->isNewRecord) {
+                                                echo Html::activeHiddenInput($contributor, "[{$i}]id");
                                             }
                                             ?>
 
                                             <div class="row">
                                                 <div>
-                                                    <?= $form->field($milestone, "[{$i}]label")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Nom du jalon') ?>
-                                                    <?= $form->field($milestone, "[{$i}]price")->textInput(['class' => 'priceHt', 'autocomplete' => 'off', 'maxlength' => true])->label('Prix HT') ?>
-                                                    <?= $form->field($milestone, "[{$i}]comments")->textarea(['autocomplete' => 'off', 'maxlength' => true])->label('Commentaire') ?>
+                                                    <?= $form->field($contributor, "[{$i}]username")->widget(\yii\jui\AutoComplete::classname(), ['clientOptions' => ['source' => $usersNames,]])->label('Nom de l\'utilisateur'); ?>
+                                                    <?= $form->field($contributor, "[{$i}]nb_day")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Nombre de jours') ?>
                                                 </div>
                                             </div><!-- .row -->
 
