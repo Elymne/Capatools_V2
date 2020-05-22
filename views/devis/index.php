@@ -222,7 +222,7 @@ function getIdArray()
         'contentOptions' => ['class' => 'capaid-row'],
         'headerOptions' => ['class' => 'capaid-row'],
         'value' => function ($data) {
-            return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']]);
+            return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']], ['target' => '_blank',]);
         }
     ];
 }
@@ -296,6 +296,7 @@ function getUpdateButtonArray()
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-green',
+                    'title' => "Modifier le devis"
                 ]
             );
         }
@@ -329,6 +330,7 @@ function getDocumentButtonArray()
                         'data-pjax' => true,
                         'action' => Url::to(['#', 'id' => $model->id]),
                         'class' => 'btn-floating disabled',
+                        'title' => "Télécharger le document"
                     ]
                 );
             }
@@ -351,6 +353,7 @@ function getPdfButtonArray()
                     'data-pjax' => true,
                     'action' => Url::to(['devis/pdf', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-purple',
+                    'title' => "Générer le devis sous forme pdf"
                 ]
             );
         }
@@ -371,6 +374,7 @@ function getExcelButtonArray()
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-green-darker',
+                    'title' => "Générer le devis sous forme excel"
                 ]
             );
         }
