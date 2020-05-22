@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 
 use app\helper\_clazz\MenuSelectorHelper;
+use app\helper\_clazz\UploadFileHelper;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\CompanyTypeEnum;
 use app\helper\_enum\SubMenuEnum;
@@ -24,6 +25,7 @@ use app\models\devis\UploadFile;
 use app\models\parameters\DevisParameter;
 use app\models\parameters\DevisParameterCreateForm;
 use app\models\parameters\DevisParameterUpdateForm;
+use yii\web\UploadedFile;
 
 /**
  * Classe contrôleur des vues et des actions de la partie adminitration.
@@ -407,6 +409,20 @@ class AdministrationController extends Controller
 
         // Get file model.
         $fileCguEnModel = new UploadFile();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $fileCguFrModel->file = UploadedFile::getInstance($fileCguFrModel, 'cguFrFile');
+            UploadFileHelper::uploadCguFrFile($fileCguFrModel);
+
+            $fileCguEnModel->file = UploadedFile::getInstance($fileCguEnModel, 'cguEnFile');
+            UploadFileHelper::uploadCguEnFile($fileCguEnModel);
+
+            $model->save();
+
+            MenuSelectorHelper::setMenuDevisCreate();
+            return $this->redirect(['devis/create']);
+        }
 
         MenuSelectorHelper::setMenuDevisParameters();
         return $this->render(

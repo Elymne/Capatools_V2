@@ -49,12 +49,12 @@ AppAsset::register($this);
                             ->label("Domiciliation bancaire")
                         ?>
 
-                        <?= $form->field($fileCguFrModel, 'file')
+                        <?= $form->field($fileCguFrModel, 'cguFrFile')
                             ->label('Ajouter un CGU Français (pdf)', [])
                             ->fileInput([])
                         ?>
 
-                        <?= $form->field($fileCguEnModel, 'file')
+                        <?= $form->field($fileCguEnModel, 'cguEnFile')
                             ->label('Ajouter un CGU Anglais (pdf)', [])
                             ->fileInput([])
                         ?>

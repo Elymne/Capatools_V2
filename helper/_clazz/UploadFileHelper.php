@@ -16,9 +16,53 @@ class UploadFileHelper
 {
 
     /**
+     * Cette méthode est utilisé pour enrengistrer un fichier CGU Français uniquement.
+     * 
+     * @param FileModel $fileModel.
+     * 
+     * @return bool Retourne vrai si le download s'est correctement passé.
+     */
+    public static function uploadCguFrFile(UploadFile $fileModel)
+    {
+        $result = true;
+
+        if ($fileModel->validate() && $fileModel->file != null) {
+            $fileModel->file->saveAs('uploads/cgu/cguFrPdf' . '.' . $fileModel->file->extension);
+        } else {
+            $result = false;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Cette méthode est utilisé pour enrengistrer un fichier CGU Anglais uniquement.
+     * 
+     * @param FileModel $fileModel.
+     * 
+     * @return bool Retourne vrai si le download s'est correctement passé.
+     */
+    public static function uploadCguEnFile(UploadFile $fileModel)
+    {
+        $result = true;
+
+        if ($fileModel->validate() && $fileModel->file != null) {
+            $fileModel->file->saveAs('uploads/cgu/cguEnPdf' . '.' . $fileModel->file->extension);
+        } else {
+            $result = false;
+        }
+
+        return $result;
+    }
+
+    /**
      * Cette fonction est utilisé pour plusieurs choses :
      * - Stocker le fichier tel qu'est dans un dossier (web/uploads).
      * - Ajouter dans la base de données l'information qu'un fichier est associé à un devis.
+     * 
+     * Il faut donc garder à l'esprit que cette fonction n'est utilisé que dans le cadre d'une sauvegarde d'un fichier par rapport à un devis.
+     * N'utilisez pas cette méthode pour enrengistrer n'importe quel fichier.
+     * Préférez créer une nouvelle fonction dans ce cas précis.
      * 
      * @param FileModel $fileModel.
      * @param string $filename.
