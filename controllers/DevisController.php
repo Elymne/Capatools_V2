@@ -29,7 +29,7 @@ use app\components\ExcelExportService;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\StringData;
 use app\models\devis\Contributor;
-use app\models\user\CapaUser;
+use app\models\users\CapaUser;
 use kartik\mpdf\Pdf;
 
 

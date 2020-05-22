@@ -30,7 +30,7 @@ $config = [
         ],
         // Set user model class for users management.
         'user' => [
-            'identityClass' => 'app\models\user\CapaUser',
+            'identityClass' => 'app\models\users\CapaUser',
             'loginUrl' => 'index',
             'enableAutoLogin' => true,
         ],

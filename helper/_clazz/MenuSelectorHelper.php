@@ -51,6 +51,17 @@ class MenuSelectorHelper
 
     /**
      * Description :
+     * - Déroule le menu Administration.
+     * - Le sub-menu de la modification des paramètres devis est actif.
+     */
+    static function setMenuDevisParameters()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_UPDATE_DEVIS_PARAMETERS;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+    }
+
+    /**
+     * Description :
      * - Déroule le menu Devis.
      * - Aucuns sub-menu n'est actif.
      */

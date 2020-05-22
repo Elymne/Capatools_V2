@@ -37,6 +37,10 @@ class m200800_000001_administration_rbac extends Migration
         $delete = $auth->createPermission('deleteAdmin');
         $auth->add($delete);
 
+        // Delete permission.
+        $devisParameter = $auth->createPermission('devisParameter');
+        $auth->add($devisParameter);
+
 
         // -- USERS PROLES -- \\
 
@@ -53,6 +57,7 @@ class m200800_000001_administration_rbac extends Migration
         $auth->addChild($administratorPermission, $view);
         $auth->addChild($administratorPermission, $update);
         $auth->addChild($administratorPermission, $delete);
+        $auth->addChild($administratorPermission, $devisParameter);
 
         // Super administrator
         $superAdministratorPermission = $auth->createRole(UserRoleEnum::SUPER_ADMINISTRATOR);
@@ -66,6 +71,7 @@ class m200800_000001_administration_rbac extends Migration
         $auth->addChild($superAdministratorPermission, $view);
         $auth->addChild($superAdministratorPermission, $update);
         $auth->addChild($superAdministratorPermission, $delete);
+        $auth->addChild($superAdministratorPermission, $devisParameter);
 
 
         // -- USERS ASSIGNEMENT -- \\
