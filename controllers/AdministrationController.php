@@ -20,6 +20,7 @@ use app\models\users\CapaUserSearch;
 use app\models\users\CapaUserUpdateForm;
 use app\models\users\Cellule;
 use app\models\companies\CompanyCreateForm;
+use app\models\devis\UploadFile;
 use app\models\parameters\DevisParameter;
 use app\models\parameters\DevisParameterCreateForm;
 use app\models\parameters\DevisParameterUpdateForm;
@@ -399,7 +400,23 @@ class AdministrationController extends Controller
     public function actionManageDevisParameters()
     {
 
-        $model = new DevisParameterUpdateForm();
+        $model = DevisParameterUpdateForm::getParameters();
+
+        // Get file model.
+        $fileCguFrModel = new UploadFile();
+
+        // Get file model.
+        $fileCguEnModel = new UploadFile();
+
+        MenuSelectorHelper::setMenuDevisParameters();
+        return $this->render(
+            'devisParameterUpdate',
+            [
+                'model' => $model,
+                'fileCguFrModel' => $fileCguFrModel,
+                'fileCguEnModel' => $fileCguEnModel
+            ]
+        );
     }
 
     /**

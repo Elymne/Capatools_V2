@@ -18,4 +18,9 @@ class DevisParameter extends ActiveRecord
     {
         return 'devis_parameter';
     }
+
+    public static function getParameters()
+    {
+        return static::find()->where(['id' => 'param'])->one();
+    }
 }

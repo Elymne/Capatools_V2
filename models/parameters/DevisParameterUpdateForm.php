@@ -15,6 +15,9 @@ namespace app\models\parameters;
 class DevisParameterUpdateForm extends DevisParameter
 {
 
+    public $cgu_fr_file;
+    public $cgu_en_file;
+
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
