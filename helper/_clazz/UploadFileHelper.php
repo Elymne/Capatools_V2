@@ -70,7 +70,7 @@ class UploadFileHelper
      * 
      * @return bool Retourne vrai si le download s'est correctement passé.
      */
-    private function saveFile(string $capaId, UploadFile $uploadFile): bool
+    private static function saveFile(string $capaId, UploadFile $uploadFile): bool
     {
         $result = true;
 
