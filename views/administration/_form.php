@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 //AppAsset::register($this);
 
 /* @var $this yii\web\View */
-/* @var $model app\models\user\CapaUser */
+/* @var $model app\models\users\CapaUser */
 /* @var $form yii\widgets\ActiveForm */
 
 // Get user roles.

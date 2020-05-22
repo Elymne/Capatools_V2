@@ -20,7 +20,6 @@ use app\models\devis\DevisSearch;
 use app\models\devis\Milestone;
 use app\models\devis\MilestoneStatus;
 use app\models\devis\UploadFile;
-use app\helper\_clazz\DateHelper;
 use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_clazz\UploadFileHelper;
 use app\helper\_enum\SubMenuEnum;
@@ -29,7 +28,7 @@ use app\components\ExcelExportService;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\StringData;
 use app\models\devis\Contributor;
-use app\models\user\CapaUser;
+use app\models\users\CapaUser;
 use kartik\mpdf\Pdf;
 
 
@@ -569,8 +568,6 @@ class DevisController extends Controller implements ServiceInterface
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
         return $pdf->render();
     }
-
-
 
     /**
      * Méthode générale pour le contrôleur permettant de retourner un devis.

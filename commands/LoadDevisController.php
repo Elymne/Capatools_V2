@@ -11,7 +11,7 @@ namespace app\commands;
 use yii\console\Controller;
 use yii\console\ExitCode;
 
-use app\models\user\Cellule;
+use app\models\users\Cellule;
 use app\models\Devis\Devis;
 use app\models\companies\Company;
 

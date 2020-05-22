@@ -10,17 +10,22 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 
 use app\helper\_clazz\MenuSelectorHelper;
+use app\helper\_clazz\UploadFileHelper;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\CompanyTypeEnum;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
-use app\models\user\CapaUser;
-use app\models\user\CapaUserCreateForm;
-use app\models\user\CapaUserSearch;
-use app\models\user\CapaUserUpdateForm;
-use app\models\user\Cellule;
+use app\models\users\CapaUser;
+use app\models\users\CapaUserCreateForm;
+use app\models\users\CapaUserSearch;
+use app\models\users\CapaUserUpdateForm;
+use app\models\users\Cellule;
 use app\models\companies\CompanyCreateForm;
-
+use app\models\devis\UploadFile;
+use app\models\parameters\DevisParameter;
+use app\models\parameters\DevisParameterCreateForm;
+use app\models\parameters\DevisParameterUpdateForm;
+use yii\web\UploadedFile;
 
 /**
  * Classe contrôleur des vues et des actions de la partie adminitration.
@@ -56,7 +61,7 @@ class AdministrationController extends Controller
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'add-company', 'manage-devis-parameters'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -87,6 +92,11 @@ class AdministrationController extends Controller
                         'allow' => true,
                         'actions' => ['add-company'],
                         'roles' => ['addCompanyDevis'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['manage-devis-parameters'],
+                        'roles' => ['devisParameter']
                     ]
                 ],
             ],
@@ -146,7 +156,7 @@ class AdministrationController extends Controller
             ])
         ) {
             array_push($result, [
-                'priorite' => 2,
+                'priorite' => 3,
                 'url' => 'administration/index',
                 'label' => 'Salariés',
                 'icon' => 'show_chart',
@@ -162,10 +172,25 @@ class AdministrationController extends Controller
             ])
         ) {
             array_push($result, [
-                'Priorite' => 1,
+                'Priorite' => 2,
                 'url' => 'administration/add-company',
                 'label' => 'Créer un client',
                 'subServiceMenuActive' => SubMenuEnum::USER_ADD_COMPANY
+            ]);
+        }
+
+        if (
+            UserRoleManager::hasRoles([
+                UserRoleEnum::ADMINISTRATOR,
+                UserRoleEnum::SUPER_ADMINISTRATOR
+            ])
+        ) {
+            array_push($result, [
+                'priorite' => 1,
+                'url' => 'administration/manage-devis-parameters',
+                'label' => 'Paramètres des devis',
+                'icon' => 'show_chart',
+                'subServiceMenuActive' => SubMenuEnum::USER_UPDATE_DEVIS_PARAMETERS
             ]);
         }
 
@@ -370,6 +395,42 @@ class AdministrationController extends Controller
             'addCompany',
             [
                 'model' =>  $model
+            ]
+        );
+    }
+
+    public function actionManageDevisParameters()
+    {
+
+        $model = DevisParameterUpdateForm::getParameters();
+
+        // Get file model.
+        $fileCguFrModel = new UploadFile();
+
+        // Get file model.
+        $fileCguEnModel = new UploadFile();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $fileCguFrModel->file = UploadedFile::getInstance($fileCguFrModel, 'cguFrFile');
+            UploadFileHelper::uploadCguFrFile($fileCguFrModel);
+
+            $fileCguEnModel->file = UploadedFile::getInstance($fileCguEnModel, 'cguEnFile');
+            UploadFileHelper::uploadCguEnFile($fileCguEnModel);
+
+            $model->save();
+
+            MenuSelectorHelper::setMenuDevisCreate();
+            return $this->redirect(['devis/create']);
+        }
+
+        MenuSelectorHelper::setMenuDevisParameters();
+        return $this->render(
+            'devisParameterUpdate',
+            [
+                'model' => $model,
+                'fileCguFrModel' => $fileCguFrModel,
+                'fileCguEnModel' => $fileCguEnModel
             ]
         );
     }

@@ -12,8 +12,8 @@ use yii\console\Controller;
 use yii\console\ExitCode;
 
 
-use app\models\user\CapaUser;
-use app\models\user\Cellule;
+use app\models\users\CapaUser;
+use app\models\users\Cellule;
 
 
 /**

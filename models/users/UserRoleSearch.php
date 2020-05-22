@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models\user;
+namespace app\models\users;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;

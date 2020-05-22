@@ -6,7 +6,7 @@ use app\widgets\TopTitle;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\user\CapaUser */
+/* @var $model app\models\users\CapaUser */
 /* @var $cellules app\models\devis\Cellule */
 
 $this->title = 'Mise à jour de l\'utilisateur: ' . $model->username;

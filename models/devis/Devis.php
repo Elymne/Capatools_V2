@@ -4,8 +4,8 @@ namespace app\models\devis;
 
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
-use app\models\user\Cellule;
-use app\models\user\CapaUser;
+use app\models\users\Cellule;
+use app\models\users\CapaUser;
 use app\models\companies\Company;
 use dosamigos\chartjs\ChartJs;
 

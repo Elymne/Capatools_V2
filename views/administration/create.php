@@ -3,7 +3,7 @@
 use app\widgets\TopTitle;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\user\CapaUser */
+/* @var $model app\models\users\CapaUser */
 
 $this->title = 'Création d\'un salarié';
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];

@@ -2,7 +2,7 @@
 
 namespace app\models\devis;
 
-use app\models\user\CapaUser;
+use app\models\users\CapaUser;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 

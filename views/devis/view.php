@@ -7,7 +7,7 @@ use yii\helpers\Html;
 use app\models\devis\DevisStatus;
 use app\models\devis\Milestone;
 use app\models\devis\MilestoneStatus;
-use app\models\user\CapaUser;
+use app\models\users\CapaUser;
 use app\widgets\TopTitle;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */

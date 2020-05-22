@@ -10,7 +10,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\user\CapaUserSearch */
+/* @var $searchModel app\models\users\CapaUserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Liste des salariés';

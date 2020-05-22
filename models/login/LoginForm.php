@@ -4,7 +4,7 @@ namespace app\models\login;
 
 use Yii;
 use yii\base\Model;
-use app\models\user\CapaUser;
+use app\models\users\CapaUser;
 
 /**
  * Classe permettant de créer le formulaire de login sur l'application Capatools.

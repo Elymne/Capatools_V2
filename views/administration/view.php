@@ -5,7 +5,7 @@ use app\helper\_enum\UserRoleEnum;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 /* @var $this yii\web\View */
-/* @var $model app\models\user\CapaUser */
+/* @var $model app\models\users\CapaUser */
 
 $this->title = "Détail du salarié : " . $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];

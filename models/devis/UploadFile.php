@@ -19,9 +19,19 @@ class UploadFile extends ActiveRecord
 {
 
     /**
+     * Attribut à utiliser pour charger sur le serveur un fichier relié à un devis.
      * @var file File attribute to upload.
      */
     public $file;
+
+    /**
+     * Attribut à utiliser pour charger sur le serveurs des fichiers pour les préférences devis.
+     * 
+     * @var file Fr file.
+     * @var file En File.
+     */
+    public $cguFrFile;
+    public $cguEnFile;
 
     public function rules(): array
     {
