@@ -570,6 +570,9 @@ class DevisController extends Controller implements ServiceInterface
         return $pdf->render();
     }
 
+    /**
+     * Ne sert qu'à tester les Jointures avec Yii2.
+     */
     public function actionTestContact()
     {
         $contacts = Contact::find()->all();
