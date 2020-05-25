@@ -94,6 +94,11 @@ class AdministrationController extends Controller
                     ],
                     [
                         'allow' => true,
+                        'actions' => ['view-devis-parameters'],
+                        'roles' => ['devisParameter']
+                    ],
+                    [
+                        'allow' => true,
                         'actions' => ['manage-devis-parameters'],
                         'roles' => ['devisParameter']
                     ]
