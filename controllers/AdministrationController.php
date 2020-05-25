@@ -23,7 +23,6 @@ use app\models\users\Cellule;
 use app\models\companies\CompanyCreateForm;
 use app\models\devis\UploadFile;
 use app\models\parameters\DevisParameter;
-use app\models\parameters\DevisParameterCreateForm;
 use app\models\parameters\DevisParameterUpdateForm;
 use yii\web\UploadedFile;
 
@@ -187,7 +186,7 @@ class AdministrationController extends Controller
         ) {
             array_push($result, [
                 'priorite' => 1,
-                'url' => 'administration/manage-devis-parameters',
+                'url' => 'administration/view-devis-parameters',
                 'label' => 'Paramètres des devis',
                 'icon' => 'show_chart',
                 'subServiceMenuActive' => SubMenuEnum::USER_UPDATE_DEVIS_PARAMETERS
@@ -399,6 +398,50 @@ class AdministrationController extends Controller
         );
     }
 
+    /**
+     * Render view : devis/view-devis-parameters.
+     * Cette méthode est utilisé pour retourner une vue affichant tous les paramètres devis de l'application.
+     * Ces paramètres sont stockés de manière globale.
+     * 
+     * @return mixed
+     */
+    public function actionViewDevisParameters()
+    {
+        MenuSelectorHelper::setMenuAdminNone();
+        return $this->render('devisParameterView', [
+            'model' => DevisParameter::getParameters()
+        ]);
+    }
+
+    /**
+     * Utilisé pour télécharger le fichier uploadé du CGU Français.
+     * 
+     */
+    public function actionDownloadCguFrFile()
+    {
+        $pathFile = 'cgu/cguFrPdf.py';
+        UploadFileHelper::downloadFile($pathFile);
+    }
+
+    /**
+     * Utilisé pour télécharger le fichier uploadé du CGU Anglais.
+     * 
+     */
+    public function actionDownloadCguEnFile()
+    {
+        $pathFile = 'cgu/cguEnPdf.py';
+        UploadFileHelper::downloadFile($pathFile);
+    }
+
+    /**
+     * Render view : devis/manage-devis-parameters.
+     * Méthode en deux temps :
+     * - Si pas de méthode POST de trouvé, on retourne la vue de la modification des paramètres devis.
+     * - Sinon, à partir de la méthode POST, on récupère toutes les informations des nouveaux param-tres devis, et ensuite à la vérification,
+     * on change celle-ci.
+     * 
+     * @return mixed
+     */
     public function actionManageDevisParameters()
     {
 
@@ -421,7 +464,7 @@ class AdministrationController extends Controller
             $model->save();
 
             MenuSelectorHelper::setMenuDevisCreate();
-            return $this->redirect(['devis/create']);
+            return $this->redirect(['administration/view-devis-parameters']);
         }
 
         MenuSelectorHelper::setMenuDevisParameters();
