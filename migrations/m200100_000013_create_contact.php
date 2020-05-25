@@ -17,14 +17,14 @@ class m200100_000013_create_contact extends Migration
 
         $this->createTable('{{%contact_company}}', [
             'id' => $this->primaryKey(),
-            'id_contact' => $this->integer()->notNull(),
-            'id_company' => $this->integer()->notNull(),
+            'contact_id' => $this->integer()->notNull(),
+            'company_id' => $this->integer()->notNull(),
         ]);
 
         $this->addForeignKey(
             'FK_contact-company',
             '{{%contact_company}}',
-            'id_contact',
+            'contact_id',
             '{{%contact}}',
             'id'
         );
@@ -32,7 +32,7 @@ class m200100_000013_create_contact extends Migration
         $this->addForeignKey(
             'FK_company-contact',
             '{{%contact_company}}',
-            'id_company',
+            'company_id',
             '{{%company}}',
             'id'
         );

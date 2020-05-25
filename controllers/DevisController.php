@@ -27,6 +27,7 @@ use app\helper\_enum\UserRoleEnum;
 use app\components\ExcelExportService;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\StringData;
+use app\models\companies\Contact;
 use app\models\devis\Contributor;
 use app\models\users\CapaUser;
 use kartik\mpdf\Pdf;
@@ -567,6 +568,19 @@ class DevisController extends Controller implements ServiceInterface
 
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
         return $pdf->render();
+    }
+
+    public function actionTestContact()
+    {
+        $contacts = Contact::find()->all();
+
+        foreach ($contacts as $contact) {
+            echo $contact->name;
+
+            foreach ($contact->companies as $company) {
+                echo $company->name;
+            }
+        }
     }
 
     /**
