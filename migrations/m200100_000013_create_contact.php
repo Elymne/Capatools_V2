@@ -2,13 +2,13 @@
 
 use yii\db\Migration;
 
-class m200100_000012_create_devis_parameter extends Migration
+class m200100_000013_create_contact extends Migration
 {
 
     public function safeUp()
     {
         $this->createTable('{{%contact}}', [
-            'id' => $this->primaryKey()->,
+            'id' => $this->primaryKey(),
             'firstname' => $this->string()->notNull(),
             'name' => $this->string()->notNull(),
             'email' => $this->string()->notNull(),
@@ -17,8 +17,8 @@ class m200100_000012_create_devis_parameter extends Migration
 
         $this->createTable('{{%contact_company}}', [
             'id' => $this->primaryKey(),
-            'id_contact' => $this->string()->notNull(),
-            'id_company' => $this->string()->notNull(),
+            'id_contact' => $this->integer()->notNull(),
+            'id_company' => $this->integer()->notNull(),
         ]);
 
         $this->addForeignKey(
@@ -36,8 +36,6 @@ class m200100_000012_create_devis_parameter extends Migration
             '{{%company}}',
             'id'
         );
-
-
     }
 
     public function safeDown()
