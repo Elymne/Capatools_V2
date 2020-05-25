@@ -54,6 +54,10 @@ a {
     margin-right: 40px;
 }
 
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
+    text-transform: none;
+}
+
 input.select-dropdown.dropdown-trigger {
     display: none;
 }
