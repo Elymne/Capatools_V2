@@ -16,6 +16,7 @@ use app\helper\_enum\UserRoleEnum;
 use app\models\companies\Company;
 use app\models\users\CapaUser;
 use app\models\companies\CompanyCreateForm;
+use app\models\companies\ContactCreateForm;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -161,10 +162,15 @@ class CompanyController extends Controller
         );
     }
 
-
+    /**
+     * Render view : devis/view.
+     * Retourne la vue des détails d'une société.
+     * 
+     * @return mixed
+     */
     public function actionView(int $id)
     {
-        MenuSelectorHelper::setMenuAdminNone();
+        MenuSelectorHelper::setMenuCompanyNone();
         return $this->render('view', [
             'model' => $this->findModel($id)
         ]);
@@ -187,9 +193,31 @@ class CompanyController extends Controller
 
             if ($model->validate()) {
 
-                // Transform data from droplist for database.
                 $model->type = CompanyTypeEnum::COMPANY_TYPE[$model->type];
 
+                $model->save(false);
+
+                MenuSelectorHelper::setMenuDevisCreate();
+                return $this->redirect(['company/index']);
+            }
+        }
+
+        MenuSelectorHelper::setMenuCompanyCreate();
+        return $this->render(
+            'create',
+            [
+                'model' => $model
+            ]
+        );
+    }
+
+    public function actionAddContact(int $id)
+    {
+        $model = new ContactCreateForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            if ($model->validate()) {
                 $model->save();
 
                 MenuSelectorHelper::setMenuDevisCreate();
@@ -211,10 +239,7 @@ class CompanyController extends Controller
     {
     }
 
-    //TODO
-    public function actionAddContact(int $id)
-    {
-    }
+
 
     /**
      * Méthode générale pour le contrôleur permettant de retourner une société.

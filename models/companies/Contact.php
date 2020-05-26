@@ -26,9 +26,8 @@ class Contact extends ActiveRecord
 
     // Relation mapping.
 
-    public function getCompanies()
+    public function getCompany()
     {
-        return $this->hasMany(Company::className(), ['id' => 'company_id'])
-            ->viaTable('contact_company', ['contact_id' => 'id']);
+        return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
 }

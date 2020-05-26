@@ -30,6 +30,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
 
+            <div class="card">
+                <div class="card-action">
+                    <label>Liste des contacts</label>
+                </div>
+
+                <div class="card-action">
+                    <?php echo createContactsTable($model->contacts) ?>
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -81,4 +91,64 @@ function createUserDataTable($model): string
             </tbody>
         </table>
     HTML;
+}
+
+/**
+ * Créer un tableau avec tous les contacts
+ * @param Array<Contact> $model : List of milestones.
+ * 
+ * @return HTML table.
+ */
+function createContactsTable($contacts): string
+{
+
+    $statusRowBody = '';
+
+    // When no milestone has been created.
+    if (empty($milestones)) {
+        return <<<HTML
+            <p> Il n'y a aucuns contacts d'affiliés avec cette société </p>
+        HTML;
+    }
+
+    // Create the header of milestone table.
+    $headerTable = <<<HTML
+        <table class="highlight">
+            <tbody>
+                <tr class="group">
+                    <td class="header">Nom</td>
+                    <td class="header">Prénom</td>
+                    <td class="header">Email</td>
+                    <td class="header">N° de téléphone</td>
+                   
+                </tr>
+    HTML;
+
+    // Create the footer of milestone table.
+    $footerTable = <<<HTML
+                </tr>
+            </tbody>
+        </table>
+    HTML;
+
+    // Create the body of milestone table with data.
+    $bodyTable = '';
+    foreach ($contacts as $contact) {
+
+        $contactName = $contact->name;
+        $contactFirstname = $contact->firstname;
+        $contactEmail = $contact->email;
+        $contactPhone = $contact->phone;
+
+        $bodyTable = $bodyTable . <<<HTML
+            <tr>
+                <td>${contactName}</td>
+                <td>${contactFirstname} €</td>
+                <td>${contactEmail}</td>
+                <td>${contactPhone}</td>
+            </tr>   
+        HTML;
+    }
+
+    return $headerTable . $bodyTable . $footerTable;
 }
