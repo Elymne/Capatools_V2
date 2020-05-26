@@ -1,0 +1,137 @@
+<?php
+
+use app\assets\companies\CompanyIndexAsset;
+use app\widgets\TopTitle;
+use kartik\select2\Select2;
+use yii\helpers\Html;
+use yii\grid\GridView;
+use yii\widgets\Pjax;
+/* @var $this yii\web\View */
+/* @var $searchModel app\models\users\CapaUserSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Liste des sociétés';
+$this->params['breadcrumbs'][] = $this->title;
+
+CompanyIndexAsset::register($this);
+
+?>
+
+<?= TopTitle::widget(['title' => $this->title]) ?>
+
+<div class="container">
+    <div class="company-index">
+        <div class="row">
+
+            <div class="card">
+                <div class="card-content">
+                    <label>
+                        Filtres
+                    </label>
+                </div>
+                <div class="card-action">
+                    <?php getSearchFilter() ?>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-action">
+
+                    <?php Pjax::begin(); ?>
+
+                    <?= GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'tableOptions' => [
+                            'id' => 'company_table',
+                            'style' => 'height: 20px',
+                            'class' => ['highlight']
+                        ],
+                        'columns' => getCollumnArray(),
+                    ]); ?>
+
+                    <?php Pjax::end(); ?>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
+            <a href="/administration/create" class="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow">
+                <i class="material-icons">add</i>
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<?php
+
+
+function getSearchFilter()
+{
+    echo Html::input('text', 'textinput_user', '', [
+        'id' => 'companyname-search',
+        'class' => 'form-control',
+        'maxlength' => 10,
+        'style' => 'width:350px',
+        'placeholder' => 'Rechercher un nom d\'utilisateur',
+        'onkeyup' => 'usernameFilterSearch()'
+    ]);
+
+    echo '<br />';
+}
+
+/**
+ * Used to display all data needed for the table.
+ * 
+ * @return Array All data for table.
+ */
+function getCollumnArray(): array
+{
+
+    $result = [];
+
+    // Text input.
+    array_push($result, getNameArray());
+    array_push($result, getEmailArray());
+    array_push($result, getPhoneArray());
+
+    return $result;
+}
+
+function getNameArray(): array
+{
+    return [
+        'attribute' => 'name',
+        'label' => 'Nom du client',
+        'format' => 'raw',
+        'contentOptions' => ['class' => 'company-row'],
+        'encodeLabel' => false,
+        'value' => function ($data) {
+            return Html::a($data['name'], ['company/view', 'id' => $data['id']]);
+        }
+    ];
+}
+
+function getEmailArray(): array
+{
+    return [
+        'attribute' => 'email',
+        'label' => 'Adresse email',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'contentOptions' => ['class' => 'email-row'],
+    ];
+}
+
+function getPhoneArray(): array
+{
+    return [
+        'attribute' => 'phone',
+        'label' => 'Téléphone',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'contentOptions' => ['class' => 'cellule-row'],
+    ];
+}

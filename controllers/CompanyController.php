@@ -7,24 +7,16 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
 
 use app\helper\_clazz\MenuSelectorHelper;
-use app\helper\_clazz\UploadFileHelper;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\CompanyTypeEnum;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
+use app\models\companies\Company;
 use app\models\users\CapaUser;
-use app\models\users\CapaUserCreateForm;
-use app\models\users\CapaUserSearch;
-use app\models\users\CapaUserUpdateForm;
-use app\models\users\Cellule;
 use app\models\companies\CompanyCreateForm;
-use app\models\devis\UploadFile;
-use app\models\parameters\DevisParameter;
-use app\models\parameters\DevisParameterUpdateForm;
-use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
 
 /**
  * Classe contrôleur des vues et des actions de la partie société.
@@ -62,12 +54,17 @@ class CompanyController extends Controller
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['create'],
+                'only' => ['index', 'create'],
                 'rules' => [
                     [
                         'allow' => true,
+                        'actions' => ['index'],
+                        'roles' => ['indexCompany'],
+                    ],
+                    [
+                        'allow' => true,
                         'actions' => ['create'],
-                        'roles' => ['addCompanyDevis'],
+                        'roles' => ['createCompany'],
                     ],
                 ],
             ],
@@ -120,27 +117,43 @@ class CompanyController extends Controller
     {
         $result = [];
 
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::ADMINISTRATOR,
-                UserRoleEnum::SUPER_ADMINISTRATOR,
-                UserRoleEnum::PROJECT_MANAGER_DEVIS
-            ])
-        ) {
-            array_push($result, [
-                'Priorite' => 1,
-                'url' => 'company/create',
-                'label' => 'Créer un client',
-                'subServiceMenuActive' => SubMenuEnum::COMPANY_CREATE
-            ]);
-        }
+        array_push($result, [
+            'Priorite' => 1,
+            'url' => 'company/create',
+            'label' => 'Créer un client',
+            'subServiceMenuActive' => SubMenuEnum::COMPANY_CREATE
+        ]);
+
+        array_push($result, [
+            'Priorite' => 2,
+            'url' => 'company/index',
+            'label' => 'Liste des clients',
+            'subServiceMenuActive' => SubMenuEnum::COMPANY_INDEX
+        ]);
 
         return $result;
     }
 
-    //TODO
+    /**
+     * Render view : devis/index.
+     * Retourne la vue de liste de toutes les sociétés enrengistrées en bdd.
+     * 
+     * @return mixed
+     */
     public function actionIndex()
     {
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => Company::getAll(),
+        ]);
+
+        MenuSelectorHelper::setMenuCompanyIndex();
+        return $this->render(
+            'index',
+            [
+                'dataProvider' =>  $dataProvider
+            ]
+        );
     }
 
     //TODO
@@ -149,7 +162,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Render view : devis/add-company.
+     * Render view : devis/create.
      * Méthode en deux temps :
      * - Si pas de méthode POST de trouvé, on retourne la vue de la création d'une société.
      * - Sinon, à partir de la méthode POST, on récupère toutes les informations de la nouvelle société, et ensuite à la vérification,
@@ -171,13 +184,13 @@ class CompanyController extends Controller
                 $model->save();
 
                 MenuSelectorHelper::setMenuDevisCreate();
-                return $this->redirect(['devis/create']);
+                return $this->redirect(['company/index']);
             }
         }
 
-        MenuSelectorHelper::setMenuAdminCreate();
+        MenuSelectorHelper::setMenuCompanyCreate();
         return $this->render(
-            'addCompany',
+            'create',
             [
                 'model' =>  $model
             ]

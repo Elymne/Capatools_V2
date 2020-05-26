@@ -30,4 +30,9 @@ class Company extends ActiveRecord
     {
         return static::find();
     }
+
+    public static function getOneById(int $id)
+    {
+        return static::find(['id' => $id])->one();
+    }
 }

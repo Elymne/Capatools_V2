@@ -39,5 +39,6 @@ class SubMenuEnum extends Enum
     const COMPANY = 'COMPANY';
 
     const COMPANY_NONE = 'COMPANY_NONE';
+    const COMPANY_INDEX = 'COMPANY_INDEX';
     const COMPANY_CREATE = 'COMPANY_CREATE';
 }

@@ -85,9 +85,31 @@ class MenuSelectorHelper
     /**
      * Description :
      * - Déroule le menu Company.
+     * - Aucun sub menu d'actif.
+     */
+    static function setMenuCompanyNone()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::COMPANY_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::COMPANY;
+    }
+
+    /**
+     * Description :
+     * - Déroule le menu Company.
      * - Le sub-menu de la création d'une société est actif.
      */
-    static function setMenuAdminCreate()
+    static function setMenuCompanyIndex()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::COMPANY_INDEX;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::COMPANY;
+    }
+
+    /**
+     * Description :
+     * - Déroule le menu Company.
+     * - Le sub-menu de la création d'une société est actif.
+     */
+    static function setMenuCompanyCreate()
     {
         Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::COMPANY_CREATE;
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::COMPANY;
