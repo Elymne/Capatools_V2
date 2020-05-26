@@ -35,4 +35,12 @@ class Company extends ActiveRecord
     {
         return static::find(['id' => $id])->one();
     }
+
+    // Jointure manyToMany avec la table contact.
+
+    public function getCompanies()
+    {
+        return $this->hasMany(Contact::className(), ['id' => 'contact_id'])
+            ->viaTable('contact_company', ['company_id' => 'id']);
+    }
 }

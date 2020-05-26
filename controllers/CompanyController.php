@@ -54,12 +54,17 @@ class CompanyController extends Controller
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['index', 'create'],
+                'only' => ['index', 'view', 'create'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['index'],
                         'roles' => ['indexCompany'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'roles' => ['viewCompany'],
                     ],
                     [
                         'allow' => true,
@@ -156,9 +161,13 @@ class CompanyController extends Controller
         );
     }
 
-    //TODO
+
     public function actionView(int $id)
     {
+        MenuSelectorHelper::setMenuAdminNone();
+        return $this->render('view', [
+            'model' => $this->findModel($id)
+        ]);
     }
 
     /**
@@ -208,7 +217,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Méthode générale pour le contrôleur permettant de retourner un utilisateur.
+     * Méthode générale pour le contrôleur permettant de retourner une société.
      * Cette méthode est utilisé pour gérer le cas où l'utilisateur recherché n'existe pas, et donc gérer l'exception.
      * 
      * @param integer $id
@@ -217,7 +226,7 @@ class CompanyController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = CapaUser::findOne($id)) !== null) {
+        if (($model = Company::findOne($id)) !== null) {
             return $model;
         }
 
