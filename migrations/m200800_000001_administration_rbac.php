@@ -4,8 +4,7 @@ use app\helper\_enum\UserRoleEnum;
 use yii\db\Migration;
 
 /**
- * Generate all devis access for users.
- * Access are stocked in php script file.
+ * Génère les droits admins sur les différentes routes de l'applications.
  */
 class m200800_000001_administration_rbac extends Migration
 {
