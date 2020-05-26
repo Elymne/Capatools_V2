@@ -26,32 +26,26 @@ class m200800_000003_company_rbac extends Migration
         $create = $auth->createPermission('createCompany');
         $auth->add($create);
 
-        $createContact = $auth->createPermission('createContactCompany');
-        $auth->add($createContact);
-
-        $setContact = $auth->createPermission('setContactCompany');
-        $auth->add($setContact);
+        $createContacts = $auth->createPermission('addContactsCompany');
+        $auth->add($createContacts);
 
         $administratorPermission = $auth->getRole(UserRoleEnum::ADMINISTRATOR);
         $auth->addChild($administratorPermission, $index);
         $auth->addChild($administratorPermission, $view);
         $auth->addChild($administratorPermission, $create);
-        $auth->addChild($administratorPermission, $createContact);
-        $auth->addChild($administratorPermission, $setContact);
+        $auth->addChild($administratorPermission, $createContacts);
 
         $superAdministratorPermission = $auth->getRole(UserRoleEnum::SUPER_ADMINISTRATOR);
         $auth->addChild($superAdministratorPermission, $index);
         $auth->addChild($superAdministratorPermission, $view);
         $auth->addChild($superAdministratorPermission, $create);
-        $auth->addChild($superAdministratorPermission, $createContact);
-        $auth->addChild($superAdministratorPermission, $setContact);
+        $auth->addChild($superAdministratorPermission, $createContacts);
 
         $projectManagerPermission = $auth->getRole(UserRoleEnum::PROJECT_MANAGER_DEVIS);
         $auth->addChild($projectManagerPermission, $index);
         $auth->addChild($projectManagerPermission, $view);
         $auth->addChild($projectManagerPermission, $create);
-        $auth->addChild($projectManagerPermission, $createContact);
-        $auth->addChild($projectManagerPermission, $setContact);
+        $auth->addChild($projectManagerPermission, $createContacts);
     }
 
     /**

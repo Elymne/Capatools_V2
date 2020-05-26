@@ -72,6 +72,11 @@ class CompanyController extends Controller
                         'actions' => ['create'],
                         'roles' => ['createCompany'],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['add-contacts'],
+                        'roles' => ['addContactsCompany'],
+                    ],
                 ],
             ],
         ];
@@ -211,7 +216,7 @@ class CompanyController extends Controller
         );
     }
 
-    public function actionAddContact(int $id)
+    public function actionAddContacts(int $id)
     {
         $model = new ContactCreateForm();
 

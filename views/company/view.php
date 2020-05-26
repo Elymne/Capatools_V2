@@ -36,6 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="card-action">
+                    <?= Html::a('Ajouter des contacts', ['company/add-contacts', 'id' => $model['id']], ['class' => '']) ?>
+                    <br /><br />
                     <?php echo createContactsTable($model->contacts) ?>
                 </div>
             </div>
