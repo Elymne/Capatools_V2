@@ -571,19 +571,42 @@ class DevisController extends Controller implements ServiceInterface
     }
 
     /**
-     * Ne sert qu'à tester les Jointures avec Yii2.
+     * //TODO
+     * Render view : null
+     * Retournera une vue avec la liste de tous les affaires.
+     * Dans les faits, cette vue aura pratiquement la même structure que la vue de la liste des devis/projets.
+     * Un sous menu doit permettre de lancer cette route.
+     * 
+     * @return mixed
+     * @throws NotFoundHttpException If the model is not found.
      */
-    public function actionTestContact()
+    public function actionIndexBusiness()
     {
-        $contacts = Contact::find()->all();
+    }
 
-        foreach ($contacts as $contact) {
-            echo $contact->name;
+    /**
+     * //TODO
+     * Render view : null
+     * Retournera une vue avec la liste de tous les projets d'une affaire..
+     * 
+     * @return mixed
+     * @throws NotFoundHttpException If the model is not found.
+     */
+    public function actionViewBusiness(int $id)
+    {
+    }
 
-            foreach ($contact->companies as $company) {
-                echo $company->name;
-            }
-        }
+    /**
+     * //TODO
+     * Render view : null
+     * Retournera une vue permettant de créer une affaire.
+     *Le formulaire ne sera pas très complexe, un champ pour indiquer le nom du client et c'est tout.
+     * 
+     * @return mixed
+     * @throws NotFoundHttpException If the model is not found.
+     */
+    public function actionCreateBusiness()
+    {
     }
 
     /**

@@ -44,6 +44,9 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
         "Cellule"
     ); ?>
 
+    <!-- email field -->
+    <?= $form->field($model, 'salary')->input('number', ['maxlength' => true, 'placeholder' => 'Prix'])->label('Prix d\'intervention :') ?>
+
     <!-- devis role dropdown field -->
     <?= $form->field($model, 'stored_role_devis')->widget(Select2::classname(), [
         'data' => UserRoleEnum::DEVIS_ROLE_STRING,

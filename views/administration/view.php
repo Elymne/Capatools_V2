@@ -72,6 +72,7 @@ function createUserDataTable($model): string
     $username = $model->username;
     $email = $model->email;
     $cellule = $model->cellule->name;
+    $salary = $model->salary;
 
     return <<<HTML
         <table class="highlight">
@@ -87,6 +88,10 @@ function createUserDataTable($model): string
                 <tr>
                     <td width="30%" class="table-font-bold">Cellule</td>
                     <td>${cellule}</td>
+                </tr>  
+                <tr>
+                    <td width="30%" class="table-font-bold">Prix d'intervention</td>
+                    <td>${salary} (€)</td>
                 </tr>  
             </tbody>
         </table>

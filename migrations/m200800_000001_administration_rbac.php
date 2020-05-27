@@ -78,7 +78,7 @@ class m200800_000001_administration_rbac extends Migration
 
         $auth->assign($administratorPermission, 2); // sacha
         $auth->assign($administratorPermission, 3); // admin
-        $auth->assign($superAdministratorPermission, 178); // super_admin
+        $auth->assign($superAdministratorPermission, 6); // super_admin
 
     }
 

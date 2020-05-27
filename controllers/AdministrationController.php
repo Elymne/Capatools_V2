@@ -422,6 +422,25 @@ class AdministrationController extends Controller
     }
 
     /**
+     * //TODO
+     * Render view : aucune pour l'instant.
+     * Cette méthode retournera une liste avec toutes les cellules disponible ainsi que le prix de gestation de projet par cellule.
+     * Il sera donc possible à travers cette vue d'accéder à un formulaire pour modifier cette valeur de gestation.
+     */
+    public function actionIndexCellules()
+    {
+    }
+
+    /**
+     * //TODO
+     * Render view : aucune pour l'instant.
+     * Cette méthode retournera un formulaire permettant de modifier le prix de gestation d'une cellule.
+     */
+    public function actionUpdateCellule(int $id)
+    {
+    }
+
+    /**
      * Méthode générale pour le contrôleur permettant de retourner un utilisateur.
      * Cette méthode est utilisé pour gérer le cas où l'utilisateur recherché n'existe pas, et donc gérer l'exception.
      * 
