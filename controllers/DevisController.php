@@ -189,6 +189,9 @@ class DevisController extends Controller implements ServiceInterface
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
 
+        // Seperate the relationnal object from devis.
+        $milestones = $model->milestones;
+
         // Get file model.
         $fileModel = new UploadFile();
 
@@ -199,7 +202,8 @@ class DevisController extends Controller implements ServiceInterface
                 'model' => $model,
                 'delivery_types' => $delivery_types,
                 'companiesNames' => $companiesNames,
-                'fileModel' => $fileModel
+                'fileModel' => $fileModel,
+                'milestones' => (empty($milestones)) ? [new Milestone] : $milestones,
             ]
         );
     }

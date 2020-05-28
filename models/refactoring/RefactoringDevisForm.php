@@ -28,6 +28,9 @@ class RefactoringDevisForm extends Devis
 
     public $ref_interne;
     public $proba;
+    public $type;
+
+    public $test;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
