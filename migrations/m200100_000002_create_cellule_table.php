@@ -14,6 +14,7 @@ class m200100_000002_create_cellule_table extends Migration
             'id' => $this->primaryKey(),
             'identity' => $this->string(),
             'name' => $this->string(),
+            'default_salary' => $this->integer()->defaultValue(0)
         ]);
 
         $this->execute('ALTER TABLE cellule AUTO_INCREMENT = 1');

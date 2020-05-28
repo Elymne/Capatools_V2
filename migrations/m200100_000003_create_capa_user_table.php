@@ -16,7 +16,9 @@ class m200100_000003_create_capa_user_table extends Migration
             'email' => $this->string(),
             'auth_key' => $this->string(),
             'password_hash' => $this->string(),
+            'salary' => $this->integer()->defaultValue(0),
             'cellule_id' => $this->integer(),
+
             'flag_password' => $this->boolean(),
             'flag_active' => $this->boolean()
         ]);

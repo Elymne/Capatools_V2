@@ -18,7 +18,6 @@ class m200100_000005_create_company_table extends Migration
             'siret' => $this->string()->unique(),
             'tva' => $this->string()->unique(),
             'type' => $this->string(),
-
         ]);
     }
 

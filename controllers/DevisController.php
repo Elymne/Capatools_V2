@@ -27,7 +27,9 @@ use app\helper\_enum\UserRoleEnum;
 use app\components\ExcelExportService;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\StringData;
+use app\models\companies\Contact;
 use app\models\devis\Contributor;
+use app\models\refactoring\RefactoringDevisForm;
 use app\models\users\CapaUser;
 use kartik\mpdf\Pdf;
 
@@ -152,6 +154,12 @@ class DevisController extends Controller implements ServiceInterface
                         'url' => 'devis/create',
                         'label' => 'Créer un devis',
                         'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
+                    ],
+                    [
+                        'Priorite' => 1,
+                        'url' => 'devis/refactoring',
+                        'label' => 'Refactoring (TEST)',
+                        'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
                     ]
                 ]
             ];
@@ -160,6 +168,45 @@ class DevisController extends Controller implements ServiceInterface
         return $result;
     }
 
+    /**
+     * Juste un test pour voir comment gérer le formulaire multipage.
+     * Les données du formulaire seront factice et provienne d'une classe mocké de Devis.
+     */
+    public function actionRefactoring()
+    {
+
+        $model = new RefactoringDevisForm();
+
+        // preload data variable for form.
+        $model->payment_details = StringData::DEVIS_PAYMENT_DETAILS;
+        $model->payment_conditions = StringData::DEVIS_PAYMENT_CONDITIONS;
+        $model->validity_duration = 30;
+
+        // Get data that we wish to use on our view.
+        $delivery_types = DeliveryType::getDeliveryTypes();
+
+        // Here we type a specific requetst because we only want names of clients.
+        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
+        $companiesNames = array_merge($companiesNames);
+
+        // Seperate the relationnal object from devis.
+        $milestones = $model->milestones;
+
+        // Get file model.
+        $fileModel = new UploadFile();
+
+        MenuSelectorHelper::setMenuDevisNone();
+        return $this->render(
+            'createRefactoring',
+            [
+                'model' => $model,
+                'delivery_types' => $delivery_types,
+                'companiesNames' => $companiesNames,
+                'fileModel' => $fileModel,
+                'milestones' => (empty($milestones)) ? [new Milestone] : $milestones,
+            ]
+        );
+    }
 
     /**
      * Render view : devis/index
@@ -567,6 +614,45 @@ class DevisController extends Controller implements ServiceInterface
 
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
         return $pdf->render();
+    }
+
+    /**
+     * //TODO
+     * Render view : null
+     * Retournera une vue avec la liste de tous les affaires.
+     * Dans les faits, cette vue aura pratiquement la même structure que la vue de la liste des devis/projets.
+     * Un sous menu doit permettre de lancer cette route.
+     * 
+     * @return mixed
+     * @throws NotFoundHttpException If the model is not found.
+     */
+    public function actionIndexBusiness()
+    {
+    }
+
+    /**
+     * //TODO
+     * Render view : null
+     * Retournera une vue avec la liste de tous les projets d'une affaire..
+     * 
+     * @return mixed
+     * @throws NotFoundHttpException If the model is not found.
+     */
+    public function actionViewBusiness(int $id)
+    {
+    }
+
+    /**
+     * //TODO
+     * Render view : null
+     * Retournera une vue permettant de créer une affaire.
+     *Le formulaire ne sera pas très complexe, un champ pour indiquer le nom du client et c'est tout.
+     * 
+     * @return mixed
+     * @throws NotFoundHttpException If the model is not found.
+     */
+    public function actionCreateBusiness()
+    {
     }
 
     /**

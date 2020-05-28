@@ -41,17 +41,6 @@ class MenuSelectorHelper
     /**
      * Description :
      * - Déroule le menu Administration.
-     * - Le sub-menu de la création d'une société est actif.
-     */
-    static function setMenuAdminAddCompany()
-    {
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_ADD_COMPANY;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
-    }
-
-    /**
-     * Description :
-     * - Déroule le menu Administration.
      * - Le sub-menu de la modification des paramètres devis est actif.
      */
     static function setMenuDevisParameters()
@@ -91,5 +80,38 @@ class MenuSelectorHelper
     {
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
         Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_CREATE;
+    }
+
+    /**
+     * Description :
+     * - Déroule le menu Company.
+     * - Aucun sub menu d'actif.
+     */
+    static function setMenuCompanyNone()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::COMPANY_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::COMPANY;
+    }
+
+    /**
+     * Description :
+     * - Déroule le menu Company.
+     * - Le sub-menu de la création d'une société est actif.
+     */
+    static function setMenuCompanyIndex()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::COMPANY_INDEX;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::COMPANY;
+    }
+
+    /**
+     * Description :
+     * - Déroule le menu Company.
+     * - Le sub-menu de la création d'une société est actif.
+     */
+    static function setMenuCompanyCreate()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::COMPANY_CREATE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::COMPANY;
     }
 }

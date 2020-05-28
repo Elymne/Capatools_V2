@@ -32,6 +32,8 @@ class CapaUserCreateForm extends CapaUser
             ['username', 'required', 'message' => 'Veulliez renseigner le nom de l\'utilisateur'],
             ['cellule_id', 'safe'],
             ['cellule_id', 'required', 'message' => 'Veulliez selectionner la cellule de l\'utilisateur'],
+            ['salary', 'required', 'message' => 'Indiquer le prix d\'intervention.'],
+            ['salary', 'integer', 'min' => 1, 'tooSmall' => 'Le prix d\'intervention doit être supérieur à 0.', 'message' => 'Le prix d\'intervention doit être positif.'],
             ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],
             ['cellule_id', 'validateCelid', 'message' => 'Le nom de la cellule est inconnue'],
             ['stored_role_devis', 'safe'],

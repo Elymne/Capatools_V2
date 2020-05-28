@@ -90,8 +90,8 @@ DevisUpdateAsset::register($this);
 
                         <div class="row">
                             <div class="col s12">
-
                                 <div class="row">
+
                                     <div class="input-field col s6">
                                         <?= $form->field($model, 'service_duration')
                                             ->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'autocomplete' => 'off'])
@@ -104,8 +104,8 @@ DevisUpdateAsset::register($this);
                                             ->label("Durée de la prestation (jours)")
                                         ?>
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
 

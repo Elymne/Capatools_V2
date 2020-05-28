@@ -12,7 +12,6 @@ use yii\helpers\ArrayHelper;
 use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_clazz\UploadFileHelper;
 use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\CompanyTypeEnum;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 use app\models\users\CapaUser;
@@ -20,7 +19,6 @@ use app\models\users\CapaUserCreateForm;
 use app\models\users\CapaUserSearch;
 use app\models\users\CapaUserUpdateForm;
 use app\models\users\Cellule;
-use app\models\companies\CompanyCreateForm;
 use app\models\devis\UploadFile;
 use app\models\parameters\DevisParameter;
 use app\models\parameters\DevisParameterUpdateForm;
@@ -60,7 +58,7 @@ class AdministrationController extends Controller
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'add-company', 'manage-devis-parameters'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'manage-devis-parameters'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -89,8 +87,8 @@ class AdministrationController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['add-company'],
-                        'roles' => ['addCompanyDevis'],
+                        'actions' => ['view-devis-parameters'],
+                        'roles' => ['devisParameter']
                     ],
                     [
                         'allow' => true,
@@ -155,26 +153,11 @@ class AdministrationController extends Controller
             ])
         ) {
             array_push($result, [
-                'priorite' => 3,
+                'priorite' => 2,
                 'url' => 'administration/index',
                 'label' => 'Salariés',
                 'icon' => 'show_chart',
                 'subServiceMenuActive' => SubMenuEnum::USER_LIST
-            ]);
-        }
-
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::ADMINISTRATOR,
-                UserRoleEnum::SUPER_ADMINISTRATOR,
-                UserRoleEnum::PROJECT_MANAGER_DEVIS
-            ])
-        ) {
-            array_push($result, [
-                'Priorite' => 2,
-                'url' => 'administration/add-company',
-                'label' => 'Créer un client',
-                'subServiceMenuActive' => SubMenuEnum::USER_ADD_COMPANY
             ]);
         }
 
@@ -218,10 +201,6 @@ class AdministrationController extends Controller
             'dataProvider' => $dataProvider,
             'cellulesNames' => $cellulesName
         ]);
-    }
-
-    public function actionIndexFiltered($celluleName, $userName)
-    {
     }
 
     /**
@@ -363,42 +342,6 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Render view : devis/add-company.
-     * Méthode en deux temps :
-     * - Si pas de méthode POST de trouvé, on retourne la vue de la création d'une société.
-     * - Sinon, à partir de la méthode POST, on récupère toutes les informations de la nouvelle société, et ensuite à la vérification,
-     * on créer celle-ci.
-     * 
-     * @return mixed
-     */
-    public function actionAddCompany()
-    {
-        $model = new CompanyCreateForm();
-
-        if ($model->load(Yii::$app->request->post())) {
-
-            if ($model->validate()) {
-
-                // Transform data from droplist for database.
-                $model->type = CompanyTypeEnum::COMPANY_TYPE[$model->type];
-
-                $model->save();
-
-                MenuSelectorHelper::setMenuDevisCreate();
-                return $this->redirect(['devis/create']);
-            }
-        }
-
-        MenuSelectorHelper::setMenuAdminAddCompany();
-        return $this->render(
-            'addCompany',
-            [
-                'model' =>  $model
-            ]
-        );
-    }
-
-    /**
      * Render view : devis/view-devis-parameters.
      * Cette méthode est utilisé pour retourner une vue affichant tous les paramètres devis de l'application.
      * Ces paramètres sont stockés de manière globale.
@@ -407,7 +350,7 @@ class AdministrationController extends Controller
      */
     public function actionViewDevisParameters()
     {
-        MenuSelectorHelper::setMenuAdminNone();
+        MenuSelectorHelper::setMenuDevisParameters();
         return $this->render('devisParameterView', [
             'model' => DevisParameter::getParameters()
         ]);
@@ -463,7 +406,7 @@ class AdministrationController extends Controller
 
             $model->save();
 
-            MenuSelectorHelper::setMenuDevisCreate();
+            MenuSelectorHelper::setMenuDevisParameters();
             return $this->redirect(['administration/view-devis-parameters']);
         }
 
@@ -476,6 +419,25 @@ class AdministrationController extends Controller
                 'fileCguEnModel' => $fileCguEnModel
             ]
         );
+    }
+
+    /**
+     * //TODO
+     * Render view : aucune pour l'instant.
+     * Cette méthode retournera une liste avec toutes les cellules disponible ainsi que le prix de gestation de projet par cellule.
+     * Il sera donc possible à travers cette vue d'accéder à un formulaire pour modifier cette valeur de gestation.
+     */
+    public function actionIndexCellules()
+    {
+    }
+
+    /**
+     * //TODO
+     * Render view : aucune pour l'instant.
+     * Cette méthode retournera un formulaire permettant de modifier le prix de gestation d'une cellule.
+     */
+    public function actionUpdateCellule(int $id)
+    {
     }
 
     /**

@@ -10,31 +10,41 @@ class m200200_000003_insert_into_capa_user_table extends Migration
     public function safeUp()
     {
 
-        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('toto');
+        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('salarie');
         $this->insert('{{%capa_user}}', [
             'id' => 1,
-            'username' => 'toto',
-            'email' => 'toto@gmail.com',
+            'username' => 'salarie',
+            'email' => 'salarie@gmail.com',
             'auth_key' => 'test100key',
             'password_hash' =>  $password_hash,
             'cellule_id' => 1
         ]);
 
-        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('sacha');
+        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('projet_manager');
         $this->insert('{{%capa_user}}', [
             'id' => 2,
-            'username' => 'sacha',
-            'email' => 'sacha@gmail.com',
+            'username' => 'projet_manager',
+            'email' => 'projet_manager@gmail.com',
             'auth_key' => 'test100key',
             'password_hash' =>  $password_hash,
             'cellule_id' => 3
         ]);
 
-        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('admin');
+        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('resp_cellule');
         $this->insert('{{%capa_user}}', [
             'id' => 3,
-            'username' => 'admin',
-            'email' => 'admin@gmail.com',
+            'username' => 'resp_cellule',
+            'email' => 'resp_cellule@gmail.com',
+            'auth_key' => 'test100key',
+            'password_hash' =>  $password_hash,
+            'cellule_id' => 3
+        ]);
+
+        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('rh');
+        $this->insert('{{%capa_user}}', [
+            'id' => 4,
+            'username' => 'rh',
+            'email' => 'rh@gmail.com',
             'auth_key' => 'test100key',
             'password_hash' =>  $password_hash,
             'cellule_id' => 3
@@ -42,7 +52,7 @@ class m200200_000003_insert_into_capa_user_table extends Migration
 
         $password_hash = Yii::$app->getSecurity()->generatePasswordHash('support');
         $this->insert('{{%capa_user}}', [
-            'id' => 4,
+            'id' => 5,
             'username' => 'support',
             'email' => 'support@gmail.com',
             'auth_key' => 'test100key',
@@ -50,11 +60,21 @@ class m200200_000003_insert_into_capa_user_table extends Migration
             'cellule_id' => 3
         ]);
 
-        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('root');
+        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('admin');
         $this->insert('{{%capa_user}}', [
-            'id' => 178,
-            'username' => 'root',
-            'email' => 'root@gmail.com',
+            'id' => 6,
+            'username' => 'admin',
+            'email' => 'admin@gmail.com',
+            'auth_key' => 'test100key',
+            'password_hash' =>  $password_hash,
+            'cellule_id' => 3
+        ]);
+
+        $password_hash = Yii::$app->getSecurity()->generatePasswordHash('super_admin');
+        $this->insert('{{%capa_user}}', [
+            'id' => 7,
+            'username' => 'super_admin',
+            'email' => 'super_admin@gmail.com',
             'auth_key' => 'test100key',
             'password_hash' =>  $password_hash,
             'cellule_id' => 3

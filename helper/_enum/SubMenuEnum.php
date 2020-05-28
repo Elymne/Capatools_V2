@@ -5,7 +5,8 @@ namespace app\helper\_enum;
 use MyCLabs\Enum\Enum;
 
 /**
- * Allow us to manage active menu.
+ * Une classe d'enumération pour gérer les menus actifs.
+ * Marche de paire avec la classe MenuSelectorHelper.
  */
 class SubMenuEnum extends Enum
 {
@@ -13,19 +14,31 @@ class SubMenuEnum extends Enum
     // None.
     const NONE = 'NONE';
 
-    // Sub title.
+    /**
+     * Administration menu.
+     */
     const USER = 'USER';
 
     const USER_NONE = 'USER_NONE';
     const USER_CREATE = 'USER_CREATE';
     const USER_LIST = 'USER_LIST';
-    const USER_ADD_COMPANY = 'USER_ADD_COMPANY';
     const USER_UPDATE_DEVIS_PARAMETERS = "USER_UPDATE_DEVIS_PARAMETERS";
 
-    // Sub title.
+    /**
+     * Devis menu.
+     */
     const DEVIS = 'DEVIS';
 
     const DEVIS_NONE = 'DEVIS_NONE';
     const DEVIS_CREATE = 'DEVIS_CREATE';
     const DEVIS_LIST = 'DEVIS_LIST';
+
+    /**
+     * Company menu.
+     */
+    const COMPANY = 'COMPANY';
+
+    const COMPANY_NONE = 'COMPANY_NONE';
+    const COMPANY_INDEX = 'COMPANY_INDEX';
+    const COMPANY_CREATE = 'COMPANY_CREATE';
 }
