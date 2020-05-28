@@ -2,23 +2,26 @@
 
 use yii\db\Migration;
 
-class m200100_000003_create_capa_user_table extends Migration
+class m200099_000540_capa_user_table extends Migration
 {
-    /**
-     * {@inheritdoc}
-     */
+
     public function safeUp()
     {
 
         $this->createTable('{{%capa_user}}', [
             'id' => $this->primaryKey(),
-            'username' => $this->string(),
+
+            'firstname' => $this->string()->notNull(),
+            'surname' => $this->string()->notNull(),
             'email' => $this->string(),
-            'auth_key' => $this->string(),
             'password_hash' => $this->string(),
-            'salary' => $this->integer()->defaultValue(0),
+            'price' => $this->double()->defaultValue(0),
+
+            // Foreign key.
             'cellule_id' => $this->integer(),
 
+            // Yii2 user management values.
+            'auth_key' => $this->string(),
             'flag_password' => $this->boolean(),
             'flag_active' => $this->boolean()
         ]);

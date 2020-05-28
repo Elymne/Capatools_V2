@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200100_000012_create_devis_parameter extends Migration
+class m200099_000570_devis_parameter extends Migration
 {
 
     public function safeUp()
@@ -22,5 +22,6 @@ class m200100_000012_create_devis_parameter extends Migration
 
     public function safeDown()
     {
+        $this->dropTable('{{%devis_parameter}}');
     }
 }
