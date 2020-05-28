@@ -103,11 +103,12 @@ class m200800_000000_devis_rbac extends Migration
         // -- USERS ASSIGNEMENT (for testing) -- \\
 
 
-        $auth->assign($projectManagerPermission, 1); // id 1 = toto
-        $auth->assign($projectManagerPermission, 2); // id 2 = sacha
-        $auth->assign($operationalManager, 3); // id 3 = admin
-        $auth->assign($accountingSupport, 4); // id 4 = test
-
+        $auth->assign($projectManagerPermission, 1);
+        $auth->assign($projectManagerPermission, 2);
+        $auth->assign($projectManagerPermission, 6);
+        $auth->assign($projectManagerPermission, 7);
+        $auth->assign($operationalManager, 4);
+        $auth->assign($accountingSupport, 5);
     }
 
     /**
