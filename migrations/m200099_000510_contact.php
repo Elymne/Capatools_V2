@@ -17,7 +17,7 @@ class m200099_000510_contact extends Migration
 
         $this->insert('{{%contact}}', [
             'firstname' => 'Marc',
-            'Biggard' => 'Aurèle',
+            'surname' => 'Aurèle',
             'phone_number' => '06 00000000',
             'email' => 'marcaurele@gmail.com'
 

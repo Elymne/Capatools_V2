@@ -28,8 +28,8 @@ class m200099_000500_company_table extends Migration
             'city' => 'Paris',
             'country' => 'France',
             'tva' => 'FR 99999999999',
-            'balkany-corp@gmail.com',
-            'public'
+            'email' => 'balkany-corp@gmail.com',
+            'type' => 'public'
         ]);
     }
 

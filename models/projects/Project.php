@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models\devis;
+namespace app\models\projects;
 
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -17,12 +17,12 @@ use dosamigos\chartjs\ChartJs;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class Devis extends ActiveRecord
+class Project extends ActiveRecord
 {
 
     public static function tableName()
     {
-        return 'devis';
+        return 'project';
     }
 
     public static function getAll()
@@ -33,11 +33,6 @@ class Devis extends ActiveRecord
     public static function getOneById($id)
     {
         return static::find()->where(['id' => $id])->one();
-    }
-
-    public static function getOneByName($id_capa)
-    {
-        return static::find()->where(['id_capa' => $id_capa])->one();
     }
 
     public static function getAllByCellule($idCellule)
