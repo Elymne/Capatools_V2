@@ -14,10 +14,19 @@ class m200099_000510_contact extends Migration
             'phone_number' => $this->string()->notNull(),
             'email' => $this->string()->unique()
         ]);
+
+        $this->insert('{{%contact}}', [
+            'firstname' => 'Marc',
+            'Biggard' => 'Aurèle',
+            'phone_number' => '06 00000000',
+            'email' => 'marcaurele@gmail.com'
+
+        ]);
     }
 
     public function safeDown()
     {
+        $this->delete('{{%contact}}', []);
         $this->dropTable('{{%contact}}');
     }
 }

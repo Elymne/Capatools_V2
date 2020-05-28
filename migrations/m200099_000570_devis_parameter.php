@@ -18,10 +18,21 @@ class m200099_000570_devis_parameter extends Migration
         ]);
 
         $this->addPrimaryKey('PK_devis_parameter', '{{%devis_parameter}}', ['id']);
+
+        $this->insert('{{%devis_parameter}}', [
+            'id' => 'param',
+            'iban' => 'default iban',
+            'bic' => 'default bic',
+            'banking_domiciliation' => 'default domiciliation',
+            'address' => 'default address',
+            'legal_status' => 'legal status',
+            'devis_note' => 'devis note',
+        ]);
     }
 
     public function safeDown()
     {
+        $this->delete('{{%devis_parameter}}', []);
         $this->dropTable('{{%devis_parameter}}');
     }
 }

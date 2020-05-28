@@ -55,6 +55,7 @@ class m200099_000530_cellule_table extends Migration
      */
     public function safeDown()
     {
+        $this->delete('{{%cellule}}', []);
         $this->dropTable('{{%cellule}}');
     }
 }

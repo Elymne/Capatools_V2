@@ -7,6 +7,8 @@ class m200099_000500_company_table extends Migration
 
     public function safeUp()
     {
+        /* Table creation */
+
         $this->createTable('{{%company}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->unique(),
@@ -17,10 +19,23 @@ class m200099_000500_company_table extends Migration
             'email' => $this->string()->unique(),
             'type' => $this->string(),
         ]);
+
+        /* Table data insertion */
+
+        $this->insert('{{%company}}', [
+            'name' => 'Maison de Balkany',
+            'postal_code' => '44500',
+            'city' => 'Paris',
+            'country' => 'France',
+            'tva' => 'FR 99999999999',
+            'balkany-corp@gmail.com',
+            'public'
+        ]);
     }
 
     public function safeDown()
     {
+        $this->delete('{{%company}}', []);
         $this->dropTable('{{%company}}');
     }
 }
