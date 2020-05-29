@@ -9,7 +9,7 @@ use yii\helpers\Html;
 /* @var $model app\models\users\CapaUser */
 /* @var $cellules app\models\devis\Cellule */
 
-$this->title = 'Mise à jour de l\'utilisateur: ' . $model->username;
+$this->title = 'Mise à jour de l\'utilisateur: ' . $model->email;
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

@@ -33,7 +33,7 @@ class CapaUserSearch extends CapaUser
     {
         return [
             [['id', 'cellule_id', 'flag_password'], 'integer'],
-            [['username', 'email', 'auth_key', 'password_hash', 'cellule.name', 'userRight'], 'safe'],
+            [['firstname', 'surname', 'email', 'auth_key', 'password_hash', 'cellule.name', 'userRight'], 'safe'],
         ];
     }
 
@@ -72,7 +72,7 @@ class CapaUserSearch extends CapaUser
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'username' => SORT_ASC,
+                    'surname' => SORT_ASC,
                 ]
             ],
         ]);
@@ -103,7 +103,8 @@ class CapaUserSearch extends CapaUser
             'flag_password' => $this->flag_password,
         ]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
+        $query->andFilterWhere(['like', 'firstname', $this->firstname])
+            ->andFilterWhere(['like', 'surname', $this->surname])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
@@ -130,7 +131,7 @@ class CapaUserSearch extends CapaUser
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'username' => SORT_ASC,
+                    'surname' => SORT_ASC,
                 ]
             ],
         ]);
@@ -161,7 +162,8 @@ class CapaUserSearch extends CapaUser
             'flag_password' => $this->flag_password,
         ]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
+        $query->andFilterWhere(['like', 'firstname', $this->firstname])
+            ->andFilterWhere(['like', 'surname', $this->surname])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])

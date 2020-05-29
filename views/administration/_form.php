@@ -27,7 +27,8 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     ]); ?>
 
     <!-- username field -->
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true, 'placeholder' => 'Nom et prénom'])->label('Nom de l\'utilisateur :') ?>
+    <?= $form->field($model, 'surname')->textInput(['maxlength' => true, 'placeholder' => 'Nom et prénom'])->label('Nom de l\'utilisateur :') ?>
+    <?= $form->field($model, 'firstname')->textInput(['maxlength' => true, 'placeholder' => 'Nom et prénom'])->label('Prénom de l\'utilisateur :') ?>
 
     <!-- email field -->
     <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder' => 'Email capacités'])->label('Email :') ?>
@@ -45,7 +46,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     ); ?>
 
     <!-- email field -->
-    <?= $form->field($model, 'salary')->input('number', ['maxlength' => true, 'placeholder' => 'Prix'])->label('Prix d\'intervention :') ?>
+    <?= $form->field($model, 'price')->input('number', ['maxlength' => true, 'placeholder' => 'Prix'])->label('Prix d\'intervention :') ?>
 
     <!-- devis role dropdown field -->
     <?= $form->field($model, 'stored_role_devis')->widget(Select2::classname(), [

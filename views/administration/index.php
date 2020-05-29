@@ -110,7 +110,8 @@ function getCollumnArray(): array
     $result = [];
 
     // Text input.
-    array_push($result, getUsernameArray());
+    array_push($result, getSurnameArray());
+    array_push($result, getFirstnameArray());
     array_push($result, getEmailArray());
     array_push($result, getCelluleArray());
 
@@ -120,17 +121,28 @@ function getCollumnArray(): array
     return $result;
 }
 
-function getUsernameArray(): array
+function getSurnameArray(): array
 {
     return [
-        'attribute' => 'username',
+        'attribute' => 'surname',
         'format' => 'raw',
-        'label' => 'Salarié',
+        'label' => 'Nom',
         'contentOptions' => ['class' => 'username-row'],
         'encodeLabel' => false,
         'value' => function ($data) {
-            return Html::a($data['username'], ['administration/view', 'id' => $data['id']]);
+            return Html::a($data['surname'], ['administration/view', 'id' => $data['id']]);
         }
+    ];
+}
+
+function getFirstnameArray(): array
+{
+    return [
+        'label' => 'Prénom',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'attribute' => 'firstname',
+        'contentOptions' => ['class' => 'email-row'],
     ];
 }
 

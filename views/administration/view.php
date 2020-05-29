@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\users\CapaUser */
 
-$this->title = "Détail du salarié : " . $model->username;
+$this->title = "Détail du salarié : " . $model->email;
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -69,17 +69,22 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
 
 function createUserDataTable($model): string
 {
-    $username = $model->username;
+    $surname = $model->surname;
+    $firstname = $model->firstname;
     $email = $model->email;
     $cellule = $model->cellule->name;
-    $salary = $model->salary;
+    $salary = $model->price;
 
     return <<<HTML
         <table class="highlight">
             <tbody>
                 <tr>
-                    <td width="30%" class="table-font-bold">Nom / prénom</td>
-                    <td>${username}</td>
+                    <td width="30%" class="table-font-bold">Nom</td>
+                    <td>${surname}</td>
+                </tr>
+                <tr>
+                    <td width="30%" class="table-font-bold">PRénom</td>
+                    <td>${firstname}</td>
                 </tr>
                 <tr>
                     <td width="30%" class="table-font-bold">Email</td>
