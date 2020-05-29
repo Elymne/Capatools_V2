@@ -22,6 +22,9 @@ use app\models\users\Cellule;
 use app\models\projects\UploadFile;
 use app\models\parameters\DevisParameter;
 use app\models\parameters\DevisParameterUpdateForm;
+use app\models\equipments\Equipment;
+use app\models\equipments\EquipmentCreateForm;
+use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 
 /**
@@ -94,6 +97,11 @@ class AdministrationController extends Controller
                         'allow' => true,
                         'actions' => ['manage-devis-parameters'],
                         'roles' => ['devisParameter']
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view-equipments'],
+                        'roles' => ['equipments']
                     ]
                 ],
             ],
@@ -173,6 +181,21 @@ class AdministrationController extends Controller
                 'label' => 'Paramètres des devis',
                 'icon' => 'show_chart',
                 'subServiceMenuActive' => SubMenuEnum::USER_UPDATE_DEVIS_PARAMETERS
+            ]);
+        }
+
+        if (
+            UserRoleManager::hasRoles([
+                UserRoleEnum::ADMINISTRATOR,
+                UserRoleEnum::SUPER_ADMINISTRATOR
+            ])
+        ) {
+            array_push($result, [
+                'priorite' => 1,
+                'url' => 'administration/view-equipments',
+                'label' => 'Liste des matériels',
+                'icon' => 'show_chart',
+                'subServiceMenuActive' => SubMenuEnum::USER_UPDATE_EQUIPMENTS
             ]);
         }
 
@@ -419,6 +442,52 @@ class AdministrationController extends Controller
                 'fileCguEnModel' => $fileCguEnModel
             ]
         );
+    }
+
+    /**
+     * Render view : administration/view-equipments.
+     * Cette méthode est utilisé pour retourner une vue affichant tous les matériels de l'application.
+     * Ces matériels sont stockés de manière globale.
+     * 
+     * @return mixed
+     */
+    public function actionViewEquipments()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Equipment::getAll(),
+        ]);
+
+        MenuSelectorHelper::setMenuEquipments();
+        return $this->render(
+            'equipmentView',
+            [
+                'dataProvider' => $dataProvider
+            ]
+        );
+    }
+
+    /**
+     * Render view : administration/create-equipment.
+     * Cette méthode est utilisé pour retourner une vue permettant de créer un équipement.
+     * Le nouveau matériel est stocké de manière globale.
+     * 
+     * @return mixed
+     */
+    public function actionCreateEquipment()
+    {
+        $model = new EquipmentCreateForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->save()) {
+                MenuSelectorHelper::setMenuAdminNone();
+                return $this->redirect(['administration/view-equipments']);
+            }
+        }
+
+        MenuSelectorHelper::setMenuEquipments();
+        return $this->render('createEquipment', [
+            'model' => $model
+        ]);
     }
 
     /**

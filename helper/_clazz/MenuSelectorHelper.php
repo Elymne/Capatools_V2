@@ -51,6 +51,17 @@ class MenuSelectorHelper
 
     /**
      * Description :
+     * - Déroule le menu Administration.
+     * - Le sub-menu de la liste des équipements.
+     */
+    static function setMenuEquipments()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_UPDATE_EQUIPMENTS;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+    }
+
+    /**
+     * Description :
      * - Déroule le menu Devis.
      * - Aucuns sub-menu n'est actif.
      */

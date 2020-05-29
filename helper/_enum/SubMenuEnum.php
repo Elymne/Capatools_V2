@@ -23,6 +23,7 @@ class SubMenuEnum extends Enum
     const USER_CREATE = 'USER_CREATE';
     const USER_LIST = 'USER_LIST';
     const USER_UPDATE_DEVIS_PARAMETERS = "USER_UPDATE_DEVIS_PARAMETERS";
+    const USER_UPDATE_EQUIPMENTS = "USER_UPDATE_EQUIPMENTS";
 
     /**
      * Devis menu.
