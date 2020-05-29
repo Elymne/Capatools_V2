@@ -51,11 +51,9 @@ ProjectIndexAsset::register($this);
                     <?php Pjax::begin(['id' => '1']); ?>
 
                     <?= GridView::widget([
-                        'id' => 'AvantContrat_id',
                         'dataProvider' => $dataProvider,
                         'rowOptions' => [
                             'style' => 'height:20px;',
-                            //                'width:20px;',
                             'text-overflow:ellipsis;'
                         ],
                         'tableOptions' => [
@@ -196,19 +194,19 @@ function getCollumnsArray()
 {
     $result = [];
     array_push($result, getIdArray());
-    array_push($result, getInternalNameArray());
-    array_push($result, getUsernameArray());
+    //array_push($result, getInternalNameArray());
+    //array_push($result, getUsernameArray());
     if (UserRoleManager::hasRoles([UserRoleEnum::ADMINISTRATOR, UserRoleEnum::SUPER_ADMINISTRATOR])) {
         array_push($result, getCelluleArray());
     }
-    array_push($result, getCompanyArray());
-    array_push($result, getStatusArray());
+    //array_push($result, getCompanyArray());
+    //array_push($result, getStatusArray());
 
     // Buttons displaying.
-    array_push($result, getUpdateButtonArray());
-    array_push($result, getDocumentButtonArray());
-    array_push($result, getPdfButtonArray());
-    array_push($result, getExcelButtonArray());
+    //array_push($result, getUpdateButtonArray());
+    //array_push($result, getDocumentButtonArray());
+    //array_push($result, getPdfButtonArray());
+    //array_push($result, getExcelButtonArray());
 
     return $result;
 }
