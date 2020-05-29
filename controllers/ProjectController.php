@@ -170,8 +170,9 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionIndex()
     {
-
+        // Instanciation de la classe ProjectSearch qui va nous permettre d'utiliser sa fonction search qui nous renvoie tous les projets.
         $searchModel = new ProjectSearch();
+        // Nous aurons donc tous les models et en plus la possibilité d'ordonner ces données dans un gridview.
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         // Récupération des noms de companies des devis de manière distincte.
@@ -182,7 +183,6 @@ class ProjectController extends Controller implements ServiceInterface
         MenuSelectorHelper::setMenuProjectIndex();
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'companiesName' => $companiesName
         ]);

@@ -38,9 +38,9 @@ class ProjectSearch extends Project
         ];
     }
 
+
     public function attributes()
     {
-        // add related fields to searchable attributes
         return array_merge(parent::attributes(), ['project_manager.email', 'company.name', 'cellule.name']);
     }
 
@@ -62,17 +62,8 @@ class ProjectSearch extends Project
      */
     public function search($params)
     {
-        // Prepare query.
-        $query = null;
 
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
-                UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
-            ])
-        )  $query = Project::find();
-        else $query = Project::getAllByCellule(Yii::$app->user->identity->cellule->id);
-
+        $query = Project::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

@@ -3,7 +3,7 @@
 use app\assets\projects\ProjectIndexAsset;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
-use app\models\devis\UploadFile;
+use app\models\files\UploadFile;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -194,19 +194,19 @@ function getCollumnsArray()
 {
     $result = [];
     array_push($result, getIdArray());
-    //array_push($result, getInternalNameArray());
-    //array_push($result, getUsernameArray());
+    array_push($result, getInternalNameArray());
+    array_push($result, getUsernameArray());
     if (UserRoleManager::hasRoles([UserRoleEnum::ADMINISTRATOR, UserRoleEnum::SUPER_ADMINISTRATOR])) {
         array_push($result, getCelluleArray());
     }
-    //array_push($result, getCompanyArray());
-    //array_push($result, getStatusArray());
+    array_push($result, getCompanyArray());
+    array_push($result, getStatusArray());
 
     // Buttons displaying.
-    //array_push($result, getUpdateButtonArray());
-    //array_push($result, getDocumentButtonArray());
-    //array_push($result, getPdfButtonArray());
-    //array_push($result, getExcelButtonArray());
+    array_push($result, getUpdateButtonArray());
+    array_push($result, getDocumentButtonArray());
+    array_push($result, getPdfButtonArray());
+    array_push($result, getExcelButtonArray());
 
     return $result;
 }
@@ -239,7 +239,7 @@ function getInternalNameArray()
 function getUsernameArray()
 {
     return [
-        'attribute' => 'capa_user.username',
+        'attribute' => 'project_manager.email',
         'format' => 'text',
         'label' => 'Resp projet',
         'contentOptions' => ['class' => 'projectmanager-row', 'style' => 'display: none'],
@@ -272,7 +272,7 @@ function getCompanyArray()
 function getStatusArray()
 {
     return [
-        'attribute' => 'devis_status.label',
+        'attribute' => 'state',
         'format' => 'text',
         'label' => 'Statut',
         'contentOptions' => ['class' => 'status-row'],
@@ -311,11 +311,10 @@ function getDocumentButtonArray()
             if (UploadFile::getByDevis($model->id) != null) {
                 return Html::a(
                     '<i class="material-icons right">cloud_download</i>',
-                    Url::to(['devis/download-file', 'id' => $model->id]),
+                    Url::to(['project/download-file', 'id' => $model->id]),
                     [
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
-                        'action' => Url::to(['devis/update', 'id' => $model->id]),
                         'class' => 'btn-floating waves-effect waves-light btn-blue',
                     ]
                 );

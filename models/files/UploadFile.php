@@ -50,7 +50,7 @@ class UploadFile extends ActiveRecord
         return static::find();
     }
 
-    public static function getByDevis($devis_id)
+    public static function getByProject($devis_id)
     {
         return static::find()->where(['devis_id' => $devis_id])->One();
     }

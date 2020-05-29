@@ -37,7 +37,7 @@ class Project extends ActiveRecord
 
     public static function getAll()
     {
-        return static::find();
+        return static::find()->all();
     }
 
     public static function getOneById($id)
@@ -47,7 +47,7 @@ class Project extends ActiveRecord
 
     public static function getAllByCellule($idCellule)
     {
-        return static::find()->where(['project.cellule_id' => $idCellule]);
+        return static::find()->where(['project.cellule_id' => $idCellule])->all();
     }
 
     // Relation map.
