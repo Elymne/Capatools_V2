@@ -6,6 +6,7 @@ use yii\db\ActiveRecord;
 use app\models\users\Cellule;
 use app\models\users\CapaUser;
 use app\models\companies\Company;
+use app\models\companies\Contact;
 
 /**
  * Classe modèle métier des projets.
@@ -66,6 +67,11 @@ class Project extends ActiveRecord
     public function getCellule()
     {
         return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
+    }
+
+    public function getContact()
+    {
+        return $this->hasOne(Contact::className(), ['id' => 'contact_id']);
     }
 
     public function getCompany()

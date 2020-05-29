@@ -1,14 +1,11 @@
 <?php
 
 use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\CompanyTypeEnum;
 use app\helper\_enum\UserRoleEnum;
 use yii\helpers\Html;
-use app\models\devis\DevisStatus;
 use app\models\devis\Milestone;
 use app\models\devis\MilestoneStatus;
 use app\models\projects\Project;
-use app\models\users\CapaUser;
 use app\widgets\TopTitle;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
@@ -137,10 +134,10 @@ function createDataTable($model): string
     $prospecting_time_day = $model->prospecting_time_day;
     $signing_probability = $model->signing_probability;
 
-    $project_manager_firstname = $model->capa_user->firstname;
-    $project_manager_surname = $model->capa_user->surname;
-    $project_manager_email = $model->capa_user->email;
-    $project_manager_cellule = strtolower($model->capa_user->cellule->name);
+    $project_manager_firstname = $model->project_manager->firstname;
+    $project_manager_surname = $model->project_manager->surname;
+    $project_manager_email = $model->project_manager->email;
+    $project_manager_cellule = strtolower($model->project_manager->cellule->name);
 
     $company_name = $model->company->name;
     $company_email = $model->company->email;
@@ -293,7 +290,7 @@ HTML;
  * 
  * @return HTML table.
  */
-function createMilestonesTable($milestones, $idDevis): string
+function createMilestonesTable($lots): string
 {
 
     // Used to display or not tab for milestone management.
@@ -355,70 +352,6 @@ function createMilestonesTable($milestones, $idDevis): string
                 <td>${milestone_price} €</td>
                 <td>${milestone_delivery_date}</td>
                 <td>${milestone_status}</td>
-                ${statusRowBody}
-            </tr>   
-        HTML;
-    }
-
-    return $headerTable . $bodyTable . $footerTable;
-}
-
-/**
- * Create table with all milestones.
- * @param Array<Milestone> $model : List of milestones.
- * 
- * @return HTML table.
- */
-function createContributorsTable($contributors, $idDevis): string
-{
-
-    // Used to display or not tab for milestone management.
-    $statusRowHeader = '';
-    $statusRowBody = '';
-
-    // When no milestone has been created.
-    if (empty($contributors)) {
-        return <<<HTML
-            <p> Il n'existe aucuns intervenants pour ce devis. </p>
-        HTML;
-    }
-
-    // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone header tab.
-    if (UserRoleManager::hasRoles([UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) {
-        $statusRowHeader = <<<HTML
-            <td class="header"></td>
-        HTML;
-    }
-
-    // Create the header of milestone table.
-    $headerTable = <<<HTML
-        <table class="highlight">
-            <tbody>
-                <tr class="group">
-                    <td class="header">Nom utilisateur</td>
-                    <td class="header">Nombre de jours</td>
-                    ${statusRowHeader}
-                </tr>
-    HTML;
-
-    // Create the footer of milestone table.
-    $footerTable = <<<HTML
-                </tr>
-            </tbody>
-        </table>
-    HTML;
-
-    // Create the body of milestone table with data.
-    $bodyTable = '';
-    foreach ($contributors as $contributor) {
-
-        $contributor_username = CapaUser::findOne(['id' => $contributor->capa_user_id])->username;;
-        $contributor_nb_day = $contributor->nb_day;
-
-        $bodyTable = $bodyTable . <<<HTML
-            <tr>
-                <td>${contributor_username}</td>
-                <td>${contributor_nb_day} jours</td>
                 ${statusRowBody}
             </tr>   
         HTML;
