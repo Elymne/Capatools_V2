@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models\devis;
+namespace app\models\projects;
 
 use app\models\companies\Company;
 use app\models\companies\Contact;
