@@ -24,7 +24,7 @@ class Project extends ActiveRecord
     const TYPES = [self::TYPE_INTERNAL_PRESTATION, self::TYPE_OUTSOURCING_AD, self::TYPE_OUTSOURCING_UN];
 
     const STATE_DRAFT = 'Avant-projet';
-    const STATE_DEVIS_SENDED = 'Devis envvoyé';
+    const STATE_DEVIS_SENDED = 'Devis envoyé';
     const STATE_DEVIS_SIGNED = "Devis signé";
     const STATE_CANCELED = "Projet annulé";
     const STATE_FINISHED = "Projet terminé";
@@ -48,6 +48,17 @@ class Project extends ActiveRecord
     public static function getAllByCellule($idCellule)
     {
         return static::find()->where(['project.cellule_id' => $idCellule])->all();
+    }
+
+    public function getStatusIndex()
+    {
+        $result = -1;
+
+        foreach (self::STATES as $key => $state) {
+            if ($state == $this->state) $result = $key;
+        }
+
+        return $result;
     }
 
     // Relation map.

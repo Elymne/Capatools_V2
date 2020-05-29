@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use app\models\devis\DevisStatus;
 use app\models\devis\Milestone;
 use app\models\devis\MilestoneStatus;
+use app\models\projects\Project;
 use app\models\users\CapaUser;
 use app\widgets\TopTitle;
 /* @var $this yii\web\View */
@@ -19,15 +20,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
-$stages = [
-    1 => 'Avant Contrat',
-    2 => 'Validation resp opérationnel',
-    3 => 'Signature client',
-    4 => 'Projet en cours',
-    5 => 'Projet terminé / annulé'
-];
-
-$indexStatus = getIndexStatus($model);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -48,9 +40,7 @@ $indexStatus = getIndexStatus($model);
                     <label>Etat du contrat</label>
                 </div>
                 <div class="card-action">
-
-                    <?php echo createTimeline($stages, $indexStatus) ?>
-
+                    <?php echo createTimeline(Project::STATES, $model->getStatusIndex()) ?>
                 </div>
             </div>
         </div>
@@ -64,7 +54,7 @@ $indexStatus = getIndexStatus($model);
                 </div>
 
                 <div class="card-action">
-                    <?php echo createDataTable($model, $fileModel); ?>
+                    <?php echo createDataTable($model); ?>
                 </div>
             </div>
         </div>
@@ -124,35 +114,6 @@ function createTimeline($stages, $indexStatus)
 <?php
 }
 
-function getIndexStatus($model): int
-{
-
-    $indexStatus = -1;
-
-    switch ($model->devis_status->id) {
-        case 1:
-            $indexStatus = 1;
-            break;
-        case 2:
-            $indexStatus = 2;
-            break;
-        case 3:
-            $indexStatus = 3;
-            break;
-        case 4:
-            $indexStatus = 4;
-            break;
-        case 5:
-            $indexStatus = 5;
-            break;
-        case 6:
-            $indexStatus = 5;
-            break;
-    }
-
-    return $indexStatus;
-}
-
 function isStatusPassed($indexStatus, $arrayKey): bool
 {
     if ($indexStatus >= $arrayKey)
@@ -167,47 +128,35 @@ function isStatusPassed($indexStatus, $arrayKey): bool
  * 
  * @return HTML table.
  */
-function createDataTable($model, $fileModel): string
+function createDataTable($model): string
 {
 
-    $devis_name = $model->internal_name;
-    $devis_date = $model->creation_date;
-    $devis_labotory_proposal = $model->task_description;
+    $internal_name = $model->internal_name;
+    $internal_reference = $model->internal_reference;
+    $type = $model->type;
+    $prospecting_time_day = $model->prospecting_time_day;
+    $signing_probability = $model->signing_probability;
 
-    $user_name = $model->capa_user->username;
-    $user_email = $model->capa_user->email;
-    $user_cellule = strtolower($model->capa_user->cellule->name);
+    $project_manager_firstname = $model->capa_user->firstname;
+    $project_manager_surname = $model->capa_user->surname;
+    $project_manager_email = $model->capa_user->email;
+    $project_manager_cellule = strtolower($model->capa_user->cellule->name);
 
     $company_name = $model->company->name;
-    $company_type = CompanyTypeEnum::getTypeCompanyString($model->company->type);
-    $company_address = $model->company->address;
-    $company_phone = $model->company->phone;
     $company_email = $model->company->email;
-    $company_siret = $model->company->siret;
+    $company_type = $model->company->type;
+    $company_postal_code = $model->company->postal_code;
+    $company_city = $model->company->city;
+    $company_country = $model->company->country;
     $company_tva = $model->company->tva;
 
-
-    $delivery_type = $model->delivery_type->label;
-    $delivery_duration_hour = $model->service_duration;
-    $delivery_duration_day = intval($model->service_duration / 7.4);
-    $delivery_validity_duration = $model->validity_duration;
-    $delivery_payment_conditions = $model->payment_conditions;
-    $delivery_price = $model->price;
-    $delivery_payment_details = $model->payment_details;
-
-
+    $contact_firstname = $model->contact->firstname;
+    $contact_surname = $model->contact->surname;
+    $contact_phone_number = $model->contact->phone_number;
+    $contact_email = $model->contact->email;
 
     $laboxy_name = $model->id_laboxy;
-    $laboxy_prestation_duration = $model->service_duration * Yii::$app->params['LaboxyTimeDay'];
-
-    if ($fileModel == null) {
-        $file_name = 'Aucun fichier';
-        $file_version = 'Pas de fichier';
-    } else {
-        $file_name = $fileModel->name . '.' . $fileModel->type;
-        $file_version = $fileModel->version;
-    }
-
+    $laboxy_prestation_duration = $model->prospecting_time_day * Yii::$app->params['LaboxyTimeDay'];
 
     return <<<HTML
         <table class="highlight">
@@ -220,16 +169,24 @@ function createDataTable($model, $fileModel): string
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>Nom du projet</td>
-                    <td>${devis_name}</td>
+                    <td class='header'>Nom interne du projet</td>
+                    <td>${internal_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Date</td>
-                    <td>${devis_date}</td>
+                    <td class='header'>Reference interne du projet</td>
+                    <td>${internal_reference}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Proposition de laboratoire</td>
-                    <td>${devis_labotory_proposal}</td>
+                    <td class='header'>Type de projet</td>
+                    <td>${type}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Temps de prospection en jours</td>
+                    <td>${prospecting_time_day}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Probabilité de signature</td>
+                    <td>${signing_probability}</td>
                 </tr>
 
                 <!-- Project manager data -->
@@ -238,16 +195,20 @@ function createDataTable($model, $fileModel): string
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>Nom / prénom</td>
-                    <td>${user_name}</td>
+                    <td class='header'>Nom</td>
+                    <td>${project_manager_surname}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Prénom</td>
+                    <td>${project_manager_firstname}</td>
                 </tr>
                 <tr>
                     <td class='header'>Email</td>
-                    <td>${user_email}</td>
+                    <td>${project_manager_email}</td>
                 </tr>
                 <tr>
                     <td class='header'>Cellule capacité</td>
-                    <td>${user_cellule}</td>
+                    <td>${project_manager_cellule}</td>
                 </tr>
 
                 <!-- Company data -->
@@ -264,20 +225,20 @@ function createDataTable($model, $fileModel): string
                     <td>${company_type}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Addresse</td>
-                    <td>${company_address}</td>
+                    <td class='header'>Pays</td>
+                    <td>${company_country}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Téléphone</td>
-                    <td>${company_phone}</td>
+                    <td class='header'>Ville</td>
+                    <td>${company_city}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Code postal</td>
+                    <td>${company_postal_code}</td>
                 </tr>
                 <tr>
                     <td class='header'>Email</td>
                     <td>${company_email}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Siret</td>
-                    <td>${company_siret}</td>
                 </tr>
                 <tr>
                     <td class='header'>Tva</td>
@@ -285,40 +246,25 @@ function createDataTable($model, $fileModel): string
                 </tr>
 
                 <!-- Delivery data -->
-
                 <tr class='group'>
-                    <td class='header'>Prestation</td>
+                    <td class='header'>Contacte client</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>Type de prestation</td>
-                    <td>${delivery_type}</td>
+                    <td class='header'>Nom</td>
+                    <td>${contact_surname}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Durée de la prestation (h)</td>
-                    <td>${delivery_duration_hour} heure(s)</td>
+                    <td class='header'>Prénom</td>
+                    <td>${contact_firstname}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Durée de la prestation (j)</td>
-                    <td>${delivery_duration_day} jour(s)</td>
+                    <td class='header'>N° téléphone</td>
+                    <td>${contact_phone_number}</td>
                 </tr>
-                
                 <tr>
                     <td class='header'>Validité du devis</td>
-                    <td>${delivery_validity_duration} jour(s)</td>
-                </tr>
-
-                <tr>
-                    <td class='header'>Conditions de paiement</td>
-                    <td>${delivery_payment_conditions}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Prix de la prestation (HT)</td>
-                    <td>${delivery_price} €</td>
-                </tr>
-                <tr>
-                    <td class='header'>Echéancier</td>
-                    <td>${delivery_payment_details}</td>
+                    <td>${contact_email}</td>
                 </tr>
 
                  <!-- Laboxy data -->
@@ -334,26 +280,11 @@ function createDataTable($model, $fileModel): string
                     <td class='header'>Durée prestation laboxy</td>
                     <td>${laboxy_prestation_duration} heures</td>
                 </tr>
-
-                 <!-- Fichier uploadé -->
-
-                 <tr class='group'>
-                    <td class='header'>Fichier uploadé</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class='header'>Nom</td>
-                    <td>${file_name}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Version</td>
-                    <td>${file_version}</td>
-                </tr>
                 
             </tbody>
 
         </table>
-    HTML;
+HTML;
 }
 
 /**
@@ -542,62 +473,22 @@ function displayActionButtons($model)
 
     <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px']) ?>
 
-    <?php if ($model->status_id == DevisStatus::AVANT_PROJET &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
+    <?php if ($model->state == PROJECT::STATE_DRAFT && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
         <?= Html::a(
             'Passer en validation opérationnelle <i class="material-icons right">check</i>',
-            ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_OP,],
+            ['update-status', 'id' => $model->id, 'status' => PROJECT::STATE_DEVIS_SENDED,],
             ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px', 'data' => [
                 'confirm' => 'Valider ce devis en tant que responsable opérationnel ?'
             ]]
         ) ?>
     <?php endif; ?>
 
-    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_OP &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
         <?= Html::a(
             'Valider la signature client <i class="material-icons right">check</i>',
-            ['update-status', 'id' => $model->id, 'status' => DevisStatus::ATTENTE_VALIDATION_CL,],
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_SIGNED,],
             ['class' => 'waves-effect waves-light btn btn-green  rightspace-15px leftspace-15px', 'data' => [
                 'confirm' => 'Le client à signé le contrat ?'
-            ]]
-        ) ?>
-    <?php endif; ?>
-
-    <?php if ($model->status_id == DevisStatus::ATTENTE_VALIDATION_CL &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
-        <?= Html::a(
-            'Passer en projet en cours <i class="material-icons right">check</i>',
-            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_EN_COURS,],
-            ['class' => 'waves-effect waves-light btn btn-green  rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Passer ce projet en cours ?'
-            ]]
-        ) ?>
-    <?php endif; ?>
-
-    <?php if ($model->status_id == DevisStatus::PROJET_EN_COURS &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
-        <?= Html::a(
-            'Passer en projet terminé <i class="material-icons right">check</i>',
-            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJETTERMINE,],
-            ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Ce projet est terminé ?'
-            ]]
-        ) ?>
-    <?php endif; ?>
-
-    <?php if ($model->status_id < DevisStatus::PROJET_ANNULE && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
-        <?= Html::a(
-            'annuler projet <i class="material-icons right">delete</i>',
-            ['update-status', 'id' => $model->id, 'status' => DevisStatus::PROJET_ANNULE,],
-            ['class' => 'waves-effect waves-light btn btn-orange rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Annuler ce projet ?'
-            ]]
-        ) ?>
-    <?php endif; ?>
-
-    <?php if ($model->status_id == DevisStatus::PROJET_ANNULE && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS, UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) : ?>
-        <?= Html::a(
-            'Supprimer <i class="material-icons right">delete</i>',
-            ['delete', 'id' => $model->id],
-            ['class' => 'waves-effect waves-light btn btn-red rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Supprimer ce projet ?'
             ]]
         ) ?>
     <?php endif; ?>

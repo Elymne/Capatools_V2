@@ -145,13 +145,7 @@ class ProjectController extends Controller implements ServiceInterface
                     [
                         'Priorite' => 2,
                         'url' => 'project/create',
-                        'label' => 'Créer un devis',
-                        'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
-                    ],
-                    [
-                        'Priorite' => 1,
-                        'url' => 'project/refactoring',
-                        'label' => 'Refactoring (TEST)',
+                        'label' => 'Créer un projet',
                         'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
                     ]
                 ]
@@ -198,13 +192,9 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionView(int $id)
     {
-
-        MenuSelectorHelper::setMenuDevisNone();
+        MenuSelectorHelper::setMenuProjectNone();
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'milestones' => Milestone::find()->where(['devis_id' => $id])->all(),
-            'contributors' => Contributor::find()->where(['devis_id' => $id])->all(),
-            'fileModel' => UploadFile::getByDevis($id)
         ]);
     }
 
@@ -556,7 +546,7 @@ class ProjectController extends Controller implements ServiceInterface
      */
     protected function findModel($id)
     {
-        if (($model = Devis::findOne($id)) !== null) {
+        if (($model = Project::findOne($id)) !== null) {
             return $model;
         }
 

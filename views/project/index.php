@@ -3,7 +3,6 @@
 use app\assets\projects\ProjectIndexAsset;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
-use app\models\files\UploadFile;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -220,7 +219,7 @@ function getIdArray()
         'contentOptions' => ['class' => 'capaid-row'],
         'headerOptions' => ['class' => 'capaid-row'],
         'value' => function ($data) {
-            return Html::a($data['id_capa'], ['devis/view', 'id' => $data['id']], ['target' => '_blank',]);
+            return Html::a($data['id_capa'], ['project/view', 'id' => $data['id']], ['target' => '_blank',]);
         }
     ];
 }
