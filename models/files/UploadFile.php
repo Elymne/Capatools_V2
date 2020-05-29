@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models\devis;
+namespace app\models\files;
 
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;

@@ -10,16 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
 use app\models\Model;
-use app\models\devis\Devis;
-use app\models\devis\DevisStatus;
 use app\models\companies\Company;
-use app\models\devis\DeliveryType;
-use app\models\devis\DevisCreateForm;
-use app\models\devis\DevisUpdateForm;
-use app\models\devis\DevisSearch;
-use app\models\devis\Milestone;
-use app\models\devis\MilestoneStatus;
-use app\models\devis\UploadFile;
+use app\models\files\UploadFile;
 use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_clazz\UploadFileHelper;
 use app\helper\_enum\SubMenuEnum;
@@ -27,9 +19,10 @@ use app\helper\_enum\UserRoleEnum;
 use app\components\ExcelExportService;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\StringData;
-use app\models\companies\Contact;
-use app\models\devis\Contributor;
-use app\models\refactoring\RefactoringDevisForm;
+use app\models\devis\ProjectCreateForm;
+use app\models\projects\Project;
+use app\models\projects\ProjectSearch;
+use app\models\projects\ProjectUpdateForm;
 use app\models\users\CapaUser;
 use kartik\mpdf\Pdf;
 
@@ -45,7 +38,7 @@ use kartik\mpdf\Pdf;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class DevisController extends Controller implements ServiceInterface
+class ProjectController extends Controller implements ServiceInterface
 {
 
     /**
@@ -138,26 +131,26 @@ class DevisController extends Controller implements ServiceInterface
 
             $result = [
                 'priorite' => 3,
-                'name' => 'Devis',
+                'name' => 'Projets',
                 // serviceMenuActive est à un moyen très peu efficace, je vais essayer de l'oter, j'ai fais ça car je savais pas trop comment gérer
                 // les actives bar du menu à gauche.
                 'serviceMenuActive' => SubMenuEnum::DEVIS,
                 'items' => [
                     [
                         'Priorite' => 3,
-                        'url' => 'devis/index',
+                        'url' => 'project/index',
                         'label' => 'Liste des devis',
                         'subServiceMenuActive' => SubMenuEnum::DEVIS_LIST
                     ],
                     [
                         'Priorite' => 2,
-                        'url' => 'devis/create',
+                        'url' => 'project/create',
                         'label' => 'Créer un devis',
                         'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
                     ],
                     [
                         'Priorite' => 1,
-                        'url' => 'devis/refactoring',
+                        'url' => 'project/refactoring',
                         'label' => 'Refactoring (TEST)',
                         'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
                     ]
@@ -166,46 +159,6 @@ class DevisController extends Controller implements ServiceInterface
         }
 
         return $result;
-    }
-
-    /**
-     * Juste un test pour voir comment gérer le formulaire multipage.
-     * Les données du formulaire seront factice et provienne d'une classe mocké de Devis.
-     */
-    public function actionRefactoring()
-    {
-
-        $model = new RefactoringDevisForm();
-
-        // preload data variable for form.
-        $model->payment_details = StringData::DEVIS_PAYMENT_DETAILS;
-        $model->payment_conditions = StringData::DEVIS_PAYMENT_CONDITIONS;
-        $model->validity_duration = 30;
-
-        // Get data that we wish to use on our view.
-        $delivery_types = DeliveryType::getDeliveryTypes();
-
-        // Here we type a specific requetst because we only want names of clients.
-        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
-        $companiesNames = array_merge($companiesNames);
-
-        // Seperate the relationnal object from devis.
-        $milestones = $model->milestones;
-
-        // Get file model.
-        $fileModel = new UploadFile();
-
-        MenuSelectorHelper::setMenuDevisNone();
-        return $this->render(
-            'createRefactoring',
-            [
-                'model' => $model,
-                'delivery_types' => $delivery_types,
-                'companiesNames' => $companiesNames,
-                'fileModel' => $fileModel,
-                'milestones' => (empty($milestones)) ? [new Milestone] : $milestones,
-            ]
-        );
     }
 
     /**
@@ -218,15 +171,15 @@ class DevisController extends Controller implements ServiceInterface
     public function actionIndex()
     {
 
-        $searchModel = new DevisSearch();
+        $searchModel = new ProjectSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         // Récupération des noms de companies des devis de manière distincte.
         $companiesName = array_unique(array_map(function ($value) {
             return $value->company->name;
-        }, Devis::find('company.name')->all()));
+        }, ProjectSearch::find('company.name')->all()));
 
-        MenuSelectorHelper::setMenuDevisIndex();
+        MenuSelectorHelper::setMenuProjectIndex();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -267,15 +220,12 @@ class DevisController extends Controller implements ServiceInterface
     public function actionCreate()
     {
 
-        $model = new DevisCreateForm();
+        $model = new ProjectCreateForm();
 
         // preload data variable for form.
         $model->payment_details = StringData::DEVIS_PAYMENT_DETAILS;
         $model->payment_conditions = StringData::DEVIS_PAYMENT_CONDITIONS;
         $model->validity_duration = 30;
-
-        // Get data that we wish to use on our view.
-        $delivery_types = DeliveryType::getDeliveryTypes();
 
         // Here we type a specific requetst because we only want names of clients.
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
@@ -302,7 +252,6 @@ class DevisController extends Controller implements ServiceInterface
                 $model->id_laboxy = $model->id_capa . ' - ' . $company->name;
                 $model->capa_user_id = yii::$app->user->identity->id;
                 $model->cellule_id =  yii::$app->user->identity->cellule->id;
-                $model->status_id = DevisStatus::AVANT_PROJET;
                 $model->creation_date = date_create()->format('Y-m-d H:i:s');
                 $model->price = $model->unit_price * $model->quantity;
                 $model->save();
@@ -316,17 +265,16 @@ class DevisController extends Controller implements ServiceInterface
 
                 $model->save();
 
-                MenuSelectorHelper::setMenuDevisIndex();
+                MenuSelectorHelper::setMenuProjectIndex();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
-        MenuSelectorHelper::setMenuDevisCreate();
+        MenuSelectorHelper::setMenuProjectCreate();
         return $this->render(
             'create',
             [
                 'model' => $model,
-                'delivery_types' => $delivery_types,
                 'companiesNames' => $companiesNames,
                 'fileModel' => $fileModel
             ]
@@ -349,17 +297,11 @@ class DevisController extends Controller implements ServiceInterface
     {
 
         // Get the models values from devis.
-        $model =  DevisUpdateForm::findOne($id);
+        $model =  ProjectUpdateForm::findOne($id);
         $model->company_name = $model->company->name;
 
         // Get file model.
         $fileModel = new UploadFile();
-
-        // Get all delivery types.
-        $deliveryTypes = DeliveryType::getDeliveryTypes();
-
-        // Seperate the relationnal object from devis.
-        $milestones = $model->milestones;
 
         // Separation de l'entité contributors du model devis.
         $contributors = $model->contributors;
@@ -384,31 +326,11 @@ class DevisController extends Controller implements ServiceInterface
 
             if ($model->validate()) {
 
-                // Map the new milestones with existants one.
-                $milestones = Model::createMultiple(Milestone::classname(), $milestones);
-
-                // Load milestones into model.
-                Model::loadMultiple($milestones, Yii::$app->request->post());
-
-                // Map the new contributors with existants one.
-                $contributors = Model::createMultiple(Contributor::classname(), $contributors);
-
                 // Load contributors into model.
                 Model::loadMultiple($contributors, Yii::$app->request->post());
 
                 // Get the company data with name insert in field.
                 $company = Company::find()->where(['name' =>  $model->company_name])->one();
-
-                // Save each milestone.
-                foreach ($milestones as $milestone) {
-
-                    $milestone->devis_id = $model->id;
-                    // Cumulate the max priceHt.
-                    $max_price = $max_price + $milestone->price;
-
-                    // Insert the milestone.
-                    $milestone->save();
-                }
 
                 // Save each contributor.
                 foreach ($contributors as $contributor) {
@@ -430,21 +352,18 @@ class DevisController extends Controller implements ServiceInterface
                 // Save the Devis change.
                 $model->save();
 
-                MenuSelectorHelper::setMenuDevisNone();
+                MenuSelectorHelper::setMenuProjectNone();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
-        MenuSelectorHelper::setMenuDevisNone();
+        MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
             'update',
             [
                 'model' => $model,
-                'delivery_types' =>  $deliveryTypes,
                 'companiesNames' => $companiesNames,
                 'usersNames' => $usersNames,
-                'milestones' => (empty($milestones)) ? [new Milestone] : $milestones,
-                'contributors' => (empty($contributors)) ? [new Contributor()] : $contributors,
                 'fileModel' => $fileModel
             ]
         );
@@ -481,7 +400,6 @@ class DevisController extends Controller implements ServiceInterface
     {
         $model = $this->findModel($id);
 
-
         if (
             UserRoleManager::hasRoles([
                 UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
@@ -490,10 +408,9 @@ class DevisController extends Controller implements ServiceInterface
         ) $this->setStatus($model, $status);
 
 
-        MenuSelectorHelper::setMenuDevisNone();
+        MenuSelectorHelper::setMenuProjectNone();
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'milestones' => Milestone::find()->where(['devis_id' => $id])->all(),
             'fileModel' => UploadFile::getByDevis($id)
         ]);
     }
@@ -505,38 +422,12 @@ class DevisController extends Controller implements ServiceInterface
      * @param Devis Un objet devis dont on veut modifier le status.
      * @param integer Le type de status du devis à modifier.
      */
-    private function setStatus(Devis $model, int $status)
+    private function setStatus(Project $model, int $status)
     {
         if ($model) {
             $model->status_id = $status;
             $model->save();
         }
-    }
-
-    /**
-     * Utilisé pour attribuer un status à un jalon de devis.
-     * Redirect view : devis/view.
-     * 
-     * @param int $id
-     * @param string $status
-     * @param int $id_devis
-     * @return View
-     */
-    public function actionUpdateMilestoneStatus(int $id, string $status, int $id_devis)
-    {
-
-        if (UserRoleManager::hasRoles([UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) {
-            if ($status == MilestoneStatus::ENCOURS || $status == MilestoneStatus::FACTURATIONENCOURS) {
-                Milestone::setStatusById($id, $status + 1);
-            }
-        }
-
-        MenuSelectorHelper::setMenuDevisNone();
-        return $this->render('view', [
-            'model' => $this->findModel($id_devis),
-            'milestones' => Milestone::find()->where(['devis_id' => $id_devis])->all(),
-            'fileModel' => UploadFile::getByDevis($id)
-        ]);
     }
 
     /**
@@ -677,7 +568,6 @@ class DevisController extends Controller implements ServiceInterface
      */
     public static function getIndicator($user)
     {
-        return  ['label' => 'NbDevis', 'value' => Devis::getGroupbyStatus()];
     }
 
     /**

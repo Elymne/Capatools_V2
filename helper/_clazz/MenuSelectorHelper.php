@@ -54,7 +54,7 @@ class MenuSelectorHelper
      * - Déroule le menu Devis.
      * - Aucuns sub-menu n'est actif.
      */
-    static function setMenuDevisNone()
+    static function setMenuProjectNone()
     {
         Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
@@ -65,7 +65,7 @@ class MenuSelectorHelper
      * - Déroule le menu Devis.
      * - Le sub-menu de la liste des devis est actif.
      */
-    static function setMenuDevisIndex()
+    static function setMenuProjectIndex()
     {
         Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
@@ -76,7 +76,7 @@ class MenuSelectorHelper
      * - Déroule le menu Devis.
      * - Le sub-menu de la création d'un devis.
      */
-    static function setMenuDevisCreate()
+    static function setMenuProjectCreate()
     {
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
         Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_CREATE;

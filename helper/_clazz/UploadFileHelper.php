@@ -2,7 +2,7 @@
 
 namespace app\helper\_clazz;
 
-use app\models\devis\UploadFile;
+use app\models\files\UploadFile;
 use Yii;
 
 /**

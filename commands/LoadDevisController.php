@@ -12,7 +12,7 @@ use yii\console\Controller;
 use yii\console\ExitCode;
 
 use app\models\users\Cellule;
-use app\models\Devis\Devis;
+use app\models\projects\Project;
 use app\models\companies\Company;
 
 
@@ -24,7 +24,7 @@ use app\models\companies\Company;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class LoadDevisController extends Controller
+class LoadProjectController extends Controller
 {
 
     public $file = '';
@@ -57,35 +57,35 @@ class LoadDevisController extends Controller
             //Lecture des donnéess
             while (($data = fgetcsv($readfile, 10000, ';')) !== FALSE) {
                 $berreur = false;
-                $devis = new Devis();
+                $project = new Project();
                 //Username Nom Prenom
                 // $user->id =  $data[0];
-                $devis->id_capa =  $data[0];
+                $project->id_capa =  $data[0];
                 ///Protection d'erreur indication de la ligne d'erreur
-                $devis->cellule_id = Cellule::findByAXX($data[1])->id;
+                $project->cellule_id = Cellule::findByAXX($data[1])->id;
                 if ($berreur) {
                     echo 'Erreur Id cellule inconue : ' . implode(';', $data);
                 } else {
-                    $devis->filename_first_upload = $data[2];
-                    $devis->filename_last_upload =  $data[3];
+                    $project->filename_first_upload = $data[2];
+                    $project->filename_last_upload =  $data[3];
 
                     $company = new Company();
                     $company->description = $data[5];
                     $company->name = $data[4];
                     $company->tva = $data[6];
                     $company->save();
-                    $devis->company_id = $company->id;
-                    $devis->internal_name = $data[7];
+                    $project->company_id = $company->id;
+                    $project->internal_name = $data[7];
                     ///Protection d'erreur indication de la ligne d'erreur
                     echo $data[8];
-                    //$devis->capa_user_id = CapaUser::findByUsername($data[8])->id;
+                    //$project->capa_user_id = CapaUser::findByUsername($data[8])->id;
                     if ($berreur) {
                         echo 'Erreur Responsable projet inconnu : ' . implode(';', $data);
                     }
-                    $devis->service_duration = $data[9];
-                    $devis->version = $data[10];
-                    $devis->filename = $data[11];
-                    $devis->save();
+                    $project->service_duration = $data[9];
+                    $project->version = $data[10];
+                    $project->filename = $data[11];
+                    $project->save();
                 }
             }
         } else {

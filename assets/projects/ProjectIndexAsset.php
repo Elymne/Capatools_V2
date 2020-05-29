@@ -1,23 +1,23 @@
 <?php
 
-namespace app\assets\devis;
+namespace app\assets\projects;
 
 use yii\web\AssetBundle;
 
 /**
- * Asset bunfle de la vue index des devis.
+ * Asset bunfle de la vue index des projet.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DevisIndexAsset extends AssetBundle
+class ProjectIndexAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
 
-    public $css = ['css/devis/index.css'];
+    public $css = ['css/projects/index.css'];
 
-    public $js = ['js/devis/index.js'];
+    public $js = ['js/projects/index.js'];
 
     public $depends = [
         'yii\web\YiiAsset',

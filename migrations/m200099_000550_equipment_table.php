@@ -14,6 +14,12 @@ class m200099_000550_equipment_table extends Migration
             'ht_price' => $this->double()->defaultValue(0),
             'type' => $this->string()->notNull()
         ]);
+
+        $this->insert('{{%equipment}}', [
+            'name' => "Cuve à bière",
+            'ht_price' => 1060.00,
+            'type' => 'Outil expérimental'
+        ]);
     }
 
     /**

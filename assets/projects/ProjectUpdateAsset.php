@@ -1,15 +1,15 @@
 <?php
 
-namespace app\assets\devis;
+namespace app\assets\projects;
 
 use yii\web\AssetBundle;
 
 /**
- * Asset bundle pour la vue de la création d'un devis.
+ * Asset bundle pour la vue de la création d'un projet.
  * 
  * @since 2.0
  */
-class DevisUpdateAsset extends AssetBundle
+class ProjectUpdateAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
@@ -17,10 +17,10 @@ class DevisUpdateAsset extends AssetBundle
     public $css = [
         // Formjs.
         'css/step-form.css',
-        'css/devis/create.css',
+        'css/projects/create.css',
     ];
 
-    public $js = ['js/devis/update.js'];
+    public $js = ['js/projects/update.js'];
 
     public $depends = [
         'yii\web\YiiAsset',

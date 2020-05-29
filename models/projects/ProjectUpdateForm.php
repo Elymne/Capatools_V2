@@ -1,23 +1,25 @@
 <?php
 
-namespace app\models\refactoring;
+namespace app\models\projects;
 
-use app\models\companies\Company;
-use app\models\devis\Devis;
 use yii\helpers\ArrayHelper;
+use app\models\companies\Company;
+use app\models\projects\Project;
 
 /**
  * Classe relative au modèle métier des devis.
- * Celle-ci permet de créer un formulaire de création de devis et de vérifier la validité des données inscrites dans les champs.
- * Elle permet aussi lorsque l'on veut créer un formulaire pour créer un devis, d'ajouter des champs qui n'existe pas dans la bdd.
- * ex : upfilename, pathfile, datept.
+ * Celle-ci permet de créer un formulaire de modification de devis et de vérifier la validité des données inscrites dans les champs.
+ * Elle permet aussi lorsque l'on veut créer un formulaire pour modifier un devis, d'ajouter des champs qui n'existe pas dans la bdd.
+ * Cette classe ressemble exactement à DevisCreateForm mais nous la gardons tout de même dans le cas où le formulaire changerait par rapport
+ * à celle de la création d'un devis.
  * 
  * Cette classe est a utiliser lorsque vous voulez créer une vue avec un formulaire depuis le contrôleur (contrôleur Devis ici).
+ * ex : upfilename, pathfile, datept.
  * 
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class RefactoringDevisForm extends Devis
+class ProjectUpdateForm extends Project
 {
 
     public $upfilename;
@@ -26,35 +28,23 @@ class RefactoringDevisForm extends Devis
 
     public $company_name;
 
-    public $ref_interne;
-    public $proba;
-    public $type;
-
-    public $test;
-
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
         return [
-            [['payment_conditions', 'payment_details', 'unit_price', 'quantity', 'task_description'], 'safe'],
             [['upfilename'], 'file', 'skipOnEmpty' => true, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros {formattedLimit}', 'message' => 'Une proposition technique doit être associée au devis.'],
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
-            ['service_duration', 'required', 'message' => 'Indiquer le temps en heure du projet.'],
-            ['service_duration_day', 'required', 'message' => 'Indiquer le en jour temps du projet.'],
+            ['service_duration', 'required', 'message' => 'Indiquer le temps du projet.'],
             ['company_name', 'required', 'message' => 'Indiquer le nom du client.'],
-            ['company_name', 'noClientFound', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['service_duration', 'integer', 'min' => 0, 'tooSmall' => 'La durée en heure de la prestation doit être supérieur à 0.', 'message' => 'La durée en heure de la prestation doit être un entier positif.'],
-            ['service_duration_day', 'integer', 'min' => 0, 'tooSmall' => 'La durée en jour de la prestation doit être supérieur à 0.', 'message' => 'La durée en jour de la prestation doit être un entier positif.'],
-            ['validity_duration', 'integer', 'min' => 0, 'tooSmall' => 'La durée de validité doit être supérieur à 0.', 'message' => 'La durée de validité doit être un entier positif.'],
-            ['price', 'integer', 'min' => 0, 'tooSmall' => 'Le prix doit être supérieur à 0.', 'message' => 'Le prix doit être un entier positif.'],
+            ['company_name', 'noCompanyFound', 'skipOnEmpty' => false, 'skipOnError' => false],
+            ['service_duration', 'integer', 'min' => 0, 'tooSmall' => 'La durée de la prestation doit être supérieur à 0.', 'message' => 'La durée de la prestation doit être un entier positif.'],
             ['delivery_type_id', 'required', 'message' => 'Indiquer le type de la prestation !'],
         ];
     }
 
 
-    //TODO se souvenir à quoi sert cette fonction.
     public function upload()
     {
         if ($this->upfilename) {
@@ -84,7 +74,7 @@ class RefactoringDevisForm extends Devis
     /**
      * Check if client exists and return error if he don't.
      */
-    public function noClientFound($attribute, $params)
+    public function noCompanyFound($attribute, $params)
     {
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);

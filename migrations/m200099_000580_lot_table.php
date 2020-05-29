@@ -26,6 +26,22 @@ class m200099_000580_lot_table extends Migration
             '{{%project}}',
             'id'
         );
+
+        $this->insert('{{%lot}}', [
+            'number' => 1,
+            'title' => "lot numéro 1 : évasion",
+            'status' => 'En cours',
+            'comment' => 'Petit lot pour s\'évader',
+            'project_id' => 1
+        ]);
+
+        $this->insert('{{%lot}}', [
+            'number' => 2,
+            'title' => "lot numéro 2 : vacances",
+            'status' => 'En cours',
+            'comment' => 'Petit lot pour prendre des vacances',
+            'project_id' => 1
+        ]);
     }
 
     public function safeDown()

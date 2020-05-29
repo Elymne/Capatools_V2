@@ -1,12 +1,12 @@
 <?php
 
-namespace app\models\devis;
+namespace app\models\projects;
 
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\devis\Devis;
+use app\models\projects\Project;
 use Yii;
 
 /**
@@ -24,7 +24,7 @@ use Yii;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class DevisSearch extends Devis
+class ProjectSearch extends Project
 {
 
     /**

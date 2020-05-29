@@ -72,6 +72,25 @@ class m200099_000560_project_table extends Migration
             'id',
 
         );
+
+        $this->insert('{{%project}}', [
+            'id_capa' => "AIEX_I",
+            'id_laboxy' => "OIUEJYYT",
+            'internal_name' => 'Projet Balkany',
+            'internal_reference' => 'Projet Balkany',
+            'type' => 'Projet sociétal',
+            'prospecting_time_day' => 127,
+            'signing_probability' => 50,
+            'state' => 'In progress',
+            'version' => 'V2',
+            'date_version' => date_create()->format('Y-m-d H:i:s'),
+            'file_path' => '',
+            'creation_date' => date_create()->format('Y-m-d H:i:s'),
+            'cellule_id' => 1,
+            'company_id' => 1,
+            'contact_id' => 1,
+            'capa_user_id' => 1,
+        ]);
     }
 
     public function safeDown()

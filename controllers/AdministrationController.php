@@ -19,7 +19,7 @@ use app\models\users\CapaUserCreateForm;
 use app\models\users\CapaUserSearch;
 use app\models\users\CapaUserUpdateForm;
 use app\models\users\Cellule;
-use app\models\devis\UploadFile;
+use app\models\projects\UploadFile;
 use app\models\parameters\DevisParameter;
 use app\models\parameters\DevisParameterUpdateForm;
 use yii\web\UploadedFile;
