@@ -18,6 +18,18 @@ use app\models\companies\Company;
 class Project extends ActiveRecord
 {
 
+    const TYPE_INTERNAL_PRESTATION = 'Prestation interne';
+    const TYPE_OUTSOURCING_AD = 'Sous traitance AD';
+    const TYPE_OUTSOURCING_UN = "Sous traitance UN";
+    const TYPES = [self::TYPE_INTERNAL_PRESTATION, self::TYPE_OUTSOURCING_AD, self::TYPE_OUTSOURCING_UN];
+
+    const STATE_DRAFT = 'Avant-projet';
+    const STATE_DEVIS_SENDED = 'Devis envvoyé';
+    const STATE_DEVIS_SIGNED = "Devis signé";
+    const STATE_CANCELED = "Projet annulé";
+    const STATE_FINISHED = "Projet terminé";
+    const STATES = [self::STATE_DRAFT, self::STATE_DEVIS_SENDED, self::STATE_DEVIS_SIGNED, self::STATE_CANCELED, self::STATE_FINISHED];
+
     public static function tableName()
     {
         return 'project';
@@ -38,6 +50,7 @@ class Project extends ActiveRecord
         return static::find()->where(['devis.cellule_id' => $idCellule]);
     }
 
+    // Relation map.
 
     public function getCellule()
     {
@@ -49,7 +62,7 @@ class Project extends ActiveRecord
         return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
 
-    public function getProjectManager()
+    public function getProject_manager()
     {
         return $this->hasOne(CapaUser::className(), ['id' => 'capa_user_id']);
     }

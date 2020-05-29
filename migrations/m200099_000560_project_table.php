@@ -1,5 +1,6 @@
 <?php
 
+use app\models\projects\Project;
 use yii\db\Migration;
 
 class m200099_000560_project_table extends Migration
@@ -78,10 +79,10 @@ class m200099_000560_project_table extends Migration
             'id_laboxy' => "OIUEJYYT",
             'internal_name' => 'Projet Balkany',
             'internal_reference' => 'Projet Balkany',
-            'type' => 'Projet sociétal',
+            'type' => Project::TYPE_INTERNAL_PRESTATION,
             'prospecting_time_day' => 127,
             'signing_probability' => 50,
-            'state' => 'In progress',
+            'state' => Project::STATE_DRAFT,
             'version' => 'V2',
             'date_version' => date_create()->format('Y-m-d H:i:s'),
             'file_path' => '',

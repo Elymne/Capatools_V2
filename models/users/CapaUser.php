@@ -36,17 +36,6 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
     }
 
     /**
-     * Trouve une identité à partir d'un nom d'utilisateur donné.
-     *
-     * @param string|int $id l'identifiant à rechercher
-     * @return username|null l'objet identité qui correspond à l'identifiant donné
-     */
-    public static function findByUsername($name)
-    {
-        return static::findOne(['username' => $name]);
-    }
-
-    /**
      * Trouve une identité à partir de l'email donné.
      *
      * @param string|int $email de l'identifiant à rechercher

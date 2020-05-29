@@ -1,6 +1,6 @@
 <?php
 
-use app\assets\devis\DevisIndexAsset;
+use app\assets\projects\ProjectIndexAsset;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use app\models\devis\UploadFile;
@@ -11,17 +11,17 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 
-$this->title = 'Liste des devis';
+$this->title = 'Liste des projets';
 $this->params['breadcrumbs'][] = $this->title;
 
-DevisIndexAsset::register($this);
+ProjectIndexAsset::register($this);
 
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 
 <div class="container">
-    <div class="devis-index">
+    <div class="project-index">
 
         <!-- New -->
         <div class="row">
