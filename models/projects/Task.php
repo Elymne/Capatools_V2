@@ -16,6 +16,11 @@ use yii\db\ActiveRecord;
 class Task extends ActiveRecord
 {
 
+    const RISK_LOW = 'Faible';
+    const RISK_NORMAL = 'Normal';
+    const RISK_HIGH = "Haut";
+    const RISKS = [self::RISK_LOW, self::RISK_NORMAL, self::RISK_HIGH];
+
     public static function tableName()
     {
         return 'task';

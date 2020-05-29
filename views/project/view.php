@@ -3,7 +3,6 @@
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
 use yii\helpers\Html;
-use app\models\devis\Milestone;
 use app\models\devis\MilestoneStatus;
 use app\models\projects\Project;
 use app\widgets\TopTitle;
@@ -60,24 +59,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <div class="card">
                 <div class="card-content">
-                    <label>Jalon(s)</label>
+                    <label>Lot(s)</label>
                 </div>
 
                 <div class="card-action">
-                    <?php echo createMilestonesTable($milestones, $model->id); ?>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contributors informations -->
-        <div class="row">
-            <div class="card">
-                <div class="card-content">
-                    <label>Liste des intervenants</label>
-                </div>
-
-                <div class="card-action">
-                    <?php echo createContributorsTable($contributors, $model->id); ?>
+                    <?php echo createLotTable($model->lots) ?>
                 </div>
             </div>
         </div>
@@ -96,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 
-function createTimeline($stages, $indexStatus)
+function createTimeline(array $stages, int $indexStatus)
 {
 ?>
     <div class="timeline">
@@ -108,10 +94,10 @@ function createTimeline($stages, $indexStatus)
             </div>
         <?php } ?>
     </div>
-<?php
+    <?php
 }
 
-function isStatusPassed($indexStatus, $arrayKey): bool
+function isStatusPassed(int $indexStatus, int $arrayKey): bool
 {
     if ($indexStatus >= $arrayKey)
         return true;
@@ -125,7 +111,7 @@ function isStatusPassed($indexStatus, $arrayKey): bool
  * 
  * @return HTML table.
  */
-function createDataTable($model): string
+function createDataTable(Project $model): string
 {
 
     $internal_name = $model->internal_name;
@@ -179,11 +165,11 @@ function createDataTable($model): string
                 </tr>
                 <tr>
                     <td class='header'>Temps de prospection en jours</td>
-                    <td>${prospecting_time_day}</td>
+                    <td>${prospecting_time_day} jours</td>
                 </tr>
                 <tr>
                     <td class='header'>Probabilité de signature</td>
-                    <td>${signing_probability}</td>
+                    <td>${signing_probability} %</td>
                 </tr>
 
                 <!-- Project manager data -->
@@ -285,79 +271,72 @@ HTML;
 }
 
 /**
- * Create table with all milestones.
- * @param Array<Milestone> $model : List of milestones.
+ * Create table with all lots and tasks.
+ * @param Array<Lot> $model : List of Lot..
  * 
  * @return HTML table.
  */
-function createMilestonesTable($lots): string
+function createLotTable(array $lots)
 {
+    foreach ($lots as $key => $lot) {
+    ?>
+        <div class="row">
 
-    // Used to display or not tab for milestone management.
-    $statusRowHeader = '';
-    $statusRowBody = '';
+            <div class="card">
+                <div class="card-content">
+                    <label>Lot n° <?php echo $lot->number ?></label>
+                </div>
+                <div class="card-action">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Statut</th>
+                                <th>Commentaire</th>
+                            </tr>
+                            <tr>
+                                <td><?php echo $lot->title ?></td>
+                                <td><?php echo $lot->status ?></td>
+                                <td><?php echo $lot->comment ?></td>
+                            </tr>
+                        <tbody>
+                    </table>
+                </div>
+            </div>
 
-    // When no milestone has been created.
-    if (empty($milestones)) {
-        return <<<HTML
-            <p> Il n'existe aucun jalon pour ce devis. </p>
-        HTML;
+            <div class="card">
+                <div class="card-content">
+                    <label>Liste des tâches du lot</label>
+                </div>
+                <?php foreach ($lot->tasks as $task) { ?>
+                    <div class="card-action">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Titre</th>
+                                    <th>Durée</th>
+                                    <th>Risque</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Intervenant</th>
+                                </tr>
+                                <tr>
+                                    <td><?php echo $task->title ?></td>
+                                    <td><?php echo $task->days_duration ?></td>
+                                    <td><?php echo $task->risk ?></td>
+                                    <td><?php echo $task->unit_price ?></td>
+                                    <td><?php
+                                        echo $task->contributor->surname;
+                                        echo $task->contributor->firstname
+                                        ?></td>
+                                </tr>
+                            <tbody>
+                        </table>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+    <?php
     }
-
-    // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone header tab.
-    if (UserRoleManager::hasRoles([UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) {
-        $statusRowHeader = <<<HTML
-            <td class="header"></td>
-        HTML;
-    }
-
-    // Create the header of milestone table.
-    $headerTable = <<<HTML
-        <table class="highlight">
-            <tbody>
-                <tr class="group">
-                    <td class="header">Nom</td>
-                    <td class="header">Prix</td>
-                    <td class="header">Date</td>
-                    <td class="header">Status</td>
-                    ${statusRowHeader}
-                </tr>
-    HTML;
-
-    // Create the footer of milestone table.
-    $footerTable = <<<HTML
-                </tr>
-            </tbody>
-        </table>
-    HTML;
-
-    // Create the body of milestone table with data.
-    $bodyTable = '';
-    foreach ($milestones as $milestone) {
-
-        $milestone_label = $milestone->label;
-        $milestone_price = $milestone->price;
-        $milestone_delivery_date = $milestone->delivery_date;
-        $milestone_status = $milestone->milestoneStatus->label;
-
-        // When user = ACCOUNTING_SUPPORT_DEVIS, create milestone body tab.
-        if (UserRoleManager::hasRoles([UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS])) {
-            $milestone_update = $milestone->milestoneStatus->id;
-            $statusRowBody = updateStatus($milestone->id, $milestone_update, $idDevis);
-        }
-
-        $bodyTable = $bodyTable . <<<HTML
-            <tr>
-                <td>${milestone_label}</td>
-                <td>${milestone_price} €</td>
-                <td>${milestone_delivery_date}</td>
-                <td>${milestone_status}</td>
-                ${statusRowBody}
-            </tr>   
-        HTML;
-    }
-
-    return $headerTable . $bodyTable . $footerTable;
 }
 
 /**
@@ -365,7 +344,7 @@ function createMilestonesTable($lots): string
  * 
  * @return HTML cell of Milestone table.
  */
-function updateStatus($id, $status, $idDevis): string
+function updateStatus(int $id, $status, $idDevis): string
 {
 
     if ($status == MilestoneStatus::ENCOURS) {
@@ -400,7 +379,7 @@ function updateStatus($id, $status, $idDevis): string
  */
 function displayActionButtons($model)
 {
-?>
+    ?>
     <!-- Actions on devis -->
     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey rightspace-15px leftspace-15px']) ?>
 
