@@ -143,11 +143,6 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
         return Yii::$app->getSecurity()->validatePassword($pass, $this->password_hash);
     }
 
-    public function getUserRole()
-    {
-        return $this->hasMany(UserRole::className(), ['user_id' => 'id']);
-    }
-
     public function getCellule()
     {
         return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);

@@ -47,7 +47,7 @@ class Project extends ActiveRecord
 
     public static function getAllByCellule($idCellule)
     {
-        return static::find()->where(['devis.cellule_id' => $idCellule]);
+        return static::find()->where(['project.cellule_id' => $idCellule]);
     }
 
     // Relation map.
