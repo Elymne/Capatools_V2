@@ -4,19 +4,19 @@ use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use app\assets\administration\EquipmentViewAsset;
+use app\assets\companies\ContactViewAsset;
 
-$this->title = 'Liste des matériels';
+$this->title = 'Liste des contacts';
 $this->params['breadcrumbs'][] = $this->title;
 
-EquipmentViewAsset::register($this);
+ContactViewAsset::register($this);
 
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 
 <div class="container">
-    <div class="capa_user-index">
+    <div class="contact-view">
         <div class="row">
             <div class="card">
                 <div class="card-content">
@@ -46,7 +46,7 @@ EquipmentViewAsset::register($this);
         </div>
 
         <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
-            <a href="/administration/create-equipment" class="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow">
+            <a href="/company/create-contact" class="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow">
                 <i class="material-icons">add</i>
             </a>
         </div>
@@ -59,12 +59,12 @@ EquipmentViewAsset::register($this);
 function getSearchFilter()
 {
     echo Html::input('text', 'textinput_user', '', [
-        'id' => 'equipment-name-search',
+        'id' => 'contact-firstname-search',
         'class' => 'form-control',
         'maxlength' => 10,
         'style' => 'width:350px',
-        'placeholder' => 'Rechercher un nom de matériel',
-        'onkeyup' => 'equipmentNameFilterSearch()'
+        'placeholder' => 'Rechercher un nom de contact',
+        'onkeyup' => 'contactNameFilterSearch()'
     ]);
 
     echo '<br />';
@@ -80,43 +80,55 @@ function getCollumnArray(): array
     $result = [];
 
     // Text input.
-    array_push($result, getNameArray());
-    array_push($result, getHTPriceArray());
-    array_push($result, getTypeArray());
+    array_push($result, getFirstnameArray());
+    array_push($result, getSurnameArray());
+    array_push($result, getPhoneNumberArray());
+    array_push($result, getEmailArray());
 
     return $result;
 }
 
-function getNameArray(): array
+function getFirstnameArray(): array
 {
     return [
-        'attribute' => 'name',
+        'attribute' => 'firstname',
         'format' => 'raw',
-        'label' => 'Nom',
-        'contentOptions' => ['class' => 'name-row'],
+        'label' => 'Prénom',
+        'contentOptions' => ['class' => 'firstname-row'],
         'encodeLabel' => false
     ];
 }
 
-function getHTPriceArray(): array
+function getSurnameArray(): array
 {
     return [
-        'label' => 'Prix HT',
+        'label' => 'Nom',
         'encodeLabel' => false,
         'format' => 'ntext',
-        'attribute' => 'ht_price',
-        'contentOptions' => ['class' => 'ht_price-row'],
+        'attribute' => 'surname',
+        'contentOptions' => ['class' => 'surname-row'],
     ];
 }
 
-function getTypeArray(): array
+function getPhoneNumberArray(): array
 {
     return [
-        'label' => 'Type',
+        'label' => 'Téléphone',
         'encodeLabel' => false,
         'format' => 'ntext',
-        'attribute' => 'type',
-        'contentOptions' => ['class' => 'type-row'],
+        'attribute' => 'phone_number',
+        'contentOptions' => ['class' => 'phone_number-row'],
+    ];
+}
+
+function getEmailArray(): array
+{
+    return [
+        'label' => 'Email',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'attribute' => 'email',
+        'contentOptions' => ['class' => 'email-row'],
     ];
 }
 

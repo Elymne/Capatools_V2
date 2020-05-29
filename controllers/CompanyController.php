@@ -16,6 +16,7 @@ use app\helper\_enum\UserRoleEnum;
 use app\models\companies\Company;
 use app\models\users\CapaUser;
 use app\models\companies\CompanyCreateForm;
+use app\models\companies\Contact;
 use app\models\companies\ContactCreateForm;
 use yii\data\ActiveDataProvider;
 
@@ -142,6 +143,13 @@ class CompanyController extends Controller
             'subServiceMenuActive' => SubMenuEnum::COMPANY_INDEX
         ]);
 
+        array_push($result, [
+            'Priorite' => 3,
+            'url' => 'company/view-contacts',
+            'label' => 'Liste des contacts',
+            'subServiceMenuActive' => SubMenuEnum::COMPANY_UPDATE_CONTACTS
+        ]);
+
         return $result;
     }
 
@@ -214,6 +222,52 @@ class CompanyController extends Controller
                 'model' => $model
             ]
         );
+    }
+
+    /**
+     * Render view : administration/view-contacts.
+     * Cette méthode est utilisé pour retourner une vue affichant tous les contacts de l'application.
+     * Ces contacts sont stockés de manière globale.
+     * 
+     * @return mixed
+     */
+    public function actionViewContacts()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Contact::getAll(),
+        ]);
+
+        MenuSelectorHelper::setMenuCompanyContacts();
+        return $this->render(
+            'contactView',
+            [
+                'dataProvider' => $dataProvider
+            ]
+        );
+    }
+
+    /**
+     * Render view : company/create-contact.
+     * Cette méthode est utilisé pour retourner une vue permettant de créer un contact.
+     * Le nouveau contact est stocké de manière globale.
+     * 
+     * @return mixed
+     */
+    public function actionCreateContact()
+    {
+        $model = new ContactCreateForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->save()) {
+                MenuSelectorHelper::setMenuCompanyNone();
+                return $this->redirect(['company/view-contacts']);
+            }
+        }
+
+        MenuSelectorHelper::setMenuCompanyContacts();
+        return $this->render('createContact', [
+            'model' => $model
+        ]);
     }
 
     public function actionAddContacts(int $id)

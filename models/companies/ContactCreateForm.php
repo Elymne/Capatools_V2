@@ -18,6 +18,7 @@ class ContactCreateForm extends Contact
     public function rules()
     {
         return [
+            ['surname', 'required', 'message' => 'Indiquer le nom du contact !'],
             ['firstname', 'required', 'message' => 'Indiquer le prénom du contact !'],
             ['surname', 'required', 'message' => 'Indiquer le nom du contact !'],
 

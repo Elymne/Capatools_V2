@@ -125,4 +125,15 @@ class MenuSelectorHelper
         Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::COMPANY_CREATE;
         Yii::$app->params['serviceMenuActive'] = SubMenuEnum::COMPANY;
     }
+
+    /**
+     * Description :
+     * - Déroule le menu Company.
+     * - Le sub-menu de la liste des contacts.
+     */
+    static function setMenuCompanyContacts()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::COMPANY_UPDATE_CONTACTS;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::COMPANY;
+    }
 }
