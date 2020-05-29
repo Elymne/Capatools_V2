@@ -308,7 +308,7 @@ function getDocumentButtonArray()
         'label' => 'upload',
         'value' => function ($model, $key, $index, $column) {
 
-            if (UploadFile::getByDevis($model->id) != null) {
+            if ($model->file_path != null) {
                 return Html::a(
                     '<i class="material-icons right">cloud_download</i>',
                     Url::to(['project/download-file', 'id' => $model->id]),

@@ -139,7 +139,7 @@ class ProjectController extends Controller implements ServiceInterface
                     [
                         'Priorite' => 3,
                         'url' => 'project/index',
-                        'label' => 'Liste des devis',
+                        'label' => 'Liste des projets',
                         'subServiceMenuActive' => SubMenuEnum::DEVIS_LIST
                     ],
                     [
