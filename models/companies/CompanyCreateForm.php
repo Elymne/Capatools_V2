@@ -21,19 +21,16 @@ class CompanyCreateForm extends Company
             ['name', 'required', 'message' => 'Indiquer le nom de la société !'],
             ['name', 'clientAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
 
-            ['address', 'required', 'message' => 'Indiquer l\'addresse client !'],
-            ['address', 'addressAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
-
-            ['country', 'required', 'message' => 'Indiquer le pays !'],
-            ['city', 'required', 'message' => 'Indiquer la ville !'],
-
             ['email', 'required', 'message' => 'Indiquer l\'email de la société !'],
             ['email', 'emailAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
             ['email', 'email'],
 
+            ['country', 'required', 'message' => 'Indiquer le pays !'],
+            ['city', 'required', 'message' => 'Indiquer la ville !'],
+            ['postal_code', 'required', 'message' => 'Indiquer le code postal !'],
+
             ['tva', 'tvaRequired', 'skipOnEmpty' => false, 'skipOnError' => false],
             ['tva', 'tvaAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['tva', 'tvaChecker', 'skipOnEmpty' => false, 'skipOnError' => false],
 
             ['type', 'required',  'message' => 'Il doit y avoir un type de sélectionné !'],
         ];

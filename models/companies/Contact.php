@@ -28,7 +28,7 @@ class Contact extends ActiveRecord
      * Récupère tous les contactes dans la base de données.
      * @return Array<Contact>
      */
-    public function getAll()
+    public static function getAll()
     {
         return static::find();
     }

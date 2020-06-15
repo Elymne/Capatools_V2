@@ -190,7 +190,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Render view : devis/create.
+     * Render view : company/create.
      * Méthode en deux temps :
      * - Si pas de méthode POST de trouvé, on retourne la vue de la création d'une société.
      * - Sinon, à partir de la méthode POST, on récupère toutes les informations de la nouvelle société, et ensuite à la vérification,
@@ -210,7 +210,7 @@ class CompanyController extends Controller
 
                 $model->save(false);
 
-                MenuSelectorHelper::setMenuDevisCreate();
+                MenuSelectorHelper::setMenuProjectCreate();
                 return $this->redirect(['company/index']);
             }
         }
@@ -270,35 +270,10 @@ class CompanyController extends Controller
         ]);
     }
 
-    public function actionAddContacts(int $id)
-    {
-        $model = new ContactCreateForm();
-
-        if ($model->load(Yii::$app->request->post())) {
-
-            if ($model->validate()) {
-                $model->save();
-
-                MenuSelectorHelper::setMenuDevisCreate();
-                return $this->redirect(['company/index']);
-            }
-        }
-
-        MenuSelectorHelper::setMenuCompanyCreate();
-        return $this->render(
-            'create',
-            [
-                'model' =>  $model
-            ]
-        );
-    }
-
     //TODO
     public function actionSetContact(int $id)
     {
     }
-
-
 
     /**
      * Méthode générale pour le contrôleur permettant de retourner une société.

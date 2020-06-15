@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="card-action">
-                    <?= Html::a('Ajouter des contacts', ['company/add-contacts', 'id' => $model['id']], ['class' => '']) ?>
+                    <?= Html::a('Ajouter des contacts', ['company/create-contact'], ['class' => '']) ?>
                     <br /><br />
                     <?php echo createContactsTable($model->contacts) ?>
                 </div>
@@ -53,10 +53,13 @@ function createUserDataTable($model): string
 {
     $username = $model->name;
     $email = $model->email;
-    $address = $model->address;
-    $phone = $model->phone;
-    $siret = $model->siret;
+    $postal_code = $model->postal_code;
+    $country = $model->country;
+    $city = $model->city;
+
     $tva = $model->tva;
+    if ($tva == null) $tva = "(Pas de TVA)";
+
     $type = $model->type;
 
     return <<<HTML
@@ -71,19 +74,19 @@ function createUserDataTable($model): string
                     <td>${email}</td>
                 </tr>  
                 <tr>
-                    <td width="30%" class="table-font-bold">Adresse</td>
-                    <td>${address}</td>
+                    <td width="30%" class="table-font-bold">Code postal</td>
+                    <td>${postal_code}</td>
                 </tr>  
                 <tr>
-                    <td width="30%" class="table-font-bold">N° de téléphone</td>
-                    <td>${phone}</td>
+                    <td width="30%" class="table-font-bold">Pays</td>
+                    <td>${country}</td>
                 </tr>  
                 <tr>
-                    <td width="30%" class="table-font-bold">Siret</td>
-                    <td>${siret}</td>
+                    <td width="30%" class="table-font-bold">Ville</td>
+                    <td>${city}</td>
                 </tr>  
                 <tr>
-                    <td width="30%" class="table-font-bold">Tva</td>
+                    <td width="30%" class="table-font-bold">TVA</td>
                     <td>${tva}</td>
                 </tr>  
                 <tr>
@@ -97,7 +100,7 @@ function createUserDataTable($model): string
 
 /**
  * Créer un tableau avec tous les contacts
- * @param Array<Contact> $model : List of milestones.
+ * @param Array<Contact>
  * 
  * @return HTML table.
  */
@@ -107,7 +110,7 @@ function createContactsTable($contacts): string
     $statusRowBody = '';
 
     // When no milestone has been created.
-    if (empty($milestones)) {
+    if (empty($contacts)) {
         return <<<HTML
             <p> Il n'y a aucuns contacts d'affiliés avec cette société </p>
         HTML;
@@ -137,15 +140,15 @@ function createContactsTable($contacts): string
     $bodyTable = '';
     foreach ($contacts as $contact) {
 
-        $contactName = $contact->name;
+        $contactName = $contact->surname;
         $contactFirstname = $contact->firstname;
         $contactEmail = $contact->email;
-        $contactPhone = $contact->phone;
+        $contactPhone = $contact->phone_number;
 
         $bodyTable = $bodyTable . <<<HTML
             <tr>
                 <td>${contactName}</td>
-                <td>${contactFirstname} €</td>
+                <td>${contactFirstname}</td>
                 <td>${contactEmail}</td>
                 <td>${contactPhone}</td>
             </tr>   

@@ -29,11 +29,13 @@ CompanyCreateAsset::register($this);
                     <div class="card-action">
                         <?php $form = ActiveForm::begin(); ?>
 
-
-
                         <?= $form->field($model, 'name')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'name-field'])
                             ->label("Nom du client") ?>
+
+                        <?= $form->field($model, 'email')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'email-field'])
+                            ->label("Email") ?>
 
                         <?= $form->field($model, 'type')->widget(Select2::classname(), [
                             'data' => CompanyTypeEnum::COMPANY_TYPE_STRING,
@@ -45,27 +47,21 @@ CompanyCreateAsset::register($this);
 
                         <br />
 
-                        <?= $form->field($model, 'address')
-                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'address-field'])
-                            ->label("Adresse") ?>
+                        <?= $form->field($model, 'postal_code')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'postal_code-field'])
+                            ->label("Code postal") ?>
 
-                        <?= $form->field($model, 'phone')
-                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'phone-field'])
-                            ->label("Téléphone") ?>
+                        <?= $form->field($model, 'country')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'country-field'])
+                            ->label("Pays") ?>
 
-                        <?= $form->field($model, 'email')
-                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'email-field'])
-                            ->label("E-mail") ?>
-
-                        <?= $form->field($model, 'siret')
-                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'siret-field'])
-                            ->label("SIRET") ?>
+                        <?= $form->field($model, 'city')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'city-field'])
+                            ->label("Ville") ?>
 
                         <?= $form->field($model, 'tva')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'tva-field'])
                             ->label("TVA") ?>
-
-
 
                         <br />
                         <div class="form-group">

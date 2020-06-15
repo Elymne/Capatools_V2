@@ -26,6 +26,7 @@ class Company extends ActiveRecord
 
     /**
      * Récupère toutes les sociétés dans la base de données.
+     * 
      * @return Array<Company>
      */
     public static function getAll()
@@ -35,6 +36,7 @@ class Company extends ActiveRecord
 
     /**
      * Récupère une société par son id.
+     * 
      * @return Company
      */
     public static function getOneById(int $id)
@@ -43,11 +45,29 @@ class Company extends ActiveRecord
     }
 
     /**
-     * Créer un attributs contenant la liste des projets des sociétés retournées.
+     * Créer un attribut contenant la liste des projets des sociétés retournées.
+     * (Cette méthode peut-être utilisé à la place de l'attribut généré).
+     * 
      * @return Array<Project>
      */
     public function getProjects()
     {
         return $this->hasMany(Project::className(), ['company_id' => 'id']);
+    }
+
+    /**
+     * Créer un attribut contenant la liste de tous les contacts associé aux projets du client.
+     * (Cette méthode peut-être utilisé à la place de l'attribut généré).
+     * 
+     * @return Array<Contact>
+     */
+    public function getContacts(): array
+    {
+        $contacts = [];
+        foreach ($this->projects as $project) {
+            array_push($contacts, $project->contact);
+        }
+
+        return $contacts;
     }
 }
