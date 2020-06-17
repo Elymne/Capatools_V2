@@ -11,7 +11,19 @@ class UserRoleEnum extends Enum
 {
 
     const NONE = 'none';
+    const SALARY = 'salary';
+    const PROJECT_MANAGER = 'projectManager';
+    const CELLULE_MANAGER = 'celluleManager';
+    const HUMAN_RESSOURCES = 'humanRessources';
+    const SUPPORT = 'support';
+    const ADMIN = 'admin';
+    const SUPER_ADMIN = 'superAdmin';
 
+
+    /**
+     * Monster old
+     * TODO
+     */
     const PROJECT_MANAGER_DEVIS = 'projectManagerDevis';
     const OPERATIONAL_MANAGER_DEVIS = 'operationalManagerDevis';
     const ACCOUNTING_SUPPORT_DEVIS = 'accountingSupportDevis';
