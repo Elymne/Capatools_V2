@@ -179,10 +179,8 @@ function getUpdateButtonArray()
             $userRoles = [];
             if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
-            $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
-
             $buttonClass = "";
-            if (canUpdateUser($adminRole)) $buttonClass = "waves-effect waves-light btn btn-green";
+            if (canUpdateUser($userRoles)) $buttonClass = "waves-effect waves-light btn btn-green";
             else $buttonClass = "btn disabled";
 
             return Html::a(
@@ -199,16 +197,14 @@ function getUpdateButtonArray()
     ];
 }
 
-function canUpdateUser($adminRole): bool
+function canUpdateUser($userRoles): bool
 {
     $result = true;
 
-    if (
-        !UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) &&
-        ($adminRole == UserRoleEnum::ADMINISTRATOR || $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
-    )  $result = false;
+    if (!UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) && in_array(UserRoleEnum::SUPER_ADMIN, $userRoles))
+        $result = false;
 
-    if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) && $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
+    if (UserRoleManager::hasRole(UserRoleEnum::ADMIN) && in_array(UserRoleEnum::SUPER_ADMIN, $userRoles) && in_array(UserRoleEnum::ADMIN, $userRoles))
         $result = false;
 
     return $result;

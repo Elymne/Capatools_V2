@@ -88,45 +88,6 @@ class UserRoleManager
     }
 
     /**
-     * Récupère l'index l'index du droit d'un utilisateur sur le service devis.
-     * L'utilité de cette fonction réside dans le fait de pouvoir lister les droits dans une liste selectionnable.
-     * @param array $userRole : Liste de tous les droits d'un utilisateur.
-     */
-    static function getSelectedDevisRoleKey(array $userRoles): int
-    {
-        $result = 0;
-
-        foreach (UserRoleEnum::DEVIS_ROLE as $key => $role) {
-            $value = array_search($role, $userRoles);
-            if ($value != null) {
-                $result =  $key;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Récupère l'index l'index du droit d'un utilisateur sur le service d'administration.
-     * L'utilité de cette fonction réside dans le fait de pouvoir lister les droits dans une liste selectionnable.
-     * @param array $userRole : Liste de tous les droits d'un utilisateur.
-     */
-    static function getSelectedAdminRoleKey($userRoles): int
-    {
-
-        $result = 0;
-
-        foreach (UserRoleEnum::ADMINISTRATION_ROLE as $key => $role) {
-            $value = array_search($role, $userRoles);
-            if ($value != null) {
-                $result = $key;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Retourne vrai si l'utilisateur connecté a le droit passé en paramètre.
      * L'utilité de cette fonction est de pouvoir filtrer l'affichage et l'accès à certaines fonctionnalité en fonction des utilisateurs.
      * @param string $userRole : Utilisation de l'énumération UserRoleEnum.

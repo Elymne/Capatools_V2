@@ -381,7 +381,7 @@ class AdministrationController extends Controller
     public function actionViewDevisParameters()
     {
         MenuSelectorHelper::setMenuDevisParameters();
-        return $this->render('devisParameterView', [
+        return $this->render('devisParametersView', [
             'model' => DevisParameter::getParameters()
         ]);
     }
@@ -422,7 +422,7 @@ class AdministrationController extends Controller
 
         MenuSelectorHelper::setMenuDevisParameters();
         return $this->render(
-            'devisParameterUpdate',
+            'devisParametersUpdate',
             [
                 'model' => $model,
                 'fileCguFrModel' => $fileCguFrModel,

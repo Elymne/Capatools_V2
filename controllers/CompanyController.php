@@ -108,9 +108,8 @@ class CompanyController extends Controller
         $result = [];
 
         if (UserRoleManager::hasRoles([
-            UserRoleEnum::ADMINISTRATOR,
-            UserRoleEnum::SUPER_ADMINISTRATOR,
-            UserRoleEnum::PROJECT_MANAGER_DEVIS
+            UserRoleEnum::ADMIN,
+            UserRoleEnum::SUPER_ADMIN
         ])) {
             $result =
                 [
@@ -151,7 +150,7 @@ class CompanyController extends Controller
 
         array_push($result, [
             'Priorite' => 3,
-            'url' => 'company/view-contacts',
+            'url' => 'company/index-contacts',
             'label' => 'Liste des contacts',
             'subServiceMenuActive' => SubMenuEnum::COMPANY_UPDATE_CONTACTS
         ]);

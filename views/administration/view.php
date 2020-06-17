@@ -2,6 +2,7 @@
 
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\UserRoleEnum;
+use app\models\users\CapaUser;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 /* @var $this yii\web\View */
@@ -16,8 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 $userRoles = [];
 if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
-$adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
-
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -30,7 +29,7 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
                 <div class="card-action">
                     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
 
-                    <?php if (canUpdateUser($adminRole)) : ?>
+                    <?php if (canUpdateUser($userRoles)) : ?>
                         <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-green']) ?>
                     <?php else : ?>
                         <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['#', -1], ['class' => 'btn disabled']) ?>
@@ -67,13 +66,15 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
 
 <?php
 
-function createUserDataTable($model): string
+function createUserDataTable(CapaUser $model): string
 {
     $surname = $model->surname;
     $firstname = $model->firstname;
     $email = $model->email;
     $cellule = $model->cellule->name;
     $salary = $model->price;
+    $active = 'non';
+    if ($model->flag_active) $active = 'oui';
 
     return <<<HTML
         <table class="highlight">
@@ -98,6 +99,10 @@ function createUserDataTable($model): string
                     <td width="30%" class="table-font-bold">Prix d'intervention</td>
                     <td>${salary} (€)</td>
                 </tr>  
+                <tr>
+                    <td width="30%" class="table-font-bold">Utilisateur actif</td>
+                    <td>${active}</td>
+                </tr>  
             </tbody>
         </table>
     HTML;
@@ -106,41 +111,31 @@ function createUserDataTable($model): string
 function createRolesTable(array $userRoles): string
 {
 
-    // Get role by service.
-    $adminStringRole = UserRoleEnum::ADMINISTRATOR_ROLE_STRING[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
-    $devisStringRole = UserRoleEnum::DEVIS_ROLE_STRING[UserRoleManager::getSelectedDevisRoleKey($userRoles)];
+    $userRoleString = [];
+    if (in_array(UserRoleEnum::SALARY, $userRoles)) array_push($userRoleString, 'Salarié');
+    if (in_array(UserRoleEnum::PROJECT_MANAGER, $userRoles)) array_push($userRoleString, 'Chef de projet');
+    if (in_array(UserRoleEnum::CELLULE_MANAGER, $userRoles)) array_push($userRoleString, 'Resp. de cellule');
+    if (in_array(UserRoleEnum::HUMAN_RESSOURCES, $userRoles)) array_push($userRoleString, 'Resp. ressources humaine');
+    if (in_array(UserRoleEnum::SUPPORT, $userRoles)) array_push($userRoleString, 'Support');
+    if (in_array(UserRoleEnum::ADMIN, $userRoles)) array_push($userRoleString, 'Administrateur');
+    if (in_array(UserRoleEnum::SUPER_ADMIN, $userRoles)) array_push($userRoleString, 'Super administrateur');
 
     $head = <<<HTML
-
         <table class="highlight">
             <tbody>
                 <tr>
-                    <td class="table-font-bold">Service</td>
-                    <td class="table-font-bold">Rôle</td>
-                </tr>    
+                    
     HTML;
 
     $body = '';
-
-
-
-    // Admin row.
-    $body = $body . <<<HTML
-        <tr>
-            <td width="30%">Administration</td>
-            <td>${adminStringRole}</td>
-        </tr>
+    foreach ($userRoleString as $value) {
+        $body = $body . <<<HTML
+            <td>${value}</td>
     HTML;
-
-    // Devis row.
-    $body = $body . <<<HTML
-        <tr>
-            <td width="30%">Devis</td>
-            <td>${devisStringRole}</td>
-        </tr>
-    HTML;
+    }
 
     $foot = <<<HTML
+                </tr>
             </tbody>
         </table>
     HTML;
@@ -148,16 +143,14 @@ function createRolesTable(array $userRoles): string
     return $head . $body . $foot;
 }
 
-function canUpdateUser($adminRole): bool
+function canUpdateUser($userRoles): bool
 {
     $result = true;
 
-    if (
-        !UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) &&
-        ($adminRole == UserRoleEnum::ADMINISTRATOR || $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
-    )  $result = false;
+    if (!UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) && in_array(UserRoleEnum::SUPER_ADMIN, $userRoles))
+        $result = false;
 
-    if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) && $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
+    if (UserRoleManager::hasRole(UserRoleEnum::ADMIN) && in_array(UserRoleEnum::SUPER_ADMIN, $userRoles) && in_array(UserRoleEnum::ADMIN, $userRoles))
         $result = false;
 
     return $result;
