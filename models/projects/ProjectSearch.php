@@ -2,12 +2,9 @@
 
 namespace app\models\projects;
 
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\projects\Project;
-use Yii;
 
 /**
  * Cette classe permet de gérer différentes fonctionnalité à travers un objet GridView qui sert à afficher les données

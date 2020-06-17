@@ -199,7 +199,7 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
-     * Render view : devis/create.
+     * Render view : project/create.
      * Méthode en deux temps :
      * - Si pas de méthode POST de trouvé, retourne la vue de la création d'un devis.
      * - Sinon, à partir de la méthode POST, on récupère toutes les informations du nouvel devis rentrées, et suite à la vérification,
@@ -233,6 +233,17 @@ class ProjectController extends Controller implements ServiceInterface
                 'contactsNames' => $contactsNames
             ]
         );
+    }
+
+    /**
+     * Render view : project/createView.
+     * Méthode qui permet de prévisualiser les lots et tâches depuis la première partie de la création d'un projet.
+     * Un tableau est rendu.
+     * 
+     * @return mixed
+     */
+    public function actionViewCreate()
+    {
     }
 
     /**
@@ -336,7 +347,7 @@ class ProjectController extends Controller implements ServiceInterface
     {
         $this->findModel($id)->delete();
 
-        MenuSelectorHelper::setMenuDevisNone();
+        MenuSelectorHelper::setMenuProjectNone();
         return $this->redirect(['index']);
     }
 
