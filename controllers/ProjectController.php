@@ -17,6 +17,7 @@ use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 use app\components\ExcelExportService;
 use app\helper\_clazz\UserRoleManager;
+use app\helper\_enum\PermissionAccessEnum;
 use app\models\projects\Project;
 use app\models\projects\ProjectSearch;
 use app\models\projects\ProjectUpdateForm;
@@ -55,49 +56,42 @@ class ProjectController extends Controller implements ServiceInterface
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'add-client', 'update-status', 'validate-status'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'update-status'],
                 'rules' => [
                     [
                         'allow' => true,
-                        // Nom de la route, (actionIndex).
                         'actions' => ['index'],
-                        // Nom du rôle que tu as créé.
-                        'roles' => ['indexDevis'],
+                        'roles' => [PermissionAccessEnum::PROJECT_INDEX],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['create'],
-                        'roles' => ['createDevis'],
+                        'roles' => [PermissionAccessEnum::PROJECT_CREATE],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['view'],
-                        'roles' => ['viewDevis'],
+                        'roles' => [PermissionAccessEnum::PROJECT_VIEW],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['update'],
-                        'roles' => ['updateDevis'],
+                        'roles' => [PermissionAccessEnum::PROJECT_UPDATE],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['delete'],
-                        'roles' => ['deleteDevis'],
+                        'roles' => [PermissionAccessEnum::PROJECT_DELETE],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['update-status'],
-                        'roles' => ['updateStatusDevis'],
+                        'roles' => [PermissionAccessEnum::PROJECT_UPDATE_STATUS],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['pdf'],
-                        'roles' => ['pdfDevis'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['update-milestone-status'],
-                        'roles' => ['updateMilestoneStatusDevis'],
+                        'roles' => [PermissionAccessEnum::PROJECT_PDF],
                     ]
                 ],
             ],
@@ -123,9 +117,11 @@ class ProjectController extends Controller implements ServiceInterface
         $result = [];
         if (
             UserRoleManager::hasRoles([
-                UserRoleEnum::PROJECT_MANAGER_DEVIS,
-                UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
-                UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
+                UserRoleEnum::PROJECT_MANAGER,
+                UserRoleEnum::CELLULE_MANAGER,
+                UserRoleEnum::SUPPORT,
+                UserRoleEnum::ADMIN,
+                UserRoleEnum::SUPER_ADMIN
             ])
         ) {
 

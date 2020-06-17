@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_clazz\UserRoleManager;
 use app\helper\_enum\CompanyTypeEnum;
+use app\helper\_enum\PermissionAccessEnum;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 use app\models\companies\Company;
@@ -56,28 +57,33 @@ class CompanyController extends Controller
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['index', 'view', 'create'],
+                'only' => ['index', 'view', 'create', 'index-contacts', 'create-contact'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['index'],
-                        'roles' => ['indexCompany'],
+                        'roles' => [PermissionAccessEnum::COMPANY_INDEX],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['view'],
-                        'roles' => ['viewCompany'],
+                        'roles' => [PermissionAccessEnum::COMPANY_VIEW],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['create'],
-                        'roles' => ['createCompany'],
+                        'roles' => [PermissionAccessEnum::COMPANY_CREATE],
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['add-contacts'],
-                        'roles' => ['addContactsCompany'],
+                        'actions' => ['index-contacts'],
+                        'roles' => [PermissionAccessEnum::COMPANY_CONTACT_INDEX],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create-contact'],
+                        'roles' => [PermissionAccessEnum::COMPANY_CONTACT_CREATE],
+                    ]
                 ],
             ],
         ];
@@ -231,7 +237,7 @@ class CompanyController extends Controller
      * 
      * @return mixed
      */
-    public function actionViewContacts()
+    public function actionIndexContacts()
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Contact::getAll(),
@@ -268,11 +274,6 @@ class CompanyController extends Controller
         return $this->render('createContact', [
             'model' => $model
         ]);
-    }
-
-    //TODO
-    public function actionSetContact(int $id)
-    {
     }
 
     /**

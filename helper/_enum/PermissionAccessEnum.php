@@ -23,7 +23,10 @@ class PermissionAccessEnum extends Enum
     const ADMIN_VIEW = 'adminView';
     const ADMIN_UPDATE = 'adminUpdate';
     const ADMIN_DELETE = 'adminDelete';
-    const ADMIN_PROJECT_PARAMETERS = 'adminProjectParameters';
+    const ADMIN_DEVIS_PARAMETERS_VIEW = 'adminDevisParametersView';
+    const ADMIN_DEVIS_PARAMETERS_UPDATE = 'adminDevisParametersUpdate';
+    const ADMIN_EQUIPEMENT_INDEX = 'adminEquipementIndex';
+    const ADMIN_EQUIPEMENT_CREATE = 'adminEquipementCreate';
 
     const COMPANY_INDEX = 'companyIndex';
     const COMPANY_CREATE = 'companyCreate';

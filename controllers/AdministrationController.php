@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 use app\helper\_clazz\MenuSelectorHelper;
 use app\helper\_clazz\UploadFileHelper;
 use app\helper\_clazz\UserRoleManager;
+use app\helper\_enum\PermissionAccessEnum;
 use app\helper\_enum\SubMenuEnum;
 use app\helper\_enum\UserRoleEnum;
 use app\models\users\CapaUser;
@@ -61,47 +62,52 @@ class AdministrationController extends Controller
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'manage-devis-parameters'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'view-devis-parameters', 'update-devis-parameters', 'index-equipments', 'create-equipment'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['index'],
-                        'roles' => ['indexAdmin'],
+                        'roles' => [PermissionAccessEnum::ADMIN_INDEX],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['create'],
-                        'roles' => ['createAdmin'],
+                        'roles' => [PermissionAccessEnum::ADMIN_CREATE],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['view'],
-                        'roles' => ['viewAdmin'],
+                        'roles' => [PermissionAccessEnum::ADMIN_VIEW],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['update'],
-                        'roles' => ['updateAdmin'],
+                        'roles' => [PermissionAccessEnum::ADMIN_UPDATE],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['delete'],
-                        'roles' => ['deleteAdmin'],
+                        'roles' => [PermissionAccessEnum::ADMIN_DELETE],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['view-devis-parameters'],
-                        'roles' => ['devisParameter']
+                        'roles' => [PermissionAccessEnum::ADMIN_DEVIS_PARAMETERS_VIEW]
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['manage-devis-parameters'],
-                        'roles' => ['devisParameter']
+                        'actions' => ['update-devis-parameters'],
+                        'roles' => [PermissionAccessEnum::ADMIN_DEVIS_PARAMETERS_UPDATE]
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['view-equipments'],
-                        'roles' => ['equipments']
+                        'actions' => ['index-equipments'],
+                        'roles' => [PermissionAccessEnum::ADMIN_EQUIPEMENT_INDEX]
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create-equipment'],
+                        'roles' => [PermissionAccessEnum::ADMIN_EQUIPEMENT_CREATE]
                     ]
                 ],
             ],
@@ -127,9 +133,9 @@ class AdministrationController extends Controller
         $result = [];
 
         if (UserRoleManager::hasRoles([
-            UserRoleEnum::ADMINISTRATOR,
-            UserRoleEnum::SUPER_ADMINISTRATOR,
-            UserRoleEnum::PROJECT_MANAGER_DEVIS
+            UserRoleEnum::ADMIN,
+            UserRoleEnum::SUPER_ADMIN,
+            UserRoleEnum::HUMAN_RESSOURCES
         ])) {
             $result =
                 [
@@ -156,8 +162,9 @@ class AdministrationController extends Controller
 
         if (
             UserRoleManager::hasRoles([
-                UserRoleEnum::ADMINISTRATOR,
-                UserRoleEnum::SUPER_ADMINISTRATOR
+                UserRoleEnum::ADMIN,
+                UserRoleEnum::SUPER_ADMIN,
+                UserRoleEnum::HUMAN_RESSOURCES
             ])
         ) {
             array_push($result, [
@@ -171,8 +178,8 @@ class AdministrationController extends Controller
 
         if (
             UserRoleManager::hasRoles([
-                UserRoleEnum::ADMINISTRATOR,
-                UserRoleEnum::SUPER_ADMINISTRATOR
+                UserRoleEnum::ADMIN,
+                UserRoleEnum::SUPER_ADMIN
             ])
         ) {
             array_push($result, [
@@ -186,13 +193,13 @@ class AdministrationController extends Controller
 
         if (
             UserRoleManager::hasRoles([
-                UserRoleEnum::ADMINISTRATOR,
-                UserRoleEnum::SUPER_ADMINISTRATOR
+                UserRoleEnum::ADMIN,
+                UserRoleEnum::SUPER_ADMIN
             ])
         ) {
             array_push($result, [
                 'priorite' => 1,
-                'url' => 'administration/view-equipments',
+                'url' => 'administration/index-equipments',
                 'label' => 'Liste des matériels',
                 'icon' => 'show_chart',
                 'subServiceMenuActive' => SubMenuEnum::USER_UPDATE_EQUIPMENTS
@@ -380,26 +387,6 @@ class AdministrationController extends Controller
     }
 
     /**
-     * Utilisé pour télécharger le fichier uploadé du CGU Français.
-     * 
-     */
-    public function actionDownloadCguFrFile()
-    {
-        $pathFile = 'cgu/cguFrPdf.py';
-        UploadFileHelper::downloadFile($pathFile);
-    }
-
-    /**
-     * Utilisé pour télécharger le fichier uploadé du CGU Anglais.
-     * 
-     */
-    public function actionDownloadCguEnFile()
-    {
-        $pathFile = 'cgu/cguEnPdf.py';
-        UploadFileHelper::downloadFile($pathFile);
-    }
-
-    /**
      * Render view : devis/manage-devis-parameters.
      * Méthode en deux temps :
      * - Si pas de méthode POST de trouvé, on retourne la vue de la modification des paramètres devis.
@@ -408,7 +395,7 @@ class AdministrationController extends Controller
      * 
      * @return mixed
      */
-    public function actionManageDevisParameters()
+    public function actionUpdateDevisParameters()
     {
 
         $model = DevisParameterUpdateForm::getParameters();
@@ -445,13 +432,33 @@ class AdministrationController extends Controller
     }
 
     /**
+     * Utilisé pour télécharger le fichier uploadé du CGU Français.
+     * 
+     */
+    public function actionDownloadCguFrFile()
+    {
+        $pathFile = 'cgu/cguFrPdf.py';
+        UploadFileHelper::downloadFile($pathFile);
+    }
+
+    /**
+     * Utilisé pour télécharger le fichier uploadé du CGU Anglais.
+     * 
+     */
+    public function actionDownloadCguEnFile()
+    {
+        $pathFile = 'cgu/cguEnPdf.py';
+        UploadFileHelper::downloadFile($pathFile);
+    }
+
+    /**
      * Render view : administration/view-equipments.
      * Cette méthode est utilisé pour retourner une vue affichant tous les matériels de l'application.
      * Ces matériels sont stockés de manière globale.
      * 
      * @return mixed
      */
-    public function actionViewEquipments()
+    public function actionIndexEquipments()
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Equipment::getAll(),
