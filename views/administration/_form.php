@@ -1,7 +1,8 @@
 <?php
 
+use app\assets\AppAsset;
 use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
+use kartik\checkbox\CheckboxX;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -15,6 +16,7 @@ use yii\widgets\ActiveForm;
 // Get user roles.
 $userRoles = [];
 if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
+//AppAsset::register($this);
 
 ?>
 
@@ -48,29 +50,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     <!-- email field -->
     <?= $form->field($model, 'price')->input('number', ['maxlength' => true, 'placeholder' => 'Prix'])->label('Prix d\'intervention :') ?>
 
-    <!-- devis role dropdown field -->
-    <?= $form->field($model, 'stored_role_devis')->widget(Select2::classname(), [
-        'data' => UserRoleEnum::DEVIS_ROLE_STRING,
-        'options' => ['value' => UserRoleManager::getSelectedDevisRoleKey($userRoles)],
-        'pluginLoading' => false,
-        'pluginOptions' => [
-            'allowClear' => false
-        ],
-    ])->label(
-        "Permissions pour les devis"
-    ); ?>
-
-    <!-- admin role dropdown field -->
-    <?= $form->field($model, 'stored_role_admin')->widget(Select2::classname(), [
-        'data' => UserRoleEnum::ADMINISTRATOR_ROLE_STRING,
-        'options' => ['value' => UserRoleManager::getSelectedAdminRoleKey($userRoles)],
-        'pluginLoading' => false,
-        'pluginOptions' => [
-            'allowClear' => false
-        ],
-    ])->label(
-        "Permissions d'administration"
-    );; ?>
+    <?= Html::checkbox('lol', false, ['label' => 'alors mon con ?']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>

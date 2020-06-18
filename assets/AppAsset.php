@@ -25,6 +25,9 @@ class AppAsset extends AssetBundle
 
     public $css = [
 
+        //default Yii css.
+        'css/site.css',
+
         // Fonts
         'fonts/apple-touch-icon-152x152.png',
         'fonts/favicon-32x32.png',

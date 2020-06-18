@@ -16,9 +16,13 @@ namespace app\models\users;
 class CapaUserCreateForm extends CapaUser
 {
 
-    // Used to store index roles when validation in controller.
-    public $stored_role_devis;
-    public $stored_role_admin;
+    // Gestion de 6 checkboxs pour les rôles utilisateur.
+    public $salary_role_checkbox = true;
+    public $project_manager_role_checkbox = false;
+    public $cellule_manager_role_checkbox = false;
+    public $support_role_checkbox = false;
+    public $human_ressources_role_checkbox = false;
+    public $admin_role_checkbox = false;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
@@ -37,8 +41,12 @@ class CapaUserCreateForm extends CapaUser
             ['price', 'integer', 'min' => 1, 'tooSmall' => 'Le prix d\'intervention doit être supérieur à 0.', 'message' => 'Le prix d\'intervention doit être positif.'],
             ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],
             ['cellule_id', 'validateCelid', 'message' => 'Le nom de la cellule est inconnue'],
-            ['stored_role_devis', 'safe'],
-            ['stored_role_admin', 'safe']
+            ['salary_role_checkbox', 'safe'],
+            ['project_manager_role_checkbox', 'safe'],
+            ['cellule_manager_role_checkbox', 'safe'],
+            ['support_role_checkbox', 'safe'],
+            ['human_ressources_role_checkbox', 'safe'],
+            ['admin_role_checkbox', 'safe'],
         ];
     }
 }
