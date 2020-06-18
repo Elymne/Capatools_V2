@@ -466,7 +466,7 @@ class AdministrationController extends Controller
 
         MenuSelectorHelper::setMenuEquipments();
         return $this->render(
-            'equipmentView',
+            'equipmentIndex',
             [
                 'dataProvider' => $dataProvider
             ]

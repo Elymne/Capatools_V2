@@ -195,7 +195,7 @@ function getCollumnsArray()
     array_push($result, getIdArray());
     array_push($result, getInternalNameArray());
     array_push($result, getUsernameArray());
-    if (UserRoleManager::hasRoles([UserRoleEnum::ADMINISTRATOR, UserRoleEnum::SUPER_ADMINISTRATOR])) {
+    if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN])) {
         array_push($result, getCelluleArray());
     }
     array_push($result, getCompanyArray());

@@ -50,7 +50,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     <!-- email field -->
     <?= $form->field($model, 'price')->input('number', ['maxlength' => true, 'placeholder' => 'Prix'])->label('Prix d\'intervention :') ?>
 
-    <?= Html::checkbox('lol', false, ['label' => 'alors mon con ?']) ?>
+    <?= Html::checkbox('lol', false, ['label' => 'alors']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>

@@ -41,7 +41,7 @@ EquipmentCreateAsset::register($this);
                     <div class="form-group">
                         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
 
-                        <?= Html::a(Yii::t('app', 'Annuler'), ['view-equipments'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
+                        <?= Html::a(Yii::t('app', 'Annuler'), ['index-equipments'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                     </div>
 
                     <?php ActiveForm::end(); ?>

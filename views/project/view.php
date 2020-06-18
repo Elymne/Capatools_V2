@@ -385,7 +385,7 @@ function displayActionButtons($model)
 
     <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px']) ?>
 
-    <?php if ($model->state == PROJECT::STATE_DRAFT && UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
+    <?php if ($model->state == PROJECT::STATE_DRAFT && UserRoleManager::hasRoles([UserRoleEnum::CELLULE_MANAGER])) : ?>
         <?= Html::a(
             'Passer en validation opérationnelle <i class="material-icons right">check</i>',
             ['update-status', 'id' => $model->id, 'status' => PROJECT::STATE_DEVIS_SENDED,],
@@ -395,7 +395,7 @@ function displayActionButtons($model)
         ) ?>
     <?php endif; ?>
 
-    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED &&  UserRoleManager::hasRoles([UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) : ?>
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED &&  UserRoleManager::hasRoles([UserRoleEnum::CELLULE_MANAGER])) : ?>
         <?= Html::a(
             'Valider la signature client <i class="material-icons right">check</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_SIGNED,],
