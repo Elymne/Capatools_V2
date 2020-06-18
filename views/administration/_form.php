@@ -49,7 +49,13 @@ AppAsset::register($this);
     <!-- email field -->
     <?= $form->field($model, 'price')->input('number', ['maxlength' => true, 'placeholder' => 'Prix'])->label('Prix d\'intervention :') ?>
 
-    <?= Html::checkbox('lol', false, ['label' => 'alors']) ?>
+    //TODO la checkbox ne s'affiche pas car ce framework de mongole ne génère pas de div encapsulé dans l'inputType. Ne reste donc plus qu'à voir comment ajouter cela.
+    <?= Html::checkbox(null, false, ['label' => 'alors']) ?>
+
+    <label>
+        <input type="checkbox" />
+        <span>Red</span>
+    </label>
 
     <div class="form-group">
         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
