@@ -33,6 +33,9 @@ class AppAsset extends AssetBundle
         'fonts/favicon-32x32.png',
         'https://fonts.googleapis.com/icon?family=Material+Icons',
 
+        // Materialize.
+        'css/materialize.min.css',
+
         // Dark forest theme.
         'css/dark-forest/vendors.min.css',
         'css/dark-forest/materialize.min.css',
@@ -56,6 +59,10 @@ class AppAsset extends AssetBundle
     ];
 
     public $js = [
+
+        // Materialize.
+        'js/materialize.min.js',
+
         // JS Admin Template Html.
         'js/dark-forest/vendors.min.js',
         'js/dark-forest/plugins.min.js',

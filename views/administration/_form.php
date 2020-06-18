@@ -2,7 +2,6 @@
 
 use app\assets\AppAsset;
 use app\helper\_clazz\UserRoleManager;
-use kartik\checkbox\CheckboxX;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -16,7 +15,7 @@ use yii\widgets\ActiveForm;
 // Get user roles.
 $userRoles = [];
 if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
-//AppAsset::register($this);
+AppAsset::register($this);
 
 ?>
 
