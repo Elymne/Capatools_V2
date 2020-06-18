@@ -1,10 +1,10 @@
 <?php
 
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
 use yii\helpers\Html;
 use app\models\devis\MilestoneStatus;
 use app\models\projects\Project;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */

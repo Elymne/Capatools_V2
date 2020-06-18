@@ -5,10 +5,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
-use app\assets\devis\DevisUpdateAsset;
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
+use app\assets\projects\ProjectUpdateAsset;
 use app\models\devis\UploadFile;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' 
 $this->params['breadcrumbs'][] = 'Update';
 
 AppAsset::register($this);
-DevisUpdateAsset::register($this);
+ProjectUpdateAsset::register($this);
 
 ?>
 
@@ -139,7 +139,7 @@ DevisUpdateAsset::register($this);
                 </div>
 
                 <!-- Gestion fichier index -->
-                <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) { ?>
+                <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::SUPPORT])) { ?>
                     <div class="card">
                         <div class="card-action">
                             <?= $form->field($fileModel, 'file')
@@ -151,7 +151,7 @@ DevisUpdateAsset::register($this);
                 <?php } ?>
 
                 <!-- Gestion des jalons -->
-                <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) { ?>
+                <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::PROJECT_MANAGER])) { ?>
                     <div class="card">
 
                         <div class="card-content">
@@ -218,7 +218,7 @@ DevisUpdateAsset::register($this);
                 <?php } ?>
 
                 <!-- Gestion des intervenants projets -->
-                <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER_DEVIS, UserRoleEnum::OPERATIONAL_MANAGER_DEVIS])) { ?>
+                <?php if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::SUPPORT])) { ?>
                     <div class="card">
 
                         <div class="card-content">

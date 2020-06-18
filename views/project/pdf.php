@@ -1,7 +1,6 @@
 <?php
 
-use app\helper\_enum\CompanyTypeEnum;
-use yii\helpers\Html;
+use app\services\companyTypeServices\CompanyTypeEnum;
 use app\widgets\TopTitle;
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */

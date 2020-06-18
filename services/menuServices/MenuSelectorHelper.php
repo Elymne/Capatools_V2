@@ -1,8 +1,7 @@
 <?php
 
-namespace app\helper\_clazz;
+namespace app\services\menuServices;
 
-use app\helper\_enum\SubMenuEnum;
 use Yii;
 
 /**

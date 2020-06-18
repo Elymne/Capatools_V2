@@ -1,14 +1,12 @@
 <?php
 
-namespace app\helper\_enum;
-
-use MyCLabs\Enum\Enum;
+namespace app\services\menuServices;
 
 /**
  * Une classe d'enumération pour gérer les menus actifs.
  * Marche de paire avec la classe MenuSelectorHelper.
  */
-class SubMenuEnum extends Enum
+class SubMenuEnum
 {
 
     // None.

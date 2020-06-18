@@ -1,8 +1,8 @@
 <?php
 
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
 use app\models\users\CapaUser;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 /* @var $this yii\web\View */

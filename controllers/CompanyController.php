@@ -8,17 +8,17 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-use app\helper\_clazz\MenuSelectorHelper;
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\CompanyTypeEnum;
-use app\helper\_enum\PermissionAccessEnum;
-use app\helper\_enum\SubMenuEnum;
-use app\helper\_enum\UserRoleEnum;
 use app\models\companies\Company;
 use app\models\users\CapaUser;
 use app\models\companies\CompanyCreateForm;
 use app\models\companies\Contact;
 use app\models\companies\ContactCreateForm;
+use app\services\companyTypeServices\CompanyTypeEnum;
+use app\services\menuServices\MenuSelectorHelper;
+use app\services\menuServices\SubMenuEnum;
+use app\services\userRoleAccessServices\PermissionAccessEnum;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use yii\data\ActiveDataProvider;
 
 /**

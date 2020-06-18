@@ -1,6 +1,6 @@
 <?php
 
-namespace app\helper\_clazz;
+namespace app\services;
 
 /**
  * Classe utilisé pour générer des UUID car php et sql ne le font pas nativement.

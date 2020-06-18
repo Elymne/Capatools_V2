@@ -1,8 +1,8 @@
 <?php
 
 use app\assets\projects\ProjectIndexAsset;
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\helpers\Html;

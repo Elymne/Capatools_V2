@@ -1,7 +1,7 @@
 <?php
 
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 
@@ -71,11 +71,11 @@ function canUpdateUser($adminRole): bool
     $result = true;
 
     if (
-        !UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) &&
-        ($adminRole == UserRoleEnum::ADMINISTRATOR || $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
+        !UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN]) &&
+        ($adminRole == UserRoleEnum::ADMIN || $adminRole == UserRoleEnum::SUPER_ADMIN)
     )  $result = false;
 
-    if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) && $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
+    if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN]) && $adminRole == UserRoleEnum::SUPER_ADMIN)
         $result = false;
 
     return $result;

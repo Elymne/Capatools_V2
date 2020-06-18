@@ -1,13 +1,11 @@
 <?php
 
-namespace app\helper\_enum;
-
-use MyCLabs\Enum\Enum;
+namespace app\services\userRoleAccessServices;
 
 /**
  * Enum that is used to manage user roles.
  */
-class UserRoleEnum extends Enum
+class UserRoleEnum
 {
 
     const NONE = 'none';

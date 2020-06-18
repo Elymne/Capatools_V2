@@ -9,12 +9,6 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 
-use app\helper\_clazz\MenuSelectorHelper;
-use app\helper\_clazz\UploadFileHelper;
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\PermissionAccessEnum;
-use app\helper\_enum\SubMenuEnum;
-use app\helper\_enum\UserRoleEnum;
 use app\models\users\CapaUser;
 use app\models\users\CapaUserCreateForm;
 use app\models\users\CapaUserSearch;
@@ -25,6 +19,12 @@ use app\models\parameters\DevisParameter;
 use app\models\parameters\DevisParameterUpdateForm;
 use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentCreateForm;
+use app\services\menuServices\MenuSelectorHelper;
+use app\services\menuServices\SubMenuEnum;
+use app\services\uploadFileServices\UploadFileHelper;
+use app\services\userRoleAccessServices\PermissionAccessEnum;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 

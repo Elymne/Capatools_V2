@@ -9,15 +9,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
+use app\components\ExcelExportService;
 use app\models\Model;
 use app\models\files\UploadFile;
-use app\helper\_clazz\MenuSelectorHelper;
-use app\helper\_clazz\UploadFileHelper;
-use app\helper\_enum\SubMenuEnum;
-use app\helper\_enum\UserRoleEnum;
-use app\components\ExcelExportService;
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\PermissionAccessEnum;
 use app\models\projects\Project;
 use app\models\projects\ProjectSearch;
 use app\models\projects\ProjectUpdateForm;
@@ -25,6 +19,12 @@ use app\models\projects\ProjectCreateForm;
 use app\models\users\CapaUser;
 use app\models\companies\Contact;
 use app\models\companies\Company;
+use app\services\menuServices\MenuSelectorHelper;
+use app\services\menuServices\SubMenuEnum;
+use app\services\uploadFileServices\UploadFileHelper;
+use app\services\userRoleAccessServices\PermissionAccessEnum;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use kartik\mpdf\Pdf;
 
 
@@ -441,9 +441,7 @@ class ProjectController extends Controller implements ServiceInterface
         $filename = $model->internal_name . '_pdf_' . date("r");
 
         $content = $this->renderPartial('pdf', [
-            'model' => $model,
-            'milestones' => Milestone::find()->where(['devis_id' => $id])->all(),
-            'fileModel' => UploadFile::getByDevis($id)
+            'model' => $model
         ]);
 
         $pdf = new Pdf([

@@ -1,7 +1,5 @@
 <?php
 
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 /* @var $this yii\web\View */
@@ -84,64 +82,4 @@ function createParamsDataTable($model): string
             </tbody>
         </table>
     HTML;
-}
-
-function createRolesTable(array $userRoles): string
-{
-
-    // Get role by service.
-    $adminStringRole = UserRoleEnum::ADMINISTRATOR_ROLE_STRING[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
-    $devisStringRole = UserRoleEnum::DEVIS_ROLE_STRING[UserRoleManager::getSelectedDevisRoleKey($userRoles)];
-
-    $head = <<<HTML
-
-        <table class="highlight">
-            <tbody>
-                <tr>
-                    <td class="table-font-bold">Service</td>
-                    <td class="table-font-bold">Rôle</td>
-                </tr>    
-    HTML;
-
-    $body = '';
-
-
-
-    // Admin row.
-    $body = $body . <<<HTML
-        <tr>
-            <td width="30%">Administration</td>
-            <td>${adminStringRole}</td>
-        </tr>
-    HTML;
-
-    // Devis row.
-    $body = $body . <<<HTML
-        <tr>
-            <td width="30%">Devis</td>
-            <td>${devisStringRole}</td>
-        </tr>
-    HTML;
-
-    $foot = <<<HTML
-            </tbody>
-        </table>
-    HTML;
-
-    return $head . $body . $foot;
-}
-
-function canUpdateUser($adminRole): bool
-{
-    $result = true;
-
-    if (
-        !UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) &&
-        ($adminRole == UserRoleEnum::ADMINISTRATOR || $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
-    )  $result = false;
-
-    if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) && $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
-        $result = false;
-
-    return $result;
 }

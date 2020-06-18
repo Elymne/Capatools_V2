@@ -1,6 +1,6 @@
 <?php
 
-namespace app\helper\_clazz;
+namespace app\services;
 
 /**
  * Classe fournissant des fonctions d'aide à la gestion des dates.

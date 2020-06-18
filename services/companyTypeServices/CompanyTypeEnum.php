@@ -1,13 +1,11 @@
 <?php
 
-namespace app\helper\_enum;
-
-use MyCLabs\Enum\Enum;
+namespace app\services\companyTypeServices;
 
 /**
  * Enum that is used to manage user roles.
  */
-class CompanyTypeEnum extends Enum
+class CompanyTypeEnum
 {
 
     const UNKNOW = 'unknow';

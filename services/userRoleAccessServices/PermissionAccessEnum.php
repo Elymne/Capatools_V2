@@ -1,13 +1,11 @@
 <?php
 
-namespace app\helper\_enum;
-
-use MyCLabs\Enum\Enum;
+namespace app\services\userRoleAccessServices;
 
 /**
  * Classe d'énumération qui liste toutes les permissions de l'application.
  */
-class PermissionAccessEnum extends Enum
+class PermissionAccessEnum
 {
 
     const PROJECT_INDEX = 'projectIndex';

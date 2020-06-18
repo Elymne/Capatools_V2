@@ -1,6 +1,6 @@
 <?php
 
-namespace app\helper\_clazz;
+namespace app\services\userRoleAccessServices;
 
 use app\helper\_enum\UserRoleEnum;
 use Yii;

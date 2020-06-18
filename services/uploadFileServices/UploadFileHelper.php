@@ -1,6 +1,6 @@
 <?php
 
-namespace app\helper\_clazz;
+namespace app\services\uploadFileServices;
 
 use app\models\files\UploadFile;
 use Yii;

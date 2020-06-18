@@ -1,7 +1,7 @@
 <?php
 
 use app\assets\AppAsset;
-use app\helper\_clazz\UserRoleManager;
+use app\services\userRoleAccessServices\UserRoleManager;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
