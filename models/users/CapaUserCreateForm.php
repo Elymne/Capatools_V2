@@ -17,7 +17,7 @@ class CapaUserCreateForm extends CapaUser
 {
 
     // Gestion de 6 checkboxs pour les rôles utilisateur.
-    public $salary_role_checkbox = true;
+    public $salary_role_checkbox = false;
     public $project_manager_role_checkbox = false;
     public $cellule_manager_role_checkbox = false;
     public $support_role_checkbox = false;
