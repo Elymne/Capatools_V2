@@ -280,7 +280,7 @@ class AdministrationController extends Controller
             $model->cellule_id += 1;
 
             if ($model->save()) {
-                UserRoleManager::setRoles($model);
+                UserRoleManager::setRolesFromUserCreateForm($model);
 
                 MenuSelectorHelper::setMenuAdminNone();
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -314,6 +314,8 @@ class AdministrationController extends Controller
         $cellules = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
         $cellules = array_merge($cellules);
 
+        UserRoleManager::setRoleToModelForm($model);
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             // Because dropdownlist is an array.
@@ -325,8 +327,7 @@ class AdministrationController extends Controller
                 UserRoleManager::removeRolesFromUser($model->id);
 
                 // And then, we set updated roles for the user.
-                UserRoleManager::setDevisRole($model->id, UserRoleEnum::DEVIS_ROLE[$model->stored_role_devis]);
-                UserRoleManager::setAdministrationRole($model->id, UserRoleEnum::ADMINISTRATION_ROLE[$model->stored_role_admin]);
+                UserRoleManager::setRolesFromUserUpdateForm($model);
 
                 MenuSelectorHelper::setMenuAdminNone();
                 return $this->redirect(['view', 'id' => $model->id]);

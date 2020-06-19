@@ -16,9 +16,13 @@ namespace app\models\users;
 class CapaUserUpdateForm extends CapaUser
 {
 
-    // Used to store index roles when validation in controller.
-    public $stored_role_devis;
-    public $stored_role_admin;
+    // Gestion de 6 checkboxs pour les rôles utilisateur.
+    public $salary_role_checkbox = false;
+    public $project_manager_role_checkbox = false;
+    public $cellule_manager_role_checkbox = false;
+    public $support_role_checkbox = false;
+    public $human_ressources_role_checkbox = false;
+    public $admin_role_checkbox = false;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.

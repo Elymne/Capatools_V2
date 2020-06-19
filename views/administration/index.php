@@ -180,7 +180,7 @@ function getUpdateButtonArray()
             if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
             $buttonClass = "";
-            if (canUpdateUser($userRoles)) $buttonClass = "waves-effect waves-light btn btn-green";
+            if (UserRoleManager::canUpdateUser($userRoles)) $buttonClass = "waves-effect waves-light btn btn-green";
             else $buttonClass = "btn disabled";
 
             return Html::a(
@@ -195,17 +195,4 @@ function getUpdateButtonArray()
             );
         }
     ];
-}
-
-function canUpdateUser($userRoles): bool
-{
-    $result = true;
-
-    if (!UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) && in_array(UserRoleEnum::SUPER_ADMIN, $userRoles))
-        $result = false;
-
-    if (UserRoleManager::hasRole(UserRoleEnum::ADMIN) && in_array(UserRoleEnum::SUPER_ADMIN, $userRoles) && in_array(UserRoleEnum::ADMIN, $userRoles))
-        $result = false;
-
-    return $result;
 }

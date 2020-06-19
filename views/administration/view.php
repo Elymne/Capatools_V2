@@ -29,7 +29,7 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
                 <div class="card-action">
                     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
 
-                    <?php if (canUpdateUser($userRoles)) : ?>
+                    <?php if (UserRoleManager::canUpdateUser($userRoles)) : ?>
                         <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-green']) ?>
                     <?php else : ?>
                         <?= Html::a('Modifier <i class="material-icons right">mode_edit</i>', ['#', -1], ['class' => 'btn disabled']) ?>
@@ -141,17 +141,4 @@ function createRolesTable(array $userRoles): string
     HTML;
 
     return $head . $body . $foot;
-}
-
-function canUpdateUser($userRoles): bool
-{
-    $result = true;
-
-    if (!UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) && in_array(UserRoleEnum::SUPER_ADMIN, $userRoles))
-        $result = false;
-
-    if (UserRoleManager::hasRole(UserRoleEnum::ADMIN) && in_array(UserRoleEnum::SUPER_ADMIN, $userRoles) && in_array(UserRoleEnum::ADMIN, $userRoles))
-        $result = false;
-
-    return $result;
 }
