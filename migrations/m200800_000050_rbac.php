@@ -1,7 +1,7 @@
 <?php
 
-use app\helper\_enum\PermissionAccessEnum;
-use app\helper\_enum\UserRoleEnum;
+use app\services\userRoleAccessServices\PermissionAccessEnum;
+use app\services\userRoleAccessServices\UserRoleEnum;
 use yii\db\Migration;
 
 /**
