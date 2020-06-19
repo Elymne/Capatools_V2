@@ -84,7 +84,7 @@ function createUserDataTable(CapaUser $model): string
                     <td>${surname}</td>
                 </tr>
                 <tr>
-                    <td width="30%" class="table-font-bold">PRénom</td>
+                    <td width="30%" class="table-font-bold">Prénom</td>
                     <td>${firstname}</td>
                 </tr>
                 <tr>

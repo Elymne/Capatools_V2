@@ -274,15 +274,13 @@ class AdministrationController extends Controller
             //$model->generatePasswordAndmail();
 
             // Set hash password.
-            $model->setNewPassword($model->username);
+            $model->setNewPassword($model->firstname);
 
-            // Because dropdownlist is an array and begin at 0.
+            // On ajoute +1 car la liste commence à 0 et l'id cellule à 1 (décalage de 1).
             $model->cellule_id += 1;
 
             if ($model->save()) {
-                // Set roles for the new user.
-                UserRoleManager::setDevisRole($model->id, UserRoleEnum::DEVIS_ROLE[$model->stored_role_devis]);
-                UserRoleManager::setAdministrationRole($model->id, UserRoleEnum::ADMINISTRATION_ROLE[$model->stored_role_admin]);
+                UserRoleManager::setRoles($model);
 
                 MenuSelectorHelper::setMenuAdminNone();
                 return $this->redirect(['view', 'id' => $model->id]);

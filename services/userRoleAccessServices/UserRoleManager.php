@@ -2,7 +2,7 @@
 
 namespace app\services\userRoleAccessServices;
 
-use app\helper\_enum\UserRoleEnum;
+use app\models\users\CapaUserCreateForm;
 use Yii;
 
 /**
@@ -44,40 +44,20 @@ class UserRoleManager
     }
 
     /**
-     * Attribue un droit à un utilisateur sur le service des devis.
-     * @param int $id : identifiant utilisateur.
-     * @param string $role : UserRoleEnum.
+     * A partir de l'objet qui encapsule le modèle de formulaire de métier on va attribuer les rôles au dit utilisateur.
+     * Le modèle de formulaire se composant de 6 attributs qu'on utile pour générer des checkbox de rôles, on va les utiliser pour attribuer les rôles suivant
+     * leur valeur.
+     * @param int $id : id de l'utilisateur généré.
+     * @param CapaUserCreateForm $userForm : modèle de formulaire d'un user.
      */
-    static function setDevisRole(int $id, string $role)
+    static public function setRoles(CapaUserCreateForm $userForm)
     {
-        switch ($role) {
-            case UserRoleEnum::PROJECT_MANAGER_DEVIS:
-                self::setRole($id, $role);
-                break;
-            case UserRoleEnum::OPERATIONAL_MANAGER_DEVIS:
-                self::setRole($id, $role);
-                break;
-            case UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS:
-                self::setRole($id, $role);
-                break;
-        }
-    }
-
-    /**
-     * Attribue un droit à un utilisateur sur le service d'administration.
-     * @param int $id : identifiant utilisateur.
-     * @param string $role : UserRoleEnum.
-     */
-    static function setAdministrationRole(int $id, string $role)
-    {
-        switch ($role) {
-            case UserRoleEnum::ADMINISTRATOR:
-                self::setRole($id, $role);
-                break;
-            case UserRoleEnum::SUPER_ADMINISTRATOR:
-                self::setRole($id, $role);
-                break;
-        }
+        if ($userForm->salary_role_checkbox) self::setRole($userForm->id, UserRoleEnum::SALARY);
+        if ($userForm->project_manager_role_checkbox) self::setRole($userForm->id, UserRoleEnum::PROJECT_MANAGER);
+        if ($userForm->cellule_manager_role_checkbox) self::setRole($userForm->id, UserRoleEnum::CELLULE_MANAGER);
+        if ($userForm->support_role_checkbox) self::setRole($userForm->id, UserRoleEnum::SUPPORT);
+        if ($userForm->human_ressources_role_checkbox) self::setRole($userForm->id, UserRoleEnum::HUMAN_RESSOURCES);
+        if ($userForm->admin_role_checkbox) self::setRole($userForm->id, UserRoleEnum::ADMIN);
     }
 
     private static function setRole(int $id, string $role)
