@@ -72,7 +72,7 @@ class m200099_000560_project_table extends Migration
         $this->addForeignKey(
             'FK_project-contact',
             '{{%project}}',
-            'capa_user_id',
+            'contact_id',
             '{{%contact}}',
             'id',
 

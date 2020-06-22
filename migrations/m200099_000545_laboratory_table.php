@@ -28,7 +28,7 @@ class m200099_000545_laboratory_table extends Migration
             'id'
         );
 
-        $this->insert('{{%equipment}}', [
+        $this->insert('{{%laboratory}}', [
             'name' => "Le laboratoire de Dexter, oui le jeune garçon le plus doué",
             'price_contributor_day' => 234,
             'price_contributor_hour' => 23,
@@ -37,7 +37,7 @@ class m200099_000545_laboratory_table extends Migration
             'cellule_id' => 1
         ]);
 
-        $this->insert('{{%equipment}}', [
+        $this->insert('{{%laboratory}}', [
             'name' => "Le laboratoire du manoir Spenser",
             'price_contributor_day' => 1000,
             'price_contributor_hour' => 200,

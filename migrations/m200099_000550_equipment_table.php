@@ -21,7 +21,7 @@ class m200099_000550_equipment_table extends Migration
         $this->addForeignKey(
             'FK_equipment-laboratory',
             '{{%equipment}}',
-            'laboratoryid',
+            'laboratory_id',
             '{{%laboratory}}',
             'id'
         );

@@ -23,7 +23,7 @@ class m200099_000840_equipment_payment_table extends Migration
         $this->addForeignKey(
             'FK_equipment_payment-equipment',
             '{{%equipment_payment}}',
-            'lot_id',
+            'equipment_id',
             '{{%equipment}}',
             'id'
         );
@@ -31,12 +31,12 @@ class m200099_000840_equipment_payment_table extends Migration
         $this->addForeignKey(
             'FK_equipment_payment-payment',
             '{{%equipment_payment}}',
-            'lot_id',
+            'payment_id',
             '{{%payment}}',
             'id'
         );
 
-        $this->insert('{{%task_management}}', [
+        $this->insert('{{%equipment_payment}}', [
             'lot_number' => 1,
             'nb_days' => $this->integer()->defaultValue(0),
             'nb_hours' => $this->integer()->defaultValue(0),
@@ -52,9 +52,9 @@ class m200099_000840_equipment_payment_table extends Migration
 
         $this->dropForeignKey(
             'FK_task_management-lot',
-            '{{%task}}'
+            '{{%equipment_payment}}'
         );
 
-        $this->dropTable('{{%task_management}}');
+        $this->dropTable('{{%equipment_payment}}');
     }
 }
