@@ -43,9 +43,6 @@ class m200099_000560_project_table extends Migration
             'contact_id' => $this->integer()->notNull(),
             // Le chef de projet.
             'capa_user_id' => $this->integer()->notNull(),
-            // Le modèle d'avant-projet.
-            'prospecting_id' => $this->integer()->notNull()
-
         ]);
 
         $this->addForeignKey(

@@ -2,6 +2,7 @@
 
 use yii\db\Migration;
 
+//TODO renommer cette table.
 class m200099_000820_payment extends Migration
 {
 
@@ -10,7 +11,6 @@ class m200099_000820_payment extends Migration
         $this->createTable('{{%payment}}', [
             'id' => $this->primaryKey(),
             'lot_id' => $this->integer(),
-            'prospecting_id' => $this->integer()
         ]);
 
         $this->addForeignKey(
@@ -18,14 +18,6 @@ class m200099_000820_payment extends Migration
             '{{%payment}}',
             'lot_id',
             '{{%lot}}',
-            'id'
-        );
-
-        $this->addForeignKey(
-            'FK_payment-prospecting',
-            '{{%payment}}',
-            'prospecting_id',
-            '{{%prospecting}}',
             'id'
         );
     }

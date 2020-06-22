@@ -10,7 +10,6 @@ class m200099_000591_task_management_table extends Migration
 
         $this->createTable('{{%task_management}}', [
             'id' => $this->primaryKey(),
-            'lot_number' => $this->integer()->defaultValue(0),
             'title' => $this->string()->notNull(),
             'days_duration' => $this->integer()->defaultValue(0),
             'risk' => $this->string()->notNull(),
@@ -31,7 +30,6 @@ class m200099_000591_task_management_table extends Migration
         $this->insert('{{%task_management}}', [
             'lot_number' => 1,
             'title' => "Préparer le café au grin",
-            'days_duration' => 1,
             'risk' => 'Normal',
             'risk_days' => 15,
             'lot_id' => 1,

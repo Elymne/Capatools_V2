@@ -31,6 +31,16 @@ class m200099_000500_company_table extends Migration
             'email' => 'balkany-corp@gmail.com',
             'type' => 'public'
         ]);
+
+        $this->insert('{{%company}}', [
+            'name' => 'Maison du Roi des Francs',
+            'postal_code' => '12345',
+            'city' => 'Paris',
+            'country' => 'France',
+            'tva' => 'FR 99999999991',
+            'email' => 'clovis-roidelafrancia@gmail.com',
+            'type' => 'public'
+        ]);
     }
 
     public function safeDown()

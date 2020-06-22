@@ -10,7 +10,6 @@ class m200099_000590_task_table extends Migration
 
         $this->createTable('{{%task}}', [
             'id' => $this->primaryKey(),
-            'lot_number' => $this->integer()->defaultValue(0),
             'title' => $this->string()->notNull(),
             'days_duration' => $this->integer()->defaultValue(0),
             'price' => $this->double()->defaultValue(0),
@@ -50,7 +49,6 @@ class m200099_000590_task_table extends Migration
         ]);
 
         $this->insert('{{%task}}', [
-            'lot_number' => 1,
             'title' => "Tâche numéro 2 : libérer la cible",
             'days_duration' => 1,
             'risk' => 'Très haut',
@@ -60,7 +58,6 @@ class m200099_000590_task_table extends Migration
         ]);
 
         $this->insert('{{%task}}', [
-            'lot_number' => 2,
             'title' => "Tâche numéro 1 : dormir",
             'days_duration' => 1,
             'risk' => 'Très haut',

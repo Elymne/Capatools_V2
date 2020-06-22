@@ -32,6 +32,13 @@ class m200099_000550_equipment_table extends Migration
             'type' => 'Outil expérimental',
             'laboratory_id' => 1
         ]);
+
+        $this->insert('{{%equipment}}', [
+            'name' => "BFG",
+            'ht_price' => 100000.00,
+            'type' => 'Outil expérimental du DoomGuy',
+            'laboratory_id' => 2
+        ]);
     }
 
     /**

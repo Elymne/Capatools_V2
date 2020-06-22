@@ -36,6 +36,15 @@ class m200099_000545_laboratory_table extends Migration
             'price_ec_hour' => 8888,
             'cellule_id' => 1
         ]);
+
+        $this->insert('{{%equipment}}', [
+            'name' => "Le laboratoire du manoir Spenser",
+            'price_contributor_day' => 1000,
+            'price_contributor_hour' => 200,
+            'price_ec_day' => 1100,
+            'price_ec_hour' => 220,
+            'cellule_id' => 3
+        ]);
     }
 
     /**
