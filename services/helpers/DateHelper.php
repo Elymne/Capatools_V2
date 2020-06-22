@@ -1,6 +1,6 @@
 <?php
 
-namespace app\services;
+namespace app\services\helpers;
 
 /**
  * Classe fournissant des fonctions d'aide à la gestion des dates.

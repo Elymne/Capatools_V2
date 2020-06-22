@@ -1,13 +1,11 @@
 <?php
 
-namespace app\services;
-
-use MyCLabs\Enum\Enum;
+namespace app\services\stringDataServices;
 
 /**
- * Enum that is used to manage user roles.
+ * Classe qui stocke des chaînes de caractère.
  */
-class StringData extends Enum
+class StringDataEnum
 {
 
     const DEVIS_PAYMENT_DETAILS = "30% à la commande, 70% à la livraison des résultats";

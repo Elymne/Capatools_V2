@@ -1,6 +1,6 @@
 <?php
 
-namespace app\services;
+namespace app\services\helpers;
 
 /**
  * Classe utilisé pour générer des UUID car php et sql ne le font pas nativement.
