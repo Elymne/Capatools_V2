@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200099_000562_expense extends Migration
+class m200099_000585_expense extends Migration
 {
 
     public function safeUp()
@@ -10,16 +10,16 @@ class m200099_000562_expense extends Migration
         $this->createTable('{{%expense}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
-            'daily_price' => $this->double()->notNull(),
+            'price' => $this->double()->notNull(),
             'type' => $this->string()->notNull(),
-            'project_id' => $this->integer()->notNull()
+            'lot_id' => $this->integer()->notNull()
         ]);
 
         $this->addForeignKey(
-            'FK_expense-project',
+            'FK_expense-lot',
             '{{%expense}}',
-            'project_id',
-            '{{%project}}',
+            'lot_id',
+            '{{%lot}}',
             'id'
         );
     }

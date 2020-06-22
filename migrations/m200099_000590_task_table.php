@@ -13,8 +13,9 @@ class m200099_000590_task_table extends Migration
             'lot_number' => $this->integer()->defaultValue(0),
             'title' => $this->string()->notNull(),
             'days_duration' => $this->integer()->defaultValue(0),
+            'price' => $this->double()->defaultValue(0),
             'risk' => $this->string()->notNull(),
-            'unit_price' => $this->double()->defaultValue(0),
+            'risk_days' => $this->double()->defaultValue(0),
 
             // Foreign key.
             'capa_user_id' => $this->integer()->notNull(),
@@ -41,8 +42,9 @@ class m200099_000590_task_table extends Migration
             'lot_number' => 1,
             'title' => "Tâche numéro 1 : trouver les clefs",
             'days_duration' => 23,
-            'risk' => 'Normal',
-            'unit_price' => 1456,
+            'price' => 1456,
+            'risk' => 'Normale',
+            'risk_days' => 3,
             'capa_user_id' => 2,
             'lot_id' => 1,
         ]);

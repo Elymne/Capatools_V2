@@ -20,16 +20,21 @@ class m200099_000560_project_table extends Migration
             'type' => $this->string()->notNull(),
             'prospecting_time_day' => $this->integer()->defaultValue(0),
             'signing_probability' => $this->integer()->defaultValue(25),
+            'managment_rate' => $this->integer()->defaultValue(0),
 
             'state' => $this->string()->notNull(),
             'version' => $this->string()->notNull(),
             'date_version' => $this->date()->notNull(),
             'file_path' => $this->string(),
 
+            // Options for project.
+            'draft' => $this->boolean()->defaultValue(true),
+            'laboratory_payment' => $this->boolean()->defaultValue(true),
+
             // Should be generated when created.
             'creation_date' => $this->date()->notNull(),
 
-            /* FK - devis */
+            /* FK - project */
             // La cellule rataché au projet.
             'cellule_id' => $this->integer()->notNull(),
             // Le client, la société, la demande.
@@ -38,6 +43,8 @@ class m200099_000560_project_table extends Migration
             'contact_id' => $this->integer()->notNull(),
             // Le chef de projet.
             'capa_user_id' => $this->integer()->notNull(),
+            // Le modèle d'avant-projet.
+            'prospecting_id' => $this->integer()->notNull()
 
         ]);
 
