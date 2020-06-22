@@ -2,13 +2,13 @@
 
 use yii\db\Migration;
 
-class m200099_000567_contributor_prospecting extends Migration
+class m200099_000567_prospecting_contributor extends Migration
 {
 
     public function safeUp()
     {
 
-        $this->createTable('{{%contributor_prospecting}}', [
+        $this->createTable('{{%prospecting_contributor}}', [
             'id' => $this->primaryKey(),
             'nb_days' => $this->integer()->defaultValue(0),
             'nb_hours' => $this->integer()->defaultValue(0),
@@ -22,22 +22,22 @@ class m200099_000567_contributor_prospecting extends Migration
         ]);
 
         $this->addForeignKey(
-            'FK_contributor_prospecting-prospecting',
-            '{{%contributor_prospecting}}',
+            'FK_prospecting_contributor-prospecting',
+            '{{%prospecting_contributor}}',
             'prospecting_id',
             '{{%prospecting}}',
             'id'
         );
 
         $this->addForeignKey(
-            'FK_contributor_prospecting-capa_user',
-            '{{%contributor_prospecting}}',
+            'FK_prospecting_contributor-capa_user',
+            '{{%prospecting_contributor}}',
             'capa_user_id',
             '{{%capa_user}}',
             'id'
         );
 
-        $this->insert('{{%task_prospecting}}', [
+        $this->insert('{{%prospecting_contributor}}', [
             'nb_days' => 8,
             'nb_hours' => 12,
             'hour_price' => 234,
@@ -47,7 +47,7 @@ class m200099_000567_contributor_prospecting extends Migration
             'capa_user_id' => 2,
         ]);
 
-        $this->insert('{{%task_prospecting}}', [
+        $this->insert('{{%prospecting_contributor}}', [
             'nb_days' => 8,
             'nb_hours' => 12,
             'hour_price' => 234,
@@ -62,10 +62,10 @@ class m200099_000567_contributor_prospecting extends Migration
     {
 
         $this->dropForeignKey(
-            'FK_task_prospecting-prospecting',
-            '{{%task_prospecting}}'
+            'FK_prospecting_contributor-prospecting',
+            '{{%prospecting_contributor}}'
         );
 
-        $this->dropTable('{{%task_prospecting}}');
+        $this->dropTable('{{%prospecting_contributor}}');
     }
 }
