@@ -94,10 +94,10 @@ class m200099_000560_project_table extends Migration
             'date_version' => date_create()->format('Y-m-d H:i:s'),
             'file_path' => '',
             'creation_date' => date_create()->format('Y-m-d H:i:s'),
-            'cellule_id' => 1,
+            'cellule_id' => 3,
             'company_id' => 1,
             'contact_id' => 1,
-            'capa_user_id' => 1,
+            'capa_user_id' => 4,
         ]);
     }
 
