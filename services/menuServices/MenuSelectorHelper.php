@@ -66,8 +66,8 @@ class MenuSelectorHelper
      */
     static function setMenuProjectNone()
     {
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_NONE;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::PROJECT_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT;
     }
 
     /**
@@ -77,8 +77,8 @@ class MenuSelectorHelper
      */
     static function setMenuProjectIndex()
     {
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_LIST;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::PROJECT_LIST;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT;
     }
 
     /**
@@ -88,8 +88,8 @@ class MenuSelectorHelper
      */
     static function setMenuProjectCreate()
     {
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::DEVIS_CREATE;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::PROJECT_CREATE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT;
     }
 
     /**

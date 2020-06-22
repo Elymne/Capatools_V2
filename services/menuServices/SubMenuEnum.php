@@ -14,9 +14,11 @@ class SubMenuEnum
 
     /**
      * Administration menu.
+     * Correspond à la sélection principale du menu.
      */
     const USER = 'USER';
 
+    // Correspond à une sous sélection du menu.
     const USER_NONE = 'USER_NONE';
     const USER_CREATE = 'USER_CREATE';
     const USER_LIST = 'USER_LIST';
@@ -24,13 +26,13 @@ class SubMenuEnum
     const USER_UPDATE_EQUIPMENTS = "USER_UPDATE_EQUIPMENTS";
 
     /**
-     * Devis menu.
+     * Project menu.
      */
-    const DEVIS = 'DEVIS';
+    const PROJECT = 'PROJECT';
 
-    const DEVIS_NONE = 'DEVIS_NONE';
-    const DEVIS_CREATE = 'DEVIS_CREATE';
-    const DEVIS_LIST = 'DEVIS_LIST';
+    const PROJECT_NONE = 'PROJECT_NONE';
+    const PROJECT_CREATE = 'PROJECT_CREATE';
+    const PROJECT_LIST = 'PROJECT_LIST';
 
     /**
      * Company menu.

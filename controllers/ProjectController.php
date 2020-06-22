@@ -130,19 +130,19 @@ class ProjectController extends Controller implements ServiceInterface
                 'name' => 'Projets',
                 // serviceMenuActive est à un moyen très peu efficace, je vais essayer de l'oter, j'ai fais ça car je savais pas trop comment gérer
                 // les actives bar du menu à gauche.
-                'serviceMenuActive' => SubMenuEnum::DEVIS,
+                'serviceMenuActive' => SubMenuEnum::PROJECT,
                 'items' => [
                     [
                         'Priorite' => 3,
                         'url' => 'project/index',
                         'label' => 'Liste des projets',
-                        'subServiceMenuActive' => SubMenuEnum::DEVIS_LIST
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_LIST
                     ],
                     [
                         'Priorite' => 2,
                         'url' => 'project/create',
                         'label' => 'Créer un projet',
-                        'subServiceMenuActive' => SubMenuEnum::DEVIS_CREATE
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
                     ]
                 ]
             ];
