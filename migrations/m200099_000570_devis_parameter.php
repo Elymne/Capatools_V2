@@ -15,6 +15,9 @@ class m200099_000570_devis_parameter extends Migration
             'address' => $this->string()->notNull(),
             'legal_status' => $this->string()->notNull(),
             'devis_note' => $this->string()->notNull(),
+            'internal_rate_management' => $this->integer()->defaultValue(0),
+            'rate_management' => $this->integer()->defaultValue(0),
+            'delegate_rate_management' => $this->integer()->defaultValue(0.25),
         ]);
 
         $this->addPrimaryKey('PK_devis_parameter', '{{%devis_parameter}}', ['id']);
@@ -27,7 +30,10 @@ class m200099_000570_devis_parameter extends Migration
             'address' => 'default address',
             'legal_status' => 'legal status',
             'devis_note' => 'devis note',
-        ]);
+            'internal_rate_management' => 'internal rate management',
+            'rate_management' => 'rate management',
+            'delegate_rate_management' => 'delegate rate management',
+        ]); 
     }
 
     public function safeDown()
