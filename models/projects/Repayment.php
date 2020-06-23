@@ -17,12 +17,20 @@ use yii\db\ActiveRecord;
 class Repayment extends ActiveRecord
 {
 
+    /**
+     * Permet de définir le nom de la table associé.
+     */
     public static function tableName()
     {
         return 'repayment';
     }
 
-
+    /**
+     * Fonction de jointure au modèle des lots.
+     * Créer un attribut "lot" de type <Lot>.
+     * 
+     * @return Lot, un lot.
+     */
     public function getLot()
     {
         return $this->hasOne(Lot::className(), ['id' => 'lot_id']);
@@ -39,12 +47,7 @@ class Repayment extends ActiveRecord
         return $this->hasOne(Laboratory::className(), ['id' => 'laboratory_id']);
     }
 
-    /**
-     * Fonction de jointure au modèle des lots.
-     * Créer un attribut "lot" de type <Lot>.
-     * 
-     * @return Lot, un lot.
-     */
+
     public function getTasks()
     {
         return $this->hasMany(Task::className(), ['lot_id' => 'id']);

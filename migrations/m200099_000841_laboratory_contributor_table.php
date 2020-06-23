@@ -34,10 +34,36 @@ class m200099_000841_laboratory_contributor_table extends Migration
         $this->addForeignKey(
             'FK_laboratory_contributor-payment',
             '{{%laboratory_contributor}}',
-            'payment_id',
-            '{{%payment}}',
+            'repayment_id',
+            '{{%repayment}}',
             'id'
         );
+
+        $this->insert('{{%laboratory_contributor}}', [
+            'type' => 'stagiaire',
+            'nb_days' => 20,
+            'nb_hours' => 19,
+            'price_day' => 300,
+            'price_hour' => 20,
+            'risk' => 'Haute',
+            'risk_day' => 15,
+            'risk_hour' => 12,
+            'laboratory_id' => 1,
+            'repayment_id' => 1
+        ]);
+
+        $this->insert('{{%laboratory_contributor}}', [
+            'type' => 'stagiaire',
+            'nb_days' => 20,
+            'nb_hours' => 19,
+            'price_day' => 300,
+            'price_hour' => 20,
+            'risk' => 'Normale',
+            'risk_day' => 15,
+            'risk_hour' => 12,
+            'laboratory_id' => 1,
+            'repayment_id' => 2
+        ]);
     }
 
     public function safeDown()
