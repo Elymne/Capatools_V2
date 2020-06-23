@@ -19,10 +19,11 @@ use app\models\companies\Contact;
 class Project extends ActiveRecord
 {
 
-    const TYPE_INTERNAL_PRESTATION = 'Prestation interne';
+    const TYPE_PRESTATION = 'Prestation interne';
     const TYPE_OUTSOURCING_AD = 'Sous traitance AD';
     const TYPE_OUTSOURCING_UN = "Sous traitance UN";
-    const TYPES = [self::TYPE_INTERNAL_PRESTATION, self::TYPE_OUTSOURCING_AD, self::TYPE_OUTSOURCING_UN];
+    const TYPE_INTERNAL = "interne";
+    const TYPES = [self::TYPE_PRESTATION, self::TYPE_OUTSOURCING_AD, self::TYPE_OUTSOURCING_UN, self::TYPE_INTERNAL];
 
     const STATE_DRAFT = 'Avant-projet';
     const STATE_DEVIS_SENDED = 'Devis envoyé';
