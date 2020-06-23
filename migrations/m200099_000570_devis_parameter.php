@@ -30,9 +30,6 @@ class m200099_000570_devis_parameter extends Migration
             'address' => 'default address',
             'legal_status' => 'legal status',
             'devis_note' => 'devis note',
-            'internal_rate_management' => 'internal rate management',
-            'rate_management' => 'rate management',
-            'delegate_rate_management' => 'delegate rate management',
         ]); 
     }
 
