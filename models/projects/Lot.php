@@ -39,4 +39,9 @@ class Lot extends ActiveRecord
     {
         return $this->hasMany(Task::className(), ['lot_id' => 'id']);
     }
+
+    public function getConsumables()
+    {
+        return $this->hasMany(Consumable::className(), ['lot_id' => 'id']);
+    }
 }
