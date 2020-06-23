@@ -19,6 +19,7 @@ use app\models\projects\ProjectCreateForm;
 use app\models\users\CapaUser;
 use app\models\companies\Contact;
 use app\models\companies\Company;
+use app\models\projects\Lot;
 use app\models\projects\ProjectCreateFirstStepForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
@@ -561,17 +562,19 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionDevViewCreation()
     {
         $model = new ProjectCreateFirstStepForm();
+        $lot = [];
 
         // Validation du devis depuis la vue de création.
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            return $model->type;
+            return $model->combobox_type_checked;
         }
 
         return $this->render(
             'createFirstStep',
             [
-                'model' => $model
+                'model' => $model,
+                'lot' => $lot
             ]
         );
     }

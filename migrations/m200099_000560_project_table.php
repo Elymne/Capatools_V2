@@ -29,7 +29,7 @@ class m200099_000560_project_table extends Migration
 
             // Options for project.
             'draft' => $this->boolean()->defaultValue(true),
-            'laboratory_payment' => $this->boolean()->defaultValue(true),
+            'laboratory_repayment' => $this->boolean()->defaultValue(true),
 
             // Should be generated when created.
             'creation_date' => $this->date()->notNull(),
@@ -83,7 +83,7 @@ class m200099_000560_project_table extends Migration
             'id_laboxy' => "OIUEJYYT",
             'internal_name' => 'Projet Balkany',
             'internal_reference' => 'Projet Balkany',
-            'type' => Project::TYPE_INTERNAL_PRESTATION,
+            'type' => Project::TYPE_INTERNAL,
             'prospecting_time_day' => 127,
             'signing_probability' => 50,
             'state' => Project::STATE_DRAFT,

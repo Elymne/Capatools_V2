@@ -23,14 +23,24 @@ class Project extends ActiveRecord
     const TYPE_OUTSOURCING_AD = 'Sous traitance AD';
     const TYPE_OUTSOURCING_UN = "Sous traitance UN";
     const TYPE_INTERNAL = "interne";
-    const TYPES = [self::TYPE_PRESTATION, self::TYPE_OUTSOURCING_AD, self::TYPE_OUTSOURCING_UN, self::TYPE_INTERNAL];
+    const TYPES = [
+        1 => self::TYPE_PRESTATION,
+        2 => self::TYPE_OUTSOURCING_AD,
+        3 => self::TYPE_OUTSOURCING_UN,
+        4 => self::TYPE_INTERNAL
+    ];
 
     const STATE_DRAFT = 'Avant-projet';
     const STATE_DEVIS_SENDED = 'Devis envoyé';
     const STATE_DEVIS_SIGNED = "Devis signé";
     const STATE_CANCELED = "Projet annulé";
     const STATE_FINISHED = "Projet terminé";
-    const STATES = [self::STATE_DRAFT, self::STATE_DEVIS_SENDED, self::STATE_DEVIS_SIGNED, self::STATE_CANCELED, self::STATE_FINISHED];
+    const STATES = [
+        1 => self::STATE_DRAFT,
+        2 => self::STATE_DEVIS_SENDED,
+        3 => self::STATE_DEVIS_SIGNED,
+        4 => self::STATE_CANCELED, self::STATE_FINISHED
+    ];
 
     public static function tableName()
     {
