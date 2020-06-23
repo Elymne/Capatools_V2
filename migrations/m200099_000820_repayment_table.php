@@ -10,6 +10,7 @@ class m200099_000820_repayment_table extends Migration
         $this->createTable('{{%repayment}}', [
             'id' => $this->primaryKey(),
             'lot_id' => $this->integer(),
+            'laboratory_id' => $this->integer()
         ]);
 
         $this->addForeignKey(
@@ -23,11 +24,13 @@ class m200099_000820_repayment_table extends Migration
         $this->insert('{{%repayment}}', [
             'id' => 1,
             'lot_id' => 1,
+            'laboratory_id' => 1
         ]);
 
         $this->insert('{{%repayment}}', [
             'id' => 2,
             'lot_id' => 2,
+            'laboratory_id' => 1
         ]);
     }
 

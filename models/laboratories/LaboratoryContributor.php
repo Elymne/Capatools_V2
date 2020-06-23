@@ -3,6 +3,7 @@
 namespace app\models\laboratories;
 
 use app\models\equipments\Equipment;
+use app\models\projects\Repayment;
 use app\models\users\Cellule;
 use yii\db\ActiveRecord;
 
@@ -60,6 +61,6 @@ class Laboratory extends ActiveRecord
      */
     public function getRepayment()
     {
-        //return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
+        return $this->hasOne(Repayment::className(), ['id' => 'repayment_id']);
     }
 }

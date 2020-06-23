@@ -20,7 +20,7 @@ class m200099_000841_laboratory_contributor_table extends Migration
 
             // Foreign key.
             'laboratory_id' => $this->integer()->notNull(),
-            'payment_id' => $this->integer()->notNull(),
+            'repayment_id' => $this->integer()->notNull(),
         ]);
 
         $this->addForeignKey(
