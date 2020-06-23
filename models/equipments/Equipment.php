@@ -2,6 +2,7 @@
 
 namespace app\models\equipments;
 
+use app\models\laboratories\Laboratory;
 use yii\db\ActiveRecord;
 
 /**
@@ -29,9 +30,20 @@ class Equipment extends ActiveRecord
 
     /**
      * Utilisé pour récupérer tous les matériels.
+     * 
+     * @return array<Equipment>, une liste d'objet Equipment.
      */
     public static function getAll()
     {
         return static::find();
+    }
+
+    /**
+     * Fait la jonction entre un matériel et son laboratoire.
+     * Créer un attribut "laboratory" qui sera un objet Laboratory.
+     */
+    public function getLaboratory()
+    {
+        return $this->hasOne(Laboratory::className(), ['id' => 'laboratory_id']);
     }
 }
