@@ -1,7 +1,7 @@
 <?php
 
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
+use app\assets\administration\AdminFormAsset;
+use app\services\userRoleAccessServices\UserRoleManager;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -16,6 +16,8 @@ use yii\widgets\ActiveForm;
 $userRoles = [];
 if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
+AdminFormAsset::register($this);
+
 ?>
 
 <div class="capa_user-form">
@@ -27,7 +29,8 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     ]); ?>
 
     <!-- username field -->
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true, 'placeholder' => 'Nom et prénom'])->label('Nom de l\'utilisateur :') ?>
+    <?= $form->field($model, 'surname')->textInput(['maxlength' => true, 'placeholder' => 'Nom et prénom'])->label('Nom de l\'utilisateur :') ?>
+    <?= $form->field($model, 'firstname')->textInput(['maxlength' => true, 'placeholder' => 'Nom et prénom'])->label('Prénom de l\'utilisateur :') ?>
 
     <!-- email field -->
     <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder' => 'Email capacités'])->label('Email :') ?>
@@ -45,31 +48,55 @@ if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
     ); ?>
 
     <!-- email field -->
-    <?= $form->field($model, 'salary')->input('number', ['maxlength' => true, 'placeholder' => 'Prix'])->label('Prix d\'intervention :') ?>
+    <?= $form->field($model, 'price')->input('number', ['maxlength' => true, 'placeholder' => 'Prix'])->label('Prix d\'intervention :') ?>
 
-    <!-- devis role dropdown field -->
-    <?= $form->field($model, 'stored_role_devis')->widget(Select2::classname(), [
-        'data' => UserRoleEnum::DEVIS_ROLE_STRING,
-        'options' => ['value' => UserRoleManager::getSelectedDevisRoleKey($userRoles)],
-        'pluginLoading' => false,
-        'pluginOptions' => [
-            'allowClear' => false
-        ],
-    ])->label(
-        "Permissions pour les devis"
-    ); ?>
+    <label class='blue-text control-label roleLabel'>Gestion des rôles de l'utilisateur</label>
 
-    <!-- admin role dropdown field -->
-    <?= $form->field($model, 'stored_role_admin')->widget(Select2::classname(), [
-        'data' => UserRoleEnum::ADMINISTRATOR_ROLE_STRING,
-        'options' => ['value' => UserRoleManager::getSelectedAdminRoleKey($userRoles)],
-        'pluginLoading' => false,
-        'pluginOptions' => [
-            'allowClear' => false
-        ],
-    ])->label(
-        "Permissions d'administration"
-    );; ?>
+    <div class="col s12">
+        <div class="row">
+            <div class="col s3">
+                <?php $checkboxLabel = '<span>salarié</span>'; ?>
+                <?= $form->field($model, 'salary_role_checkbox', [])->checkbox([
+                    'label' => $checkboxLabel
+                ]) ?>
+            </div>
+            <div class="col s3">
+                <?php $checkboxLabel = '<span>chef de projet</span>'; ?>
+                <?= $form->field($model, 'project_manager_role_checkbox', [])->checkbox([
+                    'label' => $checkboxLabel
+                ]) ?>
+            </div>
+            <div class="col s3">
+                <?php $checkboxLabel = '<span>resp. cellule</span>'; ?>
+                <?= $form->field($model, 'cellule_manager_role_checkbox', [])->checkbox([
+                    'label' => $checkboxLabel
+                ]) ?>
+            </div>
+            <div class="col s3">
+                <?php $checkboxLabel = '<span>support</span>'; ?>
+                <?= $form->field($model, 'support_role_checkbox', [])->checkbox([
+                    'label' => $checkboxLabel
+                ]) ?>
+            </div>
+            <div class="col s3">
+                <?php $checkboxLabel = '<span>ressources humaine</span>'; ?>
+                <?= $form->field($model, 'human_ressources_role_checkbox', [])->checkbox([
+                    'label' => $checkboxLabel
+                ]) ?>
+            </div>
+            <div class="col s3">
+                <?php $checkboxLabel = '<span>admin</span>'; ?>
+                <?= $form->field($model, 'admin_role_checkbox', [])->checkbox([
+                    'label' => $checkboxLabel
+                ]) ?>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 
     <div class="form-group">
         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>

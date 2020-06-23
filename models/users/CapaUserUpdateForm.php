@@ -16,9 +16,13 @@ namespace app\models\users;
 class CapaUserUpdateForm extends CapaUser
 {
 
-    // Used to store index roles when validation in controller.
-    public $stored_role_devis;
-    public $stored_role_admin;
+    // Gestion de 6 checkboxs pour les rôles utilisateur.
+    public $salary_role_checkbox = false;
+    public $project_manager_role_checkbox = false;
+    public $cellule_manager_role_checkbox = false;
+    public $support_role_checkbox = false;
+    public $human_ressources_role_checkbox = false;
+    public $admin_role_checkbox = false;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
@@ -29,11 +33,12 @@ class CapaUserUpdateForm extends CapaUser
 
             // email required
             ['email', 'required', 'message' => 'Veulliez renseigner l\'email de l\'utilisateur'],
-            ['username', 'required', 'message' => 'Veulliez renseigner le nom de l\'utilisateur'],
+            ['surname', 'required', 'message' => 'Veulliez renseigner le nom de l\'utilisateur'],
+            ['firstname', 'required', 'message' => 'Veulliez renseigner le prénom de l\'utilisateur'],
             ['cellule_id', 'safe'],
             ['cellule_id', 'required', 'message' => 'Veulliez selectionner la cellule de l\'utilisateur'],
-            ['salary', 'required', 'message' => 'Indiquer le prix d\'intervention.'],
-            ['salary', 'integer', 'min' => 1, 'tooSmall' => 'Le prix d\'intervention doit être supérieur à 0.', 'message' => 'Le prix d\'intervention doit être positif.'],
+            ['price', 'required', 'message' => 'Indiquer le prix d\'intervention.'],
+            ['price', 'integer', 'min' => 1, 'tooSmall' => 'Le prix d\'intervention doit être supérieur à 0.', 'message' => 'Le prix d\'intervention doit être positif.'],
             ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],
             ['cellule_id', 'validateCelid', 'message' => 'Le nom de la cellule est inconnue'],
             ['stored_role_devis', 'safe'],

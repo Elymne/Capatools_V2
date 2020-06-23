@@ -36,17 +36,6 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
     }
 
     /**
-     * Trouve une identité à partir d'un nom d'utilisateur donné.
-     *
-     * @param string|int $id l'identifiant à rechercher
-     * @return username|null l'objet identité qui correspond à l'identifiant donné
-     */
-    public static function findByUsername($name)
-    {
-        return static::findOne(['username' => $name]);
-    }
-
-    /**
      * Trouve une identité à partir de l'email donné.
      *
      * @param string|int $email de l'identifiant à rechercher
@@ -152,11 +141,6 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
         //$this->password_hash = Yii::$app->getSecurity()->generatePasswordHash($pass);
         // echo $this->password_hash;
         return Yii::$app->getSecurity()->validatePassword($pass, $this->password_hash);
-    }
-
-    public function getUserRole()
-    {
-        return $this->hasMany(UserRole::className(), ['user_id' => 'id']);
     }
 
     public function getCellule()

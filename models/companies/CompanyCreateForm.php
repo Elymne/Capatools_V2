@@ -18,37 +18,31 @@ class CompanyCreateForm extends Company
     public function rules()
     {
         return [
-            ['name', 'required', 'message' => 'Indiquer le nom du client !'],
+            ['name', 'required', 'message' => 'Indiquer le nom de la société !'],
             ['name', 'clientAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
 
-            ['address', 'required', 'message' => 'Indiquer l\'addresse client !'],
-            ['address', 'addressAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
-
-            ['phone', 'required', 'message' => 'Indiquer le nom du client !'],
-            ['phone', 'phoneAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
-
-            ['email', 'required', 'message' => 'Indiquer l\'email du client !'],
+            ['email', 'required', 'message' => 'Indiquer l\'email de la société !'],
             ['email', 'emailAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
             ['email', 'email'],
 
-            ['siret', 'required', 'message' => 'Indiquer le siret du client !'],
-            ['siret', 'siretAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
-
-            ['type', 'required',  'message' => 'Il doit y avoir un type de sélectionné !'],
+            ['country', 'required', 'message' => 'Indiquer le pays !'],
+            ['city', 'required', 'message' => 'Indiquer la ville !'],
+            ['postal_code', 'required', 'message' => 'Indiquer le code postal !'],
 
             ['tva', 'tvaRequired', 'skipOnEmpty' => false, 'skipOnError' => false],
             ['tva', 'tvaAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['tva', 'tvaChecker', 'skipOnEmpty' => false, 'skipOnError' => false],
+
+            ['type', 'required',  'message' => 'Il doit y avoir un type de sélectionné !'],
         ];
     }
 
     public function clientAlreadyExists($attribute, $params)
     {
-        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
+        $companiesNames = ArrayHelper::map(self::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
 
         if (in_array($this->$attribute, $companiesNames)) {
-            $this->addError($attribute, 'Ce client existe déjà !');
+            $this->addError($attribute, 'Cette société existe déjà !');
         }
     }
 
@@ -58,17 +52,7 @@ class CompanyCreateForm extends Company
         $companiesAddress = array_merge($companiesAddress);
 
         if (in_array($this->$attribute, $companiesAddress)) {
-            $this->addError($attribute, 'Cette addresse est déjà utilisé sur un client !');
-        }
-    }
-
-    public function phoneAlreadyExists($attribute, $params)
-    {
-        $companiesPhone = ArrayHelper::map(Company::find()->all(), 'id', 'phone');
-        $companiesPhone = array_merge($companiesPhone);
-
-        if (in_array($this->$attribute, $companiesPhone)) {
-            $this->addError($attribute, 'Ce numéro de téléphone est déjà utilisé sur un client !');
+            $this->addError($attribute, 'Cette addresse est déjà utilisé par une société !');
         }
     }
 
@@ -82,21 +66,13 @@ class CompanyCreateForm extends Company
         }
     }
 
-    public function siretAlreadyExists($attribute, $params)
-    {
-        $companiesSiret = ArrayHelper::map(Company::find()->all(), 'id', 'siret');
-        $companiesSiret = array_merge($companiesSiret);
-
-        if (in_array($this->$attribute, $companiesSiret)) {
-            $this->addError($attribute, 'Ce siret est déjà utilisé sur un client !');
-        }
-    }
-
-    //TODO don't work.
+    /**
+     * //TODO 
+     * Méthode à faire pour lancer une vérification de la tva (sa syntaxe)
+     */
     public function tvaChecker($attribute, $params)
     {
-        $ok = preg_match("^[A-Za-z]{2,4}(?=.{2,12}$)[-_\s0-9]*(?:[a-zA-Z][-_\s0-9]*){0,2}^", $params);
-        if ($ok) {
+        if (false) {
             $this->addError($attribute, 'Mauvaise numéro de tva');
         }
     }

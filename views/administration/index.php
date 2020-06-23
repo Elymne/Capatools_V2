@@ -1,8 +1,8 @@
 <?php
 
 use app\assets\administration\AdminIndexAsset;
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -110,7 +110,8 @@ function getCollumnArray(): array
     $result = [];
 
     // Text input.
-    array_push($result, getUsernameArray());
+    array_push($result, getSurnameArray());
+    array_push($result, getFirstnameArray());
     array_push($result, getEmailArray());
     array_push($result, getCelluleArray());
 
@@ -120,17 +121,28 @@ function getCollumnArray(): array
     return $result;
 }
 
-function getUsernameArray(): array
+function getSurnameArray(): array
 {
     return [
-        'attribute' => 'username',
+        'attribute' => 'surname',
         'format' => 'raw',
-        'label' => 'Salarié',
+        'label' => 'Nom',
         'contentOptions' => ['class' => 'username-row'],
         'encodeLabel' => false,
         'value' => function ($data) {
-            return Html::a($data['username'], ['administration/view', 'id' => $data['id']]);
+            return Html::a($data['surname'], ['administration/view', 'id' => $data['id']]);
         }
+    ];
+}
+
+function getFirstnameArray(): array
+{
+    return [
+        'label' => 'Prénom',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'attribute' => 'firstname',
+        'contentOptions' => ['class' => 'email-row'],
     ];
 }
 
@@ -167,10 +179,8 @@ function getUpdateButtonArray()
             $userRoles = [];
             if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
-            $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
-
             $buttonClass = "";
-            if (canUpdateUser($adminRole)) $buttonClass = "waves-effect waves-light btn btn-green";
+            if (UserRoleManager::canUpdateUser($userRoles)) $buttonClass = "waves-effect waves-light btn btn-green";
             else $buttonClass = "btn disabled";
 
             return Html::a(
@@ -185,19 +195,4 @@ function getUpdateButtonArray()
             );
         }
     ];
-}
-
-function canUpdateUser($adminRole): bool
-{
-    $result = true;
-
-    if (
-        !UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) &&
-        ($adminRole == UserRoleEnum::ADMINISTRATOR || $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
-    )  $result = false;
-
-    if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) && $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
-        $result = false;
-
-    return $result;
 }

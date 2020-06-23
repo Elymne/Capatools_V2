@@ -9,19 +9,23 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 
-use app\helper\_clazz\MenuSelectorHelper;
-use app\helper\_clazz\UploadFileHelper;
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\SubMenuEnum;
-use app\helper\_enum\UserRoleEnum;
 use app\models\users\CapaUser;
 use app\models\users\CapaUserCreateForm;
 use app\models\users\CapaUserSearch;
 use app\models\users\CapaUserUpdateForm;
 use app\models\users\Cellule;
-use app\models\devis\UploadFile;
+use app\models\projects\UploadFile;
 use app\models\parameters\DevisParameter;
 use app\models\parameters\DevisParameterUpdateForm;
+use app\models\equipments\Equipment;
+use app\models\equipments\EquipmentCreateForm;
+use app\services\menuServices\MenuSelectorHelper;
+use app\services\menuServices\SubMenuEnum;
+use app\services\uploadFileServices\UploadFileHelper;
+use app\services\userRoleAccessServices\PermissionAccessEnum;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
+use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 
 /**
@@ -58,42 +62,52 @@ class AdministrationController extends Controller
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'manage-devis-parameters'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'view-devis-parameters', 'update-devis-parameters', 'index-equipments', 'create-equipment'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['index'],
-                        'roles' => ['indexAdmin'],
+                        'roles' => [PermissionAccessEnum::ADMIN_INDEX],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['create'],
-                        'roles' => ['createAdmin'],
+                        'roles' => [PermissionAccessEnum::ADMIN_CREATE],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['view'],
-                        'roles' => ['viewAdmin'],
+                        'roles' => [PermissionAccessEnum::ADMIN_VIEW],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['update'],
-                        'roles' => ['updateAdmin'],
+                        'roles' => [PermissionAccessEnum::ADMIN_UPDATE],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['delete'],
-                        'roles' => ['deleteAdmin'],
+                        'roles' => [PermissionAccessEnum::ADMIN_DELETE],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['view-devis-parameters'],
-                        'roles' => ['devisParameter']
+                        'roles' => [PermissionAccessEnum::ADMIN_DEVIS_PARAMETERS_VIEW]
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['manage-devis-parameters'],
-                        'roles' => ['devisParameter']
+                        'actions' => ['update-devis-parameters'],
+                        'roles' => [PermissionAccessEnum::ADMIN_DEVIS_PARAMETERS_UPDATE]
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index-equipments'],
+                        'roles' => [PermissionAccessEnum::ADMIN_EQUIPEMENT_INDEX]
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create-equipment'],
+                        'roles' => [PermissionAccessEnum::ADMIN_EQUIPEMENT_CREATE]
                     ]
                 ],
             ],
@@ -119,9 +133,9 @@ class AdministrationController extends Controller
         $result = [];
 
         if (UserRoleManager::hasRoles([
-            UserRoleEnum::ADMINISTRATOR,
-            UserRoleEnum::SUPER_ADMINISTRATOR,
-            UserRoleEnum::PROJECT_MANAGER_DEVIS
+            UserRoleEnum::ADMIN,
+            UserRoleEnum::SUPER_ADMIN,
+            UserRoleEnum::HUMAN_RESSOURCES
         ])) {
             $result =
                 [
@@ -148,8 +162,9 @@ class AdministrationController extends Controller
 
         if (
             UserRoleManager::hasRoles([
-                UserRoleEnum::ADMINISTRATOR,
-                UserRoleEnum::SUPER_ADMINISTRATOR
+                UserRoleEnum::ADMIN,
+                UserRoleEnum::SUPER_ADMIN,
+                UserRoleEnum::HUMAN_RESSOURCES
             ])
         ) {
             array_push($result, [
@@ -163,8 +178,8 @@ class AdministrationController extends Controller
 
         if (
             UserRoleManager::hasRoles([
-                UserRoleEnum::ADMINISTRATOR,
-                UserRoleEnum::SUPER_ADMINISTRATOR
+                UserRoleEnum::ADMIN,
+                UserRoleEnum::SUPER_ADMIN
             ])
         ) {
             array_push($result, [
@@ -173,6 +188,21 @@ class AdministrationController extends Controller
                 'label' => 'Paramètres des devis',
                 'icon' => 'show_chart',
                 'subServiceMenuActive' => SubMenuEnum::USER_UPDATE_DEVIS_PARAMETERS
+            ]);
+        }
+
+        if (
+            UserRoleManager::hasRoles([
+                UserRoleEnum::ADMIN,
+                UserRoleEnum::SUPER_ADMIN
+            ])
+        ) {
+            array_push($result, [
+                'priorite' => 1,
+                'url' => 'administration/index-equipments',
+                'label' => 'Liste des matériels',
+                'icon' => 'show_chart',
+                'subServiceMenuActive' => SubMenuEnum::USER_UPDATE_EQUIPMENTS
             ]);
         }
 
@@ -244,15 +274,13 @@ class AdministrationController extends Controller
             //$model->generatePasswordAndmail();
 
             // Set hash password.
-            $model->setNewPassword($model->username);
+            $model->setNewPassword($model->firstname);
 
-            // Because dropdownlist is an array and begin at 0.
+            // On ajoute +1 car la liste commence à 0 et l'id cellule à 1 (décalage de 1).
             $model->cellule_id += 1;
 
             if ($model->save()) {
-                // Set roles for the new user.
-                UserRoleManager::setDevisRole($model->id, UserRoleEnum::DEVIS_ROLE[$model->stored_role_devis]);
-                UserRoleManager::setAdministrationRole($model->id, UserRoleEnum::ADMINISTRATION_ROLE[$model->stored_role_admin]);
+                UserRoleManager::setRolesFromUserCreateForm($model);
 
                 MenuSelectorHelper::setMenuAdminNone();
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -286,6 +314,8 @@ class AdministrationController extends Controller
         $cellules = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
         $cellules = array_merge($cellules);
 
+        UserRoleManager::setRoleToModelForm($model);
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             // Because dropdownlist is an array.
@@ -297,8 +327,7 @@ class AdministrationController extends Controller
                 UserRoleManager::removeRolesFromUser($model->id);
 
                 // And then, we set updated roles for the user.
-                UserRoleManager::setDevisRole($model->id, UserRoleEnum::DEVIS_ROLE[$model->stored_role_devis]);
-                UserRoleManager::setAdministrationRole($model->id, UserRoleEnum::ADMINISTRATION_ROLE[$model->stored_role_admin]);
+                UserRoleManager::setRolesFromUserUpdateForm($model);
 
                 MenuSelectorHelper::setMenuAdminNone();
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -351,29 +380,9 @@ class AdministrationController extends Controller
     public function actionViewDevisParameters()
     {
         MenuSelectorHelper::setMenuDevisParameters();
-        return $this->render('devisParameterView', [
+        return $this->render('devisParametersView', [
             'model' => DevisParameter::getParameters()
         ]);
-    }
-
-    /**
-     * Utilisé pour télécharger le fichier uploadé du CGU Français.
-     * 
-     */
-    public function actionDownloadCguFrFile()
-    {
-        $pathFile = 'cgu/cguFrPdf.py';
-        UploadFileHelper::downloadFile($pathFile);
-    }
-
-    /**
-     * Utilisé pour télécharger le fichier uploadé du CGU Anglais.
-     * 
-     */
-    public function actionDownloadCguEnFile()
-    {
-        $pathFile = 'cgu/cguEnPdf.py';
-        UploadFileHelper::downloadFile($pathFile);
     }
 
     /**
@@ -385,7 +394,7 @@ class AdministrationController extends Controller
      * 
      * @return mixed
      */
-    public function actionManageDevisParameters()
+    public function actionUpdateDevisParameters()
     {
 
         $model = DevisParameterUpdateForm::getParameters();
@@ -412,13 +421,79 @@ class AdministrationController extends Controller
 
         MenuSelectorHelper::setMenuDevisParameters();
         return $this->render(
-            'devisParameterUpdate',
+            'devisParametersUpdate',
             [
                 'model' => $model,
                 'fileCguFrModel' => $fileCguFrModel,
                 'fileCguEnModel' => $fileCguEnModel
             ]
         );
+    }
+
+    /**
+     * Utilisé pour télécharger le fichier uploadé du CGU Français.
+     * 
+     */
+    public function actionDownloadCguFrFile()
+    {
+        $pathFile = 'cgu/cguFrPdf.py';
+        UploadFileHelper::downloadFile($pathFile);
+    }
+
+    /**
+     * Utilisé pour télécharger le fichier uploadé du CGU Anglais.
+     * 
+     */
+    public function actionDownloadCguEnFile()
+    {
+        $pathFile = 'cgu/cguEnPdf.py';
+        UploadFileHelper::downloadFile($pathFile);
+    }
+
+    /**
+     * Render view : administration/view-equipments.
+     * Cette méthode est utilisé pour retourner une vue affichant tous les matériels de l'application.
+     * Ces matériels sont stockés de manière globale.
+     * 
+     * @return mixed
+     */
+    public function actionIndexEquipments()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Equipment::getAll(),
+        ]);
+
+        MenuSelectorHelper::setMenuEquipments();
+        return $this->render(
+            'equipmentIndex',
+            [
+                'dataProvider' => $dataProvider
+            ]
+        );
+    }
+
+    /**
+     * Render view : administration/create-equipment.
+     * Cette méthode est utilisé pour retourner une vue permettant de créer un équipement.
+     * Le nouveau matériel est stocké de manière globale.
+     * 
+     * @return mixed
+     */
+    public function actionCreateEquipment()
+    {
+        $model = new EquipmentCreateForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->save()) {
+                MenuSelectorHelper::setMenuAdminNone();
+                return $this->redirect(['administration/view-equipments']);
+            }
+        }
+
+        MenuSelectorHelper::setMenuEquipments();
+        return $this->render('createEquipment', [
+            'model' => $model
+        ]);
     }
 
     /**

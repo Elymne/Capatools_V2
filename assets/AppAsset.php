@@ -25,16 +25,21 @@ class AppAsset extends AssetBundle
 
     public $css = [
 
+        //default Yii css.
+        'css/site.css',
+
         // Fonts
         'fonts/apple-touch-icon-152x152.png',
         'fonts/favicon-32x32.png',
         'https://fonts.googleapis.com/icon?family=Material+Icons',
 
+        // Materialize.
+        'css/materialize.min.css',
+
         // Dark forest theme.
-        'app-assets/vendors/vendors.min.css',
-        'app-assets/css/themes/vertical-dark-menu-template/materialize.min.css',
-        'app-assets/css/themes/vertical-dark-menu-template/style.min.css',
-        'app-assets/css/pages/dashboard.min.css',
+        'css/dark-forest/vendors.min.css',
+        'css/dark-forest/materialize.min.css',
+        'css/dark-forest/style.min.css',
 
         // Timeline item css.
         'css/timeline.css',
@@ -54,11 +59,15 @@ class AppAsset extends AssetBundle
     ];
 
     public $js = [
+
+        // Materialize.
+        'js/materialize.min.js',
+
         // JS Admin Template Html.
-        'app-assets/js/vendors.min.js',
-        'app-assets/js/plugins.min.js',
-        'app-assets/js/search.min.js',
-        'app-assets/js/custom/custom-script.js',
+        'js/dark-forest/vendors.min.js',
+        'js/dark-forest/plugins.min.js',
+        'js/dark-forest/search.min.js',
+        'js/dark-forest/custom-script.js',
 
         // Form js.
         'js/jquery.steps.js',

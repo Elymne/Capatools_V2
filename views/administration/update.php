@@ -1,7 +1,7 @@
 <?php
 
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 
@@ -9,7 +9,7 @@ use yii\helpers\Html;
 /* @var $model app\models\users\CapaUser */
 /* @var $cellules app\models\devis\Cellule */
 
-$this->title = 'Mise à jour de l\'utilisateur: ' . $model->username;
+$this->title = 'Mise à jour de l\'utilisateur: ' . $model->email;
 $this->params['breadcrumbs'][] = ['label' => 'Capaidentities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
@@ -18,7 +18,6 @@ $this->params['breadcrumbs'][] = 'Update';
 $userRoles = [];
 if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
-$adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdminRoleKey($userRoles)];
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -26,7 +25,7 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
 <div class="container">
     <div class="capa_user-update">
 
-        <?php if (canUpdateUser($adminRole)) : ?>
+        <?php if (UserRoleManager::canUpdateUser($userRoles)) : ?>
             <div class="row">
                 <div class="col s6 offset-s3">
 
@@ -62,21 +61,3 @@ $adminRole = UserRoleEnum::ADMINISTRATION_ROLE[UserRoleManager::getSelectedAdmin
 
     </div>
 </div>
-
-
-<?php
-
-function canUpdateUser($adminRole): bool
-{
-    $result = true;
-
-    if (
-        !UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) &&
-        ($adminRole == UserRoleEnum::ADMINISTRATOR || $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
-    )  $result = false;
-
-    if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMINISTRATOR]) && $adminRole == UserRoleEnum::SUPER_ADMINISTRATOR)
-        $result = false;
-
-    return $result;
-}

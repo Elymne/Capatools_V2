@@ -19,6 +19,10 @@ class DevisParameter extends ActiveRecord
         return 'devis_parameter';
     }
 
+    /**
+     * Retourne l'unique donnée de paramètre des projets.
+     * Il y en a qu'un seul.
+     */
     public static function getParameters()
     {
         return static::find()->where(['id' => 'param'])->one();

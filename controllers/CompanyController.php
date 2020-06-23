@@ -8,15 +8,17 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-use app\helper\_clazz\MenuSelectorHelper;
-use app\helper\_clazz\UserRoleManager;
-use app\helper\_enum\CompanyTypeEnum;
-use app\helper\_enum\SubMenuEnum;
-use app\helper\_enum\UserRoleEnum;
 use app\models\companies\Company;
 use app\models\users\CapaUser;
 use app\models\companies\CompanyCreateForm;
+use app\models\companies\Contact;
 use app\models\companies\ContactCreateForm;
+use app\services\companyTypeServices\CompanyTypeEnum;
+use app\services\menuServices\MenuSelectorHelper;
+use app\services\menuServices\SubMenuEnum;
+use app\services\userRoleAccessServices\PermissionAccessEnum;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -55,28 +57,33 @@ class CompanyController extends Controller
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['index', 'view', 'create'],
+                'only' => ['index', 'view', 'create', 'index-contacts', 'create-contact'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['index'],
-                        'roles' => ['indexCompany'],
+                        'roles' => [PermissionAccessEnum::COMPANY_INDEX],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['view'],
-                        'roles' => ['viewCompany'],
+                        'roles' => [PermissionAccessEnum::COMPANY_VIEW],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['create'],
-                        'roles' => ['createCompany'],
+                        'roles' => [PermissionAccessEnum::COMPANY_CREATE],
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['add-contacts'],
-                        'roles' => ['addContactsCompany'],
+                        'actions' => ['index-contacts'],
+                        'roles' => [PermissionAccessEnum::COMPANY_CONTACT_INDEX],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create-contact'],
+                        'roles' => [PermissionAccessEnum::COMPANY_CONTACT_CREATE],
+                    ]
                 ],
             ],
         ];
@@ -101,9 +108,8 @@ class CompanyController extends Controller
         $result = [];
 
         if (UserRoleManager::hasRoles([
-            UserRoleEnum::ADMINISTRATOR,
-            UserRoleEnum::SUPER_ADMINISTRATOR,
-            UserRoleEnum::PROJECT_MANAGER_DEVIS
+            UserRoleEnum::ADMIN,
+            UserRoleEnum::SUPER_ADMIN
         ])) {
             $result =
                 [
@@ -140,6 +146,13 @@ class CompanyController extends Controller
             'url' => 'company/index',
             'label' => 'Liste des clients',
             'subServiceMenuActive' => SubMenuEnum::COMPANY_INDEX
+        ]);
+
+        array_push($result, [
+            'Priorite' => 3,
+            'url' => 'company/index-contacts',
+            'label' => 'Liste des contacts',
+            'subServiceMenuActive' => SubMenuEnum::COMPANY_UPDATE_CONTACTS
         ]);
 
         return $result;
@@ -182,7 +195,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Render view : devis/create.
+     * Render view : company/create.
      * Méthode en deux temps :
      * - Si pas de méthode POST de trouvé, on retourne la vue de la création d'une société.
      * - Sinon, à partir de la méthode POST, on récupère toutes les informations de la nouvelle société, et ensuite à la vérification,
@@ -202,7 +215,7 @@ class CompanyController extends Controller
 
                 $model->save(false);
 
-                MenuSelectorHelper::setMenuDevisCreate();
+                MenuSelectorHelper::setMenuProjectCreate();
                 return $this->redirect(['company/index']);
             }
         }
@@ -216,35 +229,51 @@ class CompanyController extends Controller
         );
     }
 
-    public function actionAddContacts(int $id)
+    /**
+     * Render view : administration/view-contacts.
+     * Cette méthode est utilisé pour retourner une vue affichant tous les contacts de l'application.
+     * Ces contacts sont stockés de manière globale.
+     * 
+     * @return mixed
+     */
+    public function actionIndexContacts()
     {
-        $model = new ContactCreateForm();
+        $dataProvider = new ActiveDataProvider([
+            'query' => Contact::getAll(),
+        ]);
 
-        if ($model->load(Yii::$app->request->post())) {
-
-            if ($model->validate()) {
-                $model->save();
-
-                MenuSelectorHelper::setMenuDevisCreate();
-                return $this->redirect(['company/index']);
-            }
-        }
-
-        MenuSelectorHelper::setMenuCompanyCreate();
+        MenuSelectorHelper::setMenuCompanyContacts();
         return $this->render(
-            'create',
+            'contactView',
             [
-                'model' =>  $model
+                'dataProvider' => $dataProvider
             ]
         );
     }
 
-    //TODO
-    public function actionSetContact(int $id)
+    /**
+     * Render view : company/create-contact.
+     * Cette méthode est utilisé pour retourner une vue permettant de créer un contact.
+     * Le nouveau contact est stocké de manière globale.
+     * 
+     * @return mixed
+     */
+    public function actionCreateContact()
     {
+        $model = new ContactCreateForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->save()) {
+                MenuSelectorHelper::setMenuCompanyNone();
+                return $this->redirect(['company/view-contacts']);
+            }
+        }
+
+        MenuSelectorHelper::setMenuCompanyContacts();
+        return $this->render('createContact', [
+            'model' => $model
+        ]);
     }
-
-
 
     /**
      * Méthode générale pour le contrôleur permettant de retourner une société.

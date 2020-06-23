@@ -2,13 +2,9 @@
 
 use app\assets\companies\CompanyIndexAsset;
 use app\widgets\TopTitle;
-use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\users\CapaUserSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Liste des sociétés';
 $this->params['breadcrumbs'][] = $this->title;
@@ -57,7 +53,7 @@ CompanyIndexAsset::register($this);
         </div>
 
         <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
-            <a href="/administration/create" class="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow">
+            <a href="/company/create" class="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow">
                 <i class="material-icons">add</i>
             </a>
         </div>
@@ -73,7 +69,7 @@ function getSearchFilter()
     echo Html::input('text', 'textinput_user', '', [
         'id' => 'companyname-search',
         'class' => 'form-control',
-        'maxlength' => 10,
+        'maxlength' => 30,
         'style' => 'width:350px',
         'placeholder' => 'Rechercher un nom d\'utilisateur',
         'onkeyup' => 'usernameFilterSearch()'
@@ -89,13 +85,16 @@ function getSearchFilter()
  */
 function getCollumnArray(): array
 {
-
     $result = [];
 
     // Text input.
     array_push($result, getNameArray());
     array_push($result, getEmailArray());
-    array_push($result, getPhoneArray());
+    array_push($result, getPostalCode());
+    array_push($result, getCountry());
+    array_push($result, getCity());
+    array_push($result, getTva());
+    array_push($result, getCompanyType());
 
     return $result;
 }
@@ -121,17 +120,61 @@ function getEmailArray(): array
         'label' => 'Adresse email',
         'encodeLabel' => false,
         'format' => 'ntext',
-        'contentOptions' => ['class' => 'email-row'],
+        'contentOptions' => ['class' => ''],
     ];
 }
 
-function getPhoneArray(): array
+function getPostalCode(): array
 {
     return [
-        'attribute' => 'phone',
-        'label' => 'Téléphone',
+        'attribute' => 'postal_code',
+        'label' => 'Code postal',
         'encodeLabel' => false,
         'format' => 'ntext',
-        'contentOptions' => ['class' => 'cellule-row'],
+        'contentOptions' => ['class' => ''],
+    ];
+}
+
+function getCountry(): array
+{
+    return [
+        'attribute' => 'country',
+        'label' => 'Pays',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'contentOptions' => ['class' => ''],
+    ];
+}
+
+function getCity(): array
+{
+    return [
+        'attribute' => 'city',
+        'label' => 'Ville',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'contentOptions' => ['class' => ''],
+    ];
+}
+
+function getTva(): array
+{
+    return [
+        'attribute' => 'tva',
+        'label' => 'TVA',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'contentOptions' => ['class' => ''],
+    ];
+}
+
+function getCompanyType(): array
+{
+    return [
+        'attribute' => 'type',
+        'label' => 'Type',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'contentOptions' => ['class' => ''],
     ];
 }

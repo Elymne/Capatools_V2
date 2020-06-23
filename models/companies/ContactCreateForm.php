@@ -18,11 +18,12 @@ class ContactCreateForm extends Contact
     public function rules()
     {
         return [
-            ['name', 'required', 'message' => 'Indiquer le nom du contact !'],
+            ['surname', 'required', 'message' => 'Indiquer le nom du contact !'],
             ['firstname', 'required', 'message' => 'Indiquer le prénom du contact !'],
+            ['surname', 'required', 'message' => 'Indiquer le nom du contact !'],
 
-            ['phone', 'required', 'message' => 'Indiquer le nom du client !'],
-            ['phone', 'phoneAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
+            ['phone_number', 'required', 'message' => 'Indiquer le nom du client !'],
+            ['phone_number', 'phoneAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
 
             ['email', 'required', 'message' => 'Indiquer l\'email du client !'],
             ['email', 'emailAlreadyExists', 'skipOnEmpty' => false, 'skipOnError' => false],
@@ -32,7 +33,7 @@ class ContactCreateForm extends Contact
 
     public function phoneAlreadyExists($attribute, $params)
     {
-        $contactsPhone = ArrayHelper::map(Contact::find()->all(), 'id', 'phone');
+        $contactsPhone = ArrayHelper::map(Contact::find()->all(), 'id', 'phone_number');
         $contactsPhone = array_merge($contactsPhone);
 
         if (in_array($this->$attribute, $contactsPhone)) {

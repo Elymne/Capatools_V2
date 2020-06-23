@@ -2,6 +2,7 @@
 
 namespace app\models\companies;
 
+use app\models\projects\Project;
 use yii\db\ActiveRecord;
 
 /**
@@ -24,20 +25,49 @@ class Company extends ActiveRecord
     }
 
     /**
-     * Utilisé pour récupérer toutes les sociétés.
+     * Récupère toutes les sociétés dans la base de données.
+     * 
+     * @return Array<Company>
      */
     public static function getAll()
     {
         return static::find();
     }
 
+    /**
+     * Récupère une société par son id.
+     * 
+     * @return Company
+     */
     public static function getOneById(int $id)
     {
         return static::find(['id' => $id])->one();
     }
 
-    public function getContacts()
+    /**
+     * Créer un attribut contenant la liste des projets des sociétés retournées.
+     * (Cette méthode peut-être utilisé à la place de l'attribut généré).
+     * 
+     * @return Array<Project>
+     */
+    public function getProjects()
     {
-        return $this->hasMany(Contact::className(), ['company_id' => 'id']);
+        return $this->hasMany(Project::className(), ['company_id' => 'id']);
+    }
+
+    /**
+     * Créer un attribut contenant la liste de tous les contacts associé aux projets du client.
+     * (Cette méthode peut-être utilisé à la place de l'attribut généré).
+     * 
+     * @return Array<Contact>
+     */
+    public function getContacts(): array
+    {
+        $contacts = [];
+        foreach ($this->projects as $project) {
+            array_push($contacts, $project->contact);
+        }
+
+        return $contacts;
     }
 }
