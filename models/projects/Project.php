@@ -88,4 +88,9 @@ class Project extends ActiveRecord
     {
         return $this->hasMany(Lot::className(), ['project_id' => 'id']);
     }
+
+    public function getMillestones()
+    {
+        return $this->hasMany(Millestone::className(), ['project_id' => 'id']);
+    }
 }
