@@ -9,6 +9,15 @@ use yii\db\ActiveRecord;
 /**
  * Classe modèle métier des laboratoires Capacités.
  * Permet de faire des requêtes depuis la table laboratory de la db associée à l'app.
+ * Les attributs sont les suivants : 
+ *  - id
+ *  - name
+ *  - price_contributor_day
+ *  - price_contributor_hour
+ *  - price_ec_day
+ *  - price_ec_hour
+ *  - cellule_id
+ *  - cellule
  * 
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0

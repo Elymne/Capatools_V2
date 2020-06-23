@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200099_000585_expense extends Migration
+class m200099_000800_consumable_table extends Migration
 {
 
     public function safeUp()
@@ -22,6 +22,22 @@ class m200099_000585_expense extends Migration
             '{{%lot}}',
             'id'
         );
+
+        $this->insert('{{%consumable}}', [
+            'id' => 1,
+            'title' => "Orbe rouge brisé",
+            'price' => 1200,
+            'type' => 'Consommable',
+            'lot_id' => 1,
+        ]);
+
+        $this->insert('{{%consumable}}', [
+            'id' => 2,
+            'title' => "Felcloth",
+            'price' => 120000000,
+            'type' => 'Consommable',
+            'lot_id' => 1,
+        ]);
     }
 
     public function safeDown()

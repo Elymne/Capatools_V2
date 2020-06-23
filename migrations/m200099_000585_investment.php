@@ -22,19 +22,19 @@ class m200099_000585_investment extends Migration
             'id'
         );
 
-        $this->insert('{{%lot}}', [
+        $this->insert('{{%investment}}', [
             'name' => "Achat de jambon de haute qualité",
             'price' => 100,
             'lot_id' => 1,
         ]);
 
-        $this->insert('{{%lot}}', [
+        $this->insert('{{%investment}}', [
             'name' => "Frais de loyer du chalet",
             'price' => 1230000,
             'lot_id' => 1,
         ]);
 
-        $this->insert('{{%lot}}', [
+        $this->insert('{{%investment}}', [
             'name' => "La taxe",
             'price' => 140,
             'lot_id' => 2,

@@ -28,8 +28,8 @@ class m200099_000591_task_management_table extends Migration
         );
 
         $this->insert('{{%task_management}}', [
-            'lot_number' => 1,
             'title' => "Préparer le café au grin",
+            'days_duration' => 20,
             'risk' => 'Normal',
             'risk_days' => 15,
             'lot_id' => 1,

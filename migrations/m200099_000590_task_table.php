@@ -38,7 +38,6 @@ class m200099_000590_task_table extends Migration
         );
 
         $this->insert('{{%task}}', [
-            'lot_number' => 1,
             'title' => "Tâche numéro 1 : trouver les clefs",
             'days_duration' => 23,
             'price' => 1456,
@@ -51,8 +50,9 @@ class m200099_000590_task_table extends Migration
         $this->insert('{{%task}}', [
             'title' => "Tâche numéro 2 : libérer la cible",
             'days_duration' => 1,
+            'price' => 123,
             'risk' => 'Très haut',
-            'unit_price' => 23847,
+            'risk_days' => 3,
             'capa_user_id' => 3,
             'lot_id' => 1,
         ]);
@@ -60,8 +60,9 @@ class m200099_000590_task_table extends Migration
         $this->insert('{{%task}}', [
             'title' => "Tâche numéro 1 : dormir",
             'days_duration' => 1,
+            'price' => 4005,
             'risk' => 'Très haut',
-            'unit_price' => 23,
+            'risk_days' => 3,
             'capa_user_id' => 6,
             'lot_id' => 2,
         ]);
