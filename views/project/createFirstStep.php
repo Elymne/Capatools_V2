@@ -111,6 +111,7 @@ ProjectCreateFirstPhaseAsset::register($this);
                                             <div class="item">
 
                                                 <?php
+                                                $lot_rank = $i + 1;
                                                 // necessary for update action.
                                                 if (!$lot->isNewRecord) {
                                                     echo Html::activeHiddenInput($lot, "[{$i}]id");
@@ -119,7 +120,7 @@ ProjectCreateFirstPhaseAsset::register($this);
 
                                                 <div class="row">
                                                     <div class="col s6">
-                                                        <?= $form->field($lot, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label('Titre du lot') ?>
+                                                        <?= $form->field($lot, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Titre lot") ?>
                                                     </div>
                                                     <div class="col 2">
                                                         <button type="button" class="add-item btn-floating btn-large waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
