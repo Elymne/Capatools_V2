@@ -49,16 +49,13 @@ class LeftMenuBar extends \yii\bootstrap\Widget
 
         return <<<HTML
             <aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-dark sidenav-active-rounded">
-
                 <!-- Title, laissez le tag h1 sur une seule ligne. -->
                 <div class="brand-sidebar">
                     <h1 class="logo-wrapper"><a class="brand-logo darken-1" href="${homeNav}"><img class="hide-on-med-and-down " src="${logo_capa}" alt="materialize logo" /><img class="show-on-medium-and-down hide-on-med-and-up" src="${logo_capa_color}" alt="materialize logo" /><span class="logo-text hide-on-med-and-down">CapaTools</span><a class="navbar-toggler" href="#"></a></h1>
                 </div>
-
                 <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
                     ${stringSubmenu}
-                </ul>
-                
+                </ul>               
                 <div class="navigation-background"></div>
                 <a class="sidenav-trigger btn-sidenav-toggle btn-floating btn-medium waves-effect waves-light hide-on-large-only" href="#" data-target="slide-out">
                     <i class="material-icons">menu</i>

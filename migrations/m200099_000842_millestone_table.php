@@ -9,14 +9,10 @@ class m200099_000842_millestone_table extends Migration
     {
         $this->createTable('{{%millestone}}', [
             'id' => $this->primaryKey(),
-            'type' => $this->string()->notNull(),
-            'nb_days' => $this->integer()->defaultValue(0),
-            'nb_hours' => $this->integer()->defaultValue(0),
-            'price_day' => $this->string()->notNull(),
-            'price_hour' => $this->integer(),
-            'risk' => $this->string()->notNull(),
-            'risk_day' => $this->integer(0),
-            'risk_hour' => $this->integer(0),
+            'number' => $this->integer()->notNull(),
+            'comment' => $this->string()->notNull(),
+            'pourcentage' => $this->double()->notNull(),
+
 
             // Foreign key.
             'project_id' => $this->integer()->notNull(),
