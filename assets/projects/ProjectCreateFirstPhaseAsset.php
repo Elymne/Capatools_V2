@@ -16,7 +16,7 @@ class ProjectCreateFirstPhaseAsset extends AssetBundle
 
     public $css = ['css/projects/createFirstStep.css'];
 
-    public $js =  ['js/projects/createFirstStep.css'];
+    public $js =  ['js/projects/createFirstStep.js'];
 
     public $depends = [
         'yii\web\YiiAsset',

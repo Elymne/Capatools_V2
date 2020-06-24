@@ -3,6 +3,7 @@
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
 use app\assets\devis\RefactoringAsset;
+use app\assets\projects\RefactoringAsset as ProjectsRefactoringAsset;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use wbraganca\dynamicform\DynamicFormWidget;
@@ -14,7 +15,7 @@ use yii\bootstrap\Html;
 $this->title = 'Création';
 
 AppAsset::register($this);
-RefactoringAsset::register($this);
+ProjectsRefactoringAsset::register($this);
 
 ?>
 
@@ -229,6 +230,7 @@ RefactoringAsset::register($this);
                                     <p>Liste des tâches</p>
                                 </div>
                                 <div class="input-field col s12">
+
                                     <?php DynamicFormWidget::begin([
                                         'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                         'widgetBody' => '.container-items-task', // required: css class selector

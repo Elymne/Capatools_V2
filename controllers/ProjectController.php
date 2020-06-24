@@ -562,7 +562,7 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionDevViewCreation()
     {
         $model = new ProjectCreateFirstStepForm();
-        $lot = [];
+        $lots = $model->lots;
 
         // Validation du devis depuis la vue de création.
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -574,7 +574,7 @@ class ProjectController extends Controller implements ServiceInterface
             'createFirstStep',
             [
                 'model' => $model,
-                'lot' => $lot
+                'lots' => (empty($lots)) ? [new Lot()] : $lots
             ]
         );
     }
