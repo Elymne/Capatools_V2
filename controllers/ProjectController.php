@@ -19,6 +19,8 @@ use app\models\projects\ProjectCreateForm;
 use app\models\users\CapaUser;
 use app\models\companies\Contact;
 use app\models\companies\Company;
+use app\models\projects\Lot;
+use app\models\projects\ProjectCreateFirstStepForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -552,5 +554,28 @@ class ProjectController extends Controller implements ServiceInterface
                 // PDF doesn't exist so throw an error or something
             }
         }
+    }
+
+    /**
+     * //TODO supprimer cette fonction quand la vue sera terminée.
+     */
+    public function actionDevViewCreation()
+    {
+        $model = new ProjectCreateFirstStepForm();
+        $lots = $model->lots;
+
+        // Validation du devis depuis la vue de création.
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            return $model->combobox_type_checked;
+        }
+
+        return $this->render(
+            'createFirstStep',
+            [
+                'model' => $model,
+                'lots' => (empty($lots)) ? [new Lot()] : $lots
+            ]
+        );
     }
 }
