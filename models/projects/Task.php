@@ -16,6 +16,10 @@ use yii\db\ActiveRecord;
 class Task extends ActiveRecord
 {
 
+    const CATEGORY_TASK = 'Tâche';
+    const CATEGORY_MANAGEMENT = 'Management';
+    const CATEGORIES = [self::CATEGORY_TASK, self::CATEGORY_MANAGEMENT];
+
     const RISK_LOW = 'Faible';
     const RISK_NORMAL = 'Normal';
     const RISK_HIGH = "Haut";
