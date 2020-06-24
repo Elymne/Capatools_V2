@@ -15,9 +15,21 @@ use yii\db\ActiveRecord;
 class Lot extends ActiveRecord
 {
 
+    const STATE_IN_PROGRESS = 'En cours';
+
     public static function tableName()
     {
         return 'lot';
+    }
+
+    /**
+     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
+     */
+    public function rules()
+    {
+        return [
+            //['title', 'required', 'message' => 'Indiquer un titre pour le lot'],
+        ];
     }
 
     public static function getAll()

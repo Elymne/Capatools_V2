@@ -16,6 +16,14 @@ class m200099_000510_contact extends Migration
         ]);
 
         $this->insert('{{%contact}}', [
+            'id' => -1,
+            'firstname' => 'Indéfini',
+            'surname' => 'Indéfini',
+            'phone_number' => 'Indéfini',
+            'email' => 'Indéfini'
+        ]);
+
+        $this->insert('{{%contact}}', [
             'firstname' => 'Marc',
             'surname' => 'Aurèle',
             'phone_number' => '06 00000000',

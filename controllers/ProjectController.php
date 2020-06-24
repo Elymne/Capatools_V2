@@ -27,6 +27,7 @@ use app\services\uploadFileServices\UploadFileHelper;
 use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
+use DateTime;
 use kartik\mpdf\Pdf;
 
 
@@ -142,7 +143,7 @@ class ProjectController extends Controller implements ServiceInterface
                     ],
                     [
                         'Priorite' => 2,
-                        'url' => 'project/create',
+                        'url' => 'project/create-first-step',
                         'label' => 'Créer un projet',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
                     ]
@@ -557,19 +558,51 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
-     * //TODO supprimer cette fonction quand la vue sera terminée.
+     *  Nouvelle route pour la création d'un projet sur l'application Capatool.
+     * Celle-ci retourne une vue et créer un brouillon du projet.
      */
-    public function actionDevViewCreation()
+    public function actionCreateFirstStep()
     {
         $model = new ProjectCreateFirstStepForm();
         $lots = $model->lots;
 
-        // Validation du devis depuis la vue de création.
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        // Envoi par méthode POST.
+        if ($model->load(Yii::$app->request->post())) {
 
-            return $model->combobox_type_checked;
+            // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
+            if ($model->combobox_lot_checked == 2) {
+                $lots = [new Lot()];
+                $lots[0]->title = 'Lot par défaut';
+                $lots[0]->number = 1;
+                $lots[0]->status = Lot::STATE_IN_PROGRESS;
+                $lots[0]->comment = 'Un lot par défaut';
+            }
+
+            // Si les entrées sont valides ont commence à former le projet au brouillon, on rempli des champs par défaut.
+            if ($model->validate()) {
+
+                // Pré-remplissage des valeurs par défaut.
+                $defaultValue = "indéfini";
+                $model->id_capa = $defaultValue;
+                $model->internal_name = $defaultValue;
+                $model->internal_reference = $defaultValue;
+                $model->state = $defaultValue;
+                $model->version = $defaultValue;
+                $model->date_version = date('Y-m-d H:i:s');
+                $model->creation_date = date('Y-m-d H:i:s');
+                $model->id_capa = $defaultValue;
+
+                // On récupère l'id de la cellule de l'utilisateur connecté.
+                $model->cellule_id = Yii::$app->user->identity->cellule_id;
+                // On inclu la clé étragère qui référence une donnée indéfinie.
+                $model->company_id = -1;
+                $model->type = Project::TYPES[$model->combobox_type_checked];
+                $model->draft = true;
+                $model->laboratory_repayment = ($model->combobox_repayment_checked == 2) ? true : false;
+            }
         }
 
+        MenuSelectorHelper::setMenuProjectCreate();
         return $this->render(
             'createFirstStep',
             [

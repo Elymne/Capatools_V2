@@ -21,6 +21,16 @@ class m200099_000500_company_table extends Migration
         ]);
 
         /* Table data insertion */
+        $this->insert('{{%company}}', [
+            'id' => -1,
+            'name' => 'Indéfini',
+            'postal_code' => 'Indéfini',
+            'city' => 'Indéfini',
+            'country' => 'Indéfini',
+            'tva' => 'Indéfini',
+            'email' => 'Indéfini',
+            'type' => 'Indéfini'
+        ]);
 
         $this->insert('{{%company}}', [
             'name' => 'Maison de Balkany',

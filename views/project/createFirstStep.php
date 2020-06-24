@@ -32,7 +32,6 @@ ProjectCreateFirstPhaseAsset::register($this);
                         <label>Paramètres généraux</label>
                     </div>
 
-                    <!-- TODO Trouver un moyen de faire fonctionner ces combobox -->
                     <div class="card-action">
 
                         <!-- Type de projet  -->
@@ -44,7 +43,7 @@ ProjectCreateFirstPhaseAsset::register($this);
                                 else $check = "";
 
                                 $return = '<label class="modal-radio">';
-                                $return .= '<input ' . $check . ' type="radio" name="lots_radio" value="' . $value . '" tabindex="3">';
+                                $return .= '<input ' . $check . ' type="radio" name="' . $name . '" value="' . $value . '" tabindex="3">';
                                 $return .= '<span>' . ucwords($label) . '</span>';
                                 $return .= '</label>';
                                 return $return;

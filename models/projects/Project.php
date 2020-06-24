@@ -22,7 +22,7 @@ class Project extends ActiveRecord
     const TYPE_PRESTATION = 'Prestation interne';
     const TYPE_OUTSOURCING_AD = 'Sous traitance AD';
     const TYPE_OUTSOURCING_UN = "Sous traitance UN";
-    const TYPE_INTERNAL = "interne";
+    const TYPE_INTERNAL = "Interne";
     const TYPES = [
         1 => self::TYPE_PRESTATION,
         2 => self::TYPE_OUTSOURCING_AD,

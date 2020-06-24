@@ -20,11 +20,10 @@ class ProjectCreateFirstStepForm extends Project
 
     /**
      * Gestion combobox.
-     * Check par défaut sur le n°1.
      */
-    public $combobox_type_checked = 1;
-    public $combobox_lot_checked = 1;
-    public $combobox_repayment_checked = 1;
+    public $combobox_type_checked;
+    public $combobox_lot_checked;
+    public $combobox_repayment_checked;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
