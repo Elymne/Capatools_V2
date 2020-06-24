@@ -28,7 +28,7 @@ class Lot extends ActiveRecord
     public function rules()
     {
         return [
-            //['title', 'required', 'message' => 'Indiquer un titre pour le lot'],
+            [['title'], 'safe',],
         ];
     }
 

@@ -569,18 +569,10 @@ class ProjectController extends Controller implements ServiceInterface
         // Envoi par méthode POST.
         if ($model->load(Yii::$app->request->post())) {
 
-            // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
-            if ($model->combobox_lot_checked == 2) {
-                $lots = [new Lot()];
-                $lots[0]->title = 'Lot par défaut';
-                $lots[0]->number = 1;
-                $lots[0]->status = Lot::STATE_IN_PROGRESS;
-                $lots[0]->comment = 'Un lot par défaut';
-            }
-
             // Si les entrées sont valides ont commence à former le projet au brouillon, on rempli des champs par défaut.
             if ($model->validate()) {
 
+                #region Gestion de la précréation du projet.
                 // Pré-remplissage des valeurs par défaut.
                 $defaultValue = "indéfini";
                 $model->id_capa = $defaultValue;
@@ -594,11 +586,52 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // On récupère l'id de la cellule de l'utilisateur connecté.
                 $model->cellule_id = Yii::$app->user->identity->cellule_id;
-                // On inclu la clé étragère qui référence une donnée indéfinie.
+                // On inclu la clé étragère qui référence une donnée indéfinie dans la table company.
                 $model->company_id = -1;
+                // On inclu la clé étragère qui référence une donnée indéfinie dans la table contact.
+                $model->contact_id = -1;
+                // On inclu la clé étragère qui référence une donnée indéfinie dans la table capa_user.
+                $model->capa_user_id = -1;
                 $model->type = Project::TYPES[$model->combobox_type_checked];
                 $model->draft = true;
                 $model->laboratory_repayment = ($model->combobox_repayment_checked == 2) ? true : false;
+
+                // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
+                $model->save();
+                #endregion
+
+                #region Gestion de la création des lots.
+                // Géstion la multitude de lots à sauvegarder.
+                $lots = Model::createMultiple(Lot::className(), $lots);
+                Model::loadMultiple($lots, Yii::$app->request->post());
+
+                // Création d'un lot d'avant-projet.
+                $lotProscription = new Lot();
+                $lotProscription->number = 0;
+                $lotProscription->title = "titre à compléter";
+                $lotProscription->status = Lot::STATE_IN_PROGRESS;
+                $lotProscription->project_id = $model->id;
+                $lotProscription->save();
+
+                // Création des lots.
+                // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
+                if ($model->combobox_lot_checked == 1) {
+                    $lots = [new Lot()];
+                    $lots[0]->title = 'Lot par défaut';
+                    $lots[0]->number = 1;
+                    $lots[0]->status = Lot::STATE_IN_PROGRESS;
+                    $lots[0]->comment = 'Un lot par défaut';
+                }
+
+                foreach ($lots as $key => $lot) {
+                    $lot->number = $key + 1;
+                    $lot->status = Lot::STATE_IN_PROGRESS;
+                    $lot->project_id = $model->id;
+
+                    $lot->save();
+                }
+                #endregion
+
             }
         }
 
