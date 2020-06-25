@@ -13,6 +13,7 @@ use app\components\ExcelExportService;
 use app\models\Model;
 use app\models\files\UploadFile;
 use app\models\projects\Project;
+use app\models\parameters\DevisParameter;
 use app\models\projects\ProjectSearch;
 use app\models\projects\ProjectUpdateForm;
 use app\models\projects\ProjectCreateForm;
@@ -606,8 +607,30 @@ class ProjectController extends Controller implements ServiceInterface
                 // On inclu la clé étragère qui référence une donnée indéfini dans la table capa_user.
                 $model->capa_user_id = -1;
                 $model->type = Project::TYPES[$model->combobox_type_checked];
+                // On recopie le management rate
+                $rate  = DevisParameter::getParameters();
+
+                switch (Project::TYPES[$model->combobox_type_checked]) {
+                    case  Project::TYPE_PRESTATION: {
+                            $model->management_rate = $rate->rate_management;
+                        }
+                    case  Project::TYPE_OUTSOURCING_UN: {
+                            $model->management_rate = $rate->rate_management;
+                        }
+                    case  Project::TYPE_OUTSOURCING_AD: {
+                            $model->management_rate = $rate->delegate_rate_management;
+                        }
+                    case  Project::TYPE_INTERNAL: {
+                            $model->management_rate = $rate->internal_rate_management;
+                        }
+                    default: {
+                            $model->management_rate = $rate->rate_management;
+                        }
+                }
+
                 $model->draft = true;
                 $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
+
 
                 // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
                 $model->save();

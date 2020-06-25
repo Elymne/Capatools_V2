@@ -30,7 +30,7 @@ class ProjectSearch extends Project
     public function rules()
     {
         return [
-            [['id', 'prospecting_time_day', 'version', 'cellule_id', 'company_id', 'capa_user_id'], 'integer'],
+            [['id', 'version', 'cellule_id', 'company_id', 'capa_user_id'], 'integer'],
             [['id_capa', 'internal_name', 'project_manager.email', 'company.name', 'cellule.name'], 'safe'],
         ];
     }
@@ -93,7 +93,6 @@ class ProjectSearch extends Project
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'prospecting_time_day' => $this->prospecting_time_day,
             'version' => $this->version,
             'cellule_id' => $this->cellule_id,
             'company_id' => $this->company_id,

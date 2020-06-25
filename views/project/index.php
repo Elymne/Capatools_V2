@@ -171,13 +171,10 @@ function getHelperCardContent(): string
         <div>
             <a class="btn-floating waves-effect waves-light btn-green rightspace-10px no-click"><i class="material-icons right">cloud_download</i></a>
             <p style="display: inline-block">Modifier le devis</p>
-
             <a class="btn-floating waves-effect waves-light btn-blue rightspace-10px leftspace-20px no-click"><i class="material-icons right">cloud_download</i></a>
             <p style="display: inline-block">Upload du fichier</p>
-
             <a class="btn-floating waves-effect waves-light btn-purple rightspace-10px leftspace-20px no-click"><i class="material-icons right">picture_as_pdf</i></a>
             <p style="display: inline-block">Générer le pdf</p>
-
             <a class="btn-floating waves-effect waves-light btn-green-darker rightspace-10px leftspace-20px no-click"><i class="material-icons right">grid_on</i></a>
             <p style="display: inline-block">Générer le fichier excel</p>
         </div>
