@@ -51,7 +51,7 @@ ProjectCreateFirstPhaseAsset::register($this);
 
                         <!-- lot ou pas ? -->
                         <label class='blue-text control-label typeLabel'>Le projet comprend-il des lots ou des options ?</label>
-                        <?= $form->field($lots[0], 'combobox_lot_checked')->radioList([0 => "non", 1 => "oui"], [
+                        <?= $form->field($model, 'combobox_lot_checked')->radioList([0 => "non", 1 => "oui"], [
                             'item' => function ($index, $label, $name, $checked, $value) {
 
                                 if ($index == 1) $check = "checked";
@@ -99,7 +99,8 @@ ProjectCreateFirstPhaseAsset::register($this);
                                         'formId' => 'dynamic-form',
                                         'formFields' => [
                                             'id',
-                                            'title'
+                                            'title',
+                                            'combobox_lot_checked'
                                         ],
                                     ]); ?>
 
@@ -109,7 +110,6 @@ ProjectCreateFirstPhaseAsset::register($this);
                                             <div class="item">
 
                                                 <?php
-                                                $lot_rank = $i + 1;
                                                 // necessary for update action.
                                                 if (!$lot->isNewRecord) {
                                                     echo Html::activeHiddenInput($lot, "[{$i}]id");
