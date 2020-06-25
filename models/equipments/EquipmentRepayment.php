@@ -25,22 +25,6 @@ class EquipmentRepayment extends ActiveRecord
     }
 
     /**
-     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
-     */
-    public function rules()
-    {
-        return [
-            ['nb_days', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
-            ['nb_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
-            ['nb_hours', 'required', 'message' => 'Veuillez renseigner le nombre d\'heures'],
-            ['nb_hours', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
-            ['risk', 'required', 'message' => 'Veuillez spécifier la valeur d\'incertitude'],
-            ['risk_days', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
-            ['risk_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
-        ];
-    }
-
-    /**
      * Fait la jonction entre la table d'association et l'équipement, le matériel..
      * Créer un attribut "equipment" qui sera un objet Laboratory.
      */

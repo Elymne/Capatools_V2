@@ -26,7 +26,7 @@ use yii\db\ActiveRecord;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class Laboratory extends ActiveRecord
+class LaboratoryContributor extends ActiveRecord
 {
 
     const TYPE_SEARCHER = "Chercheur";
@@ -39,23 +39,6 @@ class Laboratory extends ActiveRecord
     static function tableName()
     {
         return 'laboratory_contributor';
-    }
-
-    /**
-     * Fonction surchargée de la classe ActiveRecord, elle permet de vérifier l'intégrité des données dans un modèle.
-     */
-    public function rules()
-    {
-        return [
-            ['type', 'required', 'message' => 'Veuillez renseigner le type d\'intervenant'],
-            ['nb_days', 'required', 'message' => 'Veuillez définir le nombre de jours'],
-            ['nb_hours', 'required', 'message' => 'Veuillez définir le nombre d\'heures'],
-            ['price_day', 'required', 'message' => 'Veuillez définir le prix journalier'],
-            ['risk', 'required', 'message' => 'Veuillez définir le taux d\'incertitude'],
-            ['risk_day', 'required', 'message' => 'Veulliez définir le nombre de jours lié à l\'incertitude'],
-            ['risk_hour', 'required', 'message' => 'Veulliez définir le nombre d\'heures lié à l\'incertitude'],
-            ['price_hour', 'required', 'message' => 'Veulliez définir le prix par heure'],
-        ];
     }
 
     /**
