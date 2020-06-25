@@ -18,7 +18,7 @@ class Task extends ActiveRecord
 
     const KINDDURATION_DAY = 'Jour(s)';
     const KINDDURATION_HOUR = 'Heure(s)';
-    const KINDDURATION = [self::KINDDURATION_DAY=>self::KINDDURATION_DAY,self::KINDDURATION_HOUR=> self::KINDDURATION_HOUR];
+    const KINDDURATION = [self::KINDDURATION_DAY => self::KINDDURATION_DAY, self::KINDDURATION_HOUR => self::KINDDURATION_HOUR];
 
     const CATEGORY_TASK = 'Tâche';
     const CATEGORY_MANAGEMENT = 'Management';
@@ -27,7 +27,7 @@ class Task extends ActiveRecord
     const RISK_LOW = 'Faible';
     const RISK_NORMAL = 'Normale';
     const RISK_HIGH = "Très haut";
-    const RISKS = [self::RISK_LOW=>self::RISK_LOW,self::RISK_NORMAL=> self::RISK_NORMAL, self::RISK_HIGH=>self::RISK_HIGH];
+    const RISKS = [self::RISK_LOW => self::RISK_LOW, self::RISK_NORMAL => self::RISK_NORMAL, self::RISK_HIGH => self::RISK_HIGH];
 
     public static function tableName()
     {
