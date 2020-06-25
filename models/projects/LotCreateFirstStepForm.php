@@ -22,15 +22,14 @@ class LotCreateFirstStepForm extends Lot
      * Gestion combobox lot.
      */
     public $combobox_lot_checked;
-
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
         return [
-            //['combobox_lot_checked', 'required', 'message' => 'Make a choice'],
-            //['title', 'titleIsNeeded', 'skipOnEmpty' => false, 'skipOnError' => false],
+            [['title'], 'safe',],
+            ['title', 'titleIsNeeded', 'skipOnEmpty' => false, 'skipOnError' => false],
         ];
     }
 

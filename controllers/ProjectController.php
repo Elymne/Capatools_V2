@@ -570,11 +570,12 @@ class ProjectController extends Controller implements ServiceInterface
         if ($model->load(Yii::$app->request->post())) {
             // Si les entrées sont valides ont commence à former le projet au brouillon, on rempli des champs par défaut.
             // On donne au premier modèle de lot la valeur du radiobutton concernant les lots pour qu'il puissé compléter la validité des données entréees.
+
+            $lots = Model::createMultiple(LotCreateFirstStepForm::className(), $lots);
+            Model::loadMultiple($lots, Yii::$app->request->post());
+
             $lots[0]->combobox_lot_checked = $model->combobox_lot_checked;
             if ($model->validate() && $lots[0]->validate()) {
-
-
-                return \var_dump($lots[0]->title);
 
                 // Pré-remplissage des valeurs par défaut.
                 $defaultValue = "indéfini";
@@ -601,10 +602,6 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
                 $model->save();
-
-                // Géstion la multitude de lots à sauvegarder.
-                $lots = Model::createMultiple(LotCreateFirstStepForm::className(), $lots);
-                Model::loadMultiple($lots, Yii::$app->request->post());
 
                 // Création d'un lot d'avant-projet.
                 $lotProscription = new Lot();

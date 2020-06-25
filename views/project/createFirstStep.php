@@ -105,6 +105,12 @@ ProjectCreateFirstPhaseAsset::register($this);
                                         <!-- widgetContainer -->
                                         <?php foreach ($lots as $i => $lot) : ?>
                                             <div class="item">
+                                                <?php
+                                                // necessary for update action.
+                                                if (!$lot->isNewRecord) {
+                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
+                                                }
+                                                ?>
                                                 <div class="row">
                                                     <div class="col s8">
                                                         <?= $form->field($lot, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Titre lot") ?>

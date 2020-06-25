@@ -22,16 +22,6 @@ class Lot extends ActiveRecord
         return 'lot';
     }
 
-    /**
-     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
-     */
-    public function rules()
-    {
-        return [
-            [['title'], 'safe',],
-        ];
-    }
-
     public static function getAll()
     {
         return static::find();
