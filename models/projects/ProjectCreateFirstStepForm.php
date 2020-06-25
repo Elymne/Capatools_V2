@@ -20,11 +20,10 @@ class ProjectCreateFirstStepForm extends Project
 
     /**
      * Gestion combobox.
-     * Check par défaut sur le n°1.
      */
-    public $combobox_type_checked = 1;
-    public $combobox_lot_checked = 1;
-    public $combobox_repayment_checked = 1;
+    public $combobox_type_checked;
+    public $combobox_repayment_checked;
+    public $combobox_lot_checked;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
@@ -33,7 +32,7 @@ class ProjectCreateFirstStepForm extends Project
     {
         return [
             ['combobox_type_checked', 'required', 'message' => 'Le projet doit avoir un type'],
-            ['combobox_lot_checked', 'required', 'message' => 'Vous devez cocher au moins un des deux choix proposés'],
+            ['combobox_lot_checked', 'required', 'message' => 'Make a choice'],
             ['combobox_repayment_checked', 'required', 'message' =>  'Vous devez cocher au moins un des deux choix proposés'],
         ];
     }

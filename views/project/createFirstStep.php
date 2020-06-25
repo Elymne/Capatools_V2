@@ -32,7 +32,6 @@ ProjectCreateFirstPhaseAsset::register($this);
                         <label>Paramètres généraux</label>
                     </div>
 
-                    <!-- TODO Trouver un moyen de faire fonctionner ces combobox -->
                     <div class="card-action">
 
                         <!-- Type de projet  -->
@@ -44,7 +43,7 @@ ProjectCreateFirstPhaseAsset::register($this);
                                 else $check = "";
 
                                 $return = '<label class="modal-radio">';
-                                $return .= '<input ' . $check . ' type="radio" name="lots_radio" value="' . $value . '" tabindex="3">';
+                                $return .= '<input ' . $check . ' type="radio" name="' . $name . '" value="' . $value . '" tabindex="3">';
                                 $return .= '<span>' . ucwords($label) . '</span>';
                                 $return .= '</label>';
                                 return $return;
@@ -53,7 +52,7 @@ ProjectCreateFirstPhaseAsset::register($this);
 
                         <!-- lot ou pas ? -->
                         <label class='blue-text control-label typeLabel'>Le projet comprend-il des lots ou des options ?</label>
-                        <?= $form->field($model, 'combobox_lot_checked')->radioList([1 => "non", 2 => "oui"], [
+                        <?= $form->field($model, 'combobox_lot_checked')->radioList([0 => "non", 1 => "oui"], [
                             'item' => function ($index, $label, $name, $checked, $value) {
 
                                 if ($index == 1) $check = "checked";
@@ -67,9 +66,9 @@ ProjectCreateFirstPhaseAsset::register($this);
                             }
                         ])->label(false); ?>
 
-                        <!-- renversement labo ou pas ? -->
+                        <!-- Reversement labo ou pas ? -->
                         <label class='blue-text control-label typeLabel'>Le projet comprend-il des reversements labo ?</label>
-                        <?= $form->field($model, 'combobox_repayment_checked')->radioList([1 => "non", 2 => "oui"], [
+                        <?= $form->field($model, 'combobox_repayment_checked')->radioList([0 => "non", 1 => "oui"], [
                             'item' => function ($index, $label, $name, $checked, $value) {
 
                                 if ($index == 1) $check = "checked";
@@ -99,37 +98,30 @@ ProjectCreateFirstPhaseAsset::register($this);
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $lots[0],
                                         'formId' => 'dynamic-form',
-                                        'formFields' => [
-                                            'id',
-                                            'title'
-                                        ],
+                                        'formFields' => ['title'],
                                     ]); ?>
 
                                     <div class="container-items-task">
                                         <!-- widgetContainer -->
                                         <?php foreach ($lots as $i => $lot) : ?>
                                             <div class="item">
-
                                                 <?php
-                                                $lot_rank = $i + 1;
                                                 // necessary for update action.
                                                 if (!$lot->isNewRecord) {
                                                     echo Html::activeHiddenInput($lot, "[{$i}]id");
                                                 }
                                                 ?>
-
                                                 <div class="row">
-                                                    <div class="col s6">
+                                                    <div class="col s8">
                                                         <?= $form->field($lot, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Titre lot") ?>
                                                     </div>
                                                     <div class="col 2">
-                                                        <button type="button" class="add-item btn-floating btn-large waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                        <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
                                                     </div>
                                                     <div class="col 2">
-                                                        <button type="button" class="remove-item btn-floating btn-large waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                        <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                                     </div>
                                                 </div><!-- .row -->
-
                                             </div>
                                         <?php endforeach; ?>
                                     </div>
@@ -140,7 +132,7 @@ ProjectCreateFirstPhaseAsset::register($this);
                             </div>
                         </div>
 
-
+                        <!-- Buttons -->
                         <div class="form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
                             <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
