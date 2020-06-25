@@ -2,7 +2,6 @@
 
 namespace app\models\projects\forms;
 
-use app\models\equipments\EquipmentRepayment;
 use app\models\projects\Expense;
 
 /**

@@ -9,14 +9,14 @@ use yii\web\AssetBundle;
  * 
  * @since 2.0
  */
-class ProjectCreateFirstPhaseAsset extends AssetBundle
+class ProjectCreateThirdStepAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
 
-    public $css = ['css/projects/createFirstStep.css'];
+    public $css = ['css/projects/createThirdStep.css'];
 
-    public $js =  ['js/projects/createFirstStep.js'];
+    public $js =  ['js/projects/createThirdStep.js'];
 
     public $depends = [
         'yii\web\YiiAsset',

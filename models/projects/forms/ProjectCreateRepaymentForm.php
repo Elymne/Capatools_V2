@@ -3,6 +3,7 @@
 namespace app\models\projects\forms;
 
 use app\models\projects\Repayment;
+use Yii;
 
 /**
  * Classe relative au modèle métier des dépenses.

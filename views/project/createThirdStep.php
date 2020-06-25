@@ -1,0 +1,192 @@
+<?php
+
+use app\assets\AppAsset;
+use app\assets\projects\ProjectCreateThirdStepAsset;
+use app\models\projects\Consumable;
+use app\widgets\TopTitle;
+use kartik\select2\Select2;
+use wbraganca\dynamicform\DynamicFormWidget;
+use yii\bootstrap\Html;
+use yii\widgets\ActiveForm;
+
+$this->title = 'Création d\'un projet - liste des dépenses et reversements : Lot n°?';
+
+AppAsset::register($this);
+ProjectCreateThirdStepAsset::register($this);
+
+?>
+
+<?= TopTitle::widget(['title' => $this->title]) ?>
+<div class="container">
+    <div class="project-create">
+        <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
+        <div class="row">
+            <div class="col s12">
+
+                <!-- Card : Gestion des consonmmables -->
+                <div class="card">
+
+                    <div class="card-content">
+                        <label>Dépenses</label>
+                    </div>
+
+                    <div class="card-action">
+
+                        <!-- Création de consommables -->
+                        <label id="consumable-management-label" class='blue-text control-label typeLabel'>Consommables, prestataires, déplacements...</label>
+                        <div id="consumable-management-body" class="col s12">
+                            <div class="row">
+                                <div class="input-field col s12">
+
+                                    <?php DynamicFormWidget::begin([
+                                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                        'widgetBody' => '.container-items-consummable', // required: css class selector
+                                        'widgetItem' => '.item-consummable', // required: css class
+                                        'limit' => 10, // the maximum times, an element can be cloned (default 999)
+                                        'min' => 1, // 0 or 1 (default 1)
+                                        'insertButton' => '.add-item', // css class
+                                        'deleteButton' => '.remove-item', // css class
+                                        'model' => $consumables[0],
+                                        'formId' => 'dynamic-form',
+                                        'formFields' => ['title', 'price', 'type'],
+                                    ]); ?>
+
+                                    <div class="container-items-consummable">
+                                        <!-- widgetContainer -->
+                                        <?php foreach ($consumables as $i => $consumable) : ?>
+                                            <div class="item-consummable">
+                                                <?php
+                                                // necessary for update action.
+                                                if (!$consumable->isNewRecord) {
+                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
+                                                }
+                                                ?>
+                                                <div class="row">
+                                                    <div class="col s4">
+                                                        <?= $form->field($consumable, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                    </div>
+                                                    <div class="col s2">
+                                                        <?= $form->field($consumable, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Prix HT") ?>
+                                                    </div>
+                                                    <div class="col s4">
+                                                        <!-- type dropdown field -->
+                                                        <?= $form->field($consumable, "[{$i}]type")->widget(Select2::classname(), [
+                                                            'data' => Consumable::TYPES,
+                                                            'options' => ['value' => 0],
+                                                            'pluginLoading' => false,
+                                                            'pluginOptions' => [
+                                                                'allowClear' => false
+                                                            ],
+                                                        ])->label(
+                                                            "Type"
+                                                        ); ?>
+                                                    </div>
+                                                    <div class="col 1">
+                                                        <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                    </div>
+                                                    <div class="col 1">
+                                                        <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                    </div>
+                                                </div><!-- .row -->
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                    <?php DynamicFormWidget::end(); ?>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-action">
+
+                        <!-- Création dépense , d'investissements -->
+                        <label id="expense-management-label" class='blue-text control-label typeLabel'>Liste des achats d'investissement éventuels</label>
+                        <div id="expense-management-body" class="col s12">
+                            <div class="row">
+                                <div class="input-field col s12">
+
+                                    <?php DynamicFormWidget::begin([
+                                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                        'widgetBody' => '.container-items-expense', // required: css class selector
+                                        'widgetItem' => '.item-expense', // required: css class
+                                        'limit' => 10, // the maximum times, an element can be cloned (default 999)
+                                        'min' => 1, // 0 or 1 (default 1)
+                                        'insertButton' => '.add-item', // css class
+                                        'deleteButton' => '.remove-item', // css class
+                                        'model' => $expenses[0],
+                                        'formId' => 'dynamic-form',
+                                        'formFields' => ['title', 'price'],
+                                    ]); ?>
+
+                                    <div class="container-items-expense">
+                                        <!-- widgetContainer -->
+                                        <?php foreach ($expenses as $i => $expense) : ?>
+                                            <div class="item-expense">
+                                                <?php
+                                                // necessary for update action.
+                                                if (!$consumable->isNewRecord) {
+                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
+                                                }
+                                                ?>
+                                                <div class="row">
+                                                    <div class="col s4">
+                                                        <?= $form->field($consumable, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                    </div>
+                                                    <div class="col s2">
+                                                        <?= $form->field($consumable, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Prix HT") ?>
+                                                    </div>
+                                                    <div class="col 1">
+                                                        <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                    </div>
+                                                    <div class="col 1">
+                                                        <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                    </div>
+                                                </div><!-- .row -->
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                    <?php DynamicFormWidget::end(); ?>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Card : Gestion des reversements -->
+                <div class="card">
+
+                    <div class="card-content">
+                        <label>Reversements Labo</label>
+                    </div>
+
+                    <div class="card-action">
+
+                        <!-- type dropdown field -->
+                        <?= $form->field($consumable, "[{$i}]type")->widget(Select2::classname(), [
+                            'data' => $laboratories,
+                            'options' => ['value' => 0],
+                            'pluginLoading' => false,
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ])->label(
+                            "laboratories"
+                        ); ?>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+        <?php ActiveForm::end(); ?>
+    </div>
+</div>

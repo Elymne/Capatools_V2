@@ -17,13 +17,17 @@ use app\models\projects\ProjectSearch;
 use app\models\users\CapaUser;
 use app\models\companies\Contact;
 use app\models\companies\Company;
+use app\models\laboratories\Laboratory;
+use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\forms\ProjectCreateConsumableForm;
 use app\models\projects\forms\ProjectCreateEquipmentRepaymentForm;
+use app\models\projects\forms\ProjectCreateExpenseForm;
 use app\models\projects\forms\ProjectCreateFirstStepForm;
 use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
 use app\models\projects\forms\ProjectCreateRepaymentForm;
 use app\models\projects\Lot;
+
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -661,10 +665,12 @@ class ProjectController extends Controller implements ServiceInterface
     {
         MenuSelectorHelper::setMenuProjectCreate();
         return $this->render(
-            'createAddExpenseRepayment',
+            'createThirdStep',
             [
+                'laboratories' => Laboratory::getLaboratoriesNames(),
                 'repayment' => [new ProjectCreateRepaymentForm()],
                 'consumables' => [new ProjectCreateConsumableForm()],
+                'expenses' => [new ProjectCreateExpenseForm()],
                 'equipements' => [new ProjectCreateEquipmentRepaymentForm()],
                 'contributors' => [new ProjectCreateLaboratoryContributorForm()]
             ]
