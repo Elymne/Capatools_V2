@@ -15,6 +15,8 @@ use yii\db\ActiveRecord;
 class Lot extends ActiveRecord
 {
 
+    const STATE_IN_PROGRESS = 'En cours';
+
     public static function tableName()
     {
         return 'lot';

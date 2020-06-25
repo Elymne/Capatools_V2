@@ -40,6 +40,18 @@ class m200099_000540_capa_user_table extends Migration
         /* Table data insertion */
 
         $this->insert('{{%capa_user}}', [
+            'id' => -1,
+            'firstname' => "Indéfini",
+            'surname' => "Indéfini",
+            'email' => null,
+            'auth_key' => null,
+            'password_hash' =>  null,
+            'price' => null,
+            'cellule_id' => null,
+            'flag_active' => 'false'
+        ]);
+
+        $this->insert('{{%capa_user}}', [
             'id' => 1,
             'firstname' => "Lars ",
             'surname' => "Von Trier",

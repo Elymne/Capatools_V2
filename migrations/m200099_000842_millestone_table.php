@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m200099_000840_millestone_table extends Migration
+class m200099_000842_millestone_table extends Migration
 {
 
     public function safeUp()
