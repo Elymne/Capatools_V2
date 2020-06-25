@@ -559,7 +559,10 @@ class ProjectController extends Controller implements ServiceInterface
 
     /**
      *  Nouvelle route pour la création d'un projet sur l'application Capatool.
-     * Celle-ci retourne une vue et créer un brouillon du projet.
+     *  Celle-ci retourne une vue et créer un brouillon du projet.
+     *  Elle correspond à la première étape de la création d'un projet.
+     * 
+     *  @return mixed
      */
     public function actionCreateFirstStep()
     {
@@ -568,16 +571,22 @@ class ProjectController extends Controller implements ServiceInterface
 
         // Envoi par méthode POST.
         if ($model->load(Yii::$app->request->post())) {
-            // Si les entrées sont valides ont commence à former le projet au brouillon, on rempli des champs par défaut.
-            // On donne au premier modèle de lot la valeur du radiobutton concernant les lots pour qu'il puissé compléter la validité des données entréees.
 
+            // Préparation de tous les modèles de lots reçu depuis la vue.
             $lots = Model::createMultiple(LotCreateFirstStepForm::className(), $lots);
             Model::loadMultiple($lots, Yii::$app->request->post());
 
-            $lots[0]->combobox_lot_checked = $model->combobox_lot_checked;
-            if ($model->validate() && $lots[0]->validate()) {
+            // Vérification de la validité de chaque modèle de lot.
+            $isLotsValid = true;
+            foreach ($lots as $lot) {
+                $lot->combobox_lot_checked = $model->combobox_lot_checked;
+                if (!$lot->validate()) $isLotsValid = false;
+            }
 
-                // Pré-remplissage des valeurs par défaut.
+            // Si tous les modèles de lots et le modèle de projet sont valides.
+            if ($model->validate() && $isLotsValid) {
+
+                // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
                 $defaultValue = "indéfini";
                 $model->id_capa = $defaultValue;
                 $model->internal_name = $defaultValue;
@@ -590,11 +599,11 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // On récupère l'id de la cellule de l'utilisateur connecté.
                 $model->cellule_id = Yii::$app->user->identity->cellule_id;
-                // On inclu la clé étragère qui référence une donnée indéfinie dans la table company.
+                // On inclu la clé étragère qui référence une donnée indéfini dans la table company.
                 $model->company_id = -1;
-                // On inclu la clé étragère qui référence une donnée indéfinie dans la table contact.
+                // On inclu la clé étragère qui référence une donnée indéfini dans la table contact.
                 $model->contact_id = -1;
-                // On inclu la clé étragère qui référence une donnée indéfinie dans la table capa_user.
+                // On inclu la clé étragère qui référence une donnée indéfini dans la table capa_user.
                 $model->capa_user_id = -1;
                 $model->type = Project::TYPES[$model->combobox_type_checked];
                 $model->draft = true;
