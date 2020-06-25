@@ -9,7 +9,7 @@ use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Création d\'un projet - paramètres généraux';
-$this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Project', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 
