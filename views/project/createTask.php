@@ -96,8 +96,8 @@ $task = new task()
                                                 Select2::classname(),
                                                 [
 
-                                                    'theme' => 'material',
-                                                    'name' => 'kv-type-01',
+                                                    'theme' => Select2::THEME_MATERIAL,
+                                                    'name' => 'GestionContributor',
                                                     'data' => ArrayHelper::map($CelluleUsers, 'id', 'fullName'),
                                                     'pluginLoading' => false,
                                                     'options' => [
@@ -118,8 +118,8 @@ $task = new task()
                                             <?= $form->field($task, "[{$i}]kind_duration")->widget(
                                                 Select2::classname(),
                                                 [
-                                                    'theme' => 'material',
-                                                    'name' => 'kv-type-01',
+                                                    'theme' => Select2::THEME_MATERIAL,
+                                                    'name' => 'GestionKindDuration',
                                                     'data' => $task::KINDDURATION,
                                                     'pluginLoading' => false,
                                                     'options' => [
@@ -133,8 +133,8 @@ $task = new task()
                                             <?= $form->field($task, "[{$i}]risk")->widget(
                                                 Select2::classname(),
                                                 [
-                                                    'theme' => 'material',
-                                                    'name' => 'kv-type-01',
+                                                    'theme' => Select2::THEME_MATERIAL,
+                                                    'name' => 'GestionRisk',
                                                     'data' => $task::RISKS,
                                                     'pluginLoading' => false,
                                                     'options' => [
@@ -213,8 +213,8 @@ $task = new task()
                                                     Select2::classname(),
                                                     [
 
-                                                        'theme' => 'material',
-                                                        'name' => 'kv-type-01',
+                                                        'theme' => Select2::THEME_MATERIAL,
+                                                        'name' => 'TaskContributor',
                                                         'data' => ArrayHelper::map($CelluleUsers, 'id', 'fullName'),
                                                         'pluginLoading' => false,
                                                         'options' => [
@@ -236,7 +236,7 @@ $task = new task()
                                                     Select2::classname(),
                                                     [
                                                         'theme' => 'material',
-                                                        'name' => 'kv-type-01',
+                                                        'name' => 'TaskKindDuration',
                                                         'data' => $task::KINDDURATION,
                                                         'pluginLoading' => false,
                                                         'options' => [
@@ -252,7 +252,7 @@ $task = new task()
                                                     [
 
                                                         'theme' => Select2::THEME_MATERIAL,
-                                                        'name' => 'kv-type-01',
+                                                        'name' => 'TaskRisk',
                                                         'data' => $task::RISKS,
                                                         'pluginLoading' => false,
                                                         'options' => [
