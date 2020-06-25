@@ -17,7 +17,8 @@ class LotCreateFirstStepForm extends Lot
 {
 
     /**
-     * Gestion combobox.
+     * Gestion combobox lot.
+     * Par défaut, il est coché sur oui (1 = oui, 0 = non).
      */
     public $combobox_lot_checked;
 
@@ -28,6 +29,14 @@ class LotCreateFirstStepForm extends Lot
     {
         return [
             ['combobox_lot_checked', 'required', 'message' => 'Vous devez cocher au moins un des deux choix proposés'],
+            ['title', 'titleIsNeeded', 'skipOnEmpty' => false, 'skipOnError' => false],
         ];
+    }
+
+    public function titleIsNeeded($attribute, $params)
+    {
+        if ($this->combobox_lot_checked == 1) {
+            $this->addError($attribute, 'Vous devez donner un nom à votre lot');
+        }
     }
 }

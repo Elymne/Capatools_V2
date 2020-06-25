@@ -13,8 +13,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 
-$leLotUnique = $lots[0];
-
 ProjectCreateFirstPhaseAsset::register($this);
 
 ?>
@@ -53,7 +51,7 @@ ProjectCreateFirstPhaseAsset::register($this);
 
                         <!-- lot ou pas ? -->
                         <label class='blue-text control-label typeLabel'>Le projet comprend-il des lots ou des options ?</label>
-                        <?= $form->field($leLotUnique, 'combobox_lot_checked')->radioList([1 => "non", 2 => "oui"], [
+                        <?= $form->field($lots[0], 'combobox_lot_checked')->radioList([0 => "non", 1 => "oui"], [
                             'item' => function ($index, $label, $name, $checked, $value) {
 
                                 if ($index == 1) $check = "checked";
@@ -69,7 +67,7 @@ ProjectCreateFirstPhaseAsset::register($this);
 
                         <!-- renversement labo ou pas ? -->
                         <label class='blue-text control-label typeLabel'>Le projet comprend-il des reversements labo ?</label>
-                        <?= $form->field($model, 'combobox_repayment_checked')->radioList([1 => "non", 2 => "oui"], [
+                        <?= $form->field($model, 'combobox_repayment_checked')->radioList([0 => "non", 1 => "oui"], [
                             'item' => function ($index, $label, $name, $checked, $value) {
 
                                 if ($index == 1) $check = "checked";

@@ -568,11 +568,12 @@ class ProjectController extends Controller implements ServiceInterface
 
         // Envoi par méthode POST.
         if ($model->load(Yii::$app->request->post())) {
-
             // Si les entrées sont valides ont commence à former le projet au brouillon, on rempli des champs par défaut.
             if ($model->validate()) {
 
-                #region Gestion de la précréation du projet.
+                //return $model->combobox_repayment_checked;
+
+
                 // Pré-remplissage des valeurs par défaut.
                 $defaultValue = "indéfini";
                 $model->id_capa = $defaultValue;
@@ -594,16 +595,35 @@ class ProjectController extends Controller implements ServiceInterface
                 $model->capa_user_id = -1;
                 $model->type = Project::TYPES[$model->combobox_type_checked];
                 $model->draft = true;
-                $model->laboratory_repayment = ($model->combobox_repayment_checked == 2) ? true : false;
+                $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
 
                 // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
-                $model->save();
-                #endregion
+                //$model->save();
+
 
                 #region Gestion de la création des lots.
                 // Géstion la multitude de lots à sauvegarder.
-                $lots = Model::createMultiple(Lot::className(), $lots);
+                $lots = Model::createMultiple(LotCreateFirstStepForm::className(), $lots);
                 Model::loadMultiple($lots, Yii::$app->request->post());
+
+                return $lots[0]->combobox_lot_checked;
+
+                // Création des lots.
+                // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
+                if ($lots[0]->combobox_lot_checked == 1) {
+                    $lots = [new LotCreateFirstStepForm()];
+                    $lots[0]->title = 'Lot par défaut';
+                    $lots[0]->comment = 'Un lot par défaut';
+                }
+
+                // Pour chaque lot, on lui attribut des valeurs par défaut.
+                foreach ($lots as $key => $lot) {
+                    $lot->number = $key + 1;
+                    $lot->status = Lot::STATE_IN_PROGRESS;
+                    $lot->project_id = $model->id;
+
+                    $lot->save();
+                }
 
                 // Création d'un lot d'avant-projet.
                 $lotProscription = new Lot();
@@ -612,26 +632,6 @@ class ProjectController extends Controller implements ServiceInterface
                 $lotProscription->status = Lot::STATE_IN_PROGRESS;
                 $lotProscription->project_id = $model->id;
                 $lotProscription->save();
-
-                // Création des lots.
-                // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
-                if ($model->combobox_lot_checked == 1) {
-                    $lots = [new Lot()];
-                    $lots[0]->title = 'Lot par défaut';
-                    $lots[0]->number = 1;
-                    $lots[0]->status = Lot::STATE_IN_PROGRESS;
-                    $lots[0]->comment = 'Un lot par défaut';
-                }
-
-                foreach ($lots as $key => $lot) {
-                    $lot->number = $key + 1;
-                    $lot->status = Lot::STATE_IN_PROGRESS;
-                    $lot->project_id = $model->id;
-
-                    $lot->save();
-                }
-                #endregion
-
             }
         }
 
