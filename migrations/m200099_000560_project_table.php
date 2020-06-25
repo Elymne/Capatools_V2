@@ -18,7 +18,6 @@ class m200099_000560_project_table extends Migration
             'internal_name' => $this->string()->notNull(),
             'internal_reference' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
-            'prospecting_time_day' => $this->integer()->defaultValue(0),
             'signing_probability' => $this->integer()->defaultValue(25),
             'managment_rate' => $this->integer()->defaultValue(0),
 
@@ -38,9 +37,9 @@ class m200099_000560_project_table extends Migration
             // La cellule rataché au projet.
             'cellule_id' => $this->integer()->notNull(),
             // Le client, la société, la demande.
-            'company_id' => $this->integer()->notNull(),
+            'company_id' => $this->integer(),
             // Le contacte client.
-            'contact_id' => $this->integer()->notNull(),
+            'contact_id' => $this->integer(),
             // Le chef de projet.
             'capa_user_id' => $this->integer()->notNull(),
         ]);
@@ -84,7 +83,6 @@ class m200099_000560_project_table extends Migration
             'internal_name' => 'Projet Balkany',
             'internal_reference' => 'Projet Balkany',
             'type' => Project::TYPE_INTERNAL,
-            'prospecting_time_day' => 127,
             'signing_probability' => 50,
             'state' => Project::STATE_DRAFT,
             'version' => 'V2',
