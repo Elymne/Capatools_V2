@@ -20,6 +20,7 @@ use app\models\users\CapaUser;
 use app\models\companies\Contact;
 use app\models\companies\Company;
 use app\models\projects\Lot;
+use app\models\projects\LotCreateFirstStepForm;
 use app\models\projects\ProjectCreateFirstStepForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
@@ -27,7 +28,6 @@ use app\services\uploadFileServices\UploadFileHelper;
 use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
-use DateTime;
 use kartik\mpdf\Pdf;
 
 
@@ -564,7 +564,7 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionCreateFirstStep()
     {
         $model = new ProjectCreateFirstStepForm();
-        $lots = $model->lots;
+        $lots = [new LotCreateFirstStepForm()];
 
         // Envoi par méthode POST.
         if ($model->load(Yii::$app->request->post())) {
@@ -640,7 +640,7 @@ class ProjectController extends Controller implements ServiceInterface
             'createFirstStep',
             [
                 'model' => $model,
-                'lots' => (empty($lots)) ? [new Lot()] : $lots
+                'lots' => $lots
             ]
         );
     }

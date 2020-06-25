@@ -3,7 +3,8 @@
  */
 $(() => {
     // Attributs.
-    const lotRadioboxList = $('input:radio[name="ProjectCreateFirstStepForm[combobox_lot_checked]"]')
+    const lotRadioboxList = $('input:radio[name="LotCreateFirstStepForm[combobox_lot_checked]"]')
+
     const lotManagementLabel = $("#lot-management-label")
     const lotManagementBody = $("#lot-management-body")
 

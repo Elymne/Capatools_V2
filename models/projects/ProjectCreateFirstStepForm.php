@@ -22,7 +22,6 @@ class ProjectCreateFirstStepForm extends Project
      * Gestion combobox.
      */
     public $combobox_type_checked;
-    public $combobox_lot_checked;
     public $combobox_repayment_checked;
 
     /**
@@ -32,7 +31,6 @@ class ProjectCreateFirstStepForm extends Project
     {
         return [
             ['combobox_type_checked', 'required', 'message' => 'Le projet doit avoir un type'],
-            ['combobox_lot_checked', 'required', 'message' => 'Vous devez cocher au moins un des deux choix proposés'],
             ['combobox_repayment_checked', 'required', 'message' =>  'Vous devez cocher au moins un des deux choix proposés'],
         ];
     }
