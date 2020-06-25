@@ -90,7 +90,7 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
 
     public function getfullName()
     {
-        return $this->firstname ." ". $this->surname;
+        return $this->firstname . " " . $this->surname;
     }
 
 

@@ -12,6 +12,7 @@ use yii\web\UploadedFile;
 use app\components\ExcelExportService;
 use app\models\Model;
 use app\models\files\UploadFile;
+use app\models\users\Cellule;
 use app\models\projects\Project;
 use app\models\parameters\DevisParameter;
 use app\models\projects\ProjectSearch;
@@ -23,6 +24,8 @@ use app\models\companies\Company;
 use app\models\projects\Lot;
 use app\models\projects\LotCreateFirstStepForm;
 use app\models\projects\ProjectCreateFirstStepForm;
+use app\models\projects\ProjectCreateTaskForm;
+use app\models\projects\TaskCreateTaskForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -659,6 +662,7 @@ class ProjectController extends Controller implements ServiceInterface
 
                     $lot->save();
                 }
+                Yii::$app->response->redirect(['project/task', 'number' => 0, 'project_id' => $model->id]);
             }
         }
 
@@ -668,6 +672,131 @@ class ProjectController extends Controller implements ServiceInterface
             [
                 'model' => $model,
                 'lots' => $lots
+            ]
+        );
+    }
+
+    /**
+     *  Nouvelle route pour la création de tâche d'un lot d'un projet sur l'application Capatool.
+     *  Celle-ci retourne une vue et créer un brouillon du projet.
+     *  Elle correspond à la première étape de la création d'un projet.
+     * 
+     *  @return mixed
+     */
+    public function actionTask($number, $project_id)
+    {
+        $model = new ProjectCreateTaskForm();
+        $model->project_id = $project_id;
+        $model->number = $number;
+        $idcellule = Yii::$app->user->identity->cellule_id;
+        $cel = new Cellule();
+        $cel->id = $idcellule;
+        $CelluleUsers = $cel->capaUser;
+        if ($model->load(Yii::$app->request->post())) {
+            $lot = $model->getCurrentLot();
+            /*
+        // Envoi par méthode POST.
+        if ($model->load(Yii::$app->request->post())) {
+
+            // Préparation de tous les modèles de lots reçu depuis la vue.
+            $lots = Model::createMultiple(TaskGestions::className(), $lots);
+            Model::loadMultiple($lots, Yii::$app->request->post());
+
+            // Vérification de la validité de chaque modèle de lot.
+            $isLotsValid = true;
+            foreach ($lots as $lot) {
+                $lot->combobox_lot_checked = $model->combobox_lot_checked;
+                if (!$lot->validate()) $isLotsValid = false;
+            }
+
+            // Si tous les modèles de lots et le modèle de projet sont valides.
+            if ($model->validate() && $isLotsValid) {
+
+                // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
+                $defaultValue = "indéfini";
+                $model->id_capa = $defaultValue;
+                $model->internal_name = $defaultValue;
+                $model->internal_reference = $defaultValue;
+                $model->state = $defaultValue;
+                $model->version = $defaultValue;
+                $model->date_version = date('Y-m-d H:i:s');
+                $model->creation_date = date('Y-m-d H:i:s');
+                $model->id_capa = $defaultValue;
+
+                // On récupère l'id de la cellule de l'utilisateur connecté.
+                $model->cellule_id = Yii::$app->user->identity->cellule_id;
+                // On inclu la clé étragère qui référence une donnée indéfini dans la table company.
+                $model->company_id = -1;
+                // On inclu la clé étragère qui référence une donnée indéfini dans la table contact.
+                $model->contact_id = -1;
+                // On inclu la clé étragère qui référence une donnée indéfini dans la table capa_user.
+                $model->capa_user_id = -1;
+                $model->type = Project::TYPES[$model->combobox_type_checked];
+                // On recopie le management rate
+                $rate  = DevisParameter::getParameters();
+
+                switch (Project::TYPES[$model->combobox_type_checked]) {
+                    case  Project::TYPE_PRESTATION: {
+                            $model->management_rate = $rate->rate_management;
+                        }
+                    case  Project::TYPE_OUTSOURCING_UN: {
+                            $model->management_rate = $rate->rate_management;
+                        }
+                    case  Project::TYPE_OUTSOURCING_AD: {
+                            $model->management_rate = $rate->delegate_rate_management;
+                        }
+                    case  Project::TYPE_INTERNAL: {
+                            $model->management_rate = $rate->internal_rate_management;
+                        }
+                    default: {
+                            $model->management_rate = $rate->rate_management;
+                        }
+                }
+
+                $model->draft = true;
+                $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
+
+
+                // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
+                $model->save();
+
+                // Création d'un lot d'avant-projet.
+                $lotProscription = new Lot();
+                $lotProscription->number = 0;
+                $lotProscription->title = "Lot d'avant-projet";
+                $lotProscription->status = Lot::STATE_IN_PROGRESS;
+                $lotProscription->project_id = $model->id;
+                $lotProscription->save();
+
+                // Création des lots.
+                // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
+                if ($lots[0]->combobox_lot_checked == 0) {
+                    $lots = [new LotCreateFirstStepForm()];
+                    $lots[0]->title = 'Lot par défaut';
+                    $lots[0]->comment = 'Ceci est un lot qui a été généré automatiquement car le créateur ne souhaitait pas utiliser plusieurs lots';
+                }
+
+                // Pour chaque lot, on lui attribut des valeurs par défaut.
+                foreach ($lots as $key => $lot) {
+                    $lot->number = $key + 1;
+                    $lot->status = Lot::STATE_IN_PROGRESS;
+                    $lot->project_id = $model->id;
+
+                    $lot->save();
+
+                    return $this->redirect(['index']);
+                }
+            }
+        }
+        */
+        }
+        MenuSelectorHelper::setMenuProjectCreate();
+
+        return $this->render(
+            'createTask',
+            [
+                'model' => $model,
+                'CelluleUsers' => $CelluleUsers
             ]
         );
     }
