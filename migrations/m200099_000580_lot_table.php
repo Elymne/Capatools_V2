@@ -10,7 +10,7 @@ class m200099_000580_lot_table extends Migration
 
         $this->createTable('{{%lot}}', [
             'id' => $this->primaryKey(),
-            'number' => $this->integer()->defaultValue(1),
+            'number' => $this->integer()->defaultValue(0),
             'title' => $this->string()->notNull(),
             'status' => $this->string()->notNull(),
             'comment' => $this->string(),

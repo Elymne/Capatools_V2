@@ -11,10 +11,11 @@ class m200099_000590_task_table extends Migration
         $this->createTable('{{%task}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull(),
-            'days_duration' => $this->integer()->defaultValue(0),
+            'duration' => $this->integer()->defaultValue(0),
+            'kind_duration' => $this->string()->notNull(),
             'price' => $this->double()->defaultValue(0),
             'risk' => $this->string()->notNull(),
-            'risk_days' => $this->double()->defaultValue(0),
+            'risk_duration' => $this->double()->defaultValue(0),
             'task_category' => $this->string()->notNull(),
 
             // Foreign key.
@@ -40,53 +41,59 @@ class m200099_000590_task_table extends Migration
         
         $this->insert('{{%task}}', [
             'title' => "Faire une réunion avec nous même",
-            'days_duration' => 23,
+            'duration' => 23,
+            'kind_duration' => 'Jour(s)',
+            
             'price' => 1456,
             'risk' => 'Normale',
-            'risk_days' => 3,
+            'risk_duration' => 3,
             'task_category' => 'Management',
             'capa_user_id' => 2,
             'lot_id' => 1,
         ]);
         $this->insert('{{%task}}', [
             'title' => "Tâche numéro 1 : trouver les clefs",
-            'days_duration' => 23,
+            'duration' => 23,
+            'kind_duration' => 'Jour(s)',
             'price' => 1456,
             'risk' => 'Normale',
             'task_category' => 'Tâche',
-            'risk_days' => 3,
+            'risk_duration' => 3,
             'capa_user_id' => 2,
             'lot_id' => 1,
         ]);
 
         $this->insert('{{%task}}', [
             'title' => "Tâche numéro 2 : libérer la cible",
-            'days_duration' => 1,
+            'duration' => 1,
+            'kind_duration' => 'Jour(s)',
             'price' => 123,
             'risk' => 'Très haut',
             'task_category' => 'Tâche',
-            'risk_days' => 3,
+            'risk_duration' => 3,
             'capa_user_id' => 3,
             'lot_id' => 1,
         ]);
 
         $this->insert('{{%task}}', [
             'title' => "Faire une réunion avec le lit",
-            'days_duration' => 1,
+            'duration' => 1,
+            'kind_duration' => 'Jour(s)',
             'price' => 4005,
             'risk' => 'Très haut',
             'task_category' => 'Management',
-            'risk_days' => 3,
+            'risk_duration' => 3,
             'capa_user_id' => 6,
             'lot_id' => 2,
         ]);
         $this->insert('{{%task}}', [
             'title' => "Tâche numéro 1 : dormir",
-            'days_duration' => 1,
+            'duration' => 1,
+            'kind_duration' => 'Jour(s)',
             'price' => 4005,
             'risk' => 'Très haut',
             'task_category' => 'Tâche',
-            'risk_days' => 3,
+            'risk_duration' => 3,
             'capa_user_id' => 6,
             'lot_id' => 2,
         ]);
