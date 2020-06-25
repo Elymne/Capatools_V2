@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models\projects;
+namespace app\models\projects\forms;
 
 use yii\helpers\ArrayHelper;
 use app\models\companies\Company;

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models\projects;
+namespace app\models\projects\forms;
 
 use app\models\companies\Company;
 use app\models\companies\Contact;

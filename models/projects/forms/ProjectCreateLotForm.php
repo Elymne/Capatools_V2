@@ -1,8 +1,8 @@
 <?php
 
-namespace app\models\projects;
+namespace app\models\projects\forms;
 
-use phpDocumentor\Reflection\Types\Null_;
+use app\models\projects\Lot;
 
 /**
  * Classe relative au modèle métier des Lots.
