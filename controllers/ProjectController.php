@@ -14,14 +14,13 @@ use app\models\Model;
 use app\models\files\UploadFile;
 use app\models\projects\Project;
 use app\models\projects\ProjectSearch;
-use app\models\projects\ProjectUpdateForm;
-use app\models\projects\ProjectCreateForm;
 use app\models\users\CapaUser;
 use app\models\companies\Contact;
 use app\models\companies\Company;
+use app\models\projects\forms\ProjectCreateConsumableForm;
+use app\models\projects\forms\ProjectCreateFirstStepForm;
+use app\models\projects\forms\ProjectCreateLotForm;
 use app\models\projects\Lot;
-use app\models\projects\ProjectCreateFirstStepForm;
-use app\models\projects\ProjectCreateLotForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -661,7 +660,7 @@ class ProjectController extends Controller implements ServiceInterface
         return $this->render(
             'createAddExpenseRepayment',
             [
-                //'model' => Project::getOneById(1)
+                'model' => new ProjectCreateConsumableForm(),
             ]
         );
     }

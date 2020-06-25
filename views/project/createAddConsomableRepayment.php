@@ -17,7 +17,7 @@ AppAsset::register($this);
         <div class="row">
             <div class="col s12">
 
-                <!-- Card view basique -->
+                <!-- Card : Gestion des consonmmables -->
                 <div class="card">
 
                     <div class="card-content">
@@ -29,6 +29,21 @@ AppAsset::register($this);
                     </div>
 
                 </div>
+
+
+                <!-- Card : Gestion des reversements -->
+                <div class="card">
+
+                    <div class="card-content">
+                        <label>Reversements Labo</label>
+                    </div>
+
+                    <div class="card-action">
+
+                    </div>
+
+                </div>
+
 
             </div>
         </div>
