@@ -20,8 +20,8 @@ use app\models\users\CapaUser;
 use app\models\companies\Contact;
 use app\models\companies\Company;
 use app\models\projects\Lot;
-use app\models\projects\LotCreateFirstStepForm;
 use app\models\projects\ProjectCreateFirstStepForm;
+use app\models\projects\ProjectCreateLotForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -146,6 +146,12 @@ class ProjectController extends Controller implements ServiceInterface
                         'url' => 'project/create-first-step',
                         'label' => 'Créer un projet',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    ],
+                    [
+                        'Priorite' => 1,
+                        'url' => 'project/ou-verite-lol',
+                        'label' => 'Ici, c\'est le laboratoire',
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_NONE
                     ]
                 ]
             ];
@@ -567,13 +573,13 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionCreateFirstStep()
     {
         $model = new ProjectCreateFirstStepForm();
-        $lots =  [new LotCreateFirstStepForm()];
+        $lots =  [new ProjectCreateLotForm()];
 
         // Envoi par méthode POST.
         if ($model->load(Yii::$app->request->post())) {
 
             // Préparation de tous les modèles de lots reçu depuis la vue.
-            $lots = Model::createMultiple(LotCreateFirstStepForm::className(), $lots);
+            $lots = Model::createMultiple(ProjectCreateLotForm::className(), $lots);
             Model::loadMultiple($lots, Yii::$app->request->post());
 
             // Vérification de la validité de chaque modèle de lot.
@@ -623,7 +629,7 @@ class ProjectController extends Controller implements ServiceInterface
                 // Création des lots.
                 // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
                 if ($lots[0]->combobox_lot_checked == 0) {
-                    $lots = [new LotCreateFirstStepForm()];
+                    $lots = [new ProjectCreateLotForm()];
                     $lots[0]->title = 'Lot par défaut';
                     $lots[0]->comment = 'Ceci est un lot qui a été généré automatiquement car le créateur ne souhaitait pas utiliser plusieurs lots';
                 }
@@ -645,6 +651,17 @@ class ProjectController extends Controller implements ServiceInterface
             [
                 'model' => $model,
                 'lots' => $lots
+            ]
+        );
+    }
+
+    public function actionOuVeriteLol()
+    {
+        MenuSelectorHelper::setMenuProjectCreate();
+        return $this->render(
+            'createAddExpenseRepayment',
+            [
+                //'model' => Project::getOneById(1)
             ]
         );
     }
