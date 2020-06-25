@@ -573,6 +573,9 @@ class ProjectController extends Controller implements ServiceInterface
             $lots[0]->combobox_lot_checked = $model->combobox_lot_checked;
             if ($model->validate() && $lots[0]->validate()) {
 
+
+                return \var_dump($lots[0]->title);
+
                 // Pré-remplissage des valeurs par défaut.
                 $defaultValue = "indéfini";
                 $model->id_capa = $defaultValue;

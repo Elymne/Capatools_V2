@@ -2,6 +2,8 @@
 
 namespace app\models\projects;
 
+use phpDocumentor\Reflection\Types\Null_;
+
 /**
  * Classe relative au modèle métier des Lots.
  * Celle-ci permet de créer un formulaire de création de lots et de vérifier la validité des données inscrites dans les champs.
@@ -28,7 +30,7 @@ class LotCreateFirstStepForm extends Lot
     {
         return [
             //['combobox_lot_checked', 'required', 'message' => 'Make a choice'],
-            ['title', 'titleIsNeeded', 'skipOnEmpty' => false, 'skipOnError' => false],
+            //['title', 'titleIsNeeded', 'skipOnEmpty' => false, 'skipOnError' => false],
         ];
     }
 
