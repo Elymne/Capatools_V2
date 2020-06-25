@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 
+AppAsset::register($this);
 ProjectCreateFirstPhaseAsset::register($this);
 
 ?>
@@ -65,7 +66,7 @@ ProjectCreateFirstPhaseAsset::register($this);
                             }
                         ])->label(false); ?>
 
-                        <!-- renversement labo ou pas ? -->
+                        <!-- Reversement labo ou pas ? -->
                         <label class='blue-text control-label typeLabel'>Le projet comprend-il des reversements labo ?</label>
                         <?= $form->field($model, 'combobox_repayment_checked')->radioList([0 => "non", 1 => "oui"], [
                             'item' => function ($index, $label, $name, $checked, $value) {
@@ -97,37 +98,24 @@ ProjectCreateFirstPhaseAsset::register($this);
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $lots[0],
                                         'formId' => 'dynamic-form',
-                                        'formFields' => [
-                                            'id',
-                                            'title',
-                                            'combobox_lot_checked'
-                                        ],
+                                        'formFields' => ['title'],
                                     ]); ?>
 
                                     <div class="container-items-task">
                                         <!-- widgetContainer -->
                                         <?php foreach ($lots as $i => $lot) : ?>
                                             <div class="item">
-
-                                                <?php
-                                                // necessary for update action.
-                                                if (!$lot->isNewRecord) {
-                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
-                                                }
-                                                ?>
-
                                                 <div class="row">
-                                                    <div class="col s6">
+                                                    <div class="col s8">
                                                         <?= $form->field($lot, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Titre lot") ?>
                                                     </div>
                                                     <div class="col 2">
-                                                        <button type="button" class="add-item btn-floating btn-large waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                        <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
                                                     </div>
                                                     <div class="col 2">
-                                                        <button type="button" class="remove-item btn-floating btn-large waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                        <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                                     </div>
                                                 </div><!-- .row -->
-
                                             </div>
                                         <?php endforeach; ?>
                                     </div>
@@ -138,7 +126,7 @@ ProjectCreateFirstPhaseAsset::register($this);
                             </div>
                         </div>
 
-
+                        <!-- Buttons -->
                         <div class="form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
                             <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>

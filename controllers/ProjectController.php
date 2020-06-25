@@ -564,7 +564,7 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionCreateFirstStep()
     {
         $model = new ProjectCreateFirstStepForm();
-        $lots = [new LotCreateFirstStepForm()];
+        $lots =  [new LotCreateFirstStepForm()];
 
         // Envoi par méthode POST.
         if ($model->load(Yii::$app->request->post())) {

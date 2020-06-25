@@ -36,4 +36,9 @@ class ProjectCreateFirstStepForm extends Project
             ['combobox_repayment_checked', 'required', 'message' =>  'Vous devez cocher au moins un des deux choix proposés'],
         ];
     }
+
+    public function getLotsCreateFirstStepForm()
+    {
+        return $this->hasMany(LotCreateFirstStepForm::className(), ['project_id' => 'id']);
+    }
 }
