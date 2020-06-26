@@ -719,8 +719,6 @@ class ProjectController extends Controller implements ServiceInterface
                 }
             }
 
-
-
             // Préparation de tous les modèles de Task operationel
             $tasksOperational = Model::createMultiple(TaskLotCreateTaskForm::className(), $tasksOperational);
             Model::loadMultiple($tasksOperational, Yii::$app->request->post());
@@ -744,6 +742,10 @@ class ProjectController extends Controller implements ServiceInterface
                 foreach ($tasksGestions as $key => $taskGestions) {
                     $taskGestions->number = $key;
                     $taskGestions->lot_id = $lot->id;
+
+                    $taskriskduration = risk::find(['title' => $taskGestions->risk])->one();
+                    echo $taskriskduration->coeficient;
+                    $taskGestions->risk_duration  = $taskriskduration->coeficient;
                     $taskGestions->task_category = task::CATEGORY_MANAGEMENT;
                     $taskGestions->save();
                 }
@@ -753,6 +755,12 @@ class ProjectController extends Controller implements ServiceInterface
                 foreach ($tasksOperational as $key => $taskOperational) {
                     $taskOperational->number = $key;
                     $taskOperational->lot_id = $lot->id;
+
+
+                    $taskriskduration = risk::find(['title' => $taskOperational->risk])->one();
+                    echo $taskriskduration->coeficient;
+
+                    $taskOperational->risk_duration  = $taskriskduration->coeficient;
                     $taskOperational->task_category = task::CATEGORY_TASK;
                     $taskOperational->save();
                 }

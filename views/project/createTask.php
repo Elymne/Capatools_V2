@@ -111,10 +111,10 @@ if ($lot->number != 0) {
                                                 <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
                                             </div>
                                             <div class="col s2">
@@ -217,10 +217,10 @@ if ($lot->number != 0) {
                                                 <?= $form->field($taskOperational, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskOperational, "[{$i}]hour_duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
+                                                <?= $form->field($taskOperational, "[{$i}]hour_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
                                             </div>
                                             <div class="col s2">
