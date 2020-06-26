@@ -68,7 +68,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         <?= $form->field($consumable, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($consumable, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Prix HT") ?>
+                                                        <?= $form->field($consumable, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
                                                     </div>
                                                     <div class="col s4">
                                                         <!-- type dropdown field -->
@@ -137,7 +137,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         <?= $form->field($consumable, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($consumable, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Prix HT") ?>
+                                                        <?= $form->field($consumable, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -233,13 +233,13 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Matériel "); ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]nb_days")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Nbre de jours") ?>
+                                                        <?= $form->field($equipment, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbre de jours") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]nb_hours")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Nbrs heures") ?>
+                                                        <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
+                                                        <?= $form->field($equipment, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
@@ -253,7 +253,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Incertitude"); ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($equipment, "[{$i}]risk_days")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Temps incertitude") ?>
+                                                        <?= $form->field($equipment, "[{$i}]risk_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -316,13 +316,13 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Intervenant "); ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]nb_days")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Nbre de jours") ?>
+                                                        <?= $form->field($equipment, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbre de jours") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]nb_hours")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Nbrs heures") ?>
+                                                        <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("price_day") ?>
+                                                        <?= $form->field($equipment, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("price_day") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
@@ -336,7 +336,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Incertitude"); ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($equipment, "[{$i}]risk_days")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Temps incertitude") ?>
+                                                        <?= $form->field($equipment, "[{$i}]risk_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
