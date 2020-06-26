@@ -17,6 +17,7 @@ use app\models\projects\ProjectSearch;
 use app\models\users\CapaUser;
 use app\models\companies\Contact;
 use app\models\companies\Company;
+use app\models\equipments\Equipment;
 use app\models\laboratories\Laboratory;
 use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\forms\ProjectCreateConsumableForm;
@@ -667,11 +668,16 @@ class ProjectController extends Controller implements ServiceInterface
         return $this->render(
             'createThirdStep',
             [
-                'laboratories' => Laboratory::getLaboratoriesNames(),
+                'laboratoriesName' => array_map(function ($data) {
+                    return $data->name;
+                }, Laboratory::getAll()),
+                'equipmentsName' => array_map(function ($data) {
+                    return $data->name;
+                }, Equipment::getAll()),
                 'repayment' => [new ProjectCreateRepaymentForm()],
                 'consumables' => [new ProjectCreateConsumableForm()],
                 'expenses' => [new ProjectCreateExpenseForm()],
-                'equipements' => [new ProjectCreateEquipmentRepaymentForm()],
+                'equipments' => [new ProjectCreateEquipmentRepaymentForm()],
                 'contributors' => [new ProjectCreateLaboratoryContributorForm()]
             ]
         );

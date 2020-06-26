@@ -17,8 +17,10 @@ class ProjectCreateEquipmentRepaymentForm extends EquipmentRepayment
 
     /**
      * Liste d'attributs relatif au formulaire.
+     * (Pour stocker la valeur choisie dans les listes déroulantes).
      */
     public $equipmentSelected;
+    public $riskSelected;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.

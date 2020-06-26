@@ -16,6 +16,11 @@ use yii\db\ActiveRecord;
 class EquipmentRepayment extends ActiveRecord
 {
 
+    const RISK_LOW = 'Faible';
+    const RISK_NORMAL = 'Normal';
+    const RISK_HIGH = "Haut";
+    const RISKS = [self::RISK_LOW, self::RISK_NORMAL, self::RISK_HIGH];
+
     /**
      * Utilisé pour définir quelle table est associée à cette classe.
      */

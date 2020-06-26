@@ -52,7 +52,7 @@ class Laboratory extends ActiveRecord
      */
     static function getAll()
     {
-        return static::find();
+        return static::find()->all();
     }
 
     /**
@@ -71,19 +71,5 @@ class Laboratory extends ActiveRecord
     public function getCellule()
     {
         return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
-    }
-
-    /**
-     * Sert à récupérer une liste de nom de laboratoire, utile pour utiliser une liste déroulante par exemple.
-     * 
-     * @return array<string>, une liste de chaine de caractères.
-     */
-    public static function getLaboratoriesNames()
-    {
-        $result = [];
-        foreach (Yii::$app->db->createCommand('SELECT name FROM laboratory')->queryAll() as $laboratoryName) {
-            \array_push($result, $laboratoryName);
-        }
-        return $result;
     }
 }

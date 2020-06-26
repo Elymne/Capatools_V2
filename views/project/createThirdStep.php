@@ -2,6 +2,7 @@
 
 use app\assets\AppAsset;
 use app\assets\projects\ProjectCreateThirdStepAsset;
+use app\models\equipments\EquipmentRepayment;
 use app\models\projects\Consumable;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
@@ -168,17 +169,110 @@ ProjectCreateThirdStepAsset::register($this);
 
                     <div class="card-action">
 
-                        <!-- type dropdown field -->
-                        <?= $form->field($consumable, "[{$i}]type")->widget(Select2::classname(), [
-                            'data' => $laboratories,
-                            'options' => ['value' => 0],
-                            'pluginLoading' => false,
-                            'pluginOptions' => [
-                                'allowClear' => true
-                            ],
-                        ])->label(
-                            "laboratories"
-                        ); ?>
+                        <!-- Sélection d'un laboratoire -->
+                        <label id="laboratory-management-label" class='blue-text control-label typeLabel'>Laboratoire</label>
+                        <div id="laboratory-management-body" class="col s12">
+                            <div class="row">
+                                <div class="input-field col s4">
+
+                                    <!-- type dropdown field -->
+                                    <?= $form->field($consumable, "[{$i}]type")->widget(Select2::classname(), [
+                                        'data' => $laboratoriesName,
+                                        'options' => ['value' => 0],
+                                        'pluginLoading' => false,
+                                        'pluginOptions' => [
+                                            'allowClear' => true
+                                        ],
+                                    ])->label(false); ?>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-action">
+
+                        <!-- Association de matériels au reversement labo -->
+                        <label id="equipment-management-label" class='blue-text control-label typeLabel'>Matériel utilisé</label>
+                        <div id="equipment-management-body" class="col s12">
+                            <div class="row">
+                                <div class="input-field col s12">
+
+                                    <?php DynamicFormWidget::begin([
+                                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                        'widgetBody' => '.container-items-equipment', // required: css class selector
+                                        'widgetItem' => '.item-equipment', // required: css class
+                                        'limit' => 10, // the maximum times, an element can be cloned (default 999)
+                                        'min' => 1, // 0 or 1 (default 1)
+                                        'insertButton' => '.add-item', // css class
+                                        'deleteButton' => '.remove-item', // css class
+                                        'model' => $equipments[0],
+                                        'formId' => 'dynamic-form',
+                                        'formFields' => ['laboratorySelected', 'nb_days', 'nb_hours', 'risk', 'risk_days'],
+                                    ]); ?>
+
+                                    <div class="container-items-equipment">
+                                        <!-- widgetContainer -->
+                                        <?php foreach ($equipments as $i => $equipment) : ?>
+                                            <div class="item-equipment">
+                                                <?php
+                                                // necessary for update action.
+                                                if (!$equipment->isNewRecord) {
+                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
+                                                }
+                                                ?>
+                                                <div class="row">
+                                                    <div class="col s2">
+                                                        <!-- type dropdown field -->
+                                                        <?= $form->field($equipment, "[{$i}]equipmentSelected")->widget(Select2::classname(), [
+                                                            'data' => $equipmentsName,
+                                                            'options' => ['value' => 0],
+                                                            'pluginLoading' => false,
+                                                            'pluginOptions' => [
+                                                                'allowClear' => true
+                                                            ],
+                                                        ])->label("Matériel "); ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($equipment, "[{$i}]nb_days")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Nbre de jours") ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($equipment, "[{$i}]nb_hours")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Nbrs heures") ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($equipment, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
+                                                    </div>
+                                                    <div class="col s2">
+                                                        <!-- type dropdown field -->
+                                                        <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::classname(), [
+                                                            'data' => EquipmentRepayment::RISKS,
+                                                            'options' => ['value' => 0],
+                                                            'pluginLoading' => false,
+                                                            'pluginOptions' => [
+                                                                'allowClear' => true
+                                                            ],
+                                                        ])->label("Incertitude"); ?>
+                                                    </div>
+                                                    <div class="col s2">
+                                                        <?= $form->field($equipment, "[{$i}]risk_days")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Temps incertitude") ?>
+                                                    </div>
+                                                    <div class="col 1">
+                                                        <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                    </div>
+                                                    <div class="col 1">
+                                                        <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                    </div>
+                                                </div><!-- .row -->
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                    <?php DynamicFormWidget::end(); ?>
+
+                                </div>
+                            </div>
+                        </div>
+
 
                     </div>
 

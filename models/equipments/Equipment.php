@@ -35,7 +35,7 @@ class Equipment extends ActiveRecord
      */
     public static function getAll()
     {
-        return static::find();
+        return static::find()->all();
     }
 
     /**
