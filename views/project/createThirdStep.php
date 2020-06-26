@@ -16,10 +16,6 @@ $this->title = 'Création d\'un projet - liste des dépenses et reversements : L
 AppAsset::register($this);
 ProjectCreateThirdStepAsset::register($this);
 
-$ld = array_map(function ($data) {
-    return $data->jsonSerialize();
-}, $laboratoriesData);
-
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -248,7 +244,7 @@ $ld = array_map(function ($data) {
                                                         <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Coût") ?>
+                                                        <?= $form->field($equipment, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
@@ -380,10 +376,16 @@ $ld = array_map(function ($data) {
     </div>
 </div>
 
-<!-- snip -->
-<div id="dom-target" style="display: none;">
+
+
+<!-- Utilisation : envoi de données concernant les laboratoires. -->
+<div id="laboratories-data-target" style="display: none;">
     <?php
+    // Transformation des données sous format JSON.
+    $ld = array_map(function ($data) {
+        return $data->jsonSerialize();
+    }, $laboratoriesData);
+    // Envoi de données.
     echo json_encode($ld);
     ?>
 </div>
-<!-- snip -->
