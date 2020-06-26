@@ -327,7 +327,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]price_day")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("price_day") ?>
+                                                        <?= $form->field($contributor, "[{$i}]price_day")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("price_day") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
@@ -380,6 +380,18 @@ ProjectCreateThirdStepAsset::register($this);
 
 <!-- Utilisation : envoi de données concernant les laboratoires. -->
 <div id="laboratories-data-target" style="display: none;">
+    <?php
+    // Transformation des données sous format JSON.
+    $ld = array_map(function ($data) {
+        return $data->jsonSerialize();
+    }, $laboratoriesData);
+    // Envoi de données.
+    echo json_encode($ld);
+    ?>
+</div>
+
+<!-- Utilisation : envoi de données concernant les laboratoires. -->
+<div id="equipment-data-target" style="display: none;">
     <?php
     // Transformation des données sous format JSON.
     $ld = array_map(function ($data) {
