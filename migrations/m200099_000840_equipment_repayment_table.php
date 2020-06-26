@@ -14,7 +14,7 @@ class m200099_000840_equipment_repayment_table extends Migration
             'nb_hours' => $this->integer()->defaultValue(0),
             'price' => $this->integer()->defaultValue(0),
             'risk' => $this->string()->notNull(),
-            'risk_days' => $this->integer()->defaultValue(0),
+            'risk_day' => $this->integer()->defaultValue(0),
 
             // Foreign key.
             'equipment_id' => $this->integer()->notNull(),
@@ -42,7 +42,7 @@ class m200099_000840_equipment_repayment_table extends Migration
             'nb_hours' => 19,
             'price' => 200,
             'risk' => 'Haute',
-            'risk_days' => 15,
+            'risk_day' => 15,
             'equipment_id' => 1,
             'repayment_id' => 1
         ]);
@@ -52,7 +52,7 @@ class m200099_000840_equipment_repayment_table extends Migration
             'nb_hours' => 1,
             'price' => 1000,
             'risk' => 'Très haute',
-            'risk_days' => 239,
+            'risk_day' => 239,
             'equipment_id' => 2,
             'repayment_id' => 2
         ]);

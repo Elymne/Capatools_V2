@@ -16,6 +16,11 @@ $this->title = 'Création d\'un projet - liste des dépenses et reversements : L
 AppAsset::register($this);
 ProjectCreateThirdStepAsset::register($this);
 
+$ld = array_map(function ($data) {
+    return $data->jsonSerialize();
+}, $laboratoriesData);
+$ld = json_encode($ld);
+
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -101,6 +106,7 @@ ProjectCreateThirdStepAsset::register($this);
                         </div>
 
                     </div>
+
                     <div class="card-action">
 
                         <!-- Création dépense , d'investissements -->
@@ -128,16 +134,16 @@ ProjectCreateThirdStepAsset::register($this);
                                             <div class="item-expense">
                                                 <?php
                                                 // necessary for update action.
-                                                if (!$consumable->isNewRecord) {
+                                                if (!$expense->isNewRecord) {
                                                     echo Html::activeHiddenInput($lot, "[{$i}]id");
                                                 }
                                                 ?>
                                                 <div class="row">
                                                     <div class="col s4">
-                                                        <?= $form->field($consumable, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                        <?= $form->field($expense, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($consumable, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
+                                                        <?= $form->field($expense, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -176,7 +182,7 @@ ProjectCreateThirdStepAsset::register($this);
                                 <div class="input-field col s4">
 
                                     <!-- type dropdown field -->
-                                    <?= $form->field($consumable, "[{$i}]type")->widget(Select2::classname(), [
+                                    <?= $form->field($repayment, "[{$i}]laboratorySelected")->widget(Select2::classname(), [
                                         'data' => array_map(function ($data) {
                                             return $data->name;
                                         }, $laboratoriesData),
@@ -209,7 +215,7 @@ ProjectCreateThirdStepAsset::register($this);
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $equipments[0],
                                         'formId' => 'dynamic-form',
-                                        'formFields' => ['laboratorySelected', 'nb_days', 'nb_hours', 'risk', 'risk_days'],
+                                        'formFields' => ['laboratorySelected', 'nb_days', 'nb_hours', 'risk', 'risk_day'],
                                     ]); ?>
 
                                     <div class="container-items-equipment">
@@ -257,7 +263,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Incertitude"); ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($equipment, "[{$i}]risk_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Temps incertitude") ?>
+                                                        <?= $form->field($equipment, "[{$i}]risk_day")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -280,7 +286,7 @@ ProjectCreateThirdStepAsset::register($this);
                     <div class="card-action">
                         <!-- Gestion temps humain - reversement labo -->
                         <label id="labocontributor-management-label" class='blue-text control-label typeLabel'>Temps humain</label>
-                        <div id="equipment-management-body" class="col s12">
+                        <div id="labocontributor-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
 
@@ -299,18 +305,18 @@ ProjectCreateThirdStepAsset::register($this);
 
                                     <div class="container-items-labocontributor">
                                         <!-- widgetContainer -->
-                                        <?php foreach ($equipments as $i => $equipment) : ?>
+                                        <?php foreach ($contributors as $i => $contributor) : ?>
                                             <div class="item-labocontributor">
                                                 <?php
                                                 // necessary for update action.
-                                                if (!$equipment->isNewRecord) {
+                                                if (!$contributor->isNewRecord) {
                                                     echo Html::activeHiddenInput($lot, "[{$i}]id");
                                                 }
                                                 ?>
                                                 <div class="row">
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
-                                                        <?= $form->field($equipment, "[{$i}]equipmentSelected")->widget(Select2::classname(), [
+                                                        <?= $form->field($contributor, "[{$i}]type")->widget(Select2::classname(), [
                                                             'data' => LaboratoryContributor::TYPES,
                                                             'options' => ['value' => 0],
                                                             'pluginLoading' => false,
@@ -320,17 +326,17 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Intervenant "); ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbre de jours") ?>
+                                                        <?= $form->field($contributor, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbre de jours") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
+                                                        <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("price_day") ?>
+                                                        <?= $form->field($contributor, "[{$i}]price_day")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("price_day") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
-                                                        <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::classname(), [
+                                                        <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::classname(), [
                                                             'data' => LaboratoryContributor::RISKS,
                                                             'options' => ['value' => 0],
                                                             'pluginLoading' => false,
@@ -340,7 +346,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Incertitude"); ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($equipment, "[{$i}]risk_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Temps incertitude") ?>
+                                                        <?= $form->field($contributor, "[{$i}]risk_day")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>

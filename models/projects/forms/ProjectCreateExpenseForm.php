@@ -2,6 +2,7 @@
 
 namespace app\models\projects\forms;
 
+use app\models\projects\Consumable;
 use app\models\projects\Expense;
 
 /**
@@ -12,8 +13,14 @@ use app\models\projects\Expense;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class ProjectCreateExpenseForm extends Expense
+class ProjectCreateExpenseForm extends Consumable
 {
+
+    function __construct()
+    {
+        $this->type = self::TYPE_SECONDARY_INVESTMENT;
+    }
+
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */

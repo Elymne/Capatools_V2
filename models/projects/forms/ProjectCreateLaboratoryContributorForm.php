@@ -16,6 +16,12 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
 {
 
     /**
+     * Liste d'attributs relatif au formulaire.
+     * (Pour stocker la valeur choisie dans les listes déroulantes).
+     */
+    public $riskSelected;
+
+    /**
      * Fonction surchargée de la classe ActiveRecord, elle permet de vérifier l'intégrité des données dans un modèle.
      */
     public function rules()

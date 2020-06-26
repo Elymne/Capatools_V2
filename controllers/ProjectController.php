@@ -670,7 +670,7 @@ class ProjectController extends Controller implements ServiceInterface
             [
                 'laboratoriesData' => Laboratory::getAll(),
                 'equipmentsData' => Equipment::getAll(),
-                'repayment' => [new ProjectCreateRepaymentForm()],
+                'repayment' => new ProjectCreateRepaymentForm(),
                 'consumables' => [new ProjectCreateConsumableForm()],
                 'expenses' => [new ProjectCreateExpenseForm()],
                 'equipments' => [new ProjectCreateEquipmentRepaymentForm()],

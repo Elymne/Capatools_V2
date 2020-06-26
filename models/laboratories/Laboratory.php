@@ -4,6 +4,7 @@ namespace app\models\laboratories;
 
 use app\models\equipments\Equipment;
 use app\models\users\Cellule;
+use JsonSerializable;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -23,7 +24,7 @@ use yii\db\ActiveRecord;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class Laboratory extends ActiveRecord
+class Laboratory extends ActiveRecord implements JsonSerializable
 {
 
     /**
@@ -71,5 +72,21 @@ class Laboratory extends ActiveRecord
     public function getCellule()
     {
         return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
+    }
+
+    /**
+     * Fonction pour envoyer au format json les données de l'objet.
+     */
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'name' => $this->name,
+            'price_contributor_day' => $this->price_contributor_day,
+            'price_contributor_hour' => $this->price_contributor_hour,
+            'price_ec_day' => $this->price_ec_day,
+            'price_ec_hour' => $this->price_ec_hour,
+            'cellule_id' => $this->cellule_id,
+        );
     }
 }
