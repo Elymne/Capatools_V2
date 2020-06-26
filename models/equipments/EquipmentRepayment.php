@@ -17,8 +17,8 @@ class EquipmentRepayment extends ActiveRecord
 {
 
     const RISK_LOW = 'Faible';
-    const RISK_NORMAL = 'Normal';
-    const RISK_HIGH = "Haut";
+    const RISK_NORMAL = 'Normale';
+    const RISK_HIGH = "Haute";
     const RISKS = [self::RISK_LOW, self::RISK_NORMAL, self::RISK_HIGH];
 
     /**

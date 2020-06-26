@@ -32,6 +32,16 @@ class LaboratoryContributor extends ActiveRecord
     const TYPE_SEARCHER = "Chercheur";
     const TYPE_PROBATIONER = "Stagiaire";
     const TYPE_DOCTOR = "Post-docteur";
+    const TYPES = [
+        self::TYPE_SEARCHER,
+        self::TYPE_PROBATIONER,
+        self::TYPE_DOCTOR
+    ];
+
+    const RISK_LOW = 'Faible';
+    const RISK_NORMAL = 'Normale';
+    const RISK_HIGH = "Haute";
+    const RISKS = [self::RISK_LOW, self::RISK_NORMAL, self::RISK_HIGH];
 
     /**
      * Utilisé pour définir quelle table est associée à cette classe.

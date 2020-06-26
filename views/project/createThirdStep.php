@@ -3,6 +3,7 @@
 use app\assets\AppAsset;
 use app\assets\projects\ProjectCreateThirdStepAsset;
 use app\models\equipments\EquipmentRepayment;
+use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\Consumable;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
@@ -168,7 +169,6 @@ ProjectCreateThirdStepAsset::register($this);
                     </div>
 
                     <div class="card-action">
-
                         <!-- Sélection d'un laboratoire -->
                         <label id="laboratory-management-label" class='blue-text control-label typeLabel'>Laboratoire</label>
                         <div id="laboratory-management-body" class="col s12">
@@ -188,10 +188,9 @@ ProjectCreateThirdStepAsset::register($this);
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                    <div class="card-action">
 
+                    <div class="card-action">
                         <!-- Association de matériels au reversement labo -->
                         <label id="equipment-management-label" class='blue-text control-label typeLabel'>Matériel utilisé</label>
                         <div id="equipment-management-body" class="col s12">
@@ -272,12 +271,91 @@ ProjectCreateThirdStepAsset::register($this);
                                 </div>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="card-action">
+                        <!-- Gestion temps humain - reversement labo -->
+                        <label id="labocontributor-management-label" class='blue-text control-label typeLabel'>Temps humain</label>
+                        <div id="equipment-management-body" class="col s12">
+                            <div class="row">
+                                <div class="input-field col s12">
 
+                                    <?php DynamicFormWidget::begin([
+                                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                        'widgetBody' => '.container-items-labocontributor', // required: css class selector
+                                        'widgetItem' => '.item-labocontributor', // required: css class
+                                        'limit' => 10, // the maximum times, an element can be cloned (default 999)
+                                        'min' => 1, // 0 or 1 (default 1)
+                                        'insertButton' => '.add-item', // css class
+                                        'deleteButton' => '.remove-item', // css class
+                                        'model' => $contributors[0],
+                                        'formId' => 'dynamic-form',
+                                        'formFields' => ['type', 'nb_days', 'nb_hours', 'price_day', 'price_hour', 'risk', 'risk_day', 'risk_hour'],
+                                    ]); ?>
+
+                                    <div class="container-items-labocontributor">
+                                        <!-- widgetContainer -->
+                                        <?php foreach ($equipments as $i => $equipment) : ?>
+                                            <div class="item-labocontributor">
+                                                <?php
+                                                // necessary for update action.
+                                                if (!$equipment->isNewRecord) {
+                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
+                                                }
+                                                ?>
+                                                <div class="row">
+                                                    <div class="col s2">
+                                                        <!-- type dropdown field -->
+                                                        <?= $form->field($equipment, "[{$i}]equipmentSelected")->widget(Select2::classname(), [
+                                                            'data' => LaboratoryContributor::TYPES,
+                                                            'options' => ['value' => 0],
+                                                            'pluginLoading' => false,
+                                                            'pluginOptions' => [
+                                                                'allowClear' => true
+                                                            ],
+                                                        ])->label("Intervenant "); ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($equipment, "[{$i}]nb_days")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Nbre de jours") ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($equipment, "[{$i}]nb_hours")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Nbrs heures") ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($equipment, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("price_day") ?>
+                                                    </div>
+                                                    <div class="col s2">
+                                                        <!-- type dropdown field -->
+                                                        <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::classname(), [
+                                                            'data' => LaboratoryContributor::RISKS,
+                                                            'options' => ['value' => 0],
+                                                            'pluginLoading' => false,
+                                                            'pluginOptions' => [
+                                                                'allowClear' => true
+                                                            ],
+                                                        ])->label("Incertitude"); ?>
+                                                    </div>
+                                                    <div class="col s2">
+                                                        <?= $form->field($equipment, "[{$i}]risk_days")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Temps incertitude") ?>
+                                                    </div>
+                                                    <div class="col 1">
+                                                        <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                    </div>
+                                                    <div class="col 1">
+                                                        <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                    </div>
+                                                </div><!-- .row -->
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                    <?php DynamicFormWidget::end(); ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
-
 
             </div>
         </div>
