@@ -28,8 +28,6 @@ class TaskGestionCreateTaskForm extends Task
 
             ['title', 'required', 'message' => 'Il faut un de tâche'],
             ['capa_user_id', 'required', 'message' => 'Il faut un temps indiquer l\'intervenant de la tâche'],
-            ['duration', 'required', 'message' => 'Il faut un temps pour la tâche.'],
-            ['kind_duration', 'required', 'message' => 'Il faut un temps indiquer l\'unité'],
             ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
         ];
     }

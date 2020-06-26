@@ -10,6 +10,7 @@ class m200099_000590_task_table extends Migration
 
         $this->createTable('{{%task}}', [
             'id' => $this->primaryKey(),
+            'number' => $this->integer()->defaultValue(0),
             'title' => $this->string()->notNull(),
             'day_duration' => $this->integer()->defaultValue(0),
             'hour_duration' => $this->integer()->defaultValue(0),

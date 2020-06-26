@@ -700,128 +700,68 @@ class ProjectController extends Controller implements ServiceInterface
         $cel = new Cellule();
         $cel->id = $idcellule;
         $celluleUsers = $cel->capaUser;
-        $isValid = true;
-        if ($number != 0) {
-            // Préparation de tous les modèles de Task de gestion
-            $tasksGestions = Model::createMultiple(TaskGestionCreateTaskForm::className(), $tasksGestions);
-            Model::loadMultiple($tasksGestions, Yii::$app->request->post());
+        if ($model->load(Yii::$app->request->post())) {
+            echo 'modelvalid';
+            $isValid = true;
+            if ($number != 0) {
+                // Préparation de tous les modèles de Task de gestion
+                $tasksGestions = Model::createMultiple(TaskGestionCreateTaskForm::className(), $tasksGestions);
+                Model::loadMultiple($tasksGestions, Yii::$app->request->post());
 
-            if (!empty($tasksGestions)) {
-                $isValid = false;
-            } else {
-                foreach ($tasksGestions as $taskGestions) {
-                    if (!$taskGestions->validate()) {
-                        $isValid = false;
+                if (!empty($tasksGestions)) {
+                    $isValid = false;
+                } else {
+                    foreach ($tasksGestions as $taskGestions) {
+                        if (!$taskGestions->validate()) {
+                            $isValid = false;
+                        }
                     }
                 }
             }
-        }
 
 
 
-        // Préparation de tous les modèles de Task operationel
-        $tasksOperational = Model::createMultiple(TaskLotCreateTaskForm::className(), $tasksOperational);
-        Model::loadMultiple($tasksOperational, Yii::$app->request->post());
+            // Préparation de tous les modèles de Task operationel
+            $tasksOperational = Model::createMultiple(TaskLotCreateTaskForm::className(), $tasksOperational);
+            Model::loadMultiple($tasksOperational, Yii::$app->request->post());
 
 
-        foreach ($tasksOperational as $taskOperational) {
-            if (!$taskOperational->validate()) {
-                $isValid = false;
-            }
-        }
-
-
-
-        // Vérification de la validité de chaque modèle de lot.
-        /* $isLotsValid = true;
-            foreach ($lots as $lot) {
-                $lot->combobox_lot_checked = $model->combobox_lot_checked;
-                if (!$lot->validate()) $isLotsValid = false;
-            }
-
-            // Si tous les modèles de lots et le modèle de projet sont valides.
-            if ($model->validate() && $isLotsValid) {
-
-                // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
-                $defaultValue = "indéfini";
-                $model->id_capa = $defaultValue;
-                $model->internal_name = $defaultValue;
-                $model->internal_reference = $defaultValue;
-                $model->state = $defaultValue;
-                $model->version = $defaultValue;
-                $model->date_version = date('Y-m-d H:i:s');
-                $model->creation_date = date('Y-m-d H:i:s');
-                $model->id_capa = $defaultValue;
-
-                // On récupère l'id de la cellule de l'utilisateur connecté.
-                $model->cellule_id = Yii::$app->user->identity->cellule_id;
-                // On inclu la clé étragère qui référence une donnée indéfini dans la table company.
-                $model->company_id = -1;
-                // On inclu la clé étragère qui référence une donnée indéfini dans la table contact.
-                $model->contact_id = -1;
-                // On inclu la clé étragère qui référence une donnée indéfini dans la table capa_user.
-                $model->capa_user_id = -1;
-                $model->type = Project::TYPES[$model->combobox_type_checked];
-                // On recopie le management rate
-                $rate  = DevisParameter::getParameters();
-
-                switch (Project::TYPES[$model->combobox_type_checked]) {
-                    case  Project::TYPE_PRESTATION: {
-                            $model->management_rate = $rate->rate_management;
-                        }
-                    case  Project::TYPE_OUTSOURCING_UN: {
-                            $model->management_rate = $rate->rate_management;
-                        }
-                    case  Project::TYPE_OUTSOURCING_AD: {
-                            $model->management_rate = $rate->delegate_rate_management;
-                        }
-                    case  Project::TYPE_INTERNAL: {
-                            $model->management_rate = $rate->internal_rate_management;
-                        }
-                    default: {
-                            $model->management_rate = $rate->rate_management;
-                        }
+            foreach ($tasksOperational as $taskOperational) {
+                if (!$taskOperational->validate()) {
+                    $isValid = false;
                 }
-
-                $model->draft = true;
-                $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
+            }
 
 
-                // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
-                $model->save();
+            // Si tous les modèles de taches sont valides.
+            if ($isValid) {
+                echo 'task  valid';
 
                 // Création d'un lot d'avant-projet.
-                $lotProscription = new Lot();
-                $lotProscription->number = 0;
-                $lotProscription->title = "Lot d'avant-projet";
-                $lotProscription->status = Lot::STATE_IN_PROGRESS;
-                $lotProscription->project_id = $model->id;
-                $lotProscription->save();
-
-                // Création des lots.
-                // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
-                if ($lots[0]->combobox_lot_checked == 0) {
-                    $lots = [new LotCreateFirstStepForm()];
-                    $lots[0]->title = 'Lot par défaut';
-                    $lots[0]->comment = 'Ceci est un lot qui a été généré automatiquement car le créateur ne souhaitait pas utiliser plusieurs lots';
-                }
+                $lot = $model->GetCurrentLot();
 
                 // Pour chaque lot, on lui attribut des valeurs par défaut.
-                foreach ($lots as $key => $lot) {
-                    $lot->number = $key + 1;
-                    $lot->status = Lot::STATE_IN_PROGRESS;
-                    $lot->project_id = $model->id;
-
-                    $lot->save();
-
-                    return $this->redirect(['index']);
+                foreach ($tasksGestions as $key => $taskGestions) {
+                    $taskGestions->number = $key;
+                    $taskGestions->lot_id = $lot->id;
+                    $taskGestions->task_category = task::CATEGORY_MANAGEMENT;
+                    $taskGestions->save();
                 }
-            }*/
 
 
+                // Pour chaque lot, on lui attribut des valeurs par défaut.
+                foreach ($tasksOperational as $key => $taskOperational) {
+                    $taskOperational->number = $key;
+                    $taskOperational->lot_id = $lot->id;
+                    $taskOperational->task_category = task::CATEGORY_TASK;
+                    $taskOperational->save();
+                }
 
+                /////TODO SACHA 
+                ///redirect du lien
+            }
+        }
         MenuSelectorHelper::setMenuProjectCreate();
-        var_dump($risk);
         return $this->render(
             'createTask',
             [

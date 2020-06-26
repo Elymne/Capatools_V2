@@ -32,6 +32,7 @@ if ($lot->number != 0) {
 <div class="container">
     <div class="project-create">
         <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
+        <?= Html::activeHiddenInput($model, 'valid') ?>
         <div class="row">
             <div class="col s12">
 
@@ -68,8 +69,8 @@ if ($lot->number != 0) {
                                     'title',
                                     'contributor',
                                     'price',
-                                    'duration',
-                                    'kind_duration',
+                                    'day_duration',
+                                    'hour_duration',
                                     'risk',
                                     'risk_duration',
                                 ],
@@ -174,8 +175,8 @@ if ($lot->number != 0) {
                                     'title',
                                     'contributor',
                                     'price',
-                                    'duration',
-                                    'kind_duration',
+                                    'day_duration',
+                                    'hour_duration',
                                     'risk',
                                     'risk_duration',
                                 ],

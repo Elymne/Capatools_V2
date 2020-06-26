@@ -27,8 +27,6 @@ class TaskLotCreateTaskForm extends Task
         return [
             ['title', 'required', 'message' => 'Il faut un de tâche'],
             ['capa_user_id', 'required', 'message' => 'Il faut indiquer l\'intervenant de la tâche'],
-            ['duration', 'required', 'message' => 'Il faut un temps pour la tâche.'],
-            ['kind_duration', 'required', 'message' => 'Il faut indiquer l\'unité de temps'],
             ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
         ];
     }

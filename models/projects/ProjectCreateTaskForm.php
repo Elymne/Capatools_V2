@@ -2,6 +2,7 @@
 
 namespace app\models\projects;
 
+use app\models\Model;
 use app\models\projects\Project;
 
 /**
@@ -15,11 +16,12 @@ use app\models\projects\Project;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class ProjectCreateTaskForm extends Lot
+class ProjectCreateTaskForm extends Model
 {
 
     public $project_id;
     public $number;
+    public $valid;
 
 
     public function GetCurrentLot()
