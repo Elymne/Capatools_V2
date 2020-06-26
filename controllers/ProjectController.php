@@ -668,12 +668,8 @@ class ProjectController extends Controller implements ServiceInterface
         return $this->render(
             'createThirdStep',
             [
-                'laboratoriesName' => array_map(function ($data) {
-                    return $data->name;
-                }, Laboratory::getAll()),
-                'equipmentsName' => array_map(function ($data) {
-                    return $data->name;
-                }, Equipment::getAll()),
+                'laboratoriesData' => Laboratory::getAll(),
+                'equipmentsData' => Equipment::getAll(),
                 'repayment' => [new ProjectCreateRepaymentForm()],
                 'consumables' => [new ProjectCreateConsumableForm()],
                 'expenses' => [new ProjectCreateExpenseForm()],

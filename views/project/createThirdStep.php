@@ -177,7 +177,9 @@ ProjectCreateThirdStepAsset::register($this);
 
                                     <!-- type dropdown field -->
                                     <?= $form->field($consumable, "[{$i}]type")->widget(Select2::classname(), [
-                                        'data' => $laboratoriesName,
+                                        'data' => array_map(function ($data) {
+                                            return $data->name;
+                                        }, $laboratoriesData),
                                         'options' => ['value' => 0],
                                         'pluginLoading' => false,
                                         'pluginOptions' => [
@@ -224,7 +226,9 @@ ProjectCreateThirdStepAsset::register($this);
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
                                                         <?= $form->field($equipment, "[{$i}]equipmentSelected")->widget(Select2::classname(), [
-                                                            'data' => $equipmentsName,
+                                                            'data' => array_map(function ($data) {
+                                                                return $data->name;
+                                                            }, $equipmentsData),
                                                             'options' => ['value' => 0],
                                                             'pluginLoading' => false,
                                                             'pluginOptions' => [
@@ -352,6 +356,14 @@ ProjectCreateThirdStepAsset::register($this);
                                     <?php DynamicFormWidget::end(); ?>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="card-action">
+                        <!-- Buttons -->
+                        <div class="form-group">
+                            <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                            <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                         </div>
                     </div>
 
