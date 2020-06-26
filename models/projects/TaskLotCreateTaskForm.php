@@ -24,16 +24,12 @@ class TaskLotCreateTaskForm extends Task
      */
     public function rules()
     {
-        return [];
-    }
-
-    /**
-     * Fonction permettant de vérifier que l'utilisateur rentre bien une valeur dans le champ titre lorsqu'il souhaites utiliser des lots.
-     */
-    public function titleIsNeeded($attribute, $params)
-    {
-        if ($this->title == null) {
-            $this->addError($attribute, 'Vous devez donner un nom à votre lot');
-        }
+        return [
+            ['title', 'required', 'message' => 'Il faut un de tâche'],
+            ['capa_user_id', 'required', 'message' => 'Il faut indiquer l\'intervenant de la tâche'],
+            ['duration', 'required', 'message' => 'Il faut un temps pour la tâche.'],
+            ['kind_duration', 'required', 'message' => 'Il faut indiquer l\'unité de temps'],
+            ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
+        ];
     }
 }

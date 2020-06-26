@@ -25,6 +25,7 @@ use app\models\projects\Lot;
 use app\models\projects\LotCreateFirstStepForm;
 use app\models\projects\ProjectCreateFirstStepForm;
 use app\models\projects\ProjectCreateTaskForm;
+use app\models\projects\Risk;
 use app\models\projects\Task;
 use app\models\projects\TaskGestionCreateTaskForm;
 use app\models\projects\TaskLotCreateTaskForm;
@@ -688,10 +689,9 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionTask($number, $project_id)
     {
         $model = new ProjectCreateTaskForm();
-        $taskGestions = [new TaskGestionCreateTaskForm];
-        $taskOperational = [new TaskLotCreateTaskForm];
-
-        //
+        $tasksGestions = [new TaskGestionCreateTaskForm];
+        $tasksOperational = [new TaskLotCreateTaskForm];
+        $risk = risk::find()->all();
         $model->project_id = $project_id;
         $model->number = $number;
 
@@ -700,25 +700,40 @@ class ProjectController extends Controller implements ServiceInterface
         $cel = new Cellule();
         $cel->id = $idcellule;
         $celluleUsers = $cel->capaUser;
-
-
-        if ($model->load(Yii::$app->request->post())) {
+        $isValid = true;
+        if ($number != 0) {
             // Préparation de tous les modèles de Task de gestion
-            $taskgestion = Model::createMultiple(TaskCreateTaskForm::className(), $taskgestion);
-            Model::loadMultiple($taskgestion, Yii::$app->request->post());
-            var_dump($taskgestion);
+            $tasksGestions = Model::createMultiple(TaskGestionCreateTaskForm::className(), $tasksGestions);
+            Model::loadMultiple($tasksGestions, Yii::$app->request->post());
 
-            // Préparation de tous les modèles de Task operationel
-            $taskoperationnel = Model::createMultiple(TaskCreateTaskForm::className(), $taskoperationnel);
-            Model::loadMultiple($taskoperationnel, Yii::$app->request->post());
+            if (!empty($tasksGestions)) {
+                $isValid = false;
+            } else {
+                foreach ($tasksGestions as $taskGestions) {
+                    if (!$taskGestions->validate()) {
+                        $isValid = false;
+                    }
+                }
+            }
+        }
 
 
 
+        // Préparation de tous les modèles de Task operationel
+        $tasksOperational = Model::createMultiple(TaskLotCreateTaskForm::className(), $tasksOperational);
+        Model::loadMultiple($tasksOperational, Yii::$app->request->post());
+
+
+        foreach ($tasksOperational as $taskOperational) {
+            if (!$taskOperational->validate()) {
+                $isValid = false;
+            }
+        }
 
 
 
-            // Vérification de la validité de chaque modèle de lot.
-            /* $isLotsValid = true;
+        // Vérification de la validité de chaque modèle de lot.
+        /* $isLotsValid = true;
             foreach ($lots as $lot) {
                 $lot->combobox_lot_checked = $model->combobox_lot_checked;
                 if (!$lot->validate()) $isLotsValid = false;
@@ -802,11 +817,11 @@ class ProjectController extends Controller implements ServiceInterface
                     return $this->redirect(['index']);
                 }
             }*/
-        }
+
 
 
         MenuSelectorHelper::setMenuProjectCreate();
-
+        var_dump($risk);
         return $this->render(
             'createTask',
             [
@@ -814,6 +829,8 @@ class ProjectController extends Controller implements ServiceInterface
                 'celluleUsers' => $celluleUsers,
                 'tasksGestions' => (empty($tasksGestions)) ? [new TaskGestionCreateTaskForm] : $tasksGestions,
                 'tasksOperational' => (empty($tasksOperational)) ? [new TaskLotCreateTaskForm] : $tasksOperational,
+                'risk' => $risk,
+
             ]
         );
     }

@@ -11,11 +11,11 @@ class m200099_000590_task_table extends Migration
         $this->createTable('{{%task}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull(),
-            'duration' => $this->integer()->defaultValue(0),
-            'kind_duration' => $this->string()->notNull(),
+            'day_duration' => $this->integer()->defaultValue(0),
+            'hour_duration' => $this->integer()->defaultValue(0),
             'price' => $this->double()->defaultValue(0),
             'risk' => $this->string()->notNull(),
-            'risk_duration' => $this->double()->defaultValue(0),
+            'risk_duration' => $this->string(),
             'task_category' => $this->string()->notNull(),
 
             // Foreign key.
@@ -38,12 +38,12 @@ class m200099_000590_task_table extends Migration
             '{{%lot}}',
             'id'
         );
-        
+
         $this->insert('{{%task}}', [
             'title' => "Faire une réunion avec nous même",
-            'duration' => 23,
-            'kind_duration' => 'Jour(s)',
-            
+            'day_duration' => 23,
+            'hour_duration' => 2,
+
             'price' => 1456,
             'risk' => 'Normale',
             'risk_duration' => 3,
@@ -53,8 +53,8 @@ class m200099_000590_task_table extends Migration
         ]);
         $this->insert('{{%task}}', [
             'title' => "Tâche numéro 1 : trouver les clefs",
-            'duration' => 23,
-            'kind_duration' => 'Jour(s)',
+            'day_duration' => 23,
+            'hour_duration' => 2,
             'price' => 1456,
             'risk' => 'Normale',
             'task_category' => 'Tâche',
@@ -65,8 +65,8 @@ class m200099_000590_task_table extends Migration
 
         $this->insert('{{%task}}', [
             'title' => "Tâche numéro 2 : libérer la cible",
-            'duration' => 1,
-            'kind_duration' => 'Jour(s)',
+            'day_duration' => 23,
+            'hour_duration' => 2,
             'price' => 123,
             'risk' => 'Très haut',
             'task_category' => 'Tâche',
@@ -77,8 +77,8 @@ class m200099_000590_task_table extends Migration
 
         $this->insert('{{%task}}', [
             'title' => "Faire une réunion avec le lit",
-            'duration' => 1,
-            'kind_duration' => 'Jour(s)',
+            'day_duration' => 23,
+            'hour_duration' => 2,
             'price' => 4005,
             'risk' => 'Très haut',
             'task_category' => 'Management',
@@ -88,8 +88,8 @@ class m200099_000590_task_table extends Migration
         ]);
         $this->insert('{{%task}}', [
             'title' => "Tâche numéro 1 : dormir",
-            'duration' => 1,
-            'kind_duration' => 'Jour(s)',
+            'day_duration' => 23,
+            'hour_duration' => 2,
             'price' => 4005,
             'risk' => 'Très haut',
             'task_category' => 'Tâche',

@@ -91,7 +91,7 @@ if ($lot->number != 0) {
                                                 <?= $form->field($taskGestion, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                             </div>
                                             <div class="col s2">
-                                                <?= $form->field($taskGestion, "[{$i}]contributor")->widget(
+                                                <?= $form->field($taskGestion, "[{$i}]capa_user_id")->widget(
                                                     Select2::classname(),
                                                     [
 
@@ -110,23 +110,11 @@ if ($lot->number != 0) {
                                                 <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                             </div>
-                                            <div class="col s2">
+                                            <div class="col s1">
+                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
-                                                <?= $form->field($taskGestion, "[{$i}]kind_duration")->widget(
-                                                    Select2::classname(),
-                                                    [
-                                                        'theme' => Select2::THEME_MATERIAL,
-                                                        'name' => 'GestionKindDuration',
-                                                        'data' => $taskGestion::KINDDURATION,
-                                                        'pluginLoading' => false,
-                                                        'options' => [
-                                                            'placeholder' => 'J/H',
-                                                        ]
-                                                    ]
-                                                )->label("J/H");
-                                                ?>
                                             </div>
                                             <div class="col s2">
                                                 <?= $form->field($taskGestion, "[{$i}]risk")->widget(
@@ -134,10 +122,10 @@ if ($lot->number != 0) {
                                                     [
                                                         'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'GestionRisk',
-                                                        'data' => $taskGestion::RISKS,
+                                                        'data' => ArrayHelper::map($risk, 'title', 'title'),
                                                         'pluginLoading' => false,
                                                         'options' => [
-                                                            'placeholder' => 'Risque...',
+                                                            'placeholder' => 'Incetitude...',
                                                         ]
                                                     ]
                                                 )->label("Incertitude");
@@ -146,6 +134,7 @@ if ($lot->number != 0) {
                                             <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
                                             </div>
+
                                             <div class="col 2">
                                                 <button type="button" class="add-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
                                             </div>
@@ -208,7 +197,7 @@ if ($lot->number != 0) {
                                                 <?= $form->field($taskOperational, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                             </div>
                                             <div class="col s2">
-                                                <?= $form->field($taskOperational, "[{$i}]contributor")->widget(
+                                                <?= $form->field($taskOperational, "[{$i}]capa_user_id")->widget(
                                                     Select2::classname(),
                                                     [
 
@@ -227,23 +216,11 @@ if ($lot->number != 0) {
                                                 <?= $form->field($taskOperational, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskOperational, "[{$i}]duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                             </div>
-                                            <div class="col s2">
+                                            <div class="col s1">
+                                                <?= $form->field($taskOperational, "[{$i}]hour_duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
-                                                <?= $form->field($taskOperational, "[{$i}]kind_duration")->widget(
-                                                    Select2::classname(),
-                                                    [
-                                                        'theme' => 'material',
-                                                        'name' => 'TaskKindDuration',
-                                                        'data' => $taskOperational::KINDDURATION,
-                                                        'pluginLoading' => false,
-                                                        'options' => [
-                                                            'placeholder' => 'J/H',
-                                                        ]
-                                                    ]
-                                                )->label("J/H");
-                                                ?>
                                             </div>
                                             <div class="col s2">
                                                 <?= $form->field($taskOperational, "[{$i}]risk")->widget(
@@ -252,10 +229,10 @@ if ($lot->number != 0) {
 
                                                         'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'TaskRisk',
-                                                        'data' => $taskOperational::RISKS,
+                                                        'data' => ArrayHelper::map($risk, 'title', 'title'),
                                                         'pluginLoading' => false,
                                                         'options' => [
-                                                            'placeholder' => 'Risque...',
+                                                            'placeholder' => 'Incetitude...',
                                                         ]
                                                     ]
                                                 )->label("Incertitude");
