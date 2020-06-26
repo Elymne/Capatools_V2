@@ -1,4 +1,6 @@
-// JQUERY
 $(() => {
-    const valeurAuPif = 150
+    var div = document.getElementById("dom-target")
+    var myData = JSON.parse(div.textContent)
+
+    console.log(myData)
 })

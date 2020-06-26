@@ -19,7 +19,6 @@ ProjectCreateThirdStepAsset::register($this);
 $ld = array_map(function ($data) {
     return $data->jsonSerialize();
 }, $laboratoriesData);
-$ld = json_encode($ld);
 
 ?>
 
@@ -380,3 +379,11 @@ $ld = json_encode($ld);
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+
+<!-- snip -->
+<div id="dom-target" style="display: none;">
+    <?php
+    echo json_encode($ld);
+    ?>
+</div>
+<!-- snip -->
