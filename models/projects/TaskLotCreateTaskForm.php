@@ -15,7 +15,7 @@ use phpDocumentor\Reflection\Types\Null_;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class TaskCreateTaskForm extends Task
+class TaskLotCreateTaskForm extends Task
 {
 
 
@@ -24,10 +24,7 @@ class TaskCreateTaskForm extends Task
      */
     public function rules()
     {
-        return [
-            [['title'], 'safe',],
-            ['title', 'titleIsNeeded', 'skipOnEmpty' => false, 'skipOnError' => false],
-        ];
+        return [];
     }
 
     /**

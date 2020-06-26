@@ -2,7 +2,8 @@
 
 use app\assets\AppAsset;
 
-use app\models\projects\task;
+use app\models\projects\TaskGestionCreateTaskForm;
+use app\models\projects\TaskLotCreateTaskForm;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
@@ -26,7 +27,6 @@ if ($lot->number != 0) {
 } else {
     $this->title = $this->title  . " d'avant projet";
 }
-$task = new task()
 ?>
 <?= TopTitle::widget(['title' => $this->title]) ?>
 <div class="container">
@@ -44,19 +44,15 @@ $task = new task()
 
                     <!-- TODO Trouver un moyen de faire fonctionner ces combobox -->
                     <div class="card-action">
-                        <?php if ($lot->number != 0) { ?>
+                        <?php
+
+                        //Sauvegarde du lot en cours et de l'id du projet
+
+                        if ($lot->number != 0) { ?>
                             <!-- Liste de tâche de gestion de projet du lot  -->
                             <label class='blue-text control-label typeLabel'>Tâche de gestion du projet du lot</label>
                             <?php
-                            $taskGestions = $lot->GetTasks()->where(['task_category' => task::CATEGORY_MANAGEMENT]);
 
-                            $TaskArray = null;
-                            foreach ($taskGestions->each() as $i => $task) {
-                                $TaskArray[] = $task;
-                            }
-                            if ($TaskArray == null) {
-                                $TaskArray = [new task];
-                            }
                             DynamicFormWidget::begin([
                                 'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                 'widgetBody' => '.container-items-taskGestion', // required: css class selector
@@ -65,7 +61,7 @@ $task = new task()
                                 'min' => 1, // 0 or 1 (default 1)
                                 'insertButton' => '.add-item-taskGestion', // css class
                                 'deleteButton' => '.remove-item-taskGestion', // css class
-                                'model' => $TaskArray[0],
+                                'model' => $tasksGestions[0],
                                 'formId' => 'dynamic-form',
                                 'formFields' => [
                                     'id',
@@ -80,28 +76,28 @@ $task = new task()
                             ]); ?>
                             <div class="container-items-taskGestion">
                                 <!-- widgetContainer -->
-                                <?php foreach ($TaskArray as $i => $task) : ?>
+                                <?php foreach ($tasksGestions as $i => $taskGestion) : ?>
                                     <div class="item-taskGestion">
 
                                         <?php
                                         // necessary for update action.
-                                        if (!$task->isNewRecord) {
-                                            echo Html::activeHiddenInput($task, "[{$i}]id");
+                                        if (!$taskGestion->isNewRecord) {
+                                            echo Html::activeHiddenInput($taskGestion, "[{$i}]id");
                                         }
                                         ?>
 
                                         <div class="row">
                                             <div class="col s2">
-                                                <?= $form->field($task, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                             </div>
                                             <div class="col s2">
-                                                <?= $form->field($task, "[{$i}]contributor")->widget(
+                                                <?= $form->field($taskGestion, "[{$i}]contributor")->widget(
                                                     Select2::classname(),
                                                     [
 
                                                         'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'GestionContributor',
-                                                        'data' => ArrayHelper::map($CelluleUsers, 'id', 'fullName'),
+                                                        'data' => ArrayHelper::map($celluleUsers, 'id', 'fullName'),
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'Intervenant...',
@@ -111,19 +107,19 @@ $task = new task()
                                                 ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($task, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($task, "[{$i}]duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                             </div>
                                             <div class="col s2">
 
-                                                <?= $form->field($task, "[{$i}]kind_duration")->widget(
+                                                <?= $form->field($taskGestion, "[{$i}]kind_duration")->widget(
                                                     Select2::classname(),
                                                     [
                                                         'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'GestionKindDuration',
-                                                        'data' => $task::KINDDURATION,
+                                                        'data' => $taskGestion::KINDDURATION,
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'J/H',
@@ -133,12 +129,12 @@ $task = new task()
                                                 ?>
                                             </div>
                                             <div class="col s2">
-                                                <?= $form->field($task, "[{$i}]risk")->widget(
+                                                <?= $form->field($taskGestion, "[{$i}]risk")->widget(
                                                     Select2::classname(),
                                                     [
                                                         'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'GestionRisk',
-                                                        'data' => $task::RISKS,
+                                                        'data' => $taskGestion::RISKS,
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'Risque...',
@@ -148,7 +144,7 @@ $task = new task()
                                                 ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($task, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
                                             </div>
                                             <div class="col 2">
                                                 <button type="button" class="add-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -173,15 +169,7 @@ $task = new task()
                         <?php } ?>
                         <div class="container-items-task">
                             <!-- widgetContainer -->
-                            <?php $tasklot = $lot->GetTasks()->where(['task_category' => task::CATEGORY_TASK]);
-                            $TaskLotArray = null;
-                            foreach ($tasklot->each() as $i => $task) {
-                                $TaskLotArray[] = $task;
-                            }
-
-                            if ($TaskLotArray == null) {
-                                $TaskLotArray = [new task];
-                            }
+                            <?php
                             DynamicFormWidget::begin([
                                 'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                 'widgetBody' => '.container-items-taskLot', // required: css class selector
@@ -190,7 +178,7 @@ $task = new task()
                                 'min' => 1, // 0 or 1 (default 1)
                                 'insertButton' => '.add-item-taskLot', // css class
                                 'deleteButton' => '.remove-item-taskLot', // css class
-                                'model' => $TaskLotArray[0],
+                                'model' => $tasksOperational[0],
                                 'formId' => 'dynamic-form',
                                 'formFields' => [
                                     'id',
@@ -205,28 +193,28 @@ $task = new task()
                             ]); ?>
                             <div class="container-items-taskLot">
                                 <!-- widgetContainer -->
-                                <?php foreach ($TaskLotArray as $i => $task) : ?>
+                                <?php foreach ($tasksOperational as $i => $taskOperational) : ?>
                                     <div class="item-taskLot">
 
                                         <?php
                                         // necessary for update action.
-                                        if (!$task->isNewRecord) {
-                                            echo Html::activeHiddenInput($task, "[{$i}]id");
+                                        if (!$taskOperational->isNewRecord) {
+                                            echo Html::activeHiddenInput($taskOperational, "[{$i}]id");
                                         }
                                         ?>
 
                                         <div class="row">
                                             <div class="col s2">
-                                                <?= $form->field($task, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                <?= $form->field($taskOperational, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                             </div>
                                             <div class="col s2">
-                                                <?= $form->field($task, "[{$i}]contributor")->widget(
+                                                <?= $form->field($taskOperational, "[{$i}]contributor")->widget(
                                                     Select2::classname(),
                                                     [
 
                                                         'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'TaskContributor',
-                                                        'data' => ArrayHelper::map($CelluleUsers, 'id', 'fullName'),
+                                                        'data' => ArrayHelper::map($celluleUsers, 'id', 'fullName'),
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'Intervenant...',
@@ -236,19 +224,19 @@ $task = new task()
                                                 ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($task, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
+                                                <?= $form->field($taskOperational, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($task, "[{$i}]duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                <?= $form->field($taskOperational, "[{$i}]duration")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                             </div>
                                             <div class="col s2">
 
-                                                <?= $form->field($task, "[{$i}]kind_duration")->widget(
+                                                <?= $form->field($taskOperational, "[{$i}]kind_duration")->widget(
                                                     Select2::classname(),
                                                     [
                                                         'theme' => 'material',
                                                         'name' => 'TaskKindDuration',
-                                                        'data' => $task::KINDDURATION,
+                                                        'data' => $taskOperational::KINDDURATION,
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'J/H',
@@ -258,13 +246,13 @@ $task = new task()
                                                 ?>
                                             </div>
                                             <div class="col s2">
-                                                <?= $form->field($task, "[{$i}]risk")->widget(
+                                                <?= $form->field($taskOperational, "[{$i}]risk")->widget(
                                                     Select2::classname(),
                                                     [
 
                                                         'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'TaskRisk',
-                                                        'data' => $task::RISKS,
+                                                        'data' => $taskOperational::RISKS,
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'Risque...',
@@ -274,7 +262,7 @@ $task = new task()
                                                 ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($task, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
+                                                <?= $form->field($taskOperational, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
                                             </div>
                                             <div class="col 2">
                                                 <button type="button" class="add-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>

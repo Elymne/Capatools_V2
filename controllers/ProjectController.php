@@ -25,7 +25,9 @@ use app\models\projects\Lot;
 use app\models\projects\LotCreateFirstStepForm;
 use app\models\projects\ProjectCreateFirstStepForm;
 use app\models\projects\ProjectCreateTaskForm;
-use app\models\projects\TaskCreateTaskForm;
+use app\models\projects\Task;
+use app\models\projects\TaskGestionCreateTaskForm;
+use app\models\projects\TaskLotCreateTaskForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -686,24 +688,37 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionTask($number, $project_id)
     {
         $model = new ProjectCreateTaskForm();
+        $taskGestions = [new TaskGestionCreateTaskForm];
+        $taskOperational = [new TaskLotCreateTaskForm];
+
+        //
         $model->project_id = $project_id;
         $model->number = $number;
+
+        //Recupération des membres de la cellule
         $idcellule = Yii::$app->user->identity->cellule_id;
         $cel = new Cellule();
         $cel->id = $idcellule;
-        $CelluleUsers = $cel->capaUser;
-        if ($model->load(Yii::$app->request->post())) {
-            $lot = $model->getCurrentLot();
-            /*
-        // Envoi par méthode POST.
-        if ($model->load(Yii::$app->request->post())) {
+        $celluleUsers = $cel->capaUser;
 
-            // Préparation de tous les modèles de lots reçu depuis la vue.
-            $lots = Model::createMultiple(TaskGestions::className(), $lots);
-            Model::loadMultiple($lots, Yii::$app->request->post());
+
+        if ($model->load(Yii::$app->request->post())) {
+            // Préparation de tous les modèles de Task de gestion
+            $taskgestion = Model::createMultiple(TaskCreateTaskForm::className(), $taskgestion);
+            Model::loadMultiple($taskgestion, Yii::$app->request->post());
+            var_dump($taskgestion);
+
+            // Préparation de tous les modèles de Task operationel
+            $taskoperationnel = Model::createMultiple(TaskCreateTaskForm::className(), $taskoperationnel);
+            Model::loadMultiple($taskoperationnel, Yii::$app->request->post());
+
+
+
+
+
 
             // Vérification de la validité de chaque modèle de lot.
-            $isLotsValid = true;
+            /* $isLotsValid = true;
             foreach ($lots as $lot) {
                 $lot->combobox_lot_checked = $model->combobox_lot_checked;
                 if (!$lot->validate()) $isLotsValid = false;
@@ -786,17 +801,19 @@ class ProjectController extends Controller implements ServiceInterface
 
                     return $this->redirect(['index']);
                 }
-            }
+            }*/
         }
-        */
-        }
+
+
         MenuSelectorHelper::setMenuProjectCreate();
 
         return $this->render(
             'createTask',
             [
                 'model' => $model,
-                'CelluleUsers' => $CelluleUsers
+                'celluleUsers' => $celluleUsers,
+                'tasksGestions' => (empty($tasksGestions)) ? [new TaskGestionCreateTaskForm] : $tasksGestions,
+                'tasksOperational' => (empty($tasksOperational)) ? [new TaskLotCreateTaskForm] : $tasksOperational,
             ]
         );
     }
