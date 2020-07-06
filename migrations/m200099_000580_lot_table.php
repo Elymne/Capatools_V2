@@ -14,6 +14,9 @@ class m200099_000580_lot_table extends Migration
             'title' => $this->string()->notNull(),
             'status' => $this->string()->notNull(),
             'comment' => $this->string(),
+            'rate_humain_margin' => $this->double()->defaultValue(30),
+            'rate_repayement_margin' => $this->double()->defaultValue(30),
+            'rate_consumable_investement_margin' => $this->double()->defaultValue(1),
 
             // Foreign key.
             'project_id' => $this->integer()->notNull()
