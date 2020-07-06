@@ -94,7 +94,10 @@ if ($lot->number != 0) {
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'Intervenant...',
-                                                        ]
+                                                        ],
+                                                        'pluginEvents' => [
+                                                            'select2:select' => 'function(e) { console.log(e);alert(e.currentTarget.value); }',
+                                                        ],
                                                     ]
                                                 )->label("Intervenant");
                                                 ?>
@@ -119,7 +122,10 @@ if ($lot->number != 0) {
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'Incetitude...',
-                                                        ]
+                                                        ],
+                                                        'pluginEvents' => [
+                                                            'select2:select' => 'function(e) { console.log(e);alert(e.currentTarget.value); }',
+                                                        ],
                                                     ]
                                                 )->label("Incertitude");
                                                 ?>
@@ -127,7 +133,6 @@ if ($lot->number != 0) {
                                             <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
                                             </div>
-
                                             <div class="col 2">
                                                 <button type="button" class="add-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
                                             </div>
@@ -135,10 +140,8 @@ if ($lot->number != 0) {
                                                 <button type="button" class="remove-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                             </div>
                                         </div><!-- .row -->
-
                                     </div>
                                 <?php endforeach; ?>
-
                             </div>
 
                             <?php DynamicFormWidget::end(); ?>
@@ -194,14 +197,16 @@ if ($lot->number != 0) {
                                                         <?= $form->field($taskOperational, "[{$i}]capa_user_id")->widget(
                                                             Select2::classname(),
                                                             [
-
                                                                 'theme' => Select2::THEME_MATERIAL,
                                                                 'name' => 'TaskContributor',
                                                                 'data' => ArrayHelper::map($celluleUsers, 'id', 'fullName'),
                                                                 'pluginLoading' => false,
                                                                 'options' => [
                                                                     'placeholder' => 'Intervenant...',
-                                                                ]
+                                                                ],
+                                                                'pluginEvents' => [
+                                                                    'select2:select' => 'function(e) { console.log(e);alert(e.currentTarget.value); }',
+                                                                ],
                                                             ]
                                                         )->label("Intervenant");
                                                         ?>
@@ -222,7 +227,7 @@ if ($lot->number != 0) {
                                                             [
 
                                                                 'theme' => Select2::THEME_MATERIAL,
-                                                                'name' => 'TaskRisk',
+                                                                'name' => 'TaskRisk[{$i}]',
                                                                 'data' => ArrayHelper::map($risk, 'title', 'title'),
                                                                 'pluginLoading' => false,
                                                                 'options' => [
@@ -254,17 +259,12 @@ if ($lot->number != 0) {
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
                             <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
         </div>
         <?php ActiveForm::end(); ?>
@@ -285,12 +285,37 @@ $(".dynamicform_wrapper").on("beforeInsert", function(e, item) {
 });
 
 
-$(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+$(".dynamicform_wrapper").on('afterInsert', function(e, item) {
+  
+    var seletect = item.innerHTML;
 
-    console.log("afterInsert");
+    var regex = new RegExp("tasklotcreatetaskform-([0-9]*)-risk");
+  
+    var arr = regex.exec(seletect);
+   
+    console.log(arr);
+    console.log(arr[1]);
+    var index = parseInt(arr[1]);
+    console.log(index);
+
+    var SelectRisk = "#tasklotcreatetaskform-"+ index +"-risk";
+    
+    console.log(SelectRisk);
+
+    $(SelectRisk).on('select2:select', function(e){
+        console.log(e);alert(e.currentTarget.value); 
+
+       
+    })
+
+    var SelectUser = "#tasklotcreatetaskform-"+ index +"-capa_user_id";
+    $(SelectUser).on('select2:select', function(e){
+        console.log(e);alert(e.currentTarget.value); 
+
+       
+    })
 
 });
-
 
 $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {
 
