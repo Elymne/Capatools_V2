@@ -319,13 +319,14 @@ function OnCalculIncertitude(id)
     var Taskhourduration = "#tasklotcreatetaskform-"+ id +"-hour_duration";
     var hour = $(Taskhourduration).val() ;
 
-
     var SelectRisk = "#tasklotcreatetaskform-"+ id +"-risk";
     incertitude =  $(SelectRisk).val() ;
 
-    console.log(day);
-    console.log(hour);
-    console.log(incertitude);
+    var res =CalculTempsincertitude(hour,day,incertitude);
+    
+    var SelectRiskDuration = "#tasklotcreatetaskform-"+ id +"-risk_duration";
+    incertitude =  $(SelectRiskDuration).val(res.dayIncertitude  + "j " + res.hourIncertitude +"h") ;
+
 }
 
 function CalculTempsincertitude(hour,day,incertitudestring)
@@ -390,10 +391,6 @@ $(".dynamicform_wrapperLot").on('afterInsert', function(e, item) {
     $(SelectUser).on('select2:select', function(e){
         OnCalculIntervenant(index)
     })
-
-
-
-
 
 });
 
