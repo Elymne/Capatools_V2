@@ -49,7 +49,7 @@ if ($lot->number != 0) {
                             <?php
 
                             DynamicFormWidget::begin([
-                                'widgetContainer' => 'dynamicform_wrapper1', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                'widgetContainer' => 'dynamicform_wrapperGest', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                 'widgetBody' => '.container-items-taskGestion', // required: css class selector
                                 'widgetItem' => '.item-taskGestion', // required: css class
                                 'limit' => 10, // the maximum times, an element can be cloned (default 999)
@@ -97,7 +97,9 @@ if ($lot->number != 0) {
                                                             'placeholder' => 'Intervenant...',
                                                         ],
                                                         'pluginEvents' => [
-                                                            'select2:select' => 'function(e) { console.log(e);alert(e.currentTarget.value); }',
+                                                            'select2:select' => 'function(e) { 
+                                                                OnCalculIntervenantGest(0);
+                                                             }',
                                                         ],
                                                     ]
                                                 )->label("Intervenant");
@@ -107,10 +109,10 @@ if ($lot->number != 0) {
                                                 <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
                                             </div>
                                             <div class="col s2">
@@ -119,13 +121,16 @@ if ($lot->number != 0) {
                                                     [
                                                         'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'GestionRisk',
-                                                        'data' => ArrayHelper::map($risk, 'title', 'title'),
+                                                        'data' => ArrayHelper::map($risk, 'id', 'title'),
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'Incetitude...',
+                                                            'value' => 1,
                                                         ],
                                                         'pluginEvents' => [
-                                                            'select2:select' => 'function(e) { console.log(e);alert(e.currentTarget.value); }',
+                                                            'select2:select' => 'function(e) {
+                                                                OnCalculIncertitudeGest(0);
+                                                             }',
                                                         ],
                                                     ]
                                                 )->label("Incertitude");
@@ -208,7 +213,7 @@ if ($lot->number != 0) {
                                                                 ],
                                                                 'pluginEvents' => [
                                                                     'select2:select' => 'function(e) {
-                                                                        OnCalculIntervenant(0);
+                                                                        OnCalculIntervenantlot(0);
                                                                         }',
                                                                 ],
                                                             ]
@@ -240,7 +245,7 @@ if ($lot->number != 0) {
                                                                 ],
                                                                 'pluginEvents' => [
                                                                     'select2:select' => 'function(e) { 
-                                                                        OnCalculIncertitude(0);
+                                                                        OnCalculIncertitudelot(0);
                                                                     }',
                                                                 ],
 
@@ -285,19 +290,68 @@ $intervenantMap = json_encode(ArrayHelper::map($celluleUsers, 'id', 'price'));
 $script = <<< JS
 
 
-var Taskdayduration = "#tasklotcreatetaskform-"+ 0 +"-day_duration";
-    $(Taskdayduration).on('input', function(e){
-        OnCalculIncertitude(0);
+var Taskdaydurationlot = "#tasklotcreatetaskform-"+ 0 +"-day_duration";
+    $(Taskdaydurationlot).on('input', function(e){
+        OnCalculIncertitudelot(0);
     })
 
 
-    var Taskdayduration = "#tasklotcreatetaskform-"+ 0 +"-hour_duration";
-    $(Taskdayduration).on('input', function(e){
-        OnCalculIncertitude(0);
+    var Taskdaydurationlot = "#tasklotcreatetaskform-"+ 0 +"-hour_duration";
+    $(Taskdaydurationlot).on('input', function(e){
+        OnCalculIncertitudelot(0);
     })
 
 
-function OnCalculIntervenant(id)
+
+
+    var TaskdaydurationGest = "#taskgestioncreatetaskform-"+ 0 +"-day_duration";
+    $(TaskdaydurationGest).on('input', function(e){
+        OnCalculIncertitudeGest(0);
+    })
+
+
+    var TaskdaydurationGest = "#taskgestioncreatetaskform-"+ 0 +"-hour_duration";
+    $(TaskdaydurationGest).on('input', function(e){
+        OnCalculIncertitudeGest(0);
+    })
+
+    function OnCalculIncertitudeGest(id)
+{
+    var Taskdayduration = "#taskgestioncreatetaskform-"+ id +"-day_duration";
+    var day = $(Taskdayduration).val() ;
+
+    var Taskhourduration = "#taskgestioncreatetaskform-"+ id +"-hour_duration";
+    var hour = $(Taskhourduration).val() ;
+
+    var SelectRisk = "#taskgestioncreatetaskform-"+ id +"-risk";
+    incertitude =  $(SelectRisk).val() ;
+
+    var res =CalculTempsincertitude(hour,day,incertitude);
+    
+    var SelectRiskDuration = "#taskgestioncreatetaskform-"+ id +"-risk_duration";
+    incertitude =  $(SelectRiskDuration).val(res.dayIncertitude  + "j " + res.hourIncertitude +"h") ;
+
+}
+
+
+
+function OnCalculIntervenantGest(id)
+{
+    var elementuser = "#taskgestioncreatetaskform-"+ id +"-price";
+
+    var Userselect = "#taskgestioncreatetaskform-"+ id +"-capa_user_id";
+    
+    var userid = $(Userselect).val() ;
+
+    var intervenantMap = $intervenantMap;
+    var priceuser = intervenantMap[userid];
+    $(elementuser).val(priceuser);
+
+
+}   
+
+
+function OnCalculIntervenantlot(id)
 {
     var elementuser = "#tasklotcreatetaskform-"+ id +"-price";
 
@@ -311,7 +365,7 @@ function OnCalculIntervenant(id)
 
 
 }
-function OnCalculIncertitude(id)
+function OnCalculIncertitudelot(id)
 {
     var Taskdayduration = "#tasklotcreatetaskform-"+ id +"-day_duration";
     var day = $(Taskdayduration).val() ;
@@ -338,7 +392,11 @@ function CalculTempsincertitude(hour,day,incertitudestring)
     var hourIncertitude = hour * incertitude;
     var dayIncertitude = day * incertitude;
 
-    var Additionalday =Math.trunc( hourIncertitude / 7.7);
+    var daydecimal = dayIncertitude - Math.floor(dayIncertitude);
+    dayIncertitude = Math.trunc(dayIncertitude);
+
+    hourIncertitude = Math.round(hourIncertitude + daydecimal * 7.7); 
+    var Additionalday = Math.trunc( hourIncertitude / 7.7);
     hourIncertitude = hourIncertitude % 7.7;
 
     dayIncertitude = Additionalday + dayIncertitude;
@@ -347,35 +405,25 @@ function CalculTempsincertitude(hour,day,incertitudestring)
 }
 
 
-$(".dynamicform_wrapperLot").on("beforeInsert", function(e, item) {
-
-    console.log("beforeInsert");
-
-});
-
 
 $(".dynamicform_wrapperLot").on('afterInsert', function(e, item) {
   
+    //Recherche de l'index courrent 
     var seletect = item.innerHTML;
-
-
     var regex = new RegExp("tasklotcreatetaskform-([0-9]*)-risk");
-  
     var arr = regex.exec(seletect);
-   
-
     var index = parseInt(arr[1]);
 
-
+    //Ajout des callbacks pour les élements 
     var SelectRisk = "#tasklotcreatetaskform-"+ index +"-risk";
     $(SelectRisk).on('select2:select', function(e){
-        OnCalculIncertitude(index);
+        OnCalculIncertitudeGest(index);
      })
 
     var Taskdayduration = "#tasklotcreatetaskform-"+ index +"-day_duration";
     $(Taskdayduration).val(0);
     $(Taskdayduration).on('input', function(e){
-        OnCalculIncertitude(index); 
+        OnCalculIncertitudeGest(index); 
     })
 
 
@@ -383,13 +431,13 @@ $(".dynamicform_wrapperLot").on('afterInsert', function(e, item) {
     var Taskhourduration = "#tasklotcreatetaskform-"+ index +"-hour_duration";
     $(Taskhourduration).val(0);
     $(Taskhourduration).on('input', function(e){
-        OnCalculIncertitude(index); 
+        OnCalculIncertitudeGest(index); 
     })
 
 
     var SelectUser = "#tasklotcreatetaskform-"+ index +"-capa_user_id";
     $(SelectUser).on('select2:select', function(e){
-        OnCalculIntervenant(index)
+        OnCalculIntervenantGest(index)
     })
 
 });
@@ -407,16 +455,64 @@ $(".dynamicform_wrapperLot").on("beforeDelete", function(e, item) {
 });
 
 
-$(".dynamicform_wrapper").on("afterDelete", function(e) {
+$(".dynamicform_wrapperLot").on("limitReached", function(e, item) {
 
-    console.log("Deleted item!");
+    alert("Limit reached");
+
+});
+
+$(".dynamicform_wrapperGest").on('afterInsert', function(e, item) {
+  
+  //Recherche de l'index courrent 
+  var seletect = item.innerHTML;
+  var regex = new RegExp("taskgestioncreatetaskform-([0-9]*)-risk");
+  var arr = regex.exec(seletect);
+  var index = parseInt(arr[1]);
+
+  //Ajout des callbacks pour les élements 
+  var SelectRisk = "#taskgestioncreatetaskform-"+ index +"-risk";
+  $(SelectRisk).on('select2:select', function(e){
+    OnCalculIncertitudeGest(index);
+   })
+
+  var Taskdayduration = "#taskgestioncreatetaskform-"+ index +"-day_duration";
+  $(Taskdayduration).val(0);
+  $(Taskdayduration).on('input', function(e){
+    OnCalculIncertitudeGest(index); 
+  })
+
+
+
+  var Taskhourduration = "#taskgestioncreatetaskform-"+ index +"-hour_duration";
+  $(Taskhourduration).val(0);
+  $(Taskhourduration).on('input', function(e){
+    OnCalculIncertitudeGest(index); 
+  })
+
+
+  var SelectUser = "#taskgestioncreatetaskform-"+ index +"-capa_user_id";
+  $(SelectUser).on('select2:select', function(e){
+    OnCalculIntervenantGest(index)
+  })
+
+});
+
+$(".dynamicform_wrapperGest").on("beforeDelete", function(e, item) {
+
+  if (! confirm("Are you sure you want to delete this item?")) {
+
+      return false;
+
+  }
+
+  return true;
 
 });
 
 
-$(".dynamicform_wrapper").on("limitReached", function(e, item) {
+$(".dynamicform_wrapperGest").on("limitReached", function(e, item) {
 
-    alert("Limit reached");
+  alert("Limit reached");
 
 });
 
