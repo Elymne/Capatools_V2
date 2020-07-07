@@ -1,18 +1,9 @@
 <?php
 
 use app\assets\AppAsset;
-
-use app\models\projects\TaskGestionCreateTaskForm;
-use app\models\projects\TaskLotCreateTaskForm;
-use app\services\userRoleAccessServices\UserRoleEnum;
-use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
-use GuzzleHttp\Psr7\AppendStream;
 use kartik\select2\Select2;
 use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\helpers\Url;
-use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
 
 use wbraganca\dynamicform\DynamicFormWidget;
@@ -27,6 +18,9 @@ if ($lot->number != 0) {
 } else {
     $this->title = $this->title  . " d'avant projet";
 }
+
+
+
 ?>
 <?= TopTitle::widget(['title' => $this->title]) ?>
 <div class="container">
@@ -55,7 +49,7 @@ if ($lot->number != 0) {
                             <?php
 
                             DynamicFormWidget::begin([
-                                'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                'widgetContainer' => 'dynamicform_wrapperGest', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                 'widgetBody' => '.container-items-taskGestion', // required: css class selector
                                 'widgetItem' => '.item-taskGestion', // required: css class
                                 'limit' => 10, // the maximum times, an element can be cloned (default 999)
@@ -65,7 +59,6 @@ if ($lot->number != 0) {
                                 'model' => $tasksGestions[0],
                                 'formId' => 'dynamic-form',
                                 'formFields' => [
-                                    'id',
                                     'title',
                                     'contributor',
                                     'price',
@@ -102,7 +95,12 @@ if ($lot->number != 0) {
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'Intervenant...',
-                                                        ]
+                                                        ],
+                                                        'pluginEvents' => [
+                                                            'select2:select' => 'function(e) { 
+                                                                OnCalculIntervenantGest(0);
+                                                             }',
+                                                        ],
                                                     ]
                                                 )->label("Intervenant");
                                                 ?>
@@ -111,10 +109,10 @@ if ($lot->number != 0) {
                                                 <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
                                             </div>
                                             <div class="col s2">
@@ -123,11 +121,17 @@ if ($lot->number != 0) {
                                                     [
                                                         'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'GestionRisk',
-                                                        'data' => ArrayHelper::map($risk, 'title', 'title'),
+                                                        'data' => ArrayHelper::map($risk, 'id', 'title'),
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'Incetitude...',
-                                                        ]
+                                                            'value' => 1,
+                                                        ],
+                                                        'pluginEvents' => [
+                                                            'select2:select' => 'function(e) {
+                                                                OnCalculIncertitudeGest(0);
+                                                             }',
+                                                        ],
                                                     ]
                                                 )->label("Incertitude");
                                                 ?>
@@ -135,7 +139,6 @@ if ($lot->number != 0) {
                                             <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
                                             </div>
-
                                             <div class="col 2">
                                                 <button type="button" class="add-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
                                             </div>
@@ -143,10 +146,8 @@ if ($lot->number != 0) {
                                                 <button type="button" class="remove-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                             </div>
                                         </div><!-- .row -->
-
                                     </div>
                                 <?php endforeach; ?>
-
                             </div>
 
                             <?php DynamicFormWidget::end(); ?>
@@ -157,119 +158,365 @@ if ($lot->number != 0) {
 
                             <label class='blue-text control-label typeLabel'>Tâche d'avant projet</label>
                         <?php } ?>
-                        <div class="container-items-task">
-                            <!-- widgetContainer -->
-                            <?php
-                            DynamicFormWidget::begin([
-                                'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-                                'widgetBody' => '.container-items-taskLot', // required: css class selector
-                                'widgetItem' => '.item-taskLot', // required: css class
-                                'limit' => 10, // the maximum times, an element can be cloned (default 999)
-                                'min' => 1, // 0 or 1 (default 1)
-                                'insertButton' => '.add-item-taskLot', // css class
-                                'deleteButton' => '.remove-item-taskLot', // css class
-                                'model' => $tasksOperational[0],
-                                'formId' => 'dynamic-form',
-                                'formFields' => [
-                                    'id',
-                                    'title',
-                                    'contributor',
-                                    'price',
-                                    'day_duration',
-                                    'hour_duration',
-                                    'risk',
-                                    'risk_duration',
-                                ],
-                            ]); ?>
-                            <div class="container-items-taskLot">
-                                <!-- widgetContainer -->
-                                <?php foreach ($tasksOperational as $i => $taskOperational) : ?>
-                                    <div class="item-taskLot">
+                        <div id="lot-management-body" class="col s12">
+                            <div class="row">
+                                <div class="input-field col s12">
 
-                                        <?php
-                                        // necessary for update action.
-                                        if (!$taskOperational->isNewRecord) {
-                                            echo Html::activeHiddenInput($taskOperational, "[{$i}]id");
-                                        }
-                                        ?>
+                                    <?php
+                                    DynamicFormWidget::begin([
+                                        'widgetContainer' => 'dynamicform_wrapperLot', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                        'widgetBody' => '.container-items-taskLot', // required: css class selector
+                                        'widgetItem' => '.item-taskLot', // required: css class
+                                        'limit' => 10, // the maximum times, an element can be cloned (default 999)
+                                        'min' => 1, // 0 or 1 (default 1)
+                                        'insertButton' => '.add-item-taskLot', // css class
+                                        'deleteButton' => '.remove-item-taskLot', // css class
+                                        'model' => $tasksOperational[0],
+                                        'formId' => 'dynamic-form',
+                                        'formFields' => [
+                                            'title',
+                                            'contributor',
+                                            'price',
+                                            'day_duration',
+                                            'hour_duration',
+                                            'risk',
+                                            'risk_duration',
+                                        ],
+                                    ]); ?>
+                                    <div class="container-items-taskLot">
+                                        <!-- widgetContainer -->
+                                        <?php foreach ($tasksOperational as $i => $taskOperational) : ?>
+                                            <div class="item-taskLot">
 
-                                        <div class="row">
-                                            <div class="col s2">
-                                                <?= $form->field($taskOperational, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
-                                            </div>
-                                            <div class="col s2">
-                                                <?= $form->field($taskOperational, "[{$i}]capa_user_id")->widget(
-                                                    Select2::classname(),
-                                                    [
-
-                                                        'theme' => Select2::THEME_MATERIAL,
-                                                        'name' => 'TaskContributor',
-                                                        'data' => ArrayHelper::map($celluleUsers, 'id', 'fullName'),
-                                                        'pluginLoading' => false,
-                                                        'options' => [
-                                                            'placeholder' => 'Intervenant...',
-                                                        ]
-                                                    ]
-                                                )->label("Intervenant");
+                                                <?php
+                                                // necessary for update action.
+                                                if (!$taskOperational->isNewRecord) {
+                                                    echo Html::activeHiddenInput($taskOperational, "[{$i}]id");
+                                                }
                                                 ?>
-                                            </div>
-                                            <div class="col s1">
-                                                <?= $form->field($taskOperational, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
-                                            </div>
-                                            <div class="col s1">
-                                                <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
-                                            </div>
-                                            <div class="col s1">
-                                                <?= $form->field($taskOperational, "[{$i}]hour_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
-                                            </div>
-                                            <div class="col s2">
-                                                <?= $form->field($taskOperational, "[{$i}]risk")->widget(
-                                                    Select2::classname(),
-                                                    [
+                                                <div class="row">
+                                                    <div class="col s2">
+                                                        <?= $form->field($taskOperational, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                    </div>
+                                                    <div class="col s2">
+                                                        <?= $form->field($taskOperational, "[{$i}]capa_user_id")->widget(
+                                                            Select2::classname(),
+                                                            [
+                                                                'theme' => Select2::THEME_MATERIAL,
+                                                                'name' => 'TaskContributor',
+                                                                'data' => ArrayHelper::map($celluleUsers, 'id', 'fullName'),
+                                                                'pluginLoading' => false,
 
-                                                        'theme' => Select2::THEME_MATERIAL,
-                                                        'name' => 'TaskRisk',
-                                                        'data' => ArrayHelper::map($risk, 'title', 'title'),
-                                                        'pluginLoading' => false,
-                                                        'options' => [
-                                                            'placeholder' => 'Incetitude...',
-                                                        ]
-                                                    ]
-                                                )->label("Incertitude");
-                                                ?>
-                                            </div>
-                                            <div class="col s1">
-                                                <?= $form->field($taskOperational, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
-                                            </div>
-                                            <div class="col 2">
-                                                <button type="button" class="add-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                            </div>
-                                            <div class="col 2">
-                                                <button type="button" class="remove-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
-                                            </div>
-                                        </div><!-- .row -->
+                                                                'options' => [
+                                                                    'placeholder' => 'Intervenant...',
+                                                                ],
+                                                                'pluginEvents' => [
+                                                                    'select2:select' => 'function(e) {
+                                                                        OnCalculIntervenantlot(0);
+                                                                        }',
+                                                                ],
+                                                            ]
+                                                        )->label("Intervenant");
+                                                        ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($taskOperational, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($taskOperational, "[{$i}]hour_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
+                                                    </div>
+                                                    <div class="col s2">
+                                                        <?= $form->field($taskOperational, "[{$i}]risk")->widget(
+                                                            Select2::classname(),
+                                                            [
+
+                                                                'theme' => Select2::THEME_MATERIAL,
+                                                                'name' => 'TaskRisk[{$i}]',
+                                                                'data' => ArrayHelper::map($risk, 'id', 'title'),
+                                                                'pluginLoading' => false,
+                                                                'options' => [
+                                                                    'placeholder' => 'Incetitude...',
+                                                                    'value' => 1,
+                                                                ],
+                                                                'pluginEvents' => [
+                                                                    'select2:select' => 'function(e) { 
+                                                                        OnCalculIncertitudelot(0);
+                                                                    }',
+                                                                ],
+
+                                                            ]
+                                                        )->label("Incertitude");
+                                                        ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($taskOperational, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
+                                                    </div>
+                                                    <div class="col 2">
+                                                        <button type="button" class="add-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                    </div>
+                                                    <div class="col 2">
+                                                        <button type="button" class="remove-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                    </div>
+                                                </div><!-- .row -->
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
-                                <?php endforeach; ?>
+
+                                    <?php DynamicFormWidget::end(); ?>
+                                </div>
                             </div>
-
-
-                            <?php DynamicFormWidget::end(); ?>
                         </div>
-
-
                         <div class="form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
                             <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+
+<?php
+
+$incertudeMap = json_encode(ArrayHelper::map($risk, 'id', 'coeficient'));
+$intervenantMap = json_encode(ArrayHelper::map($celluleUsers, 'id', 'price'));
+$script = <<< JS
+
+
+var Taskdaydurationlot = "#tasklotcreatetaskform-"+ 0 +"-day_duration";
+    $(Taskdaydurationlot).on('input', function(e){
+        OnCalculIncertitudelot(0);
+    })
+
+
+    var Taskdaydurationlot = "#tasklotcreatetaskform-"+ 0 +"-hour_duration";
+    $(Taskdaydurationlot).on('input', function(e){
+        OnCalculIncertitudelot(0);
+    })
+
+
+
+
+    var TaskdaydurationGest = "#taskgestioncreatetaskform-"+ 0 +"-day_duration";
+    $(TaskdaydurationGest).on('input', function(e){
+        OnCalculIncertitudeGest(0);
+    })
+
+
+    var TaskdaydurationGest = "#taskgestioncreatetaskform-"+ 0 +"-hour_duration";
+    $(TaskdaydurationGest).on('input', function(e){
+        OnCalculIncertitudeGest(0);
+    })
+
+    function OnCalculIncertitudeGest(id)
+{
+    var Taskdayduration = "#taskgestioncreatetaskform-"+ id +"-day_duration";
+    var day = $(Taskdayduration).val() ;
+
+    var Taskhourduration = "#taskgestioncreatetaskform-"+ id +"-hour_duration";
+    var hour = $(Taskhourduration).val() ;
+
+    var SelectRisk = "#taskgestioncreatetaskform-"+ id +"-risk";
+    incertitude =  $(SelectRisk).val() ;
+
+    var res =CalculTempsincertitude(hour,day,incertitude);
+    
+    var SelectRiskDuration = "#taskgestioncreatetaskform-"+ id +"-risk_duration";
+    incertitude =  $(SelectRiskDuration).val(res.dayIncertitude  + "j " + res.hourIncertitude +"h") ;
+
+}
+
+
+
+function OnCalculIntervenantGest(id)
+{
+    var elementuser = "#taskgestioncreatetaskform-"+ id +"-price";
+
+    var Userselect = "#taskgestioncreatetaskform-"+ id +"-capa_user_id";
+    
+    var userid = $(Userselect).val() ;
+
+    var intervenantMap = $intervenantMap;
+    var priceuser = intervenantMap[userid];
+    $(elementuser).val(priceuser);
+
+
+}   
+
+
+function OnCalculIntervenantlot(id)
+{
+    var elementuser = "#tasklotcreatetaskform-"+ id +"-price";
+
+    var Userselect = "#tasklotcreatetaskform-"+ id +"-capa_user_id";
+    
+    var userid = $(Userselect).val() ;
+
+    var intervenantMap = $intervenantMap;
+    var priceuser = intervenantMap[userid];
+    $(elementuser).val(priceuser);
+
+
+}
+function OnCalculIncertitudelot(id)
+{
+    var Taskdayduration = "#tasklotcreatetaskform-"+ id +"-day_duration";
+    var day = $(Taskdayduration).val() ;
+
+    var Taskhourduration = "#tasklotcreatetaskform-"+ id +"-hour_duration";
+    var hour = $(Taskhourduration).val() ;
+
+    var SelectRisk = "#tasklotcreatetaskform-"+ id +"-risk";
+    incertitude =  $(SelectRisk).val() ;
+
+    var res =CalculTempsincertitude(hour,day,incertitude);
+    
+    var SelectRiskDuration = "#tasklotcreatetaskform-"+ id +"-risk_duration";
+    incertitude =  $(SelectRiskDuration).val(res.dayIncertitude  + "j " + res.hourIncertitude +"h") ;
+
+}
+
+function CalculTempsincertitude(hour,day,incertitudestring)
+{
+   
+    var incertitudeMap = $incertudeMap
+    var incertitude = incertitudeMap[incertitudestring];
+    
+    var hourIncertitude = hour * incertitude;
+    var dayIncertitude = day * incertitude;
+
+    var daydecimal = dayIncertitude - Math.floor(dayIncertitude);
+    dayIncertitude = Math.trunc(dayIncertitude);
+
+    hourIncertitude = Math.round(hourIncertitude + daydecimal * 7.7); 
+    var Additionalday = Math.trunc( hourIncertitude / 7.7);
+    hourIncertitude = hourIncertitude % 7.7;
+
+    dayIncertitude = Additionalday + dayIncertitude;
+
+    return {dayIncertitude,hourIncertitude};
+}
+
+
+
+$(".dynamicform_wrapperLot").on('afterInsert', function(e, item) {
+  
+    //Recherche de l'index courrent 
+    var seletect = item.innerHTML;
+    var regex = new RegExp("tasklotcreatetaskform-([0-9]*)-risk");
+    var arr = regex.exec(seletect);
+    var index = parseInt(arr[1]);
+
+    //Ajout des callbacks pour les élements 
+    var SelectRisk = "#tasklotcreatetaskform-"+ index +"-risk";
+    $(SelectRisk).on('select2:select', function(e){
+        OnCalculIncertitudeGest(index);
+     })
+
+    var Taskdayduration = "#tasklotcreatetaskform-"+ index +"-day_duration";
+    $(Taskdayduration).val(0);
+    $(Taskdayduration).on('input', function(e){
+        OnCalculIncertitudeGest(index); 
+    })
+
+
+
+    var Taskhourduration = "#tasklotcreatetaskform-"+ index +"-hour_duration";
+    $(Taskhourduration).val(0);
+    $(Taskhourduration).on('input', function(e){
+        OnCalculIncertitudeGest(index); 
+    })
+
+
+    var SelectUser = "#tasklotcreatetaskform-"+ index +"-capa_user_id";
+    $(SelectUser).on('select2:select', function(e){
+        OnCalculIntervenantGest(index)
+    })
+
+});
+
+$(".dynamicform_wrapperLot").on("beforeDelete", function(e, item) {
+
+    if (! confirm("Are you sure you want to delete this item?")) {
+
+        return false;
+
+    }
+
+    return true;
+
+});
+
+
+$(".dynamicform_wrapperLot").on("limitReached", function(e, item) {
+
+    alert("Limit reached");
+
+});
+
+$(".dynamicform_wrapperGest").on('afterInsert', function(e, item) {
+  
+  //Recherche de l'index courrent 
+  var seletect = item.innerHTML;
+  var regex = new RegExp("taskgestioncreatetaskform-([0-9]*)-risk");
+  var arr = regex.exec(seletect);
+  var index = parseInt(arr[1]);
+
+  //Ajout des callbacks pour les élements 
+  var SelectRisk = "#taskgestioncreatetaskform-"+ index +"-risk";
+  $(SelectRisk).on('select2:select', function(e){
+    OnCalculIncertitudeGest(index);
+   })
+
+  var Taskdayduration = "#taskgestioncreatetaskform-"+ index +"-day_duration";
+  $(Taskdayduration).val(0);
+  $(Taskdayduration).on('input', function(e){
+    OnCalculIncertitudeGest(index); 
+  })
+
+
+
+  var Taskhourduration = "#taskgestioncreatetaskform-"+ index +"-hour_duration";
+  $(Taskhourduration).val(0);
+  $(Taskhourduration).on('input', function(e){
+    OnCalculIncertitudeGest(index); 
+  })
+
+
+  var SelectUser = "#taskgestioncreatetaskform-"+ index +"-capa_user_id";
+  $(SelectUser).on('select2:select', function(e){
+    OnCalculIntervenantGest(index)
+  })
+
+});
+
+$(".dynamicform_wrapperGest").on("beforeDelete", function(e, item) {
+
+  if (! confirm("Are you sure you want to delete this item?")) {
+
+      return false;
+
+  }
+
+  return true;
+
+});
+
+
+$(".dynamicform_wrapperGest").on("limitReached", function(e, item) {
+
+  alert("Limit reached");
+
+});
+
+
+JS;
+
+$this->registerJs($script);

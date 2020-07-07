@@ -19,7 +19,7 @@ use app\models\companies\Contact;
 class Project extends ActiveRecord
 {
 
-    const TYPE_PRESTATION = 'Prestation interne';
+    const TYPE_PRESTATION = 'Prestation';
     const TYPE_OUTSOURCING_AD = 'Sous traitance AD';
     const TYPE_OUTSOURCING_UN = "Sous traitance UN";
     const TYPE_INTERNAL = "Interne";
