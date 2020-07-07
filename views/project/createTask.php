@@ -20,6 +20,7 @@ if ($lot->number != 0) {
 }
 
 
+
 ?>
 <?= TopTitle::widget(['title' => $this->title]) ?>
 <div class="container">
@@ -158,7 +159,7 @@ if ($lot->number != 0) {
 
                                     <?php
                                     DynamicFormWidget::begin([
-                                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                        'widgetContainer' => 'dynamicform_wrapperLot', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                         'widgetBody' => '.container-items-taskLot', // required: css class selector
                                         'widgetItem' => '.item-taskLot', // required: css class
                                         'limit' => 10, // the maximum times, an element can be cloned (default 999)
@@ -201,11 +202,14 @@ if ($lot->number != 0) {
                                                                 'name' => 'TaskContributor',
                                                                 'data' => ArrayHelper::map($celluleUsers, 'id', 'fullName'),
                                                                 'pluginLoading' => false,
+
                                                                 'options' => [
                                                                     'placeholder' => 'Intervenant...',
                                                                 ],
                                                                 'pluginEvents' => [
-                                                                    'select2:select' => 'function(e) { console.log(e);alert(e.currentTarget.value); }',
+                                                                    'select2:select' => 'function(e) {
+                                                                        OnCalculIntervenant(0);
+                                                                        }',
                                                                 ],
                                                             ]
                                                         )->label("Intervenant");
@@ -215,10 +219,10 @@ if ($lot->number != 0) {
                                                         <?= $form->field($taskOperational, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                        <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($taskOperational, "[{$i}]hour_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
+                                                        <?= $form->field($taskOperational, "[{$i}]hour_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
                                                     </div>
                                                     <div class="col s2">
@@ -228,13 +232,16 @@ if ($lot->number != 0) {
 
                                                                 'theme' => Select2::THEME_MATERIAL,
                                                                 'name' => 'TaskRisk[{$i}]',
-                                                                'data' => ArrayHelper::map($risk, 'title', 'title'),
+                                                                'data' => ArrayHelper::map($risk, 'id', 'title'),
                                                                 'pluginLoading' => false,
                                                                 'options' => [
                                                                     'placeholder' => 'Incetitude...',
+                                                                    'value' => 1,
                                                                 ],
                                                                 'pluginEvents' => [
-                                                                    'select2:select' => 'function(e) { console.log(e);alert(e.currentTarget.value); }',
+                                                                    'select2:select' => 'function(e) { 
+                                                                        OnCalculIncertitude(0);
+                                                                    }',
                                                                 ],
 
                                                             ]
@@ -273,51 +280,124 @@ if ($lot->number != 0) {
 
 <?php
 
-
-
+$incertudeMap = json_encode(ArrayHelper::map($risk, 'id', 'coeficient'));
+$intervenantMap = json_encode(ArrayHelper::map($celluleUsers, 'id', 'price'));
 $script = <<< JS
 
 
-$(".dynamicform_wrapper").on("beforeInsert", function(e, item) {
+var Taskdayduration = "#tasklotcreatetaskform-"+ 0 +"-day_duration";
+    $(Taskdayduration).on('input', function(e){
+        OnCalculIncertitude(0);
+    })
+
+
+    var Taskdayduration = "#tasklotcreatetaskform-"+ 0 +"-hour_duration";
+    $(Taskdayduration).on('input', function(e){
+        OnCalculIncertitude(0);
+    })
+
+
+function OnCalculIntervenant(id)
+{
+    var elementuser = "#tasklotcreatetaskform-"+ id +"-price";
+
+    var Userselect = "#tasklotcreatetaskform-"+ id +"-capa_user_id";
+    
+    var userid = $(Userselect).val() ;
+
+    var intervenantMap = $intervenantMap;
+    var priceuser = intervenantMap[userid];
+    $(elementuser).val(priceuser);
+
+
+}
+function OnCalculIncertitude(id)
+{
+    var Taskdayduration = "#tasklotcreatetaskform-"+ id +"-day_duration";
+    var day = $(Taskdayduration).val() ;
+
+    var Taskhourduration = "#tasklotcreatetaskform-"+ id +"-hour_duration";
+    var hour = $(Taskhourduration).val() ;
+
+
+    var SelectRisk = "#tasklotcreatetaskform-"+ id +"-risk";
+    incertitude =  $(SelectRisk).val() ;
+
+    console.log(day);
+    console.log(hour);
+    console.log(incertitude);
+}
+
+function CalculTempsincertitude(hour,day,incertitudestring)
+{
+   
+    var incertitudeMap = $incertudeMap
+    var incertitude = incertitudeMap[incertitudestring];
+    
+    var hourIncertitude = hour * incertitude;
+    var dayIncertitude = day * incertitude;
+
+    var Additionalday =Math.trunc( hourIncertitude / 7.7);
+    hourIncertitude = hourIncertitude % 7.7;
+
+    dayIncertitude = Additionalday + dayIncertitude;
+
+    return {dayIncertitude,hourIncertitude};
+}
+
+
+$(".dynamicform_wrapperLot").on("beforeInsert", function(e, item) {
 
     console.log("beforeInsert");
 
 });
 
 
-$(".dynamicform_wrapper").on('afterInsert', function(e, item) {
+$(".dynamicform_wrapperLot").on('afterInsert', function(e, item) {
   
     var seletect = item.innerHTML;
+
 
     var regex = new RegExp("tasklotcreatetaskform-([0-9]*)-risk");
   
     var arr = regex.exec(seletect);
    
-    console.log(arr);
-    console.log(arr[1]);
+
     var index = parseInt(arr[1]);
-    console.log(index);
+
 
     var SelectRisk = "#tasklotcreatetaskform-"+ index +"-risk";
-    
-    console.log(SelectRisk);
-
     $(SelectRisk).on('select2:select', function(e){
-        console.log(e);alert(e.currentTarget.value); 
+        OnCalculIncertitude(index);
+     })
 
-       
+    var Taskdayduration = "#tasklotcreatetaskform-"+ index +"-day_duration";
+    $(Taskdayduration).val(0);
+    $(Taskdayduration).on('input', function(e){
+        OnCalculIncertitude(index); 
     })
+
+
+
+    var Taskhourduration = "#tasklotcreatetaskform-"+ index +"-hour_duration";
+    $(Taskhourduration).val(0);
+    $(Taskhourduration).on('input', function(e){
+        OnCalculIncertitude(index); 
+    })
+
 
     var SelectUser = "#tasklotcreatetaskform-"+ index +"-capa_user_id";
     $(SelectUser).on('select2:select', function(e){
-        console.log(e);alert(e.currentTarget.value); 
-
-       
+        OnCalculIntervenant(index)
     })
+
+
+
+
 
 });
 
-$(".dynamicform_wrapper").on("beforeDelete", function(e, item) {
+$(".dynamicform_wrapperLot").on("beforeDelete", function(e, item) {
 
     if (! confirm("Are you sure you want to delete this item?")) {
 
