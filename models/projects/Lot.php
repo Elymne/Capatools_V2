@@ -46,14 +46,4 @@ class Lot extends ActiveRecord
     {
         return $this->hasMany(Consumable::className(), ['lot_id' => 'id']);
     }
-
-    public function getTotalCostHuman()
-    {
-        return "0€";
-    }
-
-    public function getTotalCostInvest()
-    {
-        return "0€";
-    }
 }

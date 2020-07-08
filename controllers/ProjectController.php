@@ -22,6 +22,7 @@ use app\models\users\CapaUser;
 use app\models\companies\Contact;
 use app\models\companies\Company;
 use app\models\projects\Lot;
+use app\models\projects\LotSimulate;
 use app\models\projects\LotCreateFirstStepForm;
 use app\models\projects\ProjectCreateFirstStepForm;
 use app\models\projects\ProjectCreateTaskForm;
@@ -677,7 +678,8 @@ class ProjectController extends Controller implements ServiceInterface
                 'lots' => $lots
             ]
         );*/
-        $lot = new Lot();
+        $lot = LotSimulate::getOneById(1);
+
         return $this->render(
             'lotSimulation',
             [

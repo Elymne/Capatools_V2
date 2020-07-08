@@ -10,7 +10,6 @@ use yii\widgets\ActiveForm;
 $this->title = 'Simulation de lot';
 
 AppAsset::register($this);
-
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -24,13 +23,13 @@ AppAsset::register($this);
                 <div class="card">
 
                     <div class="card-content">
-                        <label>Détail des coûts</label>
+                        <label>Détail des coûts du lot (avec les coûts d'avant projet)</label>
                     </div>
 
                     <div class="card-action">
                         <div class="row">
                             <div class="col s3">
-                                Total coût humain des tâches
+                                Total coût temps homme (€):
                             </div>
                             <div class="col s1">
                                 <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
@@ -41,18 +40,18 @@ AppAsset::register($this);
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Total des dépenses et investissement
+                                Total des dépenses et investissement (€):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "totalCostInvest")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Total des reversements laboratoires
+                                Total des reversements laboratoires (€):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "totalCostRepayement")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
 
@@ -71,17 +70,7 @@ AppAsset::register($this);
                         <div class="row">
                             <div class="col s4">
                                 <!-- Détail du coût  -->
-                                Total Prix de revient H.T. temps homme (CAPA + Labo)
-                            </div>
-                            <div class="col s1">
-                                <!-- Détail du coût  -->
-                                <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col s4">
-                                <!-- Détail du coût  -->
-                                Taux de marge temps homme
+                                Taux de marge temps homme (%):
                             </div>
                             <div class="col s1">
                                 <!-- Détail du coût  -->
@@ -93,20 +82,22 @@ AppAsset::register($this);
 
                             </div>
                         </div>
-                        <label class='blue-text control-label typeLabel'>Marge consommables, déplacements et achat</label>
                         <div class="row">
                             <div class="col s4">
                                 <!-- Détail du coût  -->
-                                Total Prix de revient H.T. consommables, déplacements et achat
+                                Total Prix de revient H.T. temps homme (€):
                             </div>
                             <div class="col s1">
                                 <!-- Détail du coût  -->
-                                <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "total_cost_human_with_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
+
+                        <label class='blue-text control-label typeLabel'>Marge consommables, déplacements et achat</label>
+
                         <div class="row">
                             <div class="col s4">
-                                Taux de marge consommables, déplacements et achat
+                                Taux de marge consommables, déplacements et achat (%):
 
                             </div>
                             <div class="col s1">
@@ -117,33 +108,49 @@ AppAsset::register($this);
                                 <?= Html::button("+", ['title' => "Topic", 'onclick' => 'console.log(\'toto\');', 'class' => 'waves-effect waves-light btn btn']) ?>
                                 <?= Html::button("-", ['title' => "Topic", 'onclick' => 'console.log(\'toto\');', 'class' => 'waves-effect waves-light btn btn-red']) ?>
 
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s4">
+                                <!-- Détail du coût  -->
+                                Total Prix de revient H.T. consommables, déplacements et achat (€):
+                            </div>
+                            <div class="col s1">
+                                <!-- Détail du coût  -->
+                                <?= $form->field($lot, "total_cost_invest_with_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
 
                         <label class='blue-text control-label typeLabel'>Marge reversement Laboratoire</label>
+
                         <div class="row">
                             <div class="col s4">
-                                <!-- Détail du coût  -->
-                                Total Prix de revient H.T. reversement Laboratoire
-                            </div>
-                            <div class="col s1">
-                                <!-- Détail du coût  -->
-                                <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col s4">
-                                Taux de marge reversement Laboratoire
+                                Taux de marge reversement Laboratoire (%):
 
                             </div>
                             <div class="col s1">
                                 <!-- Détail du coût  -->
-                                <?= $form->field($lot, "rate_consumable_investement_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "rate_repayement_margin")->textInput([
+                                    'autocomplete' => 'off',
+                                    'maxlength' => true,
+                                    'onchange' => ' js:alert("toto"); UpdateRepayementMargin();'
+                                ])->label(false) ?>
                             </div>
                             <div class="col s4">
-                                <?= Html::button("+", ['title' => "Topic", 'onclick' => 'console.log(\'toto\');', 'class' => 'waves-effect waves-light btn btn']) ?>
+                                <?= Html::button("+", ['title' => "Topic", 'onclick' => 'js:UpdateRepayementMargin();', 'class' => 'waves-effect waves-light btn btn']) ?>
                                 <?= Html::button("-", ['title' => "Topic", 'onclick' => 'console.log(\'toto\');', 'class' => 'waves-effect waves-light btn btn-red']) ?>
 
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col s4">
+                                <!-- Détail du coût  -->
+                                Total Prix de revient H.T. reversement Laboratoire (€):
+                            </div>
+                            <div class="col s1">
+                                <!-- Détail du coût  -->
+                                <?= $form->field($lot, "total_cost_repayement_with_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
                     </div>
@@ -160,35 +167,35 @@ AppAsset::register($this);
 
                         <div class="row">
                             <div class="col s3">
-                                Montant Total HT :
+                                Montant Total HT (€):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "total_cost_lot")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
 
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Taux marge moyen avant frais de gestion :
+                                Taux de marge moyen avant frais de gestion (%):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "mean_lot_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Frais de gestion du support HT :
+                                Frais de gestion du support HT (€):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "support_cost")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Prix de vente du lot HT :
+                                Prix de vente du lot HT (€):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "total_cost_lot_with_support")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
                     </div>
@@ -203,3 +210,106 @@ AppAsset::register($this);
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+
+<?php
+
+$management_rate = $lot->project->management_rate;
+$script = <<< JS
+
+///Debug
+var LotrateMargine = "#lotsimulate-rate_humain_margin";
+$(LotrateMargine).val(10);
+
+
+LotrateMargine = "#lotsimulate-rate_consumable_investement_margin";
+$(LotrateMargine).val(20);
+  
+
+LotrateMargine = "#lotsimulate-rate_repayement_margin";
+$(LotrateMargine).val(30);
+ 
+//Fin debug
+
+
+
+
+
+UpdateHumanMargin();
+UpdateInvestMargin();
+UpdateRepayementMargin();
+CalculTotalLot();
+
+function UpdateHumanMargin()
+{
+    var totalcostwithmargin = "#lotsimulate-total_cost_human_with_margin";
+    var LotrateMargin = "#lotsimulate-rate_humain_margin";
+    var totalcost = "#lotsimulate-totalcosthuman";
+    var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
+    $(totalcostwithmargin).val(resultattwithmargin);
+
+ 
+}
+function UpdateInvestMargin()
+{
+    var totalcostwithmargin = "#lotsimulate-total_cost_invest_with_margin";
+    var LotrateMargin = "#lotsimulate-rate_consumable_investement_margin";
+    var totalcost = "#lotsimulate-totalcostinvest";
+    var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
+    $(totalcostwithmargin).val(resultattwithmargin);
+ 
+}
+
+function UpdateRepayementMargin()
+{
+    var totalcostwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
+    var LotrateMargin = "#lotsimulate-rate_repayement_margin";
+    var totalcost = "#lotsimulate-totalcostrepayement";
+    var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
+    $(totalcostwithmargin).val(resultattwithmargin);
+}
+
+
+
+function CalculTotalLot()
+{
+
+    
+    var totalcosthuman = "#lotsimulate-totalcosthuman";
+    var totalcostinvest = "#lotsimulate-totalcostinvest";
+    var totalcostrepayement = "#lotsimulate-totalcostrepayement";
+
+    var totalcostlot = "#lotsimulate-total_cost_lot";
+    var totalcosthumanwithmargin = "#lotsimulate-total_cost_human_with_margin";
+    var totalcostinvestwithmargin = "#lotsimulate-total_cost_invest_with_margin";
+    var totalcostrepayementwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
+
+    var totalcost = parseInt($(totalcosthuman).val()) + parseInt($(totalcostinvest).val()) + parseInt($(totalcostrepayement).val())  ;
+    var totalcostwithMargin = parseInt($(totalcosthumanwithmargin).val()) + parseInt($(totalcostinvestwithmargin).val()) + parseInt($(totalcostrepayementwithmargin).val())  ;
+    $(totalcostlot).val(totalcostwithMargin);
+
+
+    var meanlotmargin = "#lotsimulate-mean_lot_margin";
+   
+
+
+    var mean = ((totalcostwithMargin / totalcost) - 1) * 100;
+    $(meanlotmargin).val(mean.toFixed(2));
+
+    var supportcost = "#lotsimulate-support_cost";
+    var totalcostlotwithsupport = "#lotsimulate-total_cost_lot_with_support";
+
+    var ratesupp = $management_rate;
+
+
+    var support = totalcostwithMargin * ratesupp /100;
+    $(supportcost).val(support.toFixed(2));
+
+    var totalwithsupport = support + totalcostwithMargin
+    $(totalcostlotwithsupport).val(totalwithsupport.toFixed(2));
+
+    
+}
+
+JS;
+
+$this->registerJs($script);
