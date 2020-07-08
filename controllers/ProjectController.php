@@ -677,9 +677,12 @@ class ProjectController extends Controller implements ServiceInterface
                 'lots' => $lots
             ]
         );*/
+        $lot = new Lot();
         return $this->render(
             'lotSimulation',
-            []
+            [
+                'lot' => $lot
+            ]
         );
     }
 

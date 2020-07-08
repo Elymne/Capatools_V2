@@ -417,13 +417,13 @@ $(".dynamicform_wrapperLot").on('afterInsert', function(e, item) {
     //Ajout des callbacks pour les élements 
     var SelectRisk = "#tasklotcreatetaskform-"+ index +"-risk";
     $(SelectRisk).on('select2:select', function(e){
-        OnCalculIncertitudeGest(index);
+        OnCalculIncertitudelot(index);
      })
 
     var Taskdayduration = "#tasklotcreatetaskform-"+ index +"-day_duration";
     $(Taskdayduration).val(0);
     $(Taskdayduration).on('input', function(e){
-        OnCalculIncertitudeGest(index); 
+        OnCalculIncertitudelot(index); 
     })
 
 
@@ -431,13 +431,13 @@ $(".dynamicform_wrapperLot").on('afterInsert', function(e, item) {
     var Taskhourduration = "#tasklotcreatetaskform-"+ index +"-hour_duration";
     $(Taskhourduration).val(0);
     $(Taskhourduration).on('input', function(e){
-        OnCalculIncertitudeGest(index); 
+        OnCalculIncertitudelot(index); 
     })
 
 
     var SelectUser = "#tasklotcreatetaskform-"+ index +"-capa_user_id";
     $(SelectUser).on('select2:select', function(e){
-        OnCalculIntervenantGest(index)
+        OnCalculIntervenantlot(index)
     })
 
 });
