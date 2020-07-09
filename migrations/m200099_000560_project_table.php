@@ -93,6 +93,7 @@ class m200099_000560_project_table extends Migration
             'company_id' => 1,
             'contact_id' => 1,
             'capa_user_id' => 4,
+            'management_rate' => 12,
         ]);
     }
 

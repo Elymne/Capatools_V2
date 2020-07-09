@@ -74,11 +74,11 @@ AppAsset::register($this);
                             </div>
                             <div class="col s1">
                                 <!-- Détail du coût  -->
-                                <?= $form->field($lot, "rate_humain_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "rate_human_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label(false) ?>
                             </div>
                             <div class="col s4">
-                                <?= Html::button("+", ['title' => "Topic", 'onclick' => 'console.log(\'toto\');', 'class' => 'waves-effect waves-light btn btn']) ?>
-                                <?= Html::button("-", ['title' => "Topic", 'onclick' => 'console.log(\'toto\');', 'class' => 'waves-effect waves-light btn btn-red']) ?>
+                                <?= Html::button("+", ['id' => 'lotsimulate-rate_human_marginup', 'title' => "Topic",  'class' => 'waves-effect waves-light btn btn']) ?>
+                                <?= Html::button("-", ['id' => 'lotsimulate-rate_human_margindown', 'title' => "Topic",  'class' => 'waves-effect waves-light btn btn-red']) ?>
 
                             </div>
                         </div>
@@ -102,11 +102,11 @@ AppAsset::register($this);
                             </div>
                             <div class="col s1">
                                 <!-- Détail du coût  -->
-                                <?= $form->field($lot, "rate_consumable_investement_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "rate_consumable_investement_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label(false) ?>
                             </div>
                             <div class="col s4">
-                                <?= Html::button("+", ['title' => "Topic", 'onclick' => 'console.log(\'toto\');', 'class' => 'waves-effect waves-light btn btn']) ?>
-                                <?= Html::button("-", ['title' => "Topic", 'onclick' => 'console.log(\'toto\');', 'class' => 'waves-effect waves-light btn btn-red']) ?>
+                                <?= Html::button("+", ['id' => 'lotsimulate-rate_consumable_investement_marginup', 'title' => "Topic",  'class' => 'waves-effect waves-light btn btn']) ?>
+                                <?= Html::button("-", ['id' => 'lotsimulate-rate_consumable_investement_margindown', 'title' => "Topic",  'class' => 'waves-effect waves-light btn btn-red']) ?>
 
                             </div>
                         </div>
@@ -133,12 +133,11 @@ AppAsset::register($this);
                                 <?= $form->field($lot, "rate_repayement_margin")->textInput([
                                     'autocomplete' => 'off',
                                     'maxlength' => true,
-                                    'onchange' => ' js:alert("toto"); UpdateRepayementMargin();'
                                 ])->label(false) ?>
                             </div>
                             <div class="col s4">
-                                <?= Html::button("+", ['title' => "Topic", 'onclick' => 'js:UpdateRepayementMargin();', 'class' => 'waves-effect waves-light btn btn']) ?>
-                                <?= Html::button("-", ['title' => "Topic", 'onclick' => 'console.log(\'toto\');', 'class' => 'waves-effect waves-light btn btn-red']) ?>
+                                <?= Html::button("+", ['id' => 'lotsimulate-rate_repayement_marginup',  'class' => 'waves-effect waves-light  btn']) ?>
+                                <?= Html::button("-", ['id' => 'lotsimulate-rate_repayement_margindown',  'class' => 'waves-effect waves-light btn btn-red']) ?>
 
                             </div>
                         </div>
@@ -215,9 +214,10 @@ AppAsset::register($this);
 
 $management_rate = $lot->project->management_rate;
 $script = <<< JS
+var stepsize = 0.5;
 
 ///Debug
-var LotrateMargine = "#lotsimulate-rate_humain_margin";
+var LotrateMargine = "#lotsimulate-rate_human_margin";
 $(LotrateMargine).val(10);
 
 
@@ -227,10 +227,136 @@ $(LotrateMargine).val(20);
 
 LotrateMargine = "#lotsimulate-rate_repayement_margin";
 $(LotrateMargine).val(30);
- 
+
 //Fin debug
+var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
+    $(InputRateHumamMargin).on('blur', function(e){
+        var rate = parseFloat(e.currentTarget.value);
+        if(rate < 10  || isNaN(rate))
+        {
+            e.currentTarget.value = 10;
+        }
+
+    })
+
+    $(InputRateHumamMargin).on('input', function(e){
+        UpdateHumanMargin();    
+        CalculTotalLot();
+    })
 
 
+    var InputInvestMargin = "#lotsimulate-rate_consumable_investement_margin";
+    $(InputInvestMargin).on('blur', function(e){
+        var rate = parseFloat(e.currentTarget.value);
+        if(rate < 0 || isNaN(rate))
+        {
+            e.currentTarget.value = 0;
+        }
+
+    })
+
+
+    $(InputInvestMargin).on('input', function(e){
+        UpdateInvestMargin();    
+        CalculTotalLot();
+    })
+
+
+    var InputRepayementMargin = "#lotsimulate-rate_repayement_margin";
+    $(InputRepayementMargin).on('blur', function(e){
+        var rate = parseFloat(e.currentTarget.value);
+        if(rate < 0.0 || isNaN(rate))
+        {
+            e.currentTarget.value = 0;
+        }
+
+    })  
+    $(InputRepayementMargin).on('input', function(e){
+        UpdateRepayementMargin();    
+        CalculTotalLot();
+    })
+
+
+    var ButtonRateHumamMarginUp = "#lotsimulate-rate_human_marginup"; 
+    $(ButtonRateHumamMarginUp).on('click', function(){
+        var rate = parseFloat($(InputRateHumamMargin).val());
+        if(!isNaN(rate))
+        {
+            $(InputRateHumamMargin).val(rate + stepsize);
+            UpdateHumanMargin();    
+            CalculTotalLot();
+        }
+    })
+  
+    var ButtonRateHumamMarginDown = "#lotsimulate-rate_human_margindown";
+    $(ButtonRateHumamMarginDown).on('click', function(){
+        var rate = parseFloat($(InputRateHumamMargin).val());
+        if(!isNaN(rate))
+        {
+            
+            rate = rate - stepsize;
+           if(rate >= 10)
+           {
+                $(InputRateHumamMargin).val(rate );
+                UpdateHumanMargin();    
+                CalculTotalLot();
+           }
+        }
+    })
+
+
+    var ButtonInvestMarginUp = "#lotsimulate-rate_consumable_investement_marginup";
+    $(ButtonInvestMarginUp).on('click', function(){
+        var rate = parseFloat($(InputInvestMargin).val());
+        if(!isNaN(rate))
+        {
+            $(InputInvestMargin).val(rate + stepsize);
+            UpdateInvestMargin();    
+            CalculTotalLot();
+        }
+    })
+
+    var ButtonInvestMarginDown = "#lotsimulate-rate_consumable_investement_margindown";
+    $(ButtonInvestMarginDown).on('click', function(){
+        var rate = parseFloat($(InputInvestMargin).val());
+        if(!isNaN(rate))
+        {
+            
+            rate = rate - stepsize;
+           if(rate >= 0)
+            {
+                $(InputInvestMargin).val(rate);
+                UpdateInvestMargin();    
+                CalculTotalLot();
+           }
+        }
+    })
+
+    var ButtonRepayementMarginUp = "#lotsimulate-rate_repayement_marginup";
+    $(ButtonRepayementMarginUp).on('click', function(){
+        var rate = parseFloat($(InputRepayementMargin).val());
+        if(!isNaN(rate))
+        {
+            $(InputRepayementMargin).val(rate + stepsize);
+            UpdateRepayementMargin();    
+            CalculTotalLot();
+        }
+    })
+    var ButtonRepayementMarginDown = "#lotsimulate-rate_repayement_margindown";
+    $(ButtonRepayementMarginDown).on('click', function(){
+        var rate = parseFloat($(InputRepayementMargin).val());
+        if(!isNaN(rate))
+        {
+            
+             rate = rate - stepsize;
+            if(rate >= 0)
+            {
+                $(InputRepayementMargin).val(rate);
+                UpdateRepayementMargin();    
+                CalculTotalLot();
+            }
+        }
+    })
 
 
 
@@ -242,10 +368,14 @@ CalculTotalLot();
 function UpdateHumanMargin()
 {
     var totalcostwithmargin = "#lotsimulate-total_cost_human_with_margin";
-    var LotrateMargin = "#lotsimulate-rate_humain_margin";
+    var LotrateMargin = "#lotsimulate-rate_human_margin";
     var totalcost = "#lotsimulate-totalcosthuman";
     var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
-    $(totalcostwithmargin).val(resultattwithmargin);
+    if(isNaN(resultattwithmargin))
+    {
+        resultattwithmargin = 0;
+    }
+    $(totalcostwithmargin).val(resultattwithmargin.toFixed(2));
 
  
 }
@@ -255,7 +385,11 @@ function UpdateInvestMargin()
     var LotrateMargin = "#lotsimulate-rate_consumable_investement_margin";
     var totalcost = "#lotsimulate-totalcostinvest";
     var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
-    $(totalcostwithmargin).val(resultattwithmargin);
+    if(isNaN(resultattwithmargin))
+    {
+        resultattwithmargin = 0;
+    }
+    $(totalcostwithmargin).val(resultattwithmargin.toFixed(2));
  
 }
 
@@ -265,7 +399,11 @@ function UpdateRepayementMargin()
     var LotrateMargin = "#lotsimulate-rate_repayement_margin";
     var totalcost = "#lotsimulate-totalcostrepayement";
     var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
-    $(totalcostwithmargin).val(resultattwithmargin);
+    if(isNaN(resultattwithmargin))
+    {
+        resultattwithmargin = 0;
+    }
+    $(totalcostwithmargin).val(resultattwithmargin.toFixed(2));
 }
 
 

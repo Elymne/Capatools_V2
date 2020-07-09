@@ -15,6 +15,20 @@ use yii\db\ActiveRecord;
 class LotSimulate extends Lot
 {
 
+    /**
+     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
+     */
+    public function rules()
+    {
+        return [
+
+            ['rate_consumable_investement_margin', 'required', 'message' => 'Il faut un de tâche'],
+            ['rate_consumable_investement_margin', 'double', 'message' => 'Il faut un de tâche'],
+
+            ['capa_user_id', 'required', 'message' => 'Il faut un temps indiquer l\'intervenant de la tâche'],
+            ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
+        ];
+    }
     public $total_cost_human_with_margin;
     public $total_cost_invest_with_margin;
     public $total_cost_repayement_with_margin;
@@ -23,6 +37,15 @@ class LotSimulate extends Lot
     public $mean_lot_margin;
     public $support_cost;
     public $total_cost_lot_with_support;
+    public $ButtonRateHumamMarginup;
+    public $ButtonRateHumamMargindown;
+    public $ButtonInvestMarginup;
+    public $ButtonInvestMargindown;
+    public $ButtonRepayementMarginup;
+    public $ButtonRepayementMargindown;
+
+
+
 
     public function getTotalCostHuman()
     {
