@@ -12,11 +12,12 @@ use yii\helpers\ArrayHelper;
 AppAsset::register($this);
 $this->title = 'Liste des tâches';
 $lot = $model->GetCurrentLot();
-
+$hide = false;
 if ($lot->number != 0) {
     $this->title = $this->title  . " pour le lot " . $lot->title;
 } else {
     $this->title = $this->title  . " d'avant projet";
+    $hide = true;
 }
 
 
@@ -231,26 +232,32 @@ if ($lot->number != 0) {
 
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($taskOperational, "[{$i}]risk")->widget(
-                                                            Select2::classname(),
-                                                            [
+                                                        <?php
+                                                        if ($hide) {
 
-                                                                'theme' => Select2::THEME_MATERIAL,
-                                                                'name' => 'TaskRisk[{$i}]',
-                                                                'data' => ArrayHelper::map($risk, 'id', 'title'),
-                                                                'pluginLoading' => false,
-                                                                'options' => [
-                                                                    'placeholder' => 'Incetitude...',
-                                                                    'value' => 1,
-                                                                ],
-                                                                'pluginEvents' => [
-                                                                    'select2:select' => 'function(e) { 
+                                                            echo  $form->field($taskOperational, "[{$i}]risk")->hiddeninput(['value' => 1])->label('');
+                                                        } else {
+                                                            echo $form->field($taskOperational, "[{$i}]risk")->widget(
+                                                                Select2::classname(),
+                                                                [
+
+                                                                    'theme' => Select2::THEME_MATERIAL,
+                                                                    'name' => 'TaskRisk[{$i}]',
+                                                                    'data' => ArrayHelper::map($risk, 'id', 'title'),
+                                                                    'pluginLoading' => false,
+                                                                    'options' => [
+                                                                        'placeholder' => 'Incetitude...',
+                                                                        'value' => 1,
+                                                                    ],
+                                                                    'pluginEvents' => [
+                                                                        'select2:select' => 'function(e) { 
                                                                         OnCalculIncertitudelot(0);
                                                                     }',
-                                                                ],
+                                                                    ],
 
-                                                            ]
-                                                        )->label("Incertitude");
+                                                                ]
+                                                            )->label("Incertitude");
+                                                        }
                                                         ?>
                                                     </div>
                                                     <div class="col s1">
@@ -372,10 +379,12 @@ function OnCalculIncertitudelot(id)
 
     var Taskhourduration = "#tasklotcreatetaskform-"+ id +"-hour_duration";
     var hour = $(Taskhourduration).val() ;
-
+    console.log(hour);
     var SelectRisk = "#tasklotcreatetaskform-"+ id +"-risk";
     incertitude =  $(SelectRisk).val() ;
 
+    
+    console.log( $(SelectRisk));
     var res =CalculTempsincertitude(hour,day,incertitude);
     
     var SelectRiskDuration = "#tasklotcreatetaskform-"+ id +"-risk_duration";
