@@ -574,7 +574,7 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionCreateFirstStep()
     {
-        /* $model = new ProjectCreateFirstStepForm();
+        /*$model = new ProjectCreateFirstStepForm();
         $lots =  [new LotCreateFirstStepForm()];
 
         // Envoi par méthode POST.
@@ -679,13 +679,14 @@ class ProjectController extends Controller implements ServiceInterface
             ]
         );*/
         $lot = LotSimulate::getOneById(1);
-
-        return $this->render(
+        $lot->getTotalCostHuman();
+        /* return $this->render(
             'lotSimulation',
             [
                 'lot' => $lot
             ]
         );
+        return "";
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace app\models\projects;
 
+
 use yii\db\ActiveRecord;
 
 /**
@@ -22,11 +23,10 @@ class LotSimulate extends Lot
     {
         return [
 
-            ['rate_consumable_investement_margin', 'required', 'message' => 'Il faut un de tâche'],
-            ['rate_consumable_investement_margin', 'double', 'message' => 'Il faut un de tâche'],
+            ['rate_consumable_investement_margin', 'required', 'message' => 'Il faut une marge d\'investissement'],
+            ['rate_human_margin', 'required', 'message' => 'Il faut une marge sur le temps humain'],
+            ['rate_repayement_margin', 'required', 'message' => 'Il faut une marge sur le reversement laboratoire'],
 
-            ['capa_user_id', 'required', 'message' => 'Il faut un temps indiquer l\'intervenant de la tâche'],
-            ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
         ];
     }
     public $total_cost_human_with_margin;
@@ -43,22 +43,4 @@ class LotSimulate extends Lot
     public $ButtonInvestMargindown;
     public $ButtonRepayementMarginup;
     public $ButtonRepayementMargindown;
-
-
-
-
-    public function getTotalCostHuman()
-    {
-        return "1000";
-    }
-
-    public function getTotalCostInvest()
-    {
-        return "2200";
-    }
-
-    public function getTotalCostRepayement()
-    {
-        return "5000";
-    }
 }

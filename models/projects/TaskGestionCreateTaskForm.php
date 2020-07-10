@@ -25,9 +25,11 @@ class TaskGestionCreateTaskForm extends Task
     public function rules()
     {
         return [
-
-            ['title', 'required', 'message' => 'Il faut un de tâche'],
-            ['capa_user_id', 'required', 'message' => 'Il faut un temps indiquer l\'intervenant de la tâche'],
+            ['title', 'required', 'message' => 'Il faut un titre de tâche'],
+            ['capa_user_id', 'required', 'message' => 'Il faut indiquer l\'intervenant de la tâche'],
+            ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
+            ['day_duration', 'required', 'message' => 'Il faut renseigner le nombre de jour'],
+            ['hour_duration', 'required', 'message' => 'Il faut renseigner le nombre d\'heure'],
             ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
         ];
     }

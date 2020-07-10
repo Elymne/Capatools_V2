@@ -12,12 +12,12 @@ use yii\db\ActiveRecord;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class Expense extends ActiveRecord
+class Investment extends ActiveRecord
 {
 
     public static function tableName()
     {
-        return 'expense';
+        return 'investment';
     }
 
     public static function getAll()
@@ -30,8 +30,8 @@ class Expense extends ActiveRecord
         return static::find()->where(['id' => $id])->one();
     }
 
-    public function getProject()
+    public function getLot()
     {
-        return $this->hasOne(Project::className(), ['id' => 'project_id']);
+        return $this->hasOne(Lot::className(), ['id' => 'project_id']);
     }
 }
