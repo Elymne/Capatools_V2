@@ -26,6 +26,7 @@ use app\models\projects\LotSimulate;
 use app\models\projects\LotCreateFirstStepForm;
 use app\models\projects\ProjectCreateFirstStepForm;
 use app\models\projects\ProjectCreateTaskForm;
+use app\models\projects\ProjectSimulate;
 use app\models\projects\Risk;
 use app\models\projects\Task;
 use app\models\projects\TaskGestionCreateTaskForm;
@@ -679,11 +680,16 @@ class ProjectController extends Controller implements ServiceInterface
             ]
         );*/
         $lot = LotSimulate::getOneById(1);
+        $project = ProjectSimulate::getOneById(1);
+        $lotavp = $project->getLotaventprojet();
 
+        //echo $lotavp->TotalCostInvest;
         return $this->render(
-            'lotSimulation',
+            'projectSimulation',
             [
-                'lot' => $lot
+                'lot' => $lot,
+                'lotavp' => $lotavp,
+                'project' => $project
             ]
         );
     }

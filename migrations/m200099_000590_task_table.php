@@ -41,13 +41,25 @@ class m200099_000590_task_table extends Migration
         );
 
         $this->insert('{{%task}}', [
+            'title' => "Fumer un bon cigare",
+            'day_duration' => 23,
+            'hour_duration' => 2,
+
+            'price' => 15000,
+            'risk' => 'Normale',
+            'risk_duration' => '1j 0h',
+            'task_category' => 'Tâche',
+            'capa_user_id' => 2,
+            'lot_id' => 3,
+        ]);
+        $this->insert('{{%task}}', [
             'title' => "Faire une réunion avec nous même",
             'day_duration' => 23,
             'hour_duration' => 2,
 
             'price' => 1456,
             'risk' => 'Normale',
-            'risk_duration' => 3,
+            'risk_duration' => '3j 0h',
             'task_category' => 'Management',
             'capa_user_id' => 2,
             'lot_id' => 1,
@@ -59,7 +71,7 @@ class m200099_000590_task_table extends Migration
             'price' => 1456,
             'risk' => 'Normale',
             'task_category' => 'Tâche',
-            'risk_duration' => 3,
+            'risk_duration' => '3j 0h',
             'capa_user_id' => 2,
             'lot_id' => 1,
         ]);
@@ -71,7 +83,7 @@ class m200099_000590_task_table extends Migration
             'price' => 123,
             'risk' => 'Très haut',
             'task_category' => 'Tâche',
-            'risk_duration' => 3,
+            'risk_duration' => '3j 0h',
             'capa_user_id' => 3,
             'lot_id' => 1,
         ]);
@@ -83,7 +95,7 @@ class m200099_000590_task_table extends Migration
             'price' => 4005,
             'risk' => 'Très haut',
             'task_category' => 'Management',
-            'risk_duration' => 3,
+            'risk_duration' => '3j 0h',
             'capa_user_id' => 6,
             'lot_id' => 2,
         ]);
@@ -94,7 +106,7 @@ class m200099_000590_task_table extends Migration
             'price' => 4005,
             'risk' => 'Très haut',
             'task_category' => 'Tâche',
-            'risk_duration' => 3,
+            'risk_duration' => '3j 0h',
             'capa_user_id' => 6,
             'lot_id' => 2,
         ]);

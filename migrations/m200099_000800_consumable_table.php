@@ -24,6 +24,14 @@ class m200099_000800_consumable_table extends Migration
         );
 
         $this->insert('{{%consumable}}', [
+            'id' => 3,
+            'title' => "Un cigare cubain",
+            'price' => 1555,
+            'type' => 'Consommable',
+            'lot_id' => 3,
+        ]);
+
+        $this->insert('{{%consumable}}', [
             'id' => 1,
             'title' => "Orbe rouge brisé",
             'price' => 1200,

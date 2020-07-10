@@ -45,6 +45,13 @@ class m200099_000580_lot_table extends Migration
             'comment' => 'Petit lot pour prendre des vacances',
             'project_id' => 1
         ]);
+        $this->insert('{{%lot}}', [
+            'number' => 0,
+            'title' => "Avant projet",
+            'status' => 'En cours',
+            'comment' => 'Temps de chiffrage à la maison',
+            'project_id' => 1
+        ]);
     }
 
     public function safeDown()

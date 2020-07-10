@@ -104,4 +104,9 @@ class Project extends ActiveRecord
     {
         return $this->hasMany(Millestone::className(), ['project_id' => 'id']);
     }
+    public function getLotaventprojet()
+    {
+
+        return Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
+    }
 }
