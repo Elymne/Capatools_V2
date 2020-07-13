@@ -67,7 +67,7 @@ class Laboratory extends ActiveRecord implements JsonSerializable
 
     /**
      * Fait la jonction entre un laboratoire et sa cellule.
-     * Créer un attribut "cellules" qui sera un objet Cellule.
+     * Créer un attribut "cellule" qui sera un objet Cellule.
      */
     public function getCellule()
     {
@@ -86,7 +86,7 @@ class Laboratory extends ActiveRecord implements JsonSerializable
             'price_contributor_hour' => $this->price_contributor_hour,
             'price_ec_day' => $this->price_ec_day,
             'price_ec_hour' => $this->price_ec_hour,
-            'cellule_id' => $this->cellule_id,
+            'cellule' => $this->cellule_id,
         );
     }
 }

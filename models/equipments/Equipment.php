@@ -56,10 +56,10 @@ class Equipment extends ActiveRecord implements JsonSerializable
         return array(
             'id' => $this->id,
             'name' => $this->name,
-            'price_day' => $this->price_contributor_day,
-            'price_hour' => $this->price_contributor_hour,
-            'type' => $this->price_ec_day,
-            'laboratory_id' => $this->price_ec_hour
+            'price_day' => $this->price_day,
+            'price_hour' => $this->price_hour,
+            'type' => $this->type,
+            'laboratory_id' => $this->laboratory_id
         );
     }
 }

@@ -203,7 +203,7 @@ ProjectCreateThirdStepAsset::register($this);
                                 <div class="input-field col s12">
 
                                     <?php DynamicFormWidget::begin([
-                                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                        'widgetContainer' => 'dynamicform_wrapper_equipment', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                         'widgetBody' => '.container-items-equipment', // required: css class selector
                                         'widgetItem' => '.item-equipment', // required: css class
                                         'limit' => 10, // the maximum times, an element can be cloned (default 999)
@@ -288,7 +288,7 @@ ProjectCreateThirdStepAsset::register($this);
                                 <div class="input-field col s12">
 
                                     <?php DynamicFormWidget::begin([
-                                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                        'widgetContainer' => 'dynamicform_wrapper_contributor', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                         'widgetBody' => '.container-items-labocontributor', // required: css class selector
                                         'widgetItem' => '.item-labocontributor', // required: css class
                                         'limit' => 10, // the maximum times, an element can be cloned (default 999)
@@ -329,7 +329,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]price_day")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("price_day") ?>
+                                                        <?= $form->field($contributor, "[{$i}]price_day")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
@@ -392,14 +392,14 @@ ProjectCreateThirdStepAsset::register($this);
     ?>
 </div>
 
-<!-- Utilisation : envoi de données concernant les laboratoires. -->
+<!-- Utilisation : envoi de données concernant les équipements/matériel. -->
 <div id="equipment-data-target" style="display: none;">
     <?php
     // Transformation des données sous format JSON.
-    $ld = array_map(function ($data) {
+    $ed = array_map(function ($data) {
         return $data->jsonSerialize();
-    }, $laboratoriesData);
+    }, $equipmentsData);
     // Envoi de données.
-    echo json_encode($ld);
+    echo json_encode($ed);
     ?>
 </div>
