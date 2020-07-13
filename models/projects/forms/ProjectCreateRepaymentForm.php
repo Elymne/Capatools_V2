@@ -2,6 +2,8 @@
 
 namespace app\models\projects\forms;
 
+use app\models\projects\Consumable;
+
 /**
  * Classe relative au modèle métier des dépenses.
  * Celle-ci permet de créer un formulaire de création de dépenses sur la création d'un projet et de vérifier la validité des données inscrites dans les champs.

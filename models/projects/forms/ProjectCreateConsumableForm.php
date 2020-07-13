@@ -1,7 +1,8 @@
- * 
 <?php
 
 namespace app\models\projects\forms;
+
+use app\models\projects\Consumable;
 
 /**
  * Classe relative au modèle métier des dépenses.
