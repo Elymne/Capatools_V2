@@ -139,45 +139,47 @@ $(() => {
             getEquipementsOptionsListFromSelectedLaboratory(equipmentsData, laboratoriesData),
         )
 
-        /**
-         * Callback onChange sur la liste déroulante des matériels de l'élément ajouté.
-         * Permet de reclaculer le coût d'utilisation d'un matériel.
-         */
-        $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-equipmentselected`).change(() => {
-            const result = calculateEquipmentPrice(
-                $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-nb_days`).val(),
-                $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-nb_hours`).val(),
-                getValueFromEquipmentSelectedByIndex(equipmentsStateList, nbEquipmentLineDuplicated),
-            )
+        for (let i = 0; i <= nbEquipmentLineDuplicated; i++) {
+            /**
+             * Callback onChange sur la liste déroulante des matériels de l'élément ajouté.
+             * Permet de reclaculer le coût d'utilisation d'un matériel.
+             */
+            $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).change(() => {
+                const result = calculateEquipmentPrice(
+                    $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+                    $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+                    getValueFromEquipmentSelectedByIndex(equipmentsStateList, nbEquipmentLineDuplicated),
+                )
 
-            $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-price`).val(result)
-        })
+                $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
+            })
 
-        /**
-         * Callback onInput sur le champ de sélection des jours d'utilisation d'un élément matériel ajouté.
-         * Permet de reclaculer le coût d'utilisation d'un matériel.
-         */
-        $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-nb_days`).on("input", () => {
-            const result = calculateEquipmentPrice(
-                $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-nb_days`).val(),
-                $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-nb_hours`).val(),
-                getValueFromEquipmentSelectedByIndex(equipmentsStateList, nbEquipmentLineDuplicated),
-            )
-            $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-price`).val(result)
-        })
+            /**
+             * Callback onInput sur le champ de sélection des jours d'utilisation d'un élément matériel ajouté.
+             * Permet de reclaculer le coût d'utilisation d'un matériel.
+             */
+            $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).on("input", () => {
+                const result = calculateEquipmentPrice(
+                    $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+                    $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+                    getValueFromEquipmentSelectedByIndex(equipmentsStateList, nbEquipmentLineDuplicated),
+                )
+                $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
+            })
 
-        /**
-         * Callback onInput sur le champ de sélection des heures d'utilisation d'un élément matériel ajouté.
-         * Permet de recalculer le coût d'utilisation d'un matériel.
-         */
-        $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-nb_hours`).on("input", () => {
-            const result = calculateEquipmentPrice(
-                $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-nb_days`).val(),
-                $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-nb_hours`).val(),
-                getValueFromEquipmentSelectedByIndex(equipmentsStateList, nbEquipmentLineDuplicated),
-            )
-            $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-price`).val(result)
-        })
+            /**
+             * Callback onInput sur le champ de sélection des heures d'utilisation d'un élément matériel ajouté.
+             * Permet de recalculer le coût d'utilisation d'un matériel.
+             */
+            $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).on("input", () => {
+                const result = calculateEquipmentPrice(
+                    $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+                    $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+                    getValueFromEquipmentSelectedByIndex(equipmentsStateList, nbEquipmentLineDuplicated),
+                )
+                $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
+            })
+        }
     })
 
     /**
@@ -222,31 +224,33 @@ $(() => {
     $(".dynamicform_wrapper_contributor").on("afterInsert", function (e, item) {
         nbContributorLineDuplicated++
 
-        /**
-         * Callback onInput sur le champ de sélection des jours pris par un intervenant.
-         * Permet de reclaculer le coût d'un intervenant.
-         */
-        $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-nb_days`).on("input", () => {
-            const result = calculateContributorPrice(
-                $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-nb_days`).val(),
-                $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-nb_hours`).val(),
-                getValueFromLaboratorySelected(laboratoriesData),
-            )
-            $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-price_day`).val(result)
-        })
+        for (let i = 0; i <= nbContributorLineDuplicated; i++) {
+            /**
+             * Callback onInput sur le champ de sélection des jours pris par un intervenant.
+             * Permet de reclaculer le coût d'un intervenant.
+             */
+            $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).on("input", () => {
+                const result = calculateContributorPrice(
+                    $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+                    $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
+                    getValueFromLaboratorySelected(laboratoriesData),
+                )
+                $(`#projectcreatelaboratorycontributorform-${i}-price_day`).val(result)
+            })
 
-        /**
-         * Callback onInput sur le champ de sélection des heures prises par un intervenant.
-         * Permet de reclaculer le coût d'un intervenant.
-         */
-        $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-nb_hours`).on("input", () => {
-            const result = calculateContributorPrice(
-                $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-nb_days`).val(),
-                $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-nb_hours`).val(),
-                getValueFromLaboratorySelected(laboratoriesData),
-            )
-            $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-price_day`).val(result)
-        })
+            /**
+             * Callback onInput sur le champ de sélection des heures prises par un intervenant.
+             * Permet de reclaculer le coût d'un intervenant.
+             */
+            $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).on("input", () => {
+                const result = calculateContributorPrice(
+                    $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+                    $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
+                    getValueFromLaboratorySelected(laboratoriesData),
+                )
+                $(`#projectcreatelaboratorycontributorform-${i}-price_day`).val(result)
+            })
+        }
     })
 
     $(".dynamicform_wrapper_contributor").on("afterDelete", function (e) {
