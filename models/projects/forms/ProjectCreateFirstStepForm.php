@@ -25,6 +25,8 @@ class ProjectCreateFirstStepForm extends Project
     public $combobox_repayment_checked;
     public $combobox_lot_checked;
 
+    public $management_rate;
+
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
