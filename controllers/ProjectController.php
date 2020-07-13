@@ -529,17 +529,16 @@ class ProjectController extends Controller implements ServiceInterface
                 $model->draft = true;
                 $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
 
-
                 // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
                 $model->save();
 
                 // Création d'un lot d'avant-projet.
-                $lotProscription = new Lot();
-                $lotProscription->number = 0;
-                $lotProscription->title = "Lot d'avant-projet";
-                $lotProscription->status = Lot::STATE_IN_PROGRESS;
-                $lotProscription->project_id = $model->id;
-                $lotProscription->save();
+                $lotProspection = new Lot();
+                $lotProspection->number = 0;
+                $lotProspection->title = "Lot d'avant-projet";
+                $lotProspection->status = Lot::STATE_IN_PROGRESS;
+                $lotProspection->project_id = $model->id;
+                $lotProspection->save();
 
                 // Création des lots.
                 // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
@@ -591,7 +590,7 @@ class ProjectController extends Controller implements ServiceInterface
         $model = new ProjectCreateTaskForm();
         $tasksGestions = [new TaskGestionCreateTaskForm];
         $tasksOperational = [new TaskLotCreateTaskForm];
-        $risk = risk::find()->all();
+        $risk = Risk::find()->all();
         $model->project_id = $project_id;
         $model->number = $number;
 
@@ -600,9 +599,11 @@ class ProjectController extends Controller implements ServiceInterface
         $cel = new Cellule();
         $cel->id = $idcellule;
         $celluleUsers = $cel->capaUser;
+
         if ($model->load(Yii::$app->request->post())) {
             echo 'modelvalid';
             $isValid = true;
+
             if ($number != 0) {
                 // Préparation de tous les modèles de Task de gestion
                 $tasksGestions = Model::createMultiple(TaskGestionCreateTaskForm::className(), $tasksGestions);
@@ -629,7 +630,6 @@ class ProjectController extends Controller implements ServiceInterface
                     $isValid = false;
                 }
             }
-
 
             // Si tous les modèles de taches sont valides.
             if ($isValid) {

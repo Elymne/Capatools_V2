@@ -1,6 +1,7 @@
 <?php
 
 use app\assets\AppAsset;
+use app\assets\projects\ProjectCreateTaskAsset;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -10,6 +11,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
 
 AppAsset::register($this);
+ProjectCreateTaskAsset::register($this);
+
+
 $this->title = 'Liste des tâches';
 $lot = $model->GetCurrentLot();
 $hide = false;
@@ -19,8 +23,6 @@ if ($lot->number != 0) {
     $this->title = $this->title  . " d'avant projet";
     $hide = true;
 }
-
-
 
 ?>
 <?= TopTitle::widget(['title' => $this->title]) ?>
