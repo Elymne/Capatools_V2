@@ -153,8 +153,8 @@ class ProjectController extends Controller implements ServiceInterface
                     ],
                     [
                         'Priorite' => 1,
-                        'url' => 'project/ou-verite-lol',
-                        'label' => 'Ici, c\'est le laboratoire',
+                        'url' => 'project/test-view-third',
+                        'label' => 'Tester la 3eme étape',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_NONE
                     ]
                 ]
@@ -683,9 +683,9 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
-    public function actionOuVeriteLol()
+    public function actionTestViewThird()
     {
-        MenuSelectorHelper::setMenuProjectCreate();
+        MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
             'createThirdStep',
             [

@@ -16,6 +16,11 @@ class ProjectCreateRepaymentForm extends Consumable
 {
 
     /**
+     * Liste d'attributs relatif au formulaire.
+     */
+    public $laboratorySelected;
+
+    /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
