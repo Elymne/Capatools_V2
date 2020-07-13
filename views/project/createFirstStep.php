@@ -1,7 +1,7 @@
 <?php
 
 use app\assets\AppAsset;
-use app\assets\projects\ProjectCreateFirstPhaseAsset;
+use app\assets\projects\ProjectCreateFirstStepAsset;
 use app\models\projects\Project;
 use app\widgets\TopTitle;
 use wbraganca\dynamicform\DynamicFormWidget;
@@ -14,8 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' 
 $this->params['breadcrumbs'][] = 'Update';
 
 AppAsset::register($this);
-ProjectCreateFirstPhaseAsset::register($this);
-
+ProjectCreateFirstStepAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>

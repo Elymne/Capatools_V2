@@ -16,28 +16,17 @@ use yii\db\ActiveRecord;
 class EquipmentRepayment extends ActiveRecord
 {
 
+    const RISK_LOW = 'Faible';
+    const RISK_NORMAL = 'Normale';
+    const RISK_HIGH = "Haute";
+    const RISKS = [self::RISK_LOW, self::RISK_NORMAL, self::RISK_HIGH];
+
     /**
      * Utilisé pour définir quelle table est associée à cette classe.
      */
     public static function tableName()
     {
         return 'equipment_repayment';
-    }
-
-    /**
-     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
-     */
-    public function rules()
-    {
-        return [
-            ['nb_days', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
-            ['nb_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
-            ['nb_hours', 'required', 'message' => 'Veuillez renseigner le nombre d\'heures'],
-            ['nb_hours', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
-            ['risk', 'required', 'message' => 'Veuillez spécifier la valeur d\'incertitude'],
-            ['risk_days', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
-            ['risk_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
-        ];
     }
 
     /**

@@ -19,19 +19,24 @@ use app\models\projects\ProjectSearch;
 use app\models\users\CapaUser;
 use app\models\companies\Contact;
 use app\models\companies\Company;
-use app\models\projects\forms\ProjectCreateConsumableForm;
-use app\models\projects\forms\ProjectCreateFirstStepForm;
-use app\models\projects\forms\ProjectCreateLotForm;
-use app\models\projects\Lot;
 use app\models\projects\LotSimulate;
 use app\models\projects\LotCreateFirstStepForm;
-use app\models\projects\ProjectCreateFirstStepForm;
 use app\models\projects\ProjectCreateTaskForm;
 use app\models\projects\Risk;
 use app\models\projects\Task;
 use app\models\projects\TaskGestionCreateTaskForm;
 use app\models\projects\TaskLotCreateTaskForm;
-use app\models\projects\ProjectCreateLotForm;
+use app\models\equipments\Equipment;
+use app\models\laboratories\Laboratory;
+use app\models\laboratories\LaboratoryContributor;
+use app\models\projects\forms\ProjectCreateConsumableForm;
+use app\models\projects\forms\ProjectCreateEquipmentRepaymentForm;
+use app\models\projects\forms\ProjectCreateExpenseForm;
+use app\models\projects\forms\ProjectCreateFirstStepForm;
+use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
+use app\models\projects\forms\ProjectCreateLotForm;
+use app\models\projects\forms\ProjectCreateRepaymentForm;
+use app\models\projects\Lot;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -224,30 +229,6 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionCreate()
     {
-
-        $model = new ProjectCreateForm();
-
-        // On récupère tous les clients pour la liste déroulantes.
-        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
-        $companiesNames = array_merge($companiesNames);
-
-        // On récupère tous les clients pour la liste déroulantes.
-        $contactsNames = ArrayHelper::map(Contact::find()->all(), 'id', ['surname', 'firstname']);
-        $contactsNames = array_merge($companiesNames);
-
-        // Validation du devis depuis la vue de création.
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-        }
-
-        MenuSelectorHelper::setMenuProjectCreate();
-        return $this->render(
-            'create',
-            [
-                'model' => $model,
-                'companiesNames' => $companiesNames,
-                'contactsNames' => $contactsNames
-            ]
-        );
     }
 
     /**
@@ -275,78 +256,6 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionUpdate(int $id)
     {
-
-        // Get the models values from devis.
-        $model =  ProjectUpdateForm::findOne($id);
-        $model->company_name = $model->company->name;
-
-        // Get file model.
-        $fileModel = new UploadFile();
-
-        // Separation de l'entité contributors du model devis.
-        $contributors = $model->contributors;
-
-        foreach ($contributors as $contributor) {
-            $contributor->username = CapaUser::findOne(['id' => $contributor->capa_user_id])->username;
-        }
-
-        // Here we type a specific request because we only want names of clients.
-        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
-        $companiesNames = array_merge($companiesNames);
-
-        // Here we type a specific request because we only want names of users.
-        $usersNames = ArrayHelper::map(CapaUser::find()->all(), 'id', 'username');
-        $usersNames = array_merge($usersNames);
-
-        // Setup the total price HT.
-        $max_price = 0;
-
-
-        if ($model->load(Yii::$app->request->post())) {
-
-            if ($model->validate()) {
-
-                // Load contributors into model.
-                Model::loadMultiple($contributors, Yii::$app->request->post());
-
-                // Get the company data with name insert in field.
-                $company = Company::find()->where(['name' =>  $model->company_name])->one();
-
-                // Save each contributor.
-                foreach ($contributors as $contributor) {
-
-                    $contributor->devis_id = $model->id;
-                    $contributor->capa_user_id = CapaUser::findByUsername($contributor->username)->id;
-
-                    $contributor->save();
-                }
-
-                // Store the file in uploads folder and his name in db.
-                $fileModel->file = UploadedFile::getInstance($fileModel, 'file');
-                UploadFileHelper::upload($fileModel, (string) $model->id_capa, $model->id);
-
-                // Set all milestones prices to devis price.
-                $model->price = $max_price;
-                $model->company_id = $company->id;
-
-                // Save the Devis change.
-                $model->save();
-
-                MenuSelectorHelper::setMenuProjectNone();
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        }
-
-        MenuSelectorHelper::setMenuProjectNone();
-        return $this->render(
-            'update',
-            [
-                'model' => $model,
-                'companiesNames' => $companiesNames,
-                'usersNames' => $usersNames,
-                'fileModel' => $fileModel
-            ]
-        );
     }
 
     /**
@@ -378,21 +287,6 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionUpdateStatus(int $id, int $status)
     {
-        $model = $this->findModel($id);
-
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::OPERATIONAL_MANAGER_DEVIS,
-                UserRoleEnum::ACCOUNTING_SUPPORT_DEVIS
-            ])
-        ) $this->setStatus($model, $status);
-
-
-        MenuSelectorHelper::setMenuProjectNone();
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-            'fileModel' => UploadFile::getByDevis($id)
-        ]);
     }
 
     /**
@@ -417,12 +311,12 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionDownloadFile(int $id)
     {
-        $fileModel = UploadFile::getByDevis($id);
+        // $fileModel = UploadFile::getByDevis($id);
 
-        if ($fileModel != null) {
-            $pathFile = $fileModel->name . '.' . $fileModel->type;
-            UploadFileHelper::downloadFile($pathFile);
-        }
+        // if ($fileModel != null) {
+        //     $pathFile = $fileModel->name . '.' . $fileModel->type;
+        //     UploadFileHelper::downloadFile($pathFile);
+        // }
     }
 
     /**
@@ -432,8 +326,8 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionDownloadExcel(int $id)
     {
-        $model = $this->findModel($id);
-        if ($model != null) ExcelExportService::exportModelDataToExcel($model, ExcelExportService::DEVIS_TYPE);
+        // $model = $this->findModel($id);
+        // if ($model != null) ExcelExportService::exportModelDataToExcel($model, ExcelExportService::DEVIS_TYPE);
     }
 
     /**
@@ -481,7 +375,7 @@ class ProjectController extends Controller implements ServiceInterface
             ]
         ]);
 
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT;
         return $pdf->render();
     }
 
@@ -554,7 +448,7 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionViewpdf($id)
     {
 
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::DEVIS_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT_NONE;
 
         $model = $this->findModel($id);
 
@@ -582,8 +476,8 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionCreateFirstStep()
     {
-        /* $model = new ProjectCreateFirstStepForm();
-        $lots =  [new LotCreateFirstStepForm()];
+        $model = new ProjectCreateFirstStepForm();
+        $lots =  [new ProjectCreateLotForm()];
 
         // Envoi par méthode POST.
         if ($model->load(Yii::$app->request->post())) {
@@ -685,7 +579,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'model' => $model,
                 'lots' => $lots
             ]
-        );*/
+        );
         $lot = LotSimulate::getOneById(1);
 
         return $this->render(
@@ -796,6 +690,23 @@ class ProjectController extends Controller implements ServiceInterface
                 'tasksOperational' => (empty($tasksOperational)) ? [new TaskLotCreateTaskForm] : $tasksOperational,
                 'risk' => $risk,
 
+            ]
+        );
+    }
+
+    public function actionOuVeriteLol()
+    {
+        MenuSelectorHelper::setMenuProjectCreate();
+        return $this->render(
+            'createThirdStep',
+            [
+                'laboratoriesData' => Laboratory::getAll(),
+                'equipmentsData' => Equipment::getAll(),
+                'repayment' => new ProjectCreateRepaymentForm(),
+                'consumables' => [new ProjectCreateConsumableForm()],
+                'expenses' => [new ProjectCreateExpenseForm()],
+                'equipments' => [new ProjectCreateEquipmentRepaymentForm()],
+                'contributors' => [new ProjectCreateLaboratoryContributorForm()]
             ]
         );
     }
