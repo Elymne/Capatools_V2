@@ -28,13 +28,14 @@ class ProjectCreateEquipmentRepaymentForm extends EquipmentRepayment
     public function rules()
     {
         return [
+            [['equipmentSelected', 'riskSelected'], 'safe'],
             ['nb_days', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
             ['nb_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
             ['nb_hours', 'required', 'message' => 'Veuillez renseigner le nombre d\'heures'],
             ['nb_hours', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
             ['risk', 'required', 'message' => 'Veuillez spécifier la valeur d\'incertitude'],
-            ['risk_days', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
-            ['risk_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
+            ['risk_day', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
+            ['risk_day', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
         ];
     }
 }

@@ -10,7 +10,7 @@ class m200099_000840_equipment_repayment_table extends Migration
 
         $this->createTable('{{%equipment_repayment}}', [
             'id' => $this->primaryKey(),
-            'nb_days' => $this->string()->notNull(),
+            'nb_days' => $this->integer()->notNull(),
             'nb_hours' => $this->integer()->defaultValue(0),
             'price' => $this->integer()->defaultValue(0),
             'risk' => $this->string()->notNull(),
