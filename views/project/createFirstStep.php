@@ -1,7 +1,7 @@
 <?php
 
 use app\assets\AppAsset;
-use app\assets\projects\ProjectCreateFirstPhaseAsset;
+use app\assets\projects\ProjectCreateFirstStepAsset;
 use app\models\projects\Project;
 use app\widgets\TopTitle;
 use wbraganca\dynamicform\DynamicFormWidget;
@@ -9,13 +9,12 @@ use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Création d\'un projet - paramètres généraux';
-$this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Project', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 
 AppAsset::register($this);
-ProjectCreateFirstPhaseAsset::register($this);
-
+ProjectCreateFirstStepAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>

@@ -15,6 +15,17 @@ use yii\db\ActiveRecord;
 class Consumable extends ActiveRecord
 {
 
+    const TYPE_EXTERNAL_DELIVERY = "Prestation externe";
+    const TYPE_CONSUMABLE = "Consommable";
+    const TYPE_INTERNAL_DELIVERY = "Prestation interne";
+    const TYPE_SECONDARY_INVESTMENT = "Investissement éventuels";
+
+    const TYPES = [
+        1 => self::TYPE_EXTERNAL_DELIVERY,
+        2 => self::TYPE_CONSUMABLE,
+        3 => self::TYPE_INTERNAL_DELIVERY
+    ];
+
     public static function tableName()
     {
         return 'consumable';
