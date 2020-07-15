@@ -16,8 +16,6 @@ use app\models\projects\ProjectCreateTaskForm;
 use app\models\projects\ProjectSimulate;
 use app\models\projects\Risk;
 use app\models\projects\Task;
-use app\models\projects\TaskGestionCreateTaskForm;
-use app\models\projects\TaskLotCreateTaskForm;
 use app\models\equipments\Equipment;
 use app\models\laboratories\Laboratory;
 use app\models\projects\forms\ProjectCreateConsumableForm;
@@ -27,6 +25,8 @@ use app\models\projects\forms\ProjectCreateFirstStepForm;
 use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
 use app\models\projects\forms\ProjectCreateRepaymentForm;
+use app\models\projects\ProjectCreateGestionTaskForm;
+use app\models\projects\ProjectCreateLotTaskForm;
 use app\models\projects\Lot;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
@@ -595,8 +595,8 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionTask($number, $project_id)
     {
         $model = new ProjectCreateTaskForm();
-        $tasksGestions = [new TaskGestionCreateTaskForm];
-        $tasksOperational = [new TaskLotCreateTaskForm];
+        $tasksGestions = [new ProjectCreateGestionTaskForm];
+        $tasksOperational = [new ProjectCreateLotTaskForm];
         $risk = risk::find()->all();
         $model->project_id = $project_id;
         $model->number = $number;
@@ -681,8 +681,8 @@ class ProjectController extends Controller implements ServiceInterface
             [
                 'model' => $model,
                 'celluleUsers' => $celluleUsers,
-                'tasksGestions' => (empty($tasksGestions)) ? [new TaskGestionCreateTaskForm] : $tasksGestions,
-                'tasksOperational' => (empty($tasksOperational)) ? [new TaskLotCreateTaskForm] : $tasksOperational,
+                'tasksGestions' => (empty($tasksGestions)) ? [new ProjectCreateGestionTaskForm] : $tasksGestions,
+                'tasksOperational' => (empty($tasksOperational)) ? [new ProjectCreateLotTaskForm] : $tasksOperational,
                 'risk' => $risk,
 
             ]

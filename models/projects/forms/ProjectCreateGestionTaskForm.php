@@ -15,7 +15,7 @@ use phpDocumentor\Reflection\Types\Null_;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class TaskGestionCreateTaskForm extends Task
+class ProjectCreateGestionTaskForm extends Task
 {
 
 
