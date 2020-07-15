@@ -598,7 +598,7 @@ class ProjectController extends Controller implements ServiceInterface
         $idcellule = Yii::$app->user->identity->cellule_id;
         $cel = new Cellule();
         $cel->id = $idcellule;
-        $celluleUsers = $cel->capaUser;
+        $celluleUsers = $cel->capaUsers;
 
         if ($model->load(Yii::$app->request->post())) {
             echo 'modelvalid';

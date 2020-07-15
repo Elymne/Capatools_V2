@@ -16,7 +16,7 @@ class ProjectCreateTaskAsset extends AssetBundle
 
     public $css = [];
 
-    public $js =  ['js/projects/createTaskStep.js'];
+    public $js =  ['js/projects/createTask.js'];
 
     public $depends = [
         'yii\web\YiiAsset',
