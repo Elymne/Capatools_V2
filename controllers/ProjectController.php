@@ -18,7 +18,10 @@ use app\models\projects\Task;
 use app\models\projects\TaskGestionCreateTaskForm;
 use app\models\projects\TaskLotCreateTaskForm;
 use app\models\equipments\Equipment;
+use app\models\equipments\EquipmentRepayment;
 use app\models\laboratories\Laboratory;
+use app\models\laboratories\LaboratoryContributor;
+use app\models\projects\Consumable;
 use app\models\projects\forms\ProjectCreateConsumableForm;
 use app\models\projects\forms\ProjectCreateEquipmentRepaymentForm;
 use app\models\projects\forms\ProjectCreateExpenseForm;
@@ -153,8 +156,8 @@ class ProjectController extends Controller implements ServiceInterface
                     ],
                     [
                         'Priorite' => 1,
-                        'url' => 'project/test-view-third',
-                        'label' => 'Tester la 3eme étape',
+                        'url' => 'project/create-third-step',
+                        'label' => '3eme étape (controller)',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_NONE
                     ]
                 ]
@@ -556,6 +559,7 @@ class ProjectController extends Controller implements ServiceInterface
 
                     $lot->save();
                 }
+                // On redirige vers la prochaine étape.
                 Yii::$app->response->redirect(['project/task', 'number' => 0, 'project_id' => $model->id]);
             }
         }
@@ -665,8 +669,8 @@ class ProjectController extends Controller implements ServiceInterface
                     $taskOperational->save();
                 }
 
-                /////TODO SACHA 
-                ///redirect du lien
+                // On redirige vers la prochaine étape.
+                Yii::$app->response->redirect(['project/create-third-step', 'number' => $model->number, 'project_id' => $model->id]);
             }
         }
         MenuSelectorHelper::setMenuProjectCreate();
@@ -678,24 +682,106 @@ class ProjectController extends Controller implements ServiceInterface
                 'tasksGestions' => (empty($tasksGestions)) ? [new TaskGestionCreateTaskForm] : $tasksGestions,
                 'tasksOperational' => (empty($tasksOperational)) ? [new TaskLotCreateTaskForm] : $tasksOperational,
                 'risk' => $risk,
-
             ]
         );
     }
 
-    public function actionTestViewThird()
+    /**
+     * Route : create-third-step
+     * Permet de gérer la gestion des consomables et matériels utilisés pour un lot spécifique d'un projet.
+     * 
+     * @param 
+     */
+    public function actionCreateThirdStep($project_id, $number)
     {
+
+        // Modèle du lot à updater. On s'en sert pour récupérer son id.
+        $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
+
+        // Modèles à sauvegarder.
+        $repayment = new ProjectCreateRepaymentForm();
+        $consumables = [new ProjectCreateConsumableForm()];
+        $expenses = [new ProjectCreateExpenseForm()];
+        $equipmentsRepayment = [new ProjectCreateEquipmentRepaymentForm()];
+        $contributors = [new ProjectCreateLaboratoryContributorForm()];
+
+        $laboratoriesData = Laboratory::getAll();
+        $equipmentsData = Equipment::getAll();
+
+        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
+        if ($repayment->load(Yii::$app->request->post())) {
+            // Variable de vérification de validité des données lors du renvoi par méthode POST.
+            $isValid = true;
+
+            $consumables = Model::createMultiple(ProjectCreateConsumableForm::className(), $consumables);
+            if (!Model::loadMultiple($consumables, Yii::$app->request->post())) $isValid = false;
+            $expenses = Model::createMultiple(ProjectCreateExpenseForm::className(), $expenses);
+            if (!Model::loadMultiple($expenses, Yii::$app->request->post())) $isValid = false;
+            $equipmentsRepayment = Model::createMultiple(ProjectCreateEquipmentRepaymentForm::className(), $equipmentsRepayment);
+            if (!Model::loadMultiple($equipmentsRepayment, Yii::$app->request->post())) $isValid = false;
+            $contributors = Model::createMultiple(ProjectCreateLaboratoryContributorForm::className(), $contributors);
+            if (!Model::loadMultiple($contributors, Yii::$app->request->post())) $isValid = false;
+
+            if ($isValid) {
+
+                $repayment->lot_id = $lot->id;
+                $repayment->laboratory_id = $laboratoriesData[$repayment->laboratorySelected]->id;
+                $repayment->save();
+
+                // On associe les consommables au lot actuel, puis on les sauvegardes.
+                foreach ($consumables as $consumable) {
+                    $consumable->lot_id = $lot->id;
+                    $consumable->type = Consumable::TYPES[$consumable->type];
+                    $consumable->save();
+                }
+
+                // On associe les consommables au lot actuel, puis on les sauvegardes.
+                foreach ($expenses as $expense) {
+                    $expense->lot_id = $lot->id;
+                    $expense->save();
+                }
+
+                // On récupère la liste de matériels lié au choix du labo fait précédement. Utilisé pour récupérer le bon matériel sélectionné.
+                $id_laboratory = $repayment->laboratory_id;
+                $equipmentsDataFilteredByLabo = array_values(
+                    array_filter($equipmentsData, function ($equipment) use ($id_laboratory) {
+                        return ($equipment->laboratory_id == $id_laboratory);
+                    })
+                );
+
+
+                // On associe les matériels au lot actuel, puis on les sauvegardes.
+                foreach ($equipmentsRepayment as $equipmentRepayment) {
+                    $equipmentRepayment->equipment_id = $equipmentsDataFilteredByLabo[$equipmentRepayment->equipmentSelected]->id;
+                    $equipmentRepayment->repayment_id = $repayment->id;
+                    $equipmentRepayment->risk = EquipmentRepayment::RISKS[$equipmentRepayment->riskSelected];
+                    $equipmentRepayment->save();
+                }
+
+                // On associe les intervenants de laboratoire au lot actuel, puis ont les sauvegardes.
+                foreach ($contributors as $contributor) {
+                    $contributor->type = LaboratoryContributor::RISKS[$contributor->type];
+                    $contributor->laboratory_id = $id_laboratory;
+                    $contributor->repayment_id = $repayment->id;
+                    $contributor->save();
+                }
+
+                return "Ca a marché, et oui, moi aussi j'aime Beethoven";
+            }
+        }
+
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
             'createThirdStep',
             [
-                'laboratoriesData' => Laboratory::getAll(),
-                'equipmentsData' => Equipment::getAll(),
-                'repayment' => new ProjectCreateRepaymentForm(),
-                'consumables' => [new ProjectCreateConsumableForm()],
-                'expenses' => [new ProjectCreateExpenseForm()],
-                'equipments' => [new ProjectCreateEquipmentRepaymentForm()],
-                'contributors' => [new ProjectCreateLaboratoryContributorForm()]
+                'number' => $number,
+                'laboratoriesData' => $laboratoriesData,
+                'equipmentsData' => $equipmentsData,
+                'repayment' => $repayment,
+                'consumables' => $consumables,
+                'expenses' => $expenses,
+                'equipments' => $equipmentsRepayment,
+                'contributors' => $contributors
             ]
         );
     }

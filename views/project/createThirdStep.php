@@ -13,7 +13,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Création d\'un projet - liste des dépenses et reversements : Lot n°?';
+if ($number == 0) $this->title = 'Création d\'un projet - liste des dépenses et reversements : Avant-projet';
+else $this->title = 'Création d\'un projet - liste des dépenses et reversements : Lot n°' . $number;
 
 AppAsset::register($this);
 ProjectCreateThirdStepAsset::register($this);
@@ -179,7 +180,7 @@ ProjectCreateThirdStepAsset::register($this);
                                 <div class="input-field col s4">
 
                                     <!-- type dropdown field -->
-                                    <?= $form->field($repayment, "[{$i}]laboratorySelected")->widget(Select2::classname(), [
+                                    <?= $form->field($repayment, "laboratorySelected")->widget(Select2::classname(), [
                                         'data' => array_map(function ($data) {
                                             return $data->name;
                                         }, $laboratoriesData),

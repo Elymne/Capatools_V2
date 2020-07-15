@@ -3,6 +3,7 @@
 namespace app\models\projects\forms;
 
 use app\models\projects\Consumable;
+use app\models\projects\Repayment;
 
 /**
  * Classe relative au modèle métier des dépenses.
@@ -12,7 +13,7 @@ use app\models\projects\Consumable;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class ProjectCreateRepaymentForm extends Consumable
+class ProjectCreateRepaymentForm extends Repayment
 {
 
     /**
@@ -25,6 +26,8 @@ class ProjectCreateRepaymentForm extends Consumable
      */
     public function rules()
     {
-        return [];
+        return [
+            ['laboratorySelected', 'safe']
+        ];
     }
 }
