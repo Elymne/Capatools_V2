@@ -36,6 +36,7 @@ class ProjectCreateFirstStepForm extends Project
             ['combobox_type_checked', 'required', 'message' => 'Le projet doit avoir un type'],
             ['combobox_lot_checked', 'required', 'message' => 'Make a choice'],
             ['combobox_repayment_checked', 'required', 'message' =>  'Vous devez cocher au moins un des deux choix proposés'],
+            ['internal_name', 'required', 'message' => 'Vous devez préciser un nom pour le projet/brouillon']
         ];
     }
 }

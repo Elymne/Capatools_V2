@@ -33,6 +33,10 @@ ProjectCreateFirstStepAsset::register($this);
 
                     <div class="card-action">
 
+                        <!-- Champ titre -->
+                        <label class='blue-text control-label typeLabel'>Titre du projet</label>
+                        <?= $form->field($model, 'internal_name')->textInput([])->label(false) ?>
+
                         <!-- Type de projet  -->
                         <label class='blue-text control-label typeLabel'>Type de projet</label>
                         <?= $form->field($model, 'combobox_type_checked')->radioList(Project::TYPES, [

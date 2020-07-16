@@ -31,6 +31,7 @@ use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
 use app\models\projects\forms\ProjectCreateRepaymentForm;
 use app\models\projects\Lot;
+use app\services\laboxyServices\IdLaboxyManager;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\userRoleAccessServices\PermissionAccessEnum;
@@ -427,16 +428,16 @@ class ProjectController extends Controller implements ServiceInterface
             // Si tous les modèles de lots et le modèle de projet sont valides.
             if ($model->validate() && $isLotsValid) {
 
+
+
                 // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
                 $defaultValue = "indéfini";
-                $model->id_capa = $defaultValue;
-                $model->internal_name = $defaultValue;
                 $model->internal_reference = $defaultValue;
                 $model->state = $defaultValue;
                 $model->version = $defaultValue;
                 $model->date_version = date('Y-m-d H:i:s');
                 $model->creation_date = date('Y-m-d H:i:s');
-                $model->id_capa = $defaultValue;
+                $model->id_capa = IdLaboxyManager::generateDraftId($model->internal_name);
 
                 // On récupère l'id de la cellule de l'utilisateur connecté.
                 $model->cellule_id = Yii::$app->user->identity->cellule_id;
