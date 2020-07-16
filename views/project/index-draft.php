@@ -1,10 +1,8 @@
 <?php
 
-use app\assets\projects\ProjectIndexAsset;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
-use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -76,9 +74,6 @@ function getCollumnsArray()
 
     // Buttons displaying.
     array_push($result, getUpdateButtonArray());
-    array_push($result, getDocumentButtonArray());
-    array_push($result, getPdfButtonArray());
-    array_push($result, getExcelButtonArray());
 
     return $result;
 }
@@ -87,13 +82,10 @@ function getIdArray()
 {
     return [
         'attribute' => 'id_capa',
-        'format' => 'raw',
+        'format' => 'text',
         'label' => 'CapaID',
-        'contentOptions' => ['class' => 'capaid-row'],
-        'headerOptions' => ['class' => 'capaid-row'],
-        'value' => function ($data) {
-            return Html::a($data['id_capa'], ['project/view', 'id' => $data['id']], ['target' => '_blank',]);
-        }
+        'contentOptions' => ['class' => 'projectname-row'],
+        'headerOptions' => ['class' => 'projectname-row'],
     ];
 }
 
