@@ -40,9 +40,9 @@ ProjectCreateFirstStepAsset::register($this);
                         <!-- Type de projet  -->
                         <label class='blue-text control-label typeLabel'>Type de projet</label>
                         <?= $form->field($model, 'combobox_type_checked')->radioList(Project::TYPES, [
-                            'item' => function ($index, $label, $name, $checked, $value) {
+                            'item' => function ($index, $label, $name, $checked, $value) use ($model) {
 
-                                if ($index == 0) $check = "checked";
+                                if ($index == $model->combobox_type_checked) $check = "checked";
                                 else $check = "";
 
                                 $return = '<label class="modal-radio">';
@@ -56,9 +56,9 @@ ProjectCreateFirstStepAsset::register($this);
                         <!-- lot ou pas ? -->
                         <label class='blue-text control-label typeLabel'>Le projet comprend-il des lots ou des options ?</label>
                         <?= $form->field($model, 'combobox_lot_checked')->radioList([0 => "non", 1 => "oui"], [
-                            'item' => function ($index, $label, $name, $checked, $value) {
+                            'item' => function ($index, $label, $name, $checked, $value) use ($model) {
 
-                                if ($index == 1) $check = "checked";
+                                if ($index == $model->combobox_lot_checked) $check = "checked";
                                 else $check = "";
 
                                 $return = '<label class="modal-radio">';
@@ -72,9 +72,9 @@ ProjectCreateFirstStepAsset::register($this);
                         <!-- Reversement labo ou pas ? -->
                         <label class='blue-text control-label typeLabel'>Le projet comprend-il des reversements labo ?</label>
                         <?= $form->field($model, 'combobox_repayment_checked')->radioList([0 => "non", 1 => "oui"], [
-                            'item' => function ($index, $label, $name, $checked, $value) {
+                            'item' => function ($index, $label, $name, $checked, $value) use ($model) {
 
-                                if ($index == 1) $check = "checked";
+                                if ($index == $model->combobox_repayment_checked) $check = "checked";
                                 else $check = "";
 
                                 $return = '<label class="modal-radio">';

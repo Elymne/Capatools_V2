@@ -16,7 +16,9 @@ a<?php
             <div class="card">
                 <div class="card-action">
                     <span>
-                        <?php echo $errorDescription ?>
+                        <?php foreach ($errorDescriptions as $errorDescription) {
+                            echo "<label>" . $errorDescription . "</label>";
+                        } ?>
                     </span>
                 </div>
             </div>

@@ -12,7 +12,6 @@ use app\models\users\Cellule;
 use app\models\projects\Project;
 use app\models\parameters\DevisParameter;
 use app\models\projects\ProjectSearch;
-use app\models\projects\LotSimulate;
 use app\models\projects\ProjectCreateTaskForm;
 use app\models\projects\Risk;
 use app\models\projects\Task;
@@ -38,8 +37,8 @@ use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use kartik\mpdf\Pdf;
+use yii\helpers\ArrayHelper;
 #endregion
-
 
 /**
  * Classe contrôleur des vues et des actions de la partie devis.
@@ -428,16 +427,14 @@ class ProjectController extends Controller implements ServiceInterface
             // Si tous les modèles de lots et le modèle de projet sont valides.
             if ($model->validate() && $isLotsValid) {
 
-
-
                 // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
                 $defaultValue = "indéfini";
                 $model->internal_reference = $defaultValue;
-                $model->state = $defaultValue;
                 $model->version = $defaultValue;
                 $model->date_version = date('Y-m-d H:i:s');
                 $model->creation_date = date('Y-m-d H:i:s');
                 $model->id_capa = IdLaboxyManager::generateDraftId($model->internal_name);
+                $model->state = Project::STATE_DRAFT;
 
                 // On récupère l'id de la cellule de l'utilisateur connecté.
                 $model->cellule_id = Yii::$app->user->identity->cellule_id;
@@ -510,14 +507,6 @@ class ProjectController extends Controller implements ServiceInterface
             [
                 'model' => $model,
                 'lots' => $lots
-            ]
-        );
-        $lot = LotSimulate::getOneById(1);
-
-        return $this->render(
-            'lotSimulation',
-            [
-                'lot' => $lot
             ]
         );
     }
@@ -645,9 +634,8 @@ class ProjectController extends Controller implements ServiceInterface
             return $this->redirect([
                 'error',
                 'errorName' => 'Lot innexistant',
-                'errorDescription' => 'Vous essayez actuellement de gérer une liste de matériels sur un lot qui n\'existe pas.'
+                'errorDescriptions' => ['Vous essayez actuellement de gérer une liste de matériels sur un lot qui n\'existe pas.']
             ]);
-            exit;
         }
 
 
@@ -765,6 +753,134 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+    public function actionUpdateFirstStep(int $id)
+    {
+        // Récupération du projet brouillon.
+        $model = ProjectCreateFirstStepForm::getOneById($id);
+        $lots = ProjectCreateLotForm::getAllByIdProject($id);
+
+        // Check si il y a bien plus d'un lot attaché au projet (un lot d'avant-projet et un lot principal).
+        if (count($lots) <= 1) {
+            return $this->redirect([
+                'error',
+                'errorName' => 'Incohérence de lot',
+                'errorDescriptions' => [
+                    "Le projet que vous essayer de modifier présente une incohérence au niveau des lots.",
+                    "Il devrait avoir un nombre de lots supérieur ou égale à 2 or ce n'est pas le cas ici."
+                ]
+            ]);
+        }
+
+        // Retire le lot n°0 qui correspond à l'avant-projet.
+        unset($lots[0]);
+        $lots = array_values($lots);
+
+        if ($lots[0]->title == "Lot par défaut") $model->combobox_lot_checked = 0;
+        else $model->combobox_lot_checked = 1;
+
+        switch ($model->type) {
+            case Project::TYPE_PRESTATION:
+                $model->combobox_type_checked = 0;
+                break;
+            case Project::TYPE_OUTSOURCING_AD:
+                $model->combobox_type_checked = 1;
+                break;
+            case Project::TYPE_OUTSOURCING_UN:
+                $model->combobox_type_checked = 2;
+                break;
+            case Project::TYPE_INTERNAL:
+                $model->combobox_type_checked = 3;
+                break;
+        }
+
+
+        // Envoi par méthode POST.
+        if ($model->load(Yii::$app->request->post())) {
+
+            // Préparation de tous les modèles de lots reçu depuis la vue.
+            $oldIds = ArrayHelper::map($lots, 'id', 'id');
+            $lots = Model::createMultiple(ProjectCreateLotForm::className(), $lots);
+            Model::loadMultiple($lots, Yii::$app->request->post());
+            $deletedIDs = array_diff($oldIds, array_filter(ArrayHelper::map($lots, 'id', 'id')));
+
+            // Vérification de la validité de chaque modèle de lot.
+            $isLotsValid = true;
+            foreach ($lots as $lot) {
+                $lot->combobox_lot_checked = $model->combobox_lot_checked;
+                if (!$lot->validate()) $isLotsValid = false;
+            }
+
+            // Si tous les modèles de lots et le modèle de projet sont valides.
+            if ($model->validate() && $isLotsValid) {
+
+                // On met à jour la date de modification.
+                $model->date_version = date('Y-m-d H:i:s');
+
+                // On met à jour le type de projet.
+                $model->type = Project::TYPES[$model->combobox_type_checked];
+
+                // On met à jour l'option labo.
+                $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
+
+                // On récupère les paramètres de taux de gestion pour les appliquer au projet en cours de modification.
+                $rate  = DevisParameter::getParameters();
+                switch (Project::TYPES[$model->combobox_type_checked]) {
+                    case  Project::TYPE_PRESTATION: {
+                            $model->management_rate = $rate->rate_management;
+                        }
+                    case  Project::TYPE_OUTSOURCING_UN: {
+                            $model->management_rate = $rate->rate_management;
+                        }
+                    case  Project::TYPE_OUTSOURCING_AD: {
+                            $model->management_rate = $rate->delegate_rate_management;
+                        }
+                    case  Project::TYPE_INTERNAL: {
+                            $model->management_rate = $rate->internal_rate_management;
+                        }
+                    default: {
+                            $model->management_rate = $rate->rate_management;
+                        }
+                }
+
+                // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
+                $model->save();
+
+                // Création des lots.
+                // Si il a été décidé que ce projet ne devait plus avoir de lot, on récupère le lot n°1 pour en faire un lot par défaut.
+                if ($lots[0]->combobox_lot_checked == 0) {
+                    $lots = [$lots[0]];
+                    $lots[0]->title = 'Lot par défaut';
+                    $lots[0]->comment = 'Ceci est un lot qui a été généré automatiquement car le créateur ne souhaitait pas utiliser plusieurs lots';
+                }
+
+                // Suppression des lots dans la bdd.
+                if (!empty($deletedIDs)) {
+                    Lot::deleteAll(['id' => $deletedIDs]);
+                }
+
+                // Pour chaque lot, on lui attribut des valeurs par défaut.
+                foreach ($lots as $key => $lot) {
+                    $lot->number = $key + 1;
+                    $lot->status = Lot::STATE_IN_PROGRESS;
+                    $lot->project_id = $model->id;
+
+                    $lot->save();
+                }
+                // On redirige vers la prochaine étape.
+                //Yii::$app->response->redirect(['project/task', 'number' => 0, 'project_id' => $model->id]);
+            }
+        }
+
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render(
+            'createFirstStep',
+            [
+                'model' => $model,
+                'lots' => $lots
+            ]
+        );
+    }
+
     /**
      * Méthode générale pour le contrôleur permettant de retourner un devis.
      * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
@@ -792,14 +908,14 @@ class ProjectController extends Controller implements ServiceInterface
     /**
      * Fonction qui rend une page d'erreur.
      */
-    public function actionError(string $errorName, string $errorDescription)
+    public function actionError(string $errorName, array $errorDescriptions)
     {
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
             'error',
             [
                 'errorName' => $errorName,
-                'errorDescription' => $errorDescription
+                'errorDescriptions' => $errorDescriptions
             ]
         );
     }
