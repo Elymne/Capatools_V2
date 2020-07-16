@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
 class ProjectSimulate extends Project
 {
 
+    public $support_cost;
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */

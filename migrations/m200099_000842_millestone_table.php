@@ -12,7 +12,7 @@ class m200099_000842_millestone_table extends Migration
             'number' => $this->integer()->notNull(),
             'comment' => $this->string()->notNull(),
             'pourcentage' => $this->double()->notNull(),
-
+            'price' => $this->double()->notNull(),
 
             // Foreign key.
             'project_id' => $this->integer()->notNull(),
@@ -25,7 +25,6 @@ class m200099_000842_millestone_table extends Migration
             '{{%project}}',
             'id'
         );
-
     }
 
     public function safeDown()

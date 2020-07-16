@@ -15,6 +15,7 @@ use app\models\projects\LotSimulate;
 use app\models\projects\ProjectCreateTaskForm;
 use app\models\projects\ProjectSimulate;
 use app\models\projects\Risk;
+use app\models\projects\Millestone;
 use app\models\projects\Task;
 use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentRepayment;
@@ -469,7 +470,7 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionCreateFirstStep()
     {
-        $model = new ProjectCreateFirstStepForm();
+        /*   $model = new ProjectCreateFirstStepForm();
         $lots =  [new ProjectCreateLotForm()];
 
         // Envoi par méthode POST.
@@ -572,18 +573,21 @@ class ProjectController extends Controller implements ServiceInterface
                 'model' => $model,
                 'lots' => $lots
             ]
-        );
+        );*/
         $lot = LotSimulate::getOneById(1);
         $project = ProjectSimulate::getOneById(1);
         $lotavp = $project->getLotaventprojet();
+        $lots = $project->lots;
 
+        $millestones = [new Millestone];
         //echo $lotavp->TotalCostInvest;
         return $this->render(
             'projectSimulation',
             [
-                'lot' => $lot,
+                'lots' => $lots,
                 'lotavp' => $lotavp,
-                'project' => $project
+                'project' => $project,
+                'millestones' => (empty($millestones)) ?  [new Millestone] : $millestones,
             ]
         );
     }
@@ -611,7 +615,6 @@ class ProjectController extends Controller implements ServiceInterface
         $celluleUsers = $cel->capaUsers;
 
         if ($model->load(Yii::$app->request->post())) {
-            echo 'modelvalid';
             $isValid = true;
 
             if ($number != 0) {
@@ -643,7 +646,6 @@ class ProjectController extends Controller implements ServiceInterface
 
             // Si tous les modèles de taches sont valides.
             if ($isValid) {
-                echo 'task  valid';
 
                 // Création d'un lot d'avant-projet.
                 $lot = $model->GetCurrentLot();
@@ -698,9 +700,9 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @param 
      */
-    public function actionCreateThirdStep($project_id, $number)
+    public function actionCreateThirdStep($project_id = 0, $number = 0)
     {
-
+        /*
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
 
@@ -788,6 +790,20 @@ class ProjectController extends Controller implements ServiceInterface
                 'expenses' => $expenses,
                 'equipments' => $equipmentsRepayment,
                 'contributors' => $contributors
+            ]
+        );*/
+
+        $lot = LotSimulate::getOneById(2);
+        $project = ProjectSimulate::getOneById(1);
+        $lotavp = $project->getLotaventprojet();
+
+        //echo $lotavp->TotalCostInvest;
+        return $this->render(
+            'lotSimulation',
+            [
+                'lot' => $lot,
+                'lotavp' => $lotavp,
+                'project' => $project
             ]
         );
     }

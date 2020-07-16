@@ -34,7 +34,7 @@ class LotSimulate extends Lot
     public $total_cost_repayement_with_margin;
     public $total_cost_building_project = 500;
     public $total_cost_lot;
-    public $mean_lot_margin;
+    public $average_lot_margin;
     public $support_cost;
     public $total_cost_lot_with_support;
     public $ButtonRateHumamMarginup;

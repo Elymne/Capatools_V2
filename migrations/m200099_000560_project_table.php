@@ -19,7 +19,7 @@ class m200099_000560_project_table extends Migration
             'internal_reference' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
             'signing_probability' => $this->integer()->defaultValue(0),
-            'management_rate' => $this->integer()->defaultValue(0),
+            'management_rate' => $this->double()->defaultValue(0),
 
             'state' => $this->string()->notNull(),
             'version' => $this->string()->notNull(),

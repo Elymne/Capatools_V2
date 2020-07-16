@@ -169,7 +169,7 @@ AppAsset::register($this);
                                 Montant Total HT (€):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "total_cost_lot")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "total_cost_lot")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => ['decimal', 2]])->label(false) ?>
 
                             </div>
                         </div>
@@ -178,7 +178,7 @@ AppAsset::register($this);
                                 Taux de marge moyen avant frais de gestion (%):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "mean_lot_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "average_lot_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
@@ -216,17 +216,7 @@ $management_rate = $lot->project->management_rate;
 $script = <<< JS
 var stepsize = 0.5;
 
-///Debug
-var LotrateMargine = "#lotsimulate-rate_human_margin";
-$(LotrateMargine).val(10);
 
-
-LotrateMargine = "#lotsimulate-rate_consumable_investement_margin";
-$(LotrateMargine).val(20);
-  
-
-LotrateMargine = "#lotsimulate-rate_repayement_margin";
-$(LotrateMargine).val(30);
 
 //Fin debug
 var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
@@ -423,15 +413,15 @@ function CalculTotalLot()
 
     var totalcost = parseFloat($(totalcosthuman).val()) + parseFloat($(totalcostinvest).val()) + parseFloat($(totalcostrepayement).val())  ;
     var totalcostwithMargin = parseFloat($(totalcosthumanwithmargin).val()) + parseFloat($(totalcostinvestwithmargin).val()) + parseFloat($(totalcostrepayementwithmargin).val())  ;
-    $(totalcostlot).val(totalcostwithMargin);
+    $(totalcostlot).val(totalcostwithMargin.toFixed(2));
 
 
-    var meanlotmargin = "#lotsimulate-mean_lot_margin";
+    var averagelotmargin = "#lotsimulate-average_lot_margin";
    
 
 
-    var mean = ((totalcostwithMargin / totalcost) - 1) * 100;
-    $(meanlotmargin).val(mean.toFixed(2));
+    var average = ((totalcostwithMargin / totalcost) - 1) * 100;
+    $(averagelotmargin).val(average.toFixed(2));
 
     var supportcost = "#lotsimulate-support_cost";
     var totalcostlotwithsupport = "#lotsimulate-total_cost_lot_with_support";

@@ -109,4 +109,50 @@ class Project extends ActiveRecord
 
         return Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
     }
+
+    public function getAdditionalLotPrice()
+    {
+
+        $lotavp = Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
+        $lotavpTotalMarge = $lotavp->total * (1 + $this->marginaverage / 100);
+        return round(($lotavpTotalMarge / (count($this->lots) - 1)), 2);
+    }
+
+    public function getTotal()
+    {
+        $totalwithmargin = 0.0;
+        $totalwithoutmargin = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+            if ($lot->number != 0) {
+                $totalwithmargin = $totalwithmargin + $lot->totalwithmargin + $this->additionallotprice;
+            }
+        }
+        return $totalwithmargin;
+    }
+
+    public function getSupportPrice()
+    {
+        return round($this->total * ($this->management_rate / 100), 2);
+    }
+
+    public function getSellingPrice()
+    {
+        return $this->total + $this->supportprice;
+    }
+
+    public function getMarginAverage()
+    {
+
+        $totalwithmargin = 0.0;
+        $totalwithoutmargin = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+            if ($lot->number != 0) {
+                $totalwithmargin = $totalwithmargin + $lot->totalwithmargin;
+                $totalwithoutmargin = $totalwithoutmargin + $lot->total;
+            }
+        }
+        return round((($totalwithmargin / $totalwithoutmargin) - 1) * 100, 2);
+    }
 }

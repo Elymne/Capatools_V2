@@ -54,6 +54,14 @@ AppAsset::register($this);
                         </div>
                         <div class="row">
                             <div class="col s3">
+                                Total de l'avant projet (€):
+                            </div>
+                            <div class="col s1">
+                                <?= $form->field($lotavp, "total")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s3">
                                 <?= Html::a(Yii::t('app', 'Modifier les tâches'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
 
                             </div>
@@ -72,32 +80,44 @@ AppAsset::register($this);
                         <label>avec les coûts d'avant projet intégré dans chaque lot</label>
                     </div>
 
+                    <?php
+                    $MargeAverage = $project->marginaverage;
+                    $totalcostavplot = ($lotavp->total *  ($project->marginaverage / 100 + 1)) / (count($lots) - 1);
+                    $totalprojet = 0.0
+
+                    ?>
                     <div class="card-action">
+                        <?php foreach ($lots as $lotproject) {
+                            if ($lotproject->number != 0) {
+                        ?>
+                                <label class='blue-text control-label typeLabel'> <?= $lotproject->title ?> </label>
+                                <div class="row">
+                                    <div class="col s4">
+                                        <!-- Détail du coût  -->
+                                        Prix du total lot :
+                                    </div>
+                                    <div class="col s1">
+                                        <!-- Détail du coût  -->
+                                        <?= Html::input('text', '', $lotproject->totalwithmargin + $project->additionallotprice, $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true,]) ?>
+                                    </div>
+                                </div>
 
-                        <label class='blue-text control-label typeLabel'>Lot1</label>
-                        <div class="row">
-                            <div class="col s4">
-                                <!-- Détail du coût  -->
-                                Prix du lot avec coût d'avant projet :
-                            </div>
-                            <div class="col s1">
-                                <!-- Détail du coût  -->
-                                <?= $form->field($lot, "rate_human_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label(false) ?>
-                            </div>
-                        </div>
+                                <div class="row">
+                                    <div class="col s3">
+                                        <?= Html::a(Yii::t('app', 'Modifier les tâches'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
 
-                        <div class="row">
-                            <div class="col s3">
-                                <?= Html::a(Yii::t('app', 'Modifier les tâches'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                    </div>
+                                    <div class="col s5">
+                                        <?= Html::a(Yii::t('app', 'Modifier les invest/Consomable/Laboratoire'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                    </div>
+                                    <div class="col s1">
+                                        <?= Html::a(Yii::t('app', 'Modifier les marges'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                    </div>
+                                </div>
 
-                            </div>
-                            <div class="col s5">
-                                <?= Html::a(Yii::t('app', 'Modifier les invest/Consomable/Laboratoire'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                            </div>
-                            <div class="col s1">
-                                <?= Html::a(Yii::t('app', 'Modifier les marges'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                            </div>s
-                        </div>
+                        <?php
+                            }
+                        } ?>
 
 
                     </div>
@@ -107,7 +127,7 @@ AppAsset::register($this);
                 <div class="card">
 
                     <div class="card-content">
-                        <label>Prix Total du lot</label>
+                        <label>Prix Total du projet</label>
                     </div>
 
                     <div class="card-action">
@@ -117,8 +137,7 @@ AppAsset::register($this);
                                 Montant Total HT (€):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "total_cost_lot")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
-
+                                <?= $form->field($project, "total")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
@@ -126,7 +145,7 @@ AppAsset::register($this);
                                 Taux de marge moyen avant frais de gestion (%):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "mean_lot_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($project, "marginaverage")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
@@ -134,7 +153,7 @@ AppAsset::register($this);
                                 Frais de gestion du support HT (€):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "support_cost")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($project, "supportprice")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
@@ -142,11 +161,72 @@ AppAsset::register($this);
                                 Prix de vente du lot HT (€):
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "total_cost_lot_with_support")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($project, "SellingPrice")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="card">
+
+                    <div class="card-content">
+                        <label>Facturation</label>
+                    </div>
+
+                    <div class="card-action">
+                        <?php
+
+                        DynamicFormWidget::begin([
+                            'widgetContainer' => 'dynamicform_millestone', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                            'widgetBody' => '.container-items-millestone', // required: css class selector
+                            'widgetItem' => '.item-millestone', // required: css class
+                            'limit' => 10, // the maximum times, an element can be cloned (default 999)
+                            'min' => 1, // 0 or 1 (default 1)
+                            'insertButton' => '.add-item-millestone', // css class
+                            'deleteButton' => '.remove-item-millestone', // css class
+                            'model' => $millestones[0],
+                            'formId' => 'dynamic-form',
+                            'formFields' => [
+                                'pourcentage',
+                            ],
+                        ]); ?>
+                        <div class="container-items-millestone">
+                            <!-- widgetContainer -->
+                            <?php foreach ($millestones as $i => $millestone) : ?>
+                                <div class="item-millestone">
+
+                                    <?php
+                                    // necessary for update action.
+                                    if (!$millestone->isNewRecord) {
+                                        echo Html::activeHiddenInput($millestone, "[{$i}]id");
+                                    }
+                                    ?>
+                                    <div class="row">
+                                        <div class="col s3">
+                                            <?= $form->field($millestone, "comment")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Titre") ?>
+
+                                        </div>
+                                        <div class="col s1">
+                                            <?= $form->field($millestone, "pourcentage")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Pourcentage") ?>
+                                        </div>
+                                        <div class="col s1">
+                                            <?= $form->field($millestone, "price")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Prix") ?>
+                                        </div>
+                                        <div class="col 2">
+                                            <button type="button" class="add-item-millestone btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                        </div>
+                                        <div class="col 2">
+                                            <button type="button" class="remove-item-millestone btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <?php DynamicFormWidget::end(); ?>
+                    </div>
+                </div>
+
                 <!-- Buttons -->
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
@@ -157,245 +237,3 @@ AppAsset::register($this);
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-
-<?php
-
-$management_rate = $lot->project->management_rate;
-$script = <<< JS
-var stepsize = 0.5;
-
-///Debug
-var LotrateMargine = "#lotsimulate-rate_human_margin";
-$(LotrateMargine).val(10);
-
-
-LotrateMargine = "#lotsimulate-rate_consumable_investement_margin";
-$(LotrateMargine).val(20);
-  
-
-LotrateMargine = "#lotsimulate-rate_repayement_margin";
-$(LotrateMargine).val(30);
-
-//Fin debug
-var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
-    $(InputRateHumamMargin).on('blur', function(e){
-        var rate = parseFloat(e.currentTarget.value);
-        if(rate < 10  || isNaN(rate))
-        {
-            e.currentTarget.value = 10;
-        }
-
-    })
-
-    $(InputRateHumamMargin).on('input', function(e){
-        UpdateHumanMargin();    
-        CalculTotalLot();
-    })
-
-
-    var InputInvestMargin = "#lotsimulate-rate_consumable_investement_margin";
-    $(InputInvestMargin).on('blur', function(e){
-        var rate = parseFloat(e.currentTarget.value);
-        if(rate < 0 || isNaN(rate))
-        {
-            e.currentTarget.value = 0;
-        }
-
-    })
-
-
-    $(InputInvestMargin).on('input', function(e){
-        UpdateInvestMargin();    
-        CalculTotalLot();
-    })
-
-
-    var InputRepayementMargin = "#lotsimulate-rate_repayement_margin";
-    $(InputRepayementMargin).on('blur', function(e){
-        var rate = parseFloat(e.currentTarget.value);
-        if(rate < 0.0 || isNaN(rate))
-        {
-            e.currentTarget.value = 0;
-        }
-
-    })  
-    $(InputRepayementMargin).on('input', function(e){
-        UpdateRepayementMargin();    
-        CalculTotalLot();
-    })
-
-
-    var ButtonRateHumamMarginUp = "#lotsimulate-rate_human_marginup"; 
-    $(ButtonRateHumamMarginUp).on('click', function(){
-        var rate = parseFloat($(InputRateHumamMargin).val());
-        if(!isNaN(rate))
-        {
-            $(InputRateHumamMargin).val(rate + stepsize);
-            UpdateHumanMargin();    
-            CalculTotalLot();
-        }
-    })
-  
-    var ButtonRateHumamMarginDown = "#lotsimulate-rate_human_margindown";
-    $(ButtonRateHumamMarginDown).on('click', function(){
-        var rate = parseFloat($(InputRateHumamMargin).val());
-        if(!isNaN(rate))
-        {
-            
-            rate = rate - stepsize;
-           if(rate >= 10)
-           {
-                $(InputRateHumamMargin).val(rate );
-                UpdateHumanMargin();    
-                CalculTotalLot();
-           }
-        }
-    })
-
-
-    var ButtonInvestMarginUp = "#lotsimulate-rate_consumable_investement_marginup";
-    $(ButtonInvestMarginUp).on('click', function(){
-        var rate = parseFloat($(InputInvestMargin).val());
-        if(!isNaN(rate))
-        {
-            $(InputInvestMargin).val(rate + stepsize);
-            UpdateInvestMargin();    
-            CalculTotalLot();
-        }
-    })
-
-    var ButtonInvestMarginDown = "#lotsimulate-rate_consumable_investement_margindown";
-    $(ButtonInvestMarginDown).on('click', function(){
-        var rate = parseFloat($(InputInvestMargin).val());
-        if(!isNaN(rate))
-        {
-            
-            rate = rate - stepsize;
-           if(rate >= 0)
-            {
-                $(InputInvestMargin).val(rate);
-                UpdateInvestMargin();    
-                CalculTotalLot();
-           }
-        }
-    })
-
-    var ButtonRepayementMarginUp = "#lotsimulate-rate_repayement_marginup";
-    $(ButtonRepayementMarginUp).on('click', function(){
-        var rate = parseFloat($(InputRepayementMargin).val());
-        if(!isNaN(rate))
-        {
-            $(InputRepayementMargin).val(rate + stepsize);
-            UpdateRepayementMargin();    
-            CalculTotalLot();
-        }
-    })
-    var ButtonRepayementMarginDown = "#lotsimulate-rate_repayement_margindown";
-    $(ButtonRepayementMarginDown).on('click', function(){
-        var rate = parseFloat($(InputRepayementMargin).val());
-        if(!isNaN(rate))
-        {
-            
-             rate = rate - stepsize;
-            if(rate >= 0)
-            {
-                $(InputRepayementMargin).val(rate);
-                UpdateRepayementMargin();    
-                CalculTotalLot();
-            }
-        }
-    })
-
-
-
-UpdateHumanMargin();
-UpdateInvestMargin();
-UpdateRepayementMargin();
-CalculTotalLot();
-
-function UpdateHumanMargin()
-{
-    var totalcostwithmargin = "#lotsimulate-total_cost_human_with_margin";
-    var LotrateMargin = "#lotsimulate-rate_human_margin";
-    var totalcost = "#lotsimulate-totalcosthuman";
-    var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
-    if(isNaN(resultattwithmargin))
-    {
-        resultattwithmargin = 0;
-    }
-    $(totalcostwithmargin).val(resultattwithmargin.toFixed(2));
-
- 
-}
-function UpdateInvestMargin()
-{
-    var totalcostwithmargin = "#lotsimulate-total_cost_invest_with_margin";
-    var LotrateMargin = "#lotsimulate-rate_consumable_investement_margin";
-    var totalcost = "#lotsimulate-totalcostinvest";
-    var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
-    if(isNaN(resultattwithmargin))
-    {
-        resultattwithmargin = 0;
-    }
-    $(totalcostwithmargin).val(resultattwithmargin.toFixed(2));
- 
-}
-
-function UpdateRepayementMargin()
-{
-    var totalcostwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
-    var LotrateMargin = "#lotsimulate-rate_repayement_margin";
-    var totalcost = "#lotsimulate-totalcostrepayement";
-    var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
-    if(isNaN(resultattwithmargin))
-    {
-        resultattwithmargin = 0;
-    }
-    $(totalcostwithmargin).val(resultattwithmargin.toFixed(2));
-}
-
-
-
-function CalculTotalLot()
-{
-
-    
-    var totalcosthuman = "#lotsimulate-totalcosthuman";
-    var totalcostinvest = "#lotsimulate-totalcostinvest";
-    var totalcostrepayement = "#lotsimulate-totalcostrepayement";
-
-    var totalcostlot = "#lotsimulate-total_cost_lot";
-    var totalcosthumanwithmargin = "#lotsimulate-total_cost_human_with_margin";
-    var totalcostinvestwithmargin = "#lotsimulate-total_cost_invest_with_margin";
-    var totalcostrepayementwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
-
-    var totalcost = parseInt($(totalcosthuman).val()) + parseInt($(totalcostinvest).val()) + parseInt($(totalcostrepayement).val())  ;
-    var totalcostwithMargin = parseInt($(totalcosthumanwithmargin).val()) + parseInt($(totalcostinvestwithmargin).val()) + parseInt($(totalcostrepayementwithmargin).val())  ;
-    $(totalcostlot).val(totalcostwithMargin);
-
-
-    var meanlotmargin = "#lotsimulate-mean_lot_margin";
-   
-
-
-    var mean = ((totalcostwithMargin / totalcost) - 1) * 100;
-    $(meanlotmargin).val(mean.toFixed(2));
-
-    var supportcost = "#lotsimulate-support_cost";
-    var totalcostlotwithsupport = "#lotsimulate-total_cost_lot_with_support";
-
-    var ratesupp = $management_rate;
-
-
-    var support = totalcostwithMargin * ratesupp /100;
-    $(supportcost).val(support.toFixed(2));
-
-    var totalwithsupport = support + totalcostwithMargin
-    $(totalcostlotwithsupport).val(totalwithsupport.toFixed(2));
-
-    
-}
-
-JS;
-
-$this->registerJs($script);
