@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+#region imports
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -30,13 +31,14 @@ use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
 use app\models\projects\forms\ProjectCreateRepaymentForm;
 use app\models\projects\Lot;
-use app\services\errorPageServices\ErrorPage;
+use app\services\laboxyServices\IdLaboxyManager;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use kartik\mpdf\Pdf;
+#endregion
 
 
 /**
@@ -144,22 +146,22 @@ class ProjectController extends Controller implements ServiceInterface
                 'serviceMenuActive' => SubMenuEnum::PROJECT,
                 'items' => [
                     [
-                        'Priorite' => 3,
+                        'Priorite' => 1,
                         'url' => 'project/index',
                         'label' => 'Liste des projets',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_LIST
                     ],
                     [
                         'Priorite' => 2,
+                        'url' => 'project/index-draft',
+                        'label' => 'Liste des brouillons',
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_NONE
+                    ],
+                    [
+                        'Priorite' => 3,
                         'url' => 'project/create-first-step',
                         'label' => 'Créer un projet',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    ],
-                    [
-                        'Priorite' => 1,
-                        'url' => 'project/create-third-step',
-                        'label' => '3eme étape (controller)',
-                        'subServiceMenuActive' => SubMenuEnum::PROJECT_NONE
                     ]
                 ]
             ];
@@ -177,7 +179,7 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionIndex()
     {
-        // Instanciation de la classe ProjectSearch qui va nous permettre d'utiliser sa fonction search qui nous renvoie tous les projets.
+        // Instanciation de la classe ProjectSearch qui va nous permettre d'utiliser la fonction search qui nous renvoie tous les projets.
         $searchModel = new ProjectSearch();
         // Nous aurons donc tous les models et en plus la possibilité d'ordonner ces données dans un gridview.
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -373,69 +375,6 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
-     * //TODO
-     * Render view : null
-     * Retournera une vue avec la liste de tous les affaires.
-     * Dans les faits, cette vue aura pratiquement la même structure que la vue de la liste des devis/projets.
-     * Un sous menu doit permettre de lancer cette route.
-     * 
-     * @return mixed
-     * @throws NotFoundHttpException If the model is not found.
-     */
-    public function actionIndexBusiness()
-    {
-    }
-
-    /**
-     * //TODO
-     * Render view : null
-     * Retournera une vue avec la liste de tous les projets d'une affaire..
-     * 
-     * @return mixed
-     * @throws NotFoundHttpException If the model is not found.
-     */
-    public function actionViewBusiness(int $id)
-    {
-    }
-
-    /**
-     * //TODO
-     * Render view : null
-     * Retournera une vue permettant de créer une affaire.
-     *Le formulaire ne sera pas très complexe, un champ pour indiquer le nom du client et c'est tout.
-     * 
-     * @return mixed
-     * @throws NotFoundHttpException If the model is not found.
-     */
-    public function actionCreateBusiness()
-    {
-    }
-
-    /**
-     * Méthode générale pour le contrôleur permettant de retourner un devis.
-     * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
-     * 
-     * @param integer $id
-     * @return Devis the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Project::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('Le devis n\'existe pas.');
-    }
-
-    /**
-     * @deprecated Cette fonction n'est plus utilisé
-     */
-    public static function getIndicator($user)
-    {
-    }
-
-    /**
      * @deprecated Cette fonction n'est plus utilisé
      */
     public function actionViewpdf($id)
@@ -489,16 +428,16 @@ class ProjectController extends Controller implements ServiceInterface
             // Si tous les modèles de lots et le modèle de projet sont valides.
             if ($model->validate() && $isLotsValid) {
 
+
+
                 // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
                 $defaultValue = "indéfini";
-                $model->id_capa = $defaultValue;
-                $model->internal_name = $defaultValue;
                 $model->internal_reference = $defaultValue;
                 $model->state = $defaultValue;
                 $model->version = $defaultValue;
                 $model->date_version = date('Y-m-d H:i:s');
                 $model->creation_date = date('Y-m-d H:i:s');
-                $model->id_capa = $defaultValue;
+                $model->id_capa = IdLaboxyManager::generateDraftId($model->internal_name);
 
                 // On récupère l'id de la cellule de l'utilisateur connecté.
                 $model->cellule_id = Yii::$app->user->identity->cellule_id;
@@ -694,7 +633,7 @@ class ProjectController extends Controller implements ServiceInterface
      * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
      * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
      * 
-     * @return mixed|null
+     * @return mixed|error
      */
     public function actionCreateThirdStep($project_id, $number)
     {
@@ -801,6 +740,53 @@ class ProjectController extends Controller implements ServiceInterface
                 'contributors' => $contributors
             ]
         );
+    }
+
+    /**
+     * Route : index-draft
+     * Permet d'afficher la liste des tous les brouillons, c'est-à-dire les devis qui n'ont pas été finalisés.
+     * 
+     * @return mixed|error
+     */
+    public function actionIndexDraft()
+    {
+        // Instanciation de la classe ProjectSearch qui va nous permettre d'utiliser la fonction search qui nous renvoie tous les projets. 
+        // Nous récupérerons les brouillons à l'aide une option.
+        $searchModel = new ProjectSearch();
+        // Nous aurons donc tous les models et en plus la possibilité d'ordonner ces données dans un gridview.
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ProjectSearch::GET_DRAFT_QUERY_OPTION);
+
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render(
+            'index-draft',
+            [
+                'dataProvider' => $dataProvider
+            ]
+        );
+    }
+
+    /**
+     * Méthode générale pour le contrôleur permettant de retourner un devis.
+     * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
+     * 
+     * @param integer $id
+     * @return Devis the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Project::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('Le devis n\'existe pas.');
+    }
+
+    /**
+     * @deprecated Cette fonction n'est plus utilisé
+     */
+    public static function getIndicator($user)
+    {
     }
 
     /**
