@@ -29,8 +29,9 @@ use app\models\projects\forms\ProjectCreateFirstStepForm;
 use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
 use app\models\projects\forms\ProjectCreateRepaymentForm;
-use app\models\projects\ProjectCreateGestionTaskForm;
-use app\models\projects\ProjectCreateLotTaskForm;
+use app\models\projects\forms\ProjectCreateGestionTaskForm;
+use app\models\projects\forms\ProjectCreateLotTaskForm;
+use app\models\projects\forms\ProjectCreateMilleStoneForm;
 use app\models\projects\Lot;
 use app\services\laboxyServices\IdLaboxyManager;
 use app\services\menuServices\MenuSelectorHelper;
@@ -408,7 +409,7 @@ class ProjectController extends Controller implements ServiceInterface
      *  @return mixed
      */
     public function actionCreateFirstStep()
-    {
+    {/*
         $model = new ProjectCreateFirstStepForm();
         $lots =  [new ProjectCreateLotForm()];
 
@@ -510,23 +511,21 @@ class ProjectController extends Controller implements ServiceInterface
                 'model' => $model,
                 'lots' => $lots
             ]
-        );
-        /* $lot = LotSimulate::getOneById(1);
+        );*/
         $project = ProjectSimulate::getOneById(1);
         $lotavp = $project->getLotaventprojet();
         $lots = $project->lots;
 
-        $millestones = [new Millestone];
-        //echo $lotavp->TotalCostInvest;
+        $millestones = [new ProjectCreateMilleStoneForm];
         return $this->render(
             'projectSimulation',
             [
                 'lots' => $lots,
                 'lotavp' => $lotavp,
                 'project' => $project,
-                'millestones' => (empty($millestones)) ?  [new Millestone] : $millestones,
+                'millestones' => (empty($millestones)) ?  [new ProjectCreateMilleStoneForm] : $millestones,
             ]
-        );*/
+        );
     }
 
     /**
@@ -934,19 +933,5 @@ class ProjectController extends Controller implements ServiceInterface
                 'errorDescriptions' => $errorDescriptions
             ]
         );
-        /*
-        $lot = LotSimulate::getOneById(2);
-        $project = ProjectSimulate::getOneById(1);
-        $lotavp = $project->getLotaventprojet();
-
-        //echo $lotavp->TotalCostInvest;
-        return $this->render(
-            'lotSimulation',
-            [
-                'lot' => $lot,
-                'lotavp' => $lotavp,
-                'project' => $project
-            ]
-        );*/
     }
 }

@@ -2,7 +2,8 @@
 
 namespace app\models\projects\forms;
 
-use app\models\projects\Task;
+
+use app\models\projects\Millestone;
 
 /**
  * Classe relative au modèle métier des Lots.
@@ -15,7 +16,7 @@ use app\models\projects\Task;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class ProjectCreateLotTaskForm extends Task
+class ProjectCreateMilleStoneForm extends Millestone
 {
 
 
@@ -25,12 +26,9 @@ class ProjectCreateLotTaskForm extends Task
     public function rules()
     {
         return [
-            ['title', 'required', 'message' => 'Il faut un titre de tâche'],
-            ['capa_user_id', 'required', 'message' => 'Il faut indiquer l\'intervenant de la tâche'],
-            ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
-            ['day_duration', 'required', 'message' => 'Il faut renseigner le nombre de jour'],
-            ['hour_duration', 'required', 'message' => 'Il faut renseigner le nombre d\'heure'],
-            ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
+            ['comment', 'required', 'message' => 'Il faut identifier le jalon'],
+            ['pourcentage', 'required', 'message' => 'Il faut indiquer un pourcentage'],
+            ['price', 'required', 'message' => 'Il faut indiquer un prix'],
         ];
     }
 }
