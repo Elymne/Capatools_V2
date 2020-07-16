@@ -13,10 +13,10 @@ use app\models\projects\Project;
 use app\models\parameters\DevisParameter;
 use app\models\projects\ProjectSearch;
 use app\models\projects\ProjectCreateTaskForm;
+use app\models\projects\ProjectSimulate;
 use app\models\projects\Risk;
+use app\models\projects\Millestone;
 use app\models\projects\Task;
-use app\models\projects\TaskGestionCreateTaskForm;
-use app\models\projects\TaskLotCreateTaskForm;
 use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentRepayment;
 use app\models\laboratories\Laboratory;
@@ -29,6 +29,8 @@ use app\models\projects\forms\ProjectCreateFirstStepForm;
 use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
 use app\models\projects\forms\ProjectCreateRepaymentForm;
+use app\models\projects\ProjectCreateGestionTaskForm;
+use app\models\projects\ProjectCreateLotTaskForm;
 use app\models\projects\Lot;
 use app\services\laboxyServices\IdLaboxyManager;
 use app\services\menuServices\MenuSelectorHelper;
@@ -509,6 +511,22 @@ class ProjectController extends Controller implements ServiceInterface
                 'lots' => $lots
             ]
         );
+        /* $lot = LotSimulate::getOneById(1);
+        $project = ProjectSimulate::getOneById(1);
+        $lotavp = $project->getLotaventprojet();
+        $lots = $project->lots;
+
+        $millestones = [new Millestone];
+        //echo $lotavp->TotalCostInvest;
+        return $this->render(
+            'projectSimulation',
+            [
+                'lots' => $lots,
+                'lotavp' => $lotavp,
+                'project' => $project,
+                'millestones' => (empty($millestones)) ?  [new Millestone] : $millestones,
+            ]
+        );*/
     }
 
     /**
@@ -521,8 +539,8 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionTask($number, $project_id)
     {
         $model = new ProjectCreateTaskForm();
-        $tasksGestions = [new TaskGestionCreateTaskForm];
-        $tasksOperational = [new TaskLotCreateTaskForm];
+        $tasksGestions = [new ProjectCreateGestionTaskForm];
+        $tasksOperational = [new ProjectCreateLotTaskForm];
         $risk = Risk::find()->all();
         $model->project_id = $project_id;
         $model->number = $number;
@@ -534,7 +552,6 @@ class ProjectController extends Controller implements ServiceInterface
         $celluleUsers = $cel->capaUsers;
 
         if ($model->load(Yii::$app->request->post())) {
-            echo 'modelvalid';
             $isValid = true;
 
             if ($number != 0) {
@@ -566,7 +583,6 @@ class ProjectController extends Controller implements ServiceInterface
 
             // Si tous les modèles de taches sont valides.
             if ($isValid) {
-                echo 'task  valid';
 
                 // Création d'un lot d'avant-projet.
                 $lot = $model->GetCurrentLot();
@@ -624,7 +640,7 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionCreateThirdStep($project_id, $number)
+    public function actionCreateThirdStep($project_id = 0, $number = 0)
     {
 
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
@@ -918,5 +934,19 @@ class ProjectController extends Controller implements ServiceInterface
                 'errorDescriptions' => $errorDescriptions
             ]
         );
+        /*
+        $lot = LotSimulate::getOneById(2);
+        $project = ProjectSimulate::getOneById(1);
+        $lotavp = $project->getLotaventprojet();
+
+        //echo $lotavp->TotalCostInvest;
+        return $this->render(
+            'lotSimulation',
+            [
+                'lot' => $lot,
+                'lotavp' => $lotavp,
+                'project' => $project
+            ]
+        );*/
     }
 }

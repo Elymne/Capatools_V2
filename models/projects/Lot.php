@@ -70,11 +70,7 @@ class Lot extends ActiveRecord
         $result = 0;
         $taskslot = $this->tasks;
         foreach ($taskslot as $task) {
-            preg_match_all('!\d+!', $task->risk_duration, $matches);
-            $day = intval($matches[0][0]);
-            $totalhour =  intval($matches[0][1]) + $day * Yii::$app->params['LaboxyTimeDay'];
-            $pricehoraire = $task->price;
-            $result  = $result + ($pricehoraire * $totalhour);
+            $result  = $result + ($task->price *  $task->risk_duration_hour);
         }
 
         return $result;
@@ -102,6 +98,23 @@ class Lot extends ActiveRecord
 
     public function getTotalCostRepayement()
     {
-        return "5000";
+        return 5000;
+    }
+
+    public function getTotal()
+    {
+        $result = 0.000;
+        $result =  $this->totalcosthuman
+            + $this->totalcostinvest
+            + $this->totalcostrepayement;
+        return round($result, 2);
+    }
+    public function getTotalWithMargin()
+    {
+        $result = 0.000;
+        $result =  $this->totalcosthuman * (1 + $this->rate_human_margin / 100)
+            + $this->totalcostinvest * (1 + $this->rate_consumable_investement_margin / 100)
+            + $this->totalcostrepayement * (1 + $this->rate_repayement_margin / 100);
+        return round($result, 2);
     }
 }

@@ -30,7 +30,7 @@ class m200099_000585_investment extends Migration
 
         $this->insert('{{%investment}}', [
             'name' => "Frais de loyer du chalet",
-            'price' => 1230000,
+            'price' => 12300,
             'lot_id' => 1,
         ]);
 
