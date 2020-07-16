@@ -62,6 +62,11 @@ class Project extends ActiveRecord
         return static::find()->where(['project.cellule_id' => $idCellule])->all();
     }
 
+    public static function getAllDraft()
+    {
+        return static::find()->where(['draft' => true])->all();
+    }
+
     public function getStatusIndex()
     {
         $result = -1;

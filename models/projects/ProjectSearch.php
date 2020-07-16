@@ -24,6 +24,10 @@ use app\models\projects\Project;
 class ProjectSearch extends Project
 {
 
+    const GET_DRAFT_QUERY_OPTION = "get_draft";
+    const GET_PROJECT_QUERY_OPTION = "get_project";
+    const GET_ALL_QUERY_OPTION = "get_all";
+
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
@@ -57,10 +61,24 @@ class ProjectSearch extends Project
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, string $queryOption = self::GET_PROJECT_QUERY_OPTION)
     {
 
-        $query = Project::find();
+        // Check la query option envoyé en paramètre.
+        switch ($queryOption) {
+            case self::GET_ALL_QUERY_OPTION:
+                $query = Project::find();
+                break;
+            case self::GET_PROJECT_QUERY_OPTION:
+                $query = Project::find()->where(['draft' => false]);
+                break;
+            case self::GET_DRAFT_QUERY_OPTION:
+                $query = Project::find()->where(['draft' => true]);
+                break;
+            default:
+                $query = Project::find()->where(['draft' => false]);
+                break;
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
