@@ -152,90 +152,13 @@ function getUpdateButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">build</i>',
-                Url::to(['devis/update', 'id' => $model->id]),
+                Url::to(['project/update-first-step', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-green',
                     'title' => "Modifier le devis"
-                ]
-            );
-        }
-    ];
-}
-
-function getDocumentButtonArray()
-{
-    return [
-        'format' => 'raw',
-        'label' => 'upload',
-        'value' => function ($model, $key, $index, $column) {
-
-            if ($model->file_path != null) {
-                return Html::a(
-                    '<i class="material-icons right">cloud_download</i>',
-                    Url::to(['project/download-file', 'id' => $model->id]),
-                    [
-                        'id' => 'grid-custom-button',
-                        'data-pjax' => true,
-                        'class' => 'btn-floating waves-effect waves-light btn-blue',
-                    ]
-                );
-            } else {
-                return Html::a(
-                    '<i class="material-icons right">cloud_download</i>',
-                    Url::to(['#', 'id' => $model->id]),
-                    [
-                        'id' => 'grid-custom-button',
-                        'data-pjax' => true,
-                        'action' => Url::to(['#', 'id' => $model->id]),
-                        'class' => 'btn-floating disabled',
-                        'title' => "Télécharger le document"
-                    ]
-                );
-            }
-        }
-    ];
-}
-
-function getPdfButtonArray()
-{
-    return [
-        'format' => 'raw',
-        'label' => 'PDF',
-        'value' => function ($model, $key, $index, $column) {
-            return Html::a(
-                '<i class="material-icons right">picture_as_pdf</i>',
-                Url::to(['devis/pdf', 'id' => $model->id,]),
-                [
-                    'id' => 'grid-custom-button',
-                    'target' => '_blank',
-                    'data-pjax' => true,
-                    'action' => Url::to(['devis/pdf', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-purple',
-                    'title' => "Générer le devis sous forme pdf"
-                ]
-            );
-        }
-    ];
-}
-
-function getExcelButtonArray()
-{
-    return [
-        'format' => 'raw',
-        'label' => 'XLS',
-        'value' => function ($model, $key, $index, $column) {
-            return Html::a(
-                '<i class="material-icons right">grid_on</i>',
-                Url::to(['devis/download-excel', 'id' => $model->id]),
-                [
-                    'id' => 'grid-custom-button',
-                    'data-pjax' => true,
-                    'action' => Url::to(['devis/update', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-green-darker',
-                    'title' => "Générer le devis sous forme excel"
                 ]
             );
         }

@@ -34,6 +34,11 @@ class Lot extends ActiveRecord
         return static::find()->where(['id' => $id])->one();
     }
 
+    public static function getAllByIdProject($idProject)
+    {
+        return static::find()->where(['project_id' => $idProject])->all();
+    }
+
     public static function getOneByIdProjectAndNumber($idProject, $nb)
     {
         return static::find()->where(['project_id' => $idProject, 'number' => $nb])->one();

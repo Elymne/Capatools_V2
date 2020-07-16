@@ -21,9 +21,9 @@ class ProjectCreateFirstStepForm extends Project
     /**
      * Gestion combobox.
      */
-    public $combobox_type_checked;
-    public $combobox_repayment_checked;
-    public $combobox_lot_checked;
+    public $combobox_type_checked = 0;
+    public $combobox_lot_checked = 1;
+    public $combobox_repayment_checked = 1;
 
     public $management_rate;
 
