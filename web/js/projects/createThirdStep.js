@@ -106,7 +106,7 @@ $(() => {
      * En effet, chaque matériel est lié à un labo, de ce fait, le changement d'un labo entraine donc le changement de la liste des matériels à disposition.
      * (Et donc le coût aussi vu que le matériel de chaque élément va changer).
      */
-    $("#projectcreaterepaymentform-0-laboratoryselected").change(() => {
+    $("#projectcreaterepaymentform-laboratoryselected").change(() => {
         for (let i = 0; i <= nbEquipmentLineDuplicated; i++) {
             $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).empty()
             $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).append(
@@ -206,7 +206,7 @@ $(() => {
      * Permet de recalculer le coût de chaque élément.
      * En effet, chaque intervenant est lié à un labo, de ce fait, le changement d'un labo entraine donc le changement du coût d'un intervenant.
      */
-    $("#projectcreaterepaymentform-0-laboratoryselected").change(() => {
+    $("#projectcreaterepaymentform-laboratoryselected").change(() => {
         for (let i = 0; i <= nbContributorLineDuplicated; i++) {
             const result = calculateContributorPrice(
                 $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
@@ -262,7 +262,7 @@ $(() => {
  * Fonction permettant de retourner le labo sélectionné.
  * @param {*} laboratoriesData Liste de tous les laboratoires.
  */
-const getValueFromLaboratorySelected = (laboratoriesData) => laboratoriesData[$("#projectcreaterepaymentform-0-laboratoryselected option:selected").val()]
+const getValueFromLaboratorySelected = (laboratoriesData) => laboratoriesData[$("#projectcreaterepaymentform-laboratoryselected option:selected").val()]
 
 /**
  * Fonction qui permet de retourner l'équipement sélectionné sur une ligne précise.
@@ -298,6 +298,7 @@ const calculateContributorPrice = (nbDay, nbHour, laboratory) => laboratory.pric
  */
 const getEquipementsOptionsListFromSelectedLaboratory = (equipmentsData, laboratoriesData) => {
     dataToRefresh = equipmentsData.filter((element) => element.laboratory_id == getValueFromLaboratorySelected(laboratoriesData).id)
+
     results = []
 
     dataToRefresh.forEach((element, index) => {
