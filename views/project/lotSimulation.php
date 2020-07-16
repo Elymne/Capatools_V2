@@ -23,7 +23,7 @@ AppAsset::register($this);
                 <div class="card">
 
                     <div class="card-content">
-                        <label>Détail des coûts du lot (avec les coûts d'avant projet)</label>
+                        <label>Détail des coûts du lot </label>
                     </div>
 
                     <div class="card-action">
@@ -421,8 +421,8 @@ function CalculTotalLot()
     var totalcostinvestwithmargin = "#lotsimulate-total_cost_invest_with_margin";
     var totalcostrepayementwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
 
-    var totalcost = parseInt($(totalcosthuman).val()) + parseInt($(totalcostinvest).val()) + parseInt($(totalcostrepayement).val())  ;
-    var totalcostwithMargin = parseInt($(totalcosthumanwithmargin).val()) + parseInt($(totalcostinvestwithmargin).val()) + parseInt($(totalcostrepayementwithmargin).val())  ;
+    var totalcost = parseFloat($(totalcosthuman).val()) + parseFloat($(totalcostinvest).val()) + parseFloat($(totalcostrepayement).val())  ;
+    var totalcostwithMargin = parseFloat($(totalcosthumanwithmargin).val()) + parseFloat($(totalcostinvestwithmargin).val()) + parseFloat($(totalcostrepayementwithmargin).val())  ;
     $(totalcostlot).val(totalcostwithMargin);
 
 
