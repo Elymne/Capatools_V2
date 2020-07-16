@@ -470,7 +470,7 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionCreateFirstStep()
     {
-        /*   $model = new ProjectCreateFirstStepForm();
+        $model = new ProjectCreateFirstStepForm();
         $lots =  [new ProjectCreateLotForm()];
 
         // Envoi par méthode POST.
@@ -573,8 +573,8 @@ class ProjectController extends Controller implements ServiceInterface
                 'model' => $model,
                 'lots' => $lots
             ]
-        );*/
-        $lot = LotSimulate::getOneById(1);
+        );
+        /* $lot = LotSimulate::getOneById(1);
         $project = ProjectSimulate::getOneById(1);
         $lotavp = $project->getLotaventprojet();
         $lots = $project->lots;
@@ -589,7 +589,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'project' => $project,
                 'millestones' => (empty($millestones)) ?  [new Millestone] : $millestones,
             ]
-        );
+        );*/
     }
 
     /**
@@ -702,7 +702,7 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionCreateThirdStep($project_id = 0, $number = 0)
     {
-        /*
+
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
 
@@ -791,8 +791,8 @@ class ProjectController extends Controller implements ServiceInterface
                 'equipments' => $equipmentsRepayment,
                 'contributors' => $contributors
             ]
-        );*/
-
+        );
+        /*
         $lot = LotSimulate::getOneById(2);
         $project = ProjectSimulate::getOneById(1);
         $lotavp = $project->getLotaventprojet();
@@ -805,6 +805,6 @@ class ProjectController extends Controller implements ServiceInterface
                 'lotavp' => $lotavp,
                 'project' => $project
             ]
-        );
+        );*/
     }
 }

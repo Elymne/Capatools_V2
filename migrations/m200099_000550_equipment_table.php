@@ -37,8 +37,8 @@ class m200099_000550_equipment_table extends Migration
 
         $this->insert('{{%equipment}}', [
             'name' => "BFG",
-            'price_day' => 10000000.00,
-            'price_hour' => 1000000.00,
+            'price_day' => 1000.00,
+            'price_hour' => 10000.00,
             'type' => 'Outil expérimental du DoomGuy',
             'laboratory_id' => 2
         ]);
