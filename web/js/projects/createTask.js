@@ -1,4 +1,4 @@
-const $incertudeMap = JSON.parse(document.getElementById("coeficient-data-target").textContent)
+const $incertudeMap = JSON.parse(document.getElementById("coefficient-data-target").textContent)
 const $intervenantMap = JSON.parse(document.getElementById("capauser-data-target").textContent)
 
 var Taskdaydurationlot = "#tasklotcreatetaskform-" + 0 + "-day_duration"

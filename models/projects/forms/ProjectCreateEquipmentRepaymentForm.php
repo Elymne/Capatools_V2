@@ -33,9 +33,9 @@ class ProjectCreateEquipmentRepaymentForm extends EquipmentRepayment
             ['nb_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
             ['nb_hours', 'required', 'message' => 'Veuillez renseigner le nombre d\'heures'],
             ['nb_hours', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
-            ['risk', 'required', 'message' => 'Veuillez spécifier la valeur d\'incertitude'],
-            ['risk_day', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
-            ['risk_day', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
+            ['risk_time', 'required', 'message' => 'Le temps d\'incertitude n\'a pas généré'],
+            ['price', 'required', 'message' => 'Le coût n\'a pas été généré'],
+            ['price', 'integer', 'min' => 0, 'tooSmall' => 'Le temps d\'incertitude généré doit être supérieur à 0', 'message' => 'Le temps d\'incertitude généré doit être supérieur à 0'],
         ];
     }
 }

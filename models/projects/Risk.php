@@ -23,20 +23,20 @@ class Risk extends ActiveRecord implements JsonSerializable
 
     public static function getAll()
     {
-        return static::find();
+        return static::find()->all();
     }
 
     /**
      * Fonction pour envoyer au format json les données de l'objet.
      * 
-     * //TODO coefficient voca error.
+     * //TODO corriger l'erreur de vocabulaire dans la bdd : coefficient*
      */
     public function jsonSerialize()
     {
         return array(
             'id' => $this->id,
             'title' => $this->title,
-            'coeficient' => $this->coeficient,
+            'coefficient' => $this->coefficient,
         );
     }
 }

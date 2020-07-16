@@ -30,6 +30,7 @@ use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
 use app\models\projects\forms\ProjectCreateRepaymentForm;
 use app\models\projects\Lot;
+use app\services\errorPageServices\ErrorPage;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\userRoleAccessServices\PermissionAccessEnum;
@@ -648,8 +649,8 @@ class ProjectController extends Controller implements ServiceInterface
                     $taskGestions->lot_id = $lot->id;
 
                     $taskriskduration = risk::find(['title' => $taskGestions->risk])->one();
-                    echo $taskriskduration->coeficient;
-                    $taskGestions->risk_duration  = $taskriskduration->coeficient;
+                    echo $taskriskduration->coefficient;
+                    $taskGestions->risk_duration  = $taskriskduration->coefficient;
                     $taskGestions->task_category = task::CATEGORY_MANAGEMENT;
                     $taskGestions->save();
                 }
@@ -662,9 +663,9 @@ class ProjectController extends Controller implements ServiceInterface
 
 
                     $taskriskduration = risk::find(['title' => $taskOperational->risk])->one();
-                    echo $taskriskduration->coeficient;
+                    echo $taskriskduration->coefficient;
 
-                    $taskOperational->risk_duration  = $taskriskduration->coeficient;
+                    $taskOperational->risk_duration  = $taskriskduration->coefficient;
                     $taskOperational->task_category = task::CATEGORY_TASK;
                     $taskOperational->save();
                 }
@@ -690,13 +691,26 @@ class ProjectController extends Controller implements ServiceInterface
      * Route : create-third-step
      * Permet de gérer la gestion des consomables et matériels utilisés pour un lot spécifique d'un projet.
      * 
-     * @param 
+     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * 
+     * @return mixed|null
      */
     public function actionCreateThirdStep($project_id, $number)
     {
 
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
+
+        if ($lot == null) {
+            return $this->redirect([
+                'error',
+                'errorName' => 'Lot innexistant',
+                'errorDescription' => 'Vous essayez actuellement de gérer une liste de matériels sur un lot qui n\'existe pas.'
+            ]);
+            exit;
+        }
+
 
         // Modèles à sauvegarder.
         $repayment = new ProjectCreateRepaymentForm();
@@ -705,8 +719,10 @@ class ProjectController extends Controller implements ServiceInterface
         $equipmentsRepayment = [new ProjectCreateEquipmentRepaymentForm()];
         $contributors = [new ProjectCreateLaboratoryContributorForm()];
 
+        // Import de données depuis la bdd.
         $laboratoriesData = Laboratory::getAll();
         $equipmentsData = Equipment::getAll();
+        $risksData = Risk::getAll();
 
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
         if ($repayment->load(Yii::$app->request->post())) {
@@ -777,11 +793,27 @@ class ProjectController extends Controller implements ServiceInterface
                 'number' => $number,
                 'laboratoriesData' => $laboratoriesData,
                 'equipmentsData' => $equipmentsData,
+                'risksData' => $risksData,
                 'repayment' => $repayment,
                 'consumables' => $consumables,
                 'expenses' => $expenses,
                 'equipments' => $equipmentsRepayment,
                 'contributors' => $contributors
+            ]
+        );
+    }
+
+    /**
+     * Fonction qui rend une page d'erreur.
+     */
+    public function actionError(string $errorName, string $errorDescription)
+    {
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render(
+            'error',
+            [
+                'errorName' => $errorName,
+                'errorDescription' => $errorDescription
             ]
         );
     }
