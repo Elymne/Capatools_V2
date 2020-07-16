@@ -27,13 +27,15 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
     public function rules()
     {
         return [
+            [['riskSelected'], 'safe'],
             ['type', 'required', 'message' => 'Veuillez renseigner le type d\'intervenant'],
             ['nb_days', 'required', 'message' => 'Veuillez définir le nombre de jours'],
+            ['nb_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
             ['nb_hours', 'required', 'message' => 'Veuillez définir le nombre d\'heures'],
-            ['price_day', 'required', 'message' => 'Veuillez définir le prix journalier'],
-            ['risk', 'required', 'message' => 'Veuillez définir le taux d\'incertitude'],
-            ['risk_day', 'required', 'message' => 'Veulliez définir le nombre de jours lié à l\'incertitude'],
-            ['risk_hour', 'required', 'message' => 'Veulliez définir le nombre d\'heures lié à l\'incertitude'],
+            ['nb_hours', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
+            ['price', 'required', 'message' => 'Le coût n\'a pas été généré'],
+            ['price', 'integer', 'min' => 0, 'tooSmall' => 'Le coût généré doit être supérieur à 0', 'message' => 'Le coût généré doit être supérieur à 0'],
+            ['time_risk', 'required', 'message' => 'Le temps d\'incertitude n\'a pas été généré'],
         ];
     }
 }

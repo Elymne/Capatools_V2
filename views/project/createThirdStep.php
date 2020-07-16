@@ -164,7 +164,6 @@ ProjectCreateThirdStepAsset::register($this);
 
                 </div>
 
-
                 <!-- Card : Gestion des reversements -->
                 <div class="card">
 
@@ -213,7 +212,7 @@ ProjectCreateThirdStepAsset::register($this);
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $equipments[0],
                                         'formId' => 'dynamic-form',
-                                        'formFields' => ['laboratorySelected', 'nb_days', 'nb_hours', 'risk', 'risk_day'],
+                                        'formFields' => ['equipmentSelected', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'time_risk'],
                                     ]); ?>
 
                                     <div class="container-items-equipment">
@@ -252,7 +251,9 @@ ProjectCreateThirdStepAsset::register($this);
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
                                                         <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::classname(), [
-                                                            'data' => EquipmentRepayment::RISKS,
+                                                            'data' => array_map(function ($risk) {
+                                                                return $risk->title;
+                                                            }, $risksData),
                                                             'options' => ['value' => 0],
                                                             'pluginLoading' => false,
                                                             'pluginOptions' => [
@@ -261,7 +262,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Incertitude"); ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($equipment, "[{$i}]risk_day")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Temps incertitude") ?>
+                                                        <?= $form->field($equipment, "[{$i}]time_risk")->input('string', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -298,7 +299,7 @@ ProjectCreateThirdStepAsset::register($this);
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $contributors[0],
                                         'formId' => 'dynamic-form',
-                                        'formFields' => ['type', 'nb_days', 'nb_hours', 'price_day', 'price_hour', 'risk', 'risk_day', 'risk_hour'],
+                                        'formFields' => ['type', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'time_risk'],
                                     ]); ?>
 
                                     <div class="container-items-labocontributor">
@@ -330,12 +331,14 @@ ProjectCreateThirdStepAsset::register($this);
                                                         <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]price_day")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Coût") ?>
+                                                        <?= $form->field($contributor, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
                                                         <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::classname(), [
-                                                            'data' => LaboratoryContributor::RISKS,
+                                                            'data' => array_map(function ($risk) {
+                                                                return $risk->title;
+                                                            }, $risksData),
                                                             'options' => ['value' => 0],
                                                             'pluginLoading' => false,
                                                             'pluginOptions' => [
@@ -344,7 +347,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Incertitude"); ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($contributor, "[{$i}]risk_day")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Temps incertitude") ?>
+                                                        <?= $form->field($contributor, "[{$i}]time_risk")->input('string', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -394,7 +397,7 @@ ProjectCreateThirdStepAsset::register($this);
 </div>
 
 <!-- Utilisation : envoi de données concernant les équipements/matériel. -->
-<div id="equipment-data-target" style="display: none;">
+<div id="equipments-data-target" style="display: none;">
     <?php
     // Transformation des données sous format JSON.
     $ed = array_map(function ($data) {
@@ -402,5 +405,17 @@ ProjectCreateThirdStepAsset::register($this);
     }, $equipmentsData);
     // Envoi de données.
     echo json_encode($ed);
+    ?>
+</div>
+
+<!-- Utilisation : envoi de données concernant les incertitudes/risques. -->
+<div id="risks-data-target" style="display: none;">
+    <?php
+    // Transformation des données sous format JSON.
+    $rd = array_map(function ($data) {
+        return $data->jsonSerialize();
+    }, $risksData);
+    // Envoi de données.
+    echo json_encode($rd);
     ?>
 </div>

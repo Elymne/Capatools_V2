@@ -13,12 +13,12 @@ class m200099_000840_equipment_repayment_table extends Migration
             'nb_days' => $this->integer()->notNull(),
             'nb_hours' => $this->integer()->defaultValue(0),
             'price' => $this->integer()->defaultValue(0),
-            'risk' => $this->string()->notNull(),
-            'risk_day' => $this->integer()->defaultValue(0),
+            'time_risk' => $this->integer()->defaultValue(0),
 
             // Foreign key.
             'equipment_id' => $this->integer()->notNull(),
             'repayment_id' => $this->integer()->notNull(),
+            'risk_id' => $this->integer()->notNull(),
         ]);
 
         $this->addForeignKey(
@@ -37,24 +37,32 @@ class m200099_000840_equipment_repayment_table extends Migration
             'id'
         );
 
+        $this->addForeignKey(
+            'FK_equipment_repayment-risk',
+            '{{%equipment_repayment}}',
+            'risk_id',
+            '{{%risk}}',
+            'id'
+        );
+
         $this->insert('{{%equipment_repayment}}', [
             'nb_days' => 20,
             'nb_hours' => 19,
             'price' => 200,
-            'risk' => 'Haute',
-            'risk_day' => 15,
+            'time_risk' => 15,
             'equipment_id' => 1,
-            'repayment_id' => 1
+            'repayment_id' => 1,
+            'risk_id' => 1
         ]);
 
         $this->insert('{{%equipment_repayment}}', [
             'nb_days' => 2000,
             'nb_hours' => 1,
             'price' => 1000,
-            'risk' => 'Très haute',
-            'risk_day' => 239,
+            'time_risk' => 239,
             'equipment_id' => 2,
-            'repayment_id' => 2
+            'repayment_id' => 2,
+            'risk_id' => 3
         ]);
     }
 

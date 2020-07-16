@@ -293,10 +293,10 @@ if ($lot->number != 0) {
 </div>
 
 <!-- Utilisation : envoi de données concernant les risques. -->
-<div id="coeficient-data-target" style="display: none;">
+<div id="coefficient-data-target" style="display: none;">
     <?php
     // Envoi de données.
-    echo json_encode(ArrayHelper::map($risk, 'id', 'coeficient'));
+    echo json_encode(ArrayHelper::map($risk, 'id', 'coefficient'));
     ?>
 </div>
 

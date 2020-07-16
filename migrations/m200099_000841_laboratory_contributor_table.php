@@ -12,15 +12,13 @@ class m200099_000841_laboratory_contributor_table extends Migration
             'type' => $this->string()->notNull(),
             'nb_days' => $this->integer()->defaultValue(0),
             'nb_hours' => $this->integer()->defaultValue(0),
-            'price_day' => $this->string()->notNull(),
-            'price_hour' => $this->integer(),
-            'risk' => $this->string()->notNull(),
-            'risk_day' => $this->integer(0),
-            'risk_hour' => $this->integer(0),
+            'price' => $this->integer()->defaultValue(0),
+            'time_risk' => $this->integer()->defaultValue(0),
 
             // Foreign key.
             'laboratory_id' => $this->integer()->notNull(),
             'repayment_id' => $this->integer()->notNull(),
+            'risk_id' => $this->integer()->notNull(),
         ]);
 
         $this->addForeignKey(
@@ -39,30 +37,34 @@ class m200099_000841_laboratory_contributor_table extends Migration
             'id'
         );
 
+        $this->addForeignKey(
+            'laboratory_contributor-risk',
+            '{{%laboratory_contributor}}',
+            'risk_id',
+            '{{%risk}}',
+            'id'
+        );
+
         $this->insert('{{%laboratory_contributor}}', [
             'type' => 'stagiaire',
             'nb_days' => 20,
             'nb_hours' => 19,
-            'price_day' => 300,
-            'price_hour' => 20,
-            'risk' => 'Haute',
-            'risk_day' => 15,
-            'risk_hour' => 12,
+            'price' => 300,
+            'time_risk' => 15,
             'laboratory_id' => 1,
-            'repayment_id' => 1
+            'repayment_id' => 1,
+            'risk_id' => 3
         ]);
 
         $this->insert('{{%laboratory_contributor}}', [
             'type' => 'stagiaire',
             'nb_days' => 20,
             'nb_hours' => 19,
-            'price_day' => 300,
-            'price_hour' => 20,
-            'risk' => 'Normale',
-            'risk_day' => 15,
-            'risk_hour' => 12,
+            'price' => 300,
+            'time_risk' => 15,
             'laboratory_id' => 1,
-            'repayment_id' => 2
+            'repayment_id' => 2,
+            'risk_id' => 1
         ]);
     }
 
