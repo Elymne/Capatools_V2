@@ -15,9 +15,19 @@ use yii\db\ActiveRecord;
 class Consumable extends ActiveRecord
 {
 
+    /**
+     * Petite note ici qui a son importance.
+     * Sur l'application, on dicerne deux types de consommables :
+     *  les consommables par défaut que l'on va simplement appeler "consommable"
+     *  les consommables qui seront définie comme des dépenses éventuelles que l'on va appeler "expense"
+     * 
+     * Pour résumer simplement, au niveau de l'affichage, on va séparer les consommables qui sont de type : TYPE_SECONDARY_INVESTMENT avec le reste.
+     */
+    // Consommable par défaut.
     const TYPE_EXTERNAL_DELIVERY = "Prestation externe";
     const TYPE_CONSUMABLE = "Consommable";
     const TYPE_INTERNAL_DELIVERY = "Prestation interne";
+    // Dépenses éventuelles.
     const TYPE_SECONDARY_INVESTMENT = "Investissement éventuels";
 
     const TYPES = [
@@ -29,6 +39,16 @@ class Consumable extends ActiveRecord
     public static function tableName()
     {
         return 'consumable';
+    }
+
+    public static function getAllConsummablesByLotID(int $lotID)
+    {
+        return self::find()->where(['lot_id' => $lotID, 'type' => !self::TYPE_SECONDARY_INVESTMENT])->all();
+    }
+
+    public static function getAllExpensesByLotID(int $lotID)
+    {
+        return self::find()->where(['lot_id' => $lotID, 'type' => self::TYPE_SECONDARY_INVESTMENT])->all();
     }
 
     public function getLot()

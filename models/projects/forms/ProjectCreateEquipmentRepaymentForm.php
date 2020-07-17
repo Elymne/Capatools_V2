@@ -21,6 +21,7 @@ class ProjectCreateEquipmentRepaymentForm extends EquipmentRepayment
      */
     public $equipmentSelected;
     public $riskSelected;
+    public $timeRiskStringify;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
@@ -28,12 +29,12 @@ class ProjectCreateEquipmentRepaymentForm extends EquipmentRepayment
     public function rules()
     {
         return [
-            [['equipmentSelected', 'riskSelected'], 'safe'],
+            [['equipmentSelected', 'riskSelected', 'timeRiskStringify'], 'safe'],
             ['nb_days', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
             ['nb_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
             ['nb_hours', 'required', 'message' => 'Veuillez renseigner le nombre d\'heures'],
             ['nb_hours', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
-            ['risk_time', 'required', 'message' => 'Le temps d\'incertitude n\'a pas généré'],
+            ['timeRiskStringify', 'required', 'message' => 'Le temps d\'incertitude n\'a pas généré'],
             ['price', 'required', 'message' => 'Le coût n\'a pas été généré'],
             ['price', 'integer', 'min' => 0, 'tooSmall' => 'Le temps d\'incertitude généré doit être supérieur à 0', 'message' => 'Le temps d\'incertitude généré doit être supérieur à 0'],
         ];

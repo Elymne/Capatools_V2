@@ -1,11 +1,11 @@
-a<?php
+<?php
 
-    use app\widgets\TopTitle;
+use app\widgets\TopTitle;
 
-    $this->title = 'Erreur : ' . $errorName;
-    $this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Erreur : ' . $errorName;
+$this->params['breadcrumbs'][] = $this->title;
 
-    ?>
+?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 

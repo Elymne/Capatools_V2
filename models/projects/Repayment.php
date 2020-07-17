@@ -25,6 +25,11 @@ class Repayment extends ActiveRecord
         return 'repayment';
     }
 
+    public static function getOneByLotID(int $lotID)
+    {
+        return self::find()->where(['lot_id' => $lotID])->one();
+    }
+
     /**
      * Fonction de jointure au modèle des lots.
      * Créer un attribut "lot" de type <Lot>.

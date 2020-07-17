@@ -26,6 +26,7 @@ $(() => {
         }
     })
     frameElement()
+
     // Callback lorsque l'utilisateur supprime un lot.
     $(".dynamicform_wrapper").on("beforeDelete", (e, item) => {
         if (!confirm("Etes-vous sûr de vouloir supprimer ce lot ? Pour rappel, toutes les tâches liées à ce lot seront supprimées dans le precessus")) {
