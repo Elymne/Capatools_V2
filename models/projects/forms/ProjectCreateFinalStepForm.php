@@ -5,6 +5,7 @@ namespace app\models\projects\forms;
 use app\models\companies\Company;
 use app\models\companies\Contact;
 use app\models\projects\Project;
+use app\models\users\CapaUser;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -21,12 +22,18 @@ use yii\helpers\ArrayHelper;
 class ProjectCreateFinalStepForm extends Project
 {
 
-    public $upfilename;
-    public $pathfile;
-    public $datept;
+    // public $upfilename;
+    // public $pathfile;
+    // public $datept;
 
+    // Champ supplémentaire.
     public $company_name;
     public $contact_name;
+    public $project_manager;
+
+    public $commentary;
+
+    public $signatureProbability;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
@@ -34,17 +41,18 @@ class ProjectCreateFinalStepForm extends Project
     public function rules()
     {
         return [
-            [[], 'safe'],
+            [['signatureProbability', 'commentary'], 'safe'],
 
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
-            ['service_duration', 'required', 'message' => 'Indiquer le temps en heure du projet.'],
-            ['service_duration_day', 'required', 'message' => 'Indiquer le en jour temps du projet.'],
+
             ['company_name', 'required', 'message' => 'Indiquer le nom du client.'],
             ['company_name', 'noCompanyFound', 'skipOnEmpty' => false, 'skipOnError' => false],
+
             ['contact_name', 'required', 'message' => 'Indiquer le nom du client.'],
             ['contact_name', 'noContactFound', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['service_duration', 'integer', 'min' => 0, 'tooSmall' => 'La durée en heure de la prestation doit être supérieur à 0.', 'message' => 'La durée en heure de la prestation doit être un entier positif.'],
-            ['service_duration_day', 'integer', 'min' => 0, 'tooSmall' => 'La durée en jour de la prestation doit être supérieur à 0.', 'message' => 'La durée en jour de la prestation doit être un entier positif.'],
+
+            ['project_manager', 'required', 'message' => 'Indiquer le nom du client.'],
+            ['project_manager', 'noContactFound', 'skipOnEmpty' => false, 'skipOnError' => false],
 
 
             ['prospecting_time_day', 'integer', 'min' => 0, 'tooSmall' => 'La durée doit être supérieur à 0.', 'message' => 'La durée doit être un entier positif.'],
@@ -106,6 +114,19 @@ class ProjectCreateFinalStepForm extends Project
 
         if (!in_array($this->$attribute, $companiesNames)) {
             $this->addError($attribute, 'Le client n\'existe pas.');
+        }
+    }
+
+    /**
+     * Vérifie que le chef de projet rengseigné existe, et si il est bien un chef de projet (c'est-à-dire qu'il a le r$ole PROJECT_MANAGER).
+     */
+    public function noProjectManager($attribute, $params)
+    {
+        $usersMail = ArrayHelper::map(CapaUser::find()->all(), 'id', 'email');
+        $usersMail = array_merge($usersMail);
+
+        if (!in_array($this->$attribute, $usersMail)) {
+            $this->addError($attribute, "Cet utilisateur n'existe pas.");
         }
     }
 }

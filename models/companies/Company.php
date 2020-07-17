@@ -31,7 +31,16 @@ class Company extends ActiveRecord
      */
     public static function getAll()
     {
-        return static::find();
+        return static::find()->all();
+    }
+
+    /**
+     * On retourne tous les clients sauf le client indéfini.
+     * Mauvaise conception, //TODO A changer en ndd.
+     */
+    public static function getAllWithoutUndifined()
+    {
+        return self::find()->andWhere(['!=', 'id', -1])->all();
     }
 
     /**

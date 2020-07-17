@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 #region imports
+
+use app\models\companies\Company;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -24,6 +26,7 @@ use app\models\projects\Consumable;
 use app\models\projects\forms\ProjectCreateConsumableForm;
 use app\models\projects\forms\ProjectCreateEquipmentRepaymentForm;
 use app\models\projects\forms\ProjectCreateExpenseForm;
+use app\models\projects\forms\ProjectCreateFinalStepForm;
 use app\models\projects\forms\ProjectCreateFirstStepForm;
 use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
@@ -32,6 +35,7 @@ use app\models\projects\forms\ProjectCreateGestionTaskForm;
 use app\models\projects\forms\ProjectCreateLotTaskForm;
 use app\models\projects\forms\ProjectCreateMilleStoneForm;
 use app\models\projects\Lot;
+use app\models\projects\ProjectCreateGestionTaskForm as ProjectsProjectCreateGestionTaskForm;
 use app\services\laboxyServices\IdLaboxyManager;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
@@ -409,7 +413,7 @@ class ProjectController extends Controller implements ServiceInterface
      *  @return mixed
      */
     public function actionCreateFirstStep()
-    {/*
+    {
         $model = new ProjectCreateFirstStepForm();
         $lots =  [new ProjectCreateLotForm()];
 
@@ -511,7 +515,9 @@ class ProjectController extends Controller implements ServiceInterface
                 'model' => $model,
                 'lots' => $lots
             ]
-        );*/
+        );
+
+        //TODO J'ai pas trop compris, surement un soucis survenu lors d'un merge ou un rebase. A voir :o
         $project = ProjectSimulate::getOneById(1);
         $lotavp = $project->getLotaventprojet();
         $lots = $project->lots;
@@ -538,7 +544,7 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionTask($number, $project_id)
     {
         $model = new ProjectCreateTaskForm();
-        $tasksGestions = [new ProjectCreateGestionTaskForm];
+        $tasksGestions = [new ProjectsProjectCreateGestionTaskForm()];
         $tasksOperational = [new ProjectCreateLotTaskForm];
         $risk = Risk::find()->all();
         $model->project_id = $project_id;
@@ -648,7 +654,7 @@ class ProjectController extends Controller implements ServiceInterface
         if ($lot == null) {
             return $this->redirect([
                 'error',
-                'errorName' => 'Lot innexistant',
+                'errorName' => 'Lot inexistant',
                 'errorDescriptions' => ['Vous essayez actuellement de gérer une liste de matériels sur un lot qui n\'existe pas.']
             ]);
         }
@@ -746,11 +752,32 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
-    /**
-     * A faire.
-     */
-    public function actionUpdateTask($number, $project_id)
+    public function actionCreateFinalStep($project_id)
     {
+        $model = ProjectCreateFinalStepForm::getOneById($project_id);
+        $clientsName = array_map(function ($elem) {
+            return $elem->name;
+        }, Company::getAllWithoutUndifined());
+
+        if ($model == null) {
+            return $this->redirect([
+                'error',
+                'errorName' => 'Projet en cours de création inexistant',
+                'errorDescriptions' => [
+                    "Vous êtes actuellement en train d'essayer d'acéder à la finalisation d'un projet qui n'existe pas dans la bdd",
+                    "Si vous avez cette erreur, il est plus que probable que vous ayez essayé de rentré dans cette vue en utilisant le mauvais id"
+                ]
+            ]);
+        }
+
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render(
+            'createFinalStep',
+            [
+                'model' => $model,
+                'clientsName' => $clientsName
+            ]
+        );
     }
 
     /**
@@ -910,6 +937,20 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+    /**
+     * A faire.
+     */
+    public function actionUpdateTask($number, $project_id)
+    {
+    }
+
+    /**
+     * Route : update-third-step
+     * Retourne la vue de la troisième étape de la création d'un projet. On utilise celle-ci pour modifier un projet existant.
+     * Les modifications sur cette vue concernent : les consommables, les matériels et les intervenants par lot.
+     * 
+     * //TODO not done.
+     */
     public function actionUpdateThirdStep($project_id, $number)
     {
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
