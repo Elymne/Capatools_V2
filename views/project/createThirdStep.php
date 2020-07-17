@@ -212,7 +212,7 @@ ProjectCreateThirdStepAsset::register($this);
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $equipments[0],
                                         'formId' => 'dynamic-form',
-                                        'formFields' => ['equipmentSelected', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'time_risk'],
+                                        'formFields' => ['equipmentSelected', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'timeRiskStringify'],
                                     ]); ?>
 
                                     <div class="container-items-equipment">
@@ -246,7 +246,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Coût") ?>
+                                                        <?= $form->field($equipment, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'readonly' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
@@ -262,7 +262,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Incertitude"); ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($equipment, "[{$i}]time_risk")->input('string', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Temps incertitude") ?>
+                                                        <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -299,7 +299,7 @@ ProjectCreateThirdStepAsset::register($this);
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $contributors[0],
                                         'formId' => 'dynamic-form',
-                                        'formFields' => ['type', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'time_risk'],
+                                        'formFields' => ['type', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'timeRiskStringify'],
                                     ]); ?>
 
                                     <div class="container-items-labocontributor">
@@ -331,7 +331,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Coût") ?>
+                                                        <?= $form->field($contributor, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'readonly' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
@@ -347,7 +347,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Incertitude"); ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($contributor, "[{$i}]time_risk")->input('string', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Temps incertitude") ?>
+                                                        <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label(false)->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -417,5 +417,28 @@ ProjectCreateThirdStepAsset::register($this);
     }, $risksData);
     // Envoi de données.
     echo json_encode($rd);
+    ?>
+</div>
+
+<!-- Informations relatives aux données présentes. -->
+<div id="info-data-target" style="display: none;">
+    <?php
+
+    // Transformation des données sous format JSON.
+    $ided = array_map(function ($data) {
+        return $data->jsonSerialize();
+    }, $equipments);
+
+    // Transformation des données sous format JSON.
+    $idcd = array_map(function ($data) {
+        return $data->jsonSerialize();
+    }, $contributors);
+
+    // Envoi de données.
+    echo json_encode([
+        'laboratorySelected' => $repayment->laboratory_id,
+        'equipments' => $ided,
+        'contributors' => $idcd,
+    ]);
     ?>
 </div>

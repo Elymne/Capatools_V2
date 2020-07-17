@@ -20,6 +20,7 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
      * (Pour stocker la valeur choisie dans les listes déroulantes).
      */
     public $riskSelected;
+    public $timeRiskStringify;
 
     /**
      * Fonction surchargée de la classe ActiveRecord, elle permet de vérifier l'intégrité des données dans un modèle.
@@ -27,7 +28,7 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
     public function rules()
     {
         return [
-            [['riskSelected'], 'safe'],
+            [['riskSelected', 'timeRiskStringify'], 'safe'],
             ['type', 'required', 'message' => 'Veuillez renseigner le type d\'intervenant'],
             ['nb_days', 'required', 'message' => 'Veuillez définir le nombre de jours'],
             ['nb_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
@@ -35,7 +36,7 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
             ['nb_hours', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
             ['price', 'required', 'message' => 'Le coût n\'a pas été généré'],
             ['price', 'integer', 'min' => 0, 'tooSmall' => 'Le coût généré doit être supérieur à 0', 'message' => 'Le coût généré doit être supérieur à 0'],
-            ['time_risk', 'required', 'message' => 'Le temps d\'incertitude n\'a pas été généré'],
+            ['timeRiskStringify', 'required', 'message' => 'Le temps d\'incertitude n\'a pas été généré'],
         ];
     }
 }

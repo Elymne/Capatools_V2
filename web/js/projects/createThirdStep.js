@@ -3,150 +3,208 @@ const laboratoriesData = JSON.parse(document.getElementById("laboratories-data-t
 const equipmentsData = JSON.parse(document.getElementById("equipments-data-target").textContent)
 const risksData = JSON.parse(document.getElementById("risks-data-target").textContent)
 
-// Variable utilisé pour déterminer le contenu dans la liste déroulante d'un matériel.
-let equipmentsStateList = equipmentsData
+// Liste d'informations relatives au données qui enreichissent le dynamicForm.
+const infoData = JSON.parse(document.getElementById("info-data-target").textContent)
+
+const laboratorySelected = infoData.laboratorySelected !== null ? infoData.laboratorySelected : 0
+const addedEquipementsOnInit = infoData.equipments
+const addedContributorsOnInit = infoData.contributors
 
 /**
- * Scope jquery qui s'occupe de gérer la partie dynamique (calcul des coûts ect..) au lancement de la vue.
- * C'est donc la gestion dynamique de tous les composants à l'initialisation de la vue.
+ * Cette variable existe car suivant le laboratoire sélectionné, les éléments dans les listes déroulantes vont changer pour correspondre à leur laboratoire respectif.
+ * Il nous faut donc une variable qui stock les éléments présent des ces listes déroulantes, et cette variable doit être mise à jour à chaque fois qu'un nouveau laboratoire est sélectionné.
+ * Voir la fonction : getEquipementsListFromSelectedLaboratory() qui permet de mettre à jour cette variable (plus précisément, elle ne met pas à jour, elle retourne un tableau de données
+ * et c'est nous qui mettons à jour la table en l'écrasant avec le résutat de la fonction).
+ */
+let equipmentsLocalStateList = equipmentsData
+
+/**
+ * Scope de test parce que je ne sais pas trop ce que je fais actuellement, on va voir si ça marche en tout cas.
+ * J'pense que j'vais appeler ce scope : THE BEGGIN OF BIG FAT JQUERY CODE OF DOOM.
  */
 $(() => {
-    /**
-     * On vide la liste déroulantes de toutes ses options, puis la nourrit avec la liste des matériels existants.
-     * En sommes, ici, nous rafraichissons la liste déroulante à l'initialisation de la vue.
-     */
-    $("#projectcreateequipmentrepaymentform-0-equipmentselected").empty()
-    $("#projectcreateequipmentrepaymentform-0-equipmentselected").append(getEquipementsOptionsListFromSelectedLaboratory(equipmentsData, laboratoriesData))
-
-    // Par défaut, le temps généré par le risque est à 0.
-    $("#projectcreateequipmentrepaymentform-0-time_risk").val(stringifyRiskTime())
-    $("#projectcreatelaboratorycontributorform-0-time_risk").val(stringifyRiskTime())
-
-    // Par défaut, le coût généré est de 0.
-    $("#projectcreateequipmentrepaymentform-0-price").val(0)
-    $("#projectcreatelaboratorycontributorform-0-price").val(0)
-
     /**
      * Mise à jour de l'état de la liste des matériels par rapport au labo choisi.
      * Très utile car on en a besoin pour faire le calcul du coût par matériel.
      */
-    equipmentsStateList = getEquipementsListFromSelectedLaboratory(equipmentsData, laboratoriesData)
+    equipmentsLocalStateList = getEquipementsListFromSelectedLaboratory(equipmentsData, laboratoriesData)
 
     /**
-     * Callback onChange sur la liste déroulante des matériels du premier item.
-     * Permet de reclaculer le coût d'utilisation d'un matériel.
+     * Explication : Pour chaque equipment de renvoyé dans la vue (des équipements donc qui seront affichés dans la dynamicView), il va nous falloir définir les callback de calcul
+     * pour chaque élément.
+     * C'est donc ce que l'on fait dans cette boucle.
      */
-    $("#projectcreateequipmentrepaymentform-0-equipmentselected").change(() => {
+    addedEquipementsOnInit.forEach((elem, i) => {
+        /**
+         * On vide la liste déroulantes de toutes ses options, puis la nourrit avec la liste des matériels existants.
+         * En sommes, ici, nous rafraichissons la liste déroulante à l'initialisation de la vue.
+         */
+        $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).empty()
+        $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).append(
+            getEquipementsOptionsListFromSelectedLaboratory(equipmentsData, laboratoriesData),
+        )
+
+        /**
+         * On calcul le coût de risque de l'équipement inscrit dans l'élément corresponant à l'index i.
+         * Si aucunes données ne permet de calculer le coût de risque, on part du principe que le jour et l'heure rentré est équivalent à 0,
+         */
+        const riskObject = calculateRiskTime(
+            !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+            !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+            getValueFromEquipmentRiskSelectedByIndex(risksData, i),
+        )
+        $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+
+        /**
+         * On calcul le coût d'utilisation de l'équipement inscrit dans l'élément corresponant à l'index i.
+         * Si aucunes données ne permet de calculer le coût, on part du principe que le jour et l'heure rentré est équivalent à 0,
+         */
         const result = calculateEquipmentPrice(
-            $("#projectcreateequipmentrepaymentform-0-nb_days").val(),
-            $("#projectcreateequipmentrepaymentform-0-nb_hours").val(),
-            getValueFromEquipmentSelectedByIndex(equipmentsStateList),
+            !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+            !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+            getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
         )
-        $("#projectcreateequipmentrepaymentform-0-price").val(result)
+        $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
+
+        /**
+         * Callback onChange sur la liste déroulante des matériels du premier item.
+         * Permet de reclaculer le coût d'utilisation d'un matériel.
+         */
+        $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).change(() => {
+            const result = calculateEquipmentPrice(
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+                getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
+            )
+            $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
+        })
+
+        /**
+         * Callback onChange sur la liste déroulante des matériels du premier item.
+         * Permet de recalculer le temps additionel lié au risque.
+         */
+        $(`#projectcreateequipmentrepaymentform-${i}-riskselected`).change(() => {
+            const riskObject = calculateRiskTime(
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+                getValueFromEquipmentRiskSelectedByIndex(risksData, 0),
+            )
+            $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+        })
+
+        /**
+         * Callback onInput sur le champ de sélection des jours d'utilisation d'un matériel.
+         * Permet de reclaculer le coût d'utilisation d'un matériel.
+         */
+        $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).on("input", () => {
+            const result = calculateEquipmentPrice(
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+                getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
+            )
+
+            $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
+
+            const riskObject = calculateRiskTime(
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+                getValueFromEquipmentRiskSelectedByIndex(risksData, i),
+            )
+            $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+        })
+
+        /**
+         * Callback onInput sur le champ de sélection des heures d'utilisation d'un matériel.
+         * Permet de recalculer le coût d'utilisation d'un matériel.
+         */
+        $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).on("input", () => {
+            const result = calculateEquipmentPrice(
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+                getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
+            )
+            $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
+            const riskObject = calculateRiskTime(
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+                !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+                getValueFromEquipmentRiskSelectedByIndex(risksData, i),
+            )
+            $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+        })
+
+        //getIndexSelectorOfEquipment(elem, equipmentsLocalStateList)
     })
 
-    /**
-     * Callback onChange sur la liste déroulante des matériels du premier item.
-     * Permet de recalculer le temps additionel lié au risque.
-     */
-    $("#projectcreateequipmentrepaymentform-0-riskselected").change(() => {
-        const riskObject = calculateRiskTime(
-            $("#projectcreateequipmentrepaymentform-0-nb_days").val(),
-            $("#projectcreateequipmentrepaymentform-0-nb_hours").val(),
-            getValueFromEquipmentRiskSelectedByIndex(risksData, 0),
-        )
-        $("#projectcreateequipmentrepaymentform-0-time_risk").val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
-    })
-
-    /**
-     * Callback onInput sur le champ de sélection des jours d'utilisation d'un matériel.
-     * Permet de reclaculer le coût d'utilisation d'un matériel.
-     */
-    $("#projectcreateequipmentrepaymentform-0-nb_days").on("input", () => {
-        const result = calculateEquipmentPrice(
-            $("#projectcreateequipmentrepaymentform-0-nb_days").val(),
-            $("#projectcreateequipmentrepaymentform-0-nb_hours").val(),
-            getValueFromEquipmentSelectedByIndex(equipmentsStateList),
-        )
-        $("#projectcreateequipmentrepaymentform-0-price").val(result)
-        const riskObject = calculateRiskTime(
-            $("#projectcreateequipmentrepaymentform-0-nb_days").val(),
-            $("#projectcreateequipmentrepaymentform-0-nb_hours").val(),
-            getValueFromEquipmentRiskSelectedByIndex(risksData, 0),
-        )
-        $("#projectcreateequipmentrepaymentform-0-time_risk").val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
-    })
-
-    /**
-     * Callback onInput sur le champ de sélection des heures d'utilisation d'un matériel.
-     * Permet de recalculer le coût d'utilisation d'un matériel.
-     */
-    $("#projectcreateequipmentrepaymentform-0-nb_hours").on("input", () => {
-        const result = calculateEquipmentPrice(
-            $("#projectcreateequipmentrepaymentform-0-nb_days").val(),
-            $("#projectcreateequipmentrepaymentform-0-nb_hours").val(),
-            getValueFromEquipmentSelectedByIndex(equipmentsStateList),
-        )
-        $("#projectcreateequipmentrepaymentform-0-price").val(result)
-        const riskObject = calculateRiskTime(
-            $("#projectcreateequipmentrepaymentform-0-nb_days").val(),
-            $("#projectcreateequipmentrepaymentform-0-nb_hours").val(),
-            getValueFromEquipmentRiskSelectedByIndex(risksData, 0),
-        )
-        $("#projectcreateequipmentrepaymentform-0-time_risk").val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
-    })
-
-    /**
-     * Callback onChange sur la liste déroulante des matériels du premier item.
-     * Permet de recalculer le temps additionel lié au risque.
-     */
-    $("#projectcreatelaboratorycontributorform-0-riskselected").change(() => {
-        const riskObject = calculateRiskTime(
-            $("#projectcreatelaboratorycontributorform-0-nb_days").val(),
-            $("#projectcreatelaboratorycontributorform-0-nb_hours").val(),
-            getValueFromContributorRiskSelectedByIndex(risksData, 0),
-        )
-        $("#projectcreatelaboratorycontributorform-0-time_risk").val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
-    })
-
-    /**
-     * Calbacl onInput sur le champ de sélection des jours pris par un intervenant labo.
-     * Permet de recalculer le coût d'une intervention.
-     */
-    $("#projectcreatelaboratorycontributorform-0-nb_days").on("input", () => {
+    addedContributorsOnInit.forEach((elem, i) => {
+        /**
+         * Mise en place des valeur par défaut dans les prix et les co$uts en temps.
+         */
         const result = calculateContributorPrice(
-            $("#projectcreatelaboratorycontributorform-0-nb_days").val(),
-            $("#projectcreatelaboratorycontributorform-0-nb_hours").val(),
+            !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+            !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
             getValueFromLaboratorySelected(laboratoriesData),
         )
-        $("#projectcreatelaboratorycontributorform-0-price").val(result)
+        $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
 
         const riskObject = calculateRiskTime(
-            $("#projectcreatelaboratorycontributorform-0-nb_days").val(),
-            $("#projectcreatelaboratorycontributorform-0-nb_hours").val(),
+            !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+            !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
             getValueFromContributorRiskSelectedByIndex(risksData, 0),
         )
-        $("#projectcreatelaboratorycontributorform-0-time_risk").val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
-    })
+        $(`#projectcreatelaboratorycontributorform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
 
-    /**
-     * Calbacl onInput sur le champ de sélection des heures pris par un intervenant labo.
-     * Permet de recalculer le coût d'une intervention.
-     */
-    $("#projectcreatelaboratorycontributorform-0-nb_hours").on("input", () => {
-        const result = calculateContributorPrice(
-            $("#projectcreatelaboratorycontributorform-0-nb_days").val(),
-            $("#projectcreatelaboratorycontributorform-0-nb_hours").val(),
-            getValueFromLaboratorySelected(laboratoriesData),
-        )
-        $("#projectcreatelaboratorycontributorform-0-price").val(result)
+        /**
+         * Callback onChange sur la liste déroulante des matériels du premier item.
+         * Permet de recalculer le temps additionel lié au risque.
+         */
+        $(`#projectcreatelaboratorycontributorform-${i}-riskselected`).change(() => {
+            const riskObject = calculateRiskTime(
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
+                getValueFromContributorRiskSelectedByIndex(risksData, i),
+            )
+            $(`#projectcreatelaboratorycontributorform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+        })
 
-        const riskObject = calculateRiskTime(
-            $("#projectcreatelaboratorycontributorform-0-nb_days").val(),
-            $("#projectcreatelaboratorycontributorform-0-nb_hours").val(),
-            getValueFromContributorRiskSelectedByIndex(risksData, 0),
-        )
-        $("#projectcreatelaboratorycontributorform-0-time_risk").val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+        /**
+         * Calbacl onInput sur le champ de sélection des jours pris par un intervenant labo.
+         * Permet de recalculer le coût d'une intervention.
+         */
+        $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).on("input", () => {
+            const result = calculateContributorPrice(
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
+                getValueFromLaboratorySelected(laboratoriesData),
+            )
+            $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
+
+            const riskObject = calculateRiskTime(
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
+                getValueFromContributorRiskSelectedByIndex(risksData, 0),
+            )
+            $(`#projectcreatelaboratorycontributorform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+        })
+
+        /**
+         * Calbacl onInput sur le champ de sélection des heures pris par un intervenant labo.
+         * Permet de recalculer le coût d'une intervention.
+         */
+        $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).on("input", () => {
+            const result = calculateContributorPrice(
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
+                getValueFromLaboratorySelected(laboratoriesData),
+            )
+            $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
+
+            const riskObject = calculateRiskTime(
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
+                getValueFromContributorRiskSelectedByIndex(risksData, 0),
+            )
+            $(`#projectcreatelaboratorycontributorform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+        })
     })
 })
 
@@ -174,11 +232,11 @@ $(() => {
                 getEquipementsOptionsListFromSelectedLaboratory(equipmentsData, laboratoriesData),
             )
 
-            equipmentsStateList = getEquipementsListFromSelectedLaboratory(equipmentsData, laboratoriesData)
+            equipmentsLocalStateList = getEquipementsListFromSelectedLaboratory(equipmentsData, laboratoriesData)
             const result = calculateEquipmentPrice(
                 $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
                 $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                getValueFromEquipmentSelectedByIndex(equipmentsStateList, 0),
+                getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
             )
             $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
         }
@@ -188,7 +246,7 @@ $(() => {
      * Calback onAddItem.
      * Permet de gérer les callback des futurs éléments que l'utilisateur pourra créer.
      */
-    $(".dynamicform_wrapper_equipment").on("afterInsert", function (e, item) {
+    $(".dynamicform_wrapper_equipment").on("afterInsert", (e, item) => {
         nbEquipmentLineDuplicated++
 
         /**
@@ -201,7 +259,7 @@ $(() => {
         )
 
         // Par défaut, le temps généré par le risque est à 0.
-        $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-time_risk`).val(stringifyRiskTime())
+        $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-timeriskstringify`).val(stringifyRiskTime())
 
         // Par défaut, le coût généré est de 0.
         $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-price`).val(0)
@@ -215,7 +273,7 @@ $(() => {
                 const result = calculateEquipmentPrice(
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                    getValueFromEquipmentSelectedByIndex(equipmentsStateList, nbEquipmentLineDuplicated),
+                    getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
                 )
 
                 $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
@@ -231,7 +289,7 @@ $(() => {
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
                     getValueFromEquipmentRiskSelectedByIndex(risksData, i),
                 )
-                $(`#projectcreateequipmentrepaymentform-${i}-time_risk`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+                $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
             })
 
             /**
@@ -242,7 +300,7 @@ $(() => {
                 const result = calculateEquipmentPrice(
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                    getValueFromEquipmentSelectedByIndex(equipmentsStateList, i),
+                    getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
                 )
                 $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
                 const riskObject = calculateRiskTime(
@@ -250,7 +308,7 @@ $(() => {
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
                     getValueFromEquipmentRiskSelectedByIndex(risksData, i),
                 )
-                $(`#projectcreateequipmentrepaymentform-${i}-time_risk`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+                $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
             })
 
             /**
@@ -261,7 +319,7 @@ $(() => {
                 const result = calculateEquipmentPrice(
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                    getValueFromEquipmentSelectedByIndex(equipmentsStateList, i),
+                    getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
                 )
                 $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
                 const riskObject = calculateRiskTime(
@@ -269,7 +327,7 @@ $(() => {
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
                     getValueFromEquipmentRiskSelectedByIndex(risksData, 0),
                 )
-                $(`#projectcreateequipmentrepaymentform-${i}-time_risk`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+                $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
             })
         }
     })
@@ -277,7 +335,7 @@ $(() => {
     /**
      * Calback onRemoveItem.
      */
-    $(".dynamicform_wrapper_equipment").on("afterDelete", function (e) {
+    $(".dynamicform_wrapper_equipment").on("afterDelete", (e) => {
         nbEquipmentLineDuplicated--
     })
 })
@@ -305,7 +363,7 @@ $(() => {
                 $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
                 getValueFromLaboratorySelected(laboratoriesData),
             )
-            $(`#projectcreatelaboratorycontributorform-${i}-price_day`).val(result)
+            $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
         }
     })
 
@@ -313,11 +371,11 @@ $(() => {
      * Calback onAddItem.
      * Permet de gérer les callback des futurs éléments que l'utilisateur pourra créer.
      */
-    $(".dynamicform_wrapper_contributor").on("afterInsert", function (e, item) {
+    $(".dynamicform_wrapper_contributor").on("afterInsert", (e, item) => {
         nbContributorLineDuplicated++
 
         // Par défaut, le temps généré par le risque est à 0.
-        $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-time_risk`).val(stringifyRiskTime())
+        $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-timeriskstringify`).val(stringifyRiskTime())
 
         // Par défaut, le coût généré est de 0.
         $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-price`).val(0)
@@ -331,9 +389,9 @@ $(() => {
                 const riskObject = calculateRiskTime(
                     $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
                     $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
-                    getValueFromContributorRiskSelectedByIndex(risksData, 0),
+                    getValueFromContributorRiskSelectedByIndex(risksData, i),
                 )
-                $(`#projectcreatelaboratorycontributorform-${i}-time_risk`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+                $(`#projectcreatelaboratorycontributorform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
             })
 
             /**
@@ -351,9 +409,9 @@ $(() => {
                 const riskObject = calculateRiskTime(
                     $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
                     $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
-                    getValueFromContributorRiskSelectedByIndex(risksData, 0),
+                    getValueFromContributorRiskSelectedByIndex(risksData, i),
                 )
-                $(`#projectcreatelaboratorycontributorform-${i}-time_risk`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+                $(`#projectcreatelaboratorycontributorform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
             })
 
             /**
@@ -371,17 +429,19 @@ $(() => {
                 const riskObject = calculateRiskTime(
                     $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
                     $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
-                    getValueFromContributorRiskSelectedByIndex(risksData, 0),
+                    getValueFromContributorRiskSelectedByIndex(risksData, i),
                 )
-                $(`#projectcreatelaboratorycontributorform-${i}-time_risk`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
+                $(`#projectcreatelaboratorycontributorform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
             })
         }
     })
 
-    $(".dynamicform_wrapper_contributor").on("afterDelete", function (e) {
+    $(".dynamicform_wrapper_contributor").on("afterDelete", (e) => {
         nbContributorLineDuplicated--
     })
 })
+
+//#region Liste des fonctions js
 
 /**
  * Fonction permettant de retourner le labo sélectionné.
@@ -489,3 +549,15 @@ const getEquipementsOptionsListFromSelectedLaboratory = (equipmentsData, laborat
  */
 const getEquipementsListFromSelectedLaboratory = (equipmentsData, laboratoriesData) =>
     equipmentsData.filter((element) => element.laboratory_id == getValueFromLaboratorySelected(laboratoriesData).id)
+
+/**
+ * Fonction assez simple qui va regarder l'id du laboratoire associé à l'équipement fournit en paramètre.
+ * Grâce à celui-ci, il va pouvoir retourner un index correspondant à l'item précis de la liste déroulante par rapport au tableau d'éléments enrengistré dans le second paramètre.
+ * Si il n'y a pas d'id de l'aboratoire, l'index retourné est 0.
+ * @param {*} equipementElem
+ */
+const getIndexSelectorOfEquipment = (equipementElem, equipmentsLocalStateList) => {
+    if (!equipementElem.repayment.null) return 0
+}
+
+//#endregion

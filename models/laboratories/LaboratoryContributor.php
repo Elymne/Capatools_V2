@@ -3,6 +3,7 @@
 namespace app\models\laboratories;
 
 use app\models\projects\Repayment;
+use JsonSerializable;
 use yii\db\ActiveRecord;
 
 /**
@@ -26,7 +27,7 @@ use yii\db\ActiveRecord;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class LaboratoryContributor extends ActiveRecord
+class LaboratoryContributor extends ActiveRecord implements JsonSerializable
 {
 
     const TYPE_SEARCHER = "Chercheur";
@@ -38,17 +39,17 @@ class LaboratoryContributor extends ActiveRecord
         self::TYPE_DOCTOR
     ];
 
-    const RISK_LOW = 'Faible';
-    const RISK_NORMAL = 'Normale';
-    const RISK_HIGH = "Haute";
-    const RISKS = [self::RISK_LOW, self::RISK_NORMAL, self::RISK_HIGH];
-
     /**
      * Utilisé pour définir quelle table est associée à cette classe.
      */
     static function tableName()
     {
         return 'laboratory_contributor';
+    }
+
+    public static function getAllByLaboratoryID(int $laboratoryID)
+    {
+        return self::find()->where(['laboratory_id' => $laboratoryID])->all();
     }
 
     /**
@@ -69,5 +70,23 @@ class LaboratoryContributor extends ActiveRecord
     public function getRepayment()
     {
         return $this->hasOne(Repayment::className(), ['id' => 'repayment_id']);
+    }
+
+    /**
+     * Fonction pour envoyer au format json les données de l'objet.
+     */
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'type' => $this->type,
+            'nb_days' => $this->nb_days,
+            'nb_hours' => $this->nb_hours,
+            'price' => $this->price,
+            'time_risk' => $this->time_risk,
+            'laboratory_id' => $this->laboratory_id,
+            'repayment_id' => $this->repayment_id,
+            'risk_id' => $this->risk_id
+        );
     }
 }

@@ -18,7 +18,6 @@ use app\models\projects\Risk;
 use app\models\projects\Millestone;
 use app\models\projects\Task;
 use app\models\equipments\Equipment;
-use app\models\equipments\EquipmentRepayment;
 use app\models\laboratories\Laboratory;
 use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\Consumable;
@@ -39,6 +38,7 @@ use app\services\menuServices\SubMenuEnum;
 use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
+use app\services\helpers\TimeStringifyHelper;
 use kartik\mpdf\Pdf;
 use yii\helpers\ArrayHelper;
 #endregion
@@ -653,7 +653,6 @@ class ProjectController extends Controller implements ServiceInterface
             ]);
         }
 
-
         // Modèles à sauvegarder.
         $repayment = new ProjectCreateRepaymentForm();
         $consumables = [new ProjectCreateConsumableForm()];
@@ -707,24 +706,26 @@ class ProjectController extends Controller implements ServiceInterface
                     })
                 );
 
-
                 // On associe les matériels au lot actuel, puis on les sauvegardes.
                 foreach ($equipmentsRepayment as $equipmentRepayment) {
                     $equipmentRepayment->equipment_id = $equipmentsDataFilteredByLabo[$equipmentRepayment->equipmentSelected]->id;
                     $equipmentRepayment->repayment_id = $repayment->id;
-                    $equipmentRepayment->risk = EquipmentRepayment::RISKS[$equipmentRepayment->riskSelected];
+                    $equipmentRepayment->risk_id = $equipmentRepayment->riskSelected + 1;
+                    $equipmentRepayment->time_risk = TimeStringifyHelper::transformStringChainToHour($equipmentRepayment->timeRiskStringify);
                     $equipmentRepayment->save();
                 }
 
                 // On associe les intervenants de laboratoire au lot actuel, puis ont les sauvegardes.
                 foreach ($contributors as $contributor) {
-                    $contributor->type = LaboratoryContributor::RISKS[$contributor->type];
+                    $contributor->type = LaboratoryContributor::TYPES[$contributor->type];
                     $contributor->laboratory_id = $id_laboratory;
                     $contributor->repayment_id = $repayment->id;
+                    $contributor->risk_id = $contributor->riskSelected + 1;
+                    $contributor->time_risk = TimeStringifyHelper::transformStringChainToHour($contributor->timeRiskStringify);
                     $contributor->save();
                 }
 
-                return "Ca a marché, et oui, moi aussi j'aime Beethoven";
+                return "Et oui, moi aussi j'aime Beethoven";
             }
         }
 
@@ -743,6 +744,13 @@ class ProjectController extends Controller implements ServiceInterface
                 'contributors' => $contributors
             ]
         );
+    }
+
+    /**
+     * A faire.
+     */
+    public function actionUpdateTask($number, $project_id)
+    {
     }
 
     /**
@@ -768,6 +776,12 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+    /**
+     * Route : update-first-step
+     * Retourne la vue de la première étape de la création d'un projet. On utilise celle-ci pour modifier un projet existant.
+     * Les modifications sur cette vue concernent : Le titre, les lots (à ôter, un lot ne doit pas être détruisable).
+     * Cette vue va probablement ne plus servir à grand chose.
+     */
     public function actionUpdateFirstStep(int $id)
     {
         // Récupération du projet brouillon.
@@ -896,6 +910,48 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+    public function actionUpdateThirdStep($project_id, $number)
+    {
+        // Modèle du lot à updater. On s'en sert pour récupérer son id.
+        $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
+
+        if ($lot == null) {
+            return $this->redirect([
+                'error',
+                'errorName' => 'Lot innexistant',
+                'errorDescriptions' => ['Vous essayez actuellement de modifier une liste de matériels sur un lot/projet qui n\'existe pas.']
+            ]);
+        }
+
+        // Récupérer les données existantes du lot spécifié en paramètre.
+        $repayment = ProjectCreateRepaymentForm::getOneByLotID($lot->id);
+        $consumables =  ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id);
+        $expenses = ProjectCreateExpenseForm::getAllExpensesByLotID($lot->id);
+        $equipmentsRepayment = ProjectCreateEquipmentRepaymentForm::getAllByRepaymentID($repayment->id);
+        $contributors = ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($repayment->laboratory_id);
+
+        // Import de données depuis la bdd.
+        $laboratoriesData = Laboratory::getAll();
+        $equipmentsData = Equipment::getAll();
+        $risksData = Risk::getAll();
+
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render(
+            'createThirdStep',
+            [
+                'number' => $number,
+                'laboratoriesData' => $laboratoriesData,
+                'equipmentsData' => $equipmentsData,
+                'risksData' => $risksData,
+                'repayment' => $repayment,
+                'consumables' => $consumables,
+                'expenses' => $expenses,
+                'equipments' => $equipmentsRepayment,
+                'contributors' => $contributors
+            ]
+        );
+    }
+
     /**
      * Méthode générale pour le contrôleur permettant de retourner un devis.
      * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
@@ -914,14 +970,9 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
-     * @deprecated Cette fonction n'est plus utilisé
-     */
-    public static function getIndicator($user)
-    {
-    }
-
-    /**
      * Fonction qui rend une page d'erreur.
+     * @param string $errorName - Le titre de l'erreur que vous souhaitez afficher.
+     * @param array $errorDescription - Une liste de chaîne de caractères avec des détails précis sur l'erreur en question.
      */
     public function actionError(string $errorName, array $errorDescriptions)
     {
@@ -933,5 +984,12 @@ class ProjectController extends Controller implements ServiceInterface
                 'errorDescriptions' => $errorDescriptions
             ]
         );
+    }
+
+    /**
+     * @deprecated Cette fonction n'est plus utilisé
+     */
+    public static function getIndicator($user)
+    {
     }
 }
