@@ -2,6 +2,7 @@
 
 use app\assets\AppAsset;
 use app\models\projects\Project;
+use app\assets\projects\ProjectSimulationAsset;
 use app\widgets\TopTitle;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
@@ -10,6 +11,8 @@ use yii\widgets\ActiveForm;
 $this->title = 'Simulation du projet';
 
 AppAsset::register($this);
+
+ProjectSimulationAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -202,14 +205,14 @@ AppAsset::register($this);
                                     ?>
                                     <div class="row">
                                         <div class="col s3">
-                                            <?= $form->field($millestone, "comment")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Titre") ?>
+                                            <?= $form->field($millestone, "[{$i}]comment")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Titre") ?>
 
                                         </div>
                                         <div class="col s1">
-                                            <?= $form->field($millestone, "pourcentage")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Pourcentage") ?>
+                                            <?= $form->field($millestone, "[{$i}]pourcentage")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Pourcentage") ?>
                                         </div>
                                         <div class="col s1">
-                                            <?= $form->field($millestone, "price")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Prix") ?>
+                                            <?= $form->field($millestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Prix") ?>
                                         </div>
                                         <div class="col 2">
                                             <button type="button" class="add-item-millestone btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
