@@ -1,8 +1,9 @@
 <?php
 
-namespace app\models\projects;
+namespace app\models\projects\forms;
 
-use phpDocumentor\Reflection\Types\Null_;
+use app\models\projects\Task;
+
 
 /**
  * Classe relative au modèle métier des Lots.
@@ -18,7 +19,7 @@ use phpDocumentor\Reflection\Types\Null_;
 class ProjectCreateGestionTaskForm extends Task
 {
 
-
+    public $risk_duration;
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */

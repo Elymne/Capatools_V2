@@ -141,6 +141,8 @@ if ($lot->number != 0) {
                                             </div>
                                             <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
+
+                                                <?php echo Html::activeHiddenInput($taskGestion, "[{$i}]risk_duration_hour"); ?>
                                             </div>
                                             <div class="col 2">
                                                 <button type="button" class="add-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -264,6 +266,8 @@ if ($lot->number != 0) {
                                                     </div>
                                                     <div class="col s1">
                                                         <?= $form->field($taskOperational, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
+                                                        <?php echo Html::activeHiddenInput($taskOperational, "[{$i}]risk_duration_hour"); ?>
+
                                                     </div>
                                                     <div class="col 2">
                                                         <button type="button" class="add-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>

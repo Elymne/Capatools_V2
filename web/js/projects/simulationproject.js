@@ -1,4 +1,3 @@
-var TotalPrice = 5005.44;
 function updateprice(id) {
     var SelectMillePourcent =
         "#projectcreatemillestoneform-" + id + "-pourcentage";
@@ -21,7 +20,17 @@ function updatepourcent(id) {
     }
     $(SelectMillePourcent).val(pourcent);
 }
+var pourcentage = "#projectcreatemillestoneform-" + 0 + "-pourcentage";
+$(pourcentage).val(0);
+$(pourcentage).on("input", function (e) {
+    updateprice(0);
+});
 
+var price = "#projectcreatemillestoneform-" + 0 + "-price";
+$(price).val(0);
+$(price).on("input", function (e) {
+    updatepourcent(0);
+});
 $(() => {
     $(".dynamicform_millestone").on("afterInsert", function (e, item) {
         //Recherche de l'index courrent

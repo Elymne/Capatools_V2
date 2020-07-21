@@ -17,7 +17,7 @@ use app\models\projects\Task;
  */
 class ProjectCreateLotTaskForm extends Task
 {
-
+    public $risk_duration;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.

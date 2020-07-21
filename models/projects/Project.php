@@ -160,4 +160,10 @@ class Project extends ActiveRecord
         }
         return round((($totalwithmargin / $totalwithoutmargin) - 1) * 100, 2);
     }
+    public function getNbLot()
+    {
+        $ListeLot = $this->lots;
+        //Le 
+        return count($ListeLot) - 1;
+    }
 }
