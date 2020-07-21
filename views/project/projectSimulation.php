@@ -95,11 +95,11 @@ ProjectSimulationAsset::register($this);
                         ?>
                                 <label class='blue-text control-label typeLabel'> <?= $lotproject->title ?> </label>
                                 <div class="row">
-                                    <div class="col s4">
+                                    <div class="col s3">
                                         <!-- Détail du coût  -->
                                         Prix du total lot :
                                     </div>
-                                    <div class="col s1">
+                                    <div class="col s2">
                                         <!-- Détail du coût  -->
                                         <?= Html::input('text', '', $lotproject->totalwithmargin + $project->additionallotprice, $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true,]) ?>
                                     </div>
@@ -139,7 +139,7 @@ ProjectSimulationAsset::register($this);
                             <div class="col s3">
                                 Montant Total HT (€):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($project, "total")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
@@ -147,7 +147,7 @@ ProjectSimulationAsset::register($this);
                             <div class="col s3">
                                 Taux de marge moyen avant frais de gestion (%):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($project, "marginaverage")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
@@ -155,7 +155,7 @@ ProjectSimulationAsset::register($this);
                             <div class="col s3">
                                 Frais de gestion du support HT (€):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($project, "supportprice")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
@@ -163,7 +163,7 @@ ProjectSimulationAsset::register($this);
                             <div class="col s3">
                                 Prix de vente du lot HT (€):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($project, "SellingPrice")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
@@ -208,10 +208,10 @@ ProjectSimulationAsset::register($this);
                                             <?= $form->field($millestone, "[{$i}]comment")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Titre") ?>
 
                                         </div>
-                                        <div class="col s1">
+                                        <div class="col s2">
                                             <?= $form->field($millestone, "[{$i}]pourcentage")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Pourcentage") ?>
                                         </div>
-                                        <div class="col s1">
+                                        <div class="col s2">
                                             <?= $form->field($millestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Prix") ?>
                                         </div>
                                         <div class="col 2">

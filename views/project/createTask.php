@@ -300,6 +300,7 @@ if ($lot->number != 0) {
 <div id="coefficient-data-target" style="display: none;">
     <?php
     // Envoi de données.
+
     echo json_encode(ArrayHelper::map($risk, 'id', 'coefficient'));
     ?>
 </div>

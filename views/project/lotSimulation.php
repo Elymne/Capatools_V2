@@ -72,7 +72,7 @@ AppAsset::register($this);
                                 <!-- Détail du coût  -->
                                 Taux de marge temps homme (%):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <!-- Détail du coût  -->
                                 <?= $form->field($lot, "rate_human_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label(false) ?>
                             </div>
@@ -87,7 +87,7 @@ AppAsset::register($this);
                                 <!-- Détail du coût  -->
                                 Total Prix de revient H.T. temps homme (€):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <!-- Détail du coût  -->
                                 <?= $form->field($lot, "total_cost_human_with_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
@@ -100,7 +100,7 @@ AppAsset::register($this);
                                 Taux de marge consommables, déplacements et achat (%):
 
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <!-- Détail du coût  -->
                                 <?= $form->field($lot, "rate_consumable_investement_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label(false) ?>
                             </div>
@@ -115,7 +115,7 @@ AppAsset::register($this);
                                 <!-- Détail du coût  -->
                                 Total Prix de revient H.T. consommables, déplacements et achat (€):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <!-- Détail du coût  -->
                                 <?= $form->field($lot, "total_cost_invest_with_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
@@ -128,7 +128,7 @@ AppAsset::register($this);
                                 Taux de marge reversement Laboratoire (%):
 
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <!-- Détail du coût  -->
                                 <?= $form->field($lot, "rate_repayement_margin")->textInput([
                                     'autocomplete' => 'off',
@@ -147,7 +147,7 @@ AppAsset::register($this);
                                 <!-- Détail du coût  -->
                                 Total Prix de revient H.T. reversement Laboratoire (€):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <!-- Détail du coût  -->
                                 <?= $form->field($lot, "total_cost_repayement_with_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
@@ -168,7 +168,7 @@ AppAsset::register($this);
                             <div class="col s3">
                                 Montant Total HT (€):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($lot, "total_cost_lot")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => ['decimal', 2]])->label(false) ?>
 
                             </div>
@@ -177,7 +177,7 @@ AppAsset::register($this);
                             <div class="col s3">
                                 Taux de marge moyen avant frais de gestion (%):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($lot, "average_lot_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
@@ -185,7 +185,7 @@ AppAsset::register($this);
                             <div class="col s3">
                                 Frais de gestion du support HT (€):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($lot, "support_cost")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>
@@ -193,7 +193,7 @@ AppAsset::register($this);
                             <div class="col s3">
                                 Prix de vente du lot HT (€):
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($lot, "total_cost_lot_with_support")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
                             </div>
                         </div>

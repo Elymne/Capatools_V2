@@ -165,7 +165,19 @@ class ProjectController extends Controller implements ServiceInterface
                         'url' => 'project/create-first-step',
                         'label' => 'Créer un projet',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    ]
+                    ],
+                    [
+                        'Priorite' => 4,
+                        'url' => 'project/lot-simulate',
+                        'label' => 'Simulation  de lot',
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    ],
+                    [
+                        'Priorite' => 5,
+                        'url' => 'project/project-simulate',
+                        'label' => 'Simulation  Projet',
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    ],
                 ]
             ];
         }
@@ -547,7 +559,7 @@ class ProjectController extends Controller implements ServiceInterface
 
             if ($number != 0) {
                 // Préparation de tous les modèles de Task de gestion
-                $tasksGestions = Model::createMultiple(TaskGestionCreateTaskForm::className(), $tasksGestions);
+                $tasksGestions = Model::createMultiple(ProjectCreateGestionTaskForm::className(), $tasksGestions);
                 Model::loadMultiple($tasksGestions, Yii::$app->request->post());
 
                 if (!empty($tasksGestions)) {
@@ -562,7 +574,7 @@ class ProjectController extends Controller implements ServiceInterface
             }
 
             // Préparation de tous les modèles de Task operationel
-            $tasksOperational = Model::createMultiple(TaskLotCreateTaskForm::className(), $tasksOperational);
+            $tasksOperational = Model::createMultiple(ProjectCreateLotTaskForm::className(), $tasksOperational);
             Model::loadMultiple($tasksOperational, Yii::$app->request->post());
 
 
@@ -606,7 +618,7 @@ class ProjectController extends Controller implements ServiceInterface
                 }
 
                 // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/create-third-step', 'number' => $model->number, 'project_id' => $model->id]);
+                Yii::$app->response->redirect(['project/create-third-step', 'number' => $number, 'project_id' => $project_id]);
             }
         }
         MenuSelectorHelper::setMenuProjectCreate();
@@ -615,8 +627,8 @@ class ProjectController extends Controller implements ServiceInterface
             [
                 'model' => $model,
                 'celluleUsers' => $celluleUsers,
-                'tasksGestions' => (empty($tasksGestions)) ? [new TaskGestionCreateTaskForm] : $tasksGestions,
-                'tasksOperational' => (empty($tasksOperational)) ? [new TaskLotCreateTaskForm] : $tasksOperational,
+                'tasksGestions' => (empty($tasksGestions)) ? [new ProjectCreateGestionTaskForm] : $tasksGestions,
+                'tasksOperational' => (empty($tasksOperational)) ? [new ProjectCreateLotTaskForm] : $tasksOperational,
                 'risk' => $risk,
             ]
         );
@@ -746,11 +758,11 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionLotSimulate($project_id = 0, $number = 0)
+    public function actionLotSimulate($project_id = 1, $number = 1)
     {
 
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
-        $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
+        $lot = LotSimulate::getOneByIdProjectAndNumber($project_id, $number);
 
         if ($lot == null) {
             return $this->redirect([
@@ -801,13 +813,15 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionProjectSimulate($project_id = 0)
+    public function actionProjectSimulate($project_id = 1)
     {
 
         // Modèle du projet à updater. On s'en sert pour récupérer son id.
-        $lot = Project::getOneById($project_id);
-
-        if ($lot == null) {
+        $project = Project::getOneById($project_id);
+        $lotavp = $project->lotaventprojet;
+        $lots = $project->lots;
+        $millestones = $project->millestones;
+        if ($project == null) {
             return $this->redirect([
                 'error',
                 'errorName' => 'projet innexistant',
@@ -824,24 +838,19 @@ class ProjectController extends Controller implements ServiceInterface
 
             $projetsimulation->save();
 
-            $millestones = [new ProjectCreateConsumableForm()];
+            $millestones = [new ProjectCreateMilleStoneForm()];
             $project = $lot->project;
             $ListeLot = $project->lots;
-            $number++;
-            if ($number == $project->nblot) {
-                // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project_id]);
-            } else {
-                // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/task', 'number' => $number, 'project_id' => $project_id]);
-            }
         }
 
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
-            'lotSimulation',
+            'projectSimulation',
             [
-                'lot' =>  $lot
+                'project' =>  $project,
+                'lotavp' => $lotavp,
+                'lots' => $lots,
+                'millestones' => (empty($millestones)) ? [new ProjectCreateMilleStoneForm()] : $millestones,
             ]
 
         );
