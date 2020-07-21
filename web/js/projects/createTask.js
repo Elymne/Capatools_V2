@@ -5,68 +5,80 @@ const $intervenantMap = JSON.parse(
     document.getElementById("capauser-data-target").textContent
 );
 
-var Taskdaydurationlot = "#tasklotcreatetaskform-" + 0 + "-day_duration";
+var Taskdaydurationlot = "#projectcreatelottaskform-" + 0 + "-day_duration";
 $(Taskdaydurationlot).on("input", function (e) {
     OnCalculIncertitudelot(0);
 });
 
-var Taskdaydurationlot = "#tasklotcreatetaskform-" + 0 + "-hour_duration";
+var Taskdaydurationlot = "#projectcreatelottaskform-" + 0 + "-hour_duration";
 $(Taskdaydurationlot).on("input", function (e) {
     OnCalculIncertitudelot(0);
 });
 
-var TaskdaydurationGest = "#taskgestioncreatetaskform-" + 0 + "-day_duration";
+var TaskdaydurationGest =
+    "#projectcreategestiontaskform-" + 0 + "-day_duration";
 $(TaskdaydurationGest).on("input", function (e) {
     OnCalculIncertitudeGest(0);
 });
 
-var TaskdaydurationGest = "#taskgestioncreatetaskform-" + 0 + "-hour_duration";
+var TaskdaydurationGest =
+    "#projectcreategestiontaskform-" + 0 + "-hour_duration";
 $(TaskdaydurationGest).on("input", function (e) {
     OnCalculIncertitudeGest(0);
+});
+
+var Userselect = "#projectcreategestiontaskform-" + 0 + "-capa_user_id";
+$(TaskdaydurationGest).on("input", function (e) {
+    OnCalculIntervenantGest(0);
+});
+
+var Userselect = "#projectcreatelottaskform-" + 0 + "-capa_user_id";
+$(TaskdaydurationGest).on("input", function (e) {
+    OnCalculIntervenantlot(0);
 });
 
 function OnCalculIncertitudeGest(id) {
-    var Taskdayduration = "#taskgestioncreatetaskform-" + id + "-day_duration";
+    var Taskdayduration =
+        "#projectcreategestiontaskform-" + id + "-day_duration";
     var day = $(Taskdayduration).val();
 
     var Taskhourduration =
-        "#taskgestioncreatetaskform-" + id + "-hour_duration";
+        "#projectcreategestiontaskform-" + id + "-hour_duration";
     var hour = $(Taskhourduration).val();
 
-    var SelectRisk = "#taskgestioncreatetaskform-" + id + "-risk";
+    var SelectRisk = "#projectcreategestiontaskform-" + id + "-risk";
     incertitude = $(SelectRisk).val();
 
     var res = CalculTempsincertitude(hour, day, incertitude);
 
     var SelectRiskDuration =
-        "#taskgestioncreatetaskform-" + id + "-risk_duration";
-    incertitude = $(SelectRiskDuration).val(
+        "#projectcreategestiontaskform-" + id + "-risk_duration";
+    $(SelectRiskDuration).val(
         res.dayIncertitude + "j " + res.hourIncertitude + "h"
     );
 
     var SelectRiskDuration =
-        "#taskgestioncreatetaskform-" + id + "-risk_duration_hour";
-    incertitude = $(SelectRiskDuration).val(
-        res.dayIncertitude + "j " + res.hourIncertitude + "h"
-    );
+        "#projectcreategestiontaskform-" + id + "-risk_duration_hour";
+    var total = res.dayIncertitude + res.hourIncertitude * 7.7;
+    $(SelectRiskDuration).val(total);
 }
 
 function OnCalculIntervenantGest(id) {
-    var elementuser = "#taskgestioncreatetaskform-" + id + "-price";
+    var elementuser = "#projectcreategestiontaskform-" + id + "-price";
 
-    var Userselect = "#taskgestioncreatetaskform-" + id + "-capa_user_id";
+    var Userselect = "#projectcreategestiontaskform-" + id + "-capa_user_id";
 
     var userid = $(Userselect).val();
-
+    console.log($intervenantMap);
     var intervenantMap = $intervenantMap;
     var priceuser = intervenantMap[userid];
     $(elementuser).val(priceuser);
 }
 
 function OnCalculIntervenantlot(id) {
-    var elementuser = "#tasklotcreatetaskform-" + id + "-price";
+    var elementuser = "#projectcreatelottaskform-" + id + "-price";
 
-    var Userselect = "#tasklotcreatetaskform-" + id + "-capa_user_id";
+    var Userselect = "#projectcreatelottaskform-" + id + "-capa_user_id";
 
     var userid = $(Userselect).val();
 
@@ -75,19 +87,20 @@ function OnCalculIntervenantlot(id) {
     $(elementuser).val(priceuser);
 }
 function OnCalculIncertitudelot(id) {
-    var Taskdayduration = "#tasklotcreatetaskform-" + id + "-day_duration";
+    var Taskdayduration = "#projectcreatelottaskform-" + id + "-day_duration";
     var day = $(Taskdayduration).val();
 
-    var Taskhourduration = "#tasklotcreatetaskform-" + id + "-hour_duration";
+    var Taskhourduration = "#projectcreatelottaskform-" + id + "-hour_duration";
     var hour = $(Taskhourduration).val();
     console.log(hour);
-    var SelectRisk = "#tasklotcreatetaskform-" + id + "-risk";
+    var SelectRisk = "#projectcreatelottaskform-" + id + "-risk";
     incertitude = $(SelectRisk).val();
 
     console.log($(SelectRisk));
     var res = CalculTempsincertitude(hour, day, incertitude);
 
-    var SelectRiskDuration = "#tasklotcreatetaskform-" + id + "-risk_duration";
+    var SelectRiskDuration =
+        "#projectcreatelottaskform-" + id + "-risk_duration";
     incertitude = $(SelectRiskDuration).val(
         res.dayIncertitude + "j " + res.hourIncertitude + "h"
     );
@@ -116,31 +129,31 @@ $(() => {
     $(".dynamicform_wrapperLot").on("afterInsert", function (e, item) {
         //Recherche de l'index courrent
         var seletect = item.innerHTML;
-        var regex = new RegExp("tasklotcreatetaskform-([0-9]*)-risk");
+        var regex = new RegExp("projectcreatelottaskform-([0-9]*)-risk");
         var arr = regex.exec(seletect);
         var index = parseInt(arr[1]);
 
         //Ajout des callbacks pour les élements
-        var SelectRisk = "#tasklotcreatetaskform-" + index + "-risk";
+        var SelectRisk = "#projectcreatelottaskform-" + index + "-risk";
         $(SelectRisk).on("select2:select", function (e) {
             OnCalculIncertitudelot(index);
         });
 
         var Taskdayduration =
-            "#tasklotcreatetaskform-" + index + "-day_duration";
+            "#projectcreatelottaskform-" + index + "-day_duration";
         $(Taskdayduration).val(0);
         $(Taskdayduration).on("input", function (e) {
             OnCalculIncertitudelot(index);
         });
 
         var Taskhourduration =
-            "#tasklotcreatetaskform-" + index + "-hour_duration";
+            "#projectcreatelottaskform-" + index + "-hour_duration";
         $(Taskhourduration).val(0);
         $(Taskhourduration).on("input", function (e) {
             OnCalculIncertitudelot(index);
         });
 
-        var SelectUser = "#tasklotcreatetaskform-" + index + "-capa_user_id";
+        var SelectUser = "#projectcreatelottaskform-" + index + "-capa_user_id";
         $(SelectUser).on("select2:select", function (e) {
             OnCalculIntervenantlot(index);
         });
@@ -161,32 +174,32 @@ $(() => {
     $(".dynamicform_wrapperGest").on("afterInsert", function (e, item) {
         //Recherche de l'index courrent
         var seletect = item.innerHTML;
-        var regex = new RegExp("taskgestioncreatetaskform-([0-9]*)-risk");
+        var regex = new RegExp("projectcreategestiontaskform-([0-9]*)-risk");
         var arr = regex.exec(seletect);
         var index = parseInt(arr[1]);
 
         //Ajout des callbacks pour les élements
-        var SelectRisk = "#taskgestioncreatetaskform-" + index + "-risk";
+        var SelectRisk = "#projectcreategestiontaskform-" + index + "-risk";
         $(SelectRisk).on("select2:select", function (e) {
             OnCalculIncertitudeGest(index);
         });
 
         var Taskdayduration =
-            "#taskgestioncreatetaskform-" + index + "-day_duration";
+            "#projectcreategestiontaskform-" + index + "-day_duration";
         $(Taskdayduration).val(0);
         $(Taskdayduration).on("input", function (e) {
             OnCalculIncertitudeGest(index);
         });
 
         var Taskhourduration =
-            "#taskgestioncreatetaskform-" + index + "-hour_duration";
+            "#projectcreategestiontaskform-" + index + "-hour_duration";
         $(Taskhourduration).val(0);
         $(Taskhourduration).on("input", function (e) {
             OnCalculIncertitudeGest(index);
         });
 
         var SelectUser =
-            "#taskgestioncreatetaskform-" + index + "-capa_user_id";
+            "#projectcreategestiontaskform-" + index + "-capa_user_id";
         $(SelectUser).on("select2:select", function (e) {
             OnCalculIntervenantGest(index);
         });
