@@ -166,18 +166,6 @@ class ProjectController extends Controller implements ServiceInterface
                         'label' => 'Créer un projet',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
                     ],
-                    [
-                        'Priorite' => 4,
-                        'url' => 'project/lot-simulate',
-                        'label' => 'Simulation  de lot',
-                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    ],
-                    [
-                        'Priorite' => 5,
-                        'url' => 'project/project-simulate',
-                        'label' => 'Simulation  Projet',
-                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    ],
                 ]
             ];
         }
