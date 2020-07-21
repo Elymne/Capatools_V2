@@ -234,14 +234,12 @@ ProjectCreateThirdStepAsset::register($this);
                                                             }, $equipmentsData),
                                                             'options' => ['value' => 0],
                                                             'pluginLoading' => false,
-                                                            'pluginOptions' => [
-                                                                'allowClear' => true
-                                                            ],
+                                                            'pluginOptions' => [],
                                                         ])->label("Matériel "); ?>
                                                     </div>
 
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'readonly' => true])->label("Coût") ?>
+                                                        <?= $form->field($equipment, "[{$i}]price")->textInput(['readonly' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s1">
                                                         <?= $form->field($equipment, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Jour(s)") ?>
@@ -260,15 +258,16 @@ ProjectCreateThirdStepAsset::register($this);
                                                                 }, $risksData),
                                                                 'options' => ['value' => 0],
                                                                 'pluginLoading' => false,
-                                                                'pluginOptions' => [
-                                                                    'allowClear' => true
-                                                                ],
+                                                                'pluginOptions' => [],
                                                             ])->label("Incertitude"); ?>
                                                         </div>
-                                                    <?php } else {
+                                                    <?php } else { ?>
 
-                                                        echo  $form->field($equipment, "[{$i}]riskSelected")->hiddeninput(['value' => 1])->label('');
-                                                    }
+                                                        <div class="col s0">
+                                                            <?= $form->field($equipment, "[{$i}]riskSelected")->hiddeninput(['value' => 0])->label(''); ?>
+
+                                                        </div>
+                                                    <?php }
                                                     ?>
                                                     <div class="col s2">
                                                         <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
@@ -328,9 +327,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                             'data' => LaboratoryContributor::TYPES,
                                                             'options' => ['value' => 0],
                                                             'pluginLoading' => false,
-                                                            'pluginOptions' => [
-                                                                'allowClear' => true
-                                                            ],
+                                                            'pluginOptions' => [],
                                                         ])->label("Intervenant "); ?>
                                                     </div>
                                                     <div class="col s1">
@@ -358,13 +355,16 @@ ProjectCreateThirdStepAsset::register($this);
                                                                 ],
                                                             ])->label("Incertitude"); ?>
                                                         </div>
-                                                    <?php } else {
+                                                    <?php } else { ?>
 
-                                                        echo  $form->field($contributor, "[{$i}]riskSelected")->hiddeninput(['value' => 0])->label('');
-                                                    }
+                                                        <div class="col s0">
+                                                            <?= $form->field($contributor, "[{$i}]riskSelected")->hiddeninput(['value' => 0])->label(''); ?>
+
+                                                        </div>
+                                                    <?php }
                                                     ?>
                                                     <div class="col s2">
-                                                        <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label(false)->label("Temps incertitude") ?>
+                                                        <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
