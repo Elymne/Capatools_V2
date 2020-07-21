@@ -350,9 +350,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                                 }, $risksData),
                                                                 'options' => ['value' => 0],
                                                                 'pluginLoading' => false,
-                                                                'pluginOptions' => [
-                                                                    'allowClear' => true
-                                                                ],
+                                                                'pluginOptions' => [],
                                                             ])->label("Incertitude"); ?>
                                                         </div>
                                                     <?php } else { ?>

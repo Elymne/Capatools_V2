@@ -2,6 +2,8 @@
 
 namespace app\models\projects;
 
+use app\models\equipments\EquipmentRepayment;
+use app\models\laboratories\LaboratoryContributor;
 use yii\db\ActiveRecord;
 
 use Yii;
@@ -62,6 +64,16 @@ class Lot extends ActiveRecord
     public function getInvests()
     {
         return $this->hasMany(Investment::className(), ['lot_id' => 'id']);
+    }
+
+    public function getLabotoryContributor()
+    {
+        return $this->hasMany(LaboratoryContributor::className(), ['lot_id' => 'id']);
+    }
+
+    public function getEquipmentRepayment()
+    {
+        return $this->hasMany(EquipmentRepayment::className(), ['lot_id' => 'id']);
     }
 
 

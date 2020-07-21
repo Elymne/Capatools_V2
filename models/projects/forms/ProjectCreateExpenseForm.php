@@ -26,9 +26,6 @@ class ProjectCreateExpenseForm extends Consumable
      */
     public function rules()
     {
-        return [
-            ['title', 'required', 'message' => 'Veuillez renseigner une description'],
-            ['price', 'required', 'message' => 'Veuillez renseigner le prix HT'],
-        ];
+        return [];
     }
 }

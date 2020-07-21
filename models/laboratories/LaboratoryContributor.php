@@ -2,7 +2,7 @@
 
 namespace app\models\laboratories;
 
-use app\models\projects\Repayment;
+use app\models\projects\Lot;
 use JsonSerializable;
 use yii\db\ActiveRecord;
 
@@ -67,9 +67,9 @@ class LaboratoryContributor extends ActiveRecord implements JsonSerializable
      * 
      * //TODO Terminer cette fonction une fois la classe Payment développée.
      */
-    public function getRepayment()
+    public function getLot()
     {
-        return $this->hasOne(Repayment::className(), ['id' => 'repayment_id']);
+        return $this->hasOne(Lot::className(), ['id' => 'lot_id']);
     }
 
     /**

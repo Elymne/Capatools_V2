@@ -658,7 +658,6 @@ class ProjectController extends Controller implements ServiceInterface
         }
 
         // Modèles à sauvegarder.
-        $repayment = new ProjectCreateRepaymentForm();
         $consumables = [new ProjectCreateConsumableForm()];
         $expenses = [new ProjectCreateExpenseForm()];
         $equipmentsRepayment = [new ProjectCreateEquipmentRepaymentForm()];
@@ -670,7 +669,7 @@ class ProjectController extends Controller implements ServiceInterface
         $risksData = Risk::getAll();
 
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        if ($repayment->load(Yii::$app->request->post())) {
+        /* if ($repayment->load(Yii::$app->request->post())) {
             // Variable de vérification de validité des données lors du renvoi par méthode POST.
             $isValid = true;
 
@@ -683,7 +682,7 @@ class ProjectController extends Controller implements ServiceInterface
             $contributors = Model::createMultiple(ProjectCreateLaboratoryContributorForm::className(), $contributors);
             if (!Model::loadMultiple($contributors, Yii::$app->request->post())) $isValid = false;
 
-            if ($isValid) {
+            /*  if ($isValid) {
 
                 $repayment->lot_id = $lot->id;
                 $repayment->laboratory_id = $laboratoriesData[$repayment->laboratorySelected]->id;
@@ -730,7 +729,8 @@ class ProjectController extends Controller implements ServiceInterface
                 }
                 Yii::$app->response->redirect(['project/lot-simulate', 'project_id' => $project_id]);
             }
-        }
+        
+        }*/
 
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
