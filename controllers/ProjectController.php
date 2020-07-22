@@ -17,13 +17,17 @@ use app\models\projects\ProjectSimulate;
 use app\models\projects\Risk;
 use app\models\projects\Millestone;
 use app\models\projects\Task;
+use app\models\projects\forms\ProjectCreateThridStepForm;
+
+
+
 use app\models\equipments\Equipment;
 use app\models\laboratories\Laboratory;
 use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\Consumable;
 use app\models\projects\forms\ProjectCreateConsumableForm;
 use app\models\projects\forms\ProjectCreateEquipmentRepaymentForm;
-use app\models\projects\forms\ProjectCreateExpenseForm;
+use app\models\projects\forms\ProjectCreateInvestForm;
 use app\models\projects\forms\ProjectCreateFirstStepForm;
 use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
@@ -659,13 +663,19 @@ class ProjectController extends Controller implements ServiceInterface
 
         // Modèles à sauvegarder.
         $consumables = [new ProjectCreateConsumableForm()];
-        $expenses = [new ProjectCreateExpenseForm()];
+        $expenses = [new ProjectCreateInvestForm()];
         $equipmentsRepayment = [new ProjectCreateEquipmentRepaymentForm()];
         $contributors = [new ProjectCreateLaboratoryContributorForm()];
-
+        $form = new ProjectCreateThridStepForm();
         // Import de données depuis la bdd.
-        $laboratoriesData = Laboratory::getAll();
-        $equipmentsData = Equipment::getAll();
+        $cellule = Cellule::getOneById(Yii::$app->user->identity->cellule_id);
+        $laboratoriesData = $cellule->laboratories;
+        $equipmentsData = [new Equipment()];
+        foreach ($laboratoriesData as $laboratory) {
+            //   echo $laboratory->name;
+            array_merge($equipmentsData, $laboratory->equipments);
+        }
+
         $risksData = Risk::getAll();
 
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
@@ -740,8 +750,8 @@ class ProjectController extends Controller implements ServiceInterface
                 'laboratoriesData' => $laboratoriesData,
                 'equipmentsData' => $equipmentsData,
                 'risksData' => $risksData,
-                'repayment' => $repayment,
                 'consumables' => $consumables,
+                'formulaire' =>  $form,
                 'expenses' => $expenses,
                 'equipments' => $equipmentsRepayment,
                 'contributors' => $contributors

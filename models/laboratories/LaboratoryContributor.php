@@ -85,7 +85,7 @@ class LaboratoryContributor extends ActiveRecord implements JsonSerializable
             'price' => $this->price,
             'time_risk' => $this->time_risk,
             'laboratory_id' => $this->laboratory_id,
-            'repayment_id' => $this->repayment_id,
+            'lot_id' => $this->lot_id,
             'risk_id' => $this->risk_id
         );
     }
