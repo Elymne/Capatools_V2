@@ -12,7 +12,7 @@ class m200099_000841_laboratory_contributor_table extends Migration
             'type' => $this->string()->notNull(),
             'nb_days' => $this->integer()->defaultValue(0),
             'nb_hours' => $this->integer()->defaultValue(0),
-            'price' => $this->integer()->defaultValue(0),
+            'price' => $this->double()->defaultValue(0),
             'time_risk' => $this->integer()->defaultValue(0),
 
             // Foreign key.

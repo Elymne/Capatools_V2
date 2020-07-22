@@ -66,12 +66,12 @@ class Lot extends ActiveRecord
         return $this->hasMany(Investment::className(), ['lot_id' => 'id']);
     }
 
-    public function getLabotoryContributor()
+    public function getLabotorycontributors()
     {
         return $this->hasMany(LaboratoryContributor::className(), ['lot_id' => 'id']);
     }
 
-    public function getEquipmentRepayment()
+    public function getEquipmentrepayments()
     {
         return $this->hasMany(EquipmentRepayment::className(), ['lot_id' => 'id']);
     }
@@ -110,6 +110,18 @@ class Lot extends ActiveRecord
 
     public function getTotalCostRepayement()
     {
+        $result = 0.0;
+        $Equipementrepayements = $this->equipmentrepayments;
+        foreach ($Equipementrepayements as $Equipementrepayement) {
+            $result  = $result + $Equipementrepayement->price * $Equipementrepayement->time_risk;
+        }
+
+        $LabotoryContributors = $this->labotorycontributors;
+        foreach ($LabotoryContributors as $LabotoryContributor) {
+            $result  = $result + $LabotoryContributor->price * $LabotoryContributor->time_risk;
+        }
+
+
         return 5000;
     }
 
