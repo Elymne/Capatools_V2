@@ -27,8 +27,8 @@ class ProjectCreateTaskForm extends Model
     public function GetCurrentLot()
     {
         $project = Project::getOneById($this->project_id);
-        $lots = $project->lots;
-        $lot = $lots[$this->number];
+        $lot = $project->getLotByNumber($this->number);
+
         return $lot;
     }
 }

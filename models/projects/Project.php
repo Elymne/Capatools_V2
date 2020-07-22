@@ -115,6 +115,11 @@ class Project extends ActiveRecord
         return Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
     }
 
+    public function getLotByNumber($number)
+    {
+
+        return Lot::find()->where(['number' => $number, 'project_id' => $this->id])->one();
+    }
     public function getAdditionalLotPrice()
     {
 

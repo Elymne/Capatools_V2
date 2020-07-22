@@ -872,6 +872,32 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionUpdateTask($number, $project_id)
     {
+        $risk = Risk::find()->all();
+        $model = new ProjectCreateTaskForm();
+        $model->project_id = $project_id;
+        $model->number = $number;
+
+        //Recupération des membres de la cellule
+        $idcellule = Yii::$app->user->identity->cellule_id;
+        $cel = new Cellule();
+        $cel->id = $idcellule;
+        $celluleUsers = $cel->capaUsers;
+
+        $lot = $model->GetCurrentLot();
+
+        $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
+        $tasksOperational = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
+        MenuSelectorHelper::setMenuProjectCreate();
+        return $this->render(
+            'createTask',
+            [
+                'model' => $model,
+                'celluleUsers' => $celluleUsers,
+                'tasksGestions' => (empty($tasksGestions)) ? [new ProjectCreateGestionTaskForm] : $tasksGestions,
+                'tasksOperational' => (empty($tasksOperational)) ? [new ProjectCreateLotTaskForm] : $tasksOperational,
+                'risk' => $risk,
+            ]
+        );
     }
 
     /**
