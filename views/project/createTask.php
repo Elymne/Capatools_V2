@@ -112,10 +112,10 @@ if ($lot->number != 0) {
                                                 <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
                                             </div>
                                             <div class="col s2">
@@ -125,10 +125,10 @@ if ($lot->number != 0) {
                                                         'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'GestionRisk',
                                                         'data' => ArrayHelper::map($risk, 'id', 'title'),
+                                                        'value' => $tasksGestions[$i]->risk,
                                                         'pluginLoading' => false,
                                                         'options' => [
                                                             'placeholder' => 'Incetitude...',
-                                                            'value' => 1,
                                                         ],
                                                         'pluginEvents' => [
                                                             'select2:select' => 'function(e) {
@@ -229,71 +229,73 @@ if ($lot->number != 0) {
                                                         <?= $form->field($taskOperational, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                        <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($taskOperational, "[{$i}]hour_duration")->textInput(['value' => 0, 'type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
+                                                        <?= $form->field($taskOperational, "[{$i}]hour_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
 
                                                     </div>
-                                                    <div class="col s2">
-                                                        <?php
-                                                        if ($hide) {
+                                                    <?php
+                                                    if ($hide) {
+                                                        echo "<div class=\"col s0\">";
+                                                        echo  $form->field($taskOperational, "[{$i}]risk")->hiddeninput(['value' => 1])->label('');
+                                                    } else {
 
-                                                            echo  $form->field($taskOperational, "[{$i}]risk")->hiddeninput(['value' => 1])->label('');
-                                                        } else {
-                                                            echo $form->field($taskOperational, "[{$i}]risk")->widget(
-                                                                Select2::classname(),
-                                                                [
+                                                        echo "<div class=\"col s2\">";
 
-                                                                    'theme' => Select2::THEME_MATERIAL,
-                                                                    'name' => 'TaskRisk[{$i}]',
-                                                                    'data' => ArrayHelper::map($risk, 'id', 'title'),
-                                                                    'pluginLoading' => false,
-                                                                    'options' => [
-                                                                        'placeholder' => 'Incetitude...',
-                                                                        'value' => 1,
-                                                                    ],
-                                                                    'pluginEvents' => [
-                                                                        'select2:select' => 'function(e) { 
+                                                        echo $form->field($taskOperational, "[{$i}]risk")->widget(
+                                                            Select2::classname(),
+                                                            [
+
+                                                                'theme' => Select2::THEME_MATERIAL,
+                                                                'name' => 'TaskRisk[{$i}]',
+                                                                'data' => ArrayHelper::map($risk, 'id', 'title'),
+                                                                'pluginLoading' => false,
+                                                                'options' => [
+                                                                    'placeholder' => 'Incetitude...',
+                                                                ],
+                                                                'pluginEvents' => [
+                                                                    'select2:select' => 'function(e) { 
                                                                         OnCalculIncertitudelot(0);
                                                                     }',
-                                                                    ],
+                                                                ],
 
-                                                                ]
-                                                            )->label("Incertitude");
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($taskOperational, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
-                                                        <?php echo Html::activeHiddenInput($taskOperational, "[{$i}]risk_duration_hour"); ?>
+                                                            ]
+                                                        )->label("Incertitude");
+                                                    }
+                                                    ?>
 
-                                                    </div>
-                                                    <div class="col 2">
-                                                        <button type="button" class="add-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                    </div>
-                                                    <div class="col 2">
-                                                        <button type="button" class="remove-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
-                                                    </div>
-                                                </div><!-- .row -->
-                                            </div>
-                                        <?php endforeach; ?>
+                                                </div>
+                                                <div class="col s1">
+                                                    <?= $form->field($taskOperational, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Total") ?>
+                                                    <?php echo Html::activeHiddenInput($taskOperational, "[{$i}]risk_duration_hour"); ?>
+
+                                                </div>
+                                                <div class="col 2">
+                                                    <button type="button" class="add-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                </div>
+                                                <div class="col 2">
+                                                    <button type="button" class="remove-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                </div>
+                                            </div><!-- .row -->
                                     </div>
-
-                                    <?php DynamicFormWidget::end(); ?>
+                                <?php endforeach; ?>
                                 </div>
+
+                                <?php DynamicFormWidget::end(); ?>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                            <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                        <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                     </div>
                 </div>
             </div>
         </div>
-        <?php ActiveForm::end(); ?>
     </div>
+    <?php ActiveForm::end(); ?>
+</div>
 </div>
 
 <!-- Utilisation : envoi de données concernant les risques. -->

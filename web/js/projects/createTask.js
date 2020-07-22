@@ -4,38 +4,63 @@ const $incertudeMap = JSON.parse(
 const $intervenantMap = JSON.parse(
     document.getElementById("capauser-data-target").textContent
 );
+initialisationLotTask();
+initialisationGestionTask();
 
-var Taskdaydurationlot = "#projectcreatelottaskform-" + 0 + "-day_duration";
-$(Taskdaydurationlot).on("input", function (e) {
-    OnCalculIncertitudelot(0);
-});
+function initialisationLotTask() {
+    var ListIndexlotTask = [];
+    var regex = new RegExp(
+        'id="projectcreatelottaskform-([0-9]*)-title',
+        "gim"
+    );
+    var array1;
+    while ((array1 = regex.exec(document.body.innerHTML)) !== null) {
+        var element = array1[1];
+        OnCalculIncertitudelot(parseInt(element));
 
-var Taskdaydurationlot = "#projectcreatelottaskform-" + 0 + "-hour_duration";
-$(Taskdaydurationlot).on("input", function (e) {
-    OnCalculIncertitudelot(0);
-});
-
-var TaskdaydurationGest =
-    "#projectcreategestiontaskform-" + 0 + "-day_duration";
-$(TaskdaydurationGest).on("input", function (e) {
-    OnCalculIncertitudeGest(0);
-});
-
-var TaskdaydurationGest =
-    "#projectcreategestiontaskform-" + 0 + "-hour_duration";
-$(TaskdaydurationGest).on("input", function (e) {
-    OnCalculIncertitudeGest(0);
-});
-
-var Userselect = "#projectcreategestiontaskform-" + 0 + "-capa_user_id";
-$(TaskdaydurationGest).on("input", function (e) {
-    OnCalculIntervenantGest(0);
-});
-
-var Userselect = "#projectcreatelottaskform-" + 0 + "-capa_user_id";
-$(TaskdaydurationGest).on("input", function (e) {
-    OnCalculIntervenantlot(0);
-});
+        var Taskdaydurationlot =
+            "#projectcreatelottaskform-" + element + "-day_duration";
+        $(Taskdaydurationlot).on("input", function (e) {
+            OnCalculIncertitudelot(parseInt(element));
+        });
+        var Taskdaydurationlot =
+            "#projectcreatelottaskform-" + element + "-hour_duration";
+        $(Taskdaydurationlot).on("input", function (e) {
+            OnCalculIncertitudelot(parseInt(element));
+        });
+        var Userselect =
+            "#projectcreatelottaskform-" + element + "-capa_user_id";
+        $(Userselect).on("input", function (e) {
+            OnCalculIntervenantlot(element);
+        });
+    }
+}
+function initialisationGestionTask() {
+    var ListIndexlotTask = [];
+    var regex = new RegExp(
+        'id="projectcreategestiontaskform-([0-9]*)-title',
+        "gim"
+    );
+    var array1;
+    while ((array1 = regex.exec(document.body.innerHTML)) !== null) {
+        var element = array1[1];
+        OnCalculIncertitudeGest(parseInt(element));
+        var TaskdaydurationGest =
+            "#projectcreategestiontaskform-" + element + "-day_duration";
+        $(TaskdaydurationGest).on("input", function (e) {
+            OnCalculIncertitudeGest(parseInt(element));
+        });
+        var TaskdaydurationGest =
+            "#projectcreategestiontaskform-" + element + "-hour_duration";
+        $(TaskdaydurationGest).on("input", function (e) {
+            OnCalculIncertitudeGest(parseInt(element));
+        });
+        var Userselect = "#projectcreategestiontaskform-" + 0 + "-capa_user_id";
+        $(TaskdaydurationGest).on("input", function (e) {
+            OnCalculIntervenantGest(parseInt(element));
+        });
+    }
+}
 
 function OnCalculIncertitudeGest(id) {
     var Taskdayduration =
@@ -92,11 +117,10 @@ function OnCalculIncertitudelot(id) {
 
     var Taskhourduration = "#projectcreatelottaskform-" + id + "-hour_duration";
     var hour = $(Taskhourduration).val();
-    console.log(hour);
+
     var SelectRisk = "#projectcreatelottaskform-" + id + "-risk";
     incertitude = $(SelectRisk).val();
 
-    console.log($(SelectRisk));
     var res = CalculTempsincertitude(hour, day, incertitude);
 
     var SelectRiskDuration =
@@ -121,7 +145,7 @@ function CalculTempsincertitude(hour, day, incertitudestring) {
     hourIncertitude = hourIncertitude % 7.7;
 
     dayIncertitude = Additionalday + dayIncertitude;
-
+    hourIncertitude = Math.round(hourIncertitude);
     return { dayIncertitude, hourIncertitude };
 }
 

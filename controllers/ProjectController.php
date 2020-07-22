@@ -886,7 +886,7 @@ class ProjectController extends Controller implements ServiceInterface
         $lot = $model->GetCurrentLot();
 
         $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
-        $tasksOperational = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
+        $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
         MenuSelectorHelper::setMenuProjectCreate();
         return $this->render(
             'createTask',
