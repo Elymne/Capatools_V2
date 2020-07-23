@@ -7,6 +7,7 @@ use app\models\equipments\EquipmentRepayment;
 use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\Consumable;
 
+use yii\helpers\ArrayHelper;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use wbraganca\dynamicform\DynamicFormWidget;
@@ -138,7 +139,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                 ?>
                                                 <div class="row">
                                                     <div class="col s4">
-                                                        <?= $form->field($expense, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                        <?= $form->field($expense, "[{$i}]name")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <?= $form->field($expense, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
@@ -179,15 +180,10 @@ ProjectCreateThirdStepAsset::register($this);
                                 <div class="input-field col s4">
 
                                     <!-- type dropdown field -->
-                                    <?= $form->field($repayment, "laboratorySelected")->widget(Select2::classname(), [
-                                        'data' => array_map(function ($data) {
-                                            return $data->name;
-                                        }, $laboratoriesData),
-                                        'options' => ['value' => 0],
+                                    <?= $form->field($formulaire, "laboratoryselected")->widget(Select2::classname(), [
+                                        'data' => ArrayHelper::map($laboratoriesData, 'id', 'name'),
                                         'pluginLoading' => false,
-                                        'pluginOptions' => [
-                                            'allowClear' => true
-                                        ],
+                                        'pluginOptions' => [],
                                     ])->label(false); ?>
 
                                 </div>
@@ -317,7 +313,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                 <?php
                                                 // necessary for update action.
                                                 if (!$contributor->isNewRecord) {
-                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
+                                                    echo Html::activeHiddenInput($contributor, "[{$i}]id");
                                                 }
                                                 ?>
                                                 <div class="row">
@@ -350,9 +346,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                                 }, $risksData),
                                                                 'options' => ['value' => 0],
                                                                 'pluginLoading' => false,
-                                                                'pluginOptions' => [
-                                                                    'allowClear' => true
-                                                                ],
+                                                                'pluginOptions' => [],
                                                             ])->label("Incertitude"); ?>
                                                         </div>
                                                     <?php } else { ?>
@@ -453,7 +447,7 @@ ProjectCreateThirdStepAsset::register($this);
 
     // Envoi de données.
     echo json_encode([
-        'laboratorySelected' => $repayment->laboratory_id,
+        'laboratorySelected' => $formulaire->laboratory_id,
         'equipments' => $ided,
         'contributors' => $idcd,
     ]);

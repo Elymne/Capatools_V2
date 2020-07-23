@@ -44,6 +44,11 @@ class Task extends ActiveRecord
         return static::find()->where(['id' => $id])->one();
     }
 
+    public static function getTypeTaskByLotId($id, $kind)
+    {
+        return static::find()->where(['lot_id' => $id, 'task_category' => $kind])->all();
+    }
+
     public function getLot()
     {
         return $this->hasOne(Lot::className(), ['id' => 'lot_id']);

@@ -2,8 +2,7 @@
 
 namespace app\models\projects\forms;
 
-use app\models\projects\Consumable;
-use app\models\projects\Expense;
+use app\models\projects\Investment;
 
 /**
  * Classe relative au modèle métier des dépenses.
@@ -13,22 +12,14 @@ use app\models\projects\Expense;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class ProjectCreateExpenseForm extends Consumable
+class ProjectCreateInvestForm extends Investment
 {
-
-    function __construct()
-    {
-        $this->type = self::TYPE_SECONDARY_INVESTMENT;
-    }
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
-        return [
-            ['title', 'required', 'message' => 'Veuillez renseigner une description'],
-            ['price', 'required', 'message' => 'Veuillez renseigner le prix HT'],
-        ];
+        return [];
     }
 }

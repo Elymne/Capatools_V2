@@ -12,12 +12,12 @@ class m200099_000841_laboratory_contributor_table extends Migration
             'type' => $this->string()->notNull(),
             'nb_days' => $this->integer()->defaultValue(0),
             'nb_hours' => $this->integer()->defaultValue(0),
-            'price' => $this->integer()->defaultValue(0),
+            'price' => $this->double()->defaultValue(0),
             'time_risk' => $this->integer()->defaultValue(0),
 
             // Foreign key.
             'laboratory_id' => $this->integer()->notNull(),
-            'repayment_id' => $this->integer()->notNull(),
+            'lot_id' => $this->integer()->notNull(),
             'risk_id' => $this->integer()->notNull(),
         ]);
 
@@ -32,8 +32,8 @@ class m200099_000841_laboratory_contributor_table extends Migration
         $this->addForeignKey(
             'FK_laboratory_contributor-payment',
             '{{%laboratory_contributor}}',
-            'repayment_id',
-            '{{%repayment}}',
+            'lot_id',
+            '{{%lot}}',
             'id'
         );
 
@@ -52,7 +52,7 @@ class m200099_000841_laboratory_contributor_table extends Migration
             'price' => 300,
             'time_risk' => 15,
             'laboratory_id' => 1,
-            'repayment_id' => 1,
+            'lot_id' => 1,
             'risk_id' => 3
         ]);
 
@@ -63,8 +63,8 @@ class m200099_000841_laboratory_contributor_table extends Migration
             'price' => 300,
             'time_risk' => 15,
             'laboratory_id' => 1,
-            'repayment_id' => 2,
-            'risk_id' => 1
+            'risk_id' => 1,
+            'lot_id' => 1
         ]);
     }
 

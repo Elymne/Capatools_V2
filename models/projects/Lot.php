@@ -2,6 +2,8 @@
 
 namespace app\models\projects;
 
+use app\models\equipments\EquipmentRepayment;
+use app\models\laboratories\LaboratoryContributor;
 use yii\db\ActiveRecord;
 
 use Yii;
@@ -64,6 +66,16 @@ class Lot extends ActiveRecord
         return $this->hasMany(Investment::className(), ['lot_id' => 'id']);
     }
 
+    public function getLabotorycontributors()
+    {
+        return $this->hasMany(LaboratoryContributor::className(), ['lot_id' => 'id']);
+    }
+
+    public function getEquipmentrepayments()
+    {
+        return $this->hasMany(EquipmentRepayment::className(), ['lot_id' => 'id']);
+    }
+
 
     public function getTotalCostHuman()
     {
@@ -98,6 +110,18 @@ class Lot extends ActiveRecord
 
     public function getTotalCostRepayement()
     {
+        $result = 0.0;
+        $Equipementrepayements = $this->equipmentrepayments;
+        foreach ($Equipementrepayements as $Equipementrepayement) {
+            $result  = $result + $Equipementrepayement->price * $Equipementrepayement->time_risk;
+        }
+
+        $LabotoryContributors = $this->labotorycontributors;
+        foreach ($LabotoryContributors as $LabotoryContributor) {
+            $result  = $result + $LabotoryContributor->price * $LabotoryContributor->time_risk;
+        }
+
+
         return 5000;
     }
 

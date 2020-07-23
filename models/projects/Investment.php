@@ -32,6 +32,6 @@ class Investment extends ActiveRecord
 
     public function getLot()
     {
-        return $this->hasOne(Lot::className(), ['id' => 'project_id']);
+        return $this->hasOne(Lot::className(), ['id' => 'lot_id']);
     }
 }
