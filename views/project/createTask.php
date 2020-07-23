@@ -62,6 +62,7 @@ if ($lot->number != 0) {
                                 'model' => $tasksGestions[0],
                                 'formId' => 'dynamic-form',
                                 'formFields' => [
+                                    'number',
                                     'title',
                                     'contributor',
                                     'price',
@@ -84,6 +85,9 @@ if ($lot->number != 0) {
                                         ?>
 
                                         <div class="row">
+                                            <div class="col s0">
+                                                <?= Html::activeHiddenInput($taskGestion, "[{$i}]number"); ?>
+                                            </div>
                                             <div class="col s2">
                                                 <?= $form->field($taskGestion, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                             </div>
@@ -179,13 +183,17 @@ if ($lot->number != 0) {
                                         'model' => $tasksOperational[0],
                                         'formId' => 'dynamic-form',
                                         'formFields' => [
+                                            'id',
+                                            'number',
                                             'title',
                                             'contributor',
                                             'price',
                                             'day_duration',
                                             'hour_duration',
                                             'risk',
-                                            'risk_duration',
+                                            'risk_duration_hour',
+
+
                                         ],
                                     ]); ?>
                                     <div class="container-items-taskLot">
@@ -195,12 +203,14 @@ if ($lot->number != 0) {
 
                                                 <?php
                                                 // necessary for update action.
-                                                if (!$taskOperational->isNewRecord) {
-                                                    echo Html::activeHiddenInput($taskOperational, "[{$i}]id");
-                                                }
+                                                echo Html::activeHiddenInput($taskOperational, "[{$i}]id");
+
                                                 ?>
 
                                                 <div class="row">
+                                                    <div class="col s0">
+                                                        <?= Html::activeHiddenInput($taskOperational, "[{$i}]number"); ?>
+                                                    </div>
                                                     <div class="col s2">
                                                         <?= $form->field($taskOperational, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                     </div>
@@ -226,7 +236,7 @@ if ($lot->number != 0) {
                                                         ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($taskOperational, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
+                                                        <?= $form->field($taskOperational, "[{$i}]price")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s1">
                                                         <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
@@ -288,7 +298,7 @@ if ($lot->number != 0) {
                     </div>
                     <div class="form-group">
                         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                        <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
+                        <?= Html::a(Yii::t('app', 'Retour'), ['project-simulate', 'project_id' => $lot->project_id], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                     </div>
                 </div>
             </div>

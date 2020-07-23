@@ -65,7 +65,7 @@ ProjectSimulationAsset::register($this);
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                <?= Html::a(Yii::t('app', 'Modifier les tâches'), ['update-task', 'number' => 0, 'project_id' => $project->id], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                <?= Html::a(Yii::t('app', 'Modifier les tâches'), ['update-task', 'numberlot' => 0, 'project_id' => $project->id], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
 
                             </div>
                             <div class="col s1">

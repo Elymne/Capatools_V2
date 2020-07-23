@@ -26,6 +26,7 @@ class ProjectCreateGestionTaskForm extends Task
     public function rules()
     {
         return [
+            [['title', 'capa_user_id', 'risk', 'day_duration', 'hour_duration', 'price', 'number', 'risk_duration_hour'], 'safe',],
             ['title', 'required', 'message' => 'Il faut un titre de tâche'],
             ['capa_user_id', 'required', 'message' => 'Il faut indiquer l\'intervenant de la tâche'],
             ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
