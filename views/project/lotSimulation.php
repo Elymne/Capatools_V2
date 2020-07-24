@@ -29,10 +29,10 @@ AppAsset::register($this);
                     <div class="card-action">
                         <div class="row">
                             <div class="col s3">
-                                Total coût temps homme (€):
+                                Total coût temps homme :
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "totalCostHuman", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostHuman)]])->label(false) ?>
 
                             </div>
 
@@ -40,18 +40,18 @@ AppAsset::register($this);
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Total des dépenses et investissement (€):
+                                Total des dépenses et investissement :
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "totalCostInvest")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "totalCostInvest", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostInvest)]])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Total des reversements laboratoires (€):
+                                Total des reversements laboratoires :
                             </div>
                             <div class="col s1">
-                                <?= $form->field($lot, "totalCostRepayement")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                                <?= $form->field($lot, "totalCostRepayement", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostRepayement)]])->label(false) ?>
                             </div>
                         </div>
 
@@ -85,7 +85,7 @@ AppAsset::register($this);
                         <div class="row">
                             <div class="col s4">
                                 <!-- Détail du coût  -->
-                                Total Prix de revient H.T. temps homme (€):
+                                Total Prix de revient H.T. temps homme :
                             </div>
                             <div class="col s2">
                                 <!-- Détail du coût  -->
@@ -113,7 +113,7 @@ AppAsset::register($this);
                         <div class="row">
                             <div class="col s4">
                                 <!-- Détail du coût  -->
-                                Total Prix de revient H.T. consommables, déplacements et achat (€):
+                                Total Prix de revient H.T. consommables, déplacements et achat :
                             </div>
                             <div class="col s2">
                                 <!-- Détail du coût  -->
@@ -145,7 +145,7 @@ AppAsset::register($this);
                         <div class="row">
                             <div class="col s4">
                                 <!-- Détail du coût  -->
-                                Total Prix de revient H.T. reversement Laboratoire (€):
+                                Total Prix de revient H.T. reversement Laboratoire :
                             </div>
                             <div class="col s2">
                                 <!-- Détail du coût  -->
@@ -166,7 +166,7 @@ AppAsset::register($this);
 
                         <div class="row">
                             <div class="col s3">
-                                Montant Total HT (€):
+                                Montant Total HT :
                             </div>
                             <div class="col s2">
                                 <?= $form->field($lot, "total_cost_lot")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => ['decimal', 2]])->label(false) ?>
@@ -175,7 +175,7 @@ AppAsset::register($this);
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Taux de marge moyen avant frais de gestion (%):
+                                Taux de marge moyen avant frais de gestion :
                             </div>
                             <div class="col s2">
                                 <?= $form->field($lot, "average_lot_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
@@ -183,7 +183,7 @@ AppAsset::register($this);
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Frais de gestion du support HT (€):
+                                Frais de gestion du support HT :
                             </div>
                             <div class="col s2">
                                 <?= $form->field($lot, "support_cost")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
@@ -191,7 +191,7 @@ AppAsset::register($this);
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Prix de vente du lot HT (€):
+                                Prix de vente du lot HT :
                             </div>
                             <div class="col s2">
                                 <?= $form->field($lot, "total_cost_lot_with_support")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
@@ -202,7 +202,7 @@ AppAsset::register($this);
                 <!-- Buttons -->
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                    <?= Html::a(Yii::t('app', 'Précédent'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
+                    <?= Html::a(Yii::t('app', 'Retour'), ['project-simulate', 'project_id' => $lot->project_id], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                 </div>
             </div>
         </div>
@@ -214,14 +214,14 @@ AppAsset::register($this);
 
 $management_rate = $lot->project->management_rate;
 $script = <<< JS
-var stepsize = 0.5;
+let stepsize = 0.5;
 
 
 
 //Fin debug
-var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
+let InputRateHumamMargin = "#lotsimulate-rate_human_margin";
     $(InputRateHumamMargin).on('blur', function(e){
-        var rate = parseFloat(e.currentTarget.value);
+        let rate = parseFloat(e.currentTarget.value);
         if(rate < 10  || isNaN(rate))
         {
             e.currentTarget.value = 10;
@@ -235,9 +235,9 @@ var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
     })
 
 
-    var InputInvestMargin = "#lotsimulate-rate_consumable_investement_margin";
+    let InputInvestMargin = "#lotsimulate-rate_consumable_investement_margin";
     $(InputInvestMargin).on('blur', function(e){
-        var rate = parseFloat(e.currentTarget.value);
+        let rate = parseFloat(e.currentTarget.value);
         if(rate < 0 || isNaN(rate))
         {
             e.currentTarget.value = 0;
@@ -252,9 +252,9 @@ var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
     })
 
 
-    var InputRepayementMargin = "#lotsimulate-rate_repayement_margin";
+    let InputRepayementMargin = "#lotsimulate-rate_repayement_margin";
     $(InputRepayementMargin).on('blur', function(e){
-        var rate = parseFloat(e.currentTarget.value);
+        let rate = parseFloat(e.currentTarget.value);
         if(rate < 0.0 || isNaN(rate))
         {
             e.currentTarget.value = 0;
@@ -267,9 +267,9 @@ var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
     })
 
 
-    var ButtonRateHumamMarginUp = "#lotsimulate-rate_human_marginup"; 
+    let ButtonRateHumamMarginUp = "#lotsimulate-rate_human_marginup"; 
     $(ButtonRateHumamMarginUp).on('click', function(){
-        var rate = parseFloat($(InputRateHumamMargin).val());
+        let rate = parseFloat($(InputRateHumamMargin).val());
         if(!isNaN(rate))
         {
             $(InputRateHumamMargin).val(rate + stepsize);
@@ -278,9 +278,9 @@ var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
         }
     })
   
-    var ButtonRateHumamMarginDown = "#lotsimulate-rate_human_margindown";
+    let ButtonRateHumamMarginDown = "#lotsimulate-rate_human_margindown";
     $(ButtonRateHumamMarginDown).on('click', function(){
-        var rate = parseFloat($(InputRateHumamMargin).val());
+        let rate = parseFloat($(InputRateHumamMargin).val());
         if(!isNaN(rate))
         {
             
@@ -295,9 +295,9 @@ var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
     })
 
 
-    var ButtonInvestMarginUp = "#lotsimulate-rate_consumable_investement_marginup";
+    let ButtonInvestMarginUp = "#lotsimulate-rate_consumable_investement_marginup";
     $(ButtonInvestMarginUp).on('click', function(){
-        var rate = parseFloat($(InputInvestMargin).val());
+        let rate = parseFloat($(InputInvestMargin).val());
         if(!isNaN(rate))
         {
             $(InputInvestMargin).val(rate + stepsize);
@@ -306,9 +306,9 @@ var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
         }
     })
 
-    var ButtonInvestMarginDown = "#lotsimulate-rate_consumable_investement_margindown";
+    let ButtonInvestMarginDown = "#lotsimulate-rate_consumable_investement_margindown";
     $(ButtonInvestMarginDown).on('click', function(){
-        var rate = parseFloat($(InputInvestMargin).val());
+        let rate = parseFloat($(InputInvestMargin).val());
         if(!isNaN(rate))
         {
             
@@ -322,9 +322,9 @@ var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
         }
     })
 
-    var ButtonRepayementMarginUp = "#lotsimulate-rate_repayement_marginup";
+    let ButtonRepayementMarginUp = "#lotsimulate-rate_repayement_marginup";
     $(ButtonRepayementMarginUp).on('click', function(){
-        var rate = parseFloat($(InputRepayementMargin).val());
+        let rate = parseFloat($(InputRepayementMargin).val());
         if(!isNaN(rate))
         {
             $(InputRepayementMargin).val(rate + stepsize);
@@ -332,9 +332,9 @@ var InputRateHumamMargin = "#lotsimulate-rate_human_margin";
             CalculTotalLot();
         }
     })
-    var ButtonRepayementMarginDown = "#lotsimulate-rate_repayement_margindown";
+    let ButtonRepayementMarginDown = "#lotsimulate-rate_repayement_margindown";
     $(ButtonRepayementMarginDown).on('click', function(){
-        var rate = parseFloat($(InputRepayementMargin).val());
+        let rate = parseFloat($(InputRepayementMargin).val());
         if(!isNaN(rate))
         {
             
@@ -357,43 +357,42 @@ CalculTotalLot();
 
 function UpdateHumanMargin()
 {
-    var totalcostwithmargin = "#lotsimulate-total_cost_human_with_margin";
-    var LotrateMargin = "#lotsimulate-rate_human_margin";
-    var totalcost = "#lotsimulate-totalcosthuman";
-    var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
+    let totalcostwithmargin = "#lotsimulate-total_cost_human_with_margin";
+    let LotrateMargin = "#lotsimulate-rate_human_margin";
+    let resultattwithmargin =$lot->totalCostHuman  / (1 - $(LotrateMargin).val()/100)
+    
     if(isNaN(resultattwithmargin))
     {
         resultattwithmargin = 0;
     }
-    $(totalcostwithmargin).val(resultattwithmargin.toFixed(2));
+    $(totalcostwithmargin).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(resultattwithmargin.toFixed(2)));
 
  
 }
 function UpdateInvestMargin()
 {
-    var totalcostwithmargin = "#lotsimulate-total_cost_invest_with_margin";
-    var LotrateMargin = "#lotsimulate-rate_consumable_investement_margin";
-    var totalcost = "#lotsimulate-totalcostinvest";
-    var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
+    let totalcostwithmargin = "#lotsimulate-total_cost_invest_with_margin";
+    let LotrateMargin = "#lotsimulate-rate_consumable_investement_margin";
+    let resultattwithmargin =$lot->totalCostInvest / (1 - $(LotrateMargin).val()/100)  ;
     if(isNaN(resultattwithmargin))
     {
         resultattwithmargin = 0;
     }
-    $(totalcostwithmargin).val(resultattwithmargin.toFixed(2));
+    $(totalcostwithmargin).val( new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(resultattwithmargin.toFixed(2)));
  
 }
 
 function UpdateRepayementMargin()
 {
-    var totalcostwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
-    var LotrateMargin = "#lotsimulate-rate_repayement_margin";
-    var totalcost = "#lotsimulate-totalcostrepayement";
-    var resultattwithmargin = (1 + $(LotrateMargin).val()/100) * $(totalcost).val();
+    let totalcostwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
+    let LotrateMargin = "#lotsimulate-rate_repayement_margin";
+    let totalcost = "#lotsimulate-totalcostrepayement";
+    let resultattwithmargin = $lot->totalCostRepayement /(1 - $(LotrateMargin).val()/100) ;
     if(isNaN(resultattwithmargin))
     {
         resultattwithmargin = 0;
     }
-    $(totalcostwithmargin).val(resultattwithmargin.toFixed(2));
+    $(totalcostwithmargin).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(resultattwithmargin.toFixed(2)));
 }
 
 
@@ -402,38 +401,44 @@ function CalculTotalLot()
 {
 
     
-    var totalcosthuman = "#lotsimulate-totalcosthuman";
-    var totalcostinvest = "#lotsimulate-totalcostinvest";
-    var totalcostrepayement = "#lotsimulate-totalcostrepayement";
+    let totalcosthuman = "#lotsimulate-totalcosthuman";
+    let totalcostinvest = "#lotsimulate-totalcostinvest";
+    let totalcostrepayement = "#lotsimulate-totalcostrepayement";
 
-    var totalcostlot = "#lotsimulate-total_cost_lot";
-    var totalcosthumanwithmargin = "#lotsimulate-total_cost_human_with_margin";
-    var totalcostinvestwithmargin = "#lotsimulate-total_cost_invest_with_margin";
-    var totalcostrepayementwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
+    let totalcostlot = "#lotsimulate-total_cost_lot";
+    let totalcosthumanwithmargin = "#lotsimulate-total_cost_human_with_margin";
+    let totalcostinvestwithmargin = "#lotsimulate-total_cost_invest_with_margin";
+    let totalcostrepayementwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
+ let totalcosthumanprice =  (Number($(totalcosthuman).val().replace(/[^0-9.-]+/g,"")))/100; 
+ let totalcostinvestprice =  (Number($(totalcostinvest).val().replace(/[^0-9.-]+/g,"")))/100; 
+ let totalcostrepayementprice =  (Number($(totalcostrepayement).val().replace(/[^0-9.-]+/g,"")))/100; 
+ let totalcosthumanwithmarginprice =  (Number($(totalcosthumanwithmargin).val().replace(/[^0-9.-]+/g,"")))/100; 
+ let totalcostinvestwithmarginprice =  (Number($(totalcostinvestwithmargin).val().replace(/[^0-9.-]+/g,"")))/100; 
+ let totalcostrepayementwithmarginprice =  (Number($(totalcostrepayementwithmargin).val().replace(/[^0-9.-]+/g,"")))/100; 
 
-    var totalcost = parseFloat($(totalcosthuman).val()) + parseFloat($(totalcostinvest).val()) + parseFloat($(totalcostrepayement).val())  ;
-    var totalcostwithMargin = parseFloat($(totalcosthumanwithmargin).val()) + parseFloat($(totalcostinvestwithmargin).val()) + parseFloat($(totalcostrepayementwithmargin).val())  ;
-    $(totalcostlot).val(totalcostwithMargin.toFixed(2));
+    let totalcost = totalcosthumanprice + totalcostinvestprice + totalcostrepayementprice  ;
+    let totalcostwithMargin = totalcosthumanwithmarginprice +  totalcostinvestwithmarginprice + totalcostrepayementwithmarginprice  ;
+    $(totalcostlot).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(totalcostwithMargin.toFixed(2)));
 
 
-    var averagelotmargin = "#lotsimulate-average_lot_margin";
+    let averagelotmargin = "#lotsimulate-average_lot_margin";
    
 
 
-    var average = ((totalcostwithMargin / totalcost) - 1) * 100;
-    $(averagelotmargin).val(average.toFixed(2));
+    let average = ((totalcostwithMargin / totalcost) - 1);
+    $(averagelotmargin).val(new Intl.NumberFormat('fr-FR', { style: 'percent', maximumFractionDigits: 2 }).format(average));
 
-    var supportcost = "#lotsimulate-support_cost";
-    var totalcostlotwithsupport = "#lotsimulate-total_cost_lot_with_support";
+    let supportcost = "#lotsimulate-support_cost";
+    let totalcostlotwithsupport = "#lotsimulate-total_cost_lot_with_support";
 
-    var ratesupp = $management_rate;
+    let ratesupp = $management_rate;
 
 
-    var support = totalcostwithMargin * ratesupp /100;
-    $(supportcost).val(support.toFixed(2));
+    let totalwithsupport = 118950.64 / (1- 12 /100);
+    let support = totalcostwithMargin * (ratesupp /100);
+    $(supportcost).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(support.toFixed(2)));
 
-    var totalwithsupport = support + totalcostwithMargin
-    $(totalcostlotwithsupport).val(totalwithsupport.toFixed(2));
+    $(totalcostlotwithsupport).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(totalwithsupport.toFixed(2)));
 
     
 }

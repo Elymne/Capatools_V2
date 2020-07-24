@@ -170,6 +170,18 @@ class ProjectController extends Controller implements ServiceInterface
                         'label' => 'Créer un projet',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
                     ],
+                    [
+                        'Priorite' => 4,
+                        'url' => 'project/lot-simulate',
+                        'label' => 'Simulation  de lot',
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    ],
+                    [
+                        'Priorite' => 5,
+                        'url' => 'project/project-simulate',
+                        'label' => 'Simulation  Projet',
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    ],
                 ]
             ];
         }
@@ -760,8 +772,15 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionLotSimulate($project_id = 1, $number = 1)
     {
 
+
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = LotSimulate::getOneByIdProjectAndNumber($project_id, $number);
+
+        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
+        if ($lot->load(Yii::$app->request->post())) {
+
+            $lot->save();
+        }
 
         if ($lot == null) {
             return $this->redirect([
@@ -770,29 +789,6 @@ class ProjectController extends Controller implements ServiceInterface
                 'errorDescriptions' => ['Vous essayez actuellement de modifier un lot qui n\'existe pas.']
             ]);
         }
-
-
-        // Modèles à sauvegarder.
-        $lotsimulation = new LotSimulate();
-
-        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        if ($lotsimulation->load(Yii::$app->request->post())) {
-
-            $lotsimulation->save();
-
-            $millestones = [new ProjectCreateConsumableForm()];
-            $project = $lot->project;
-            $ListeLot = $project->lots;
-            $number++;
-            if ($number == $project->nblot) {
-                // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project_id]);
-            } else {
-                // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/task', 'number' => $number, 'project_id' => $project_id]);
-            }
-        }
-
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
             'lotSimulation',
@@ -859,13 +855,13 @@ class ProjectController extends Controller implements ServiceInterface
     /**
      * A faire.
      */
-    public function actionUpdateTask($numberlot, $project_id)
+    public function actionUpdateTask($number, $project_id)
     {
         $model = new ProjectCreateTaskForm();
         $tasksGestionsModif = [new ProjectCreateGestionTaskForm()];
         $tasksLotsModif = [new ProjectCreateLotTaskForm()];
         $model->project_id = $project_id;
-        $model->number = $numberlot;
+        $model->number = $number;
         $lot = $model->GetCurrentLot();
         $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
         $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
@@ -886,7 +882,7 @@ class ProjectController extends Controller implements ServiceInterface
             echo ('modelloaded');
             $isValid = true;
 
-            if ($numberlot != 0) {
+            if ($number != 0) {
                 $tasksGestionsModif = Model::createMultiple(ProjectCreateGestionTaskForm::className());
                 //var_dump($tasksGestionsModif);
                 ProjectCreateGestionTaskForm::loadMultiple($tasksGestionsModif, Yii::$app->request->post());
@@ -966,7 +962,7 @@ class ProjectController extends Controller implements ServiceInterface
 
                 //Update des tâches de gestions
                 {
-                    if ($numberlot != 0) {
+                    if ($number != 0) {
                         $tasksGestionsArray = ArrayHelper::index($tasksGestions,  function ($element) {
                             return $element->number;
                         });

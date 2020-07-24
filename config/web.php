@@ -77,7 +77,7 @@ $config = [
     'name' => 'CAPATOOLS V2.0',
 
     // définit la langue cible comme étant le français-France
-    'language' => 'fr',
+    'language' => 'fr-FR',
 
     // définit la langue source comme étant l'anglais États-Unis
     'sourceLanguage' => 'en-US',
