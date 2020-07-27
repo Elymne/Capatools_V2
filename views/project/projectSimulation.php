@@ -32,40 +32,40 @@ ProjectSimulationAsset::register($this);
                     <div class="card-action">
                         <div class="row">
                             <div class="col s3">
-                                Total coût temps homme (€):
+                                Total coût temps homme :
                             </div>
-                            <div class="col s1">
-                                <?= $form->field($lotavp, "totalCostHuman")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                            <div class="col s2">
+                                <?= $form->field($lotavp, "totalCostHuman", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lotavp->totalCostHuman)]])->label(false) ?>
 
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Total des dépenses et investissement (€):
+                                Total des dépenses et investissement :
                             </div>
-                            <div class="col s1">
-                                <?= $form->field($lotavp, "totalCostInvest")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col s3">
-                                Total des reversements laboratoires (€):
-                            </div>
-                            <div class="col s1">
-                                <?= $form->field($lotavp, "totalCostRepayement")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                            <div class="col s2">
+                                <?= $form->field($lotavp, "totalCostInvest", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lotavp->totalCostInvest)]])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Total de l'avant projet (€):
+                                Total des reversements laboratoires :
                             </div>
-                            <div class="col s1">
-                                <?= $form->field($lotavp, "total")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                            <div class="col s2">
+                                <?= $form->field($lotavp, "totalCostRepayement", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lotavp->totalCostRepayement)]])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                <?= Html::a(Yii::t('app', 'Modifier les tâches'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                Total de l'avant projet :
+                            </div>
+                            <div class="col s2">
+                                <?= $form->field($lotavp, "total", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lotavp->total)]])->label(false) ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s3">
+                                <?= Html::a(Yii::t('app', 'Modifier les tâches'), ['update-task', 'numberlot' => 0, 'project_id' => $project->id], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
 
                             </div>
                             <div class="col s1">
@@ -95,26 +95,26 @@ ProjectSimulationAsset::register($this);
                         ?>
                                 <label class='blue-text control-label typeLabel'> <?= $lotproject->title ?> </label>
                                 <div class="row">
-                                    <div class="col s4">
+                                    <div class="col s3">
                                         <!-- Détail du coût  -->
                                         Prix du total lot :
                                     </div>
-                                    <div class="col s1">
+                                    <div class="col s2">
                                         <!-- Détail du coût  -->
-                                        <?= Html::input('text', '', $lotproject->totalwithmargin + $project->additionallotprice, $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true,]) ?>
+                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency($lotproject->totalwithmargin + $project->additionallotprice), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col s3">
-                                        <?= Html::a(Yii::t('app', 'Modifier les tâches'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                        <?= Html::a(Yii::t('app', 'Modifier les tâches'),  ['update-task', 'number' => $lotproject->number, 'project_id' => $project->id], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
 
                                     </div>
                                     <div class="col s5">
                                         <?= Html::a(Yii::t('app', 'Modifier les invest/Consomable/Laboratoire'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
                                     </div>
                                     <div class="col s1">
-                                        <?= Html::a(Yii::t('app', 'Modifier les marges'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                        <?= Html::a(Yii::t('app', 'Modifier les marges'), ['lot-simulate', 'number' => $lotproject->number, 'project_id' => $project->id], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
                                     </div>
                                 </div>
 
@@ -137,34 +137,34 @@ ProjectSimulationAsset::register($this);
 
                         <div class="row">
                             <div class="col s3">
-                                Montant Total HT (€):
+                                Montant Total HT :
                             </div>
-                            <div class="col s1">
-                                <?= $form->field($project, "total")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col s3">
-                                Taux de marge moyen avant frais de gestion (%):
-                            </div>
-                            <div class="col s1">
-                                <?= $form->field($project, "marginaverage")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                            <div class="col s2">
+                                <?= $form->field($project, "total", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->total)]])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Frais de gestion du support HT (€):
+                                Taux de marge moyen avant frais de gestion :
                             </div>
-                            <div class="col s1">
-                                <?= $form->field($project, "supportprice")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                            <div class="col s2">
+                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Prix de vente du lot HT (€):
+                                Frais de gestion du support HT :
                             </div>
-                            <div class="col s1">
-                                <?= $form->field($project, "SellingPrice")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?>
+                            <div class="col s2">
+                                <?= $form->field($project, "supportprice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->supportprice)]])->label(false)  ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s3">
+                                Prix de vente du projet HT (€ arrondis):
+                            </div>
+                            <div class="col s2">
+                                <?= $form->field($project, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->SellingPrice)]])->label(false) ?>
                             </div>
                         </div>
                     </div>
@@ -208,10 +208,10 @@ ProjectSimulationAsset::register($this);
                                             <?= $form->field($millestone, "[{$i}]comment")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Titre") ?>
 
                                         </div>
-                                        <div class="col s1">
+                                        <div class="col s2">
                                             <?= $form->field($millestone, "[{$i}]pourcentage")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Pourcentage") ?>
                                         </div>
-                                        <div class="col s1">
+                                        <div class="col s2">
                                             <?= $form->field($millestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Prix") ?>
                                         </div>
                                         <div class="col 2">

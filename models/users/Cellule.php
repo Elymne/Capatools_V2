@@ -2,6 +2,7 @@
 
 namespace app\models\users;
 
+use app\models\laboratories\Laboratory;
 use yii\db\ActiveRecord;
 
 /**
@@ -27,9 +28,19 @@ class Cellule extends ActiveRecord
         return static::find()->all();
     }
 
+    public static function getOneById($id)
+    {
+        return static::find()->where(['id' => $id])->one();
+    }
+
     public function getCapaUsers()
     {
         return $this->hasMany(CapaUser::className(), ['cellule_id' => 'id']);
+    }
+
+    public function getLaboratories()
+    {
+        return $this->hasMany(Laboratory::className(), ['cellule_id' => 'id']);
     }
 
     public static function findByAXX($AXXX)

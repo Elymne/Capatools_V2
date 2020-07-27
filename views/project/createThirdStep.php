@@ -7,6 +7,7 @@ use app\models\equipments\EquipmentRepayment;
 use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\Consumable;
 
+use yii\helpers\ArrayHelper;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use wbraganca\dynamicform\DynamicFormWidget;
@@ -138,7 +139,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                 ?>
                                                 <div class="row">
                                                     <div class="col s4">
-                                                        <?= $form->field($expense, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                        <?= $form->field($expense, "[{$i}]name")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                     </div>
                                                     <div class="col s2">
                                                         <?= $form->field($expense, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
@@ -179,15 +180,10 @@ ProjectCreateThirdStepAsset::register($this);
                                 <div class="input-field col s4">
 
                                     <!-- type dropdown field -->
-                                    <?= $form->field($repayment, "laboratorySelected")->widget(Select2::classname(), [
-                                        'data' => array_map(function ($data) {
-                                            return $data->name;
-                                        }, $laboratoriesData),
-                                        'options' => ['value' => 0],
+                                    <?= $form->field($formulaire, "laboratoryselected")->widget(Select2::classname(), [
+                                        'data' => ArrayHelper::map($laboratoriesData, 'id', 'name'),
                                         'pluginLoading' => false,
-                                        'pluginOptions' => [
-                                            'allowClear' => true
-                                        ],
+                                        'pluginOptions' => [],
                                     ])->label(false); ?>
 
                                 </div>
@@ -212,7 +208,7 @@ ProjectCreateThirdStepAsset::register($this);
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $equipments[0],
                                         'formId' => 'dynamic-form',
-                                        'formFields' => ['equipmentSelected', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'time_risk'],
+                                        'formFields' => ['equipmentSelected', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'timeRiskStringify'],
                                     ]); ?>
 
                                     <div class="container-items-equipment">
@@ -234,35 +230,43 @@ ProjectCreateThirdStepAsset::register($this);
                                                             }, $equipmentsData),
                                                             'options' => ['value' => 0],
                                                             'pluginLoading' => false,
-                                                            'pluginOptions' => [
-                                                                'allowClear' => true
-                                                            ],
+                                                            'pluginOptions' => [],
                                                         ])->label("Matériel "); ?>
                                                     </div>
+
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbre de jours") ?>
+                                                        <?= $form->field($equipment, "[{$i}]price")->textInput(['readonly' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
+                                                        <?= $form->field($equipment, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Jour(s)") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Coût") ?>
+                                                        <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Heure(s)") ?>
                                                     </div>
+                                                    <?php
+                                                    if ($number != 0) { ?>
+
+                                                        <div class="col s2">
+                                                            <!-- type dropdown field -->
+                                                            <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::classname(), [
+                                                                'data' => array_map(function ($risk) {
+                                                                    return $risk->title;
+                                                                }, $risksData),
+                                                                'options' => ['value' => 0],
+                                                                'pluginLoading' => false,
+                                                                'pluginOptions' => [],
+                                                            ])->label("Incertitude"); ?>
+                                                        </div>
+                                                    <?php } else { ?>
+
+                                                        <div class="col s0">
+                                                            <?= $form->field($equipment, "[{$i}]riskSelected")->hiddeninput(['value' => 0])->label(''); ?>
+
+                                                        </div>
+                                                    <?php }
+                                                    ?>
                                                     <div class="col s2">
-                                                        <!-- type dropdown field -->
-                                                        <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::classname(), [
-                                                            'data' => array_map(function ($risk) {
-                                                                return $risk->title;
-                                                            }, $risksData),
-                                                            'options' => ['value' => 0],
-                                                            'pluginLoading' => false,
-                                                            'pluginOptions' => [
-                                                                'allowClear' => true
-                                                            ],
-                                                        ])->label("Incertitude"); ?>
-                                                    </div>
-                                                    <div class="col s2">
-                                                        <?= $form->field($equipment, "[{$i}]time_risk")->input('string', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Temps incertitude") ?>
+                                                        <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -299,7 +303,7 @@ ProjectCreateThirdStepAsset::register($this);
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $contributors[0],
                                         'formId' => 'dynamic-form',
-                                        'formFields' => ['type', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'time_risk'],
+                                        'formFields' => ['type', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'timeRiskStringify'],
                                     ]); ?>
 
                                     <div class="container-items-labocontributor">
@@ -309,7 +313,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                 <?php
                                                 // necessary for update action.
                                                 if (!$contributor->isNewRecord) {
-                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
+                                                    echo Html::activeHiddenInput($contributor, "[{$i}]id");
                                                 }
                                                 ?>
                                                 <div class="row">
@@ -319,35 +323,42 @@ ProjectCreateThirdStepAsset::register($this);
                                                             'data' => LaboratoryContributor::TYPES,
                                                             'options' => ['value' => 0],
                                                             'pluginLoading' => false,
-                                                            'pluginOptions' => [
-                                                                'allowClear' => true
-                                                            ],
+                                                            'pluginOptions' => [],
                                                         ])->label("Intervenant "); ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbre de jours") ?>
+                                                        <?= $form->field($contributor, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'readonly' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Nbrs heures") ?>
+                                                        <?= $form->field($contributor, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Jour(s)") ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Coût") ?>
+                                                        <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Heure(s)") ?>
                                                     </div>
+
+                                                    <?php
+                                                    if ($number != 0) { ?>
+                                                        <div class="col s2">
+                                                            <!-- type dropdown field -->
+                                                            <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::classname(), [
+                                                                'data' => array_map(function ($risk) {
+                                                                    return $risk->title;
+                                                                }, $risksData),
+                                                                'options' => ['value' => 0],
+                                                                'pluginLoading' => false,
+                                                                'pluginOptions' => [],
+                                                            ])->label("Incertitude"); ?>
+                                                        </div>
+                                                    <?php } else { ?>
+
+                                                        <div class="col s0">
+                                                            <?= $form->field($contributor, "[{$i}]riskSelected")->hiddeninput(['value' => 0])->label(''); ?>
+
+                                                        </div>
+                                                    <?php }
+                                                    ?>
                                                     <div class="col s2">
-                                                        <!-- type dropdown field -->
-                                                        <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::classname(), [
-                                                            'data' => array_map(function ($risk) {
-                                                                return $risk->title;
-                                                            }, $risksData),
-                                                            'options' => ['value' => 0],
-                                                            'pluginLoading' => false,
-                                                            'pluginOptions' => [
-                                                                'allowClear' => true
-                                                            ],
-                                                        ])->label("Incertitude"); ?>
-                                                    </div>
-                                                    <div class="col s2">
-                                                        <?= $form->field($contributor, "[{$i}]time_risk")->input('string', ['min' => 0, 'max' => 10000, 'step' => 1, 'disabled' => true])->label("Temps incertitude") ?>
+                                                        <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -417,5 +428,28 @@ ProjectCreateThirdStepAsset::register($this);
     }, $risksData);
     // Envoi de données.
     echo json_encode($rd);
+    ?>
+</div>
+
+<!-- Informations relatives aux données présentes. -->
+<div id="info-data-target" style="display: none;">
+    <?php
+
+    // Transformation des données sous format JSON.
+    $ided = array_map(function ($data) {
+        return $data->jsonSerialize();
+    }, $equipments);
+
+    // Transformation des données sous format JSON.
+    $idcd = array_map(function ($data) {
+        return $data->jsonSerialize();
+    }, $contributors);
+
+    // Envoi de données.
+    echo json_encode([
+        'laboratorySelected' => $formulaire->laboratory_id,
+        'equipments' => $ided,
+        'contributors' => $idcd,
+    ]);
     ?>
 </div>

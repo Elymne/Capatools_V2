@@ -20,10 +20,6 @@ class ProjectCreateConsumableForm extends Consumable
      */
     public function rules()
     {
-        return [
-            ['title', 'required', 'message' => 'Vous devez inscrire une description'],
-            ['price', 'required', 'message' => 'Vous devez inscrire un prix'],
-            ['type', 'required', 'message' => 'Vous devez sélectionner un type de consommable'],
-        ];
+        return [];
     }
 }

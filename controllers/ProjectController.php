@@ -17,14 +17,17 @@ use app\models\projects\ProjectSimulate;
 use app\models\projects\Risk;
 use app\models\projects\Millestone;
 use app\models\projects\Task;
+use app\models\projects\forms\ProjectCreateThridStepForm;
+
+
+
 use app\models\equipments\Equipment;
-use app\models\equipments\EquipmentRepayment;
 use app\models\laboratories\Laboratory;
 use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\Consumable;
 use app\models\projects\forms\ProjectCreateConsumableForm;
 use app\models\projects\forms\ProjectCreateEquipmentRepaymentForm;
-use app\models\projects\forms\ProjectCreateExpenseForm;
+use app\models\projects\forms\ProjectCreateInvestForm;
 use app\models\projects\forms\ProjectCreateFirstStepForm;
 use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
@@ -40,6 +43,7 @@ use app\services\menuServices\SubMenuEnum;
 use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
+use app\services\helpers\TimeStringifyHelper;
 use kartik\mpdf\Pdf;
 use yii\helpers\ArrayHelper;
 #endregion
@@ -165,7 +169,19 @@ class ProjectController extends Controller implements ServiceInterface
                         'url' => 'project/create-first-step',
                         'label' => 'Créer un projet',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    ]
+                    ],
+                    [
+                        'Priorite' => 4,
+                        'url' => 'project/lot-simulate',
+                        'label' => 'Simulation  de lot',
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    ],
+                    [
+                        'Priorite' => 5,
+                        'url' => 'project/project-simulate',
+                        'label' => 'Simulation  Projet',
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    ],
                 ]
             ];
         }
@@ -547,22 +563,23 @@ class ProjectController extends Controller implements ServiceInterface
 
             if ($number != 0) {
                 // Préparation de tous les modèles de Task de gestion
-                $tasksGestions = Model::createMultiple(TaskGestionCreateTaskForm::className(), $tasksGestions);
+                $tasksGestions = Model::createMultiple(ProjectCreateGestionTaskForm::className(), $tasksGestions);
                 Model::loadMultiple($tasksGestions, Yii::$app->request->post());
 
                 if (!empty($tasksGestions)) {
-                    $isValid = false;
-                } else {
+
                     foreach ($tasksGestions as $taskGestions) {
                         if (!$taskGestions->validate()) {
                             $isValid = false;
                         }
                     }
+                } else {
+                    $isValid = false;
                 }
             }
 
             // Préparation de tous les modèles de Task operationel
-            $tasksOperational = Model::createMultiple(TaskLotCreateTaskForm::className(), $tasksOperational);
+            $tasksOperational = Model::createMultiple(ProjectCreateLotTaskForm::className(), $tasksOperational);
             Model::loadMultiple($tasksOperational, Yii::$app->request->post());
 
 
@@ -580,11 +597,11 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // Pour chaque lot, on lui attribut des valeurs par défaut.
                 foreach ($tasksGestions as $key => $taskGestions) {
-                    $taskGestions->number = $key;
+                    $taskGestions->number =  $taskGestions->number;;
                     $taskGestions->lot_id = $lot->id;
 
                     $taskriskduration = risk::find(['title' => $taskGestions->risk])->one();
-                    echo $taskriskduration->coefficient;
+
                     $taskGestions->risk_duration  = $taskriskduration->coefficient;
                     $taskGestions->task_category = task::CATEGORY_MANAGEMENT;
                     $taskGestions->save();
@@ -593,12 +610,11 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // Pour chaque lot, on lui attribut des valeurs par défaut.
                 foreach ($tasksOperational as $key => $taskOperational) {
-                    $taskOperational->number = $key;
+                    $taskOperational->number = $taskOperational->number;
                     $taskOperational->lot_id = $lot->id;
 
 
                     $taskriskduration = risk::find(['title' => $taskOperational->risk])->one();
-                    echo $taskriskduration->coefficient;
 
                     $taskOperational->risk_duration  = $taskriskduration->coefficient;
                     $taskOperational->task_category = task::CATEGORY_TASK;
@@ -606,17 +622,18 @@ class ProjectController extends Controller implements ServiceInterface
                 }
 
                 // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/create-third-step', 'number' => $model->number, 'project_id' => $model->id]);
+                Yii::$app->response->redirect(['project/create-third-step', 'number' => $number, 'project_id' => $project_id]);
             }
         }
         MenuSelectorHelper::setMenuProjectCreate();
         return $this->render(
             'createTask',
             [
+                'update' => true,
                 'model' => $model,
                 'celluleUsers' => $celluleUsers,
-                'tasksGestions' => (empty($tasksGestions)) ? [new TaskGestionCreateTaskForm] : $tasksGestions,
-                'tasksOperational' => (empty($tasksOperational)) ? [new TaskLotCreateTaskForm] : $tasksOperational,
+                'tasksGestions' => (empty($tasksGestions)) ? [new ProjectCreateGestionTaskForm] : $tasksGestions,
+                'tasksOperational' => (empty($tasksOperational)) ? [new ProjectCreateLotTaskForm] : $tasksOperational,
                 'risk' => $risk,
             ]
         );
@@ -645,21 +662,25 @@ class ProjectController extends Controller implements ServiceInterface
             ]);
         }
 
-
         // Modèles à sauvegarder.
-        $repayment = new ProjectCreateRepaymentForm();
         $consumables = [new ProjectCreateConsumableForm()];
-        $expenses = [new ProjectCreateExpenseForm()];
+        $expenses = [new ProjectCreateInvestForm()];
         $equipmentsRepayment = [new ProjectCreateEquipmentRepaymentForm()];
         $contributors = [new ProjectCreateLaboratoryContributorForm()];
-
+        $form = new ProjectCreateThridStepForm();
         // Import de données depuis la bdd.
-        $laboratoriesData = Laboratory::getAll();
-        $equipmentsData = Equipment::getAll();
+        $cellule = Cellule::getOneById(Yii::$app->user->identity->cellule_id);
+        $laboratoriesData = $cellule->laboratories;
+        $equipmentsData = [new Equipment()];
+        foreach ($laboratoriesData as $laboratory) {
+            //   echo $laboratory->name;
+            array_merge($equipmentsData, $laboratory->equipments);
+        }
+
         $risksData = Risk::getAll();
 
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        if ($repayment->load(Yii::$app->request->post())) {
+        /* if ($repayment->load(Yii::$app->request->post())) {
             // Variable de vérification de validité des données lors du renvoi par méthode POST.
             $isValid = true;
 
@@ -672,7 +693,7 @@ class ProjectController extends Controller implements ServiceInterface
             $contributors = Model::createMultiple(ProjectCreateLaboratoryContributorForm::className(), $contributors);
             if (!Model::loadMultiple($contributors, Yii::$app->request->post())) $isValid = false;
 
-            if ($isValid) {
+            /*  if ($isValid) {
 
                 $repayment->lot_id = $lot->id;
                 $repayment->laboratory_id = $laboratoriesData[$repayment->laboratorySelected]->id;
@@ -699,25 +720,28 @@ class ProjectController extends Controller implements ServiceInterface
                     })
                 );
 
-
                 // On associe les matériels au lot actuel, puis on les sauvegardes.
                 foreach ($equipmentsRepayment as $equipmentRepayment) {
                     $equipmentRepayment->equipment_id = $equipmentsDataFilteredByLabo[$equipmentRepayment->equipmentSelected]->id;
                     $equipmentRepayment->repayment_id = $repayment->id;
-                    $equipmentRepayment->risk = EquipmentRepayment::RISKS[$equipmentRepayment->riskSelected];
+                    $equipmentRepayment->risk_id = $equipmentRepayment->riskSelected + 1;
+                    $equipmentRepayment->time_risk = TimeStringifyHelper::transformStringChainToHour($equipmentRepayment->timeRiskStringify);
                     $equipmentRepayment->save();
                 }
 
                 // On associe les intervenants de laboratoire au lot actuel, puis ont les sauvegardes.
                 foreach ($contributors as $contributor) {
-                    $contributor->type = LaboratoryContributor::RISKS[$contributor->type];
+                    $contributor->type = LaboratoryContributor::TYPES[$contributor->type];
                     $contributor->laboratory_id = $id_laboratory;
                     $contributor->repayment_id = $repayment->id;
+                    $contributor->risk_id = $contributor->riskSelected + 1;
+                    $contributor->time_risk = TimeStringifyHelper::transformStringChainToHour($contributor->timeRiskStringify);
                     $contributor->save();
                 }
                 Yii::$app->response->redirect(['project/lot-simulate', 'project_id' => $project_id]);
             }
-        }
+        
+        }*/
 
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
@@ -727,8 +751,8 @@ class ProjectController extends Controller implements ServiceInterface
                 'laboratoriesData' => $laboratoriesData,
                 'equipmentsData' => $equipmentsData,
                 'risksData' => $risksData,
-                'repayment' => $repayment,
                 'consumables' => $consumables,
+                'formulaire' =>  $form,
                 'expenses' => $expenses,
                 'equipments' => $equipmentsRepayment,
                 'contributors' => $contributors
@@ -848,6 +872,270 @@ class ProjectController extends Controller implements ServiceInterface
 
 
     /**
+     * Route : create-lot-simulate
+     * Permet de modifier les marges d'un lot
+     * 
+     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * 
+     * @return mixed|error
+     */
+    public function actionLotSimulate($project_id = 1, $number = 1)
+    {
+
+
+        // Modèle du lot à updater. On s'en sert pour récupérer son id.
+        $lot = LotSimulate::getOneByIdProjectAndNumber($project_id, $number);
+
+        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
+        if ($lot->load(Yii::$app->request->post())) {
+
+            $lot->save();
+        }
+
+        if ($lot == null) {
+            return $this->redirect([
+                'error',
+                'errorName' => 'Lot innexistant',
+                'errorDescriptions' => ['Vous essayez actuellement de modifier un lot qui n\'existe pas.']
+            ]);
+        }
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render(
+            'lotSimulation',
+            [
+                'lot' =>  $lot
+            ]
+
+        );
+    }
+
+    /**
+     * Route : create-lot-simulate
+     * Permet de modifier les marges d'un lot
+     * 
+     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * 
+     * @return mixed|error
+     */
+    public function actionProjectSimulate($project_id = 1)
+    {
+
+        // Modèle du projet à updater. On s'en sert pour récupérer son id.
+        $project = Project::getOneById($project_id);
+        $lotavp = $project->lotaventprojet;
+        $lots = $project->lots;
+        $millestones = $project->millestones;
+        if ($project == null) {
+            return $this->redirect([
+                'error',
+                'errorName' => 'projet innexistant',
+                'errorDescriptions' => ['Vous essayez actuellement de modifier un projet qui n\'existe pas.']
+            ]);
+        }
+
+
+        // Modèles à sauvegarder.
+        $projetsimulation = new ProjectSimulate();
+
+        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
+        if ($projetsimulation->load(Yii::$app->request->post())) {
+
+            $projetsimulation->save();
+
+            $millestones = [new ProjectCreateMilleStoneForm()];
+            $project = $lot->project;
+            $ListeLot = $project->lots;
+        }
+
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render(
+            'projectSimulation',
+            [
+                'project' =>  $project,
+                'lotavp' => $lotavp,
+                'lots' => $lots,
+                'millestones' => (empty($millestones)) ? [new ProjectCreateMilleStoneForm()] : $millestones,
+            ]
+
+        );
+    }
+
+
+    /**
+     * A faire.
+     */
+    public function actionUpdateTask($number, $project_id)
+    {
+        $model = new ProjectCreateTaskForm();
+        $tasksGestionsModif = [new ProjectCreateGestionTaskForm()];
+        $tasksLotsModif = [new ProjectCreateLotTaskForm()];
+        $model->project_id = $project_id;
+        $model->number = $number;
+        $lot = $model->GetCurrentLot();
+        $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
+        $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
+
+        //Recupération des membres de la cellule
+        $idcellule = Yii::$app->user->identity->cellule_id;
+        $cel = new Cellule();
+        $cel->id = $idcellule;
+        $celluleUsers = $cel->capaUsers;
+
+
+        $risk = Risk::find()->all();
+
+
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            echo ('modelloaded');
+            $isValid = true;
+
+            if ($number != 0) {
+                $tasksGestionsModif = Model::createMultiple(ProjectCreateGestionTaskForm::className());
+                //var_dump($tasksGestionsModif);
+                ProjectCreateGestionTaskForm::loadMultiple($tasksGestionsModif, Yii::$app->request->post());
+                if (!empty($tasksGestionsModif)) {
+
+                    foreach ($tasksGestionsModif as $tasksGestionModif) {
+                        if (!$tasksGestionModif->validate()) {
+                            $isValid = false;
+                            echo ('false ');
+                        }
+                    }
+                }
+            }
+            $tasksLotsModif = Model::createMultiple(ProjectCreateLotTaskForm::className(), $tasksLotsModif);
+            //var_dump($tasksLotsModif);
+            if (!Model::loadMultiple($tasksLotsModif, Yii::$app->request->post())) {
+                echo 'failed';
+            }
+
+
+            if (!empty($tasksGestionsModif)) {
+                foreach ($tasksLotsModif as $tasksLotModif) {
+                    if (!$tasksLotModif->validate()) {
+                        $isValid = false;
+
+
+                        echo ('false ');
+                    }
+                }
+            } else {
+                $isValid = false;
+            }
+
+
+            if ($isValid) {
+
+                //Update des tâches opérationel
+                {
+                    $tasksOperationalArray = ArrayHelper::index($tasksOperational,  function ($element) {
+                        return $element->number;
+                    });
+
+                    $tasksLotsModifArray = ArrayHelper::index($tasksLotsModif,   function ($element) {
+                        return $element->number;
+                    });
+
+                    //Suppression des tâches enlevées par l'utilisateur;
+                    foreach ($tasksOperationalArray as $tasksOperational) {
+
+                        if (!array_key_exists($tasksOperational->number, $tasksLotsModifArray)) {
+                            $tasksOperational->delete();
+                        }
+                    }
+                    //Ajout et modification des données.
+                    foreach ($tasksLotsModif as $taskOperationalModif) {
+                        $task = null;
+                        if ($tasksOperationalArray[intval($taskOperationalModif->number)] != null) {
+                            //Si la tâche existe MAJ de la tâche
+                            $task =  $tasksOperationalArray[$taskOperationalModif->number];
+                        } else {
+                            //Si elle n'existe pas alors ajout de la tâche
+                            $task = new ProjectCreateLotTaskForm();
+                            $task->number = $taskOperationalModif->number;
+                            $task->task_category = Task::CATEGORY_TASK;
+                        }
+
+                        $task->title = $taskOperationalModif->title;
+                        $task->capa_user_id = $taskOperationalModif->capa_user_id;
+                        $task->day_duration = $taskOperationalModif->day_duration;
+                        $task->hour_duration = $taskOperationalModif->hour_duration;
+                        $task->price = $taskOperationalModif->price;
+                        $task->risk = $taskOperationalModif->risk;
+                        $task->risk_duration_hour = $taskOperationalModif->risk_duration_hour;
+                        $task->save();
+                    }
+                }
+
+                //Update des tâches de gestions
+                {
+                    if ($number != 0) {
+                        $tasksGestionsArray = ArrayHelper::index($tasksGestions,  function ($element) {
+                            return $element->number;
+                        });
+
+                        $tasksGestionsModifArray = ArrayHelper::index($tasksGestionsModif,   function ($element) {
+                            return $element->number;
+                        });
+
+                        //Suppression des tâches enlevées par l'utilisateur;
+                        foreach ($tasksGestionsArray as $tasksGestions) {
+
+                            if (!array_key_exists($tasksGestions->number, $tasksGestionsModifArray)) {
+                                $tasksGestions->delete();
+                            }
+                        }
+                        //Ajout et modification des données.
+                        foreach ($tasksGestionsModif as $taskGestionModif) {
+                            $task = null;
+                            if ($tasksGestionsArray[intval($taskGestionModif->number)] != null) {
+                                //Si la tâche existe MAJ de la tâche
+                                $task =  $tasksGestionsArray[$taskGestionModif->number];
+                            } else {
+                                //Si elle n'existe pas alors ajout de la tâche
+                                $task = new ProjectCreateLotTaskForm();
+                                $task->number = $taskGestionModif->number;
+                                $task->task_category = Task::CATEGORY_MANAGEMENT;
+                            }
+
+                            $task->title = $taskGestionModif->title;
+                            $task->capa_user_id = $taskGestionModif->capa_user_id;
+                            $task->day_duration = $taskGestionModif->day_duration;
+                            $task->hour_duration = $taskGestionModif->hour_duration;
+                            $task->price = $taskGestionModif->price;
+                            $task->risk = $taskGestionModif->risk;
+                            $task->risk_duration_hour = $taskGestionModif->risk_duration_hour;
+                            $task->save();
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
+        $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
+
+        MenuSelectorHelper::setMenuProjectCreate();
+        return $this->render(
+            'createTask',
+            [
+                'update' => true,
+                'model' => $model,
+                'celluleUsers' => $celluleUsers,
+                'tasksGestions' => (empty($tasksGestions)) ? [new ProjectCreateGestionTaskForm] : $tasksGestions,
+                'tasksOperational' => (empty($tasksOperational)) ? [new ProjectCreateLotTaskForm] : $tasksOperational,
+                'risk' => $risk,
+            ]
+        );
+    }
+
+    /**
      * Route : index-draft
      * Permet d'afficher la liste des tous les brouillons, c'est-à-dire les devis qui n'ont pas été finalisés.
      * 
@@ -870,6 +1158,12 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+    /**
+     * Route : update-first-step
+     * Retourne la vue de la première étape de la création d'un projet. On utilise celle-ci pour modifier un projet existant.
+     * Les modifications sur cette vue concernent : Le titre, les lots (à ôter, un lot ne doit pas être détruisable).
+     * Cette vue va probablement ne plus servir à grand chose.
+     */
     public function actionUpdateFirstStep(int $id)
     {
         // Récupération du projet brouillon.
@@ -998,6 +1292,48 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+    public function actionUpdateThirdStep($project_id, $number)
+    {
+        // Modèle du lot à updater. On s'en sert pour récupérer son id.
+        $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
+
+        if ($lot == null) {
+            return $this->redirect([
+                'error',
+                'errorName' => 'Lot innexistant',
+                'errorDescriptions' => ['Vous essayez actuellement de modifier une liste de matériels sur un lot/projet qui n\'existe pas.']
+            ]);
+        }
+
+        // Récupérer les données existantes du lot spécifié en paramètre.
+        $repayment = ProjectCreateRepaymentForm::getOneByLotID($lot->id);
+        $consumables =  ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id);
+        $expenses = ProjectCreateExpenseForm::getAllExpensesByLotID($lot->id);
+        $equipmentsRepayment = ProjectCreateEquipmentRepaymentForm::getAllByRepaymentID($repayment->id);
+        $contributors = ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($repayment->laboratory_id);
+
+        // Import de données depuis la bdd.
+        $laboratoriesData = Laboratory::getAll();
+        $equipmentsData = Equipment::getAll();
+        $risksData = Risk::getAll();
+
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render(
+            'createThirdStep',
+            [
+                'number' => $number,
+                'laboratoriesData' => $laboratoriesData,
+                'equipmentsData' => $equipmentsData,
+                'risksData' => $risksData,
+                'repayment' => $repayment,
+                'consumables' => $consumables,
+                'expenses' => $expenses,
+                'equipments' => $equipmentsRepayment,
+                'contributors' => $contributors
+            ]
+        );
+    }
+
     /**
      * Méthode générale pour le contrôleur permettant de retourner un devis.
      * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
@@ -1016,14 +1352,9 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
-     * @deprecated Cette fonction n'est plus utilisé
-     */
-    public static function getIndicator($user)
-    {
-    }
-
-    /**
      * Fonction qui rend une page d'erreur.
+     * @param string $errorName - Le titre de l'erreur que vous souhaitez afficher.
+     * @param array $errorDescription - Une liste de chaîne de caractères avec des détails précis sur l'erreur en question.
      */
     public function actionError(string $errorName, array $errorDescriptions)
     {
@@ -1035,5 +1366,12 @@ class ProjectController extends Controller implements ServiceInterface
                 'errorDescriptions' => $errorDescriptions
             ]
         );
+    }
+
+    /**
+     * @deprecated Cette fonction n'est plus utilisé
+     */
+    public static function getIndicator($user)
+    {
     }
 }

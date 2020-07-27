@@ -1,3 +1,6 @@
+var SelectTOtalPrice = "#project-sellingprice";
+var TotalPrice = $(SelectTOtalPrice).val();
+
 function updateprice(id) {
     var SelectMillePourcent =
         "#projectcreatemillestoneform-" + id + "-pourcentage";
@@ -9,6 +12,7 @@ function updateprice(id) {
     }
     $(SelectPrice).val(price);
 }
+
 function updatepourcent(id) {
     var SelectPrice = "#projectcreatemillestoneform-" + id + "-price";
     var price = $(SelectPrice).val();

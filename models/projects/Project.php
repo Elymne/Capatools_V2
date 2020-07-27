@@ -115,18 +115,22 @@ class Project extends ActiveRecord
         return Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
     }
 
+    public function getLotByNumber($number)
+    {
+
+        return Lot::find()->where(['number' => $number, 'project_id' => $this->id])->one();
+    }
     public function getAdditionalLotPrice()
     {
 
         $lotavp = Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
-        $lotavpTotalMarge = $lotavp->total * (1 + $this->marginaverage / 100);
+        $lotavpTotalMarge = $lotavp->total / (1 - $this->marginaverage / 100);
         return round(($lotavpTotalMarge / (count($this->lots) - 1)), 2);
     }
 
     public function getTotal()
     {
         $totalwithmargin = 0.0;
-        $totalwithoutmargin = 0.0;
         $lotsproject = $this->lots;
         foreach ($lotsproject as $lot) {
             if ($lot->number != 0) {
@@ -138,12 +142,12 @@ class Project extends ActiveRecord
 
     public function getSupportPrice()
     {
-        return round($this->total * ($this->management_rate / 100), 2);
+        return round($this->sellingPrice * ($this->management_rate / 100), 2);
     }
 
     public function getSellingPrice()
     {
-        return $this->total + $this->supportprice;
+        return round($this->total / (1 - $this->management_rate / 100), -2);
     }
 
     public function getMarginAverage()
@@ -163,7 +167,6 @@ class Project extends ActiveRecord
     public function getNbLot()
     {
         $ListeLot = $this->lots;
-        //Le 
         return count($ListeLot) - 1;
     }
 }
