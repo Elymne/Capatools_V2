@@ -82,7 +82,7 @@ class Lot extends ActiveRecord
         $result = 0;
         $taskslot = $this->tasks;
         foreach ($taskslot as $task) {
-            $result  = $result + ($task->price *  $task->risk_duration_hour);
+            $result  = $result + (($task->price / 7.7) *  $task->risk_duration_hour);
         }
 
         return $result;
