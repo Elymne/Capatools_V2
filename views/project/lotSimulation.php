@@ -359,7 +359,7 @@ function UpdateHumanMargin()
 {
     let totalcostwithmargin = "#lotsimulate-total_cost_human_with_margin";
     let LotrateMargin = "#lotsimulate-rate_human_margin";
-    let resultattwithmargin =$lot->totalCostHuman  / (1 - $(LotrateMargin).val()/100)
+    let resultattwithmargin =$lot->totalCostHuman  * (1 + $(LotrateMargin).val()/100)
     
     if(isNaN(resultattwithmargin))
     {
@@ -373,7 +373,7 @@ function UpdateInvestMargin()
 {
     let totalcostwithmargin = "#lotsimulate-total_cost_invest_with_margin";
     let LotrateMargin = "#lotsimulate-rate_consumable_investement_margin";
-    let resultattwithmargin =$lot->totalCostInvest / (1 - $(LotrateMargin).val()/100)  ;
+    let resultattwithmargin =$lot->totalCostInvest * (1 + $(LotrateMargin).val()/100)  ;
     if(isNaN(resultattwithmargin))
     {
         resultattwithmargin = 0;
@@ -387,7 +387,7 @@ function UpdateRepayementMargin()
     let totalcostwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
     let LotrateMargin = "#lotsimulate-rate_repayement_margin";
     let totalcost = "#lotsimulate-totalcostrepayement";
-    let resultattwithmargin = $lot->totalCostRepayement /(1 - $(LotrateMargin).val()/100) ;
+    let resultattwithmargin = $lot->totalCostRepayement *(1 + $(LotrateMargin).val()/100) ;
     if(isNaN(resultattwithmargin))
     {
         resultattwithmargin = 0;
