@@ -26,6 +26,7 @@ class ProjectCreateMilleStoneForm extends Millestone
     public function rules()
     {
         return [
+            [['comment', 'pourcentage', 'price'], 'safe',],
             ['comment', 'required', 'message' => 'Il faut identifier le jalon'],
             ['pourcentage', 'required', 'message' => 'Il faut indiquer un pourcentage'],
             ['price', 'required', 'message' => 'Il faut indiquer un prix'],

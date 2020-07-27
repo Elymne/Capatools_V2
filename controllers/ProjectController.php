@@ -760,115 +760,8 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
-    /**
-     * Route : create-lot-simulate
-     * Permet de modifier les marges d'un lot
-     * 
-     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * 
-     * @return mixed|error
-     */
-    public function actionLotSimulate($project_id = 0, $number = 0)
-    {
-
-        // Modèle du lot à updater. On s'en sert pour récupérer son id.
-        $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
-
-        if ($lot == null) {
-            return $this->redirect([
-                'error',
-                'errorName' => 'Lot innexistant',
-                'errorDescriptions' => ['Vous essayez actuellement de modifier un lot qui n\'existe pas.']
-            ]);
-        }
 
 
-        // Modèles à sauvegarder.
-        $lotsimulation = new LotSimulate();
-
-        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        if ($lotsimulation->load(Yii::$app->request->post())) {
-
-            $lotsimulation->save();
-
-            $millestones = [new ProjectCreateConsumableForm()];
-            $project = $lot->project;
-            $ListeLot = $project->lots;
-            $number++;
-            if ($number == $project->nblot) {
-                // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project_id]);
-            } else {
-                // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/task', 'number' => $number, 'project_id' => $project_id]);
-            }
-        }
-
-        MenuSelectorHelper::setMenuProjectNone();
-        return $this->render(
-            'lotSimulation',
-            [
-                'lot' =>  $lot
-            ]
-
-        );
-    }
-
-    /**
-     * Route : create-lot-simulate
-     * Permet de modifier les marges d'un lot
-     * 
-     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * 
-     * @return mixed|error
-     */
-    public function actionProjectSimulate($project_id = 0)
-    {
-
-        // Modèle du projet à updater. On s'en sert pour récupérer son id.
-        $lot = Project::getOneById($project_id);
-
-        if ($lot == null) {
-            return $this->redirect([
-                'error',
-                'errorName' => 'projet innexistant',
-                'errorDescriptions' => ['Vous essayez actuellement de modifier un projet qui n\'existe pas.']
-            ]);
-        }
-
-
-        // Modèles à sauvegarder.
-        $projetsimulation = new ProjectSimulate();
-
-        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        if ($projetsimulation->load(Yii::$app->request->post())) {
-
-            $projetsimulation->save();
-
-            $millestones = [new ProjectCreateConsumableForm()];
-            $project = $lot->project;
-            $ListeLot = $project->lots;
-            $number++;
-            if ($number == $project->nblot) {
-                // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project_id]);
-            } else {
-                // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/task', 'number' => $number, 'project_id' => $project_id]);
-            }
-        }
-
-        MenuSelectorHelper::setMenuProjectNone();
-        return $this->render(
-            'lotSimulation',
-            [
-                'lot' =>  $lot
-            ]
-
-        );
-    }
 
 
     /**
@@ -924,15 +817,24 @@ class ProjectController extends Controller implements ServiceInterface
 
         // Modèle du projet à updater. On s'en sert pour récupérer son id.
         $project = Project::getOneById($project_id);
-        $lotavp = $project->lotaventprojet;
-        $lots = $project->lots;
-        $millestones = $project->millestones;
         if ($project == null) {
             return $this->redirect([
                 'error',
                 'errorName' => 'projet innexistant',
                 'errorDescriptions' => ['Vous essayez actuellement de modifier un projet qui n\'existe pas.']
             ]);
+        }
+        $lotavp = $project->lotaventprojet;
+        $lots = $project->lots;
+        $millestones = $project->millestones;
+
+        if (count($millestones) == 0  &&  $project->SellingPrice > 2000) {
+            $advancepayement = new  ProjectCreateMilleStoneForm();
+            $advancepayement->number = 0;
+            $advancepayement->comment = "Acompte";
+            $advancepayement->pourcentage = 30.0;
+            $advancepayement->price = (30.0 / 100) * $project->SellingPrice;
+            array_push($millestones, $advancepayement);
         }
 
 

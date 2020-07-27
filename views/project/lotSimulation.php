@@ -409,7 +409,7 @@ function CalculTotalLot()
     let totalcosthumanwithmargin = "#lotsimulate-total_cost_human_with_margin";
     let totalcostinvestwithmargin = "#lotsimulate-total_cost_invest_with_margin";
     let totalcostrepayementwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
- let totalcosthumanprice =  (Number($(totalcosthuman).val().replace(/[^0-9.-]+/g,"")))/100; 
+ let totalcosthumanprice =  (Number($(totalcosthuman).val().replace(',','.').replace(/[^0-9.-]+/g,"")))/100; 
  let totalcostinvestprice =  (Number($(totalcostinvest).val().replace(/[^0-9.-]+/g,"")))/100; 
  let totalcostrepayementprice =  (Number($(totalcostrepayement).val().replace(/[^0-9.-]+/g,"")))/100; 
  let totalcosthumanwithmarginprice =  (Number($(totalcosthumanwithmargin).val().replace(/[^0-9.-]+/g,"")))/100; 
@@ -434,8 +434,8 @@ function CalculTotalLot()
     let ratesupp = $management_rate;
 
 
-    let totalwithsupport = 118950.64 / (1- 12 /100);
-    let support = totalcostwithMargin * (ratesupp /100);
+    let totalwithsupport = $totalcostwithMargin / (1 - ratesupp /100);
+    let support = totalwithsupport * (ratesupp /100);
     $(supportcost).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(support.toFixed(2)));
 
     $(totalcostlotwithsupport).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(totalwithsupport.toFixed(2)));
