@@ -925,9 +925,16 @@ class ProjectController extends Controller implements ServiceInterface
                     //Ajout et modification des données.
                     foreach ($tasksLotsModif as $taskOperationalModif) {
                         $task = null;
-                        if (array_key_exists(intval($taskOperationalModif->number), $tasksOperationalArray)) {
-                            //Si la tâche existe MAJ de la tâche
-                            $task =  $tasksOperationalArray[$taskOperationalModif->number];
+                        if (!empty($tasksOperationalArray)) {
+                            if (array_key_exists(intval($taskOperationalModif->number), $tasksOperationalArray)) {
+                                //Si la tâche existe MAJ de la tâche
+                                $task =  $tasksOperationalArray[$taskOperationalModif->number];
+                            } else {
+                                //Si elle n'existe pas alors ajout de la tâche
+                                $task = new ProjectCreateLotTaskForm();
+                                $task->number = $taskOperationalModif->number;
+                                $task->task_category = Task::CATEGORY_TASK;
+                            }
                         } else {
                             //Si elle n'existe pas alors ajout de la tâche
                             $task = new ProjectCreateLotTaskForm();
@@ -967,9 +974,17 @@ class ProjectController extends Controller implements ServiceInterface
                         //Ajout et modification des données.
                         foreach ($tasksGestionsModif as $taskGestionModif) {
                             $task = null;
-                            if (array_key_exists(intval($taskGestionModif->number), $tasksGestionsArray)) {
-                                //Si la tâche existe MAJ de la tâche
-                                $task =  $tasksGestionsArray[$taskGestionModif->number];
+                            if (!empty($tasksGestionsArray)) {
+
+                                if (array_key_exists(intval($taskGestionModif->number), $tasksGestionsArray)) {
+                                    //Si la tâche existe MAJ de la tâche
+                                    $task =  $tasksGestionsArray[$taskGestionModif->number];
+                                } else {
+                                    //Si elle n'existe pas alors ajout de la tâche
+                                    $task = new ProjectCreateLotTaskForm();
+                                    $task->number = $taskGestionModif->number;
+                                    $task->task_category = Task::CATEGORY_MANAGEMENT;
+                                }
                             } else {
                                 //Si elle n'existe pas alors ajout de la tâche
                                 $task = new ProjectCreateLotTaskForm();
