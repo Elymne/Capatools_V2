@@ -517,7 +517,7 @@ class ProjectController extends Controller implements ServiceInterface
                     $lot->save();
                 }
                 // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/task', 'number' => 0, 'project_id' => $model->id]);
+                Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $model->id]);
             }
         }
 
@@ -536,108 +536,6 @@ class ProjectController extends Controller implements ServiceInterface
         $millestones = [new ProjectCreateMilleStoneForm];
     }
 
-    /**
-     *  Nouvelle route pour la création de tâche d'un lot d'un projet sur l'application Capatool.
-     *  Celle-ci retourne une vue et créer un brouillon du projet.
-     *  Elle correspond à la première étape de la création d'un projet.
-     * 
-     *  @return mixed
-     */
-    public function actionTask($number, $project_id)
-    {
-        $model = new ProjectCreateTaskForm();
-        $tasksGestions = [new ProjectCreateGestionTaskForm];
-        $tasksOperational = [new ProjectCreateLotTaskForm];
-        $risk = Risk::find()->all();
-        $model->project_id = $project_id;
-        $model->number = $number;
-
-        //Recupération des membres de la cellule
-        $idcellule = Yii::$app->user->identity->cellule_id;
-        $cel = new Cellule();
-        $cel->id = $idcellule;
-        $celluleUsers = $cel->capaUsers;
-
-        if ($model->load(Yii::$app->request->post())) {
-            $isValid = true;
-
-            if ($number != 0) {
-                // Préparation de tous les modèles de Task de gestion
-                $tasksGestions = Model::createMultiple(ProjectCreateGestionTaskForm::className(), $tasksGestions);
-                Model::loadMultiple($tasksGestions, Yii::$app->request->post());
-
-                if (!empty($tasksGestions)) {
-
-                    foreach ($tasksGestions as $taskGestions) {
-                        if (!$taskGestions->validate()) {
-                            $isValid = false;
-                        }
-                    }
-                } else {
-                    $isValid = false;
-                }
-            }
-
-            // Préparation de tous les modèles de Task operationel
-            $tasksOperational = Model::createMultiple(ProjectCreateLotTaskForm::className(), $tasksOperational);
-            Model::loadMultiple($tasksOperational, Yii::$app->request->post());
-
-
-            foreach ($tasksOperational as $taskOperational) {
-                if (!$taskOperational->validate()) {
-                    $isValid = false;
-                }
-            }
-
-            // Si tous les modèles de taches sont valides.
-            if ($isValid) {
-
-                // Création d'un lot d'avant-projet.
-                $lot = $model->GetCurrentLot();
-
-                // Pour chaque lot, on lui attribut des valeurs par défaut.
-                foreach ($tasksGestions as $key => $taskGestions) {
-                    $taskGestions->number =  $taskGestions->number;
-                    $taskGestions->lot_id = $lot->id;
-
-                    $taskriskduration = risk::find(['title' => $taskGestions->risk])->one();
-
-                    $taskGestions->risk_duration  = $taskriskduration->coefficient;
-                    $taskGestions->task_category = task::CATEGORY_MANAGEMENT;
-                    $taskGestions->save();
-                }
-
-
-                // Pour chaque lot, on lui attribut des valeurs par défaut.
-                foreach ($tasksOperational as $key => $taskOperational) {
-                    $taskOperational->number = $taskOperational->number;
-                    $taskOperational->lot_id = $lot->id;
-
-
-                    $taskriskduration = risk::find(['title' => $taskOperational->risk])->one();
-
-                    $taskOperational->risk_duration  = $taskriskduration->coefficient;
-                    $taskOperational->task_category = task::CATEGORY_TASK;
-                    $taskOperational->save();
-                }
-
-                // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/create-third-step', 'number' => $number, 'project_id' => $project_id]);
-            }
-        }
-        MenuSelectorHelper::setMenuProjectCreate();
-        return $this->render(
-            'createTask',
-            [
-                'update' => true,
-                'model' => $model,
-                'celluleUsers' => $celluleUsers,
-                'tasksGestions' => (empty($tasksGestions)) ? [new ProjectCreateGestionTaskForm] : $tasksGestions,
-                'tasksOperational' => (empty($tasksOperational)) ? [new ProjectCreateLotTaskForm] : $tasksOperational,
-                'risk' => $risk,
-            ]
-        );
-    }
 
     /**
      * Route : create-third-step
@@ -907,7 +805,7 @@ class ProjectController extends Controller implements ServiceInterface
         //check validity of the devis
         //1 A least for each lot TotalCostHuman != 0
         foreach ($lots as $lot) {
-            if ($lot->totalcosthumain == 0) {
+            if ($lot->totalCostHuman == 0) {
                 $validdevis = false;
                 break;
             }

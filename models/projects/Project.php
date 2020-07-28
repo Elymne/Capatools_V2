@@ -162,7 +162,11 @@ class Project extends ActiveRecord
                 $totalwithoutmargin = $totalwithoutmargin + $lot->total;
             }
         }
-        return round((($totalwithmargin / $totalwithoutmargin) - 1) * 100, 2);
+        if ($totalwithoutmargin != 0) {
+            return round((($totalwithmargin / $totalwithoutmargin) - 1) * 100, 2);
+        } else {
+            return 0;
+        }
     }
     public function getNbLot()
     {

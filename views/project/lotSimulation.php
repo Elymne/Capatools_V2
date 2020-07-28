@@ -426,6 +426,10 @@ function CalculTotalLot()
 
 
     let average = ((totalcostwithMargin / totalcost) - 1);
+    if(isNaN(average))
+    {
+        average = 0;
+    } 
     $(averagelotmargin).val(new Intl.NumberFormat('fr-FR', { style: 'percent', maximumFractionDigits: 2 }).format(average));
 
     let supportcost = "#lotsimulate-support_cost";
@@ -434,7 +438,7 @@ function CalculTotalLot()
     let ratesupp = $management_rate;
 
 
-    let totalwithsupport = $totalcostwithMargin / (1 - ratesupp /100);
+    let totalwithsupport = totalcostwithMargin / (1 - ratesupp /100);
     let support = totalwithsupport * (ratesupp /100);
     $(supportcost).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(support.toFixed(2)));
 

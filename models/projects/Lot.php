@@ -122,7 +122,7 @@ class Lot extends ActiveRecord
         }
 
 
-        return 5000;
+        return 0;
     }
 
     public function getTotal()
