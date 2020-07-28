@@ -88,6 +88,56 @@ class Lot extends ActiveRecord
         return $result;
     }
 
+    public function getTotalCostHumanWithMarginAndRisk()
+    {
+        $result = 0;
+        $taskslot = $this->tasks;
+        foreach ($taskslot as $task) {
+            $result  = $result + (($task->price / 7.7) *  $task->risk_duration_hour);
+        }
+
+        return $result * (1 + $this->rate_human_margin / 100);
+    }
+
+    public function getTotalCostHumanWithMargin()
+    {
+        $result = 0;
+        $taskslot = $this->tasks;
+        foreach ($taskslot as $task) {
+            $result  = $result + (($task->price / 7.7) *  ($task->day_duration * 7.7  + $task->hour_duration));
+        }
+
+        return $result * (1 + $this->rate_human_margin / 100);
+    }
+
+
+    public function getTotalTimeWithRisk()
+    {
+        $result = 0;
+        $taskslot = $this->tasks;
+        foreach ($taskslot as $task) {
+            $result  = $result +   $task->risk_duration_hour;
+        }
+
+        return $result;
+    }
+
+
+
+    public function getTotalTime()
+    {
+        $result = 0;
+        $taskslot = $this->tasks;
+        foreach ($taskslot as $task) {
+            $result  =  $result +  $task->day_duration * 7.7  + $task->hour_duration;
+        }
+
+        return $result;
+    }
+
+
+
+
 
     public function getTotalCostInvest()
     {

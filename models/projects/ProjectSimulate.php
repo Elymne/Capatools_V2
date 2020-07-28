@@ -16,12 +16,15 @@ use yii\db\ActiveRecord;
 class ProjectSimulate extends Project
 {
 
-    public $support_cost;
-    /**
-     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
-     */
     public function rules()
     {
-        return [];
+        return [
+            [['low_tjm_raison'], 'safe'],
+            [['low_tjm_raison'], 'required', 'message' => 'Une Raison doit être sélectionnée pour valider le taux journalier'],
+        ];
     }
+
+
+
+    public $support_cost;
 }

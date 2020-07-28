@@ -19,6 +19,18 @@ use app\models\companies\Contact;
 class Project extends ActiveRecord
 {
 
+    const TJMRAISON_TJMOK = 'TJMOK';
+    const TJMRAISON_CONCURRENTIEL = 'Contexte concurrentiel';
+    const TJMRAISON_INTERVENANT = 'Profil intervenant';
+    const TJMRAISON_OFFER = "Thématique offre";
+    const TJMRAISON_OTHER = "Autre";
+    const TJMRAISON = [
+        self::TJMRAISON_CONCURRENTIEL => self::TJMRAISON_CONCURRENTIEL,
+        self::TJMRAISON_INTERVENANT => self::TJMRAISON_INTERVENANT,
+        self::TJMRAISON_OFFER => self::TJMRAISON_OFFER,
+        self::TJMRAISON_OTHER => self::TJMRAISON_OTHER
+    ];
+
     const TYPE_PRESTATION = 'Prestation';
     const TYPE_OUTSOURCING_AD = 'Sous traitance AD';
     const TYPE_OUTSOURCING_UN = "Sous traitance UN";
@@ -138,6 +150,43 @@ class Project extends ActiveRecord
             }
         }
         return $totalwithmargin;
+    }
+
+    public function getTjm()
+    {
+        $totaltime = 0.0;
+        $TotalCostHumanWithMargin = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+
+            $totaltime = $totaltime + $lot->totaltime;
+            $TotalCostHumanWithMargin = $TotalCostHumanWithMargin + $lot->totalCostHumanWithMargin;
+        }
+        $result = $TotalCostHumanWithMargin / (1 - $this->management_rate / 100);
+        if ($totaltime != 0) {
+            return round($result / $totaltime, 2);
+        } else {
+            return 0;
+        }
+    }
+
+    public function getTjmWithRisk()
+    {
+        $totaltimewithrisk = 0.0;
+        $TotalCostHumanWithMarginwithrisk = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+
+            $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
+            $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHumanWithMarginAndRisk;
+        }
+        $result = $TotalCostHumanWithMarginwithrisk / (1 - $this->management_rate / 100);
+        if ($totaltimewithrisk != 0) {
+
+            return round($result / $totaltimewithrisk, 2);
+        } else {
+            return 0;
+        }
     }
 
     public function getSupportPrice()

@@ -714,7 +714,7 @@ class ProjectController extends Controller implements ServiceInterface
     {
 
         // Modèle du projet à updater. On s'en sert pour récupérer son id.
-        $project = Project::getOneById($project_id);
+        $project = ProjectSimulate::getOneById($project_id);
         if ($project == null) {
             return $this->redirect([
                 'error',
@@ -731,8 +731,10 @@ class ProjectController extends Controller implements ServiceInterface
 
 
         // Modèles à sauvegarder.
-        $projetsimulation = new ProjectSimulate();
 
+        if ($project->load(Yii::$app->request->post())) {
+            $project->save();
+        }
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
         $millestonesModif = [new ProjectCreateMilleStoneForm()];
         $millestonesModif =  Model::createMultiple(ProjectCreateMilleStoneForm::className(), $millestonesModif);
@@ -821,12 +823,17 @@ class ProjectController extends Controller implements ServiceInterface
             $validdevis = false;
         }
 
+        $tjmstat = false;
+        if ($project->tjmWithRisk < 700 || $project->tjm < 700) {
+            $tjmstat = true;
+        }
 
 
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
             'projectSimulation',
             [
+                'tjmstatut' => $tjmstat,
                 'validdevis' => $validdevis,
                 'project' =>  $project,
                 'lotavp' => $lotavp,

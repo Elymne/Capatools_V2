@@ -8,6 +8,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
+use kartik\select2\Select2;
+
 $this->title = 'Simulation du projet';
 
 AppAsset::register($this);
@@ -130,7 +132,7 @@ ProjectSimulationAsset::register($this);
                 <div class="card">
 
                     <div class="card-content">
-                        <label>Prix Total du projet</label>
+                        <label>Bilan du projet</label>
                     </div>
 
                     <div class="card-action">
@@ -142,6 +144,12 @@ ProjectSimulationAsset::register($this);
                             <div class="col s2">
                                 <?= $form->field($project, "total", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->total)]])->label(false) ?>
                             </div>
+                            <div class="col s3">
+                                Taux journalier homme sans risque:
+                            </div>
+                            <div class="col s2">
+                                <?= $form->field($project, "tjm", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->Tjm)]])->label(false) ?>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
@@ -149,6 +157,12 @@ ProjectSimulationAsset::register($this);
                             </div>
                             <div class="col s2">
                                 <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
+                            </div>
+                            <div class="col s3">
+                                Taux journalier homme avec risque:
+                            </div>
+                            <div class="col s2">
+                                <?= $form->field($project, "tjmWithRisk", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->tjmWithRisk)]])->label(false) ?>
                             </div>
                         </div>
                         <div class="row">
@@ -158,6 +172,11 @@ ProjectSimulationAsset::register($this);
                             <div class="col s2">
                                 <?= $form->field($project, "supportprice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->supportprice)]])->label(false)  ?>
                             </div>
+                            <div class="col s5">
+                                <?php if ($tjmstatut) { ?>
+                                    <label class='orange-text control-label typeLabel'> Attention le taux journalier est inférieur à 700 €</label>
+                                <?php  } ?>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col s3">
@@ -166,6 +185,94 @@ ProjectSimulationAsset::register($this);
                             <div class="col s2">
                                 <?= $form->field($project, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->SellingPrice)]])->label(false) ?>
                             </div>
+                            <div class="col s3">
+                                <?php if ($tjmstatut) { ?>
+                                    Raison:
+                                <?php  } ?>
+                            </div>
+                            <div class="col s2">
+                                <?php
+                                if ($tjmstatut) {
+                                    echo $form->field($project, "low_tjm_raison")->widget(
+                                        Select2::classname(),
+                                        [
+                                            'theme' => Select2::THEME_MATERIAL,
+                                            'data' => Project::TJMRAISON,
+                                            'name' => 'GestionRisk',
+                                            'pluginLoading' => false,
+                                            'options' => [
+                                                'placeholder' => 'Raison...',
+                                            ],
+                                        ]
+                                    )->label(false);
+                                } else {
+                                    echo  $form->field($project, "low_tjm_raison")->hiddeninput(['value' => $project::TJMRAISON_TJMOK])->label('');
+                                } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+
+                    <div class="card-content">
+                        <label>Coût Externe</label>
+                    </div>
+
+                    <div class="card-action">
+
+                        <div class="row">
+                            <div class="col s3">
+
+                                <label class='blue-text control-label typeLabel'> Reversement interne :</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col s3">
+                                Celluele 1 :
+                            </div>
+                            <div class="col s2">
+                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col s3">
+                                Celluele 2 :
+                            </div>
+                            <div class="col s2">
+                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s3">
+                                <label class='blue-text control-label typeLabel'> Reversement Laboratoire :</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col s3">
+                                Labo 1 :
+                            </div>
+                            <div class="col s2">
+                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col s3">
+                                <label class='blue-text control-label typeLabel'> Reversement Externe :</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col s3">
+                                Capgemini :
+                            </div>
+                            <div class="col s2">
+                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -240,7 +347,7 @@ ProjectSimulationAsset::register($this);
 
                     <?php
                     if ($validdevis) {
-                        echo Html::a(Yii::t('app', 'Créer le projet'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']);
+                        echo Html::a(Yii::t('app', 'Créer le projet'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']);
                     } else {
                         echo Html::a(Yii::t('app', 'Créer le projet'), null, ['class' => '  btn btn-red']);
                     }
