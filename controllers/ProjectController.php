@@ -925,7 +925,7 @@ class ProjectController extends Controller implements ServiceInterface
                     //Ajout et modification des données.
                     foreach ($tasksLotsModif as $taskOperationalModif) {
                         $task = null;
-                        if ($tasksOperationalArray[intval($taskOperationalModif->number)] != null) {
+                        if (array_key_exists(intval($taskOperationalModif->number), $tasksOperationalArray)) {
                             //Si la tâche existe MAJ de la tâche
                             $task =  $tasksOperationalArray[$taskOperationalModif->number];
                         } else {
@@ -967,7 +967,7 @@ class ProjectController extends Controller implements ServiceInterface
                         //Ajout et modification des données.
                         foreach ($tasksGestionsModif as $taskGestionModif) {
                             $task = null;
-                            if ($tasksGestionsArray[intval($taskGestionModif->number)] != null) {
+                            if (array_key_exists(intval($taskGestionModif->number), $tasksGestionsArray)) {
                                 //Si la tâche existe MAJ de la tâche
                                 $task =  $tasksGestionsArray[$taskGestionModif->number];
                             } else {
