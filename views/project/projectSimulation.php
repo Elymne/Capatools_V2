@@ -204,6 +204,9 @@ ProjectSimulationAsset::register($this);
                                     }
                                     ?>
                                     <div class="row">
+                                        <div class="col s0">
+                                            <?= Html::activeHiddenInput($millestone, "[{$i}]number"); ?>
+                                        </div>
                                         <div class="col s3">
                                             <?= $form->field($millestone, "[{$i}]comment")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Titre") ?>
 
@@ -212,7 +215,8 @@ ProjectSimulationAsset::register($this);
                                             <?= $form->field($millestone, "[{$i}]pourcentage")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Pourcentage") ?>
                                         </div>
                                         <div class="col s2">
-                                            <?= $form->field($millestone, "[{$i}]price")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Prix") ?>
+                                            <?= $form->field($millestone, "[{$i}]priceeuros")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => Yii::$app->formatter->asCurrency($millestones[$i]->price)])->label("Prix") ?>
+                                            <?= Html::activeHiddenInput($millestone, "[{$i}]price") ?>
                                         </div>
                                         <div class="col 2">
                                             <button type="button" class="add-item-millestone btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -233,7 +237,14 @@ ProjectSimulationAsset::register($this);
                 <!-- Buttons -->
                 <div class="form-group">
                     <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                    <?= Html::a(Yii::t('app', 'Précédent'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
+
+                    <?php
+                    if ($validdevis) {
+                        echo Html::a(Yii::t('app', 'Créer le projet'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']);
+                    } else {
+                        echo Html::a(Yii::t('app', 'Créer le projet'), null, ['class' => '  btn btn-red']);
+                    }
+                    ?>
                 </div>
             </div>
         </div>

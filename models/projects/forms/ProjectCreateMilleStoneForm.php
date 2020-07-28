@@ -18,7 +18,7 @@ use app\models\projects\Millestone;
  */
 class ProjectCreateMilleStoneForm extends Millestone
 {
-
+    public $priceeuros;
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
@@ -26,7 +26,7 @@ class ProjectCreateMilleStoneForm extends Millestone
     public function rules()
     {
         return [
-            [['comment', 'pourcentage', 'price'], 'safe',],
+            [['comment', 'pourcentage', 'price', 'number'], 'safe',],
             ['comment', 'required', 'message' => 'Il faut identifier le jalon'],
             ['pourcentage', 'required', 'message' => 'Il faut indiquer un pourcentage'],
             ['price', 'required', 'message' => 'Il faut indiquer un prix'],

@@ -597,7 +597,7 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // Pour chaque lot, on lui attribut des valeurs par défaut.
                 foreach ($tasksGestions as $key => $taskGestions) {
-                    $taskGestions->number =  $taskGestions->number;;
+                    $taskGestions->number =  $taskGestions->number;
                     $taskGestions->lot_id = $lot->id;
 
                     $taskriskduration = risk::find(['title' => $taskGestions->risk])->one();
@@ -824,9 +824,76 @@ class ProjectController extends Controller implements ServiceInterface
                 'errorDescriptions' => ['Vous essayez actuellement de modifier un projet qui n\'existe pas.']
             ]);
         }
+
+        $validdevis = true;
         $lotavp = $project->lotaventprojet;
         $lots = $project->lots;
         $millestones = $project->millestones;
+
+
+
+        // Modèles à sauvegarder.
+        $projetsimulation = new ProjectSimulate();
+
+        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
+        $millestonesModif = [new ProjectCreateMilleStoneForm()];
+        $millestonesModif =  Model::createMultiple(ProjectCreateMilleStoneForm::className(), $millestonesModif);
+        $isValid = true;
+        Model::loadMultiple($millestonesModif, Yii::$app->request->post());
+        if (!empty($millestonesModif)) {
+
+            foreach ($millestonesModif as $Millestone) {
+                if (!$Millestone->validate()) {
+                    $isValid = false;
+                }
+            }
+        } else {
+            $isValid = false;
+        }
+        // Si tous les Jalons sont valides
+        if ($isValid) {
+
+            $MillestoneArray = ArrayHelper::index($millestones,  function ($element) {
+                return $element->number;
+            });
+            $millestonesModifArray = ArrayHelper::index($millestonesModif,   function ($element) {
+                return $element->number;
+            });
+            //Suppression des tâches enlevées par l'utilisateur;
+            foreach ($MillestoneArray as $Millestone) {
+
+                if (!array_key_exists($Millestone->number, $millestonesModifArray)) {
+                    $Millestone->delete();
+                }
+            }
+            //Ajout et modification des données.
+            foreach ($millestonesModif as $millestoneModif) {
+                $millestoneNew = null;
+
+                if (!empty($MillestoneArray)) {
+                    if (array_key_exists(intval($millestoneModif->number), $MillestoneArray)) {
+                        //Si la tâche existe MAJ de la tâche
+                        $millestoneNew =  $MillestoneArray[$millestoneModif->number];
+                    } else {
+                        //Si elle n'existe pas alors ajout de la tâche
+                        $millestoneNew = new ProjectCreateMilleStoneForm();
+                        $millestoneNew->number = $millestoneModif->number;
+                    }
+                } else {
+                    //Si elle n'existe pas alors ajout de la tâche
+                    $millestoneNew = new ProjectCreateMilleStoneForm();
+                    $millestoneNew->number = $millestoneModif->number;
+                }
+
+                $millestoneNew->comment = $millestoneModif->comment;
+                $millestoneNew->project_id = $project->id;
+                $millestoneNew->pourcentage = $millestoneModif->pourcentage;
+                $millestoneNew->price = $millestoneModif->price;
+                $millestoneNew->save();
+            }
+        }
+
+        $millestones = ProjectCreateMilleStoneForm::getAllByProject($project->id);
 
         if (count($millestones) == 0  &&  $project->SellingPrice > 2000) {
             $advancepayement = new  ProjectCreateMilleStoneForm();
@@ -837,24 +904,32 @@ class ProjectController extends Controller implements ServiceInterface
             array_push($millestones, $advancepayement);
         }
 
-
-        // Modèles à sauvegarder.
-        $projetsimulation = new ProjectSimulate();
-
-        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        if ($projetsimulation->load(Yii::$app->request->post())) {
-
-            $projetsimulation->save();
-
-            $millestones = [new ProjectCreateMilleStoneForm()];
-            $project = $lot->project;
-            $ListeLot = $project->lots;
+        //check validity of the devis
+        //1 A least for each lot TotalCostHuman != 0
+        foreach ($lots as $lot) {
+            if ($lot->totalcosthumain == 0) {
+                $validdevis = false;
+                break;
+            }
         }
+
+
+        //Sum of pourcent millestone = 100%
+        $totalPoucent  = 0;
+        foreach ($millestones as $millestone) {
+            $totalPoucent  = $totalPoucent  + $millestone->pourcentage;
+        }
+        if ($totalPoucent != 100) {
+            $validdevis = false;
+        }
+
+
 
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
             'projectSimulation',
             [
+                'validdevis' => $validdevis,
                 'project' =>  $project,
                 'lotavp' => $lotavp,
                 'lots' => $lots,

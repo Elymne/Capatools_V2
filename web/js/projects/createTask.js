@@ -183,6 +183,10 @@ $(() => {
         $(SelectUser).on("select2:select", function (e) {
             OnCalculIntervenantlot(index);
         });
+
+        let TaskNumber = "#projectcreatelottaskform-" + index + "-number";
+        $(TaskNumber).val(index);
+
         OnCalculIntervenantlot(index);
     });
 
