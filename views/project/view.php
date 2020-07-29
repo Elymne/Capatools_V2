@@ -128,7 +128,7 @@ function createTimeline(array $stages, int $indexStatus)
             </div>
         <?php } ?>
     </div>
-    <?php
+<?php
 }
 
 function isStatusPassed(int $indexStatus, int $arrayKey): bool
@@ -389,19 +389,22 @@ HTML;
  */
 function createMillestone(array $millestones)
 {
+?>
+    <tr>
+        <th>Titre</th>
+        <th>Pourcentage</th>
+        <th>Prix du jalon</th>
+        <th>Statut</th>
+    </tr>
+    <?php
     foreach ($millestones as $key => $millestone) {
     ?>
 
-        <tr>
-            <th>Titre</th>
-            <th>Pourcentage</th>
-            <th>Prix du jalon</th>
-            <th>Statut</th>
-        </tr>
+
         <tr>
             <td><?php echo $millestone->comment ?></td>
-            <td><?php echo $millestone->pourcentage ?></td>
-            <td><?php echo $millestone->price ?></td>
+            <td><?php echo Yii::$app->formatter->asPercent($millestone->pourcentage / 100) ?></td>
+            <td><?php echo  Yii::$app->formatter->asCurrency($millestone->price) ?></td>
             <td><?php echo  updateStatus($millestone) ?></td>
         </tr>
     <?php
@@ -417,13 +420,21 @@ function updateStatus($millestone): string
 {
 
 
-    if ($millestone->statut == Millestone::STATUT_ENCOURS && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
+    if ($millestone->statut == Millestone::STATUT_ENCOURS && $millestone->project->state  == Project::STATE_DEVIS_SENDED) {
         $id = $millestone->id;
-        $status = $millestone->statut;
+        $status = Millestone::STATUT_FACTURER;
         return <<<HTML
                 En Cours&nbsp;&nbsp;&nbsp;
                 <a href="update-milestone-status?id=${id}&status=${status}" class="btn-floating waves-effect waves-light blue">
                     <i class="material-icons right">check_circle</i>
+                </a>
+        HTML;
+    }
+    if ($millestone->statut == Millestone::STATUT_FACTURER && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
+        $id = $millestone->id;
+        $status = $millestone->statut;
+        return <<<HTML
+                Facturé&nbsp;&nbsp;&nbsp;
                 </a>
         HTML;
     }
@@ -433,14 +444,6 @@ function updateStatus($millestone): string
         $status = $millestone->statut;
         return <<<HTML
                 Facturation en cours&nbsp;&nbsp;&nbsp;
-                </a>
-        HTML;
-    }
-    if ($millestone->statut == Millestone::STATUT_FACTURER && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
-        $id = $millestone->id;
-        $status = $millestone->statut;
-        return <<<HTML
-                Facturé&nbsp;&nbsp;&nbsp;
                 </a>
         HTML;
     }

@@ -232,11 +232,9 @@ class ProjectController extends Controller implements ServiceInterface
         ]);
     }
 
-
-
     /**
      * Render view : none
-     * Redirected view : devis/index.
+     * Redirected view : project/view.
      * Modifie le status d'un devis.
      * 
      * @param integer $id
@@ -244,24 +242,43 @@ class ProjectController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateStatus(int $id, int $status)
+    public function actionUpdateStatus($id, $status)
     {
+        $project = project::getOneById($id);
+        $project->state = $status;
+        $project->save();
+
+        MenuSelectorHelper::setMenuProjectNone();
+
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
     }
 
+
     /**
-     * Utilisé pour modifier le devis d'un objet Devis.
-     * On sauvgarde/modifie ensuite cet objet dans la base de données.
+     * Render view : none
+     * Redirected view : project/view.
+     * Modifie le status d'un jalon.
      * 
-     * @param Devis Un objet devis dont on veut modifier le status.
-     * @param integer Le type de status du devis à modifier.
+     * @param integer $id
+     * @param value $status Static value of DevisStatus
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
-    private function setStatus(Project $model, int $status)
+    public function actionUpdateStatusJalon($idjalon, $status)
     {
-        if ($model) {
-            $model->status_id = $status;
-            $model->save();
-        }
+        $jalon = Millestone::getOneById($idjalon);
+        $jalon->state = $status;
+        $jalon->save();
+
+        MenuSelectorHelper::setMenuProjectNone();
+
+        return $this->render('view', [
+            'model' => $this->findModel($jalon->project_id),
+        ]);
     }
+
 
     /**
      * Utilisé pour télécharger le fichier uploadé d'un devis.
@@ -602,10 +619,6 @@ class ProjectController extends Controller implements ServiceInterface
             ]
         );
     }
-
-
-
-
 
     /**
      * Route : create-lot-simulate
