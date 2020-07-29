@@ -747,6 +747,7 @@ class ProjectController extends Controller implements ServiceInterface
                 $millestoneNew->project_id = $project->id;
                 $millestoneNew->pourcentage = $millestoneModif->pourcentage;
                 $millestoneNew->price = $millestoneModif->price;
+                $millestoneNew->statut = Millestone::STATUT_ENCOURS;
                 $millestoneNew->save();
             }
         }
