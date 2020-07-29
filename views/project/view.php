@@ -412,25 +412,33 @@ function createMillestone(array $millestones)
 }
 
 /**
- * Used to generate HTML cell of a specific milestone.
+ * Used to generate HTML cell of a specific millestone.
  * 
- * @return HTML cell of Milestone table.
+ * @return HTML cell of Millestone table.
  */
 function updateStatus($millestone): string
 {
 
 
-    if ($millestone->statut == Millestone::STATUT_ENCOURS && $millestone->project->state  == Project::STATE_DEVIS_SENDED) {
+    if ($millestone->statut == Millestone::STATUT_ENCOURS && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
         $id = $millestone->id;
-        $status = Millestone::STATUT_FACTURER;
+        $status = Millestone::STATUT_FACTURATIONENCOURS;
         return <<<HTML
                 En Cours&nbsp;&nbsp;&nbsp;
-                <a href="update-milestone-status?id=${id}&status=${status}" class="btn-floating waves-effect waves-light blue">
+                <a href="update-millestone-status?id=${id}&status=${status}" class="btn-floating waves-effect waves-light blue">
                     <i class="material-icons right">check_circle</i>
                 </a>
         HTML;
     }
-    if ($millestone->statut == Millestone::STATUT_FACTURER && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
+    if ($millestone->statut == Millestone::STATUT_ENCOURS) {
+        $id = $millestone->id;
+        $status = $millestone->statut;
+        return <<<HTML
+                En cours&nbsp;&nbsp;&nbsp;
+                </a>
+        HTML;
+    }
+    if ($millestone->statut == Millestone::STATUT_FACTURER) {
         $id = $millestone->id;
         $status = $millestone->statut;
         return <<<HTML
@@ -439,7 +447,7 @@ function updateStatus($millestone): string
         HTML;
     }
 
-    if ($millestone->statut == Millestone::STATUT_FACTURATIONENCOURS && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
+    if ($millestone->statut == Millestone::STATUT_FACTURATIONENCOURS) {
         $id = $millestone->id;
         $status = $millestone->statut;
         return <<<HTML
@@ -448,7 +456,7 @@ function updateStatus($millestone): string
         HTML;
     }
 
-    if ($millestone->statut == Millestone::STATUT_PAYED && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
+    if ($millestone->statut == Millestone::STATUT_PAYED) {
         $id = $millestone->id;
         $status = $millestone->statut;
         return <<<HTML
@@ -475,7 +483,7 @@ function displayActionButtons($model)
             'Valider la signature client <i class="material-icons right">check</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_SIGNED,],
             ['class' => 'waves-effect waves-light btn btn-green  rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Le client à signé le contrat ?'
+                'confirm' => 'Le client a signé le contrat ?'
             ]]
         ) ?>
     <?php endif; ?>

@@ -266,10 +266,10 @@ class ProjectController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateStatusJalon($idjalon, $status)
+    public function actionUpdateMillestoneStatus($id, $status)
     {
-        $jalon = Millestone::getOneById($idjalon);
-        $jalon->state = $status;
+        $jalon = Millestone::getOneById($id);
+        $jalon->statut = $status;
         $jalon->save();
 
         MenuSelectorHelper::setMenuProjectNone();
