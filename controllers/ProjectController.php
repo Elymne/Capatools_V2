@@ -232,62 +232,7 @@ class ProjectController extends Controller implements ServiceInterface
         ]);
     }
 
-    /**
-     * Render view : project/create.
-     * Méthode en deux temps :
-     * - Si pas de méthode POST de trouvé, retourne la vue de la création d'un devis.
-     * - Sinon, à partir de la méthode POST, on récupère toutes les informations du nouvel devis rentrées, et suite à la vérification,
-     * on les stocke en base de données.
-     * 
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-    }
 
-    /**
-     * Render view : project/createView.
-     * Méthode qui permet de prévisualiser les lots et tâches depuis la première partie de la création d'un projet.
-     * Un tableau est rendu.
-     * 
-     * @return mixed
-     */
-    public function actionViewCreate()
-    {
-    }
-
-    /**
-     * Render view : devis/update.
-     * Redirected view : devis/index.
-     * Méthode en deux temps :
-     * - Si pas de méthode POST de trouvé, on retourne la vue de la modification d'un devis.
-     * - Sinon, à partir de la méthode POST, on récupère toutes les informations du devis, et ensuite à la vérification,
-     * on modifie celui-ci.
-     * 
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException If the model cannot be found.
-     */
-    public function actionUpdate(int $id)
-    {
-    }
-
-    /**
-     * Render view : none.
-     * Redirected view : devis/index.
-     * Utilisé pour effacer un devis de la base de données.
-     * 
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete(int $id)
-    {
-        $this->findModel($id)->delete();
-
-        MenuSelectorHelper::setMenuProjectNone();
-        return $this->redirect(['index']);
-    }
 
     /**
      * Render view : none

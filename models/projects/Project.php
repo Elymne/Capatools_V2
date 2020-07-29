@@ -152,6 +152,18 @@ class Project extends ActiveRecord
         return $totalwithmargin;
     }
 
+    public function getTotalAchatInvesteReversementPrice()
+    {
+        $totalAchatinvest = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+            if ($lot->number != 0) {
+                $totalAchatinvest = $totalAchatinvest + $lot->totalCostInvest + $lot->totalCostRepayement;
+            }
+        }
+        return $totalAchatinvest + $this->SupportPrice;
+    }
+
     public function getTjm()
     {
         $totaltime = 0.0;
@@ -169,6 +181,31 @@ class Project extends ActiveRecord
             return 0;
         }
     }
+
+    public function getTotalHourWithRisk()
+    {
+        $totaltimewithrisk = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+
+            $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
+        }
+
+        return $totaltimewithrisk;
+    }
+
+    public function getTotalcostRHWithRisk()
+    {
+        $TotalCostHumanWithMarginwithrisk = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+
+            $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHuman;
+        }
+
+        return $TotalCostHumanWithMarginwithrisk;
+    }
+
 
     public function getTjmWithRisk()
     {

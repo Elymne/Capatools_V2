@@ -13,6 +13,7 @@ class m200099_000842_millestone_table extends Migration
             'comment' => $this->string()->notNull(),
             'pourcentage' => $this->double()->notNull(),
             'price' => $this->double()->notNull(),
+            'statut' => $this->integer()->notNull(),
 
             // Foreign key.
             'project_id' => $this->integer()->notNull(),

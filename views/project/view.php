@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use app\models\devis\MilestoneStatus;
+use app\models\projects\Millestone;
 use app\models\projects\Project;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
@@ -50,7 +50,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="card-action">
-                    <?php echo createDataTable($model); ?>
+                    <?php echo createProjetTable($model); ?>
+                </div>
+            </div>
+        </div>
+        <!-- Details informations -->
+        <div class="row">
+            <div class="card">
+
+                <div class="card-content">
+                    <label>Information Laboxy</label>
+                </div>
+
+                <div class="card-action">
+                    <?php echo createLaboxyTable($model); ?>
                 </div>
             </div>
         </div>
@@ -59,14 +72,35 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <div class="card">
                 <div class="card-content">
-                    <label>Lot(s)</label>
+                    <label>Jalon(s)</label>
                 </div>
 
                 <div class="card-action">
-                    <?php echo createLotTable($model->lots) ?>
+                    <div class="row">
+                        <table>
+                            <tbody>
+                                <?php echo createMillestone($model->millestones) ?>
+
+                            <tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- Details informations -->
+        <div class="row">
+            <div class="card">
+
+                <div class="card-content">
+                    <label>Information Client</label>
+                </div>
+
+                <div class="card-action">
+                    <?php echo createClientTable($model); ?>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Display list button -->
         <div class="row">
@@ -111,35 +145,18 @@ function isStatusPassed(int $indexStatus, int $arrayKey): bool
  * 
  * @return HTML table.
  */
-function createDataTable(Project $model): string
+function createProjetTable(Project $model): string
 {
 
     $internal_name = $model->internal_name;
     $internal_reference = $model->internal_reference;
     $type = $model->type;
-    $prospecting_time_day = $model->prospecting_time_day;
     $signing_probability = $model->signing_probability;
 
     $project_manager_firstname = $model->project_manager->firstname;
     $project_manager_surname = $model->project_manager->surname;
     $project_manager_email = $model->project_manager->email;
     $project_manager_cellule = strtolower($model->project_manager->cellule->name);
-
-    $company_name = $model->company->name;
-    $company_email = $model->company->email;
-    $company_type = $model->company->type;
-    $company_postal_code = $model->company->postal_code;
-    $company_city = $model->company->city;
-    $company_country = $model->company->country;
-    $company_tva = $model->company->tva;
-
-    $contact_firstname = $model->contact->firstname;
-    $contact_surname = $model->contact->surname;
-    $contact_phone_number = $model->contact->phone_number;
-    $contact_email = $model->contact->email;
-
-    $laboxy_name = $model->id_laboxy;
-    $laboxy_prestation_duration = $model->prospecting_time_day * Yii::$app->params['LaboxyTimeDay'];
 
     return <<<HTML
         <table class="highlight">
@@ -163,10 +180,7 @@ function createDataTable(Project $model): string
                     <td class='header'>Type de projet</td>
                     <td>${type}</td>
                 </tr>
-                <tr>
-                    <td class='header'>Temps de prospection en jours</td>
-                    <td>${prospecting_time_day} jours</td>
-                </tr>
+
                 <tr>
                     <td class='header'>Probabilité de signature</td>
                     <td>${signing_probability} %</td>
@@ -194,7 +208,115 @@ function createDataTable(Project $model): string
                     <td>${project_manager_cellule}</td>
                 </tr>
 
-                <!-- Company data -->
+            </tbody>
+
+        </table>
+HTML;
+}
+
+
+
+/**
+ * Create table with all data.
+ * @param Devis $model : Model of Devis.
+ * 
+ * @return HTML table.
+ */
+function createLaboxyTable(Project $model): string
+{
+
+    $laboxy_name = $model->id_laboxy;
+    $prix_vente = $model->sellingprice;
+    $rhcost = $model->TotalcostRHWithRisk;
+    $coutAchatInvestReversement = $model->TotalAchatInvesteReversementPrice;
+    $laboxy_prixvente = Yii::$app->formatter->asCurrency($prix_vente);
+    $laboxy_prestation_duration = Yii::$app->formatter->asInteger($model->totalHourWithRisk);
+    $laboxy_RHcost = Yii::$app->formatter->asCurrency($rhcost);
+    $laboxy_coutAchatInvestReversement = Yii::$app->formatter->asCurrency($coutAchatInvestReversement);
+
+    $marge = $prix_vente - $rhcost - $coutAchatInvestReversement;
+    $tauxMarge = $marge / ($rhcost + $coutAchatInvestReversement);
+    $laboxy_Marge =  Yii::$app->formatter->asCurrency($marge);
+    $laboxy_TauxMarge =  Yii::$app->formatter->asPercent($tauxMarge, 2);
+
+
+    return <<<HTML
+        <table class="highlight">
+
+            <tbody>
+
+
+                 <!-- Laboxy data -->
+                 <tr class='group'>
+                    <td class='header'>Information Laboxy</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>Identitifant</td>
+                    <td>${laboxy_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Nombre d'heures prévus</td>
+                    <td>${laboxy_prestation_duration} heures</td>
+                </tr>
+                <tr>
+                    <td class='header'>Coût RH</td>
+                    <td>${laboxy_RHcost}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Coût total Achat,Frais généreaux, Investissement et RH </td>
+                    <td>${laboxy_coutAchatInvestReversement} </td>
+                </tr>
+                <tr>
+                    <td class='header'>Prix de vente </td>
+                    <td>${laboxy_prixvente}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Marge avec frais généreaux</td>
+                    <td>${laboxy_Marge}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Taux marge avec frais généreaux</td>
+                    <td>${laboxy_TauxMarge}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+HTML;
+}
+
+
+
+/**
+ * Create table with all data.
+ * @param Devis $model : Model of Devis.
+ * 
+ * @return HTML table.
+ */
+function createClientTable(Project $model): string
+{
+
+
+    $company_name = $model->company->name;
+    $company_email = $model->company->email;
+    $company_type = $model->company->type;
+    $company_postal_code = $model->company->postal_code;
+    $company_city = $model->company->city;
+    $company_country = $model->company->country;
+    $company_tva = $model->company->tva;
+
+    $contact_firstname = $model->contact->firstname;
+    $contact_surname = $model->contact->surname;
+    $contact_phone_number = $model->contact->phone_number;
+    $contact_email = $model->contact->email;
+
+    return <<<HTML
+        <table class="highlight">
+
+            <tbody>
+
+                 <!-- Company data -->
                 <tr class='group'>
                     <td class='header'>Client</td>
                     <td></td>
@@ -229,8 +351,8 @@ function createDataTable(Project $model): string
                 </tr>
 
                 <!-- Delivery data -->
-                <tr class='group'>
-                    <td class='header'>Contacte client</td>
+               <tr class='group'>
+                    <td class='header'>Contact client</td>
                     <td></td>
                 </tr>
                 <tr>
@@ -246,29 +368,18 @@ function createDataTable(Project $model): string
                     <td>${contact_phone_number}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Validité du devis</td>
+                    <td class='header'>email</td>
                     <td>${contact_email}</td>
                 </tr>
 
-                 <!-- Laboxy data -->
-                 <tr class='group'>
-                    <td class='header'>Information Laboxy</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class='header'>Identitifant</td>
-                    <td>${laboxy_name}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Durée prestation laboxy</td>
-                    <td>${laboxy_prestation_duration} heures</td>
-                </tr>
-                
+ 
             </tbody>
 
         </table>
 HTML;
 }
+
+
 
 /**
  * Create table with all lots and tasks.
@@ -276,65 +387,23 @@ HTML;
  * 
  * @return HTML table.
  */
-function createLotTable(array $lots)
+function createMillestone(array $millestones)
 {
-    foreach ($lots as $key => $lot) {
+    foreach ($millestones as $key => $millestone) {
     ?>
-        <div class="row">
 
-            <div class="card">
-                <div class="card-content">
-                    <label>Lot n° <?php echo $lot->number ?></label>
-                </div>
-                <div class="card-action">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th>Titre</th>
-                                <th>Statut</th>
-                                <th>Commentaire</th>
-                            </tr>
-                            <tr>
-                                <td><?php echo $lot->title ?></td>
-                                <td><?php echo $lot->status ?></td>
-                                <td><?php echo $lot->comment ?></td>
-                            </tr>
-                        <tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <label>Liste des tâches du lot</label>
-                </div>
-                <?php foreach ($lot->tasks as $task) { ?>
-                    <div class="card-action">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <th>Titre</th>
-                                    <th>Durée</th>
-                                    <th>Risque</th>
-                                    <th>Prix unitaire</th>
-                                    <th>Intervenant</th>
-                                </tr>
-                                <tr>
-                                    <td><?php echo $task->title ?></td>
-                                    <td><?php echo $task->days_duration ?></td>
-                                    <td><?php echo $task->risk ?></td>
-                                    <td><?php echo $task->unit_price ?></td>
-                                    <td><?php
-                                        echo $task->contributor->surname;
-                                        echo $task->contributor->firstname
-                                        ?></td>
-                                </tr>
-                            <tbody>
-                        </table>
-                    </div>
-                <?php } ?>
-            </div>
-        </div>
+        <tr>
+            <th>Titre</th>
+            <th>Pourcentage</th>
+            <th>Prix du jalon</th>
+            <th>Statut</th>
+        </tr>
+        <tr>
+            <td><?php echo $millestone->comment ?></td>
+            <td><?php echo $millestone->pourcentage ?></td>
+            <td><?php echo $millestone->price ?></td>
+            <td><?php echo  updateStatus($millestone) ?></td>
+        </tr>
     <?php
     }
 }
@@ -344,38 +413,53 @@ function createLotTable(array $lots)
  * 
  * @return HTML cell of Milestone table.
  */
-function updateStatus(int $id, $status, $idDevis): string
+function updateStatus($millestone): string
 {
 
-    if ($status == MilestoneStatus::ENCOURS) {
+
+    if ($millestone->statut == Millestone::STATUT_ENCOURS && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
+        $id = $millestone->id;
+        $status = $millestone->statut;
         return <<<HTML
-            <td>
-                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating waves-effect waves-light blue">
+                En Cours&nbsp;&nbsp;&nbsp;
+                <a href="update-milestone-status?id=${id}&status=${status}" class="btn-floating waves-effect waves-light blue">
                     <i class="material-icons right">check_circle</i>
                 </a>
-            </td>
         HTML;
     }
 
-    if ($status == MilestoneStatus::FACTURATIONENCOURS) {
+    if ($millestone->statut == Millestone::STATUT_FACTURATIONENCOURS && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
+        $id = $millestone->id;
+        $status = $millestone->statut;
         return <<<HTML
-            <td>
-                <a href="update-milestone-status?id=${id}&status=${status}&id_devis=${idDevis}" class="btn-floating waves-effect waves-light blue">
-                    <i class="material-icons right">check_circle</i>
+                Facturation en cours&nbsp;&nbsp;&nbsp;
                 </a>
-            </td>
+        HTML;
+    }
+    if ($millestone->statut == Millestone::STATUT_FACTURER && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
+        $id = $millestone->id;
+        $status = $millestone->statut;
+        return <<<HTML
+                Facturé&nbsp;&nbsp;&nbsp;
+                </a>
         HTML;
     }
 
-    return <<<HTML
-        <td>Jalon réglé</td>
-    HTML;
+    if ($millestone->statut == Millestone::STATUT_PAYED && $millestone->project->state  == Project::STATE_DEVIS_SIGNED) {
+        $id = $millestone->id;
+        $status = $millestone->statut;
+        return <<<HTML
+                Payé&nbsp;&nbsp;&nbsp;
+                </a>
+        HTML;
+    }
+    return "";
 }
 
 /**
  * Display all buttons.
  * 
- * @return HTML cell of Milestone table.
+ * @return HTML cell of Action bouton
  */
 function displayActionButtons($model)
 {
@@ -383,19 +467,7 @@ function displayActionButtons($model)
     <!-- Actions on devis -->
     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey rightspace-15px leftspace-15px']) ?>
 
-    <?= Html::a('Modifier <i class="material-icons right">build</i>', ['update', 'id' => $model->id], ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px']) ?>
-
-    <?php if ($model->state == PROJECT::STATE_DRAFT && UserRoleManager::hasRoles([UserRoleEnum::CELLULE_MANAGER])) : ?>
-        <?= Html::a(
-            'Passer en validation opérationnelle <i class="material-icons right">check</i>',
-            ['update-status', 'id' => $model->id, 'status' => PROJECT::STATE_DEVIS_SENDED,],
-            ['class' => 'waves-effect waves-light btn btn-green rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Valider ce devis en tant que responsable opérationnel ?'
-            ]]
-        ) ?>
-    <?php endif; ?>
-
-    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED &&  UserRoleManager::hasRoles([UserRoleEnum::CELLULE_MANAGER])) : ?>
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
         <?= Html::a(
             'Valider la signature client <i class="material-icons right">check</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_SIGNED,],
@@ -405,10 +477,26 @@ function displayActionButtons($model)
         ) ?>
     <?php endif; ?>
 
-    <?= Html::a(
-        'Créer un pdf <i class="material-icons right">picture_as_pdf</i>',
-        ['pdf', 'id' => $model->id],
-        ['class' => 'waves-effect btn-purple waves-light btn']
-    ) ?>
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
+        <?= Html::a(
+            'Cloturer la prestation <i class="material-icons right">check</i>',
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_FINISHED,],
+            ['class' => 'waves-effect waves-light btn btn-blue  rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Clôturer la prestation ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
+
+
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
+        <?= Html::a(
+            'Abandonner la prestation <i class="material-icons right">check</i>',
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_CANCELED,],
+            ['class' => 'waves-effect waves-light btn btn-red  rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Abandonner la prestation ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
+
 <?php
 }

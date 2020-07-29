@@ -1,4 +1,4 @@
-let SelectTOtalPrice = "#project-sellingprice";
+let SelectTOtalPrice = "#projectsimulate-sellingprice";
 //let = $(SelectTOtalPrice).val();
 let TotalPrice = Number(
     $(SelectTOtalPrice)

@@ -152,11 +152,11 @@ function getUpdateButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">build</i>',
-                Url::to(['project/update-first-step', 'id' => $model->id]),
+                Url::to(['project-simulate', 'project_id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
-                    'action' => Url::to(['devis/update', 'id' => $model->id]),
+                    'action' => Url::to(['project-simulate', 'project_id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-green',
                     'title' => "Modifier le devis"
                 ]
