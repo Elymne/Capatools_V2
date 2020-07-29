@@ -416,8 +416,8 @@ function CalculTotalLot()
  let totalcostinvestwithmarginprice =  (Number($(totalcostinvestwithmargin).val().replace(/[^0-9.-]+/g,"")))/100; 
  let totalcostrepayementwithmarginprice =  (Number($(totalcostrepayementwithmargin).val().replace(/[^0-9.-]+/g,"")))/100; 
 
-    let totalcost = totalcosthumanprice + totalcostinvestprice + totalcostrepayementprice  ;
-    let totalcostwithMargin = totalcosthumanwithmarginprice +  totalcostinvestwithmarginprice + totalcostrepayementwithmarginprice  ;
+    let totalcos = totalcosthumanprice + totalcostinvestprice + totalcostrepayementprice  ;
+    let totalcostwithMargin = totaltcosthumanwithmarginprice +  totalcostinvestwithmarginprice + totalcostrepayementwithmarginprice  ;
     $(totalcostlot).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(totalcostwithMargin.toFixed(2)));
 
 

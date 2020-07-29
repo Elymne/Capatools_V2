@@ -19,6 +19,7 @@ use app\models\projects\Millestone;
 use app\models\projects\Task;
 use app\models\projects\forms\ProjectCreateThridStepForm;
 
+use yii\web\UploadedFile;
 
 
 use app\models\equipments\Equipment;
@@ -29,6 +30,7 @@ use app\models\projects\forms\ProjectCreateConsumableForm;
 use app\models\projects\forms\ProjectCreateEquipmentRepaymentForm;
 use app\models\projects\forms\ProjectCreateInvestForm;
 use app\models\projects\forms\ProjectCreateFirstStepForm;
+use app\models\projects\forms\ProjectCreateForm;
 use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
 use app\models\projects\forms\ProjectCreateRepaymentForm;
@@ -167,7 +169,7 @@ class ProjectController extends Controller implements ServiceInterface
                     [
                         'Priorite' => 3,
                         'url' => 'project/create-first-step',
-                        'label' => 'Créer un projet',
+                        'label' => 'Création d\'un devis',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
                     ],
                     [
@@ -180,6 +182,12 @@ class ProjectController extends Controller implements ServiceInterface
                         'Priorite' => 5,
                         'url' => 'project/project-simulate',
                         'label' => 'Simulation  Projet',
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    ],
+                    [
+                        'Priorite' => 6,
+                        'url' => 'project/create-project',
+                        'label' => 'Création du Projet',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
                     ],
                 ]
@@ -229,6 +237,31 @@ class ProjectController extends Controller implements ServiceInterface
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render('view', [
             'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Render create project : devis/createProject?id=?
+     * Retourne la vue de création d'un projet à partir d'un devis
+     * 
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException If the model is not found.
+     */
+    public function actionCreateProject(int $id = 1)
+    {
+        MenuSelectorHelper::setMenuProjectNone();
+        $model = ProjectCreateForm::getOneById($id);
+        if (Yii::$app->request->isPost) {
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if ($model->upload()) {
+                // file is uploaded successfully
+                Yii::$app->response->redirect(['project/#']);
+            }
+        }
+
+        return $this->render('CreateProject', [
+            'model' => ProjectCreateForm::getOneById($id),
         ]);
     }
 
@@ -831,7 +864,6 @@ class ProjectController extends Controller implements ServiceInterface
 
         if ($model->load(Yii::$app->request->post())) {
 
-            echo ('modelloaded');
             $isValid = true;
 
             if ($number != 0) {
@@ -843,7 +875,6 @@ class ProjectController extends Controller implements ServiceInterface
                     foreach ($tasksGestionsModif as $tasksGestionModif) {
                         if (!$tasksGestionModif->validate()) {
                             $isValid = false;
-                            echo ('false ');
                         }
                     }
                 }
@@ -851,7 +882,6 @@ class ProjectController extends Controller implements ServiceInterface
             $tasksLotsModif = Model::createMultiple(ProjectCreateLotTaskForm::className(), $tasksLotsModif);
             //var_dump($tasksLotsModif);
             if (!Model::loadMultiple($tasksLotsModif, Yii::$app->request->post())) {
-                echo 'failed';
             }
 
 
@@ -859,9 +889,6 @@ class ProjectController extends Controller implements ServiceInterface
                 foreach ($tasksLotsModif as $tasksLotModif) {
                     if (!$tasksLotModif->validate()) {
                         $isValid = false;
-
-
-                        echo ('false ');
                     }
                 }
             } else {

@@ -18,16 +18,15 @@ use yii\helpers\ArrayHelper;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class ProjectCreateFinalStepForm extends Project
+class ProjectCreateForm extends Project
 {
 
     public $upfilename;
     public $pathfile;
     public $datept;
-
-    public $company_name;
-    public $contact_name;
-
+    public $proba;
+    public $file;
+    public $thematique;
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
@@ -37,36 +36,23 @@ class ProjectCreateFinalStepForm extends Project
             [[], 'safe'],
 
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
-            ['service_duration', 'required', 'message' => 'Indiquer le temps en heure du projet.'],
-            ['service_duration_day', 'required', 'message' => 'Indiquer le en jour temps du projet.'],
-            ['company_name', 'required', 'message' => 'Indiquer le nom du client.'],
-            ['company_name', 'noCompanyFound', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['contact_name', 'required', 'message' => 'Indiquer le nom du client.'],
-            ['contact_name', 'noContactFound', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['service_duration', 'integer', 'min' => 0, 'tooSmall' => 'La durée en heure de la prestation doit être supérieur à 0.', 'message' => 'La durée en heure de la prestation doit être un entier positif.'],
-            ['service_duration_day', 'integer', 'min' => 0, 'tooSmall' => 'La durée en jour de la prestation doit être supérieur à 0.', 'message' => 'La durée en jour de la prestation doit être un entier positif.'],
-
-
-            ['prospecting_time_day', 'integer', 'min' => 0, 'tooSmall' => 'La durée doit être supérieur à 0.', 'message' => 'La durée doit être un entier positif.'],
             ['signing_probability', 'required', 'message' => 'Indiquez la probabilité de signature !.'],
-
-
             [['upfilename'], 'file', 'skipOnEmpty' => true, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros {formattedLimit}', 'message' => 'Une proposition technique doit être associée au devis.'],
         ];
     }
 
 
-    //TODO se souvenir à quoi sert cette fonction.
+    //chage le fichier
     public function upload()
     {
-        if ($this->upfilename) {
+        if ($this->file) {
 
             //J Save the file into upload path.
             $path = 'uploads/' . $this->id_capa;
             if (!is_dir($path)) {
                 mkdir($path);
             }
-            $pathfile = $path . '/' . $this->upfilename->baseName . '.' . $this->upfilename->extension;
+            $pathfile = $path . '/' . $this->file->baseName . '.' . $this->file->extension;
             $result = true;
             //if(file_exists(pathfile))
             {
@@ -75,9 +61,8 @@ class ProjectCreateFinalStepForm extends Project
             }
             if ($result) {
 
-                $this->filename = $this->upfilename;
 
-                $this->upfilename->saveAs($pathfile);
+                $this->file->saveAs($pathfile);
             }
             return true;
         }

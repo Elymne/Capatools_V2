@@ -27,6 +27,8 @@ class ProjectCreateFirstStepForm extends Project
 
     public $management_rate;
 
+    public $company_name;
+    public $contact_name;
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */

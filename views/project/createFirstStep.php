@@ -8,6 +8,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
+use kartik\select2\Select2;
+
 $this->title = 'Création d\'un projet - paramètres généraux';
 $this->params['breadcrumbs'][] = ['label' => 'Project', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
@@ -135,6 +137,50 @@ ProjectCreateFirstStepAsset::register($this);
                             </div>
                         </div>
 
+
+                        <div class="col s12">
+                            <div class="row">
+
+                                <div class="input-field col s6">
+                                    <?= $form->field($model, 'company_name')
+                                        ->widget(\yii\jui\AutoComplete::classname(), [
+                                            'clientOptions' => [
+                                                'source' => ['Lar Von Trier'],
+                                            ],
+                                        ])->label(
+                                            "Companie"
+                                        );
+                                    ?>
+                                    <?= Html::a('Créer un contact', [''], ['class' => '']) ?>
+                                </div>
+                                <div class="input-field col s6">
+                                    <?php /*$form->field($fileModel, 'file')
+                                        ->label('Document technique / Cahier des charges annexe (PDF)', [])
+                                        ->fileInput([])*/
+                                    ?>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <div class="row">
+
+                                <div class="input-field col s6">
+                                    <?= $form->field($model, 'company_name')
+                                        ->widget(\yii\jui\AutoComplete::classname(), [
+                                            'clientOptions' => [
+                                                'source' => ['Lar Von Trier'],
+                                            ],
+                                        ])->label(
+                                            "Client"
+                                        );
+                                    ?>
+                                    <?= Html::a('Créer un contact', [''], ['class' => '']) ?>
+                                </div>
+
+
+                            </div>
+                        </div>
                         <!-- Buttons -->
                         <div class="form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
@@ -142,6 +188,10 @@ ProjectCreateFirstStepAsset::register($this);
                         </div>
 
                     </div>
+
+
+
+
 
                 </div>
 
