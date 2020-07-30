@@ -24,17 +24,13 @@ class ProjectCreateForm extends Project
 {
 
     public $upfilename;
-    public $pathfile;
-    public $datept;
-    public $thematique;
-    public $responsable;
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
         return [
-            [['signing_probability', 'capa_user_id', 'thematique'], 'safe'],
+            [['signing_probability', 'capa_user_id', 'thematique', 'file_path'], 'safe'],
 
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
             ['thematique', 'required', 'message' => 'Indiquer la thématique du projet.'],
@@ -49,13 +45,15 @@ class ProjectCreateForm extends Project
     public function upload()
     {
         if ($this->upfilename) {
-
+            $this->file_name =  $this->upfilename[0]->name;
             //J Save the file into upload path.
             $path = 'uploads/' . $this->id_capa;
-            if (is_dir($path)) {
-                rmdir($path);
+            if (!is_dir($path)) {
+                mkdir($path);
             }
-            mkdir($path);
+            if ($this->file_path != '') {
+                unlink($this->file_path);
+            }
             $this->file_path = $path . '/' . $this->upfilename[0]->name;
             $result = true;
             if ($result) {

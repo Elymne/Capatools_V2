@@ -27,6 +27,7 @@ class m200099_000560_project_table extends Migration
             'version' => $this->string()->notNull(),
             'date_version' => $this->date()->notNull(),
             'file_path' => $this->string(),
+            'file_name' => $this->string(),
 
             // Options for project.
             'draft' => $this->boolean()->defaultValue(true),

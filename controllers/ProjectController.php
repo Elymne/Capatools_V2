@@ -259,10 +259,18 @@ class ProjectController extends Controller implements ServiceInterface
         $model = ProjectCreateForm::getOneById($id);
         if (Yii::$app->request->isPost) {
             $model->upfilename = UploadedFile::getInstances($model, 'upfilename');
-            if ($model->upload()) {
+
+            if ($model->upload(Yii::$app->request->post())) {
+                $post = Yii::$app->request->post();
+                $postform = $post["ProjectCreateForm"];
+
                 // file is uploaded successfully
-                $model->state = Project::STATE_DEVIS_SENDED;
-                $model->save();
+                $project = Project::getOneById($id);
+                $project->state = Project::STATE_DEVIS_SENDED;
+                $project->file_path = $model->file_path;
+                $project->file_name = $model->file_name;
+                $project->thematique = $postform["thematique"];
+                $project->save();
 
                 //   Yii::$app->response->redirect(['project/#']);
             }

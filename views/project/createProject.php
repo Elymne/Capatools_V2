@@ -75,6 +75,9 @@ ProjectsRefactoringAsset::register($this);
                                     <?= $form->field($model, 'upfilename')->fileInput(['accept' => 'pdf/*'])->label('Document technique / Cahier des charges annexe (PDF)', [])
 
                                     ?>
+                                    <?= $form->field($model, 'file_name')
+                                        ->textInput(['maxlength' => true, 'readonly' => true], ['autocomplete' => 'off'])->label((false));
+                                    ?>
                                 </div>
 
                             </div>
@@ -87,7 +90,7 @@ ProjectsRefactoringAsset::register($this);
 
                                 <div class="input-field col s6">
                                     <?= $form->field($model, 'thematique')
-                                        ->textInput(['maxlength' => true,], ['autocomplete' => 'off'])
+                                        ->textInput(['autocomplete' => 'off'])
                                         ->label("Thématique du projet")
                                     ?>
                                 </div>
