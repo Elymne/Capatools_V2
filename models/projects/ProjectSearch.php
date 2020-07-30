@@ -70,13 +70,15 @@ class ProjectSearch extends Project
                 $query = Project::find();
                 break;
             case self::GET_PROJECT_QUERY_OPTION:
-                $query = Project::find()->where(['draft' => false]);
+                $query = Project::find()->where([
+                    'state' => [PROJECT::STATE_FINISHED, PROJECT::STATE_DEVIS_SIGNED, PROJECT::STATE_CANCELED, PROJECT::STATE_DEVIS_SENDED]
+                ]);
                 break;
             case self::GET_DRAFT_QUERY_OPTION:
-                $query = Project::find()->where(['draft' => true]);
+                $query = Project::find()->where(['state' => PROJECT::STATE_DRAFT]);
                 break;
             default:
-                $query = Project::find()->where(['draft' => false]);
+                $query = Project::find()->where(['state' => [PROJECT::STATE_FINISHED, PROJECT::STATE_DEVIS_SIGNED, PROJECT::STATE_CANCELED, PROJECT::STATE_DEVIS_SENDED]]);
                 break;
         }
 

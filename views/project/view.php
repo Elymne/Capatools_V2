@@ -488,6 +488,16 @@ function displayActionButtons($model)
         ) ?>
     <?php endif; ?>
 
+
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
+        <?= Html::a(
+            'Cloturer le devis <i class="material-icons right">clear</i>',
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_CANCELED,],
+            ['class' => 'waves-effect waves-light btn btn-red  rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Cloturer le devis ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
     <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
         <?= Html::a(
             'Cloturer la prestation <i class="material-icons right">check</i>',
@@ -501,10 +511,21 @@ function displayActionButtons($model)
 
     <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
         <?= Html::a(
-            'Abandonner la prestation <i class="material-icons right">check</i>',
+            'Abandonner la prestation <i class="material-icons right">clear</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_CANCELED,],
             ['class' => 'waves-effect waves-light btn btn-red  rightspace-15px leftspace-15px', 'data' => [
                 'confirm' => 'Abandonner la prestation ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
+
+
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
+        <?= Html::a(
+            'Modifier le devis <i class="material-icons right">edit</i>',
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DRAFT,],
+            ['class' => 'waves-effect waves-light btn btn-black  rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Modifier le contrat ?'
             ]]
         ) ?>
     <?php endif; ?>

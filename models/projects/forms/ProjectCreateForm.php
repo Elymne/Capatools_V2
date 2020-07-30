@@ -7,6 +7,8 @@ use app\models\companies\Contact;
 use app\models\projects\Project;
 use yii\helpers\ArrayHelper;
 
+use yii\web\UploadedFile;
+
 /**
  * Classe relative au modèle métier des devis.
  * Celle-ci permet de créer un formulaire de création de devis et de vérifier la validité des données inscrites dans les champs.
@@ -24,20 +26,21 @@ class ProjectCreateForm extends Project
     public $upfilename;
     public $pathfile;
     public $datept;
-    public $proba;
-    public $file;
     public $thematique;
+    public $responsable;
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
         return [
-            [[], 'safe'],
+            [['signing_probability', 'capa_user_id', 'thematique'], 'safe'],
 
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
+            ['thematique', 'required', 'message' => 'Indiquer la thématique du projet.'],
+            ['capa_user_id', 'required', 'message' => 'Indiquer le chef de projet'],
             ['signing_probability', 'required', 'message' => 'Indiquez la probabilité de signature !.'],
-            [['upfilename'], 'file', 'skipOnEmpty' => true, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros {formattedLimit}', 'message' => 'Une proposition technique doit être associée au devis.'],
+            [['upfilename'], 'file', 'skipOnEmpty' => true, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros (2Mo maxi)}', 'message' => 'Une proposition technique doit être associée au devis.'],
         ];
     }
 
@@ -45,52 +48,21 @@ class ProjectCreateForm extends Project
     //chage le fichier
     public function upload()
     {
-        if ($this->file) {
+        if ($this->upfilename) {
 
             //J Save the file into upload path.
             $path = 'uploads/' . $this->id_capa;
-            if (!is_dir($path)) {
-                mkdir($path);
+            if (is_dir($path)) {
+                rmdir($path);
             }
-            $pathfile = $path . '/' . $this->file->baseName . '.' . $this->file->extension;
+            mkdir($path);
+            $this->file_path = $path . '/' . $this->upfilename[0]->name;
             $result = true;
-            //if(file_exists(pathfile))
-            {
-                ////Overright :)
-
-            }
             if ($result) {
 
-
-                $this->file->saveAs($pathfile);
+                ($this->upfilename[0])->saveAs($this->file_path);
             }
             return true;
-        }
-    }
-
-    /**
-     * Check if client exists and return error if he don't.
-     */
-    public function noCompanyFound($attribute, $params)
-    {
-        $companiesNames = ArrayHelper::map(Contact::find()->all(), 'id', 'name');
-        $companiesNames = array_merge($companiesNames);
-
-        if (!in_array($this->$attribute, $companiesNames)) {
-            $this->addError($attribute, 'Le client n\'existe pas.');
-        }
-    }
-
-    /**
-     * Check if contact exists and return error if he don't.
-     */
-    public function noContactFound($attribute, $params)
-    {
-        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'surname');
-        $companiesNames = array_merge($companiesNames);
-
-        if (!in_array($this->$attribute, $companiesNames)) {
-            $this->addError($attribute, 'Le client n\'existe pas.');
         }
     }
 }

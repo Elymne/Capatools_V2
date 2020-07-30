@@ -7,6 +7,9 @@ use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\bootstrap\Html;
 
+use yii\helpers\ArrayHelper;
+
+
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
@@ -55,25 +58,23 @@ ProjectsRefactoringAsset::register($this);
 
                             </div>
                         </div>
-
                         <div class="col s12">
                             <div class="row">
-
                                 <div class="input-field col s6">
-                                    <?= $form->field($model, 'file')->fileInput(['multiple' => false, 'accept' => 'pdf/*'])->label('Document technique / Cahier des charges annexe (PDF)', [])
-
-                                    ?>
-                                </div>
-                                <div class="input-field col s6">
-                                    <?= $form->field($model, 'proba')->widget(
+                                    <?= $form->field($model, 'capa_user_id')->widget(
                                         Select2::classname(),
                                         [
                                             'theme' => Select2::THEME_MATERIAL,
                                             'name' => 'TaskContributor',
-                                            'data' => ["10" => '10 %', "20" => '20 %', "30" => '30 %', "40" => '40 %', "50" => '50 %', "60" => '60 %', "70" => '70 %', "80" => '80 %', "90" => '90 %', "100" => '100 %'],
-                                            'options' => ['placeholder' => 'Selectionne un pourcentage ...'],
+                                            'data' =>  ArrayHelper::map($celluleUsers, 'id', 'fullName'),
+                                            'options' => ['placeholder' => 'Selectionner le responsable du projet ...'],
                                         ]
-                                    )->label("Probabilité de signature"); ?>
+                                    )->label("Responsable projet"); ?>
+                                </div>
+                                <div class="input-field col s6">
+                                    <?= $form->field($model, 'upfilename')->fileInput(['accept' => 'pdf/*'])->label('Document technique / Cahier des charges annexe (PDF)', [])
+
+                                    ?>
                                 </div>
 
                             </div>
@@ -82,12 +83,33 @@ ProjectsRefactoringAsset::register($this);
 
                         <div class="col s12">
                             <div class="row">
+
+
                                 <div class="input-field col s6">
                                     <?= $form->field($model, 'thematique')
-                                        ->textInput(['maxlength' => true, 'readonly' => true], ['autocomplete' => 'off'])
+                                        ->textInput(['maxlength' => true,], ['autocomplete' => 'off'])
                                         ->label("Thématique du projet")
                                     ?>
                                 </div>
+
+                                <div class="input-field col s6">
+                                    <?= $form->field($model, 'signing_probability')->widget(
+                                        Select2::classname(),
+                                        [
+                                            'theme' => Select2::THEME_MATERIAL,
+                                            'name' => 'TaskContributor',
+                                            'data' => ["10" => '10 %', "20" => '20 %', "30" => '30 %', "40" => '40 %', "50" => '50 %', "60" => '60 %', "70" => '70 %', "80" => '80 %', "90" => '90 %', "100" => '100 %'],
+                                            'options' => ['placeholder' => 'Selectionner un pourcentage ...'],
+                                        ]
+                                    )->label("Probabilité de signature"); ?>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <div class="row">
+
+
                                 <div class="input-field col s6">
                                     <?= $form->field($model, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($model->SellingPrice)]])->label('Prix de vente du projet') ?>
 
@@ -97,7 +119,6 @@ ProjectsRefactoringAsset::register($this);
 
                         <div class="col s12">
                             <div class="row">
-
                                 <div class="input-field col s6">
                                     <div class="input-field col s1 "> <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
                                     </div>

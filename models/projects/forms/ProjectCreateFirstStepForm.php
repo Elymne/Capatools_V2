@@ -41,4 +41,31 @@ class ProjectCreateFirstStepForm extends Project
             ['internal_name', 'required', 'message' => 'Vous devez préciser un nom pour le projet/brouillon']
         ];
     }
+
+
+    /**
+     * Check if client exists and return error if he don't.
+     */
+    public function noCompanyFound($attribute, $params)
+    {
+        $companiesNames = ArrayHelper::map(Contact::find()->all(), 'id', 'name');
+        $companiesNames = array_merge($companiesNames);
+
+        if (!in_array($this->$attribute, $companiesNames)) {
+            $this->addError($attribute, 'Le client n\'existe pas.');
+        }
+    }
+
+    /**
+     * Check if contact exists and return error if he don't.
+     */
+    public function noContactFound($attribute, $params)
+    {
+        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'surname');
+        $companiesNames = array_merge($companiesNames);
+
+        if (!in_array($this->$attribute, $companiesNames)) {
+            $this->addError($attribute, 'Le client n\'existe pas.');
+        }
+    }
 }

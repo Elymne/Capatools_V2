@@ -251,17 +251,27 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionCreateProject(int $id = 1)
     {
         MenuSelectorHelper::setMenuProjectNone();
+        //Recupération des membres de la cellule
+        $idcellule = Yii::$app->user->identity->cellule_id;
+        $cel = new Cellule();
+        $cel->id = $idcellule;
+        $celluleUsers = $cel->capaUsers;
         $model = ProjectCreateForm::getOneById($id);
         if (Yii::$app->request->isPost) {
-            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            $model->upfilename = UploadedFile::getInstances($model, 'upfilename');
             if ($model->upload()) {
                 // file is uploaded successfully
-                Yii::$app->response->redirect(['project/#']);
+                $model->state = Project::STATE_DEVIS_SENDED;
+                $model->save();
+
+                //   Yii::$app->response->redirect(['project/#']);
             }
         }
 
         return $this->render('CreateProject', [
             'model' => ProjectCreateForm::getOneById($id),
+            'celluleUsers' => $celluleUsers,
+
         ]);
     }
 
@@ -481,7 +491,6 @@ class ProjectController extends Controller implements ServiceInterface
                         }
                 }
 
-                $model->draft = true;
                 $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
 
                 // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.

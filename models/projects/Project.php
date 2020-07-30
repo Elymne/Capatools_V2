@@ -175,6 +175,7 @@ class Project extends ActiveRecord
             $TotalCostHumanWithMargin = $TotalCostHumanWithMargin + $lot->totalCostHumanWithMargin;
         }
         $result = $TotalCostHumanWithMargin / (1 - $this->management_rate / 100);
+        $totaltime = $totaltime / 7.7;
         if ($totaltime != 0) {
             return round($result / $totaltime, 2);
         } else {
@@ -217,6 +218,7 @@ class Project extends ActiveRecord
             $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
             $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHumanWithMarginAndRisk;
         }
+        $totaltimewithrisk = $totaltimewithrisk / 7.7;
         $result = $TotalCostHumanWithMarginwithrisk / (1 - $this->management_rate / 100);
         if ($totaltimewithrisk != 0) {
 
