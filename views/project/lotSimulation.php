@@ -77,8 +77,8 @@ AppAsset::register($this);
                                 <?= $form->field($lot, "rate_human_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label(false) ?>
                             </div>
                             <div class="col s4">
-                                <?= Html::button("+", ['id' => 'lotsimulate-rate_human_marginup', 'title' => "Topic",  'class' => 'waves-effect waves-light btn btn']) ?>
-                                <?= Html::button("-", ['id' => 'lotsimulate-rate_human_margindown', 'title' => "Topic",  'class' => 'waves-effect waves-light btn btn-red']) ?>
+                                <?= Html::button("+", ['id' => 'lotsimulate-rate_human_marginup',   'class' => 'waves-effect waves-light btn btn']) ?>
+                                <?= Html::button("-", ['id' => 'lotsimulate-rate_human_margindown',   'class' => 'waves-effect waves-light btn btn-red']) ?>
 
                             </div>
                         </div>
@@ -105,8 +105,8 @@ AppAsset::register($this);
                                 <?= $form->field($lot, "rate_consumable_investement_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label(false) ?>
                             </div>
                             <div class="col s4">
-                                <?= Html::button("+", ['id' => 'lotsimulate-rate_consumable_investement_marginup', 'title' => "Topic",  'class' => 'waves-effect waves-light btn btn']) ?>
-                                <?= Html::button("-", ['id' => 'lotsimulate-rate_consumable_investement_margindown', 'title' => "Topic",  'class' => 'waves-effect waves-light btn btn-red']) ?>
+                                <?= Html::button("+", ['id' => 'lotsimulate-rate_consumable_investement_marginup',   'class' => 'waves-effect waves-light btn btn']) ?>
+                                <?= Html::button("-", ['id' => 'lotsimulate-rate_consumable_investement_margindown',   'class' => 'waves-effect waves-light btn btn-red']) ?>
 
                             </div>
                         </div>
@@ -409,20 +409,19 @@ function CalculTotalLot()
     let totalcosthumanwithmargin = "#lotsimulate-total_cost_human_with_margin";
     let totalcostinvestwithmargin = "#lotsimulate-total_cost_invest_with_margin";
     let totalcostrepayementwithmargin = "#lotsimulate-total_cost_repayement_with_margin";
- let totalcosthumanprice =  (Number($(totalcosthuman).val().replace(',','.').replace(/[^0-9.-]+/g,"")))/100; 
- let totalcostinvestprice =  (Number($(totalcostinvest).val().replace(/[^0-9.-]+/g,"")))/100; 
- let totalcostrepayementprice =  (Number($(totalcostrepayement).val().replace(/[^0-9.-]+/g,"")))/100; 
- let totalcosthumanwithmarginprice =  (Number($(totalcosthumanwithmargin).val().replace(/[^0-9.-]+/g,"")))/100; 
- let totalcostinvestwithmarginprice =  (Number($(totalcostinvestwithmargin).val().replace(/[^0-9.-]+/g,"")))/100; 
- let totalcostrepayementwithmarginprice =  (Number($(totalcostrepayementwithmargin).val().replace(/[^0-9.-]+/g,"")))/100; 
+ let totalcosthumanprice =  (Number($(totalcosthuman).val().replace(',','.').replace(/[^0-9.-]+/g,""))); 
+ let totalcostinvestprice =  (Number($(totalcostinvest).val().replace(',','.').replace(/[^0-9.-]+/g,""))); 
+ let totalcostrepayementprice =  (Number($(totalcostrepayement).val().replace(',','.').replace(/[^0-9.-]+/g,""))); 
+ let totalcosthumanwithmarginprice =  (Number($(totalcosthumanwithmargin).val().replace(',','.').replace(/[^0-9.-]+/g,""))); 
+ let totalcostinvestwithmarginprice =  (Number($(totalcostinvestwithmargin).val().replace(',','.').replace(/[^0-9.-]+/g,""))); 
+ let totalcostrepayementwithmarginprice =  (Number($(totalcostrepayementwithmargin).val().replace(',','.').replace(/[^0-9.-]+/g,""))); 
 
-    let totalcos = totalcosthumanprice + totalcostinvestprice + totalcostrepayementprice  ;
-    let totalcostwithMargin = totaltcosthumanwithmarginprice +  totalcostinvestwithmarginprice + totalcostrepayementwithmarginprice  ;
+    let totalcost = totalcosthumanprice + totalcostinvestprice + totalcostrepayementprice  ;
+    let totalcostwithMargin = totalcosthumanwithmarginprice +  totalcostinvestwithmarginprice + totalcostrepayementwithmarginprice  ;
     $(totalcostlot).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(totalcostwithMargin.toFixed(2)));
 
 
     let averagelotmargin = "#lotsimulate-average_lot_margin";
-   
 
 
     let average = ((totalcostwithMargin / totalcost) - 1);

@@ -7,6 +7,7 @@ use app\widgets\TopTitle;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 use kartik\select2\Select2;
 
@@ -59,19 +60,49 @@ ProjectSimulationAsset::register($this);
                         </div>
                         <div class="row">
                             <div class="col s3">
-                                Total de l'avant projet :
+                                Total de l'avant projet (non margé):
                             </div>
                             <div class="col s2">
                                 <?= $form->field($lotavp, "total", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lotavp->total)]])->label(false) ?>
                             </div>
+                            <div class="col s3">
+                                Somme ajouté par lot (margé avec le Taux moyen):
+                            </div>
+                            <div class="col s2">
+                                <?= $form->field($project, "additionallotprice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->additionallotprice)]])->label(false) ?>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col s3">
-                                <?= Html::a(Yii::t('app', 'Modifier les tâches'), ['update-task', 'number' => 0, 'project_id' => $project->id], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                            <div class="col s1">
+                                <?= Html::a(
+                                    '<i class="material-icons center">assignment</i>',
+                                    Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
+                                    [
+                                        'id' => 'grid-custom-button',
+                                        'data-pjax' => true,
+                                        'action' => Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
+                                        'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
+                                        'data-position' => "bottom",
+                                        'data-tooltip' => "Modifier les tâches"
+                                    ]
+                                ); ?>
+
 
                             </div>
                             <div class="col s1">
-                                <?= Html::a(Yii::t('app', 'Modifier les investissements/Consomable/Laboratoire'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                <?= Html::a(
+                                    '<i class="material-icons center">local_grocery_store</i>',
+                                    Url::to(['project/Update-task', 'number' => 0, 'project_id' => $project->id]),
+                                    [
+                                        'id' => 'grid-custom-button',
+                                        'data-pjax' => true,
+                                        'action' => Url::to(['project/Update-task', 'number' => 0, 'project_id' => $project->id]),
+                                        'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
+                                        'data-position' => "bottom",
+                                        'data-tooltip' => "Modifier les investissements/Consomable/Laboratoire"
+                                    ]
+                                ); ?>
+
                             </div>
                         </div>
 
@@ -108,15 +139,49 @@ ProjectSimulationAsset::register($this);
                                 </div>
 
                                 <div class="row">
-                                    <div class="col s3">
-                                        <?= Html::a(Yii::t('app', 'Modifier les tâches'),  ['update-task', 'number' => $lotproject->number, 'project_id' => $project->id], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                    <div class="col s1">
+                                        <?= Html::a(
+                                            '<i class="material-icons center">assignment</i>',
+                                            Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
+                                            [
+                                                'id' => 'grid-custom-button',
+                                                'data-pjax' => true,
+                                                'action' => Url::to(['project/update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
+                                                'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
+                                                'data-position' => "bottom",
+                                                'data-tooltip' => "Modifier les tâches"
+                                            ]
+                                        ); ?>
+
 
                                     </div>
-                                    <div class="col s5">
-                                        <?= Html::a(Yii::t('app', 'Modifier les invest/Consomable/Laboratoire'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                    <div class="col s1">
+                                        <?= Html::a(
+                                            '<i class="material-icons center">local_grocery_store</i>',
+                                            Url::to(['project/Update-task', 'number' => 0, 'project_id' => $project->id]),
+                                            [
+                                                'id' => 'grid-custom-button',
+                                                'data-pjax' => true,
+                                                'action' => Url::to(['project/Update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
+                                                'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
+                                                'data-position' => "bottom",
+                                                'data-tooltip' => "Modifier les investissements/Consomable/Laboratoire"
+                                            ]
+                                        ); ?>
                                     </div>
                                     <div class="col s1">
-                                        <?= Html::a(Yii::t('app', 'Modifier les marges'), ['lot-simulate', 'number' => $lotproject->number, 'project_id' => $project->id], ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                        <?= Html::a(
+                                            '<i class="material-icons center">euro_symbol</i>',
+                                            Url::to(['project/lot-simulate', 'number' => 0, 'project_id' => $project->id]),
+                                            [
+                                                'id' => 'grid-custom-button',
+                                                'data-pjax' => true,
+                                                'action' => Url::to(['project/lot-simulate', 'number' => $lotproject->number, 'project_id' => $project->id]),
+                                                'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
+                                                'data-position' => "bottom",
+                                                'data-tooltip' => "Modifier les marges",
+                                            ]
+                                        ); ?>
                                     </div>
                                 </div>
 
@@ -349,7 +414,7 @@ ProjectSimulationAsset::register($this);
                     if ($validdevis) {
                         echo Html::a(Yii::t('app', 'Créer le projet'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']);
                     } else {
-                        echo Html::a(Yii::t('app', 'Créer le projet'), null, ['class' => '  btn btn-red']);
+                        echo Html::a(Yii::t('app', 'Créer le projet'), null, ['class' => 'btn  disabled ']);
                     }
                     ?>
                 </div>

@@ -256,7 +256,13 @@ class ProjectController extends Controller implements ServiceInterface
         $cel = new Cellule();
         $cel->id = $idcellule;
         $celluleUsers = $cel->capaUsers;
+
         $model = ProjectCreateForm::getOneById($id);
+        $company = $model->company;
+        $TVA = 0;
+        if ($company->country == 'France') {
+            $TVA = 20;
+        }
         if (Yii::$app->request->isPost) {
             $model->upfilename = UploadedFile::getInstances($model, 'upfilename');
 
@@ -279,7 +285,7 @@ class ProjectController extends Controller implements ServiceInterface
         return $this->render('CreateProject', [
             'model' => ProjectCreateForm::getOneById($id),
             'celluleUsers' => $celluleUsers,
-
+            'TVA' => $TVA
         ]);
     }
 
