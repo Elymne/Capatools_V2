@@ -182,6 +182,7 @@ function getCollumnsArray()
     array_push($result, getUpdateButtonArray());
     array_push($result, getPdfButtonArray());
     array_push($result, getExcelButtonArray());
+    array_push($result, getPieceButtonArray());
 
     return $result;
 }
@@ -313,6 +314,27 @@ function getExcelButtonArray()
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-green-darker',
                     'title' => "Générer le devis sous forme excel"
+                ]
+            );
+        }
+    ];
+}
+
+function getPieceButtonArray()
+{
+    return [
+        'format' => 'raw',
+        'label' => 'Propositon',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons right">file_download</i>',
+                Url::to(['project/download-piece', 'id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'action' => Url::to(['project/download-piece', 'id' => $model->id]),
+                    'class' => 'btn-floating waves-effect waves-light btn-green-darker',
+                    'title' => "Récupérer la proposition technique"
                 ]
             );
         }

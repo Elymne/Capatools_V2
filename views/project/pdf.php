@@ -155,8 +155,8 @@ function devisDataTable($model): string
 {
     $devis_name = $model->internal_name;
     $devis_date = $model->creation_date;
-    $user_name = $model->capa_user->username;
-    $user_cellule = strtolower($model->capa_user->cellule->name);
+    $user_name = $model->project_manager->fullname;
+    $user_cellule = strtolower($model->project_manager->cellule->name);
 
     return <<<HTML
         <table class="highlight">
@@ -185,9 +185,9 @@ function devisDataTable($model): string
 function priceDataTable($model)
 {
     $delivery_name = "livraison";
-    $delivery_quantity = $model->quantity;
-    $delivery_unit_price = $model->unit_price;
-    $delivery_price = $model->price;
+    $delivery_quantity = 1;
+    $delivery_unit_price = $model->sellingprice;
+    $delivery_price = $delivery_unit_price  * $delivery_quantity;
 
     return <<<HTML
         <table class="highlight">
@@ -213,22 +213,20 @@ function prestationDataTable($model): string
 {
 
 
-    $delivery_duration_hour = $model->service_duration;
-    $delivery_duration_day = $model->service_duration_day;
-    $delivery_validity_duration = $model->validity_duration;
-    $delivery_payment_conditions = $model->payment_conditions;
-    $delivery_payment_details = $model->payment_details;
+    //$delivery_duration_hour = $model->service_duration;
+    //$delivery_duration_day = $model->service_duration_day;
+    $delivery_validity_duration = '30j';
+    // $delivery_payment_conditions = $model->payment_conditions;
+    // $delivery_payment_details = $model->payment_details;
 
     return <<<HTML
         <table class="highlight">
             <tbody>
                 <tr>
                     <td class='header'>Durée de la prestation (h)</td>
-                    <td>${delivery_duration_hour} heure(s)</td>
                 </tr>
                 <tr>
                     <td class='header'>Durée de la prestation (j)</td>
-                    <td>${delivery_duration_day} jour(s)</td>
                 </tr>
                 <tr>
                     <td class='header'>Validité du devis</td>
@@ -236,11 +234,9 @@ function prestationDataTable($model): string
                 </tr>
                 <tr>
                     <td class='header'>Conditions de paiement</td>
-                    <td>${delivery_payment_conditions}</td>
                 </tr>
                 <tr>
                     <td class='header'>Echéancier</td>
-                    <td>${delivery_payment_details}</td>
                 </tr>
             </tbody>
         </table>

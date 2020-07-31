@@ -11,13 +11,17 @@ class m200099_000500_company_table extends Migration
 
         $this->createTable('{{%company}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string()->unique(),
-            'postal_code' => $this->string()->unique(),
+            'name' => $this->string(),
+            'address' => $this->string(),
+            'postal_code' => $this->string(),
+            'phone' => $this->string(),
             'city' => $this->string(),
             'country' => $this->string(),
             'tva' => $this->string()->unique(),
+            'siret' => $this->string()->unique(),
             'email' => $this->string()->unique(),
             'type' => $this->string(),
+
         ]);
 
         /* Table data insertion */

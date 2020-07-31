@@ -377,10 +377,10 @@ class ProjectController extends Controller implements ServiceInterface
         $model = $this->findModel($id);
 
         $css = [
-            '' . Yii::getAlias('@web') . 'app-assets/vendors/vendors.min.css',
-            '' . Yii::getAlias('@web') . 'app-assets/css/themes/vertical-dark-menu-template/materialize.min.css',
-            '' . Yii::getAlias('@web') . 'app-assets/css/themes/vertical-dark-menu-template/style.min.css',
-            '' . Yii::getAlias('@web') . 'app-assets/css/pages/dashboard.min.css',
+            //   '' . Yii::getAlias('@web') . 'assets/vendors/vendors.min.css',
+            '' . Yii::getAlias('@web') . 'css/dark-forest/materialize.min.css',
+            '' . Yii::getAlias('@web') . 'css/dark-forest/style.min.css',
+            //  '' . Yii::getAlias('@web') . 'css/pages/dashboard.min.css',
             '' . Yii::getAlias('@web') . 'css/custom.css'
         ];
 
