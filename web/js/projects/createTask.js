@@ -145,7 +145,7 @@ function CalculTempsincertitude(hour, day, incertitudestring) {
     hourIncertitude = hourIncertitude % 7.7;
 
     dayIncertitude = Additionalday + dayIncertitude;
-    hourIncertitude = hourIncertitude;
+    hourIncertitude = Math.round(hourIncertitude);
 
     return { dayIncertitude, hourIncertitude };
 }

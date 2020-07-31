@@ -142,7 +142,7 @@ ProjectSimulationAsset::register($this);
                                     <div class="col s1">
                                         <?= Html::a(
                                             '<i class="material-icons center">assignment</i>',
-                                            Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
+                                            Url::to(['project/update-task', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
                                             [
                                                 'id' => 'grid-custom-button',
                                                 'data-pjax' => true,
@@ -158,7 +158,7 @@ ProjectSimulationAsset::register($this);
                                     <div class="col s1">
                                         <?= Html::a(
                                             '<i class="material-icons center">local_grocery_store</i>',
-                                            Url::to(['project/Update-task', 'number' => 0, 'project_id' => $project->id]),
+                                            Url::to(['project/Update-task', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
                                             [
                                                 'id' => 'grid-custom-button',
                                                 'data-pjax' => true,
@@ -172,7 +172,7 @@ ProjectSimulationAsset::register($this);
                                     <div class="col s1">
                                         <?= Html::a(
                                             '<i class="material-icons center">euro_symbol</i>',
-                                            Url::to(['project/lot-simulate', 'number' => 0, 'project_id' => $project->id]),
+                                            Url::to(['project/lot-simulate', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
                                             [
                                                 'id' => 'grid-custom-button',
                                                 'data-pjax' => true,
