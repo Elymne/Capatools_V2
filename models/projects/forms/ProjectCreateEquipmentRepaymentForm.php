@@ -39,4 +39,22 @@ class ProjectCreateEquipmentRepaymentForm extends EquipmentRepayment
             ['price', 'integer', 'min' => 0, 'tooSmall' => 'Le temps d\'incertitude généré doit être supérieur à 0', 'message' => 'Le temps d\'incertitude généré doit être supérieur à 0'],
         ];
     }
+
+    /**
+     * A utiliser pour associer la bonne clé lié à la liste sélectionnable pour la vue.
+     */
+    public function setSelectedEquipment(array $equipementList)
+    {
+        foreach ($equipementList as $key => $equipment) {
+            if ($equipment->id == $this->equipment_id) $this->equipmentSelected = $key + 1;
+        }
+    }
+
+    /**
+     * A utiliser pour associer la bonne clé lié à la liste sélectionnable pour la vue.
+     */
+    public function setSelectedRisk()
+    {
+        $this->riskSelected = $this->risk_id - 1;
+    }
 }

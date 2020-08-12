@@ -840,6 +840,7 @@ class ProjectController extends Controller implements ServiceInterface
                         $task->price = $taskOperationalModif->price;
                         $task->risk = $taskOperationalModif->risk;
                         $task->risk_duration_hour = $taskOperationalModif->risk_duration_hour;
+                        $task->lot_id = $lot->id;
                         $task->save();
                     }
                 }
@@ -890,6 +891,7 @@ class ProjectController extends Controller implements ServiceInterface
                             $task->price = $taskGestionModif->price;
                             $task->risk = $taskGestionModif->risk;
                             $task->risk_duration_hour = $taskGestionModif->risk_duration_hour;
+                            $task->lot_id = $lot->id;
                             $task->save();
                         }
                     }
@@ -921,6 +923,7 @@ class ProjectController extends Controller implements ServiceInterface
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
         $model = new ProjectCreateThirdStepForm();
+
         $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
 
         if ($lot == null) {
@@ -940,12 +943,20 @@ class ProjectController extends Controller implements ServiceInterface
 
         $equipmentsRepayment = ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id)
             ? ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id) : [new ProjectCreateEquipmentRepaymentForm];
+        $equipmentByID = Equipment::getAllByLaboratoryID($lot->laboratory_id);
+        foreach ($equipmentsRepayment as $equipmentRepayment) {
+            $equipmentRepayment->setSelectedEquipment($equipmentByID);
+            $equipmentRepayment->setSelectedRisk();
+        }
 
         if ($lot->laboratory_id != null)
             $contributors = ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($lot->laboratory_id)
                 ? ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($lot->laboratory_id) : [new ProjectCreateLaboratoryContributorForm];
         else
             $contributors = [new ProjectCreateLaboratoryContributorForm];
+        foreach ($contributors as $contributor) {
+            $contributor->setSelectedRisk();
+        }
 
         // Import de données depuis la bdd.
         $laboratoriesData = Laboratory::getAll();
@@ -1028,6 +1039,7 @@ class ProjectController extends Controller implements ServiceInterface
             'createThirdStep',
             [
                 'number' => $number,
+                'project_id' => $project_id,
 
                 'laboratoriesData' => $laboratoriesData,
                 'equipmentsData' => $equipmentsData,

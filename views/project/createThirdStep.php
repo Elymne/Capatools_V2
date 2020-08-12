@@ -73,11 +73,12 @@ ProjectCreateThirdStepAsset::register($this);
                                                     <div class="col s2">
                                                         <?= $form->field($consumable, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
                                                     </div>
+
                                                     <div class="col s4">
                                                         <!-- type dropdown field -->
                                                         <?= $form->field($consumable, "[{$i}]type")->widget(Select2::class, [
                                                             'data' => Consumable::TYPES,
-                                                            'options' => ['value' => 0],
+                                                            'options' => ['value' => $consumable->getSelectedType()],
                                                             'pluginLoading' => false,
                                                             'pluginOptions' => [
                                                                 'allowClear' => false
@@ -181,6 +182,7 @@ ProjectCreateThirdStepAsset::register($this);
                                     <!-- type dropdown field -->
                                     <?= $form->field($model, "laboratoryselected")->widget(Select2::class, [
                                         'data' => ArrayHelper::map($laboratoriesData, 'id', 'name'),
+                                        'options' => ['value' => $model->laboratoryselected],
                                         'pluginLoading' => false,
                                         'pluginOptions' => [],
                                     ])->label(false); ?>
@@ -223,11 +225,11 @@ ProjectCreateThirdStepAsset::register($this);
                                                 <div class="row">
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
-                                                        <?= $form->field($equipment, "[{$i}]equipmentSelected")->widget(Select2::classname(), [
+                                                        <?= $form->field($equipment, "[{$i}]equipmentSelected")->widget(Select2::class, [
                                                             'data' => array_map(function ($data) {
                                                                 return $data->name;
                                                             }, $equipmentsData),
-                                                            'options' => ['value' => 0],
+                                                            'options' => ['value' => $equipment->equipmentSelected],
                                                             'pluginLoading' => false,
                                                             'pluginOptions' => [],
                                                         ])->label("Matériel "); ?>
@@ -247,11 +249,11 @@ ProjectCreateThirdStepAsset::register($this);
 
                                                         <div class="col s2">
                                                             <!-- type dropdown field -->
-                                                            <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::classname(), [
+                                                            <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::class, [
                                                                 'data' => array_map(function ($risk) {
                                                                     return $risk->title;
                                                                 }, $risksData),
-                                                                'options' => ['value' => 0],
+                                                                'options' => ['value' => $equipment->riskSelected],
                                                                 'pluginLoading' => false,
                                                                 'pluginOptions' => [],
                                                             ])->label("Incertitude"); ?>
@@ -318,9 +320,9 @@ ProjectCreateThirdStepAsset::register($this);
                                                 <div class="row">
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
-                                                        <?= $form->field($contributor, "[{$i}]type")->widget(Select2::classname(), [
+                                                        <?= $form->field($contributor, "[{$i}]type")->widget(Select2::class, [
                                                             'data' => LaboratoryContributor::TYPES,
-                                                            'options' => ['value' => 0],
+                                                            'options' => ['value' => $contributor->getSelectedType()],
                                                             'pluginLoading' => false,
                                                             'pluginOptions' => [],
                                                         ])->label("Intervenant "); ?>
@@ -339,11 +341,11 @@ ProjectCreateThirdStepAsset::register($this);
                                                     if ($number != 0) { ?>
                                                         <div class="col s2">
                                                             <!-- type dropdown field -->
-                                                            <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::classname(), [
+                                                            <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::class, [
                                                                 'data' => array_map(function ($risk) {
                                                                     return $risk->title;
                                                                 }, $risksData),
-                                                                'options' => ['value' => 0],
+                                                                'options' => ['value' => $contributor->riskSelected],
                                                                 'pluginLoading' => false,
                                                                 'pluginOptions' => [],
                                                             ])->label("Incertitude"); ?>
@@ -380,7 +382,7 @@ ProjectCreateThirdStepAsset::register($this);
                         <!-- Buttons -->
                         <div class="form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                            <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
+                            <?= Html::a(Yii::t('app', 'Annuler'), ['project/project-simulate?project_id=' . $project_id], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                         </div>
                     </div>
 

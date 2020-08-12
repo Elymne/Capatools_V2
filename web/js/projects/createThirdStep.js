@@ -10,6 +10,8 @@ const laboratorySelected = infoData.laboratorySelected !== null ? infoData.labor
 const addedEquipementsOnInit = infoData.equipments
 const addedContributorsOnInit = infoData.contributors
 
+console.log(laboratorySelected)
+
 /**
  * Cette variable existe car suivant le laboratoire sélectionné, les éléments dans les listes déroulantes vont changer pour correspondre à leur laboratoire respectif.
  * Il nous faut donc une variable qui stock les éléments présent des ces listes déroulantes, et cette variable doit être mise à jour à chaque fois qu'un nouveau laboratoire est sélectionné.
@@ -215,9 +217,9 @@ $(() => {
 $(() => {
     /**
      * Variable pour garder en mémoire le nombre d'élément ajouté dans le dynamicForm des matériels.
-     * Commence toujours à 0 lors de la création de la vue.
+     * Commence toujours avec le nombre d'éléments lors de l'initialisation (soit 1 à l'init, ce qui veut dire que la première ligne sera la numéro 0).
      */
-    let nbEquipmentLineDuplicated = 0
+    let nbEquipmentLineDuplicated = addedEquipementsOnInit.length - 1
 
     /**
      * Callback onChange sur la liste déroulante des laboratoires.
@@ -347,9 +349,9 @@ $(() => {
 $(() => {
     /**
      * Variable pour garder en mémoire le nombre d'élément ajouté dans le dynamicForm des matériels.
-     * Commence toujours à 0 lors de la création de la vue.
+     * Commence toujours avec le nombre d'éléments lors de l'initialisation (soit 1 à l'init, ce qui veut dire que la première ligne sera la numéro 0).
      */
-    let nbContributorLineDuplicated = 0
+    let nbContributorLineDuplicated = addedContributorsOnInit.length - 1
 
     /**
      * Callback onChange sur la liste déroulante des laboratoires.

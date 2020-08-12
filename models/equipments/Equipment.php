@@ -40,12 +40,20 @@ class Equipment extends ActiveRecord implements JsonSerializable
     }
 
     /**
+     * Permet de récupérer la liste de tous les équipements par rapport à l'id des laboratoires.
+     */
+    public static function getAllByLaboratoryID($id): array
+    {
+        return static::find()->where(['laboratory_id' => $id])->all();
+    }
+
+    /**
      * Fait la jonction entre un matériel et son laboratoire.
      * Créer un attribut "laboratory" qui sera un objet Laboratory.
      */
     public function getLaboratory()
     {
-        return $this->hasOne(Laboratory::className(), ['id' => 'laboratory_id']);
+        return $this->hasOne(Laboratory::class, ['id' => 'laboratory_id']);
     }
 
     /**

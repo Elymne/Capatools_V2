@@ -42,7 +42,8 @@ class ProjectCreateThirdStepForm extends Model
         $laboArray = Laboratory::getAll();
 
         foreach ($laboArray as $key => $labo) {
-            if ($labo->id == $id) $this->laboratoryselected = $key;
+            // Si c'est le bon labo, on associe alors la bonne clé. On ajoute 1 car sur le liste selectionable, la valeur n°1 est égale à 1 et non à 0 comme pour un tableau.
+            if ($labo->id == $id) $this->laboratoryselected = $key + 1;
         }
     }
 }
