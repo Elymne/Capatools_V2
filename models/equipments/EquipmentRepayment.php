@@ -3,6 +3,7 @@
 namespace app\models\equipments;
 
 use app\models\projects\Lot;
+use app\models\projects\Risk;
 use JsonSerializable;
 use yii\db\ActiveRecord;
 
@@ -23,9 +24,9 @@ class EquipmentRepayment extends ActiveRecord implements JsonSerializable
         return 'equipment_repayment';
     }
 
-    public static function getAllByRepaymentID(int $repaymentID)
+    public static function getAllByLotID(int $id)
     {
-        return self::find()->where(['repayment_id' => $repaymentID])->all();
+        return self::find()->where(['lot_id' => $id])->all();
     }
 
     /**
@@ -34,7 +35,16 @@ class EquipmentRepayment extends ActiveRecord implements JsonSerializable
      */
     public function getEquipment()
     {
-        return $this->hasOne(Equipment::className(), ['id' => 'equipment_id']);
+        return $this->hasOne(Equipment::class, ['id' => 'equipment_id']);
+    }
+
+    /**
+     * Fait la jonction entre la table d'association et le reversement liées au lot.
+     * Créer un attribut "repayment" qui sera un objet Laboratory.
+     */
+    public function getRisk()
+    {
+        return $this->hasOne(Risk::class, ['id' => 'risk_id']);
     }
 
     /**
@@ -43,7 +53,7 @@ class EquipmentRepayment extends ActiveRecord implements JsonSerializable
      */
     public function getLot()
     {
-        return $this->hasOne(Lot::className(), ['id' => 'lot_id']);
+        return $this->hasOne(Lot::class, ['id' => 'lot_id']);
     }
 
     /**

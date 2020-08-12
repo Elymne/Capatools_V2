@@ -15,11 +15,28 @@ use app\models\projects\Consumable;
 class ProjectCreateConsumableForm extends Consumable
 {
 
+    private $keyTypes = [
+        self::TYPE_EXTERNAL_DELIVERY => 1,
+        self::TYPE_CONSUMABLE => 2,
+        self::TYPE_INTERNAL_DELIVERY => 3
+    ];
+
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
-        return [];
+        return [
+            [["title", "price", "type"], "safe"]
+        ];
+    }
+
+    public function getSelectedType(): int
+    {
+
+        if ($this->type == null)
+            return 1;
+        else
+            return $this->keyTypes[$this->type];
     }
 }

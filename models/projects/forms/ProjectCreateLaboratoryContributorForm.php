@@ -15,6 +15,12 @@ use app\models\laboratories\LaboratoryContributor;
 class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
 {
 
+    private $keyTypes = [
+        self::TYPE_SEARCHER => 1,
+        self::TYPE_PROBATIONER => 2,
+        self::TYPE_DOCTOR => 3
+    ];
+
     /**
      * Liste d'attributs relatif au formulaire.
      * (Pour stocker la valeur choisie dans les listes déroulantes).
@@ -38,5 +44,25 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
             ['price', 'integer', 'min' => 0, 'tooSmall' => 'Le coût généré doit être supérieur à 0', 'message' => 'Le coût généré doit être supérieur à 0'],
             ['timeRiskStringify', 'required', 'message' => 'Le temps d\'incertitude n\'a pas été généré'],
         ];
+    }
+
+    /**
+     * Permet de récupérer la bonne clé pour la liste sélectionnable, à utiliser sur la vue.
+     */
+    public function getSelectedType(): int
+    {
+
+        if ($this->type == null)
+            return 1;
+        else
+            return $this->keyTypes[$this->type];
+    }
+
+    /**
+     * A utiliser pour associer la bonne clé lié à la liste sélectionnable pour la vue.
+     */
+    public function setSelectedRisk()
+    {
+        $this->riskSelected = $this->risk_id - 1;
     }
 }

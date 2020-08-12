@@ -30,6 +30,11 @@ class Investment extends ActiveRecord
         return static::find()->where(['id' => $id])->one();
     }
 
+    public static function getAllByLotID($id)
+    {
+        return static::find()->where(['lot_id' => $id])->all();
+    }
+
     public function getLot()
     {
         return $this->hasOne(Lot::className(), ['id' => 'lot_id']);

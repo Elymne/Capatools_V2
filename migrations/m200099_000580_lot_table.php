@@ -19,7 +19,8 @@ class m200099_000580_lot_table extends Migration
             'rate_consumable_investement_margin' => $this->double()->defaultValue(1),
 
             // Foreign key.
-            'project_id' => $this->integer()->notNull()
+            'project_id' => $this->integer()->notNull(),
+            'laboratory_id' => $this->integer()
         ]);
 
         $this->addForeignKey(
@@ -27,6 +28,14 @@ class m200099_000580_lot_table extends Migration
             '{{%lot}}',
             'project_id',
             '{{%project}}',
+            'id'
+        );
+
+        $this->addForeignKey(
+            'FK_lot-laboratory',
+            '{{%lot}}',
+            'laboratory_id',
+            '{{%laboratory}}',
             'id'
         );
 
