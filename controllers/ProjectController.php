@@ -17,10 +17,8 @@ use app\models\projects\ProjectSimulate;
 use app\models\projects\Risk;
 use app\models\projects\Millestone;
 use app\models\projects\Task;
-use app\models\projects\forms\ProjectCreateThridStepForm;
 
 use yii\web\UploadedFile;
-
 
 use app\models\equipments\Equipment;
 use app\models\laboratories\Laboratory;
@@ -33,10 +31,10 @@ use app\models\projects\forms\ProjectCreateFirstStepForm;
 use app\models\projects\forms\ProjectCreateForm;
 use app\models\projects\forms\ProjectCreateLaboratoryContributorForm;
 use app\models\projects\forms\ProjectCreateLotForm;
-use app\models\projects\forms\ProjectCreateRepaymentForm;
 use app\models\projects\forms\ProjectCreateGestionTaskForm;
 use app\models\projects\forms\ProjectCreateLotTaskForm;
 use app\models\projects\forms\ProjectCreateMilleStoneForm;
+use app\models\projects\forms\ProjectCreateThirdStepForm;
 use app\models\projects\Lot;
 use app\models\projects\LotSimulate;
 use app\services\laboxyServices\IdLaboxyManager;
@@ -554,128 +552,6 @@ class ProjectController extends Controller implements ServiceInterface
         $millestones = [new ProjectCreateMilleStoneForm];
     }
 
-
-    /**
-     * Route : create-third-step
-     * Permet de gérer la gestion des consomables et matériels utilisés pour un lot spécifique d'un projet.
-     * 
-     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * 
-     * @return mixed|error
-     */
-    public function actionCreateThirdStep($project_id = 0, $number = 0)
-    {
-
-        // Modèle du lot à updater. On s'en sert pour récupérer son id.
-        $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
-
-        if ($lot == null) {
-            return $this->redirect([
-                'error',
-                'errorName' => 'Lot innexistant',
-                'errorDescriptions' => ['Vous essayez actuellement de gérer une liste de matériels sur un lot qui n\'existe pas.']
-            ]);
-        }
-
-        // Modèles à sauvegarder.
-        $consumables = [new ProjectCreateConsumableForm()];
-        $expenses = [new ProjectCreateInvestForm()];
-        $equipmentsRepayment = [new ProjectCreateEquipmentRepaymentForm()];
-        $contributors = [new ProjectCreateLaboratoryContributorForm()];
-        $form = new ProjectCreateThridStepForm();
-        // Import de données depuis la bdd.
-        $cellule = Cellule::getOneById(Yii::$app->user->identity->cellule_id);
-        $laboratoriesData = $cellule->laboratories;
-        $equipmentsData = [new Equipment()];
-        foreach ($laboratoriesData as $laboratory) {
-            //   echo $laboratory->name;
-            array_merge($equipmentsData, $laboratory->equipments);
-        }
-
-        $risksData = Risk::getAll();
-
-        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        /* if ($repayment->load(Yii::$app->request->post())) {
-            // Variable de vérification de validité des données lors du renvoi par méthode POST.
-            $isValid = true;
-
-            $consumables = Model::createMultiple(ProjectCreateConsumableForm::className(), $consumables);
-            if (!Model::loadMultiple($consumables, Yii::$app->request->post())) $isValid = false;
-            $expenses = Model::createMultiple(ProjectCreateExpenseForm::className(), $expenses);
-            if (!Model::loadMultiple($expenses, Yii::$app->request->post())) $isValid = false;
-            $equipmentsRepayment = Model::createMultiple(ProjectCreateEquipmentRepaymentForm::className(), $equipmentsRepayment);
-            if (!Model::loadMultiple($equipmentsRepayment, Yii::$app->request->post())) $isValid = false;
-            $contributors = Model::createMultiple(ProjectCreateLaboratoryContributorForm::className(), $contributors);
-            if (!Model::loadMultiple($contributors, Yii::$app->request->post())) $isValid = false;
-
-            /*  if ($isValid) {
-
-                $repayment->lot_id = $lot->id;
-                $repayment->laboratory_id = $laboratoriesData[$repayment->laboratorySelected]->id;
-                $repayment->save();
-
-                // On associe les consommables au lot actuel, puis on les sauvegardes.
-                foreach ($consumables as $consumable) {
-                    $consumable->lot_id = $lot->id;
-                    $consumable->type = Consumable::TYPES[$consumable->type];
-                    $consumable->save();
-                }
-
-                // On associe les consommables au lot actuel, puis on les sauvegardes.
-                foreach ($expenses as $expense) {
-                    $expense->lot_id = $lot->id;
-                    $expense->save();
-                }
-
-                // On récupère la liste de matériels lié au choix du labo fait précédement. Utilisé pour récupérer le bon matériel sélectionné.
-                $id_laboratory = $repayment->laboratory_id;
-                $equipmentsDataFilteredByLabo = array_values(
-                    array_filter($equipmentsData, function ($equipment) use ($id_laboratory) {
-                        return ($equipment->laboratory_id == $id_laboratory);
-                    })
-                );
-
-                // On associe les matériels au lot actuel, puis on les sauvegardes.
-                foreach ($equipmentsRepayment as $equipmentRepayment) {
-                    $equipmentRepayment->equipment_id = $equipmentsDataFilteredByLabo[$equipmentRepayment->equipmentSelected]->id;
-                    $equipmentRepayment->repayment_id = $repayment->id;
-                    $equipmentRepayment->risk_id = $equipmentRepayment->riskSelected + 1;
-                    $equipmentRepayment->time_risk = TimeStringifyHelper::transformStringChainToHour($equipmentRepayment->timeRiskStringify);
-                    $equipmentRepayment->save();
-                }
-
-                // On associe les intervenants de laboratoire au lot actuel, puis ont les sauvegardes.
-                foreach ($contributors as $contributor) {
-                    $contributor->type = LaboratoryContributor::TYPES[$contributor->type];
-                    $contributor->laboratory_id = $id_laboratory;
-                    $contributor->repayment_id = $repayment->id;
-                    $contributor->risk_id = $contributor->riskSelected + 1;
-                    $contributor->time_risk = TimeStringifyHelper::transformStringChainToHour($contributor->timeRiskStringify);
-                    $contributor->save();
-                }
-                Yii::$app->response->redirect(['project/lot-simulate', 'project_id' => $project_id]);
-            }
-        
-        }*/
-
-        MenuSelectorHelper::setMenuProjectNone();
-        return $this->render(
-            'createThirdStep',
-            [
-                'number' => $number,
-                'laboratoriesData' => $laboratoriesData,
-                'equipmentsData' => $equipmentsData,
-                'risksData' => $risksData,
-                'consumables' => $consumables,
-                'formulaire' =>  $form,
-                'expenses' => $expenses,
-                'equipments' => $equipmentsRepayment,
-                'contributors' => $contributors
-            ]
-        );
-    }
-
     /**
      * Route : create-lot-simulate
      * Permet de modifier les marges d'un lot
@@ -859,7 +735,6 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
-
     /**
      * A faire.
      */
@@ -1041,6 +916,132 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+    public function actionUpdateDependenciesConsumables($project_id, $number)
+    {
+        // Modèle du lot à updater. On s'en sert pour récupérer son id.
+        $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
+        $model = new ProjectCreateThirdStepForm();
+        $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
+
+        if ($lot == null) {
+            return $this->redirect([
+                'error',
+                'errorName' => 'Lot innexistant',
+                'errorDescriptions' => ['Vous essayez actuellement de modifier une liste de matériels sur un lot/projet qui n\'existe pas.']
+            ]);
+        }
+
+        // Récupérer les données existantes du lot spécifié en paramètre.
+        $consumables = ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id)
+            ? ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id) : [new ProjectCreateConsumableForm];
+
+        $invests = ProjectCreateInvestForm::getAllByLotID($lot->id)
+            ? ProjectCreateInvestForm::getAllByLotID($lot->id) : [new ProjectCreateInvestForm];
+
+        $equipmentsRepayment = ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id)
+            ? ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id) : [new ProjectCreateEquipmentRepaymentForm];
+
+        if ($lot->laboratory_id != null)
+            $contributors = ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($lot->laboratory_id)
+                ? ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($lot->laboratory_id) : [new ProjectCreateLaboratoryContributorForm];
+        else
+            $contributors = [new ProjectCreateLaboratoryContributorForm];
+
+        // Import de données depuis la bdd.
+        $laboratoriesData = Laboratory::getAll();
+        $equipmentsData = Equipment::getAll();
+        $risksData = Risk::getAll();
+
+        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
+        if ($model->load(Yii::$app->request->post())) {
+            // Variable de vérification de validité des données lors du renvoi par méthode POST.
+            $isValid = true;
+
+            // Vérification des consommables.
+            $consumables = Model::createMultiple(ProjectCreateConsumableForm::class, $consumables);
+            if (!Model::loadMultiple($consumables, Yii::$app->request->post())) $isValid = false;
+
+            // Vérifications des investissements.
+            $invests = Model::createMultiple(ProjectCreateInvestForm::class, $invests);
+            if (!Model::loadMultiple($invests, Yii::$app->request->post())) $isValid = false;
+
+            // Vérification des équipements de laboratoire et de leur utilisation. 
+            $equipmentsRepayment = Model::createMultiple(ProjectCreateEquipmentRepaymentForm::class, $equipmentsRepayment);
+            if (!Model::loadMultiple($equipmentsRepayment, Yii::$app->request->post())) $isValid = false;
+
+            // Vérification des intervenants.
+            $contributors = Model::createMultiple(ProjectCreateLaboratoryContributorForm::class, $contributors);
+            if (!Model::loadMultiple($contributors, Yii::$app->request->post())) $isValid = false;
+
+            if ($isValid) {
+
+                // Sauvegarde du laboratoire sélectionné dans le lot.
+                $lot->laboratory_id = $laboratoriesData[$model->laboratoryselected - 1]->id;
+                $lot->save();
+
+                // On associe les consommables au lot actuel, puis on les sauvegardes.
+                foreach ($consumables as $consumable) {
+                    $consumable->lot_id = $lot->id;
+                    $consumable->type = Consumable::TYPES[$consumable->type];
+                    $consumable->save();
+                }
+
+                // On associe les consommables au lot actuel, puis on les sauvegardes.
+                foreach ($invests as $invest) {
+                    $invest->lot_id = $lot->id;
+                    $invest->save();
+                }
+
+                // On récupère la liste de matériels lié au choix du labo fait précédement. Utilisé pour récupérer le bon matériel sélectionné.
+                $id_laboratory = $lot->laboratory_id;
+                $equipmentsDataFilteredByLabo = array_values(
+                    array_filter($equipmentsData, function ($equipment) use ($id_laboratory) {
+                        return ($equipment->laboratory_id == $id_laboratory);
+                    })
+                );
+
+                // On associe les matériels au lot actuel, puis on les sauvegardes.
+                foreach ($equipmentsRepayment as $equipmentRepayment) {
+                    $equipmentRepayment->equipment_id = $equipmentsDataFilteredByLabo[$equipmentRepayment->equipmentSelected]->id;
+                    $equipmentRepayment->lot_id = $lot->id;
+                    $equipmentRepayment->risk_id = $equipmentRepayment->riskSelected + 1;
+                    $equipmentRepayment->time_risk = TimeStringifyHelper::transformStringChainToHour($equipmentRepayment->timeRiskStringify);
+                    $equipmentRepayment->save();
+                }
+
+                // On associe les intervenants de laboratoire au lot actuel, puis ont les sauvegardes.
+                foreach ($contributors as $contributor) {
+                    $contributor->type = LaboratoryContributor::TYPES[$contributor->type];
+                    $contributor->laboratory_id = $id_laboratory;
+                    $contributor->lot_id = $lot->id;
+                    $contributor->risk_id = $contributor->riskSelected + 1;
+                    $contributor->time_risk = TimeStringifyHelper::transformStringChainToHour($contributor->timeRiskStringify);
+                    $contributor->save();
+                }
+
+                Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project_id]);
+            }
+        }
+
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render(
+            'createThirdStep',
+            [
+                'number' => $number,
+
+                'laboratoriesData' => $laboratoriesData,
+                'equipmentsData' => $equipmentsData,
+                'risksData' => $risksData,
+
+                'model' => $model,
+                'consumables' => $consumables,
+                'invests' => $invests,
+                'equipments' => $equipmentsRepayment,
+                'contributors' => $contributors
+            ]
+        );
+    }
+
     /**
      * Route : index-draft
      * Permet d'afficher la liste des tous les brouillons, c'est-à-dire les devis qui n'ont pas été finalisés.
@@ -1194,48 +1195,6 @@ class ProjectController extends Controller implements ServiceInterface
             [
                 'model' => $model,
                 'lots' => $lots
-            ]
-        );
-    }
-
-    public function actionUpdateThirdStep($project_id, $number)
-    {
-        // Modèle du lot à updater. On s'en sert pour récupérer son id.
-        $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
-
-        if ($lot == null) {
-            return $this->redirect([
-                'error',
-                'errorName' => 'Lot innexistant',
-                'errorDescriptions' => ['Vous essayez actuellement de modifier une liste de matériels sur un lot/projet qui n\'existe pas.']
-            ]);
-        }
-
-        // Récupérer les données existantes du lot spécifié en paramètre.
-        $repayment = ProjectCreateRepaymentForm::getOneByLotID($lot->id);
-        $consumables =  ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id);
-        $expenses = ProjectCreateExpenseForm::getAllExpensesByLotID($lot->id);
-        $equipmentsRepayment = ProjectCreateEquipmentRepaymentForm::getAllByRepaymentID($repayment->id);
-        $contributors = ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($repayment->laboratory_id);
-
-        // Import de données depuis la bdd.
-        $laboratoriesData = Laboratory::getAll();
-        $equipmentsData = Equipment::getAll();
-        $risksData = Risk::getAll();
-
-        MenuSelectorHelper::setMenuProjectNone();
-        return $this->render(
-            'createThirdStep',
-            [
-                'number' => $number,
-                'laboratoriesData' => $laboratoriesData,
-                'equipmentsData' => $equipmentsData,
-                'risksData' => $risksData,
-                'repayment' => $repayment,
-                'consumables' => $consumables,
-                'expenses' => $expenses,
-                'equipments' => $equipmentsRepayment,
-                'contributors' => $contributors
             ]
         );
     }

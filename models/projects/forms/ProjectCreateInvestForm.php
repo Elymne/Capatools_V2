@@ -20,6 +20,8 @@ class ProjectCreateInvestForm extends Investment
      */
     public function rules()
     {
-        return [];
+        return [
+            [["name", "price"], "safe"]
+        ];
     }
 }

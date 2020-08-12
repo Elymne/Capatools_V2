@@ -23,9 +23,9 @@ class EquipmentRepayment extends ActiveRecord implements JsonSerializable
         return 'equipment_repayment';
     }
 
-    public static function getAllByRepaymentID(int $repaymentID)
+    public static function getAllByLotID(int $id)
     {
-        return self::find()->where(['repayment_id' => $repaymentID])->all();
+        return self::find()->where(['lot_id' => $id])->all();
     }
 
     /**

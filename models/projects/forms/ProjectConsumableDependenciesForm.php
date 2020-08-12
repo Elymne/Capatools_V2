@@ -16,7 +16,7 @@ use app\models\Model;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class ProjectCreateThridStepForm extends Model
+class ProjectConsumableDependenciesForm extends Model
 {
 
     /**

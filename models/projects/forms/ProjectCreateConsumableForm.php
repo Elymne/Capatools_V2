@@ -14,12 +14,13 @@ use app\models\projects\Consumable;
  */
 class ProjectCreateConsumableForm extends Consumable
 {
-
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
-        return [];
+        return [
+            [["title", "price", "type"], "safe"]
+        ];
     }
 }

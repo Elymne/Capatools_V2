@@ -3,7 +3,6 @@
 use app\assets\AppAsset;
 use app\assets\projects\ProjectCreateThirdStepAsset;
 
-use app\models\equipments\EquipmentRepayment;
 use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\Consumable;
 
@@ -64,7 +63,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                 <?php
                                                 // necessary for update action.
                                                 if (!$consumable->isNewRecord) {
-                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
+                                                    echo Html::activeHiddenInput($consumable, "[{$i}]id");
                                                 }
                                                 ?>
                                                 <div class="row">
@@ -76,7 +75,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                     </div>
                                                     <div class="col s4">
                                                         <!-- type dropdown field -->
-                                                        <?= $form->field($consumable, "[{$i}]type")->widget(Select2::classname(), [
+                                                        <?= $form->field($consumable, "[{$i}]type")->widget(Select2::class, [
                                                             'data' => Consumable::TYPES,
                                                             'options' => ['value' => 0],
                                                             'pluginLoading' => false,
@@ -109,40 +108,40 @@ ProjectCreateThirdStepAsset::register($this);
                     <div class="card-action">
 
                         <!-- Création dépense , d'investissements -->
-                        <label id="expense-management-label" class='blue-text control-label typeLabel'>Liste des achats d'investissement éventuels</label>
-                        <div id="expense-management-body" class="col s12">
+                        <label id="invtest-management-label" class='blue-text control-label typeLabel'>Liste des achats d'investissement éventuels</label>
+                        <div id="invtest-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
 
                                     <?php DynamicFormWidget::begin([
                                         'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-                                        'widgetBody' => '.container-items-expense', // required: css class selector
-                                        'widgetItem' => '.item-expense', // required: css class
+                                        'widgetBody' => '.container-items-invtest', // required: css class selector
+                                        'widgetItem' => '.item-invtest', // required: css class
                                         'limit' => 10, // the maximum times, an element can be cloned (default 999)
                                         'min' => 1, // 0 or 1 (default 1)
                                         'insertButton' => '.add-item', // css class
                                         'deleteButton' => '.remove-item', // css class
-                                        'model' => $expenses[0],
+                                        'model' => $invests[0],
                                         'formId' => 'dynamic-form',
                                         'formFields' => ['title', 'price'],
                                     ]); ?>
 
-                                    <div class="container-items-expense">
+                                    <div class="container-items-invtest">
                                         <!-- widgetContainer -->
-                                        <?php foreach ($expenses as $i => $expense) : ?>
-                                            <div class="item-expense">
+                                        <?php foreach ($invests as $i => $invtest) : ?>
+                                            <div class="item-invtest">
                                                 <?php
                                                 // necessary for update action.
-                                                if (!$expense->isNewRecord) {
-                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
+                                                if (!$invtest->isNewRecord) {
+                                                    echo Html::activeHiddenInput($invtest, "[{$i}]id");
                                                 }
                                                 ?>
                                                 <div class="row">
                                                     <div class="col s4">
-                                                        <?= $form->field($expense, "[{$i}]name")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                        <?= $form->field($invtest, "[{$i}]name")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($expense, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
+                                                        <?= $form->field($invtest, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -180,7 +179,7 @@ ProjectCreateThirdStepAsset::register($this);
                                 <div class="input-field col s4">
 
                                     <!-- type dropdown field -->
-                                    <?= $form->field($formulaire, "laboratoryselected")->widget(Select2::classname(), [
+                                    <?= $form->field($model, "laboratoryselected")->widget(Select2::class, [
                                         'data' => ArrayHelper::map($laboratoriesData, 'id', 'name'),
                                         'pluginLoading' => false,
                                         'pluginOptions' => [],
@@ -218,7 +217,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                 <?php
                                                 // necessary for update action.
                                                 if (!$equipment->isNewRecord) {
-                                                    echo Html::activeHiddenInput($lot, "[{$i}]id");
+                                                    echo Html::activeHiddenInput($equipment, "[{$i}]id");
                                                 }
                                                 ?>
                                                 <div class="row">
@@ -447,7 +446,7 @@ ProjectCreateThirdStepAsset::register($this);
 
     // Envoi de données.
     echo json_encode([
-        'laboratorySelected' => $formulaire->laboratory_id,
+        'laboratorySelected' => $model->laboratoryselected,
         'equipments' => $ided,
         'contributors' => $idcd,
     ]);
