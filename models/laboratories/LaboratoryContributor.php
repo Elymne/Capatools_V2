@@ -58,7 +58,7 @@ class LaboratoryContributor extends ActiveRecord implements JsonSerializable
      */
     public function getLaboratory()
     {
-        return $this->hasOne(Laboratory::className(), ['id' => 'laboratory_id']);
+        return $this->hasOne(Laboratory::class, ['id' => 'laboratory_id']);
     }
 
     /**
@@ -69,7 +69,7 @@ class LaboratoryContributor extends ActiveRecord implements JsonSerializable
      */
     public function getLot()
     {
-        return $this->hasOne(Lot::className(), ['id' => 'lot_id']);
+        return $this->hasOne(Lot::class, ['id' => 'lot_id']);
     }
 
     /**
