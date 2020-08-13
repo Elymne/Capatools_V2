@@ -21,6 +21,7 @@ use app\models\projects\Task;
 use yii\web\UploadedFile;
 
 use app\models\equipments\Equipment;
+use app\models\equipments\EquipmentRepayment;
 use app\models\laboratories\Laboratory;
 use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\Consumable;
@@ -35,6 +36,7 @@ use app\models\projects\forms\ProjectCreateGestionTaskForm;
 use app\models\projects\forms\ProjectCreateLotTaskForm;
 use app\models\projects\forms\ProjectCreateMilleStoneForm;
 use app\models\projects\forms\ProjectCreateThirdStepForm;
+use app\models\projects\Investment;
 use app\models\projects\Lot;
 use app\models\projects\LotSimulate;
 use app\services\laboxyServices\IdLaboxyManager;
@@ -978,20 +980,28 @@ class ProjectController extends Controller implements ServiceInterface
             $isValid = true;
 
             // Vérification des consommables.
+            $oldConsumablesIds = ArrayHelper::map($consumables, 'id', 'id');
             $consumables = Model::createMultiple(ProjectCreateConsumableForm::class, $consumables);
             if (!Model::loadMultiple($consumables, Yii::$app->request->post())) $isValid = false;
+            $deletedConsumablesIDs = array_diff($oldConsumablesIds, array_filter(ArrayHelper::map($consumables, 'id', 'id')));
 
             // Vérifications des investissements.
+            $oldInvestsIds = ArrayHelper::map($invests, 'id', 'id');
             $invests = Model::createMultiple(ProjectCreateInvestForm::class, $invests);
             if (!Model::loadMultiple($invests, Yii::$app->request->post())) $isValid = false;
+            $deletedInvestsIDs = array_diff($oldInvestsIds, array_filter(ArrayHelper::map($invests, 'id', 'id')));
 
-            // Vérification des équipements de laboratoire et de leur utilisation. 
+            // Vérification des équipements de laboratoire et de leur utilisation.
+            $oldEquipmentsRepaymentIds = ArrayHelper::map($equipmentsRepayment, 'id', 'id');
             $equipmentsRepayment = Model::createMultiple(ProjectCreateEquipmentRepaymentForm::class, $equipmentsRepayment);
             if (!Model::loadMultiple($equipmentsRepayment, Yii::$app->request->post())) $isValid = false;
+            $deletedEquipmentsRepaymentIDs = array_diff($oldEquipmentsRepaymentIds, array_filter(ArrayHelper::map($equipmentsRepayment, 'id', 'id')));
 
             // Vérification des intervenants.
+            $oldContributorsIds = ArrayHelper::map($contributors, 'id', 'id');
             $contributors = Model::createMultiple(ProjectCreateLaboratoryContributorForm::class, $contributors);
             if (!Model::loadMultiple($contributors, Yii::$app->request->post())) $isValid = false;
+            $deletedContributorsIDs = array_diff($oldContributorsIds, array_filter(ArrayHelper::map($contributors, 'id', 'id')));
 
             if ($isValid) {
 
@@ -1005,11 +1015,17 @@ class ProjectController extends Controller implements ServiceInterface
                     $consumable->type = Consumable::TYPES[$consumable->type];
                     $consumable->save();
                 }
+                if (!empty($deletedConsumablesIDs)) {
+                    Consumable::deleteAll(['id' => $deletedConsumablesIDs]);
+                }
 
                 // On associe les consommables au lot actuel, puis on les sauvegardes.
                 foreach ($invests as $invest) {
                     $invest->lot_id = $lot->id;
                     $invest->save();
+                }
+                if (!empty($deletedInvestsIDs)) {
+                    Investment::deleteAll(['id' => $deletedInvestsIDs]);
                 }
 
                 // On récupère la liste de matériels lié au choix du labo fait précédement. Utilisé pour récupérer le bon matériel sélectionné.
@@ -1028,6 +1044,9 @@ class ProjectController extends Controller implements ServiceInterface
                     $equipmentRepayment->time_risk = TimeStringifyHelper::transformStringChainToHour($equipmentRepayment->timeRiskStringify);
                     $equipmentRepayment->save();
                 }
+                if (!empty($deletedEquipmentsRepaymentIDs)) {
+                    EquipmentRepayment::deleteAll(['id' => $deletedEquipmentsRepaymentIDs]);
+                }
 
                 // On associe les intervenants de laboratoire au lot actuel, puis ont les sauvegardes.
                 foreach ($contributors as $contributor) {
@@ -1037,6 +1056,9 @@ class ProjectController extends Controller implements ServiceInterface
                     $contributor->risk_id = $contributor->riskSelected + 1;
                     $contributor->time_risk = TimeStringifyHelper::transformStringChainToHour($contributor->timeRiskStringify);
                     $contributor->save();
+                }
+                if (!empty($deletedContributorsIDs)) {
+                    LaboratoryContributor::deleteAll(['id' => $deletedContributorsIDs]);
                 }
 
                 Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project_id]);

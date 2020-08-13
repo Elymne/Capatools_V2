@@ -16,9 +16,9 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
 {
 
     private $keyTypes = [
-        self::TYPE_SEARCHER => 1,
-        self::TYPE_PROBATIONER => 2,
-        self::TYPE_DOCTOR => 3
+        self::TYPE_SEARCHER => 0,
+        self::TYPE_PROBATIONER => 1,
+        self::TYPE_DOCTOR => 2
     ];
 
     /**
