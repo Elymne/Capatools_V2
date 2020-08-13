@@ -1,9 +1,10 @@
 <?php
 
-use app\services\companyTypeServices\CompanyTypeEnum;
+use app\assets\projects\PdfAsset;
+use app\models\projects\Project;
 use app\widgets\TopTitle;
-/* @var $this yii\web\View */
-/* @var $model app\models\devis\Devis */
+
+PdfAsset::register($this);
 
 $id = $model->id;
 if ($model->id_capa) $this->title = $model->id_capa;
@@ -48,16 +49,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="card">
                 <div class="card-content">
-                    <span style="color:white">Devis</span>
+                    <span style="color:white">Projet</span>
                 </div>
                 <div class="card-action">
-                    <?php echo devisDataTable($model) ?>
+                    <?php echo projectDataTable($model) ?>
                 </div>
+            </div>
+
+            <div class="spaceFirstPage">
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
             </div>
 
             <div class="card">
                 <div class="card-content">
-                    <span style="color:white">Prix</span>
+                    <span style="color:white">Informations laboxy</span>
                 </div>
                 <div class="card-action">
                     <?php echo priceDataTable($model) ?>
@@ -68,17 +73,17 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="card">
 
                 <div class="card-content">
-                    <span style="color:white">Prestation</span>
+                    <span style="color:white">Informations client</span>
                 </div>
 
                 <div class="card-action">
-                    <?php echo prestationDataTable($model); ?>
+                    <?php echo createClientTable($model); ?>
                 </div>
             </div>
 
-            <br />
-            <br />
-            <br />
+            <div>
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+            </div>
 
             <div class="card">
                 <div class="card-action">
@@ -108,11 +113,11 @@ function defaultDataTable(): string
 function companyDataTable($model): string
 {
     $company_name = $model->company->name;
-    $company_type = CompanyTypeEnum::getTypeCompanyString($model->company->type);
-    $company_address = $model->company->address;
-    $company_phone = $model->company->phone;
+    $company_type = $model->company->type;
+    $company_country = $model->company->country;
+    $company_city = $model->company->city;
+    $company_postal_code = $model->company->postal_code;
     $company_email = $model->company->email;
-    $company_siret = $model->company->siret;
     $company_tva = $model->company->tva;
 
     return <<<HTML
@@ -127,20 +132,20 @@ function companyDataTable($model): string
                     <td>${company_type}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Addresse</td>
-                    <td>${company_address}</td>
+                    <td class='header'>Pays</td>
+                    <td>${company_country}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Téléphone</td>
-                    <td>${company_phone}</td>
+                    <td class='header'>Ville</td>
+                    <td>${company_city}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Code postal</td>
+                    <td>${company_postal_code}</td>
                 </tr>
                 <tr>
                     <td class='header'>Email</td>
                     <td>${company_email}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Siret</td>
-                    <td>${company_siret}</td>
                 </tr>
                 <tr>
                     <td class='header'>Tva</td>
@@ -151,12 +156,19 @@ function companyDataTable($model): string
    HTML;
 }
 
-function devisDataTable($model): string
+function projectDataTable($model): string
 {
     $devis_name = $model->internal_name;
     $devis_date = $model->creation_date;
-    $user_name = $model->project_manager->fullname;
+    $project_probability = $model->signing_probability;
+    $project_type = $model->type;
+
+    $project_manager_firstname = $model->project_manager->firstname;
+    $project_manager_surname = $model->project_manager->surname;
+    $project_manager_email = $model->project_manager->email;
     $user_cellule = strtolower($model->project_manager->cellule->name);
+
+
 
     return <<<HTML
         <table class="highlight">
@@ -166,15 +178,41 @@ function devisDataTable($model): string
                     <td>${devis_name}</td>
                 </tr>
                 <tr>
+                    <td class='header'>Probabilité de signature</td>
+                    <td>${project_probability} %</td>
+                </tr>
+                <tr>
+                    <td class='header'>Type</td>
+                    <td>${project_type}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Référence</td>
+                    <td>${devis_name}</td>
+                </tr>
+                <tr>
                     <td class='header'>Date</td>
                     <td>${devis_date}</td>
                 </tr>
+
+                <tr class='group'>
+                    <td class='header'>Chef de projet</td>
+                    <td></td>
+                </tr>
+
                 <tr>
-                    <td class='header'>Proposition de</td>
-                    <td>${user_name}</td>
+                    <td class='header'>Nom</td>
+                    <td>${project_manager_firstname}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Laboratoire</td>
+                    <td class='header'>Prénom</td>
+                    <td>${project_manager_surname}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Email</td>
+                    <td>${project_manager_email}</td>
+                </tr>
+                <tr>
+                    <td class='header'>De la cellule</td>
                     <td>${user_cellule}</td>
                 </tr>
             </tbody>
@@ -184,63 +222,137 @@ function devisDataTable($model): string
 
 function priceDataTable($model)
 {
-    $delivery_name = "livraison";
-    $delivery_quantity = 1;
-    $delivery_unit_price = $model->sellingprice;
-    $delivery_price = $delivery_unit_price  * $delivery_quantity;
+    $laboxy_name = $model->id_laboxy;
+    $prix_vente = $model->sellingprice;
+    $rhcost = $model->TotalcostRHWithRisk;
+    $coutAchatInvestReversement = $model->TotalAchatInvesteReversementPrice;
+    $laboxy_prixvente = Yii::$app->formatter->asCurrency($prix_vente);
+    $laboxy_prestation_duration = Yii::$app->formatter->asInteger($model->totalHourWithRisk);
+    $laboxy_RHcost = Yii::$app->formatter->asCurrency($rhcost);
+    $laboxy_coutAchatInvestReversement = Yii::$app->formatter->asCurrency($coutAchatInvestReversement);
+
+    $marge = $prix_vente - $rhcost - $coutAchatInvestReversement;
+    $tauxMarge = $marge / ($rhcost + $coutAchatInvestReversement);
+    $laboxy_Marge =  Yii::$app->formatter->asCurrency($marge);
+    $laboxy_TauxMarge =  Yii::$app->formatter->asPercent($tauxMarge, 2);
 
     return <<<HTML
         <table class="highlight">
             <tbody>
-                <tr>
-                    <td class='header'>Désignation</td>
-                    <td class='header'>P.U HT</td>
-                    <td class='header'>Quantité</td>
-                    <td class='header'>Prix total</td>
+                 <!-- Laboxy data -->
+                 <tr class='group'>
+                    <td class='header'>Information Laboxy</td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td>${delivery_name}</td>
-                    <td>${delivery_quantity}</td>
-                    <td>${delivery_unit_price}</td>
-                    <td>${delivery_price}</td>
+                    <td class='header'>Identitifant</td>
+                    <td>${laboxy_name}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Nombre d'heures prévus</td>
+                    <td>${laboxy_prestation_duration} heures</td>
+                </tr>
+                <tr>
+                    <td class='header'>Coût RH</td>
+                    <td>${laboxy_RHcost}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Coût total Achat,Frais généreaux, Investissement et RH </td>
+                    <td>${laboxy_coutAchatInvestReversement} </td>
+                </tr>
+                <tr>
+                    <td class='header'>Prix de vente </td>
+                    <td>${laboxy_prixvente}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Marge avec frais généreaux</td>
+                    <td>${laboxy_Marge}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Taux marge avec frais généreaux</td>
+                    <td>${laboxy_TauxMarge}</td>
                 </tr>
             </tbody>
         </table>
-   HTML;
+HTML;
 }
 
-function prestationDataTable($model): string
+function createClientTable(Project $model): string
 {
+    $company_name = $model->company->name;
+    $company_email = $model->company->email;
+    $company_type = $model->company->type;
+    $company_postal_code = $model->company->postal_code;
+    $company_city = $model->company->city;
+    $company_country = $model->company->country;
+    $company_tva = $model->company->tva;
 
-
-    //$delivery_duration_hour = $model->service_duration;
-    //$delivery_duration_day = $model->service_duration_day;
-    $delivery_validity_duration = '30j';
-    // $delivery_payment_conditions = $model->payment_conditions;
-    // $delivery_payment_details = $model->payment_details;
+    $contact_firstname = $model->contact->firstname;
+    $contact_surname = $model->contact->surname;
+    $contact_phone_number = $model->contact->phone_number;
+    $contact_email = $model->contact->email;
 
     return <<<HTML
         <table class="highlight">
             <tbody>
-                <tr>
-                    <td class='header'>Durée de la prestation (h)</td>
+                 <!-- Company data -->
+                <tr class='group'>
+                    <td class='header'>Client</td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td class='header'>Durée de la prestation (j)</td>
+                    <td class='header'>Nom du client / société</td>
+                    <td>${company_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Validité du devis</td>
-                    <td>${delivery_validity_duration} jour(s)</td>
+                    <td class='header'>Type d'entreprise</td>
+                    <td>${company_type}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Conditions de paiement</td>
+                    <td class='header'>Pays</td>
+                    <td>${company_country}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Echéancier</td>
+                    <td class='header'>Ville</td>
+                    <td>${company_city}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Code postal</td>
+                    <td>${company_postal_code}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Email</td>
+                    <td>${company_email}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Tva</td>
+                    <td>${company_tva}</td>
+                </tr>
+
+                <!-- Delivery data -->
+               <tr class='group'>
+                    <td class='header'>Contact client</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class='header'>Nom</td>
+                    <td>${contact_surname}</td>
+                </tr>
+                <tr>
+                    <td class='header'>Prénom</td>
+                    <td>${contact_firstname}</td>
+                </tr>
+                <tr>
+                    <td class='header'>N° téléphone</td>
+                    <td>${contact_phone_number}</td>
+                </tr>
+                <tr>
+                    <td class='header'>email</td>
+                    <td>${contact_email}</td>
                 </tr>
             </tbody>
         </table>
-    HTML;
+HTML;
 }
 
 function footerDataTable()

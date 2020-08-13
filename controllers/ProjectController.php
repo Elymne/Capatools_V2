@@ -918,6 +918,15 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+    /**
+     * Route : update-dependencies-consumables
+     * Permet de modifier les dépenses et les consommables d'un lot.
+     * 
+     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * 
+     * @return mixed|error
+     */
     public function actionUpdateDependenciesConsumables($project_id, $number)
     {
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
