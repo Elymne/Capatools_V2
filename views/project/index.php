@@ -285,12 +285,12 @@ function getPdfButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">picture_as_pdf</i>',
-                Url::to(['devis/pdf', 'id' => $model->id,]),
+                Url::to(['project/pdf', 'id' => $model->id,]),
                 [
                     'id' => 'grid-custom-button',
                     'target' => '_blank',
                     'data-pjax' => true,
-                    'action' => Url::to(['devis/pdf', 'id' => $model->id]),
+                    'action' => Url::to(['project/pdf', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-purple',
                     'title' => "Générer le devis sous forme pdf"
                 ]
