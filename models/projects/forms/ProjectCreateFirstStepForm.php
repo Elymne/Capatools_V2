@@ -2,7 +2,10 @@
 
 namespace app\models\projects\forms;
 
+use app\models\companies\Company;
+use app\models\companies\Contact;
 use app\models\projects\Project;
+use yii\helpers\ArrayHelper;
 
 /**
  * Classe relative au modèle métier des devis.
@@ -28,17 +31,20 @@ class ProjectCreateFirstStepForm extends Project
     public $management_rate;
 
     public $company_name;
-    public $contact_name;
+    public $contact_email;
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
         return [
+            [["company_name", "contact_email"], "safe"],
             ['combobox_type_checked', 'required', 'message' => 'Le projet doit avoir un type'],
             ['combobox_lot_checked', 'required', 'message' => 'Make a choice'],
             ['combobox_repayment_checked', 'required', 'message' =>  'Vous devez cocher au moins un des deux choix proposés'],
-            ['internal_name', 'required', 'message' => 'Vous devez préciser un nom pour le projet/brouillon']
+            ['internal_name', 'required', 'message' => 'Vous devez préciser un nom pour le projet/brouillon'],
+            ['company_name', 'noCompanyFound'],
+            ['contact_email', 'noContactFound']
         ];
     }
 
@@ -48,7 +54,7 @@ class ProjectCreateFirstStepForm extends Project
      */
     public function noCompanyFound($attribute, $params)
     {
-        $companiesNames = ArrayHelper::map(Contact::find()->all(), 'id', 'name');
+        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
 
         if (!in_array($this->$attribute, $companiesNames)) {
@@ -61,10 +67,10 @@ class ProjectCreateFirstStepForm extends Project
      */
     public function noContactFound($attribute, $params)
     {
-        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'surname');
-        $companiesNames = array_merge($companiesNames);
+        $contact_email = ArrayHelper::map(Company::find()->all(), 'id', 'email');
+        $contact_email = array_merge($contact_email);
 
-        if (!in_array($this->$attribute, $companiesNames)) {
+        if (!in_array($this->$attribute, $contact_email)) {
             $this->addError($attribute, 'Le client n\'existe pas.');
         }
     }

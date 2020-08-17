@@ -42,6 +42,18 @@ class Contact extends ActiveRecord
         return static::find(['id' => $id])->one();
     }
 
+
+    /**
+     * Récupère un contact grace à son email.
+     * @param string email
+     * 
+     * @return Contact
+     */
+    public static function getOneByEmail(string $email): Contact
+    {
+        return static::find(['email' => $email])->one();
+    }
+
     /**
      * Créer un attributs contenant la liste des projets des contactes retournés.
      * @return Array<Project>

@@ -8,8 +8,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
-use kartik\select2\Select2;
-
 $this->title = 'Création d\'un projet - paramètres généraux';
 $this->params['breadcrumbs'][] = ['label' => 'Project', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
@@ -143,9 +141,9 @@ ProjectCreateFirstStepAsset::register($this);
 
                                 <div class="input-field col s6">
                                     <?= $form->field($model, 'company_name')
-                                        ->widget(\yii\jui\AutoComplete::classname(), [
+                                        ->widget(\yii\jui\AutoComplete::class, [
                                             'clientOptions' => [
-                                                'source' => ['Lar Von Trier'],
+                                                'source' => $companiesNames,
                                             ],
                                         ])->label(
                                             "Companie"
@@ -166,10 +164,10 @@ ProjectCreateFirstStepAsset::register($this);
                             <div class="row">
 
                                 <div class="input-field col s6">
-                                    <?= $form->field($model, 'company_name')
-                                        ->widget(\yii\jui\AutoComplete::classname(), [
+                                    <?= $form->field($model, 'contact_email')
+                                        ->widget(\yii\jui\AutoComplete::class, [
                                             'clientOptions' => [
-                                                'source' => ['Lar Von Trier'],
+                                                'source' => $contactsEmail,
                                             ],
                                         ])->label(
                                             "Client"

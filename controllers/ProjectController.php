@@ -3,6 +3,9 @@
 namespace app\controllers;
 
 #region imports
+
+use app\models\companies\Company;
+use app\models\companies\Contact;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -449,11 +452,19 @@ class ProjectController extends Controller implements ServiceInterface
         $model = new ProjectCreateFirstStepForm();
         $lots =  [new ProjectCreateLotForm()];
 
+        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
+        $companiesNames = array_merge($companiesNames);
+        unset($companiesNames[0]);
+
+        $contactsEmail = ArrayHelper::map(Contact::find()->all(), 'id', 'email');
+        $contactsEmail = array_merge($contactsEmail);
+        unset($contactsEmail[0]);
+
         // Envoi par méthode POST.
         if ($model->load(Yii::$app->request->post())) {
 
             // Préparation de tous les modèles de lots reçu depuis la vue.
-            $lots = Model::createMultiple(ProjectCreateLotForm::className(), $lots);
+            $lots = Model::createMultiple(ProjectCreateLotForm::class, $lots);
             Model::loadMultiple($lots, Yii::$app->request->post());
 
             // Vérification de la validité de chaque modèle de lot.
@@ -478,9 +489,9 @@ class ProjectController extends Controller implements ServiceInterface
                 // On récupère l'id de la cellule de l'utilisateur connecté.
                 $model->cellule_id = Yii::$app->user->identity->cellule_id;
                 // On inclu la clé étragère qui référence une donnée indéfini dans la table company.
-                $model->company_id = -1;
+                $model->company_id = Company::getOneByName($model->company_name)->id;
                 // On inclu la clé étragère qui référence une donnée indéfini dans la table contact.
-                $model->contact_id = -1;
+                $model->contact_id = Contact::getOneByEmail($model->contact_email)->id;
                 // On inclu la clé étragère qui référence une donnée indéfini dans la table capa_user.
                 $model->capa_user_id = -1;
                 $model->type = Project::TYPES[$model->combobox_type_checked];
@@ -544,13 +555,15 @@ class ProjectController extends Controller implements ServiceInterface
             'createFirstStep',
             [
                 'model' => $model,
-                'lots' => $lots
+                'lots' => $lots,
+                'companiesNames' => \array_values($companiesNames),
+                'contactsEmail' => \array_values($contactsEmail)
             ]
         );
+        //TODO Je sais pas à quoi ces 4 lignes servent.
         $project = ProjectSimulate::getOneById(1);
         $lotavp = $project->getLotaventprojet();
         $lots = $project->lots;
-
         $millestones = [new ProjectCreateMilleStoneForm];
     }
 
