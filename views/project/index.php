@@ -177,6 +177,7 @@ function getCollumnsArray()
     }
     array_push($result, getCompanyArray());
     array_push($result, getStatusArray());
+    array_push($result, getProbabilityArray());
 
     // Buttons displaying.
     array_push($result, getUpdateButtonArray());
@@ -253,6 +254,20 @@ function getStatusArray()
         'label' => 'Statut',
         'contentOptions' => ['class' => 'status-row'],
         'headerOptions' => ['class' => 'status-row'],
+    ];
+}
+
+function getProbabilityArray()
+{
+    return [
+        'attribute' => 'signing_probability',
+        'format' => 'text',
+        'label' => 'Proba. signature',
+        'contentOptions' => ['class' => 'signing_probability-row'],
+        'headerOptions' => ['class' => 'signing_probability-row'],
+        'value' => function ($model) {
+            return $model->signing_probability . ' %';
+        }
     ];
 }
 
