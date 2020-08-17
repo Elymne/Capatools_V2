@@ -34,7 +34,7 @@ class AppAsset extends AssetBundle
         'https://fonts.googleapis.com/icon?family=Material+Icons',
 
         // Materialize.
-        'css/materialize.min.css',
+        //'css/materialize.min.css',
 
         // Dark forest theme.
         'css/dark-forest/vendors.min.css',
