@@ -380,11 +380,8 @@ class ProjectController extends Controller implements ServiceInterface
         $model = $this->findModel($id);
 
         $css = [
-            //   '' . Yii::getAlias('@web') . 'assets/vendors/vendors.min.css',
-            '' . Yii::getAlias('@web') . 'css/dark-forest/materialize.min.css',
-            '' . Yii::getAlias('@web') . 'css/dark-forest/style.min.css',
-            //  '' . Yii::getAlias('@web') . 'css/pages/dashboard.min.css',
-            '' . Yii::getAlias('@web') . 'css/custom.css'
+            '' . Yii::getAlias('@web') . 'css/materialize_pdf.min.css',
+            '' . Yii::getAlias('@web') . 'css/projects/pdf.css'
         ];
 
         $filename = $model->internal_name . '_pdf_' . date("r");
@@ -395,7 +392,7 @@ class ProjectController extends Controller implements ServiceInterface
 
         $pdf = new Pdf([
             'mode' => Pdf::MODE_CORE,
-            'format' => Pdf::FORMAT_LEDGER,
+            'format' => Pdf::FORMAT_TABLOID,
             'orientation' => Pdf::ORIENT_PORTRAIT,
             'destination' => Pdf::DEST_BROWSER,
             'content' => $content,
@@ -1294,5 +1291,13 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public static function getIndicator($user)
     {
+    }
+
+    public function actionFilterEmailNames()
+    {
+        $csv = str_getcsv(file_get_contents('../users_testing.csv'));
+        echo '<pre>';
+        print_r($csv);
+        echo '</pre>';
     }
 }
