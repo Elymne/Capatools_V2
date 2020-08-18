@@ -67,11 +67,11 @@ class ProjectCreateFirstStepForm extends Project
      */
     public function noContactFound($attribute, $params)
     {
-        $contact_email = ArrayHelper::map(Company::find()->all(), 'id', 'email');
+        $contact_email = ArrayHelper::map(Contact::find()->all(), 'id', 'email');
         $contact_email = array_merge($contact_email);
 
         if (!in_array($this->$attribute, $contact_email)) {
-            $this->addError($attribute, 'Le client n\'existe pas.');
+            $this->addError($attribute, 'Le contact n\'existe pas.');
         }
     }
 }
