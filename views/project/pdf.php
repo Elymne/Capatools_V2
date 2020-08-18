@@ -58,9 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<div class="lol"></div>
-
-
 <?php
 
 function defaultDataTable(): string
