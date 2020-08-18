@@ -77,7 +77,6 @@ class m200099_000560_project_table extends Migration
             'contact_id',
             '{{%contact}}',
             'id',
-
         );
 
         $this->insert('{{%project}}', [

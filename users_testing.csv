@@ -1,0 +1,82 @@
+id,email,username,password,cellule,cellule_name,tokken,flag,active
+1,admin@admin.com,NULL,bea6deac2e539b857d80a891fba98174,NULL,NULL,NULL,0,1
+2,email123@email.com,NULL,bea6deac2e539b857d80a891fba98174,NULL,NULL,NULL,0,0
+3,admin@ireal.com,ireal,bea6deac2e539b857d80a891fba98174,AIERA,IREALITE,NULL,0,1
+4,admin,cmer,bea6deac2e539b857d80a891fba98174,ACMER,MER,NULL,0,1
+6,fahmi.alila@capacites.fr,fahmi.alila@capacites.fr,bf69a0f82c735b62e4f5a8377b00280e,ACAPT,CAPTEURS ET COMPOSITES,NULL,0,1
+7,hamed.ameryoun@capacites.fr,hamed.ameryoun@capacites.fr,bea6deac2e539b857d80a891fba98174,AIXEA,IXEAD,NULL,0,1
+8,amelie.augereau@capacites.fr,amelie.augereau@capacites.fr,bea6deac2e539b857d80a891fba98174,AIERA,IREALITE,NULL,0,1
+9,laurent.baranger@capacites.fr,laurent.baranger@capacites.fr,bea6deac2e539b857d80a891fba98174,ACMER,MER,NULL,0,1
+10,nathalie.barreau@capacites.fr,nathalie.barreau@capacites.fr,bea6deac2e539b857d80a891fba98174,AERIM,ERIMAT,NULL,0,1
+11,yoann.baveye@capacites.fr,yoann.baveye@capacites.fr,bb225f24bab46e08dc87f38fbbc129c0,AIXPE,IXPEL,NULL,0,1
+12,jean-francois.bigot@capacites.fr,jean-francois.bigot@capacites.fr,bea6deac2e539b857d80a891fba98174,ACMER,MER,NULL,0,1
+13,samuel.bonnet@capacites.fr,samuel.bonnet@capacites.fr,2e297a2e6565a9881f8244487973d40b,AROBO,ROBOTIQUE ET PROCEDES,NULL,0,1
+14,elodie.bozec@capacites.fr,elodie.bozec@capacites.fr,790a6c53b205476c2822633f92cc78a9,ACSUP,SUPPORT,NULL,0,1
+15,isabelle.calard@capacites.fr,isabelle.calard@capacites.fr,59eb7d2b839a897452bd155302e60253,ACBSO,CBS,NULL,0,1
+16,dorian.caudal@capacites.fr,dorian.caudal@capacites.fr,bea6deac2e539b857d80a891fba98174,ATHCH,THERACH,NULL,0,1
+17,sebastien.ceylan@capacites.fr,sebastien.ceylan@capacites.fr,bea6deac2e539b857d80a891fba98174,AIREA,IREALITE,NULL,0,1
+18,pauline.chiron@capacites.fr,pauline.chiron@capacites.fr,3f996d7d9add2b14b5f5674a6b07f06e,ACSUP,SUPPORT,NULL,0,1
+19,sebastien.chollet@capacites.fr,sebastien.chollet@capacites.fr,bea6deac2e539b857d80a891fba98174,ACPCE,CPC,NULL,0,1
+20,olivier.coarer@capacites.fr,olivier.coarer@capacites.fr,5aa4f1f9c6bf1d557936f1928669d3b6,ACSUP,SUPPORT,NULL,0,1
+21,stephane.coic@capacites.fr,stephane.coic@capacites.fr,bea6deac2e539b857d80a891fba98174,AERIM,ERIMAT,NULL,0,1
+22,marine.cornec@capacites.fr,marine.cornec@capacites.fr,1d9275bad9cf911546026ce542ca6248,AGENO,BIRD,NULL,0,1
+23,daniel.couedel@capacites.fr,daniel.couedel@capacites.fr,bea6deac2e539b857d80a891fba98174,AINSI,INSILICO,NULL,0,1
+24,mickael.cregut@capacites.fr,mickael.cregut@capacites.fr,e25daedb56ffa52ba2dfdfbfecd4b651,ABIOS,BIOSYS,NULL,0,1
+25,nicolas.delanou@capacites.fr,nicolas.delanou@capacites.fr,bea6deac2e539b857d80a891fba98174,AIREA,CIREALITE,NULL,0,1
+26,mylene.deleplanque@capacites.fr,mylene.deleplanque@capacites.fr,bea6deac2e539b857d80a891fba98174,AERIM,ERIMAT,NULL,0,1
+27,guillaume.gallot@capacites.fr,guillaume.gallot@capacites.fr,1acd167d5cd8e00e4a85418fc1fa371a,AROBO,ROBOTIQUE ET PROCEDES,NULL,0,1
+28,samy.gascoin-fontaine@capacites.fr,samy.gascoin-fontaine@capacites.fr,bea6deac2e539b857d80a891fba98174,AKNOW,KNOWEDGE,NULL,0,1
+29,elsa.gerard@univ-nantes.r,elsa.gerard@univ-nantes.r,bea6deac2e539b857d80a891fba98174,AGEPR,GP,NULL,0,1
+30,philippe.grandet@capacites.fr,philippe.grandet@capacites.fr,bea6deac2e539b857d80a891fba98174,ALTEN,LTN,NULL,0,1
+31,laurence.guiheneuf@capacites.fr,laurence.guiheneuf@capacites.fr,73f3befa5e1c2a77efd242aba6c3a767,AVALI,VALINBTP,NULL,0,1
+32,sandrine.hebras-leclerc@capacites.fr,sandrine.hebras-leclerc@capacites.fr,92ba92e00362126743c1deb77accb2b5,ACMER,MER,NULL,0,1
+33,laura.herve@capacites.fr,laura.herve@capacites.fr,bea6deac2e539b857d80a891fba98174,AGEPR,GP,NULL,0,1
+34,aude.lafoux@capacites.fr,aude.lafoux@capacites.fr,1d343f9843fe3c3f210f78d9e2292e7f,ATHCH,THERACH,NULL,0,1
+35,julien.launay@capacites.fr,julien.launay@capacites.fr,b50b6817f04efc5c0f0e7dc06da37860,AINSI,INSILICO,NULL,0,1
+36,veronique.lebihan@capacites.fr,veronique.lebihan@capacites.fr,bea6deac2e539b857d80a891fba98174,ACMER,MER,NULL,0,1
+37,violaine.le-louet@capacites.fr,violaine.le-louet@capacites.fr,bea6deac2e539b857d80a891fba98174,ALTEN,LTN,NULL,0,1
+38,claire.lemoine@capacites.fr,claire.lemoine@capacites.fr,bea6deac2e539b857d80a891fba98174,ACSUP,SUPPORT,NULL,0,1
+39,joachim.marais@capacites.fr,joachim.marais@capacites.fr,07d56e9e05cbf4e70265ae66ef9943f7,AROBO,ROBOTIQUE ET PROCEDES,NULL,0,1
+40,florence.marchandon@capacites.fr,florence.marchandon@capacites.fr,1adbdd3de4bc51bad0b4601a50854b70,ACSUP,SUPPORT,NULL,0,1
+41,cedric.martin@capacites.fr,cedric.martin@capacites.fr,bea6deac2e539b857d80a891fba98174,AERIM,ERIMAT,NULL,0,1
+42,estelle.martineau@capacites.fr,estelle.martineau@capacites.fr,38acf429671557468720026041f9e1fc,ASPEC,SPECTROMAITRISE,NULL,0,1
+43,virginie.mazan@capacites.fr,virginie.mazan@capacites.fr,617daa7e087e32c14ba4d204f8884bcd,ACSUP,SUPPORT,NULL,0,1
+44,charlotte.moreau@capacites.fr,charlotte.moreau@capacites.fr,48222a1c73c2d94a2d32b38b6b34ab1e,ACSUP,SUPPORT,NULL,0,1
+45,alex.morel@capacites.fr,alex.morel@capacites.fr,bea6deac2e539b857d80a891fba98174,AIREA,IREALITE,NULL,0,1
+46,baptiste.morineau@capacites.fr,baptiste.morineau@capacites.fr,bea6deac2e539b857d80a891fba98174,ACMER,MER,NULL,0,1
+47,pierrick.ollivier@capacites.fr,pierrick.ollivier@capacites.fr,bea6deac2e539b857d80a891fba98174,ACMER,MER,NULL,0,1
+48,brendan.pilard@capacites.fr,brendan.pilard@capacites.fr,bea6deac2e539b857d80a891fba98174,AROBO,ROBOTIQUE ET PROCEDES,NULL,0,1
+49,natalia.pingard@capacites.fr,natalia.pingard@capacites.fr,bea6deac2e539b857d80a891fba98174,ACSUP,SUPPORT,NULL,0,1
+50,lionel.regis-constant@capacites.fr,lionel.regis-constant@capacites.fr,8a8ab77c2483bc43c28bc6d71fbeaeaf,AIREA,IREALITE,NULL,0,1
+51,veronique.rothenbuhler@capacites.fr,veronique.rothenbuhler@capacites.fr,7977b3a00b3d31321117eaba1d0980d5,APATR,PATRIMOINE,NULL,0,1
+52,amelie.saumonneau@capacites.fr,amelie.saumonneau@capacites.fr,71d39670b28260d9d68efa436989272b,ADZYM,DZYME,NULL,0,1
+53,arnaud.souffez@capacites.fr,arnaud.souffez@capacites.fr,bea6deac2e539b857d80a891fba98174,ACMER,MER,NULL,0,1
+54,jordan.tallec@capacites.fr,jordan.tallec@capacites.fr,81f31b3cd914a0fc575dfc6601c54e85,AGEPR,GP,NULL,0,1
+55,magda.torres@capacites.fr,magda.torres@capacites.fr,91d4fc83d2c3a804b21d8feb6b7c924d,AIXEA,IXEAD,NULL,0,1
+56,raphaelle.touchard@capacites.fr,raphaelle.touchard@capacites.fr,bea6deac2e539b857d80a891fba98174,AGEPR,GP,NULL,0,1
+57,lucie.vanhaver@capacites.fr,lucie.vanhaver@capacites.fr,b93221df7f6a60530faa097da4ae1b9d,AGEPR,GP,NULL,0,1
+58,julien.viaud@capacites.fr,julien.viaud@capacites.fr,20cfa16c3b86e8484b1dc3ea16e662e0,AROBO,ROBOTIQUE ET PROCEDES,NULL,0,1
+59,maeva.vigneau@univ-nantes.fr,maeva.vigneau@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,AGEPR,GP,NULL,0,1
+60,maxime.villiere@capacites.fr,maxime.villiere@capacites.fr,bea6deac2e539b857d80a891fba98174,ALTEN,LTN,NULL,0,1
+61,noel.barbu@capacites.fr,noel.barbu@capacites.fr,bea6deac2e539b857d80a891fba98174,ACSUP,SUPPORT,NULL,0,1
+62,thierry.brousse@capacites.fr,thierry.brousse@capacites.fr,bea6deac2e539b857d80a891fba98174,AERIM,ERIMAT,NULL,0,1
+63,olivier.joubert@cnrs-imn.fr,olivier.joubert@cnrs-imn.fr,bea6deac2e539b857d80a891fba98174,AERIM,ERIMAT,NULL,0,1
+64,isabelle.judic@univ-nantes.fr,isabelle.judic@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,AIXEA,IXEAD,NULL,0,1
+65,cedric.lemay@univ-nantes.fr,cedric.lemay@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,ATHCL,THERACLM,NULL,0,1
+66,franck.schoefs@univ-nantes.fr,franck.schoefs@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,AIXEA,IXEAD,NULL,0,1
+67,vincent.sobotka@univ-nantes.fr,vincent.sobotka@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,ALTEN,LTN,NULL,0,1
+68,francky.trichet@univ-nantes.fr,francky.trichet@univ-nantes.fr,6da33a51a00b39a000d6d5c552b3ff46,AIREA,IREALITE,NULL,0,1
+69,pascal.casari@univ-nantes.fr,pascal.casari@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,ACAPT,CAPTEURS ET COMPOSITES,NULL,0,1
+70,patrick.giraudeau@univ-nantes.fr,patrick.giraudeau@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,ASPEC,SPECTROMAITRISE,NULL,0,1
+71,gerald.remaud@univ-nantes.fr,gerald.remaud@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,ASPEC,SPECTROMAITRISE,NULL,0,1
+72,maud.chetiveaux@univ-nantes.fr,maud.chetiveaux@univ-nantes.fr,b9233e4b7201a68d02aec127be8ad02c,ATHPC,THERAPC,NULL,0,1
+73,patrice.guillotreau@univ-nantes.fr,patrice.guillotreau@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,ACMER,MER,NULL,0,1
+74,bruno.durand@univ-nantes.fr,bruno.durand@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,AEREL,ERELUEC,NULL,0,1
+75,sandrine.rousseaux@univ-nantes.fr,sandrine.rousseaux@univ-nantes.fr,e66184e227002f870ff7688298cb656a,ACECO,ECONOMIE CIRCULAIRE,NULL,0,1
+76,lionel@irealite.com,admin,bea6deac2e539b857d80a891fba98174,NULL,NULL,NULL,0,1
+78,fabrice.brau@univ-nantes.fr,fabrice.brau@univ-nantes.fr,d553bd7dc84ee55afb36520e99c22404,AEASI,EASI,NULL,0,1
+79,philippe.leray@capacites.fr,philippe.leray@capacites.fr,bea6deac2e539b857d80a891fba98174,AKNOW,KNOWEDGE,NULL,0,1
+80,david.derouet@capacites.fr,david.derouet@capacites.fr,76f8a0247c58548d51299a3442d5cbe1,ACSUP,SUPPORT,NULL,0,1
+96,claire.gauzente@univ-nantes.fr,claire.gauzente@univ-nantes.fr,bea6deac2e539b857d80a891fba98174,ACECO,ECONOMIE CIRCULAIRE,NULL,0,1
+97,sacha.djurdjevic@gmail.com,sdjurdjevic_test,e10adc3949ba59abbe56e057f20f883e,AIERA,IREALITE,NULL,0,1
+98,test@gmail.com,test,098f6bcd4621d373cade4e832627b4f6,AIERA,IREALITE,NULL,0,1

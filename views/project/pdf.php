@@ -1,10 +1,6 @@
 <?php
 
-use app\assets\projects\PdfAsset;
 use app\models\projects\Project;
-use app\widgets\TopTitle;
-
-PdfAsset::register($this);
 
 $id = $model->id;
 if ($model->id_capa) $this->title = $model->id_capa;
@@ -14,99 +10,75 @@ $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<?= TopTitle::widget(['title' => "Devis : " . $this->title]) ?>
+<div class="card">
+    <div class="card-content">
+        <p class="title"><?= 'Devis : ' . $this->title ?></p>
+    </div>
+</div>
 
-<div class="container">
-    <div class="devis-view">
 
+<div class="devis-view">
+    <div class="row">
         <!-- Details informations -->
-        <div class="row">
 
-            <div class="col s12">
-                <div class="row">
+        <div class="col s12">
+            <div class="row">
 
-                    <div class="col s4">
-                        <div class="card">
-                            <div class="card-action">
-                                <?php echo defaultDataTable() ?>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col s5">
+                    <?php echo defaultDataTable() ?>
 
-                    <div class="col s7">
-                        <div class="card">
-                            <div class="card-content">
-                                <span style="color:white">Société</span>
-                            </div>
-                            <div class="card-action">
-                                <?php echo companyDataTable($model) ?>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <span style="color:white">Projet</span>
-                </div>
-                <div class="card-action">
                     <?php echo projectDataTable($model) ?>
                 </div>
-            </div>
 
-            <div class="spaceFirstPage">
-                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <span style="color:white">Informations laboxy</span>
-                </div>
-                <div class="card-action">
-                    <?php echo priceDataTable($model) ?>
-                </div>
-            </div>
-
-
-            <div class="card">
-
-                <div class="card-content">
-                    <span style="color:white">Informations client</span>
+                <div class="col s6">
+                    <?php echo companyDataTable($model) ?>
                 </div>
 
-                <div class="card-action">
-                    <?php echo createClientTable($model); ?>
-                </div>
             </div>
-
-            <div>
-                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-            </div>
-
-            <div class="card">
-                <div class="card-action">
-                    <?php echo footerDataTable($model); ?>
-                </div>
-            </div>
-
         </div>
+
+        <div class="col s12">
+            <?php echo milestonesDataTables($model) ?>
+        </div>
+
+        <div class="col s6">
+            <?php echo detailsDataTable($model); ?>
+        </div>
+
+        <div class="col s12">
+            <?php echo warningDataTable() ?>
+        </div>
+
+        <div class="col s12">
+            <?php echo signatureDataTable() ?>
+        </div>
+
+        <pagebreak />
 
     </div>
 </div>
+
+<div class="lol"></div>
+
 
 <?php
 
 function defaultDataTable(): string
 {
     return <<<HTML
-        <b>CAPACITES SAS</b>
-        <p>26, boulevard Vincent Gâche</p>
-        <p>44200 Nantes - FRANCE</p>
-        <p><b>Tél :</b> 02 72 64 88 40</p>
-        <p><b>Fax :</b> 02 72 64 88 98</p>
-        <p><b>Email :</b> commercial@capacites.fr</p>
+        <table>
+            <tr>
+                <td class="textcenter">
+                    <b class="bolded">CAPACITES SAS</b>
+                    <p>26, boulevard Vincent Gâche</p>
+                    <p>44200 Nantes - FRANCE</p>
+                    <p><b class="bolded">Tél :</b> 02 72 64 88 40</p>
+                    <p><b class="bolded">Fax :</b> 02 72 64 88 98</p>
+                    <p><b class="bolded">Email :</b> commercial@capacites.fr</p>
+                </td>
+            </tr>
+        </table>
+        <br />
     HTML;
 }
 
@@ -114,42 +86,47 @@ function companyDataTable($model): string
 {
     $company_name = $model->company->name;
     $company_type = $model->company->type;
-    $company_country = $model->company->country;
-    $company_city = $model->company->city;
-    $company_postal_code = $model->company->postal_code;
+    $company_address = $model->company->address;
+    $company_phone = $model->company->phone;
     $company_email = $model->company->email;
     $company_tva = $model->company->tva;
+    $company_siret = $model->company->siret;
 
     return <<<HTML
-        <table class="highlight">
+        <table>
+            <tr>
+                <th class="title-stylish">Société</th>
+            </tr>
+        </table>
+        <table>
             <tbody>
                 <tr>
-                    <td class='header'>Nom du client / société</td>
+                    <th>Dénomination</th>
                     <td>${company_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Type d'entreprise</td>
+                    <th>A l'attention de</th>
                     <td>${company_type}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Pays</td>
-                    <td>${company_country}</td>
+                    <th>Addresse</th>
+                    <td>${company_address}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Ville</td>
-                    <td>${company_city}</td>
+                    <th>Téléphone</th>
+                    <td>${company_phone}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Code postal</td>
-                    <td>${company_postal_code}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Email</td>
+                    <th>E-mail</th>
                     <td>${company_email}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Tva</td>
+                    <th>Tva</th>
                     <td>${company_tva}</td>
+                </tr>
+                <tr>
+                    <th>Siret</th>
+                    <td>${company_siret}</td>
                 </tr>
             </tbody>
         </table>
@@ -160,121 +137,124 @@ function projectDataTable($model): string
 {
     $devis_name = $model->internal_name;
     $devis_date = $model->creation_date;
-    $project_probability = $model->signing_probability;
-    $project_type = $model->type;
-
-    $project_manager_firstname = $model->project_manager->firstname;
-    $project_manager_surname = $model->project_manager->surname;
-    $project_manager_email = $model->project_manager->email;
     $user_cellule = strtolower($model->project_manager->cellule->name);
 
-
-
     return <<<HTML
-        <table class="highlight">
-            <tbody>
+        <table>
+            <tr>
+                <th class="title-stylish">Devis</th>
+            </tr>
+        </table>
+        <table>
                 <tr>
-                    <td class='header'>Référence</td>
+                    <tH>Référence :</th>
                     <td>${devis_name}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Probabilité de signature</td>
-                    <td>${project_probability} %</td>
-                </tr>
-                <tr>
-                    <td class='header'>Type</td>
-                    <td>${project_type}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Référence</td>
-                    <td>${devis_name}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Date</td>
+                    <th>Date :</th>
                     <td>${devis_date}</td>
                 </tr>
-
-                <tr class='group'>
-                    <td class='header'>Chef de projet</td>
-                    <td></td>
-                </tr>
-
                 <tr>
-                    <td class='header'>Nom</td>
-                    <td>${project_manager_firstname}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Prénom</td>
-                    <td>${project_manager_surname}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Email</td>
-                    <td>${project_manager_email}</td>
-                </tr>
-                <tr>
-                    <td class='header'>De la cellule</td>
+                    <th>Proposition <br />de <br />laboratoire :</th>
                     <td>${user_cellule}</td>
                 </tr>
-            </tbody>
         </table>
    HTML;
 }
 
-function priceDataTable($model)
+function milestonesDataTables($model): string
 {
-    $laboxy_name = $model->id_laboxy;
-    $prix_vente = $model->sellingprice;
-    $rhcost = $model->TotalcostRHWithRisk;
-    $coutAchatInvestReversement = $model->TotalAchatInvesteReversementPrice;
-    $laboxy_prixvente = Yii::$app->formatter->asCurrency($prix_vente);
-    $laboxy_prestation_duration = Yii::$app->formatter->asInteger($model->totalHourWithRisk);
-    $laboxy_RHcost = Yii::$app->formatter->asCurrency($rhcost);
-    $laboxy_coutAchatInvestReversement = Yii::$app->formatter->asCurrency($coutAchatInvestReversement);
 
-    $marge = $prix_vente - $rhcost - $coutAchatInvestReversement;
-    $tauxMarge = $marge / ($rhcost + $coutAchatInvestReversement);
-    $laboxy_Marge =  Yii::$app->formatter->asCurrency($marge);
-    $laboxy_TauxMarge =  Yii::$app->formatter->asPercent($tauxMarge, 2);
+    $max_price = 0;
+
+    $html_header = <<<HTML
+        <div class="row">
+            <div class="col s12">
+                <table>
+                    <tr>
+                        <th>Désignation</th>
+                        <th>Pourcentage</th>
+                        <th>Prix</th>
+                    </tr>
+    HTML;
+
+    $html_body = "";
+
+    foreach ($model->millestones as $milestone) {
+        $milestone_comment = $milestone->comment;
+        $milestone_percent = $milestone->pourcentage;
+        $milestone_price = $milestone->price;
+
+        $max_price += $milestone_price;
+
+        $html_body = $html_body . <<<HTML
+            <tr>
+                <td>${milestone_comment}</td>
+                <td>${milestone_percent}</td>
+                <td>${milestone_price}</td>
+            </tr>
+        HTML;
+    }
+
+    $html_footer = <<<HTML
+            </table>
+        </div>
+    HTML;
+
+    $tva_price = $max_price * 0.2;
+    $price_ttc = $max_price * 1.2;
+
+    $total_price_table = <<<HTML
+            <div class="col s3 offset-s9">
+                <table>
+                    <tr>
+                        <td class="price-stylish">TOTAL HT</td>
+                        <td class="price-stylish">${max_price} €</td>
+                    </tr>
+                    <tr>
+                        <td class="price-stylish">TVA 20%</td>
+                        <td class="price-stylish">${tva_price} €</td>
+                    </tr>
+                    <tr>
+                        <td class="price-stylish">TOTAL TTC</td>
+                        <td class="price-stylish">${price_ttc} €</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    HTML;
+
+
+    return $html_header . $html_body . $html_footer . $total_price_table;
+}
+
+function detailsDataTable($model): string
+{
+    $laboxy_prestation_duration = Yii::$app->formatter->asInteger($model->totalHourWithRisk);
 
     return <<<HTML
-        <table class="highlight">
-            <tbody>
-                 <!-- Laboxy data -->
-                 <tr class='group'>
-                    <td class='header'>Information Laboxy</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class='header'>Identitifant</td>
-                    <td>${laboxy_name}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Nombre d'heures prévus</td>
-                    <td>${laboxy_prestation_duration} heures</td>
-                </tr>
-                <tr>
-                    <td class='header'>Coût RH</td>
-                    <td>${laboxy_RHcost}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Coût total Achat,Frais généreaux, Investissement et RH </td>
-                    <td>${laboxy_coutAchatInvestReversement} </td>
-                </tr>
-                <tr>
-                    <td class='header'>Prix de vente </td>
-                    <td>${laboxy_prixvente}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Marge avec frais généreaux</td>
-                    <td>${laboxy_Marge}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Taux marge avec frais généreaux</td>
-                    <td>${laboxy_TauxMarge}</td>
-                </tr>
-            </tbody>
+        <table>
+            <tr>
+                <td><p><mark class="stylish">Durée de la prestation : </mark>${laboxy_prestation_duration}</p></td>
+            </tr>
+            <tr>
+                <td><p><mark class="stylish">Validité du devis : </mark>3 mois</p></td>
+            </tr>
+            <tr>
+                <td><p><mark class="stylish">Condition de paiement : </mark>30 jours nets, date de facture</p></td>
+            </tr>
+            <tr>
+                <td><p><mark class="stylish">Détails du paiement (échéancier) : </mark>Devis < 2000 €</p></td>
+            </tr>
+            <tr>
+                <td><p>-30% à la commande</p></td>
+            </tr>
+            <tr>
+                <td><p>-70% à la livraison des résultats</p></td>
+            </tr>
         </table>
-HTML;
+        <br />
+    HTML;
 }
 
 function createClientTable(Project $model): string
@@ -352,22 +332,43 @@ function createClientTable(Project $model): string
                 </tr>
             </tbody>
         </table>
-HTML;
+    HTML;
 }
 
-function footerDataTable()
+function warningDataTable(): string
 {
     return <<<HTML
-        <p>En cas d'acceptation, merci de nous retourner le présent devis daté et signé avec la mention : </p>
-        <p>bon pour accord" et le cachet de votre entreprise.</p>
-        <p>La signature du présent contrat vaut acceptation des conditions générales de ventes jointes au devis</p>
-       
-        <table class="highlight">
-            <tbody>
-                <tr><td>Nom - Prénom : </td><tr>
-                <tr><td>Fonction : </td><tr>
-                <tr><td>Date : </td><tr>
-            </tbody>
+        <table>
+            <tr>
+                <td class="textcenter">
+                    <p class="warning">En cas d'acceptation, merci de nous retourner le présent devis daté et signé avec la mention :</p>
+                    <p class="warning">"bon pour accord" et le cachet de votre entreprise.</p>
+                    <p class="warning">La signature du présent contrat vaut acceptation des conditions générales de ventes jointes au devis</p>
+                </td>
+            </tr>
+        </table>
+    HTML;
+}
+
+function signatureDataTable()
+{
+    return <<<HTML
+        <table>
+            <tr>
+                <td class="invisible">
+                    Nom-Prenom :
+                </td>
+            </tr>
+            <tr>
+                <td class="invisible">
+                    Fonction :
+                </td>
+            </tr>
+            <tr>
+                <td class="invisible">
+                    Date :
+                </td>
+            </tr>
         </table>
     HTML;
 }
