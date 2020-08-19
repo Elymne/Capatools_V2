@@ -1,3 +1,8 @@
+strong,
+b {
+    font-weight: bold;
+}
+
 p.title {
     color: #509587;
     text-align: center;
@@ -12,6 +17,20 @@ b.bolded {
 
 p.stylish {
     color: #509587;
+}
+
+p.minus {
+    font-size: 0.9em;
+}
+
+b.stylish-minus {
+    font-size: 0.9em;
+    color: #509587;
+}
+
+b.bluest-minus {
+    font-size: 0.9em;
+    color: navy;
 }
 
 p.warning {
@@ -68,4 +87,13 @@ th.title-stylish {
     text-align: center;
     vertical-align: middle;
     font-size: x-large;
+}
+
+.no-padding {
+    padding: 0;
+    margin: 0;
+}
+
+#filoutage-table {
+    padding-right: 100px;
 }
