@@ -20,18 +20,16 @@ p.stylish {
 }
 
 p.minus {
-    font-size: x-small;
+    font-size: 0.9em;
 }
 
 b.stylish-minus {
-    font-weight: bolder;
-    font-size: x-small;
+    font-size: 0.9em;
     color: #509587;
 }
 
 b.bluest-minus {
-    font-weight: bolder;
-    font-size: x-small;
+    font-size: 0.9em;
     color: navy;
 }
 
@@ -89,4 +87,13 @@ th.title-stylish {
     text-align: center;
     vertical-align: middle;
     font-size: x-large;
+}
+
+.no-padding {
+    padding: 0;
+    margin: 0;
+}
+
+#filoutage-table {
+    padding-right: 100px;
 }
