@@ -55,6 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <pagebreak />
 
+        <!-- //TODO Les images crash avec mpdf pour des raisons inconnues, il faut donc utiliser autre chose -->
+
     </div>
 </div>
 
@@ -164,6 +166,9 @@ function milestonesDataTables($model): string
 
     $max_price = 0;
 
+    if ($model->company->country == "France") $hasTVA = true;
+    else $hasTVA = false;
+
     $html_header = <<<HTML
         <div class="row">
             <div class="col s12">
@@ -201,28 +206,39 @@ function milestonesDataTables($model): string
     $tva_price = $max_price * 0.2;
     $price_ttc = $max_price * 1.2;
 
-    $total_price_table = <<<HTML
-            <div class="col s3 offset-s9">
-                <table>
-                    <tr>
-                        <td class="price-stylish">TOTAL HT</td>
-                        <td class="price-stylish">${max_price} €</td>
-                    </tr>
-                    <tr>
-                        <td class="price-stylish">TVA 20%</td>
-                        <td class="price-stylish">${tva_price} €</td>
-                    </tr>
-                    <tr>
-                        <td class="price-stylish">TOTAL TTC</td>
-                        <td class="price-stylish">${price_ttc} €</td>
-                    </tr>
+    $total_price_table_header = <<<HTML
+        <div class="col s3 offset-s9">
+            <table>
+    HTML;
+
+    $total_price_table_data = <<<HTML
+        <tr>
+            <td class="price-stylish">TOTAL HT</td>
+            <td class="price-stylish">${max_price} €</td>
+        </tr>
+    HTML;
+
+    $total_price_tva_table_data = "";
+    if ($hasTVA) {
+        $total_price_tva_table_data = <<<HTML
+            <tr>
+                <td class="price-stylish">TVA 20%</td>
+                <td class="price-stylish">${tva_price} €</td>
+            </tr>
+            <tr>
+                <td class="price-stylish">TOTAL TTC</td>
+                <td class="price-stylish">${price_ttc} €</td>
+            </tr>
+        HTML;
+    }
+
+    $total_price_table_footer_data = <<<HTML
                 </table>
             </div>
         </div>
     HTML;
 
-
-    return $html_header . $html_body . $html_footer . $total_price_table;
+    return $html_header . $html_body . $html_footer . $total_price_table_header . $total_price_table_data . $total_price_tva_table_data . $total_price_table_footer_data;
 }
 
 function detailsDataTable($model): string
