@@ -41,7 +41,7 @@ class Company extends ActiveRecord
      */
     public static function getOneById(int $id)
     {
-        return static::find(['id' => $id])->one();
+        return static::find()->where(['id' => $id])->one();
     }
 
     /**
@@ -52,7 +52,7 @@ class Company extends ActiveRecord
      */
     public static function getOneByName(string $name): Company
     {
-        return static::find(['name' => $name])->one();
+        return static::find()->where(['name' => $name])->one();
     }
 
     /**

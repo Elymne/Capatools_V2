@@ -39,7 +39,7 @@ class Contact extends ActiveRecord
      */
     public static function getOneById(int $id)
     {
-        return static::find(['id' => $id])->one();
+        return static::find()->where(['id' => $id])->one();
     }
 
 
@@ -51,7 +51,7 @@ class Contact extends ActiveRecord
      */
     public static function getOneByEmail(string $email): Contact
     {
-        return static::find(['email' => $email])->one();
+        return static::find()->where(['email' => $email])->one();
     }
 
     /**
@@ -60,6 +60,6 @@ class Contact extends ActiveRecord
      */
     public function getProjects()
     {
-        return $this->hasMany(Project::className(), ['contact_id' => 'id']);
+        return $this->hasMany(Project::class, ['contact_id' => 'id']);
     }
 }
