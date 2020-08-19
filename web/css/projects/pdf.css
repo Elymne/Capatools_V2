@@ -1,3 +1,8 @@
+strong,
+b {
+    font-weight: bold;
+}
+
 p.title {
     color: #509587;
     text-align: center;
@@ -12,6 +17,22 @@ b.bolded {
 
 p.stylish {
     color: #509587;
+}
+
+p.minus {
+    font-size: x-small;
+}
+
+b.stylish-minus {
+    font-weight: bolder;
+    font-size: x-small;
+    color: #509587;
+}
+
+b.bluest-minus {
+    font-weight: bolder;
+    font-size: x-small;
+    color: navy;
 }
 
 p.warning {

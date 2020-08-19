@@ -183,6 +183,7 @@ class Lot extends ActiveRecord
             + $this->totalcostrepayement;
         return round($result, 2);
     }
+
     public function getTotalWithMargin()
     {
         $result = 0.000;
