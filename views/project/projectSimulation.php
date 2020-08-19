@@ -89,21 +89,6 @@ ProjectSimulationAsset::register($this);
 
 
                             </div>
-                            <div class="col s1">
-                                <?= Html::a(
-                                    '<i class="material-icons center">local_grocery_store</i>',
-                                    Url::to(['project/Update-task', 'number' => 0, 'project_id' => $project->id]),
-                                    [
-                                        'id' => 'grid-custom-button',
-                                        'data-pjax' => true,
-                                        'action' => Url::to(['project/Update-task', 'number' => 0, 'project_id' => $project->id]),
-                                        'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
-                                        'data-position' => "bottom",
-                                        'data-tooltip' => "Modifier les investissements/Consomable/Laboratoire"
-                                    ]
-                                ); ?>
-
-                            </div>
                         </div>
 
                     </div>
