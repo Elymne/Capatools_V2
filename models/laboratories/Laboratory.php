@@ -7,6 +7,7 @@ use app\models\users\Cellule;
 use JsonSerializable;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 /**
  * Classe modèle métier des laboratoires Capacités.
@@ -57,12 +58,24 @@ class Laboratory extends ActiveRecord implements JsonSerializable
     }
 
     /**
+     * Récupère la liste de tous les laboratoires possédant au moins un équipement.
+     * 
+     * @return array<Laboratory>, retourne une liste d'objet Laboratory.
+     */
+    static function getAllThatHasEquipments(): array
+    {
+        return \array_filter(static::find()->all(), function ($elem) {
+            return \sizeof($elem->equipments) > 0;
+        });
+    }
+
+    /**
      * Fait la jonction entre un laboratoire et sa liste de matériels.
      * Créer un attribut "equipments" qui sera composé d'une liste d'objet Equipment.
      */
     function getEquipments()
     {
-        return $this->hasMany(Equipment::className(), ['laboratory_id' => 'id']);
+        return $this->hasMany(Equipment::class, ['laboratory_id' => 'id']);
     }
 
     /**
