@@ -68,7 +68,7 @@ class CapaUserSearch extends CapaUser
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 10,
+                'pageSize' => -1,
             ],
             'sort' => [
                 'defaultOrder' => [
@@ -127,7 +127,7 @@ class CapaUserSearch extends CapaUser
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 10,
+                'pageSize' => -1,
             ],
             'sort' => [
                 'defaultOrder' => [
