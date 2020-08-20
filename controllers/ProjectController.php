@@ -167,7 +167,7 @@ class ProjectController extends Controller implements ServiceInterface
                         'Priorite' => 2,
                         'url' => 'project/index-draft',
                         'label' => 'Liste des brouillons',
-                        'subServiceMenuActive' => SubMenuEnum::PROJECT_NONE
+                        'subServiceMenuActive' => SubMenuEnum::PROJECT_DRAFT
                     ],
                     [
                         'Priorite' => 3,
@@ -175,24 +175,24 @@ class ProjectController extends Controller implements ServiceInterface
                         'label' => 'Création d\'un devis',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
                     ],
-                    [
-                        'Priorite' => 4,
-                        'url' => 'project/lot-simulate',
-                        'label' => 'Simulation  de lot',
-                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    ],
-                    [
-                        'Priorite' => 5,
-                        'url' => 'project/project-simulate',
-                        'label' => 'Simulation  Projet',
-                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    ],
-                    [
-                        'Priorite' => 6,
-                        'url' => 'project/create-project',
-                        'label' => 'Création du Projet',
-                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    ],
+                    // [
+                    //     'Priorite' => 4,
+                    //     'url' => 'project/lot-simulate',
+                    //     'label' => 'Simulation  de lot',
+                    //     'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    // ],
+                    // [
+                    //     'Priorite' => 5,
+                    //     'url' => 'project/project-simulate',
+                    //     'label' => 'Simulation  Projet',
+                    //     'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    // ],
+                    // [
+                    //     'Priorite' => 6,
+                    //     'url' => 'project/create-project',
+                    //     'label' => 'Création du Projet',
+                    //     'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                    // ],
                 ]
             ];
         }
@@ -220,7 +220,6 @@ class ProjectController extends Controller implements ServiceInterface
         }, ProjectSearch::find('company.name')->all()));
 
         MenuSelectorHelper::setMenuProjectIndex();
-
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'companiesName' => $companiesName
@@ -237,13 +236,14 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionView(int $id)
     {
-        MenuSelectorHelper::setMenuProjectNone();
+        MenuSelectorHelper::setMenuProjectIndex();
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
 
     /**
+     * //TODO TO DELETE : not used anymore.
      * Render create project : devis/createProject?id=?
      * Retourne la vue de création d'un projet à partir d'un devis
      * 
@@ -293,6 +293,7 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
+     * //TODO TO DELETE : not used anymore.
      * Render view : none
      * Redirected view : project/view.
      * Modifie le status d'un devis.
@@ -309,7 +310,6 @@ class ProjectController extends Controller implements ServiceInterface
         $project->save();
 
         MenuSelectorHelper::setMenuProjectNone();
-
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -317,6 +317,7 @@ class ProjectController extends Controller implements ServiceInterface
 
 
     /**
+     * //TODO TO DELETE : not used anymore.
      * Render view : none
      * Redirected view : project/view.
      * Modifie le status d'un jalon.
@@ -341,6 +342,7 @@ class ProjectController extends Controller implements ServiceInterface
 
 
     /**
+     * //TODO TO DELETE : not used anymore.
      * Utilisé pour télécharger le fichier uploadé d'un devis.
      * 
      * @param int $id
@@ -356,6 +358,7 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
+     * //TODO TO KEEP : just need an update.
      * Utilisé pour générer sous format excel les informations d'un devis.
      * 
      * @param int $id
@@ -408,11 +411,12 @@ class ProjectController extends Controller implements ServiceInterface
             ]
         ]);
 
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT;
+        MenuSelectorHelper::setMenuProjectNone();
         return $pdf->render();
     }
 
     /**
+     * //TODO TO DELETE : useless.
      * @deprecated Cette fonction n'est plus utilisé
      */
     public function actionViewpdf($id)
@@ -557,11 +561,6 @@ class ProjectController extends Controller implements ServiceInterface
                 'contactsEmail' => \array_values($contactsEmail)
             ]
         );
-        //TODO Je sais pas à quoi ces 4 lignes servent.
-        $project = ProjectSimulate::getOneById(1);
-        $lotavp = $project->getLotaventprojet();
-        $lots = $project->lots;
-        $millestones = [new ProjectCreateMilleStoneForm];
     }
 
     /**
@@ -575,7 +574,6 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionLotSimulate($project_id = 1, $number = 1)
     {
-
 
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = LotSimulate::getOneByIdProjectAndNumber($project_id, $number);
@@ -593,7 +591,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'errorDescriptions' => ['Vous essayez actuellement de modifier un lot qui n\'existe pas.']
             ]);
         }
-        MenuSelectorHelper::setMenuProjectNone();
+        MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(
             'lotSimulation',
             [
@@ -732,7 +730,7 @@ class ProjectController extends Controller implements ServiceInterface
         }
 
 
-        MenuSelectorHelper::setMenuProjectNone();
+        MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(
             'projectSimulation',
             [
@@ -767,10 +765,7 @@ class ProjectController extends Controller implements ServiceInterface
         $cel->id = $idcellule;
         $celluleUsers = $cel->capaUsers;
 
-
         $risk = Risk::find()->all();
-
-
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -916,7 +911,7 @@ class ProjectController extends Controller implements ServiceInterface
         $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
         $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
 
-        MenuSelectorHelper::setMenuProjectCreate();
+        MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(
             'createTask',
             [
@@ -1075,7 +1070,7 @@ class ProjectController extends Controller implements ServiceInterface
             }
         }
 
-        MenuSelectorHelper::setMenuProjectNone();
+        MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(
             'createThirdStep',
             [
@@ -1109,7 +1104,7 @@ class ProjectController extends Controller implements ServiceInterface
         // Nous aurons donc tous les models et en plus la possibilité d'ordonner ces données dans un gridview.
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ProjectSearch::GET_DRAFT_QUERY_OPTION);
 
-        MenuSelectorHelper::setMenuProjectNone();
+        MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(
             'index-draft',
             [
@@ -1242,7 +1237,7 @@ class ProjectController extends Controller implements ServiceInterface
             }
         }
 
-        MenuSelectorHelper::setMenuProjectNone();
+        MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(
             'createFirstStep',
             [
@@ -1291,13 +1286,5 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public static function getIndicator($user)
     {
-    }
-
-    public function actionFilterEmailNames()
-    {
-        $csv = str_getcsv(file_get_contents('../users_testing.csv'));
-        echo '<pre>';
-        print_r($csv);
-        echo '</pre>';
     }
 }
