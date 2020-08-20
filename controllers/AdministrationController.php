@@ -460,7 +460,7 @@ class AdministrationController extends Controller
     public function actionIndexEquipments()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Equipment::getAll(),
+            'query' => Equipment::getAllDataProvider(),
         ]);
 
         MenuSelectorHelper::setMenuEquipments();

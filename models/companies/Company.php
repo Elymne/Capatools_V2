@@ -25,6 +25,17 @@ class Company extends ActiveRecord
     }
 
     /**
+     * Utilisé pour fonctionner avec un GridView.
+     * Il retourne non pas un tableau de données classique avec chaque société mais un objet de type DataProvider.
+     * 
+     * @return DataProvider
+     */
+    static function getAllDataProvider()
+    {
+        return static::find();
+    }
+
+    /**
      * Récupère toutes les sociétés dans la base de données.
      * 
      * @return Array<Company>
@@ -63,7 +74,7 @@ class Company extends ActiveRecord
      */
     public function getProjects()
     {
-        return $this->hasMany(Project::className(), ['company_id' => 'id']);
+        return $this->hasMany(Project::class, ['company_id' => 'id']);
     }
 
     /**
