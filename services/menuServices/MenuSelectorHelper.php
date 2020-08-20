@@ -84,6 +84,17 @@ class MenuSelectorHelper
     /**
      * Description :
      * - Déroule le menu Devis.
+     * - Le sub-menu de la liste des devis est actif.
+     */
+    static function setMenuProjectDraft()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::PROJECT_DRAFT;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT;
+    }
+
+    /**
+     * Description :
+     * - Déroule le menu Devis.
      * - Le sub-menu de la création d'un devis.
      */
     static function setMenuProjectCreate()
