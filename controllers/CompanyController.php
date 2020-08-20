@@ -47,13 +47,13 @@ class CompanyController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
             ],
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
@@ -168,7 +168,7 @@ class CompanyController extends Controller
     {
 
         $dataProvider = new ActiveDataProvider([
-            'query' => Company::getAll(),
+            'query' => Company::getAllDataProvider(),
         ]);
 
         MenuSelectorHelper::setMenuCompanyIndex();

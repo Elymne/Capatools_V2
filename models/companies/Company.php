@@ -25,6 +25,17 @@ class Company extends ActiveRecord
     }
 
     /**
+     * Utilisé pour fonctionner avec un GridView.
+     * Il retourne non pas un tableau de données classique avec chaque société mais un objet de type DataProvider.
+     * 
+     * @return DataProvider
+     */
+    static function getAllDataProvider()
+    {
+        return static::find();
+    }
+
+    /**
      * Récupère toutes les sociétés dans la base de données.
      * 
      * @return Array<Company>
