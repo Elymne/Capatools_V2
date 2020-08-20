@@ -33,10 +33,7 @@ class AppAsset extends AssetBundle
         'fonts/favicon-32x32.png',
         'https://fonts.googleapis.com/icon?family=Material+Icons',
 
-        // Materialize.
-        'css/materialize.min.css',
-
-        // Dark forest theme.
+        // Dark forest theme + materialize.
         'css/dark-forest/vendors.min.css',
         'css/dark-forest/materialize.min.css',
         'css/dark-forest/style.min.css',

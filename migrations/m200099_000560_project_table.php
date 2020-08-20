@@ -18,14 +18,16 @@ class m200099_000560_project_table extends Migration
             'internal_name' => $this->string()->notNull(),
             'internal_reference' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
-            'prospecting_time_day' => $this->integer()->defaultValue(0),
-            'signing_probability' => $this->integer()->defaultValue(25),
-            'managment_rate' => $this->integer()->defaultValue(0),
+            'signing_probability' => $this->integer()->defaultValue(0),
+            'management_rate' => $this->double()->defaultValue(0),
+            'low_tjm_raison' => $this->string(),
+            'thematique' => $this->string(),
 
             'state' => $this->string()->notNull(),
             'version' => $this->string()->notNull(),
             'date_version' => $this->date()->notNull(),
             'file_path' => $this->string(),
+            'file_name' => $this->string(),
 
             // Options for project.
             'draft' => $this->boolean()->defaultValue(true),
@@ -38,9 +40,9 @@ class m200099_000560_project_table extends Migration
             // La cellule rataché au projet.
             'cellule_id' => $this->integer()->notNull(),
             // Le client, la société, la demande.
-            'company_id' => $this->integer()->notNull(),
+            'company_id' => $this->integer(),
             // Le contacte client.
-            'contact_id' => $this->integer()->notNull(),
+            'contact_id' => $this->integer(),
             // Le chef de projet.
             'capa_user_id' => $this->integer()->notNull(),
         ]);
@@ -75,7 +77,6 @@ class m200099_000560_project_table extends Migration
             'contact_id',
             '{{%contact}}',
             'id',
-
         );
 
         $this->insert('{{%project}}', [
@@ -84,17 +85,18 @@ class m200099_000560_project_table extends Migration
             'internal_name' => 'Projet Balkany',
             'internal_reference' => 'Projet Balkany',
             'type' => Project::TYPE_INTERNAL,
-            'prospecting_time_day' => 127,
             'signing_probability' => 50,
-            'state' => Project::STATE_DRAFT,
+            'state' => Project::STATE_DEVIS_SENDED,
             'version' => 'V2',
             'date_version' => date_create()->format('Y-m-d H:i:s'),
             'file_path' => '',
             'creation_date' => date_create()->format('Y-m-d H:i:s'),
+            'draft' => false,
             'cellule_id' => 3,
             'company_id' => 1,
             'contact_id' => 1,
             'capa_user_id' => 4,
+            'management_rate' => 12,
         ]);
     }
 

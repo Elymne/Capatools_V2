@@ -2,7 +2,8 @@
 
 namespace app\models\laboratories;
 
-use app\models\projects\Repayment;
+use app\models\projects\Lot;
+use JsonSerializable;
 use yii\db\ActiveRecord;
 
 /**
@@ -26,12 +27,17 @@ use yii\db\ActiveRecord;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class Laboratory extends ActiveRecord
+class LaboratoryContributor extends ActiveRecord implements JsonSerializable
 {
 
     const TYPE_SEARCHER = "Chercheur";
     const TYPE_PROBATIONER = "Stagiaire";
     const TYPE_DOCTOR = "Post-docteur";
+    const TYPES = [
+        self::TYPE_SEARCHER,
+        self::TYPE_PROBATIONER,
+        self::TYPE_DOCTOR
+    ];
 
     /**
      * Utilisé pour définir quelle table est associée à cette classe.
@@ -41,21 +47,9 @@ class Laboratory extends ActiveRecord
         return 'laboratory_contributor';
     }
 
-    /**
-     * Fonction surchargée de la classe ActiveRecord, elle permet de vérifier l'intégrité des données dans un modèle.
-     */
-    public function rules()
+    public static function getAllByLaboratoryID(int $laboratoryID)
     {
-        return [
-            ['type', 'required', 'message' => 'Veuillez renseigner le type d\'intervenant'],
-            ['nb_days', 'required', 'message' => 'Veuillez définir le nombre de jours'],
-            ['nb_hours', 'required', 'message' => 'Veuillez définir le nombre d\'heures'],
-            ['price_day', 'required', 'message' => 'Veuillez définir le prix journalier'],
-            ['risk', 'required', 'message' => 'Veuillez définir le taux d\'incertitude'],
-            ['risk_day', 'required', 'message' => 'Veulliez définir le nombre de jours lié à l\'incertitude'],
-            ['risk_hour', 'required', 'message' => 'Veulliez définir le nombre d\'heures lié à l\'incertitude'],
-            ['price_hour', 'required', 'message' => 'Veulliez définir le prix par heure'],
-        ];
+        return self::find()->where(['laboratory_id' => $laboratoryID])->all();
     }
 
     /**
@@ -64,7 +58,7 @@ class Laboratory extends ActiveRecord
      */
     public function getLaboratory()
     {
-        return $this->hasOne(Laboratory::className(), ['id' => 'laboratory_id']);
+        return $this->hasOne(Laboratory::class, ['id' => 'laboratory_id']);
     }
 
     /**
@@ -73,8 +67,26 @@ class Laboratory extends ActiveRecord
      * 
      * //TODO Terminer cette fonction une fois la classe Payment développée.
      */
-    public function getRepayment()
+    public function getLot()
     {
-        return $this->hasOne(Repayment::className(), ['id' => 'repayment_id']);
+        return $this->hasOne(Lot::class, ['id' => 'lot_id']);
+    }
+
+    /**
+     * Fonction pour envoyer au format json les données de l'objet.
+     */
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'type' => $this->type,
+            'nb_days' => $this->nb_days,
+            'nb_hours' => $this->nb_hours,
+            'price' => $this->price,
+            'time_risk' => $this->time_risk,
+            'laboratory_id' => $this->laboratory_id,
+            'lot_id' => $this->lot_id,
+            'risk_id' => $this->risk_id
+        );
     }
 }

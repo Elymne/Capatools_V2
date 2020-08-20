@@ -10,14 +10,15 @@ class m200099_000840_equipment_repayment_table extends Migration
 
         $this->createTable('{{%equipment_repayment}}', [
             'id' => $this->primaryKey(),
-            'nb_days' => $this->string()->notNull(),
+            'nb_days' => $this->integer()->notNull(),
             'nb_hours' => $this->integer()->defaultValue(0),
-            'risk' => $this->string()->notNull(),
-            'risk_days' => $this->integer()->defaultValue(0),
+            'price' => $this->double()->defaultValue(0),
+            'time_risk' => $this->integer()->defaultValue(0),
 
             // Foreign key.
             'equipment_id' => $this->integer()->notNull(),
-            'repayment_id' => $this->integer()->notNull(),
+            'lot_id' => $this->integer()->notNull(),
+            'risk_id' => $this->integer()->notNull(),
         ]);
 
         $this->addForeignKey(
@@ -29,29 +30,39 @@ class m200099_000840_equipment_repayment_table extends Migration
         );
 
         $this->addForeignKey(
-            'FK_equipment_repayment-repayment',
+            'FK_equipment_repayment-lot',
             '{{%equipment_repayment}}',
-            'repayment_id',
-            '{{%repayment}}',
+            'lot_id',
+            '{{%lot}}',
+            'id'
+        );
+
+        $this->addForeignKey(
+            'FK_equipment_repayment-risk',
+            '{{%equipment_repayment}}',
+            'risk_id',
+            '{{%risk}}',
             'id'
         );
 
         $this->insert('{{%equipment_repayment}}', [
             'nb_days' => 20,
             'nb_hours' => 19,
-            'risk' => 'Haute',
-            'risk_days' => 15,
+            'price' => 200,
+            'time_risk' => 15,
             'equipment_id' => 1,
-            'repayment_id' => 1
+            'lot_id' => 1,
+            'risk_id' => 1
         ]);
 
         $this->insert('{{%equipment_repayment}}', [
             'nb_days' => 2000,
             'nb_hours' => 1,
-            'risk' => 'Très haute',
-            'risk_days' => 239,
+            'price' => 1000,
+            'time_risk' => 239,
             'equipment_id' => 2,
-            'repayment_id' => 2
+            'lot_id' => 2,
+            'risk_id' => 3
         ]);
     }
 

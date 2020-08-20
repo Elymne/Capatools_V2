@@ -1,7 +1,7 @@
 <?php
 
 use app\assets\AppAsset;
-use app\assets\projects\ProjectCreateFirstPhaseAsset;
+use app\assets\projects\ProjectCreateFirstStepAsset;
 use app\models\projects\Project;
 use app\widgets\TopTitle;
 use wbraganca\dynamicform\DynamicFormWidget;
@@ -9,13 +9,12 @@ use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Création d\'un projet - paramètres généraux';
-$this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Project', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 
 AppAsset::register($this);
-ProjectCreateFirstPhaseAsset::register($this);
-
+ProjectCreateFirstStepAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -34,12 +33,16 @@ ProjectCreateFirstPhaseAsset::register($this);
 
                     <div class="card-action">
 
+                        <!-- Champ titre -->
+                        <label class='blue-text control-label typeLabel'>Titre du projet</label>
+                        <?= $form->field($model, 'internal_name')->textInput([])->label(false) ?>
+
                         <!-- Type de projet  -->
                         <label class='blue-text control-label typeLabel'>Type de projet</label>
                         <?= $form->field($model, 'combobox_type_checked')->radioList(Project::TYPES, [
-                            'item' => function ($index, $label, $name, $checked, $value) {
+                            'item' => function ($index, $label, $name, $checked, $value) use ($model) {
 
-                                if ($index == 0) $check = "checked";
+                                if ($index == $model->combobox_type_checked) $check = "checked";
                                 else $check = "";
 
                                 $return = '<label class="modal-radio">';
@@ -53,9 +56,9 @@ ProjectCreateFirstPhaseAsset::register($this);
                         <!-- lot ou pas ? -->
                         <label class='blue-text control-label typeLabel'>Le projet comprend-il des lots ou des options ?</label>
                         <?= $form->field($model, 'combobox_lot_checked')->radioList([0 => "non", 1 => "oui"], [
-                            'item' => function ($index, $label, $name, $checked, $value) {
+                            'item' => function ($index, $label, $name, $checked, $value) use ($model) {
 
-                                if ($index == 1) $check = "checked";
+                                if ($index == $model->combobox_lot_checked) $check = "checked";
                                 else $check = "";
 
                                 $return = '<label class="modal-radio">';
@@ -69,9 +72,9 @@ ProjectCreateFirstPhaseAsset::register($this);
                         <!-- Reversement labo ou pas ? -->
                         <label class='blue-text control-label typeLabel'>Le projet comprend-il des reversements labo ?</label>
                         <?= $form->field($model, 'combobox_repayment_checked')->radioList([0 => "non", 1 => "oui"], [
-                            'item' => function ($index, $label, $name, $checked, $value) {
+                            'item' => function ($index, $label, $name, $checked, $value) use ($model) {
 
-                                if ($index == 1) $check = "checked";
+                                if ($index == $model->combobox_repayment_checked) $check = "checked";
                                 else $check = "";
 
                                 $return = '<label class="modal-radio">';
@@ -132,6 +135,50 @@ ProjectCreateFirstPhaseAsset::register($this);
                             </div>
                         </div>
 
+
+                        <div class="col s12">
+                            <div class="row">
+
+                                <div class="input-field col s6">
+                                    <?= $form->field($model, 'company_name')
+                                        ->widget(\yii\jui\AutoComplete::class, [
+                                            'clientOptions' => [
+                                                'source' => $companiesNames,
+                                            ],
+                                        ])->label(
+                                            "Companie"
+                                        );
+                                    ?>
+                                    <?= Html::a('Créer un contact', [''], ['class' => '']) ?>
+                                </div>
+                                <div class="input-field col s6">
+                                    <?php /*$form->field($fileModel, 'file')
+                                        ->label('Document technique / Cahier des charges annexe (PDF)', [])
+                                        ->fileInput([])*/
+                                    ?>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col s12">
+                            <div class="row">
+
+                                <div class="input-field col s6">
+                                    <?= $form->field($model, 'contact_email')
+                                        ->widget(\yii\jui\AutoComplete::class, [
+                                            'clientOptions' => [
+                                                'source' => $contactsEmail,
+                                            ],
+                                        ])->label(
+                                            "Client"
+                                        );
+                                    ?>
+                                    <?= Html::a('Créer un contact', [''], ['class' => '']) ?>
+                                </div>
+
+
+                            </div>
+                        </div>
                         <!-- Buttons -->
                         <div class="form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
@@ -139,6 +186,10 @@ ProjectCreateFirstPhaseAsset::register($this);
                         </div>
 
                     </div>
+
+
+
+
 
                 </div>
 

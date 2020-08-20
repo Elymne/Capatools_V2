@@ -2,8 +2,9 @@
 
 namespace app\models\equipments;
 
-use app\models\laboratories\Laboratory;
-use app\models\projects\Repayment;
+use app\models\projects\Lot;
+use app\models\projects\Risk;
+use JsonSerializable;
 use yii\db\ActiveRecord;
 
 /**
@@ -13,9 +14,8 @@ use yii\db\ActiveRecord;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class EquipmentRepayment extends ActiveRecord
+class EquipmentRepayment extends ActiveRecord implements JsonSerializable
 {
-
     /**
      * Utilisé pour définir quelle table est associée à cette classe.
      */
@@ -24,20 +24,9 @@ class EquipmentRepayment extends ActiveRecord
         return 'equipment_repayment';
     }
 
-    /**
-     * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
-     */
-    public function rules()
+    public static function getAllByLotID(int $id)
     {
-        return [
-            ['nb_days', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
-            ['nb_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
-            ['nb_hours', 'required', 'message' => 'Veuillez renseigner le nombre d\'heures'],
-            ['nb_hours', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
-            ['risk', 'required', 'message' => 'Veuillez spécifier la valeur d\'incertitude'],
-            ['risk_days', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
-            ['risk_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
-        ];
+        return self::find()->where(['lot_id' => $id])->all();
     }
 
     /**
@@ -46,15 +35,41 @@ class EquipmentRepayment extends ActiveRecord
      */
     public function getEquipment()
     {
-        return $this->hasOne(Equipment::className(), ['id' => 'equipment_id']);
+        return $this->hasOne(Equipment::class, ['id' => 'equipment_id']);
     }
 
     /**
-     * Fait la jonction entre la table d'association et le reversement.
+     * Fait la jonction entre la table d'association et le reversement liées au lot.
      * Créer un attribut "repayment" qui sera un objet Laboratory.
      */
-    public function getRepayment()
+    public function getRisk()
     {
-        return $this->hasOne(Repayment::className(), ['id' => 'repayment_id']);
+        return $this->hasOne(Risk::class, ['id' => 'risk_id']);
+    }
+
+    /**
+     * Fait la jonction entre la table d'association et le reversement liées au lot.
+     * Créer un attribut "repayment" qui sera un objet Laboratory.
+     */
+    public function getLot()
+    {
+        return $this->hasOne(Lot::class, ['id' => 'lot_id']);
+    }
+
+    /**
+     * Fonction pour envoyer au format json les données de l'objet.
+     */
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'nb_days' => $this->nb_days,
+            'nb_hours' => $this->nb_hours,
+            'price' => $this->price,
+            'time_risk' => $this->time_risk,
+            'equipment_id' => $this->equipment_id,
+            'lot_id' => $this->lot_id,
+            'risk_id' => $this->risk_id
+        );
     }
 }

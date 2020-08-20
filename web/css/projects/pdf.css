@@ -1,0 +1,99 @@
+strong,
+b {
+    font-weight: bold;
+}
+
+p.title {
+    color: #509587;
+    text-align: center;
+    vertical-align: middle;
+    font-size: x-large;
+}
+
+b.bolded {
+    font-weight: bolder;
+    color: #222222;
+}
+
+p.stylish {
+    color: #509587;
+}
+
+p.minus {
+    font-size: 0.9em;
+}
+
+b.stylish-minus {
+    font-size: 0.9em;
+    color: #509587;
+}
+
+b.bluest-minus {
+    font-size: 0.9em;
+    color: navy;
+}
+
+p.warning {
+    color: #509587;
+    text-align: center;
+}
+
+mark.stylish {
+    color: #509587;
+    background-color: white;
+}
+
+.card .card-content {
+    background-color: #e6e6e6;
+    padding: 10px;
+}
+
+.card .card-action {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.col .s3 .to-right {
+    right: 0;
+}
+
+th {
+    background-color: #e6e6e6;
+    border: 1px solid #666666;
+    color: #509587;
+}
+
+td {
+    border: 1px solid #666666;
+    color: #333333;
+}
+
+td.textcenter {
+    text-align: center;
+}
+
+td.invisible {
+    border: 0px solid #ffffff;
+}
+
+td.price-stylish {
+    background-color: #509587;
+    border: 0px solid #ffffff;
+    color: #ffffff;
+}
+
+th.title-stylish {
+    color: #509587;
+    text-align: center;
+    vertical-align: middle;
+    font-size: x-large;
+}
+
+.no-padding {
+    padding: 0;
+    margin: 0;
+}
+
+#filoutage-table {
+    padding-right: 100px;
+}

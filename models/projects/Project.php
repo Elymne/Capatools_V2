@@ -19,7 +19,19 @@ use app\models\companies\Contact;
 class Project extends ActiveRecord
 {
 
-    const TYPE_PRESTATION = 'Prestation interne';
+    const TJMRAISON_TJMOK = 'TJMOK';
+    const TJMRAISON_CONCURRENTIEL = 'Contexte concurrentiel';
+    const TJMRAISON_INTERVENANT = 'Profil intervenant';
+    const TJMRAISON_OFFER = "Thématique offre";
+    const TJMRAISON_OTHER = "Autre";
+    const TJMRAISON = [
+        self::TJMRAISON_CONCURRENTIEL => self::TJMRAISON_CONCURRENTIEL,
+        self::TJMRAISON_INTERVENANT => self::TJMRAISON_INTERVENANT,
+        self::TJMRAISON_OFFER => self::TJMRAISON_OFFER,
+        self::TJMRAISON_OTHER => self::TJMRAISON_OTHER
+    ];
+
+    const TYPE_PRESTATION = 'Prestation';
     const TYPE_OUTSOURCING_AD = 'Sous traitance AD';
     const TYPE_OUTSOURCING_UN = "Sous traitance UN";
     const TYPE_INTERNAL = "Interne";
@@ -60,6 +72,11 @@ class Project extends ActiveRecord
     public static function getAllByCellule($idCellule)
     {
         return static::find()->where(['project.cellule_id' => $idCellule])->all();
+    }
+
+    public static function getAllDraft()
+    {
+        return static::find()->where(['draft' => true])->all();
     }
 
     public function getStatusIndex()
@@ -103,5 +120,145 @@ class Project extends ActiveRecord
     public function getMillestones()
     {
         return $this->hasMany(Millestone::className(), ['project_id' => 'id']);
+    }
+    public function getLotaventprojet()
+    {
+
+        return Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
+    }
+
+    public function getLotByNumber($number)
+    {
+
+        return Lot::find()->where(['number' => $number, 'project_id' => $this->id])->one();
+    }
+    public function getAdditionalLotPrice()
+    {
+
+        $lotavp = Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
+        $lotavpTotalMarge = $lotavp->total / (1 - $this->marginaverage / 100);
+        return round(($lotavpTotalMarge / (count($this->lots) - 1)), 2);
+    }
+
+    public function getTotal()
+    {
+        $totalwithmargin = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+            if ($lot->number != 0) {
+                $totalwithmargin = $totalwithmargin + $lot->totalwithmargin + $this->additionallotprice;
+            }
+        }
+        return $totalwithmargin;
+    }
+
+    public function getTotalAchatInvesteReversementPrice()
+    {
+        $totalAchatinvest = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+            if ($lot->number != 0) {
+                $totalAchatinvest = $totalAchatinvest + $lot->totalCostInvest + $lot->totalCostRepayement;
+            }
+        }
+        return $totalAchatinvest + $this->SupportPrice;
+    }
+
+    public function getTjm()
+    {
+        $totaltime = 0.0;
+        $TotalCostHumanWithMargin = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+
+            $totaltime = $totaltime + $lot->totaltime;
+            $TotalCostHumanWithMargin = $TotalCostHumanWithMargin + $lot->totalCostHumanWithMargin;
+        }
+        $result = $TotalCostHumanWithMargin / (1 - $this->management_rate / 100);
+        $totaltime = $totaltime / 7.7;
+        if ($totaltime != 0) {
+            return round($result / $totaltime, 2);
+        } else {
+            return 0;
+        }
+    }
+
+    public function getTotalHourWithRisk()
+    {
+        $totaltimewithrisk = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+
+            $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
+        }
+
+        return $totaltimewithrisk;
+    }
+
+    public function getTotalcostRHWithRisk()
+    {
+        $TotalCostHumanWithMarginwithrisk = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+
+            $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHuman;
+        }
+
+        return $TotalCostHumanWithMarginwithrisk;
+    }
+
+
+    public function getTjmWithRisk()
+    {
+        $totaltimewithrisk = 0.0;
+        $TotalCostHumanWithMarginwithrisk = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+
+            $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
+            $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHumanWithMarginAndRisk;
+        }
+        $totaltimewithrisk = $totaltimewithrisk / 7.7;
+        $result = $TotalCostHumanWithMarginwithrisk / (1 - $this->management_rate / 100);
+        if ($totaltimewithrisk != 0) {
+
+            return round($result / $totaltimewithrisk, 2);
+        } else {
+            return 0;
+        }
+    }
+
+    public function getSupportPrice()
+    {
+        return round($this->sellingPrice * ($this->management_rate / 100), 2);
+    }
+
+    public function getSellingPrice()
+    {
+        return round($this->total / (1 - $this->management_rate / 100), -2);
+    }
+
+    public function getMarginAverage()
+    {
+
+        $totalwithmargin = 0.0;
+        $totalwithoutmargin = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+            if ($lot->number != 0) {
+                $totalwithmargin = $totalwithmargin + $lot->totalwithmargin;
+                $totalwithoutmargin = $totalwithoutmargin + $lot->total;
+            }
+        }
+        if ($totalwithoutmargin != 0) {
+            return round((($totalwithmargin / $totalwithoutmargin) - 1) * 100, 2);
+        } else {
+            return 0;
+        }
+    }
+    public function getNbLot()
+    {
+        $ListeLot = $this->lots;
+        return count($ListeLot) - 1;
     }
 }

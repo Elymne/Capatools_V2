@@ -2,7 +2,11 @@
 
 namespace app\models\projects;
 
+use app\models\equipments\EquipmentRepayment;
+use app\models\laboratories\LaboratoryContributor;
 use yii\db\ActiveRecord;
+
+use Yii;
 
 /**
  * Classe modèle métier des lots.
@@ -32,6 +36,16 @@ class Lot extends ActiveRecord
         return static::find()->where(['id' => $id])->one();
     }
 
+    public static function getAllByIdProject($idProject)
+    {
+        return static::find()->where(['project_id' => $idProject])->all();
+    }
+
+    public static function getOneByIdProjectAndNumber($idProject, $nb)
+    {
+        return static::find()->where(['project_id' => $idProject, 'number' => $nb])->one();
+    }
+
     public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'project_id']);
@@ -45,5 +59,137 @@ class Lot extends ActiveRecord
     public function getConsumables()
     {
         return $this->hasMany(Consumable::className(), ['lot_id' => 'id']);
+    }
+
+    public function getInvests()
+    {
+        return $this->hasMany(Investment::className(), ['lot_id' => 'id']);
+    }
+
+    public function getLabotorycontributors()
+    {
+        return $this->hasMany(LaboratoryContributor::className(), ['lot_id' => 'id']);
+    }
+
+    public function getEquipmentrepayments()
+    {
+        return $this->hasMany(EquipmentRepayment::className(), ['lot_id' => 'id']);
+    }
+
+
+    public function getTotalCostHuman()
+    {
+        $result = 0;
+        $taskslot = $this->tasks;
+        foreach ($taskslot as $task) {
+            $result  = $result + (($task->price / 7.7) *  $task->risk_duration_hour);
+        }
+
+        return $result;
+    }
+
+    public function getTotalCostHumanWithMarginAndRisk()
+    {
+        $result = 0;
+        $taskslot = $this->tasks;
+        foreach ($taskslot as $task) {
+            $result  = $result + (($task->price / 7.7) *  $task->risk_duration_hour);
+        }
+
+        return $result * (1 + $this->rate_human_margin / 100);
+    }
+
+    public function getTotalCostHumanWithMargin()
+    {
+        $result = 0;
+        $taskslot = $this->tasks;
+        foreach ($taskslot as $task) {
+            $result  = $result + (($task->price / 7.7) *  ($task->day_duration * 7.7  + $task->hour_duration));
+        }
+
+        return $result * (1 + $this->rate_human_margin / 100);
+    }
+
+
+    public function getTotalTimeWithRisk()
+    {
+        $result = 0;
+        $taskslot = $this->tasks;
+        foreach ($taskslot as $task) {
+            $result  = $result +   $task->risk_duration_hour;
+        }
+
+        return $result;
+    }
+
+
+
+    public function getTotalTime()
+    {
+        $result = 0;
+        $taskslot = $this->tasks;
+        foreach ($taskslot as $task) {
+            $result  =  $result +  $task->day_duration * 7.7  + $task->hour_duration;
+        }
+
+        return $result;
+    }
+
+
+
+
+
+    public function getTotalCostInvest()
+    {
+        $result = 0.0;
+        $consumables = $this->consumables;
+        foreach ($consumables as $consumable) {
+            $result  = $result + $consumable->price;
+        }
+
+
+        $Invests = $this->invests;
+        foreach ($Invests as $Invest) {
+            $result  = $result + $Invest->price;
+        }
+
+
+        return $result;
+    }
+
+
+    public function getTotalCostRepayement()
+    {
+        $result = 0.0;
+        $Equipementrepayements = $this->equipmentrepayments;
+        foreach ($Equipementrepayements as $Equipementrepayement) {
+            $result  = $result + $Equipementrepayement->price * $Equipementrepayement->time_risk;
+        }
+
+        $LabotoryContributors = $this->labotorycontributors;
+        foreach ($LabotoryContributors as $LabotoryContributor) {
+            $result  = $result + $LabotoryContributor->price * $LabotoryContributor->time_risk;
+        }
+
+
+        return 0;
+    }
+
+    public function getTotal()
+    {
+        $result = 0.000;
+        $result =  $this->totalcosthuman
+            + $this->totalcostinvest
+            + $this->totalcostrepayement;
+        return round($result, 2);
+    }
+
+    public function getTotalWithMargin()
+    {
+        $result = 0.000;
+        $result =  $this->totalcosthuman * (1 + $this->rate_human_margin / 100)
+            + $this->totalcostinvest * (1 + $this->rate_consumable_investement_margin / 100)
+            + $this->totalcostrepayement * (1 + $this->rate_repayement_margin / 100);
+        return round($result, 2);
     }
 }

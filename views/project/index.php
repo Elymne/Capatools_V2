@@ -160,29 +160,6 @@ function getFilterCardContent(): string
     HTML;
 }
 
-/**
- * Used to display combobox.
- * 
- * @return string HTML content.
- */
-function getHelperCardContent(): string
-{
-    return <<<HTML
-        <div>
-            <a class="btn-floating waves-effect waves-light btn-green rightspace-10px no-click"><i class="material-icons right">cloud_download</i></a>
-            <p style="display: inline-block">Modifier le devis</p>
-
-            <a class="btn-floating waves-effect waves-light btn-blue rightspace-10px leftspace-20px no-click"><i class="material-icons right">cloud_download</i></a>
-            <p style="display: inline-block">Upload du fichier</p>
-
-            <a class="btn-floating waves-effect waves-light btn-purple rightspace-10px leftspace-20px no-click"><i class="material-icons right">picture_as_pdf</i></a>
-            <p style="display: inline-block">Générer le pdf</p>
-
-            <a class="btn-floating waves-effect waves-light btn-green-darker rightspace-10px leftspace-20px no-click"><i class="material-icons right">grid_on</i></a>
-            <p style="display: inline-block">Générer le fichier excel</p>
-        </div>
-    HTML;
-}
 
 /**
  * Used to display all data needed for the table.
@@ -200,12 +177,13 @@ function getCollumnsArray()
     }
     array_push($result, getCompanyArray());
     array_push($result, getStatusArray());
+    array_push($result, getProbabilityArray());
 
     // Buttons displaying.
     array_push($result, getUpdateButtonArray());
-    array_push($result, getDocumentButtonArray());
     array_push($result, getPdfButtonArray());
     array_push($result, getExcelButtonArray());
+    array_push($result, getPieceButtonArray());
 
     return $result;
 }
@@ -279,57 +257,37 @@ function getStatusArray()
     ];
 }
 
-function getUpdateButtonArray()
+function getProbabilityArray()
 {
     return [
-        'format' => 'raw',
-        'label' => 'Edit',
-        'value' => function ($model, $key, $index, $column) {
-            return Html::a(
-                '<i class="material-icons right">build</i>',
-                Url::to(['devis/update', 'id' => $model->id]),
-                [
-                    'id' => 'grid-custom-button',
-                    'data-pjax' => true,
-                    'action' => Url::to(['devis/update', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-green',
-                    'title' => "Modifier le devis"
-                ]
-            );
+        'attribute' => 'signing_probability',
+        'format' => 'text',
+        'label' => 'Proba. signature',
+        'contentOptions' => ['class' => 'signing_probability-row'],
+        'headerOptions' => ['class' => 'signing_probability-row'],
+        'value' => function ($model) {
+            return $model->signing_probability . ' %';
         }
     ];
 }
 
-function getDocumentButtonArray()
+function getUpdateButtonArray()
 {
     return [
         'format' => 'raw',
-        'label' => 'upload',
+        'label' => 'visualiser',
         'value' => function ($model, $key, $index, $column) {
-
-            if ($model->file_path != null) {
-                return Html::a(
-                    '<i class="material-icons right">cloud_download</i>',
-                    Url::to(['project/download-file', 'id' => $model->id]),
-                    [
-                        'id' => 'grid-custom-button',
-                        'data-pjax' => true,
-                        'class' => 'btn-floating waves-effect waves-light btn-blue',
-                    ]
-                );
-            } else {
-                return Html::a(
-                    '<i class="material-icons right">cloud_download</i>',
-                    Url::to(['#', 'id' => $model->id]),
-                    [
-                        'id' => 'grid-custom-button',
-                        'data-pjax' => true,
-                        'action' => Url::to(['#', 'id' => $model->id]),
-                        'class' => 'btn-floating disabled',
-                        'title' => "Télécharger le document"
-                    ]
-                );
-            }
+            return Html::a(
+                '<i class="material-icons center">visibility</i>',
+                Url::to(['project/view', 'id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'action' => Url::to(['project/view', 'id' => $model->id]),
+                    'class' => 'btn-floating waves-effect waves-light btn-green',
+                    'title' => "visualiser le devis"
+                ]
+            );
         }
     ];
 }
@@ -342,12 +300,12 @@ function getPdfButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">picture_as_pdf</i>',
-                Url::to(['devis/pdf', 'id' => $model->id,]),
+                Url::to(['project/pdf', 'id' => $model->id,]),
                 [
                     'id' => 'grid-custom-button',
                     'target' => '_blank',
                     'data-pjax' => true,
-                    'action' => Url::to(['devis/pdf', 'id' => $model->id]),
+                    'action' => Url::to(['project/pdf', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-purple',
                     'title' => "Générer le devis sous forme pdf"
                 ]
@@ -364,13 +322,34 @@ function getExcelButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">grid_on</i>',
-                Url::to(['devis/download-excel', 'id' => $model->id]),
+                Url::to(['project/download-excel', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-green-darker',
                     'title' => "Générer le devis sous forme excel"
+                ]
+            );
+        }
+    ];
+}
+
+function getPieceButtonArray()
+{
+    return [
+        'format' => 'raw',
+        'label' => 'Propositon',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons right">file_download</i>',
+                Url::to(['project/download-piece', 'id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'action' => Url::to(['project/download-piece', 'id' => $model->id]),
+                    'class' => 'btn-floating waves-effect waves-light btn-green-darker',
+                    'title' => "Récupérer la proposition technique"
                 ]
             );
         }

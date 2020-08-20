@@ -88,6 +88,13 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
             ->send();
     }
 
+    public function getfullName()
+    {
+        return $this->firstname . " " . $this->surname;
+    }
+
+
+
     /**
      * Generates new password
      * @return string le nouveau password

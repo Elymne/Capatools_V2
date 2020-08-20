@@ -11,7 +11,8 @@ class m200099_000550_equipment_table extends Migration
         $this->createTable('{{%equipment}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
-            'ht_price' => $this->double()->defaultValue(0),
+            'price_day' => $this->double()->defaultValue(0),
+            'price_hour' => $this->double()->defaultValue(0),
             'type' => $this->string()->notNull(),
 
             // Foreign key.
@@ -28,14 +29,16 @@ class m200099_000550_equipment_table extends Migration
 
         $this->insert('{{%equipment}}', [
             'name' => "Cuve à bière",
-            'ht_price' => 1060.00,
+            'price_day' => 1060.00,
+            'price_hour' => 129.00,
             'type' => 'Outil expérimental',
             'laboratory_id' => 1
         ]);
 
         $this->insert('{{%equipment}}', [
             'name' => "BFG",
-            'ht_price' => 100000.00,
+            'price_day' => 1000.00,
+            'price_hour' => 10000.00,
             'type' => 'Outil expérimental du DoomGuy',
             'laboratory_id' => 2
         ]);

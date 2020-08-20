@@ -24,13 +24,17 @@ use app\models\projects\Project;
 class ProjectSearch extends Project
 {
 
+    const GET_DRAFT_QUERY_OPTION = "get_draft";
+    const GET_PROJECT_QUERY_OPTION = "get_project";
+    const GET_ALL_QUERY_OPTION = "get_all";
+
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
         return [
-            [['id', 'prospecting_time_day', 'version', 'cellule_id', 'company_id', 'capa_user_id'], 'integer'],
+            [['id', 'version', 'cellule_id', 'company_id', 'capa_user_id'], 'integer'],
             [['id_capa', 'internal_name', 'project_manager.email', 'company.name', 'cellule.name'], 'safe'],
         ];
     }
@@ -57,10 +61,26 @@ class ProjectSearch extends Project
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, string $queryOption = self::GET_PROJECT_QUERY_OPTION)
     {
 
-        $query = Project::find();
+        // Check la query option envoyé en paramètre.
+        switch ($queryOption) {
+            case self::GET_ALL_QUERY_OPTION:
+                $query = Project::find();
+                break;
+            case self::GET_PROJECT_QUERY_OPTION:
+                $query = Project::find()->where([
+                    'state' => [PROJECT::STATE_FINISHED, PROJECT::STATE_DEVIS_SIGNED, PROJECT::STATE_CANCELED, PROJECT::STATE_DEVIS_SENDED]
+                ]);
+                break;
+            case self::GET_DRAFT_QUERY_OPTION:
+                $query = Project::find()->where(['state' => PROJECT::STATE_DRAFT]);
+                break;
+            default:
+                $query = Project::find()->where(['state' => [PROJECT::STATE_FINISHED, PROJECT::STATE_DEVIS_SIGNED, PROJECT::STATE_CANCELED, PROJECT::STATE_DEVIS_SENDED]]);
+                break;
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -93,7 +113,6 @@ class ProjectSearch extends Project
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'prospecting_time_day' => $this->prospecting_time_day,
             'version' => $this->version,
             'cellule_id' => $this->cellule_id,
             'company_id' => $this->company_id,
