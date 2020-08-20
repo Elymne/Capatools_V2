@@ -169,6 +169,9 @@ class CompanyController extends Controller
 
         $dataProvider = new ActiveDataProvider([
             'query' => Company::getAllDataProvider(),
+            'pagination' => [
+                'pageSize' => -1,
+            ],
         ]);
 
         MenuSelectorHelper::setMenuCompanyIndex();
@@ -240,6 +243,9 @@ class CompanyController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Contact::getAll(),
+            'pagination' => [
+                'pageSize' => -1,
+            ],
         ]);
 
         MenuSelectorHelper::setMenuCompanyContacts();

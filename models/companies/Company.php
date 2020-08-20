@@ -74,7 +74,7 @@ class Company extends ActiveRecord
      */
     public function getProjects()
     {
-        return $this->hasMany(Project::className(), ['company_id' => 'id']);
+        return $this->hasMany(Project::class, ['company_id' => 'id']);
     }
 
     /**
