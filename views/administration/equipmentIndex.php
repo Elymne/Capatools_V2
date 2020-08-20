@@ -81,8 +81,10 @@ function getCollumnArray(): array
 
     // Text input.
     array_push($result, getNameArray());
-    array_push($result, getHTPriceArray());
+    array_push($result, getPriceDayArray());
+    array_push($result, getPriceHourArray());
     array_push($result, getTypeArray());
+    array_push($result, getLaboratoryNameArray());
 
     return $result;
 }
@@ -98,14 +100,25 @@ function getNameArray(): array
     ];
 }
 
-function getHTPriceArray(): array
+function getPriceDayArray(): array
 {
     return [
-        'label' => 'Prix HT',
+        'label' => 'Prix journalier',
         'encodeLabel' => false,
         'format' => 'ntext',
-        'attribute' => 'ht_price',
-        'contentOptions' => ['class' => 'ht_price-row'],
+        'attribute' => 'price_day',
+        'contentOptions' => ['class' => 'price_day-row'],
+    ];
+}
+
+function getPriceHourArray(): array
+{
+    return [
+        'label' => 'Prix horaire',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'attribute' => 'price_hour',
+        'contentOptions' => ['class' => 'price_hour-row'],
     ];
 }
 
@@ -116,6 +129,17 @@ function getTypeArray(): array
         'encodeLabel' => false,
         'format' => 'ntext',
         'attribute' => 'type',
+        'contentOptions' => ['class' => 'type-row'],
+    ];
+}
+
+function getLaboratoryNameArray(): array
+{
+    return [
+        'label' => 'Propriété',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'attribute' => 'laboratory.name',
         'contentOptions' => ['class' => 'type-row'],
     ];
 }
