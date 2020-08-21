@@ -19,6 +19,7 @@ use app\models\parameters\DevisParameter;
 use app\models\parameters\DevisParameterUpdateForm;
 use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentCreateForm;
+use app\models\laboratories\Laboratory;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -482,6 +483,7 @@ class AdministrationController extends Controller
     public function actionCreateEquipment()
     {
         $model = new EquipmentCreateForm();
+        $laboratoriesName = ArrayHelper::map(Laboratory::getAll(), 'id', 'name');
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->save()) {
@@ -492,7 +494,8 @@ class AdministrationController extends Controller
 
         MenuSelectorHelper::setMenuEquipments();
         return $this->render('createEquipment', [
-            'model' => $model
+            'model' => $model,
+            'laboratoriesName' => $laboratoriesName
         ]);
     }
 
