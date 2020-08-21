@@ -4,7 +4,7 @@ use app\assets\AppAsset;
 use app\assets\projects\ProjectCreateFirstStepAsset;
 use app\models\projects\Project;
 use app\widgets\TopTitle;
-use wbraganca\dynamicform\DynamicFormWidget;
+use kidzen\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 

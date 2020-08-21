@@ -4,10 +4,10 @@ use app\assets\AppAsset;
 use app\assets\projects\ProjectCreateTaskAsset;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
+use kidzen\dynamicform\DynamicFormWidget;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
 
 AppAsset::register($this);

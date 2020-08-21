@@ -9,7 +9,7 @@ use app\models\projects\Consumable;
 use yii\helpers\ArrayHelper;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
-use wbraganca\dynamicform\DynamicFormWidget;
+use kidzen\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 

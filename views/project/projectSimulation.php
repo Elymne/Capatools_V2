@@ -4,12 +4,12 @@ use app\assets\AppAsset;
 use app\models\projects\Project;
 use app\assets\projects\ProjectSimulationAsset;
 use app\widgets\TopTitle;
-use wbraganca\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 use kartik\select2\Select2;
+use kidzen\dynamicform\DynamicFormWidget;
 
 $this->title = 'Simulation du projet';
 

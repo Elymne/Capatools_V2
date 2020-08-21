@@ -1,9 +1,7 @@
 <?php
 
 use app\assets\AppAsset;
-use app\models\projects\Project;
 use app\widgets\TopTitle;
-use wbraganca\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "25abbbd9a3c99b622597db02166558bd",
+    "content-hash": "0c0675aaeed2a6973b0731a582096384",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -364,54 +364,6 @@
             "time": "2020-05-25T17:44:05+00:00"
         },
         {
-            "name": "dogrocker/yii2-dynamicform",
-            "version": "v2.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dogrocker/yii2-dynamicform.git",
-                "reference": "065394c553155688367af6e27454b744c71d6ce7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dogrocker/yii2-dynamicform/zipball/065394c553155688367af6e27454b744c71d6ce7",
-                "reference": "065394c553155688367af6e27454b744c71d6ce7",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/css-selector": "~2.8|~3.0",
-                "symfony/dom-crawler": "~2.8|~3.0",
-                "yiisoft/yii2": "~2.0.5"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "wbraganca\\dynamicform\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Wanderson Bragança",
-                    "email": "wanderson.wbc@gmail.com",
-                    "homepage": "http://wbraganca.com"
-                }
-            ],
-            "description": "It is widget to yii2 framework to clone form elements in a nested manner, maintaining accessibility.",
-            "keywords": [
-                "copy DOM element",
-                "extension",
-                "wbraganca",
-                "widget",
-                "yii2",
-                "yii2 dynamic form",
-                "yii2-dynamicform"
-            ],
-            "time": "2017-03-14T07:52:20+00:00"
-        },
-        {
             "name": "egulias/email-validator",
             "version": "2.1.19",
             "source": {
@@ -676,6 +628,53 @@
                 "yii2"
             ],
             "time": "2020-07-22T10:40:59+00:00"
+        },
+        {
+            "name": "kidzen/yii2-dynamicform",
+            "version": "2.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kidzen/yii2-dynamicform.git",
+                "reference": "16e928b3c1699eb7c2af6bc7dbce7d73a5cb38d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kidzen/yii2-dynamicform/zipball/16e928b3c1699eb7c2af6bc7dbce7d73a5cb38d2",
+                "reference": "16e928b3c1699eb7c2af6bc7dbce7d73a5cb38d2",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/css-selector": "~2.8|~3.0",
+                "symfony/dom-crawler": "~2.8|~3.0",
+                "yiisoft/yii2": "~2.0.5"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kidzen\\dynamicform\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "kidzen",
+                    "email": "kidzenfxc@gmail.com"
+                }
+            ],
+            "description": "It is widget to yii2 framework to clone form elements in a nested manner, maintaining accessibility.",
+            "keywords": [
+                "copy DOM element",
+                "extension",
+                "kidzen",
+                "widget",
+                "yii2",
+                "yii2 dynamic form",
+                "yii2-dynamicform"
+            ],
+            "time": "2019-04-07T19:43:18+00:00"
         },
         {
             "name": "mpdf/mpdf",

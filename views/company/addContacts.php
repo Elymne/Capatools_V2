@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use wbraganca\dynamicform\DynamicFormWidget;
 use yii\widgets\ActiveForm;
 use app\assets\AppAsset;
 use app\widgets\TopTitle;
+use kidzen\dynamicform\DynamicFormWidget;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
