@@ -1,18 +1,18 @@
-f<?php
+<?php
 
-    use app\widgets\TopTitle;
-    use app\assets\AppAsset;
-    use app\assets\administration\EquipmentCreateAsset;
-    use kartik\select2\Select2;
-    use yii\widgets\ActiveForm;
-    use yii\helpers\Html;
+use app\widgets\TopTitle;
+use app\assets\AppAsset;
+use app\assets\administration\EquipmentCreateAsset;
+use kartik\select2\Select2;
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 
-    $this->title = 'Création d\'un matériel';
+$this->title = 'Création d\'un matériel';
 
-    AppAsset::register($this);
-    EquipmentCreateAsset::register($this);
+AppAsset::register($this);
+EquipmentCreateAsset::register($this);
 
-    ?>
+?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 
