@@ -58,7 +58,7 @@ class AppAsset extends AssetBundle
     public $js = [
 
         // Materialize.
-        'js/materialize.min.js',
+        //'js/materialize.min.js',
 
         // JS Admin Template Html.
         'js/dark-forest/vendors.min.js',
