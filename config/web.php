@@ -46,10 +46,15 @@ $config = [
         // Php mailer.
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
             'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'encryption' => 'tls',
+                'host' => 'gp7vw.mail.infomaniak.com',
+                'port' => '25',
+                'username' => 'gp7vw_capatools',
+                'password' => '6wZQaHpULTXY',
+            ],
         ],
         // Logger file.
         'log' => [
