@@ -44,7 +44,7 @@ ProjectCreateThirdStepAsset::register($this);
                                 <div class="input-field col s12">
 
                                     <?php DynamicFormWidget::begin([
-                                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                        'widgetContainer' => 'dynamicform_wrapper_consumable', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                         'widgetBody' => '.container-items-consummable', // required: css class selector
                                         'widgetItem' => '.item-consummable', // required: css class
                                         'limit' => 10, // the maximum times, an element can be cloned (default 999)
@@ -115,7 +115,7 @@ ProjectCreateThirdStepAsset::register($this);
                                 <div class="input-field col s12">
 
                                     <?php DynamicFormWidget::begin([
-                                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                        'widgetContainer' => 'dynamicform_wrapper_invtest', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                         'widgetBody' => '.container-items-invtest', // required: css class selector
                                         'widgetItem' => '.item-invtest', // required: css class
                                         'limit' => 10, // the maximum times, an element can be cloned (default 999)
@@ -128,7 +128,6 @@ ProjectCreateThirdStepAsset::register($this);
                                     ]); ?>
 
                                     <div class="container-items-invtest">
-                                        <!-- widgetContainer -->
                                         <?php foreach ($invests as $i => $invtest) : ?>
                                             <div class="item-invtest">
                                                 <?php
@@ -138,6 +137,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                 }
                                                 ?>
                                                 <div class="row">
+
                                                     <div class="col s4">
                                                         <?= $form->field($invtest, "[{$i}]name")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                     </div>
@@ -150,10 +150,11 @@ ProjectCreateThirdStepAsset::register($this);
                                                     <div class="col 1">
                                                         <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                                     </div>
+
                                                 </div><!-- .row -->
-                                            </div>
+                                            </div><!-- .item -->
                                         <?php endforeach; ?>
-                                    </div>
+                                    </div><!-- .container -->
 
                                     <?php DynamicFormWidget::end(); ?>
 

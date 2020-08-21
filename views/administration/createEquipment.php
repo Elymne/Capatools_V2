@@ -1,17 +1,18 @@
-<?php
+f<?php
 
-use app\widgets\TopTitle;
-use app\assets\AppAsset;
-use app\assets\administration\EquipmentCreateAsset;
-use yii\widgets\ActiveForm;
-use yii\helpers\Html;
+    use app\widgets\TopTitle;
+    use app\assets\AppAsset;
+    use app\assets\administration\EquipmentCreateAsset;
+    use kartik\select2\Select2;
+    use yii\widgets\ActiveForm;
+    use yii\helpers\Html;
 
-$this->title = 'Création d\'un matériel';
+    $this->title = 'Création d\'un matériel';
 
-AppAsset::register($this);
-EquipmentCreateAsset::register($this);
+    AppAsset::register($this);
+    EquipmentCreateAsset::register($this);
 
-?>
+    ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 
@@ -33,10 +34,23 @@ EquipmentCreateAsset::register($this);
                     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'placeholder' => 'Nom'])->label('Nom du matériel :') ?>
 
                     <!-- ht_price field -->
-                    <?= $form->field($model, 'ht_price')->input('number', ['maxlength' => true, 'placeholder' => 'Prix hors taxes'])->label('Prix journalier hors taxes du matériel :') ?>
+                    <?= $form->field($model, 'price_day')->input('number', ['maxlength' => true, 'placeholder' => 'Prix hors taxes'])->label('Prix journalier hors taxes du matériel :') ?>
+
+                    <!-- ht_price field -->
+                    <?= $form->field($model, 'price_hour')->input('number', ['maxlength' => true, 'placeholder' => 'Prix hors taxes'])->label('Prix journalier hors taxes du matériel :') ?>
 
                     <!-- type field -->
                     <?= $form->field($model, 'type')->textInput(['maxlength' => true, 'placeholder' => 'Type'])->label('Type de matériel :') ?>
+
+                    <?= $form->field($model, "laboratory")->widget(Select2::class, [
+                        'data' => $laboratoriesName,
+                        'pluginLoading' => false,
+                        'pluginOptions' => [
+                            'allowClear' => false
+                        ],
+                    ])->label(
+                        "Laboratoire"
+                    ); ?>
 
                     <div class="form-group">
                         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>

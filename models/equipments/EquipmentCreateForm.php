@@ -21,7 +21,8 @@ class EquipmentCreateForm extends Equipment
     {
         return [
             ['name', 'required', 'message' => 'Veulliez renseigner le nom du matériel'],
-            ['ht_price', 'required', 'message' => 'Veulliez renseigner le prix journalier du matériel'],
+            ['price_day', 'required', 'message' => 'Veulliez renseigner le prix journalier du matériel'],
+            ['price_hour', 'required', 'message' => 'Veulliez renseigner le prix horaire du matériel'],
             ['type', 'required', 'message' => 'Veulliez renseigner le type du matériel'],
             ['laboratory', 'required', 'message' => 'Veulliez renseigner le laboratoire'],
         ];
