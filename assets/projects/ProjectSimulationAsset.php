@@ -14,7 +14,7 @@ class ProjectSimulationAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
 
-    public $css = [];
+    public $css = ['css/projects/projectSimulation.css'];
 
     public $js = ['js/projects/simulationproject.js'];
 

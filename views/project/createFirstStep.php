@@ -4,7 +4,7 @@ use app\assets\AppAsset;
 use app\assets\projects\ProjectCreateFirstStepAsset;
 use app\models\projects\Project;
 use app\widgets\TopTitle;
-use wbraganca\dynamicform\DynamicFormWidget;
+use kidzen\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
@@ -32,11 +32,12 @@ ProjectCreateFirstStepAsset::register($this);
                     </div>
 
                     <div class="card-action">
-
                         <!-- Champ titre -->
                         <label class='blue-text control-label typeLabel'>Titre du projet</label>
                         <?= $form->field($model, 'internal_name')->textInput([])->label(false) ?>
+                    </div>
 
+                    <div class="card-action">
                         <!-- Type de projet  -->
                         <label class='blue-text control-label typeLabel'>Type de projet</label>
                         <?= $form->field($model, 'combobox_type_checked')->radioList(Project::TYPES, [
@@ -84,6 +85,9 @@ ProjectCreateFirstStepAsset::register($this);
                                 return $return;
                             }
                         ])->label(false); ?>
+                    </div>
+
+                    <div class="card-action">
 
                         <!-- Création de lot -->
                         <label id="lot-management-label" class='blue-text control-label typeLabel'>Créer des lots - ils seront éditables par la suite</label>
@@ -128,14 +132,14 @@ ProjectCreateFirstStepAsset::register($this);
                                             </div>
                                         <?php endforeach; ?>
                                     </div>
-
                                     <?php DynamicFormWidget::end(); ?>
-
                                 </div>
                             </div>
                         </div>
 
+                    </div>
 
+                    <div class="card-action">
                         <div class="col s12">
                             <div class="row">
 
@@ -146,10 +150,11 @@ ProjectCreateFirstStepAsset::register($this);
                                                 'source' => $companiesNames,
                                             ],
                                         ])->label(
-                                            "Companie"
+                                            "Société"
                                         );
                                     ?>
-                                    <?= Html::a('Créer un contact', [''], ['class' => '']) ?>
+                                    <?= Html::a('Ajouter une société', [''], ['class' => '']) ?>
+                                    <br /><br />
                                 </div>
                                 <div class="input-field col s6">
                                     <?php /*$form->field($fileModel, 'file')
@@ -170,15 +175,20 @@ ProjectCreateFirstStepAsset::register($this);
                                                 'source' => $contactsEmail,
                                             ],
                                         ])->label(
-                                            "Client"
+                                            "Contact client"
                                         );
                                     ?>
-                                    <?= Html::a('Créer un contact', [''], ['class' => '']) ?>
+                                    <?= Html::a('Ajouter un contact', [''], ['class' => '']) ?>
+                                    <br /><br />
                                 </div>
 
 
                             </div>
                         </div>
+                    </div>
+
+                    <div class="card-action">
+
                         <!-- Buttons -->
                         <div class="form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
@@ -186,10 +196,6 @@ ProjectCreateFirstStepAsset::register($this);
                         </div>
 
                     </div>
-
-
-
-
 
                 </div>
 
