@@ -6,16 +6,18 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+
 $this->title = Yii::$app->name;
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="row">
     <div class="col s6 m6">
         <div class="card">
             <p class="center-align">
-                <img src= "<?= Html::encode(Yii::$app->homeUrl) ?>images/logo.png" alt="" />
+                <img src="<?= Html::encode(Yii::$app->homeUrl) ?>images/logo.png" alt="" />
             </p>
-            <div class="card-content">
+            <div class="card-action">
                 <span class="card-title">Réinitialisation du mot de passe</span>
                 <?php $form = ActiveForm::begin([
                     'id' => 'login-form',
@@ -26,15 +28,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]); ?>
 
-                    <?= $form->field($model, 'email')->textInput(['autofocus' => true])->label('Email') ?>
+                <?= $form->field($model, 'email')->textInput(['autofocus' => true])->label('Email') ?>
 
-                    <div class="form-group">
-                        <div class="col s12">
+                <div class="form-group">
+                    <div class="col s12">
                         <p class="center-align">
                             <?= Html::submitButton('Envoyer <i class="material-icons right">mail_outline</i>', ['class' => 'btn waves-effect waves-light', 'name' => 'login-button']) ?>
-                </p>
-                        </div>
+                        </p>
                     </div>
+                </div>
 
                 <?php ActiveForm::end(); ?>
             </div>
