@@ -14,7 +14,7 @@ class ProjectCreateTaskAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
 
-    public $css = [];
+    public $css = ['css/projects/createTask.css'];
 
     public $js =  ['js/projects/createTask.js'];
 

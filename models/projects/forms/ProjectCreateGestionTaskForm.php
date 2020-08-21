@@ -31,7 +31,9 @@ class ProjectCreateGestionTaskForm extends Task
             ['capa_user_id', 'required', 'message' => 'Il faut indiquer l\'intervenant de la tâche'],
             ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
             ['day_duration', 'required', 'message' => 'Il faut renseigner le nombre de jour'],
+            ['day_duration', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
             ['hour_duration', 'required', 'message' => 'Il faut renseigner le nombre d\'heure'],
+            ['hour_duration', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
             ['risk', 'required', 'message' => 'Il faut renseigner l\'incertitude'],
         ];
     }

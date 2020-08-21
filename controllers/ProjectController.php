@@ -906,8 +906,6 @@ class ProjectController extends Controller implements ServiceInterface
             }
         }
 
-
-
         $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
         $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
 
