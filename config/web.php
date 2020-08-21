@@ -78,8 +78,6 @@ $config = [
         ],
 
         'formatter' => [
-            'currencyCode' => 'fr-FR',
-            'locale' => 'fr-FR',
             'numberFormatterSymbols' => [\NumberFormatter::CURRENCY_SYMBOL => '€'],
         ],
 
