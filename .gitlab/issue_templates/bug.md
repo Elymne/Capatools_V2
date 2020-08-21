@@ -1,40 +1,31 @@
-Summary
+Résumé
 
-(Summarize the bug encountered concisely)
-
-
-Steps to reproduce
-
-(How one can reproduce the issue - this is very important)
+(Résumé du bug)
 
 
-Example Project
+Comment le reproduire
 
-(If possible, please create an example project here on GitLab.com that exhibits the problematic behaviour, and link to it here in the bug report)
-
-(If you are using an older version of GitLab, this will also determine whether the bug has been fixed in a more recent version)
+(Comment reproduire le bug  - C'est vraiment important)
 
 
-What is the current bug behavior?
+Exemple de devis:
 
-(What actually happens)
-
-
-What is the expected correct behavior?
-
-(What you should see instead)
+Un exemple de devis sauvegardé qui permet de reproduire le bug plus facilement
 
 
-Relevant logs and/or screenshots
-
-(Paste any relevant logs - please use code blocks (```) to format console output,
-logs, and code as it's very hard to read otherwise.)
+Ce qui est atentdu?
 
 
-Possible fixes
 
-(If you can, link to the line of code that might be responsible for the problem)
+Ce qui se passe?
 
-/label ~bug ~reproduced ~needs-investigation
-/cc @project-manager
-/assign @qa-tester
+
+
+Ajouter des images screenshot ou message d'erreur
+
+
+
+Platforme (firefox, edge, chrome...) :
+
+Version : 
+
