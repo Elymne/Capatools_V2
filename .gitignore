@@ -34,6 +34,7 @@ tests/_support/_generated
 /config/db.php
 
 /web/uploads/*
+/web/assets/*
 
 # rbac ignores files
 /rbac/assignments.php
