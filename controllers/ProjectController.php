@@ -333,8 +333,7 @@ class ProjectController extends Controller implements ServiceInterface
         $jalon->statut = $status;
         $jalon->save();
 
-        MenuSelectorHelper::setMenuProjectNone();
-
+        MenuSelectorHelper::setMenuProjectIndex();
         return $this->render('view', [
             'model' => $this->findModel($jalon->project_id),
         ]);

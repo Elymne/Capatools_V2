@@ -33,7 +33,7 @@ class m200099_000842_millestone_table extends Migration
             'comment' => 'Jalon 1',
             'pourcentage' => 40,
             'price' => 1200,
-            'statut' => 1,
+            'statut' => 'en cours',
 
             'project_id' => 1
         ]);
@@ -44,7 +44,7 @@ class m200099_000842_millestone_table extends Migration
             'comment' => 'Jalon 2',
             'pourcentage' => 60,
             'price' => 1200,
-            'statut' => 1,
+            'statut' => 'en cours',
 
             'project_id' => 1
         ]);

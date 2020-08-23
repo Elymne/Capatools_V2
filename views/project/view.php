@@ -80,7 +80,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <table>
                             <tbody>
                                 <?php echo createMillestone($model->millestones) ?>
-
                             <tbody>
                         </table>
                     </div>
@@ -395,18 +394,42 @@ function createMillestone(array $millestones)
         <th>Pourcentage</th>
         <th>Prix du jalon</th>
         <th>Statut</th>
+        <?php if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ADMIN, UserRoleEnum::SUPPORT])) {
+            echo "<th></th>";
+        } ?>
     </tr>
     <?php
     foreach ($millestones as $key => $millestone) {
     ?>
-
-
         <tr>
             <td><?php echo $millestone->comment ?></td>
             <td><?php echo Yii::$app->formatter->asPercent($millestone->pourcentage / 100) ?></td>
-            <td><?php echo  Yii::$app->formatter->asCurrency($millestone->price) ?></td>
-            <td><?php echo  updateStatus($millestone) ?></td>
+            <td><?php echo Yii::$app->formatter->asCurrency($millestone->price) ?></td>
+            <td><?php echo updateStatus($millestone) ?></td>
+            <?php if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ADMIN, UserRoleEnum::SUPPORT])) {
+                getUpdateStatusButton($millestone);
+            } ?>
         </tr>
+    <?php
+    }
+}
+
+function getUpdateStatusButton(Millestone $milestone)
+{
+    if ($milestone->statut == Millestone::STATUT_ENCOURS) {
+    ?> <td><?= Html::a('A facturer', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURATIONENCOURS], ['class' => 'waves-effect waves-light btn btn-grey']) ?></td>
+    <?php
+    }
+    if ($milestone->statut == Millestone::STATUT_FACTURATIONENCOURS) {
+    ?> <td><?= Html::a('Valider la facturation', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURER], ['class' => 'waves-effect waves-light btn btn-grey']) ?></td>
+    <?php
+    }
+    if ($milestone->statut == Millestone::STATUT_FACTURER) {
+    ?> <td><?= Html::a('Valider le paiement', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_PAYED], ['class' => 'waves-effect waves-light btn btn-grey']) ?></td>
+    <?php
+    }
+    if ($milestone->statut == Millestone::STATUT_PAYED) {
+    ?> <td></td>
     <?php
     }
 }
