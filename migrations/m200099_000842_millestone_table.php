@@ -26,6 +26,28 @@ class m200099_000842_millestone_table extends Migration
             '{{%project}}',
             'id'
         );
+
+        $this->insert('{{%millestone}}', [
+            'id' => 1,
+            'number' => 1,
+            'comment' => 'Jalon 1',
+            'pourcentage' => 40,
+            'price' => 1200,
+            'statut' => 1,
+
+            'project_id' => 1
+        ]);
+
+        $this->insert('{{%millestone}}', [
+            'id' => 2,
+            'number' => 2,
+            'comment' => 'Jalon 2',
+            'pourcentage' => 60,
+            'price' => 1200,
+            'statut' => 1,
+
+            'project_id' => 1
+        ]);
     }
 
     public function safeDown()
