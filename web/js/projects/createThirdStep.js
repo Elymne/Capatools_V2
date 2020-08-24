@@ -9,8 +9,7 @@ const infoData = JSON.parse(document.getElementById("info-data-target").textCont
 const laboratorySelected = infoData.laboratorySelected !== null ? infoData.laboratorySelected : 0
 const addedEquipementsOnInit = infoData.equipments
 const addedContributorsOnInit = infoData.contributors
-
-console.log(laboratorySelected)
+const number = infoData.number
 
 /**
  * Cette variable existe car suivant le laboratoire sélectionné, les éléments dans les listes déroulantes vont changer pour correspondre à leur laboratoire respectif.
@@ -19,6 +18,11 @@ console.log(laboratorySelected)
  * et c'est nous qui mettons à jour la table en l'écrasant avec le résutat de la fonction).
  */
 let equipmentsLocalStateList = equipmentsData
+
+/**
+ * Constante que j'utilise pour savoir si le lot actuel de la vue est un lot d'avant projet, c'est-à-dire un lot dont le numéro est égale à 0.
+ */
+const isPreProject = number === '"0"'
 
 /**
  * Scope de test parce que je ne sais pas trop ce que je fais actuellement, on va voir si ça marche en tout cas.
@@ -30,6 +34,10 @@ $(() => {
      * Très utile car on en a besoin pour faire le calcul du coût par matériel.
      */
     equipmentsLocalStateList = getEquipementsListFromSelectedLaboratory(equipmentsData, laboratoriesData)
+
+    hideCardInvestPlus(isPreProject)
+    hideEquipmentRisk(isPreProject)
+    hideContributorRisk(isPreProject)
 
     /**
      * Explication : Pour chaque equipment de renvoyé dans la vue (des équipements donc qui seront affichés dans la dynamicView), il va nous falloir définir les callback de calcul
@@ -53,7 +61,7 @@ $(() => {
         const riskObject = calculateRiskTime(
             !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
             !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-            getValueFromEquipmentRiskSelectedByIndex(risksData, i),
+            getValueFromEquipmentRiskSelectedByIndex(risksData, i, number),
         )
         $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`).val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
 
@@ -250,6 +258,7 @@ $(() => {
      */
     $(".dynamicform_wrapper_equipment").on("afterInsert", (e, item) => {
         nbEquipmentLineDuplicated++
+        hideEquipmentRisk(isPreProject)
 
         /**
          * On vide la liste déroulantes de toutes ses options, puis la nourrit avec la liste des matériels existants.
@@ -267,6 +276,11 @@ $(() => {
         $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-price`).val(0)
 
         for (let i = 0; i <= nbEquipmentLineDuplicated; i++) {
+            /**
+             * Cache la liste des risques si le lot est le n°0
+             */
+            hideEquipmentRisk(isPreProject, i)
+
             /**
              * Callback onChange sur la liste déroulante des matériels de l'élément ajouté.
              * Permet de reclaculer le coût d'utilisation d'un matériel.
@@ -375,6 +389,7 @@ $(() => {
      */
     $(".dynamicform_wrapper_contributor").on("afterInsert", (e, item) => {
         nbContributorLineDuplicated++
+        hideContributorRisk(isPreProject)
 
         // Par défaut, le temps généré par le risque est à 0.
         $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-timeriskstringify`).val(stringifyRiskTime())
@@ -383,6 +398,11 @@ $(() => {
         $(`#projectcreatelaboratorycontributorform-${nbContributorLineDuplicated}-price`).val(0)
 
         for (let i = 0; i <= nbContributorLineDuplicated; i++) {
+            /**
+             *
+             */
+            hideContributorRisk(isPreProject, i)
+
             /**
              * Callback onChange sur la liste déroulante des matériels du premier item.
              * Permet de recalculer le temps additionel lié au risque.
@@ -467,7 +487,7 @@ const getValueFromEquipmentSelectedByIndex = (equipmentsData, index = 0) =>
  * @param {*} risksData - Une liste d'objet risque que l'on a au préalable injecté dans la liste déroulante.
  * @param {*} index - Numéro de l'item précis dont on souhaite connaitre l'équipement sélectionné
  */
-const getValueFromEquipmentRiskSelectedByIndex = (risksData, index = 0) =>
+const getValueFromEquipmentRiskSelectedByIndex = (risksData, index = 0, number) =>
     risksData[$(`#projectcreateequipmentrepaymentform-${index}-riskselected option:selected`).val()]
 
 /**
@@ -563,6 +583,34 @@ const getEquipementsListFromSelectedLaboratory = (equipmentsData, laboratoriesDa
  */
 const getIndexSelectorOfEquipment = (equipementElem, equipmentsLocalStateList) => {
     if (!equipementElem.repayment.null) return 0
+}
+
+/**
+ * Fonction qui permet de cacher l'une liste sélectionnable des risques.
+ * @param {*} number
+ */
+const hideEquipmentRisk = (bool) => {
+    if (bool) {
+        $(`.equipment_risk`).hide()
+    }
+}
+
+/**
+ * Fonction qui permet de cacher une des liste sélectionnable des risques.
+ * @param {*} number
+ */
+const hideContributorRisk = (bool) => {
+    if (bool) {
+        $(`.contributor_risk`).hide()
+    }
+}
+
+/**
+ * Fonction qui permet de cacher la cardview qui gère les investissements éventuels.
+ * @param {*} bool
+ */
+const hideCardInvestPlus = (bool) => {
+    if (bool) $("#card-invest-plus").hide()
 }
 
 //#endregion

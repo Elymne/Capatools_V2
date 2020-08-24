@@ -1021,13 +1021,20 @@ class ProjectController extends Controller implements ServiceInterface
                     Consumable::deleteAll(['id' => $deletedConsumablesIDs]);
                 }
 
-                // On associe les consommables au lot actuel, puis on les sauvegardes.
-                foreach ($invests as $invest) {
-                    $invest->lot_id = $lot->id;
-                    $invest->save();
-                }
-                if (!empty($deletedInvestsIDs)) {
-                    Investment::deleteAll(['id' => $deletedInvestsIDs]);
+                /**
+                 * On associe les consommables au lot actuel, puis on les sauvegardes. Notons que si le lot est égale à 0, on enregistre aucuns investissements.
+                 * Quand le lot est égale à 0, il n'y a pas d'investissements. Le fonctionement du widget DynamicForm nous 
+                 * oblige tout de même à garder un objet Invest dans la liste $invtests.
+                 * On ne doit donc pas le prendre en compte lors de la validation du formulaire.
+                 */
+                if ($number != 0) {
+                    foreach ($invests as $invest) {
+                        $invest->lot_id = $lot->id;
+                        $invest->save();
+                    }
+                    if (!empty($deletedInvestsIDs)) {
+                        Investment::deleteAll(['id' => $deletedInvestsIDs]);
+                    }
                 }
 
                 // On récupère la liste de matériels lié au choix du labo fait précédement. Utilisé pour récupérer le bon matériel sélectionné.
@@ -1042,7 +1049,7 @@ class ProjectController extends Controller implements ServiceInterface
                 foreach ($equipmentsRepayment as $equipmentRepayment) {
                     $equipmentRepayment->equipment_id = $equipmentsDataFilteredByLabo[$equipmentRepayment->equipmentSelected]->id;
                     $equipmentRepayment->lot_id = $lot->id;
-                    $equipmentRepayment->risk_id = $equipmentRepayment->riskSelected + 1;
+                    $equipmentRepayment->risk_id = \intval($equipmentRepayment->riskSelected) + 1;
                     $equipmentRepayment->time_risk = TimeStringifyHelper::transformStringChainToHour($equipmentRepayment->timeRiskStringify);
                     $equipmentRepayment->save();
                 }
@@ -1055,7 +1062,7 @@ class ProjectController extends Controller implements ServiceInterface
                     $contributor->type = LaboratoryContributor::TYPES[$contributor->type];
                     $contributor->laboratory_id = $id_laboratory;
                     $contributor->lot_id = $lot->id;
-                    $contributor->risk_id = $contributor->riskSelected + 1;
+                    $contributor->risk_id = intval($contributor->riskSelected) + 1;
                     $contributor->time_risk = TimeStringifyHelper::transformStringChainToHour($contributor->timeRiskStringify);
                     $contributor->save();
                 }
