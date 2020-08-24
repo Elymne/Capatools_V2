@@ -30,9 +30,9 @@ use yii\db\ActiveRecord;
 class LaboratoryContributor extends ActiveRecord implements JsonSerializable
 {
 
-    const TYPE_SEARCHER = "Chercheur";
-    const TYPE_PROBATIONER = "Stagiaire";
-    const TYPE_DOCTOR = "Post-docteur";
+    const TYPE_SEARCHER = "chercheur";
+    const TYPE_PROBATIONER = "stagiaire";
+    const TYPE_DOCTOR = "post-docteur";
     const TYPES = [
         self::TYPE_SEARCHER,
         self::TYPE_PROBATIONER,
