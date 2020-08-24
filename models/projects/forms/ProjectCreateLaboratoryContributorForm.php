@@ -51,7 +51,6 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
      */
     public function getSelectedType(): int
     {
-
         if ($this->type == null)
             return 1;
         else
@@ -60,6 +59,7 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
 
     /**
      * A utiliser pour associer la bonne clé lié à la liste sélectionnable pour la vue.
+     * Cette fonction ne marche que parce que les valeurs des id risks sont auto incrémenté.
      */
     public function setSelectedRisk()
     {

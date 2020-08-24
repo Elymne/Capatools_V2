@@ -16,6 +16,10 @@ use yii\widgets\ActiveForm;
 if ($number == 0) $this->title = 'Création d\'un projet - liste des dépenses et reversements : Avant-projet';
 else $this->title = 'Création d\'un projet - liste des dépenses et reversements : Lot n°' . $number;
 
+$risksName = array_map(function ($risk) {
+    return $risk->title;
+}, $risksData);
+
 AppAsset::register($this);
 ProjectCreateThirdStepAsset::register($this);
 
@@ -106,7 +110,7 @@ ProjectCreateThirdStepAsset::register($this);
 
                     </div>
 
-                    <div class="card-action">
+                    <div class="card-action" id="card-invest-plus">
 
                         <!-- Création dépense , d'investissements -->
                         <label id="invtest-management-label" class='blue-text control-label typeLabel'>Liste des achats d'investissement éventuels</label>
@@ -227,9 +231,7 @@ ProjectCreateThirdStepAsset::register($this);
                                                     <div class="col s2">
                                                         <!-- type dropdown field -->
                                                         <?= $form->field($equipment, "[{$i}]equipmentSelected")->widget(Select2::class, [
-                                                            'data' => array_map(function ($data) {
-                                                                return $data->name;
-                                                            }, $equipmentsData),
+                                                            'data' => $risksName,
                                                             'options' => ['value' => $equipment->equipmentSelected],
                                                             'pluginLoading' => false,
                                                             'pluginOptions' => [],
@@ -245,28 +247,17 @@ ProjectCreateThirdStepAsset::register($this);
                                                     <div class="col s1">
                                                         <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Heure(s)") ?>
                                                     </div>
-                                                    <?php
-                                                    if ($number != 0) { ?>
-
-                                                        <div class="col s2">
-                                                            <!-- type dropdown field -->
-                                                            <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::class, [
-                                                                'data' => array_map(function ($risk) {
-                                                                    return $risk->title;
-                                                                }, $risksData),
-                                                                'options' => ['value' => $equipment->riskSelected],
-                                                                'pluginLoading' => false,
-                                                                'pluginOptions' => [],
-                                                            ])->label("Incertitude"); ?>
-                                                        </div>
-                                                    <?php } else { ?>
-
-                                                        <div class="col s0">
-                                                            <?= $form->field($equipment, "[{$i}]riskSelected")->hiddeninput(['value' => 0])->label(''); ?>
-
-                                                        </div>
-                                                    <?php }
-                                                    ?>
+                                                    <div class="col s2 equipment_risk">
+                                                        <!-- type dropdown field -->
+                                                        <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::class, [
+                                                            'data' => array_map(function ($risk) {
+                                                                return $risk->title;
+                                                            }, $risksData),
+                                                            'options' => ['value' => $equipment->riskSelected],
+                                                            'pluginLoading' => false,
+                                                            'pluginOptions' => [],
+                                                        ])->label("Incertitude"); ?>
+                                                    </div>
                                                     <div class="col s2">
                                                         <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
                                                     </div>
@@ -337,28 +328,15 @@ ProjectCreateThirdStepAsset::register($this);
                                                     <div class="col s1">
                                                         <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Heure(s)") ?>
                                                     </div>
-
-                                                    <?php
-                                                    if ($number != 0) { ?>
-                                                        <div class="col s2">
-                                                            <!-- type dropdown field -->
-                                                            <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::class, [
-                                                                'data' => array_map(function ($risk) {
-                                                                    return $risk->title;
-                                                                }, $risksData),
-                                                                'options' => ['value' => $contributor->riskSelected],
-                                                                'pluginLoading' => false,
-                                                                'pluginOptions' => [],
-                                                            ])->label("Incertitude"); ?>
-                                                        </div>
-                                                    <?php } else { ?>
-
-                                                        <div class="col s0">
-                                                            <?= $form->field($contributor, "[{$i}]riskSelected")->hiddeninput(['value' => 0])->label(''); ?>
-
-                                                        </div>
-                                                    <?php }
-                                                    ?>
+                                                    <div class="col s2 contributor_risk">
+                                                        <!-- type dropdown field -->
+                                                        <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::class, [
+                                                            'data' => $risksName,
+                                                            'options' => ['value' => $contributor->riskSelected],
+                                                            'pluginLoading' => false,
+                                                            'pluginOptions' => [],
+                                                        ])->label("Incertitude"); ?>
+                                                    </div>
                                                     <div class="col s2">
                                                         <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
                                                     </div>
@@ -447,11 +425,14 @@ ProjectCreateThirdStepAsset::register($this);
         return $data->jsonSerialize();
     }, $contributors);
 
+    $lotnb = json_encode($number);
+
     // Envoi de données.
     echo json_encode([
         'laboratorySelected' => $model->laboratoryselected,
         'equipments' => $ided,
         'contributors' => $idcd,
+        'number' => $lotnb
     ]);
     ?>
 </div>
