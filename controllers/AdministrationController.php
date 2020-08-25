@@ -319,7 +319,7 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            // Because dropdownlist is an array.
+            // +1 car le dropdown est un tableau et son index commence à 0. L'id lui commence à 1.
             $model->cellule_id += 1;
 
             if ($model->save()) {

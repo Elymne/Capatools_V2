@@ -90,12 +90,11 @@ if ($lot->number != 0) {
                                             <div class="col s2">
                                                 <?= $form->field($taskGestion, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                             </div>
-                                            <div class="col s2">
+                                            <div class="col s3">
                                                 <?= $form->field($taskGestion, "[{$i}]capa_user_id")->widget(
                                                     Select2::classname(),
                                                     [
-
-                                                        'theme' => Select2::THEME_MATERIAL,
+                                                        //'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'GestionContributor',
                                                         'data' => ArrayHelper::map($celluleUsers, 'id', 'fullName'),
                                                         'pluginLoading' => false,
@@ -120,11 +119,11 @@ if ($lot->number != 0) {
                                             <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['type' => 'number', 'min' => 0, 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
                                             </div>
-                                            <div class="col s2">
+                                            <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]risk")->widget(
                                                     Select2::classname(),
                                                     [
-                                                        'theme' => Select2::THEME_MATERIAL,
+                                                        //'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'GestionRisk',
                                                         'data' => ArrayHelper::map($risk, 'id', 'title'),
                                                         'value' => $tasksGestions[$i]->risk,
@@ -212,11 +211,11 @@ if ($lot->number != 0) {
                                                 <div class="col s2">
                                                     <?= $form->field($taskOperational, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                 </div>
-                                                <div class="col s2">
+                                                <div class="col s3">
                                                     <?= $form->field($taskOperational, "[{$i}]capa_user_id")->widget(
                                                         Select2::classname(),
                                                         [
-                                                            'theme' => Select2::THEME_MATERIAL,
+                                                            //'theme' => Select2::THEME_MATERIAL,
                                                             'name' => 'TaskContributor',
                                                             'data' => ArrayHelper::map($celluleUsers, 'id', 'fullName'),
                                                             'pluginLoading' => false,
@@ -249,12 +248,12 @@ if ($lot->number != 0) {
                                                     echo  $form->field($taskOperational, "[{$i}]risk")->hiddeninput(['value' => 1])->label('');
                                                 } else {
 
-                                                    echo "<div class=\"col s2\">";
+                                                    echo "<div class=\"col s1\">";
 
                                                     echo $form->field($taskOperational, "[{$i}]risk")->widget(
                                                         Select2::classname(),
                                                         [
-                                                            'theme' => Select2::THEME_MATERIAL,
+                                                            //'theme' => Select2::THEME_MATERIAL,
                                                             'name' => 'TaskRisk[{$i}]',
                                                             'data' => ArrayHelper::map($risk, 'id', 'title'),
                                                             'pluginLoading' => false,

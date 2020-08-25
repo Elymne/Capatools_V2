@@ -87,6 +87,11 @@ span.span-combobox {
     font-weight: lighter;
 }
 
+button.btn-floating {
+    border: none;
+    margin-top: 20px;
+}
+
 /* id css */
 
 #main {

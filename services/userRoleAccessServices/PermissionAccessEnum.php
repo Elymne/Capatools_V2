@@ -4,10 +4,15 @@ namespace app\services\userRoleAccessServices;
 
 /**
  * Classe d'énumération qui liste toutes les permissions de l'application.
+ * Une permission est défini par une chaîne de caractère.
+ * Les permissions sont créés à partir des fichiers de migrations rbac. S'y réferer pour comprendre le processus qui régit les droits d'utilisateur.
+ * 
+ * A chaque fois que vous voulez créer un nouveau droit, faite d'abbord une nouvelle énumération dans cette classe que vous utiliserez ensuite dans le fichier de migration et dans le code.
  */
 class PermissionAccessEnum
 {
 
+    // Enums relatif à la gestions des projets.
     const PROJECT_INDEX = 'projectIndex';
     const PROJECT_CREATE = 'projectCreate';
     const PROJECT_VIEW = 'projectView';
@@ -16,6 +21,7 @@ class PermissionAccessEnum
     const PROJECT_UPDATE_STATUS = 'ProjectUpdateStatus';
     const PROJECT_PDF = 'projectPdf';
 
+    // Enums relatif à la gestions des utilisateurs.
     const ADMIN_INDEX = 'adminIndex';
     const ADMIN_CREATE = 'adminCreate';
     const ADMIN_VIEW = 'adminView';
@@ -26,6 +32,7 @@ class PermissionAccessEnum
     const ADMIN_EQUIPEMENT_INDEX = 'adminEquipementIndex';
     const ADMIN_EQUIPEMENT_CREATE = 'adminEquipementCreate';
 
+    // Enums relatif à la gestions des sociétés et des contacts.
     const COMPANY_INDEX = 'companyIndex';
     const COMPANY_CREATE = 'companyCreate';
     const COMPANY_VIEW = 'companyView';

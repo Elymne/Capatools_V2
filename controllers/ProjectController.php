@@ -54,15 +54,16 @@ use yii\helpers\ArrayHelper;
 #endregion
 
 /**
- * Classe contrôleur des vues et des actions de la partie devis.
+ * Classe contrôleur des vues et des actions de la partie projet/devis.
  * Attention au nom du contrôleur, il détermine le point d'entré de la route.
- * ex : pour notre contrôleur DevisController -> devis/[*]
+ * ex : pour notre contrôleur ProjetController -> projet/[*]
+ * 
  * Chaque route généré par le controller provient des fonctions dont le nom commence par action******.
  * ex : actionIndex donnera la route suivante -> devis/index
  * ex : actionIndexDetails donnera la route suivante -> devis/index-details.
  * 
- * @version Capatools v2.0
- * @since Classe existante depuis la Release v2.0
+ * @version Capatools v2.0.6
+ * @since Classe existante depuis la Release v2.0.0
  */
 class ProjectController extends Controller implements ServiceInterface
 {
@@ -71,13 +72,15 @@ class ProjectController extends Controller implements ServiceInterface
      * Utilisé pour déterminer les droits sur chaque action du contrôleur.
      * Dans la clé "rules", on défini un ou plusieurs rôles à une action du contrôleur.
      * 
-     * @return array Un tableau de droits tel que Yii2 le défini.
+     * On utilise une classe d'énumération pour les noms de rôle pour éviter des erreurs de code : PermissionAccessEnum.
+     * 
+     * @return array Un tableau de règles de comportements.
      */
     public function behaviors()
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
@@ -129,10 +132,9 @@ class ProjectController extends Controller implements ServiceInterface
      * Si l'utilisateur connecté ne possède pas les bons droits, on retourne un tableau vide.
      * Cette méthode est utilisé par le composant suivant : widgets/LeftMenuBar.
      * 
-     * - priotite : L'ordre de priorité de position du menu Devis.
-     * - name : Texte du menu Devis.
-     * - serviceMenuActive : Paramètre utilisé pour permettre de déplier le menu Devis 
-     * lorsque l'utilisateur est actuellement sur une vue Devis.
+     * - priorité : L'ordre de priorité de position du menu Projet.
+     * - name : Texte du menu Projet.
+     * - serviceMenuActive : Paramètre utilisé pour permettre de déplier le menu Devis lorsque l'utilisateur est actuellement sur une vue Devis.
      * - items : Les sous-menus.
      * 
      * @return Array Un tableau de données relatif au menu Devis.
@@ -140,21 +142,17 @@ class ProjectController extends Controller implements ServiceInterface
     public static function getActionUser()
     {
         $result = [];
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::PROJECT_MANAGER,
-                UserRoleEnum::CELLULE_MANAGER,
-                UserRoleEnum::SUPPORT,
-                UserRoleEnum::ADMIN,
-                UserRoleEnum::SUPER_ADMIN
-            ])
-        ) {
+        if (UserRoleManager::hasRoles([
+            UserRoleEnum::PROJECT_MANAGER,
+            UserRoleEnum::CELLULE_MANAGER,
+            UserRoleEnum::SUPPORT,
+            UserRoleEnum::ADMIN,
+            UserRoleEnum::SUPER_ADMIN
+        ])) {
 
             $result = [
                 'priorite' => 3,
                 'name' => 'Projets',
-                // serviceMenuActive est à un moyen très peu efficace, je vais essayer de l'oter, j'ai fais ça car je savais pas trop comment gérer
-                // les actives bar du menu à gauche.
                 'serviceMenuActive' => SubMenuEnum::PROJECT,
                 'items' => [
                     [
@@ -174,25 +172,7 @@ class ProjectController extends Controller implements ServiceInterface
                         'url' => 'project/create-first-step',
                         'label' => 'Création d\'un devis',
                         'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    ],
-                    // [
-                    //     'Priorite' => 4,
-                    //     'url' => 'project/lot-simulate',
-                    //     'label' => 'Simulation  de lot',
-                    //     'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    // ],
-                    // [
-                    //     'Priorite' => 5,
-                    //     'url' => 'project/project-simulate',
-                    //     'label' => 'Simulation  Projet',
-                    //     'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    // ],
-                    // [
-                    //     'Priorite' => 6,
-                    //     'url' => 'project/create-project',
-                    //     'label' => 'Création du Projet',
-                    //     'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    // ],
+                    ]
                 ]
             ];
         }
@@ -201,9 +181,9 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
-     * Render view : devis/index
+     * Render view : projet/index
      * Retourne la vue de l'index Devis.
-     * Liste de tous les devis présent dans la base de données.
+     * Liste de tous les projets présent dans la base de données qui ne sont pas à l'état de brouillon.
      * 
      * @return mixed 
      */
@@ -227,10 +207,33 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
-     * Render view : devis/view?id=?
-     * Retourne la vue détaillé d'un devis par rapport à l'id rentré en paramètre.
+     * Route : projet/index-draft
+     * Permet d'afficher la liste des tous les brouillons, c'est-à-dire les devis qui n'ont pas été finalisés, qui sont à l'état de brouillon.
      * 
+     * @return mixed|error
+     */
+    public function actionIndexDraft()
+    {
+        // Instanciation de la classe ProjectSearch qui va nous permettre d'utiliser la fonction search qui nous renvoie tous les projets. 
+        // Nous récupérerons les brouillons à l'aide une option.
+        $searchModel = new ProjectSearch();
+        // Nous aurons donc tous les models et en plus la possibilité d'ordonner ces données dans un gridview.
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ProjectSearch::GET_DRAFT_QUERY_OPTION);
+
+        MenuSelectorHelper::setMenuProjectDraft();
+        return $this->render(
+            'index-draft',
+            [
+                'dataProvider' => $dataProvider
+            ]
+        );
+    }
+
+    /**
+     * Render view : project/view?id=?
+     * Retourne la vue détaillé d'un projet par rapport à l'id rentré en paramètre.
      * @param integer $id
+     * 
      * @return mixed
      * @throws NotFoundHttpException If the model is not found.
      */
@@ -243,63 +246,12 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
-     * //TODO TO DELETE : not used anymore.
-     * Render create project : devis/createProject?id=?
-     * Retourne la vue de création d'un projet à partir d'un devis
-     * 
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException If the model is not found.
-     */
-    public function actionCreateProject(int $id = 1)
-    {
-        MenuSelectorHelper::setMenuProjectNone();
-        //Recupération des membres de la cellule
-        $idcellule = Yii::$app->user->identity->cellule_id;
-        $cel = new Cellule();
-        $cel->id = $idcellule;
-        $celluleUsers = $cel->capaUsers;
-
-        $model = ProjectCreateForm::getOneById($id);
-        $company = $model->company;
-        $TVA = 0;
-        if ($company->country == 'France') {
-            $TVA = 20;
-        }
-        if (Yii::$app->request->isPost) {
-            $model->upfilename = UploadedFile::getInstances($model, 'upfilename');
-
-            if ($model->upload(Yii::$app->request->post())) {
-                $post = Yii::$app->request->post();
-                $postform = $post["ProjectCreateForm"];
-
-                // file is uploaded successfully
-                $project = Project::getOneById($id);
-                $project->state = Project::STATE_DEVIS_SENDED;
-                $project->file_path = $model->file_path;
-                $project->file_name = $model->file_name;
-                $project->thematique = $postform["thematique"];
-                $project->save();
-
-                //   Yii::$app->response->redirect(['project/#']);
-            }
-        }
-
-        return $this->render('CreateProject', [
-            'model' => ProjectCreateForm::getOneById($id),
-            'celluleUsers' => $celluleUsers,
-            'TVA' => $TVA
-        ]);
-    }
-
-    /**
-     * //TODO TO DELETE : not used anymore.
      * Render view : none
-     * Redirected view : project/view.
-     * Modifie le status d'un devis.
-     * 
+     * Redirected view : project/view?id=?.
+     * Modifie le status d'un projet.
      * @param integer $id
      * @param integer $status Static value of DevisStatus
+     * 
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -315,15 +267,13 @@ class ProjectController extends Controller implements ServiceInterface
         ]);
     }
 
-
     /**
-     * //TODO TO DELETE : not used anymore.
      * Render view : none
-     * Redirected view : project/view.
-     * Modifie le status d'un jalon.
-     * 
+     * Redirected view : project/view?id=?.
+     * Modifie le status d'un jalon d'un projet.
      * @param integer $id
-     * @param value $status Static value of DevisStatus
+     * @param String $status Static value of DevisStatus
+     * 
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -339,40 +289,11 @@ class ProjectController extends Controller implements ServiceInterface
         ]);
     }
 
-
-    /**
-     * //TODO TO DELETE : not used anymore.
-     * Utilisé pour télécharger le fichier uploadé d'un devis.
-     * 
-     * @param int $id
-     */
-    public function actionDownloadFile(int $id)
-    {
-        // $fileModel = UploadFile::getByDevis($id);
-
-        // if ($fileModel != null) {
-        //     $pathFile = $fileModel->name . '.' . $fileModel->type;
-        //     UploadFileHelper::downloadFile($pathFile);
-        // }
-    }
-
-    /**
-     * //TODO TO KEEP : just need an update.
-     * Utilisé pour générer sous format excel les informations d'un devis.
-     * 
-     * @param int $id
-     */
-    public function actionDownloadExcel(int $id)
-    {
-        // $model = $this->findModel($id);
-        // if ($model != null) ExcelExportService::exportModelDataToExcel($model, ExcelExportService::DEVIS_TYPE);
-    }
-
     /**
      * Render view : devis/pdf?id=?
      * Permet de générer une vue html sous format pdf des informations d'un devis, permet aussi de le télécharger.
-     * 
      * @param integer $id
+     * 
      * @return mixed
      * @throws NotFoundHttpException If the model is not found.
      */
@@ -414,31 +335,7 @@ class ProjectController extends Controller implements ServiceInterface
         return $pdf->render();
     }
 
-    /**
-     * //TODO TO DELETE : useless.
-     * @deprecated Cette fonction n'est plus utilisé
-     */
-    public function actionViewpdf($id)
-    {
-
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT_NONE;
-
-        $model = $this->findModel($id);
-
-        if ($model) {
-            $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
-            if (file_exists($filepath)) {
-
-                // Set up PDF headers 
-                header('Content-type: application/pdf');
-                header('Content-Disposition: inline; filename="' . $model->filename . '"');
-                // Render the file
-                readfile($filepath);
-            } else {
-                // PDF doesn't exist so throw an error or something
-            }
-        }
-    }
+    // /!\ CREATION DE DEVIS-PROJET /!\
 
     /**
      *  Nouvelle route pour la création d'un projet sur l'application Capatool.
@@ -563,49 +460,10 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
-     * Route : create-lot-simulate
-     * Permet de modifier les marges d'un lot
-     * 
-     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * 
-     * @return mixed|error
-     */
-    public function actionLotSimulate($project_id = 1, $number = 1)
-    {
-
-        // Modèle du lot à updater. On s'en sert pour récupérer son id.
-        $lot = LotSimulate::getOneByIdProjectAndNumber($project_id, $number);
-
-        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        if ($lot->load(Yii::$app->request->post())) {
-
-            $lot->save();
-        }
-
-        if ($lot == null) {
-            return $this->redirect([
-                'error',
-                'errorName' => 'Lot innexistant',
-                'errorDescriptions' => ['Vous essayez actuellement de modifier un lot qui n\'existe pas.']
-            ]);
-        }
-        MenuSelectorHelper::setMenuProjectDraft();
-        return $this->render(
-            'lotSimulation',
-            [
-                'lot' =>  $lot
-            ]
-
-        );
-    }
-
-    /**
-     * Route : create-lot-simulate
-     * Permet de modifier les marges d'un lot
-     * 
-     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * Route : project/project-simulate.
+     * Action qui renvoie vers la page de simulation de projet, c'est à partir de la vue retourné par cette action que l'on peut 
+     * modifier les tâches, investissements ect d'un projet brouillon.
+     * @param integer $project_id : id du projet.
      * 
      * @return mixed|error
      */
@@ -745,7 +603,49 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
     /**
-     * A faire.
+     * Route : create-lot-simulate
+     * Permet de modifier les marges d'un lot
+     * @param integer $project_id : id du projet sur lequel se trouve le lot.
+     * @param integer $number : numéro du lot.
+     * 
+     * @return mixed|error
+     */
+    public function actionLotSimulate($project_id = 1, $number = 1)
+    {
+
+        // Modèle du lot à updater. On s'en sert pour récupérer son id.
+        $lot = LotSimulate::getOneByIdProjectAndNumber($project_id, $number);
+
+        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
+        if ($lot->load(Yii::$app->request->post())) {
+
+            $lot->save();
+        }
+
+        if ($lot == null) {
+            return $this->redirect([
+                'error',
+                'errorName' => 'Lot innexistant',
+                'errorDescriptions' => ['Vous essayez actuellement de modifier un lot qui n\'existe pas.']
+            ]);
+        }
+        MenuSelectorHelper::setMenuProjectDraft();
+        return $this->render(
+            'lotSimulation',
+            [
+                'lot' =>  $lot
+            ]
+
+        );
+    }
+
+    /**
+     * Route : update-task
+     * Permet de modifier les tâches d'un lot de projet.
+     * @param integer $project_id : id du projet sur lequel se trouve le lot.
+     * @param integer $number : numéro du lot.
+     * 
+     * @return mixed|error
      */
     public function actionUpdateTask($number, $project_id)
     {
@@ -925,7 +825,6 @@ class ProjectController extends Controller implements ServiceInterface
     /**
      * Route : update-dependencies-consumables
      * Permet de modifier les dépenses et les consommables d'un lot.
-     * 
      * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
      * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
      * 
@@ -1094,34 +993,152 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+
     /**
-     * Route : index-draft
-     * Permet d'afficher la liste des tous les brouillons, c'est-à-dire les devis qui n'ont pas été finalisés.
+     * Route : none.
+     * Redirect : project/view?id=?
+     * Permet de transformer un brouillon en projet.
+     * @param integer $id : id du projet.
      * 
      * @return mixed|error
      */
-    public function actionIndexDraft()
+    public function actionCreateProject(int $id = 1)
     {
-        // Instanciation de la classe ProjectSearch qui va nous permettre d'utiliser la fonction search qui nous renvoie tous les projets. 
-        // Nous récupérerons les brouillons à l'aide une option.
-        $searchModel = new ProjectSearch();
-        // Nous aurons donc tous les models et en plus la possibilité d'ordonner ces données dans un gridview.
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ProjectSearch::GET_DRAFT_QUERY_OPTION);
+        MenuSelectorHelper::setMenuProjectNone();
+        //Recupération des membres de la cellule
+        $idcellule = Yii::$app->user->identity->cellule_id;
+        $cel = new Cellule();
+        $cel->id = $idcellule;
+        $celluleUsers = $cel->capaUsers;
 
-        MenuSelectorHelper::setMenuProjectDraft();
+        $model = ProjectCreateForm::getOneById($id);
+        $company = $model->company;
+        $TVA = 0;
+        if ($company->country == 'France') {
+            $TVA = 20;
+        }
+        if (Yii::$app->request->isPost) {
+            $model->upfilename = UploadedFile::getInstances($model, 'upfilename');
+
+            if ($model->upload(Yii::$app->request->post())) {
+                $post = Yii::$app->request->post();
+                $postform = $post["ProjectCreateForm"];
+
+                // file is uploaded successfully
+                $project = Project::getOneById($id);
+                $project->state = Project::STATE_DEVIS_SENDED;
+                $project->file_path = $model->file_path;
+                $project->file_name = $model->file_name;
+                $project->thematique = $postform["thematique"];
+                $project->save();
+
+                //   Yii::$app->response->redirect(['project/#']);
+            }
+        }
+
+        return $this->render('CreateProject', [
+            'model' => ProjectCreateForm::getOneById($id),
+            'celluleUsers' => $celluleUsers,
+            'TVA' => $TVA
+        ]);
+    }
+
+    /**
+     * Méthode générale pour le contrôleur permettant de retourner un devis.
+     * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
+     * 
+     * @param integer $id
+     * @return Devis the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Project::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('Le devis n\'existe pas.');
+    }
+
+    /**
+     * Fonction qui rend une page d'erreur.
+     * @param string $errorName - Le titre de l'erreur que vous souhaitez afficher.
+     * @param array $errorDescription - Une liste de chaîne de caractères avec des détails précis sur l'erreur en question.
+     */
+    public function actionError(string $errorName, array $errorDescriptions)
+    {
+        MenuSelectorHelper::setMenuProjectNone();
         return $this->render(
-            'index-draft',
+            'error',
             [
-                'dataProvider' => $dataProvider
+                'errorName' => $errorName,
+                'errorDescriptions' => $errorDescriptions
             ]
         );
     }
 
     /**
-     * Route : update-first-step
-     * Retourne la vue de la première étape de la création d'un projet. On utilise celle-ci pour modifier un projet existant.
-     * Les modifications sur cette vue concernent : Le titre, les lots (à ôter, un lot ne doit pas être détruisable).
-     * Cette vue va probablement ne plus servir à grand chose.
+     * @deprecated Cette fonction n'est plus utilisé
+     */
+    public static function getIndicator($user)
+    {
+    }
+
+
+    /**
+     * /!\ TRASHBOX /!\
+     * Methodes inutilisées - cassées
+     */
+
+    /**
+     * //TODO TO DELETE : not used anymore.
+     */
+    public function actionDownloadFile(int $id)
+    {
+        // $fileModel = UploadFile::getByDevis($id);
+
+        // if ($fileModel != null) {
+        //     $pathFile = $fileModel->name . '.' . $fileModel->type;
+        //     UploadFileHelper::downloadFile($pathFile);
+        // }
+    }
+
+    /**
+     * //TODO TO KEEP : just need an update.
+     */
+    public function actionDownloadExcel(int $id)
+    {
+        // $model = $this->findModel($id);
+        // if ($model != null) ExcelExportService::exportModelDataToExcel($model, ExcelExportService::DEVIS_TYPE);
+    }
+
+    /**
+     * //TODO TO DELETE : useless.
+     */
+    public function actionViewpdf($id)
+    {
+
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT_NONE;
+
+        $model = $this->findModel($id);
+
+        if ($model) {
+            $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
+            if (file_exists($filepath)) {
+
+                // Set up PDF headers 
+                header('Content-type: application/pdf');
+                header('Content-Disposition: inline; filename="' . $model->filename . '"');
+                // Render the file
+                readfile($filepath);
+            } else {
+                // PDF doesn't exist so throw an error or something
+            }
+        }
+    }
+
+    /**
+     * //TODO TO DELETE : useless.
      */
     public function actionUpdateFirstStep(int $id)
     {
@@ -1249,46 +1266,5 @@ class ProjectController extends Controller implements ServiceInterface
                 'lots' => $lots
             ]
         );
-    }
-
-    /**
-     * Méthode générale pour le contrôleur permettant de retourner un devis.
-     * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
-     * 
-     * @param integer $id
-     * @return Devis the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Project::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('Le devis n\'existe pas.');
-    }
-
-    /**
-     * Fonction qui rend une page d'erreur.
-     * @param string $errorName - Le titre de l'erreur que vous souhaitez afficher.
-     * @param array $errorDescription - Une liste de chaîne de caractères avec des détails précis sur l'erreur en question.
-     */
-    public function actionError(string $errorName, array $errorDescriptions)
-    {
-        MenuSelectorHelper::setMenuProjectNone();
-        return $this->render(
-            'error',
-            [
-                'errorName' => $errorName,
-                'errorDescriptions' => $errorDescriptions
-            ]
-        );
-    }
-
-    /**
-     * @deprecated Cette fonction n'est plus utilisé
-     */
-    public static function getIndicator($user)
-    {
     }
 }
