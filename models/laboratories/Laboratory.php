@@ -5,9 +5,7 @@ namespace app\models\laboratories;
 use app\models\equipments\Equipment;
 use app\models\users\Cellule;
 use JsonSerializable;
-use Yii;
 use yii\db\ActiveRecord;
-use yii\db\Query;
 
 /**
  * Classe modèle métier des laboratoires Capacités.
@@ -55,6 +53,16 @@ class Laboratory extends ActiveRecord implements JsonSerializable
     static function getAll()
     {
         return static::find()->all();
+    }
+
+    /**
+     * Récupère la liste de tous les laboratoires sous l'objet DataProvider, utile pour nourirc certains widget.
+     * 
+     * @return DataProvider, retourne une liste d'objets Laboratory sous un objet ActiveData.
+     */
+    static function getAllDataProvider()
+    {
+        return static::find();
     }
 
     /**
