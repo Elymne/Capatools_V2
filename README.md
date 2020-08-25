@@ -29,7 +29,7 @@ Lancer la commande `php yii migrate` pour générer les bases de données par ra
 
 # Déploiement en pré-production.
 
-## Pour déploiyer en pré-prod, il faut faire attention à plusieurs choses :
+## Pour déployer en pré-prod, il faut faire attention à plusieurs choses :
 
 ### Il n'y a pas de déploiement automatique géré avec gitlab,
 
