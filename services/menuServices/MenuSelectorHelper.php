@@ -22,8 +22,8 @@ class MenuSelectorHelper
      */
     static function setMenuAdminNone()
     {
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_NONE;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::ADMIN_NONE;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::ADMIN;
     }
 
     /**
@@ -33,8 +33,8 @@ class MenuSelectorHelper
      */
     static function setMenuAdminIndex()
     {
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_LIST;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::ADMIN_LIST_USER;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::ADMIN;
     }
 
     /**
@@ -44,8 +44,8 @@ class MenuSelectorHelper
      */
     static function setMenuDevisParameters()
     {
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_UPDATE_DEVIS_PARAMETERS;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::ADMIN_UPDATE_DEVIS_PARAMETERS;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::ADMIN;
     }
 
     /**
@@ -55,8 +55,19 @@ class MenuSelectorHelper
      */
     static function setMenuEquipments()
     {
-        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::USER_UPDATE_EQUIPMENTS;
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::USER;
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::ADMIN_LIST_EQUIPMENTS;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::ADMIN;
+    }
+
+    /**
+     * Description :
+     * - Déroule le menu Administration.
+     * - Le sub-menu de la liste des laboratoires.
+     */
+    static function setMenuLaboratories()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::ADMIN_LIST_LABORATORIES;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::ADMIN;
     }
 
     /**

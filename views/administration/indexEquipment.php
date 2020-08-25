@@ -1,15 +1,15 @@
 <?php
 
+use app\assets\administration\EquipmentIndexAsset;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use app\assets\administration\EquipmentViewAsset;
 
 $this->title = 'Liste des matériels';
 $this->params['breadcrumbs'][] = $this->title;
 
-EquipmentViewAsset::register($this);
+EquipmentIndexAsset::register($this);
 
 ?>
 

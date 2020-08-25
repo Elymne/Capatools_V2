@@ -20,6 +20,7 @@ use app\models\parameters\DevisParameterUpdateForm;
 use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentCreateForm;
 use app\models\laboratories\Laboratory;
+use app\models\laboratories\LaboratoryCreateForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -53,13 +54,13 @@ class AdministrationController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
             ],
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
@@ -102,7 +103,7 @@ class AdministrationController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index-equipments'],
+                        'actions' => ['index-equipment'],
                         'roles' => [PermissionAccessEnum::ADMIN_EQUIPEMENT_INDEX]
                     ],
                     [
@@ -142,7 +143,7 @@ class AdministrationController extends Controller
                 [
                     'priorite' => 1,
                     'name' => 'Administration',
-                    'serviceMenuActive' => SubMenuEnum::USER,
+                    'serviceMenuActive' => SubMenuEnum::ADMIN,
                     'items' => self::getSubActionUser()
                 ];
         }
@@ -173,7 +174,7 @@ class AdministrationController extends Controller
                 'url' => 'administration/index',
                 'label' => 'Salariés',
                 'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::USER_LIST
+                'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_USER
             ]);
         }
 
@@ -188,7 +189,7 @@ class AdministrationController extends Controller
                 'url' => 'administration/view-devis-parameters',
                 'label' => 'Paramètres des devis',
                 'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::USER_UPDATE_DEVIS_PARAMETERS
+                'subServiceMenuActive' => SubMenuEnum::ADMIN_UPDATE_DEVIS_PARAMETERS
             ]);
         }
 
@@ -200,10 +201,25 @@ class AdministrationController extends Controller
         ) {
             array_push($result, [
                 'priorite' => 1,
-                'url' => 'administration/index-equipments',
+                'url' => 'administration/index-equipment',
                 'label' => 'Liste des matériels',
                 'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::USER_UPDATE_EQUIPMENTS
+                'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_EQUIPMENTS
+            ]);
+        }
+
+        if (
+            UserRoleManager::hasRoles([
+                UserRoleEnum::ADMIN,
+                UserRoleEnum::SUPER_ADMIN
+            ])
+        ) {
+            array_push($result, [
+                'priorite' => 1,
+                'url' => 'administration/index-laboratory',
+                'label' => 'Liste des laboratoires',
+                'icon' => 'show_chart',
+                'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_LABORATORIES
             ]);
         }
 
@@ -458,7 +474,7 @@ class AdministrationController extends Controller
      * 
      * @return mixed
      */
-    public function actionIndexEquipments()
+    public function actionIndexEquipment()
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Equipment::getAllDataProvider(),
@@ -466,7 +482,7 @@ class AdministrationController extends Controller
 
         MenuSelectorHelper::setMenuEquipments();
         return $this->render(
-            'equipmentIndex',
+            'indexEquipment',
             [
                 'dataProvider' => $dataProvider
             ]
@@ -487,8 +503,8 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->save()) {
-                MenuSelectorHelper::setMenuAdminNone();
-                return $this->redirect(['administration/view-equipments']);
+                MenuSelectorHelper::setMenuEquipments();
+                return $this->redirect(['administration/index-equipments']);
             }
         }
 
@@ -496,6 +512,54 @@ class AdministrationController extends Controller
         return $this->render('createEquipment', [
             'model' => $model,
             'laboratoriesName' => $laboratoriesName
+        ]);
+    }
+
+    /**
+     * Render view : administration/view-laboratories.
+     * Cette méthode est utilisé pour retourner une vue affichant tous les matériels de l'application.
+     * 
+     * @return mixed
+     */
+    public function actionIndexLaboratory()
+    {
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => Laboratory::getAllDataProvider()
+        ]);
+
+        MenuSelectorHelper::setMenuLaboratories();
+        return $this->render(
+            'indexLaboratory',
+            [
+                'dataProvider' => $dataProvider
+            ]
+        );
+    }
+
+    /**
+     * Render view : administration/create-laboratory.
+     * Cette méthode est utilisé pour retourner une vue permettant de créer un laboratoire.
+     * 
+     * @return mixed
+     */
+    public function actionCreateLaboratory()
+    {
+        $model = new LaboratoryCreateForm();
+        $cellulesName = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->cellule_id = $model->celluleSelect;
+            if ($model->save()) {
+                MenuSelectorHelper::setMenuLaboratories();
+                return $this->redirect(['administration/index-laboratory']);
+            }
+        }
+
+        MenuSelectorHelper::setMenuLaboratories();
+        return $this->render('createLaboratory', [
+            'model' => $model,
+            'cellulesName' => $cellulesName
         ]);
     }
 
