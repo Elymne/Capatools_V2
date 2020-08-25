@@ -13,6 +13,8 @@ namespace app\models\laboratories;
  */
 class LaboratoryCreateForm extends Laboratory
 {
+    // Attribut qui stockera la données séléecitonné sur la liste déroulante.
+    public $celluleSelect;
 
     /**
      * Fonction surchargée de la classe ActiveRecord, elle permet de vérifier l'intégrité des données dans un modèle.
@@ -20,12 +22,14 @@ class LaboratoryCreateForm extends Laboratory
     public function rules()
     {
         return [
+            [['celluleSelect'], 'safe'],
             ['name', 'required', 'message' => 'Veulliez renseigner le nom du laboratoire'],
             ['price_contributor_day', 'required', 'message' => 'Veulliez définir le prix/jour d\'un intervenant'],
             ['price_contributor_hour', 'required', 'message' => 'Veulliez définir le prix/heure d\'un intervenant'],
             ['price_ec_day', 'required', 'message' => 'Veulliez définir le prix/heure d\'un EC'],
             ['price_ec_hour', 'required', 'message' => 'Veulliez définir le prix/heure d\'un EC'],
-            ['cellule', 'required', 'message' => 'Veulliez renseigner la cellule rattaché au laboratoire']
+
+            ['celluleSelect', 'required', 'message' => 'Veulliez renseigner la cellule rattaché au laboratoire']
         ];
     }
 }

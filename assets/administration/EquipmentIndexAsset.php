@@ -4,14 +4,14 @@ namespace app\assets\administration;
 
 use yii\web\AssetBundle;
 
-class EquipmentViewAsset extends AssetBundle
+class EquipmentIndexAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
 
     public $css = [];
 
-    public $js = ['js/admin/equipment.js'];
+    public $js = ['js/admin/indexEquipment.js'];
 
     public $depends = [
         'yii\web\YiiAsset',

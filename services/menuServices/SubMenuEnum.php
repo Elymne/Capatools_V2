@@ -16,14 +16,15 @@ class SubMenuEnum
      * Administration menu.
      * Correspond à la sélection principale du menu.
      */
-    const USER = 'USER';
+    const ADMIN = 'ADMIN';
 
     // Correspond à une sous sélection du menu.
-    const USER_NONE = 'USER_NONE';
-    const USER_CREATE = 'USER_CREATE';
-    const USER_LIST = 'USER_LIST';
-    const USER_UPDATE_DEVIS_PARAMETERS = "USER_UPDATE_DEVIS_PARAMETERS";
-    const USER_UPDATE_EQUIPMENTS = "USER_UPDATE_EQUIPMENTS";
+    const ADMIN_NONE = 'ADMIN_NONE';
+    const ADMIN_CREATE_USER = 'ADMIN_CREATE_USER';
+    const ADMIN_LIST_USER = 'ADMIN_LIST_USER';
+    const ADMIN_UPDATE_DEVIS_PARAMETERS = "USER_UPDATE_DEVIS_PARAMETERS";
+    const ADMIN_LIST_EQUIPMENTS = "USER_UPDATE_EQUIPMENTS";
+    const ADMIN_LIST_LABORATORIES = "USER_LIST_LABORATORIES";
 
     /**
      * Project menu.
