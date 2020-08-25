@@ -478,6 +478,9 @@ class AdministrationController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Equipment::getAllDataProvider(),
+            'pagination' => [
+                'pageSize' => -1,
+            ],
         ]);
 
         MenuSelectorHelper::setMenuEquipments();
@@ -525,7 +528,10 @@ class AdministrationController extends Controller
     {
 
         $dataProvider = new ActiveDataProvider([
-            'query' => Laboratory::getAllDataProvider()
+            'query' => Laboratory::getAllDataProvider(),
+            'pagination' => [
+                'pageSize' => -1,
+            ],
         ]);
 
         MenuSelectorHelper::setMenuLaboratories();
