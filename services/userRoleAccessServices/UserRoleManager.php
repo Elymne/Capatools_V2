@@ -17,21 +17,16 @@ class UserRoleManager
 {
 
     /**
-     * Récupère tous les droits d'un utilisateur depuis sont id.
+     * Récupère tous les droits d'un utilisateur depuis son id.
      * @param int $id : identifiant utilisateur.
      * 
-     * @return array La liste sous forme de string de tous les rôles de l'utilisateur.
+     * @return array La liste de string de tous les rôles de l'utilisateur.
      */
     static function getUserRoles(int $id): array
     {
-        $userRoles = Yii::$app->authManager->getAssignments($id);
-
-        // Map this array, we just want names role. Not objects.
-        $func = function ($userRole) {
+        return array_map(function ($userRole) {
             return $userRole->roleName;
-        };
-
-        return array_map($func, $userRoles);
+        }, Yii::$app->authManager->getAssignments($id));
     }
 
     /**
@@ -45,10 +40,10 @@ class UserRoleManager
     }
 
     /**
-     * A partir de l'objet qui encapsule le modèle de formulaire de création, on va attribuer les rôles au dit utilisateur.
+     * A partir de l'objet qui encapsule le modèle de formulaire de création d'un utilisateur, on va attribuer les rôles au dit utilisateur.
      * Le modèle de formulaire se composant de 6 attributs qu'on utile pour générer des checkbox de rôles, on va les utiliser pour attribuer les rôles suivant
      * leur valeur.
-     * @param int $id : id de l'utilisateur généré.
+     * Le type des attributs régissant les checkbox est un boolean.
      * @param CapaUserCreateForm $userForm : modèle de formulaire d'un user.
      */
     static function setRolesFromUserCreateForm(CapaUserCreateForm $userForm)
@@ -65,7 +60,7 @@ class UserRoleManager
      * A partir de l'objet qui encapsule le modèle de formulaire de modification, on va attribuer les rôles au dit utilisateur.
      * Le modèle de formulaire se composant de 6 attributs qu'on utile pour générer des checkbox de rôles, on va les utiliser pour attribuer les rôles suivant
      * leur valeur.
-     * @param int $id : id de l'utilisateur généré.
+     * Le type des attributs régissant les checkbox est un boolean.
      * @param CapaUserCreateForm $userForm : modèle de formulaire d'un user.
      */
     static function setRolesFromUserUpdateForm(CapaUserUpdateForm $userForm)
@@ -79,7 +74,9 @@ class UserRoleManager
     }
 
     /**
-     * Méthode privée pour attribuer un role plus rapidement.
+     * Méthode privée pour attribuer un rôle plus rapidement.
+     * @param int $id, id utilisateur.
+     * @param string $role, la chaîne de caractère représentant le rôle (UTILISEZ LA CLASSE D'ENUMERATION).
      */
     private static function setRole(int $id, string $role)
     {
@@ -89,7 +86,9 @@ class UserRoleManager
     }
 
     /**
-     * Fonction utilisée pour associer les rôles de l'utilisateur aux valeurs des checkbox que l'on va générer dans la vue de modification.
+     * On utilise cette fonction pour définir les valeur des boolean de chaque combobox dans le modèle de formulaire fournit en paramètre.
+     * On mute donc les valeurs de l'objet $model qu'on a instancié (pas très programmation fonctionnel hélas).
+     * @param CapaUserUpdateForm $model, un modèle de formulaire qui sert à modifier des utilisateurs.
      */
     static function setRoleToModelForm(CapaUserUpdateForm $model)
     {
@@ -103,8 +102,17 @@ class UserRoleManager
     }
 
     /**
-     * Fonction assez lourde (donc possiblement à améliorer, voir la mettre autre part car elle n'a pas sa place dans une vue) qui permet de déterminé si l'utilisateur
-     * peut être connecté par la personne connecté.
+     * Fonction assez lourde qui permet en réalité de déterminer si l'utilisateur connecté peut modifier un utilisateur spécifique.
+     * La fonction est mal conçu dans le sens où elle ne prend en paramètre, pas un objet User mais bien les rôles d'un user.
+     * En gros, pour utiliser cette fonction dans une vue ou un contrôleur, on récupère un utilisteur, on récupère ses rôles 
+     * puis ont les utilises dans cette fonction pour voir si on à le droit de modifier l'utilisateur en question.
+     * 
+     * Cela permet qu'un admin ne puisse pas modifier un autre admin ou un super-admin.
+     * Qu'un support ne puisse pas modifier un autre support ou un admin ou un super-admin.
+     * 
+     * @param array $userRoles, la liste des rôles d'un utilisateur.
+     * 
+     * @return bool
      */
     static function canUpdateUser($userRoles): bool
     {
@@ -137,9 +145,9 @@ class UserRoleManager
     /**
      * Retourne vrai si l'utilisateur connecté a le droit passé en paramètre.
      * L'utilité de cette fonction est de pouvoir filtrer l'affichage et l'accès à certaines fonctionnalité en fonction des utilisateurs.
-     * @param string $userRole : Utilisation de l'énumération UserRoleEnum.
+     * @param string $userRole, Utilisation de l'énumération UserRoleEnum.
      * 
-     * @return bool Retourne vrai si l'utilisateur a le droit rentré en paramètre, sinon false.
+     * @return bool, retourne vrai si l'utilisateur a le droit rentré en paramètre, sinon false.
      */
     static function hasRole(string $userRole): bool
     {
@@ -149,9 +157,9 @@ class UserRoleManager
     /**
      * Retourne vrai si l'utilisateur connecté a au moins un des droits passés en paramètre.
      * L'utilité de cette fonction est de pouvoir filtrer l'affichage et l'accès à certaines fonctionnalité en fonction des utilisateurs.
-     * @param string $userRole : Utilisation de l'énumération UserRoleEnum.
+     * @param string $userRole, utilisation de l'énumération UserRoleEnum.
      * 
-     * @return bool Retourne vrai si l'utilisateur a au moins un des droits rentrés en paramètre, sinon false.
+     * @return bool, retourne vrai si l'utilisateur a au moins un des droits rentrés en paramètre, sinon false.
      */
     static function hasRoles(array $userRoles): bool
     {

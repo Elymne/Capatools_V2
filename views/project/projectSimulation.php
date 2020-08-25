@@ -431,7 +431,7 @@ ProjectSimulationAsset::register($this);
 
                             <?php
                             if ($validdevis) {
-                                echo Html::a(Yii::t('app', 'Créer le projet'), ['#'], ['class' => 'waves-effect waves-light btn btn-blue']);
+                                echo Html::a(Yii::t('app', 'Créer le projet'), ['#', 'id' => $project->id], ['class' => 'waves-effect waves-light btn btn-blue']);
                             } else {
                                 echo Html::a(Yii::t('app', 'Créer le projet'), null, ['class' => 'btn  disabled ']);
                             }
