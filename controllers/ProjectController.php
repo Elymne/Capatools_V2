@@ -251,7 +251,7 @@ class ProjectController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException If the model is not found.
      */
-    public function actionCreateProject(int $id = 1)
+    public function actionCreateProject_old(int $id = 1)
     {
         MenuSelectorHelper::setMenuProjectNone();
         //Recupération des membres de la cellule
@@ -317,7 +317,6 @@ class ProjectController extends Controller implements ServiceInterface
 
 
     /**
-     * //TODO TO DELETE : not used anymore.
      * Render view : none
      * Redirected view : project/view.
      * Modifie le status d'un jalon.
@@ -1092,6 +1091,33 @@ class ProjectController extends Controller implements ServiceInterface
                 'contributors' => $contributors
             ]
         );
+    }
+
+    public function actionCreateProject($project_id)
+    {
+
+        $project = Project::getOneById($project_id);
+        $isProjectValid = true;
+
+        // Vérification de la validité des lots du devis que l'on souhaite passer au statde projet.
+        foreach ($project->lots as $lot) {
+            if ($lot->totalCostHuman == 0) {
+                $isProjectValid = false;
+                break;
+            }
+        }
+
+        //Vérification que la totalité des jalons prend en compte 100% du prix du projet.
+        $totalPercent  = 0;
+        foreach ($project->millestones as $millestone) {
+            $totalPercent  += $millestone->pourcentage;
+        }
+        if ($totalPercent != 100) {
+            $isProjectValid = false;
+        }
+
+        if ($isProjectValid) {
+        }
     }
 
     /**
