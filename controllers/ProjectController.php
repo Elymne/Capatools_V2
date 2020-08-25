@@ -1014,9 +1014,11 @@ class ProjectController extends Controller implements ServiceInterface
         $model = ProjectCreateForm::getOneById($id);
         $company = $model->company;
         $TVA = 0;
+
         if ($company->country == 'France') {
             $TVA = 20;
         }
+
         if (Yii::$app->request->isPost) {
             $model->upfilename = UploadedFile::getInstances($model, 'upfilename');
 
@@ -1032,11 +1034,11 @@ class ProjectController extends Controller implements ServiceInterface
                 $project->thematique = $postform["thematique"];
                 $project->save();
 
-                //   Yii::$app->response->redirect(['project/#']);
+                Yii::$app->response->redirect(['project/view', 'id' => $project->id]);
             }
         }
 
-        return $this->render('CreateProject', [
+        return $this->render('createProject', [
             'model' => ProjectCreateForm::getOneById($id),
             'celluleUsers' => $celluleUsers,
             'TVA' => $TVA
