@@ -1,22 +1,22 @@
-<?php
+ix(s<?php
 
-use app\assets\AppAsset;
-use app\models\projects\Project;
-use app\assets\projects\ProjectSimulationAsset;
-use app\widgets\TopTitle;
-use yii\bootstrap\Html;
-use yii\widgets\ActiveForm;
-use yii\helpers\Url;
+    use app\assets\AppAsset;
+    use app\models\projects\Project;
+    use app\assets\projects\ProjectSimulationAsset;
+    use app\widgets\TopTitle;
+    use yii\bootstrap\Html;
+    use yii\widgets\ActiveForm;
+    use yii\helpers\Url;
 
-use kartik\select2\Select2;
-use kidzen\dynamicform\DynamicFormWidget;
+    use kartik\select2\Select2;
+    use kidzen\dynamicform\DynamicFormWidget;
 
-$this->title = 'Simulation du projet';
+    $this->title = 'Simulation du projet';
 
-AppAsset::register($this);
-ProjectSimulationAsset::register($this);
+    AppAsset::register($this);
+    ProjectSimulationAsset::register($this);
 
-?>
+    ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 <div class="container">
@@ -288,7 +288,7 @@ ProjectSimulationAsset::register($this);
                 <div class="card">
 
                     <div class="card-content">
-                        <label>Coût Externe</label>
+                        <label>Autres reversements</label>
                     </div>
 
                     <div class="card-action">
