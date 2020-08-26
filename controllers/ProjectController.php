@@ -248,7 +248,7 @@ class ProjectController extends Controller implements ServiceInterface
     /**
      * Render view : none
      * Redirected view : project/view?id=?.
-     * Modifie le status d'un projet.
+     * Modifie le status d'un projet. Si le projet est signé, sa proba de signature passe à 100%.
      * @param integer $id
      * @param integer $status Static value of DevisStatus
      * 
@@ -259,6 +259,10 @@ class ProjectController extends Controller implements ServiceInterface
     {
         $project = project::getOneById($id);
         $project->state = $status;
+
+        if (Project::STATE_DEVIS_SIGNED || Project::STATE_FINISHED)
+            $project->signing_probability = 100;
+
         $project->save();
 
         MenuSelectorHelper::setMenuProjectNone();
@@ -351,11 +355,11 @@ class ProjectController extends Controller implements ServiceInterface
 
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
-        unset($companiesNames[0]);
+        unset($companiesNames[0]); // On supprime la première company qui représente la company "indéfini".
 
         $contactsEmail = ArrayHelper::map(Contact::find()->all(), 'id', 'email');
         $contactsEmail = array_merge($contactsEmail);
-        unset($contactsEmail[0]);
+        unset($contactsEmail[0]); // On supprime le premier contact qui est en "indéfini".
 
         // Envoi par méthode POST.
         if ($model->load(Yii::$app->request->post())) {
@@ -376,11 +380,12 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
                 $defaultValue = "indéfini";
-                $model->internal_reference = $defaultValue;
+                $model->internal_reference = $model->internal_name;
                 $model->version = $defaultValue;
                 $model->date_version = date('Y-m-d H:i:s');
                 $model->creation_date = date('Y-m-d H:i:s');
-                $model->id_capa = IdLaboxyManager::generateDraftId($model->internal_name);
+                $model->id_capa = IdLaboxyManager::generateDraftId($model);
+                $model->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($model);
                 $model->state = Project::STATE_DRAFT;
 
                 // On récupère l'id de la cellule de l'utilisateur connecté.
