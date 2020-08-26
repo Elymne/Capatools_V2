@@ -657,12 +657,20 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionUpdateTask($number, $project_id)
     {
+
+        // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $model = new ProjectCreateTaskForm();
-        $tasksGestionsModif = [new ProjectCreateGestionTaskForm()];
-        $tasksLotsModif = [new ProjectCreateLotTaskForm()];
         $model->project_id = $project_id;
         $model->number = $number;
         $lot = $model->GetCurrentLot();
+
+        $tasksGestionsModif = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT)
+            ? ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT) : [new ProjectCreateGestionTaskForm()];
+
+        $tasksLotsModif = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK)
+            ? ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK) : [new ProjectCreateLotTaskForm()];
+
+
         $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
         $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
 
@@ -671,7 +679,6 @@ class ProjectController extends Controller implements ServiceInterface
         $cel = new Cellule();
         $cel->id = $idcellule;
         $celluleUsers = $cel->capaUsers;
-
         $risk = Risk::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -680,128 +687,39 @@ class ProjectController extends Controller implements ServiceInterface
             if ($number != 0) {
                 $oldTasksGestionsModifIds = ArrayHelper::map($tasksGestionsModif, 'id', 'id');
                 $tasksGestionsModif = Model::createMultiple(ProjectCreateGestionTaskForm::class, $tasksGestionsModif);
-                ProjectCreateGestionTaskForm::loadMultiple($tasksGestionsModif, Yii::$app->request->post());
+                if (!ProjectCreateGestionTaskForm::loadMultiple($tasksGestionsModif, Yii::$app->request->post())) $isValid = false;
                 $deletedTasksGestionsModifIds = array_diff($oldTasksGestionsModifIds, array_filter(ArrayHelper::map($tasksGestionsModif, 'id', 'id')));
-
-                if (!empty($tasksGestionsModif)) {
-                    foreach ($tasksGestionsModif as $tasksGestionModif) {
-                        if (!$tasksGestionModif->validate()) $isValid = false;
-                    }
-                }
             }
 
             $oldTasksLotsModifIds = ArrayHelper::map($tasksLotsModif, 'id', 'id');
             $tasksLotsModif = Model::createMultiple(ProjectCreateLotTaskForm::class, $tasksLotsModif);
-            ProjectCreateLotTaskForm::loadMultiple($tasksLotsModif, Yii::$app->request->post());
+            if (!ProjectCreateLotTaskForm::loadMultiple($tasksLotsModif, Yii::$app->request->post())) $isValid = false;
             $deletedTasksLotsModifIds = array_diff($oldTasksLotsModifIds, array_filter(ArrayHelper::map($tasksLotsModif, 'id', 'id')));
-
-            if (!empty($tasksGestionsModif)) {
-                foreach ($tasksLotsModif as $tasksLotModif) {
-                    if (!$tasksLotModif->validate()) $isValid = false;
-                }
-            } else $isValid = false;
 
             if ($isValid) {
 
-                //Update des tâches opérationel
-                {
-                    $tasksOperationalArray = ArrayHelper::index($tasksOperational,  function ($element) {
-                        return $element->number;
-                    });
-
-                    $tasksLotsModifArray = ArrayHelper::index($tasksLotsModif,   function ($element) {
-                        return $element->number;
-                    });
-
-                    //Suppression des tâches enlevées par l'utilisateur;
-                    foreach ($tasksOperationalArray as $tasksOperational) {
-
-                        if (!array_key_exists($tasksOperational->number, $tasksLotsModifArray)) {
-                            $tasksOperational->delete();
-                        }
-                    }
+                if ($number != 0) {
                     //Ajout et modification des données.
-                    foreach ($tasksLotsModif as $taskOperationalModif) {
-                        $task = null;
-                        if (!empty($tasksOperationalArray)) {
-                            if (array_key_exists(intval($taskOperationalModif->number), $tasksOperationalArray)) {
-                                //Si la tâche existe MAJ de la tâche
-                                $task =  $tasksOperationalArray[$taskOperationalModif->number];
-                            } else {
-                                //Si elle n'existe pas alors ajout de la tâche
-                                $task = new ProjectCreateLotTaskForm();
-                                $task->number = $taskOperationalModif->number;
-                                $task->task_category = Task::CATEGORY_TASK;
-                            }
-                        } else {
-                            //Si elle n'existe pas alors ajout de la tâche
-                            $task = new ProjectCreateLotTaskForm();
-                            $task->number = $taskOperationalModif->number;
-                            $task->task_category = Task::CATEGORY_TASK;
-                        }
-
-                        $task->title = $taskOperationalModif->title;
-                        $task->capa_user_id = $taskOperationalModif->capa_user_id;
-                        $task->day_duration = $taskOperationalModif->day_duration;
-                        $task->hour_duration = $taskOperationalModif->hour_duration;
-                        $task->price = $taskOperationalModif->price;
-                        $task->risk = $taskOperationalModif->risk;
-                        $task->risk_duration_hour = $taskOperationalModif->risk_duration_hour;
-                        $task->lot_id = $lot->id;
-                        $task->save();
+                    foreach ($tasksGestionsModif as $taskGestionModif) {
+                        $taskGestionModif->lot_id = $lot->id;
+                        $taskGestionModif->number = $lot->number;
+                        $taskGestionModif->task_category = Task::CATEGORY_MANAGEMENT;
+                        $taskGestionModif->save();
+                    }
+                    if (!empty($deletedTasksGestionsModifIds)) {
+                        ProjectCreateGestionTaskForm::deleteAll(['id' => $deletedTasksGestionsModifIds]);
                     }
                 }
 
-                //Update des tâches de gestions
-                {
-                    if ($number != 0) {
-                        $tasksGestionsArray = ArrayHelper::index($tasksGestions,  function ($element) {
-                            return $element->number;
-                        });
-
-                        $tasksGestionsModifArray = ArrayHelper::index($tasksGestionsModif,   function ($element) {
-                            return $element->number;
-                        });
-
-                        //Suppression des tâches enlevées par l'utilisateur;
-                        foreach ($tasksGestionsArray as $tasksGestions) {
-
-                            if (!array_key_exists($tasksGestions->number, $tasksGestionsModifArray)) {
-                                $tasksGestions->delete();
-                            }
-                        }
-                        //Ajout et modification des données.
-                        foreach ($tasksGestionsModif as $taskGestionModif) {
-                            $task = null;
-                            if (!empty($tasksGestionsArray)) {
-
-                                if (array_key_exists(intval($taskGestionModif->number), $tasksGestionsArray)) {
-                                    //Si la tâche existe MAJ de la tâche
-                                    $task =  $tasksGestionsArray[$taskGestionModif->number];
-                                } else {
-                                    //Si elle n'existe pas alors ajout de la tâche
-                                    $task = new ProjectCreateLotTaskForm();
-                                    $task->number = $taskGestionModif->number;
-                                    $task->task_category = Task::CATEGORY_MANAGEMENT;
-                                }
-                            } else {
-                                //Si elle n'existe pas alors ajout de la tâche
-                                $task = new ProjectCreateLotTaskForm();
-                                $task->number = $taskGestionModif->number;
-                                $task->task_category = Task::CATEGORY_MANAGEMENT;
-                            }
-
-                            $task->title = $taskGestionModif->title;
-                            $task->capa_user_id = $taskGestionModif->capa_user_id;
-                            $task->day_duration = $taskGestionModif->day_duration;
-                            $task->hour_duration = $taskGestionModif->hour_duration;
-                            $task->price = $taskGestionModif->price;
-                            $task->risk = $taskGestionModif->risk;
-                            $task->risk_duration_hour = $taskGestionModif->risk_duration_hour;
-                            $task->lot_id = $lot->id;
-                            $task->save();
-                        }
-                    }
+                //Ajout et modification des données.
+                foreach ($tasksLotsModif as $taskOperationalModif) {
+                    $taskOperationalModif->lot_id = $lot->id;
+                    $taskOperationalModif->number = $lot->number;
+                    $taskOperationalModif->task_category = Task::CATEGORY_TASK;
+                    $taskOperationalModif->save();
+                }
+                if (!empty($deletedTasksLotsModifIds)) {
+                    ProjectCreateLotTaskForm::deleteAll(['id' => $deletedTasksLotsModifIds]);
                 }
             }
         }
