@@ -121,16 +121,13 @@ if ($lot->number != 0) {
                                             </div>
                                             <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]risk")->widget(
-                                                    Select2::classname(),
+                                                    Select2::class,
                                                     [
                                                         //'theme' => Select2::THEME_MATERIAL,
                                                         'name' => 'GestionRisk',
                                                         'data' => ArrayHelper::map($risk, 'id', 'title'),
                                                         'value' => $tasksGestions[$i]->risk,
                                                         'pluginLoading' => false,
-                                                        'options' => [
-                                                            'placeholder' => 'Incetitude...',
-                                                        ],
                                                         'pluginEvents' => [
                                                             'select2:select' => 'function(e) {
                                                                 OnCalculIncertitudeGest(0);
@@ -251,15 +248,12 @@ if ($lot->number != 0) {
                                                     echo "<div class=\"col s1\">";
 
                                                     echo $form->field($taskOperational, "[{$i}]risk")->widget(
-                                                        Select2::classname(),
+                                                        Select2::class,
                                                         [
                                                             //'theme' => Select2::THEME_MATERIAL,
                                                             'name' => 'TaskRisk[{$i}]',
                                                             'data' => ArrayHelper::map($risk, 'id', 'title'),
                                                             'pluginLoading' => false,
-                                                            'options' => [
-                                                                'placeholder' => 'Incetitude...',
-                                                            ],
                                                             'pluginEvents' => [
                                                                 'select2:select' => 'function(e) { 
                                                                         OnCalculIncertitudelot(0);
