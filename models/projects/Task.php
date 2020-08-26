@@ -51,11 +51,11 @@ class Task extends ActiveRecord
 
     public function getLot()
     {
-        return $this->hasOne(Lot::className(), ['id' => 'lot_id']);
+        return $this->hasOne(Lot::class, ['id' => 'lot_id']);
     }
 
     public function getContributor()
     {
-        return $this->hasOne(CapaUser::className(), ['id' => 'capa_user_id']);
+        return $this->hasOne(CapaUser::class, ['id' => 'capa_user_id']);
     }
 }

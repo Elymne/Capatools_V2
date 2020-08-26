@@ -361,7 +361,7 @@ ProjectCreateThirdStepAsset::register($this);
                         <!-- Buttons -->
                         <div class="form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                            <?= Html::a(Yii::t('app', 'Annuler'), ['project/project-simulate?project_id=' . $project_id], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
+                            <?= Html::a(Yii::t('app', 'Retour'), ['project/project-simulate?project_id=' . $project_id], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                         </div>
                     </div>
 

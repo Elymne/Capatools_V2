@@ -21,7 +21,9 @@ class ProjectCreateInvestForm extends Investment
     public function rules()
     {
         return [
-            [["name", "price"], "safe"]
+            [["name", "price"], "safe"],
+            ['name', 'required', 'message' => 'Vous devez au moins renseigner ce champ, si vous ne souhaitez pas ajouter dépenses, précisez le sur ce champ (ex : aucun + le prix à 0).'],
+            ['price', 'required', 'message' => 'Vous devez au moins renseigner un prix.'],
         ];
     }
 }
