@@ -407,7 +407,7 @@ function createMillestone(array $millestones)
             <td><?php echo Yii::$app->formatter->asCurrency($millestone->price) ?></td>
             <td><?php echo updateStatus($millestone) ?></td>
             <?php if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ADMIN, UserRoleEnum::SUPPORT])) {
-                getUpdateStatusButton($millestone);
+                //getUpdateStatusButton($millestone);
             } ?>
         </tr>
     <?php
