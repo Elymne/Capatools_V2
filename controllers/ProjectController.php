@@ -248,7 +248,7 @@ class ProjectController extends Controller implements ServiceInterface
     /**
      * Render view : none
      * Redirected view : project/view?id=?.
-     * Modifie le status d'un projet.
+     * Modifie le status d'un projet. Si le projet est signé, sa proba de signature passe à 100%.
      * @param integer $id
      * @param integer $status Static value of DevisStatus
      * 
@@ -259,6 +259,10 @@ class ProjectController extends Controller implements ServiceInterface
     {
         $project = project::getOneById($id);
         $project->state = $status;
+
+        if (Project::STATE_DEVIS_SIGNED || Project::STATE_FINISHED)
+            $project->signing_probability = 100;
+
         $project->save();
 
         MenuSelectorHelper::setMenuProjectNone();
