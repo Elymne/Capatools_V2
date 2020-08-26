@@ -27,7 +27,9 @@ class ProjectCreateConsumableForm extends Consumable
     public function rules()
     {
         return [
-            [["title", "price", "type"], "safe"]
+            [["title", "price", "type"], "safe"],
+            ['title', 'required', 'message' => 'Vous devez au moins renseigner ce champ, si vous ne souhaitez pas ajouter dépenses, précisez le sur ce champ (ex : aucun + le prix à 0).'],
+            ['price', 'required', 'message' => 'Vous devez au moins renseigner un prix.'],
         ];
     }
 
