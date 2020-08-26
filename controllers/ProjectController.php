@@ -260,8 +260,11 @@ class ProjectController extends Controller implements ServiceInterface
         $project = project::getOneById($id);
         $project->state = $status;
 
-        if (Project::STATE_DEVIS_SIGNED || Project::STATE_FINISHED)
+        if (Project::STATE_DEVIS_SIGNED || Project::STATE_FINISHED) {
             $project->signing_probability = 100;
+            $project->id_laboxy = IdLaboxyManager::generateLaboxyId($project);
+        }
+
 
         $project->save();
 
@@ -1273,5 +1276,10 @@ class ProjectController extends Controller implements ServiceInterface
                 'lots' => $lots
             ]
         );
+    }
+
+    public function actionTest($id)
+    {
+        return IdLaboxyManager::generateNumberFromId($id);
     }
 }

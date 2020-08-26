@@ -154,6 +154,9 @@ $(() => {
             OnCalculIncertitudelot(index)
         })
 
+        let TaskRiskduration = "#projectcreatelottaskform-" + index + "-risk_duration"
+        $(TaskRiskduration).val("0j 0h")
+
         let SelectUser = "#projectcreatelottaskform-" + index + "-capa_user_id"
         $(SelectUser).on("select2:select", function (e) {
             OnCalculIntervenantlot(index)
@@ -203,6 +206,9 @@ $(() => {
             OnCalculIncertitudeGest(index)
         })
 
+        let TaskRiskduration = "#projectcreategestiontaskform-" + index + "-risk_duration"
+        $(TaskRiskduration).val("0j 0h")
+
         let SelectUser = "#projectcreategestiontaskform-" + index + "-capa_user_id"
         $(SelectUser).on("select2:select", function (e) {
             OnCalculIntervenantGest(index)
@@ -221,4 +227,28 @@ $(() => {
     $(".dynamicform_wrapperGest").on("limitReached", function (e, item) {
         alert("Limit reached")
     })
+})
+
+/**
+ * Scope à l'initialisation de la vue.
+ * En gros, si les premiers éléments à l'init sont vides. on place des valeurs par défaut dans les champs numériques.
+ */
+$(() => {
+    const pt = $("#projectcreategestiontaskform-0-capa_user_id").val()
+    const po = $("#projectcreategestiontaskform-0-risk").val()
+
+    if (pt == "" || po == "") {
+        $("#projectcreategestiontaskform-0-day_duration").val(0)
+        $("#projectcreategestiontaskform-0-hour_duration").val(0)
+        $("#projectcreategestiontaskform-0-risk_duration").val("0j 0h")
+    }
+
+    const ot = $("#projectcreatelottaskform-0-capa_user_id").val()
+    const oo = $("#projectcreatelottaskform-0-risk").val()
+
+    if (ot == "" || oo == "") {
+        $("#projectcreatelottaskform-0-day_duration").val(0)
+        $("#projectcreatelottaskform-0-hour_duration").val(0)
+        $("#projectcreatelottaskform-0-risk_duration").val("0j 0h")
+    }
 })
