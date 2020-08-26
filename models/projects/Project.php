@@ -7,6 +7,9 @@ use app\models\users\Cellule;
 use app\models\users\CapaUser;
 use app\models\companies\Company;
 use app\models\companies\Contact;
+use app\models\laboratories\LaboratoryContributor;
+use app\models\equipments\EquipmentRepayment;
+use yii\helpers\ArrayHelper;
 
 /**
  * Classe modèle métier des projets.
@@ -226,6 +229,28 @@ class Project extends ActiveRecord
         } else {
             return 0;
         }
+    }
+
+    public function getCoutEquipementLaboratoire()
+    {
+        $ListeEquipementRepayment = array();
+        foreach ($this->lots as $lot) {
+
+            $ListeContributorGroupbyLabolot = EquipmentRepayment::getAllEquipementRepayementGroupByLaboBylotID($lot->id);
+            $ListeEquipementRepayment = array_merge($ListeEquipementRepayment, $ListeContributorGroupbyLabolot);
+        }
+        return  ArrayHelper::index($ListeEquipementRepayment, null, 'id');
+    }
+
+    public function getCoutLaboratoire()
+    {
+        $ListeContributor = array();
+        foreach ($this->lots as $lot) {
+
+            $ListeContributorGroupbyLabolot = LaboratoryContributor::getAllContributionGroupByLaboBylotID($lot->id);
+            $ListeContributor = array_merge($ListeContributor, $ListeContributorGroupbyLabolot);
+        }
+        return  ArrayHelper::index($ListeContributor, null, 'id');
     }
 
     public function getSupportPrice()

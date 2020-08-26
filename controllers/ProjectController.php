@@ -572,6 +572,34 @@ class ProjectController extends Controller implements ServiceInterface
         }
 
 
+        $laborary = array();
+
+        $resultatLaboColabborator =  $project->coutLaboratoire;
+        //Je parcour la maps des données
+        foreach ($resultatLaboColabborator as $Labo) {
+            $couttotal = 0;
+            $laboid = $Labo[0]->id;
+            foreach ($Labo as $l) {
+                $couttotal = $couttotal + $l->total;
+            }
+            array_push($laborary, array('labo_id' => $laboid, 'total' => $couttotal));
+        }
+
+        $resultatLaboEquipement = $project->coutEquipementLaboratoire;
+        $ids = ArrayHelper::getColumn($resultatLaboEquipement, 'labo_id');
+        //Je parcour la maps des données
+        foreach ($resultatLaboEquipement as $Labo) {
+            $couttotal = 0;
+            $laboid = $Labo[0]->id;
+            foreach ($Labo as $l) {
+                $couttotal = $couttotal + $l->total;
+            }
+
+            array_push($laborary, array('labo_id' => $laboid, 'total' => $couttotal));
+        }
+        var_dump($laborary);
+        //  var_dump($resultatLaboEquipement);
+
         //Sum of pourcent millestone = 100%
         $totalPoucent  = 0;
         foreach ($millestones as $millestone) {
@@ -588,7 +616,7 @@ class ProjectController extends Controller implements ServiceInterface
 
 
         MenuSelectorHelper::setMenuProjectDraft();
-        return $this->render(
+        /* return $this->render(
             'projectSimulation',
             [
                 'tjmstatut' => $tjmstat,
@@ -599,7 +627,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'millestones' => (empty($millestones)) ? [new ProjectCreateMilleStoneForm()] : $millestones,
             ]
 
-        );
+        );*/
     }
 
     /**
