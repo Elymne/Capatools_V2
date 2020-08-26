@@ -675,38 +675,31 @@ class ProjectController extends Controller implements ServiceInterface
         $risk = Risk::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
-
             $isValid = true;
 
             if ($number != 0) {
-                $tasksGestionsModif = Model::createMultiple(ProjectCreateGestionTaskForm::className());
-                //var_dump($tasksGestionsModif);
+                $oldTasksGestionsModifIds = ArrayHelper::map($tasksGestionsModif, 'id', 'id');
+                $tasksGestionsModif = Model::createMultiple(ProjectCreateGestionTaskForm::class, $tasksGestionsModif);
                 ProjectCreateGestionTaskForm::loadMultiple($tasksGestionsModif, Yii::$app->request->post());
-                if (!empty($tasksGestionsModif)) {
+                $deletedTasksGestionsModifIds = array_diff($oldTasksGestionsModifIds, array_filter(ArrayHelper::map($tasksGestionsModif, 'id', 'id')));
 
+                if (!empty($tasksGestionsModif)) {
                     foreach ($tasksGestionsModif as $tasksGestionModif) {
-                        if (!$tasksGestionModif->validate()) {
-                            $isValid = false;
-                        }
+                        if (!$tasksGestionModif->validate()) $isValid = false;
                     }
                 }
             }
-            $tasksLotsModif = Model::createMultiple(ProjectCreateLotTaskForm::className(), $tasksLotsModif);
-            //var_dump($tasksLotsModif);
-            if (!Model::loadMultiple($tasksLotsModif, Yii::$app->request->post())) {
-            }
 
+            $oldTasksLotsModifIds = ArrayHelper::map($tasksLotsModif, 'id', 'id');
+            $tasksLotsModif = Model::createMultiple(ProjectCreateLotTaskForm::class, $tasksLotsModif);
+            ProjectCreateLotTaskForm::loadMultiple($tasksLotsModif, Yii::$app->request->post());
+            $deletedTasksLotsModifIds = array_diff($oldTasksLotsModifIds, array_filter(ArrayHelper::map($tasksLotsModif, 'id', 'id')));
 
             if (!empty($tasksGestionsModif)) {
                 foreach ($tasksLotsModif as $tasksLotModif) {
-                    if (!$tasksLotModif->validate()) {
-                        $isValid = false;
-                    }
+                    if (!$tasksLotModif->validate()) $isValid = false;
                 }
-            } else {
-                $isValid = false;
-            }
-
+            } else $isValid = false;
 
             if ($isValid) {
 
