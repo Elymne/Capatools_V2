@@ -195,7 +195,7 @@ function lotsDataTables($model): string
 
     foreach ($model->lots as $lot) {
         $lot_title = $lot->title;
-        $lot_total_price = $lot->getTotalWithMargin();
+        $lot_total_price = round(($lot->totalwithmargin + $model->additionallotprice) / (1 - $model->management_rate / 100), -2);
         $lot_total_total_price = $lot_total_price * $quantity;
 
         $html_body = $html_body . <<<HTML
@@ -256,7 +256,7 @@ function lotsTotalDataTables($model): string
     if ($model->company->country == "France") $hasTVA = true;
     else $hasTVA = false;
 
-    foreach ($model->lots as $lot) $max_price += $lot->getTotalWithMargin();
+    foreach ($model->lots as $lot) $max_price +=  round(($lot->totalwithmargin + $model->additionallotprice) / (1 - $model->management_rate / 100), -2);
 
     $tva_price = $max_price * 0.2;
     $price_ttc = $max_price * 1.2;

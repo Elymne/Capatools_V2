@@ -190,6 +190,6 @@ class Lot extends ActiveRecord
         $result =  $this->totalcosthuman * (1 + $this->rate_human_margin / 100)
             + $this->totalcostinvest * (1 + $this->rate_consumable_investement_margin / 100)
             + $this->totalcostrepayement * (1 + $this->rate_repayement_margin / 100);
-        return round($result, 2);
+        return round($result, -2);
     }
 }

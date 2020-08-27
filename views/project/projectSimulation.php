@@ -113,7 +113,6 @@ ProjectSimulationAsset::register($this);
 
                     <div class="card-content">
                         <label>Résumé du projet </label>
-                        <label> (+ coûts d'avant-projet intégré dans chaque lot)</label>
                     </div>
 
                     <?php
@@ -133,17 +132,33 @@ ProjectSimulationAsset::register($this);
                                     <div class="col s12">
                                         <p class='lot-title blue-text control-label typeLabel top-spacing bottom-spacing'> <?= $lotproject->title ?> </p>
                                     </div>
+                                </div>
+                                <div class="row">
 
-                                    <div class="col s12">
-                                        <!-- Détail du coût  -->
-                                        <b>Prix du total lot :</b>
+                                    <div class="col s3">
+                                        <b>Prix du total lot sans avp:</b>
                                     </div>
                                     <div class="col s3">
-                                        <!-- Détail du coût  -->
+                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency($lotproject->totalwithmargin), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                    </div>
+
+                                    <div class="col s3">
+                                        <b>Prix du total lot avec avp :</b>
+                                    </div>
+                                    <div class="col s3">
                                         <?= Html::input('text', '', Yii::$app->formatter->asCurrency($lotproject->totalwithmargin + $project->additionallotprice), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                    </div>
+                                    <div class="col s3">
+                                        <b>Prix du total lot avec avp et support :</b>
+                                    </div>
+                                    <div class="col s3">
+                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency(round(($lotproject->totalwithmargin + $project->additionallotprice) / (1 - $project->management_rate / 100), -2)), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
                                     </div>
                                 </div>
 
+                                <div class="row">
+
+                                </div>
                                 <div class="row top-spacing bottom-spacing">
                                     <div class="col s1">
                                         <?= Html::a(
