@@ -85,7 +85,7 @@ class m200099_000540_capa_user_table extends Migration
         ]);
 
         $this->insert('{{%capa_user}}', [
-            'id' => 4,
+            'id' => 5,
             'firstname' => "Bernardo",
             'surname' => "Bertolucci",
             'email' => 'rh@gmail.com',
@@ -96,7 +96,7 @@ class m200099_000540_capa_user_table extends Migration
         ]);
 
         $this->insert('{{%capa_user}}', [
-            'id' => 5,
+            'id' => 4,
             'firstname' => "David",
             'surname' => "Lynch",
             'email' => 'support@gmail.com',

@@ -50,7 +50,6 @@ use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\services\helpers\TimeStringifyHelper;
 use kartik\mpdf\Pdf;
-use phpDocumentor\Reflection\Types\Array_;
 use yii\helpers\ArrayHelper;
 #endregion
 
@@ -85,7 +84,21 @@ class ProjectController extends Controller implements ServiceInterface
                 'denyCallback' => function ($rule, $action) {
                     throw new \Exception('You are not allowed to access this page');
                 },
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'update-status'],
+                'only' => [
+                    'index',
+                    'index-draft',
+                    'view',
+                    'update-status',
+                    'update-millestone-status',
+                    'pdf',
+                    'create-first-step',
+                    'project-simulate',
+                    'lot-simulate',
+                    'update-task',
+                    'update-dependencies-consumables',
+                    'create-project',
+                    'delete',
+                ],
                 'rules' => [
                     [
                         'allow' => true,
@@ -94,8 +107,8 @@ class ProjectController extends Controller implements ServiceInterface
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create'],
-                        'roles' => [PermissionAccessEnum::PROJECT_CREATE],
+                        'actions' => ['index-draft'],
+                        'roles' => [PermissionAccessEnum::PROJECT_INDEX_DRAFT],
                     ],
                     [
                         'allow' => true,
@@ -104,24 +117,55 @@ class ProjectController extends Controller implements ServiceInterface
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['update'],
-                        'roles' => [PermissionAccessEnum::PROJECT_UPDATE],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['delete'],
-                        'roles' => [PermissionAccessEnum::PROJECT_DELETE],
-                    ],
-                    [
-                        'allow' => true,
                         'actions' => ['update-status'],
                         'roles' => [PermissionAccessEnum::PROJECT_UPDATE_STATUS],
                     ],
                     [
                         'allow' => true,
+                        'actions' => ['update-millestone-status'],
+                        'roles' => [PermissionAccessEnum::PROJECT_UPDATE_MILESTONE_STATUS],
+                    ],
+                    [
+                        'allow' => true,
                         'actions' => ['pdf'],
                         'roles' => [PermissionAccessEnum::PROJECT_PDF],
-                    ]
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create-first-step'],
+                        'roles' => [PermissionAccessEnum::PROJECT_CREATE],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['project-simulate'],
+                        'roles' => [PermissionAccessEnum::PROJECT_CREATE],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['lot-simulate'],
+                        'roles' => [PermissionAccessEnum::PROJECT_CREATE],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update-task'],
+                        'roles' => [PermissionAccessEnum::PROJECT_CREATE],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update-dependencies-consumables'],
+                        'roles' => [PermissionAccessEnum::PROJECT_CREATE],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create-project'],
+                        'roles' => [PermissionAccessEnum::PROJECT_CREATE],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['delete'],
+                        'roles' => [PermissionAccessEnum::PROJECT_CREATE],
+                    ],
+
                 ],
             ],
         ];
@@ -145,8 +189,7 @@ class ProjectController extends Controller implements ServiceInterface
         $result = [];
         if (UserRoleManager::hasRoles([
             UserRoleEnum::PROJECT_MANAGER,
-            UserRoleEnum::CELLULE_MANAGER,
-            UserRoleEnum::SUPPORT,
+            UserRoleEnum::ACCOUNTING_SUPPORT,
             UserRoleEnum::ADMIN,
             UserRoleEnum::SUPER_ADMIN
         ])) {
@@ -155,30 +198,51 @@ class ProjectController extends Controller implements ServiceInterface
                 'priorite' => 3,
                 'name' => 'Projets',
                 'serviceMenuActive' => SubMenuEnum::PROJECT,
-                'items' => [
-                    [
-                        'Priorite' => 1,
-                        'url' => 'project/index',
-                        'label' => 'Liste des projets',
-                        'subServiceMenuActive' => SubMenuEnum::PROJECT_LIST
-                    ],
-                    [
-                        'Priorite' => 2,
-                        'url' => 'project/index-draft',
-                        'label' => 'Liste des brouillons',
-                        'subServiceMenuActive' => SubMenuEnum::PROJECT_DRAFT
-                    ],
-                    [
-                        'Priorite' => 3,
-                        'url' => 'project/create-first-step',
-                        'label' => 'Création d\'un devis',
-                        'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                    ]
-                ]
+                'items' => static::getActionSubUser()
             ];
         }
 
         return $result;
+    }
+
+    public static function getActionSubUser()
+    {
+        $arraySubMenu = [];
+
+        if (UserRoleManager::hasRoles([
+            UserRoleEnum::PROJECT_MANAGER,
+            UserRoleEnum::ADMIN,
+            UserRoleEnum::SUPER_ADMIN
+        ])) {
+            \array_push(
+                $arraySubMenu,
+                [
+                    'Priorite' => 3,
+                    'url' => 'project/create-first-step',
+                    'label' => 'Création d\'un devis',
+                    'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
+                ],
+                [
+                    'Priorite' => 2,
+                    'url' => 'project/index-draft',
+                    'label' => 'Liste des brouillons',
+                    'subServiceMenuActive' => SubMenuEnum::PROJECT_DRAFT
+                ]
+            );
+        }
+
+        array_push(
+            $arraySubMenu,
+            [
+                'Priorite' => 1,
+                'url' => 'project/index',
+                'label' => 'Liste des projets',
+                'subServiceMenuActive' => SubMenuEnum::PROJECT_LIST
+            ],
+
+        );
+
+        return $arraySubMenu;
     }
 
     /**
@@ -188,7 +252,7 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed 
      */
-    public function actionIndex()
+    function actionIndex()
     {
         // Instanciation de la classe ProjectSearch qui va nous permettre d'utiliser la fonction search qui nous renvoie tous les projets.
         $searchModel = new ProjectSearch();
@@ -219,7 +283,7 @@ class ProjectController extends Controller implements ServiceInterface
         // Nous récupérerons les brouillons à l'aide une option.
         $searchModel = new ProjectSearch();
         // Nous aurons donc tous les models et en plus la possibilité d'ordonner ces données dans un gridview.
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ProjectSearch::GET_DRAFT_QUERY_OPTION);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
 
         MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(

@@ -51,7 +51,7 @@ class UserRoleManager
         if ($userForm->salary_role_checkbox) self::setRole($userForm->id, UserRoleEnum::SALARY);
         if ($userForm->project_manager_role_checkbox) self::setRole($userForm->id, UserRoleEnum::PROJECT_MANAGER);
         if ($userForm->cellule_manager_role_checkbox) self::setRole($userForm->id, UserRoleEnum::CELLULE_MANAGER);
-        if ($userForm->support_role_checkbox) self::setRole($userForm->id, UserRoleEnum::SUPPORT);
+        if ($userForm->support_role_checkbox) self::setRole($userForm->id, UserRoleEnum::ACCOUNTING_SUPPORT);
         if ($userForm->human_ressources_role_checkbox) self::setRole($userForm->id, UserRoleEnum::HUMAN_RESSOURCES);
         if ($userForm->admin_role_checkbox) self::setRole($userForm->id, UserRoleEnum::ADMIN);
     }
@@ -68,7 +68,7 @@ class UserRoleManager
         if ($userForm->salary_role_checkbox) self::setRole($userForm->id, UserRoleEnum::SALARY);
         if ($userForm->project_manager_role_checkbox) self::setRole($userForm->id, UserRoleEnum::PROJECT_MANAGER);
         if ($userForm->cellule_manager_role_checkbox) self::setRole($userForm->id, UserRoleEnum::CELLULE_MANAGER);
-        if ($userForm->support_role_checkbox) self::setRole($userForm->id, UserRoleEnum::SUPPORT);
+        if ($userForm->support_role_checkbox) self::setRole($userForm->id, UserRoleEnum::ACCOUNTING_SUPPORT);
         if ($userForm->human_ressources_role_checkbox) self::setRole($userForm->id, UserRoleEnum::HUMAN_RESSOURCES);
         if ($userForm->admin_role_checkbox) self::setRole($userForm->id, UserRoleEnum::ADMIN);
     }
@@ -96,7 +96,7 @@ class UserRoleManager
         if (in_array(UserRoleEnum::SALARY, $userRoles)) $model->salary_role_checkbox = true;
         if (in_array(UserRoleEnum::PROJECT_MANAGER, $userRoles)) $model->project_manager_role_checkbox = true;
         if (in_array(UserRoleEnum::CELLULE_MANAGER, $userRoles)) $model->cellule_manager_role_checkbox = true;
-        if (in_array(UserRoleEnum::SUPPORT, $userRoles)) $model->support_role_checkbox = true;
+        if (in_array(UserRoleEnum::ACCOUNTING_SUPPORT, $userRoles)) $model->support_role_checkbox = true;
         if (in_array(UserRoleEnum::HUMAN_RESSOURCES, $userRoles)) $model->human_ressources_role_checkbox = true;
         if (in_array(UserRoleEnum::ADMIN, $userRoles)) $model->admin_role_checkbox = true;
     }
@@ -116,30 +116,23 @@ class UserRoleManager
      */
     static function canUpdateUser($userRoles): bool
     {
-        $result = true;
 
-        if (
-            UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN])
-            || UserRoleManager::hasRoles([UserRoleEnum::ADMIN])
-            || !UserRoleManager::hasRoles([UserRoleEnum::HUMAN_RESSOURCES])
-        ) {
-
-            if (
-                (UserRoleManager::hasRoles([UserRoleEnum::ADMIN]) || UserRoleManager::hasRoles([UserRoleEnum::HUMAN_RESSOURCES]))
-                &&
-                (in_array(UserRoleEnum::SUPER_ADMIN, $userRoles) || in_array(UserRoleEnum::ADMIN, $userRoles))
-            ) $result = false;
-
-            if (
-                UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN])
-                &&
-                in_array(UserRoleEnum::SUPER_ADMIN, $userRoles)
-            ) $result = false;
-        } else {
-            $result = false;
+        if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN])) {
+            if (in_array(UserRoleEnum::SUPER_ADMIN, $userRoles)) return false;
+            else return true;
         }
 
-        return $result;
+        if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN])) {
+            if (in_array(UserRoleEnum::SUPER_ADMIN, $userRoles) || in_array(UserRoleEnum::ADMIN, $userRoles)) return false;
+            else return true;
+        }
+
+        if (UserRoleManager::hasRoles([UserRoleEnum::HUMAN_RESSOURCES])) {
+            if (in_array(UserRoleEnum::SUPER_ADMIN, $userRoles) || in_array(UserRoleEnum::ADMIN, $userRoles)) return false;
+            else return true;
+        }
+
+        return false;
     }
 
     /**

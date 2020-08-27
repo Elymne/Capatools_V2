@@ -116,7 +116,7 @@ function createRolesTable(array $userRoles): string
     if (in_array(UserRoleEnum::PROJECT_MANAGER, $userRoles)) array_push($userRoleString, 'Chef de projet');
     if (in_array(UserRoleEnum::CELLULE_MANAGER, $userRoles)) array_push($userRoleString, 'Resp. de cellule');
     if (in_array(UserRoleEnum::HUMAN_RESSOURCES, $userRoles)) array_push($userRoleString, 'Resp. ressources humaine');
-    if (in_array(UserRoleEnum::SUPPORT, $userRoles)) array_push($userRoleString, 'Support');
+    if (in_array(UserRoleEnum::ACCOUNTING_SUPPORT, $userRoles)) array_push($userRoleString, 'Support');
     if (in_array(UserRoleEnum::ADMIN, $userRoles)) array_push($userRoleString, 'Administrateur');
     if (in_array(UserRoleEnum::SUPER_ADMIN, $userRoles)) array_push($userRoleString, 'Super administrateur');
 
