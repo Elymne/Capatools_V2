@@ -575,6 +575,8 @@ class ProjectController extends Controller implements ServiceInterface
         $laborary = array();
 
         $resultatLaboColabborator =  $project->coutLaboratoire;
+        var_dump($resultatLaboColabborator);
+
         //Je parcour la maps des données
         foreach ($resultatLaboColabborator as $Labo) {
             $couttotal = 0;
@@ -582,8 +584,9 @@ class ProjectController extends Controller implements ServiceInterface
             foreach ($Labo as $l) {
                 $couttotal = $couttotal + $l->total;
             }
-            array_push($laborary, array('labo_id' => $laboid, 'total' => $couttotal));
+            $laborary = $laborary + array($laboid => array('labo_id' => $laboid, 'total' => $couttotal));
         }
+        var_dump($laborary);
 
         $resultatLaboEquipement = $project->coutEquipementLaboratoire;
         $ids = ArrayHelper::getColumn($resultatLaboEquipement, 'labo_id');
@@ -594,11 +597,14 @@ class ProjectController extends Controller implements ServiceInterface
             foreach ($Labo as $l) {
                 $couttotal = $couttotal + $l->total;
             }
-
-            array_push($laborary, array('labo_id' => $laboid, 'total' => $couttotal));
+            if (array_key_exists(intval($laboid), $laborary)) {
+                $laborary[$laboid]['total'] = $laborary[$laboid]['total'] + $couttotal;
+            } else {
+                $laborary = $laborary + array($laboid => array('labo_id' => $laboid, 'total' => $couttotal));
+            }
         }
         var_dump($laborary);
-        //  var_dump($resultatLaboEquipement);
+
 
         //Sum of pourcent millestone = 100%
         $totalPoucent  = 0;
