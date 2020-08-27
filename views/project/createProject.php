@@ -26,7 +26,7 @@ ProjectsRefactoringAsset::register($this);
 <div class="container">
     <div class="devis-update">
 
-        <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
+        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'id' => 'dynamic-form']); ?>
         <div class="row">
 
             <div class="col s10 offset-s1">
@@ -60,33 +60,30 @@ ProjectsRefactoringAsset::register($this);
                         </div>
                         <div class="col s12">
                             <div class="row">
+
                                 <div class="input-field col s6">
-                                    <?= $form->field($model, 'capa_user_id')->widget(
-                                        Select2::classname(),
+
+                                    <?= $form->field($model, 'projectManagerSelectedValue')->widget(
+                                        Select2::class,
                                         [
-                                            'theme' => Select2::THEME_MATERIAL,
-                                            'name' => 'TaskContributor',
-                                            'data' =>  ArrayHelper::map($celluleUsers, 'id', 'fullName'),
+                                            'data' =>  $celluleUsers,
                                             'options' => ['placeholder' => 'Selectionner le responsable du projet ...'],
                                         ]
                                     )->label("Responsable projet"); ?>
                                 </div>
-                                <div class="input-field col s6">
-                                    <?= $form->field($model, 'upfilename')->fileInput(['accept' => 'pdf/*'])->label('Document technique / Cahier des charges annexe (PDF)', [])
 
-                                    ?>
-                                    <?= $form->field($model, 'file_name')
-                                        ->textInput(['maxlength' => true, 'readonly' => true], ['autocomplete' => 'off'])->label((false));
-                                    ?>
+                                <div class="input-field col s6">
+                                    <?= $form
+                                        ->field($model, 'pdfFile')
+                                        ->fileInput(['accept' => 'pdf/*'])
+                                        ->label('Document technique / Cahier des charges annexe (PDF)', []) ?>
                                 </div>
 
                             </div>
                         </div>
 
-
                         <div class="col s12">
                             <div class="row">
-
 
                                 <div class="input-field col s6">
                                     <?= $form->field($model, 'thematique')
@@ -97,7 +94,7 @@ ProjectsRefactoringAsset::register($this);
 
                                 <div class="input-field col s6">
                                     <?= $form->field($model, 'signing_probability')->widget(
-                                        Select2::classname(),
+                                        Select2::class,
                                         [
                                             'theme' => Select2::THEME_MATERIAL,
                                             'name' => 'TaskContributor',

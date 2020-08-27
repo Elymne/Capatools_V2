@@ -35,12 +35,12 @@ class Cellule extends ActiveRecord
 
     public function getCapaUsers()
     {
-        return $this->hasMany(CapaUser::className(), ['cellule_id' => 'id']);
+        return $this->hasMany(CapaUser::class, ['cellule_id' => 'id']);
     }
 
     public function getLaboratories()
     {
-        return $this->hasMany(Laboratory::className(), ['cellule_id' => 'id']);
+        return $this->hasMany(Laboratory::class, ['cellule_id' => 'id']);
     }
 
     public static function findByAXX($AXXX)
