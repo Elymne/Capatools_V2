@@ -30,8 +30,14 @@ class CapaUserCreateForm extends CapaUser
     public function rules()
     {
         return [
-
-            // email required
+            [[
+                "salary_role_checkbox",
+                "project_manager_role_checkbox",
+                "cellule_manager_role_checkbox",
+                "support_role_checkbox",
+                "human_ressources_role_checkbox",
+                "admin_role_checkbox"
+            ], "safe"],
             ['email', 'required', 'message' => 'Veulliez renseigner l\'email de l\'utilisateur'],
             ['surname', 'required', 'message' => 'Veulliez renseigner le nom de l\'utilisateur'],
             ['firstname', 'required', 'message' => 'Veulliez renseigner le prénom de l\'utilisateur'],
@@ -41,12 +47,6 @@ class CapaUserCreateForm extends CapaUser
             ['price', 'integer', 'min' => 1, 'tooSmall' => 'Le prix d\'intervention doit être supérieur à 0.', 'message' => 'Le prix d\'intervention doit être positif.'],
             ['email', 'email', 'message' => 'L\'adresse email doit être valide.'],
             ['cellule_id', 'validateCelid', 'message' => 'Le nom de la cellule est inconnue'],
-            ['salary_role_checkbox', 'safe'],
-            ['project_manager_role_checkbox', 'safe'],
-            ['cellule_manager_role_checkbox', 'safe'],
-            ['support_role_checkbox', 'safe'],
-            ['human_ressources_role_checkbox', 'safe'],
-            ['admin_role_checkbox', 'safe'],
         ];
     }
 }
