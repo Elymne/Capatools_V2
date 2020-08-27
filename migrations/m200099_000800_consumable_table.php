@@ -27,7 +27,7 @@ class m200099_000800_consumable_table extends Migration
             'id' => 3,
             'title' => "Un cigare cubain",
             'price' => 1555,
-            'type' => 'Consommable',
+            'type' => 'Consommable & déplacement',
             'lot_id' => 3,
         ]);
 
@@ -35,7 +35,7 @@ class m200099_000800_consumable_table extends Migration
             'id' => 1,
             'title' => "Orbe rouge brisé",
             'price' => 1200,
-            'type' => 'Consommable',
+            'type' => 'Consommable & déplacement',
             'lot_id' => 1,
         ]);
 
@@ -43,7 +43,7 @@ class m200099_000800_consumable_table extends Migration
             'id' => 2,
             'title' => "Felcloth",
             'price' => 1200,
-            'type' => 'Consommable',
+            'type' => 'Consommable & déplacement',
             'lot_id' => 1,
         ]);
     }

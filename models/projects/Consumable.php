@@ -50,7 +50,23 @@ class Consumable extends ActiveRecord
     {
         return self::find()->where(['lot_id' => $lotID, 'type' => self::TYPE_SECONDARY_INVESTMENT])->all();
     }
+    public static function  getAllExternalGroupByTitleBylotID(int $lotID)
+    {
+        return $res = self::find()
+            ->select('SUM(price) as total,title')
+            ->where(['lot_id' => $lotID, 'type' => self::TYPE_EXTERNAL_DELIVERY])
+            ->groupBy(['title'])
+            ->all();
+    }
 
+    public static function  getAllInternalGroupByTitleBylotID(int $lotID)
+    {
+        return $res = self::find()
+            ->select('SUM(price) as total,title')
+            ->where(['lot_id' => $lotID, 'type' => self::TYPE_INTERNAL_DELIVERY])
+            ->groupBy(['title'])
+            ->all();
+    }
     public function getLot()
     {
         return $this->hasOne(Lot::className(), ['id' => 'lot_id']);

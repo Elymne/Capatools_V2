@@ -50,6 +50,7 @@ use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\services\helpers\TimeStringifyHelper;
 use kartik\mpdf\Pdf;
+use phpDocumentor\Reflection\Types\Array_;
 use yii\helpers\ArrayHelper;
 #endregion
 
@@ -580,6 +581,51 @@ class ProjectController extends Controller implements ServiceInterface
         }
 
 
+        $laborarydepenses = array();
+
+        $resultatLaboColabborator =  $project->coutlaboratoire;
+
+        //Je parcour la maps des données
+        foreach ($resultatLaboColabborator as $Labo) {
+            $couttotal = 0;
+            $laboid = $Labo[0]->id;
+            foreach ($Labo as $l) {
+                $couttotal = $couttotal + $l->total;
+            }
+            $laborarydepenses = $laborarydepenses + array($laboid => array('labo_id' => $laboid, 'total' => $couttotal));
+        }
+
+
+        $resultatLaboEquipement = $project->coutequipementlaboratoire;
+        $ids = ArrayHelper::getColumn($resultatLaboEquipement, 'labo_id');
+
+        //Je parcour la maps des données
+        foreach ($resultatLaboEquipement as $Labo) {
+            $couttotal = 0;
+            $laboid = $Labo[0]->id;
+            foreach ($Labo as $l) {
+                $couttotal = $couttotal + $l->total;
+            }
+            if (array_key_exists(intval($laboid), $laborarydepenses)) {
+                $laborarydepenses[$laboid]['total'] = $laborarydepenses[$laboid]['total'] + $couttotal;
+            } else {
+                $laborarydepenses = $laborarydepenses + array($laboid => array('labo_id' => $laboid, 'total' => $couttotal));
+            }
+        }
+
+
+
+        $laboratorylist = Laboratory::getAll();
+
+        $laboratorylistArray = ArrayHelper::map($laboratorylist, 'id', 'name');
+
+
+
+        $listExternalDepense = $project->coutExternalDepense;
+        $listInternalDepense = $project->coutInternalDepense;
+
+
+
         //Sum of pourcent millestone = 100%
         $totalPoucent  = 0;
         foreach ($millestones as $millestone) {
@@ -605,6 +651,11 @@ class ProjectController extends Controller implements ServiceInterface
                 'lotavp' => $lotavp,
                 'lots' => $lots,
                 'millestones' => (empty($millestones)) ? [new ProjectCreateMilleStoneForm()] : $millestones,
+                'laboratorydepenses' => $laborarydepenses,
+                'laboratorylistArray' => $laboratorylistArray,
+                'listExternalDepense' => $listExternalDepense,
+                'listInternalDepense' => $listInternalDepense,
+
             ]
 
         );
