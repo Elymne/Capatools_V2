@@ -12,6 +12,6 @@ return [
     // ActualSubSidebar Activated.
     'serviceMenuActive' => 'NONE',
     'subServiceMenuActive' => 'NONE',
-    'version' => 'v0.6'
+    'version' => 'v2.0.7'
 
 ];
