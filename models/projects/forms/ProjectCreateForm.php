@@ -23,44 +23,53 @@ use yii\web\UploadedFile;
 class ProjectCreateForm extends Project
 {
 
-    public $upfilename;
+    /**
+     * @var string $upfilename,
+     * @var string $projectManagerSelectedValue,
+     */
+    public $pdfFile;
+    public $projectManagerSelectedValue;
+
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
     public function rules()
     {
         return [
-            [['signing_probability', 'capa_user_id', 'thematique', 'file_path'], 'safe'],
+            [['signing_probability', 'capa_user_id', 'thematique', 'file_path', 'pdfFile', 'projectManagerSelectedValue'], 'safe'],
 
             ['internal_name', 'required', 'message' => 'Un nom de projet est obligatoire.'],
             ['thematique', 'required', 'message' => 'Indiquer la thématique du projet.'],
             ['capa_user_id', 'required', 'message' => 'Indiquer le chef de projet'],
             ['signing_probability', 'required', 'message' => 'Indiquez la probabilité de signature !.'],
-            [['upfilename'], 'file', 'skipOnEmpty' => true, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros (2Mo maxi)}', 'message' => 'Une proposition technique doit être associée au devis.'],
+
+            ['pdfFile', 'required', 'message' => 'Un document pdf doit être fournit'],
+            [['pdfFile'], 'file', 'skipOnEmpty' => false, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros (2Mo maxi)}', 'message' => 'Une proposition technique doit être associée au devis.'],
         ];
     }
 
 
-    //chage le fichier
-    public function upload()
+    /**
+     * Fonction permettant d'upload le fichier.
+     * 
+     * @return bool, retourne vrai ou faux suivant si les étapes se sont bien passés.
+     */
+    public function upload(): bool
     {
-        if ($this->upfilename) {
-            $this->file_name =  $this->upfilename[0]->name;
-            //J Save the file into upload path.
-            $path = 'uploads/' . $this->id_capa;
-            if (!is_dir($path)) {
-                mkdir($path);
-            }
-            if ($this->file_path != '') {
-                unlink($this->file_path);
-            }
-            $this->file_path = $path . '/' . $this->upfilename[0]->name;
-            $result = true;
-            if ($result) {
+        // On attribut le nom du fichier à l'arribut file_name qui sera stocké en bdd.
+        $this->file_name =  $this->pdfFile[0]->name;
 
-                ($this->upfilename[0])->saveAs($this->file_path);
-            }
-            return true;
-        }
+        $path = 'uploads/' . $this->id_capa;
+
+        // Si le dossier n'existe pas, on le créer.
+        if (!is_dir($path))
+            mkdir($path);
+
+        // Si le dossier existe déjà (donc qu'il y a déjà un fichier existant), on le supprime.
+        if ($this->file_path != '')
+            unlink($this->file_path);
+
+        $this->file_path = $path . '/' . $this->file_name;
+        return $this->pdfFile[0]->saveAs($this->file_path);
     }
 }

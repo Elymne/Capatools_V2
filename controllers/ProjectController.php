@@ -452,7 +452,7 @@ class ProjectController extends Controller implements ServiceInterface
                     $lot->save();
                 }
                 // On redirige vers la prochaine étape.
-                Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $model->id]);
+                return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $model->id]);
             }
         }
 
@@ -773,7 +773,7 @@ class ProjectController extends Controller implements ServiceInterface
                     ProjectCreateLotTaskForm::deleteAll(['id' => $deletedTasksLotsModifIds]);
                 }
 
-                Yii::$app->response->redirect(['project/update-task', 'project_id' => $project_id, 'number' => $number]);
+                return Yii::$app->response->redirect(['project/update-task', 'project_id' => $project_id, 'number' => $number]);
             }
         }
 
@@ -941,7 +941,7 @@ class ProjectController extends Controller implements ServiceInterface
                     LaboratoryContributor::deleteAll(['id' => $deletedContributorsIDs]);
                 }
 
-                Yii::$app->response->redirect(['project/update-dependencies-consumables', 'project_id' => $project_id, 'number' => $number]);
+                return Yii::$app->response->redirect(['project/update-dependencies-consumables', 'project_id' => $project_id, 'number' => $number]);
             }
         }
 
@@ -976,42 +976,36 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionCreateProject(int $id = 1)
     {
-        MenuSelectorHelper::setMenuProjectNone();
-        //Recupération des membres de la cellule
-        $idcellule = Yii::$app->user->identity->cellule_id;
-        $cel = new Cellule();
-        $cel->id = $idcellule;
-        $celluleUsers = $cel->capaUsers;
+        $model = ProjectCreateForm::getOneById($id); // On récupère le modèle formulaire de données de projet avec l'id.
+        $celluleUsers = ArrayHelper::map(Cellule::getOneById(Yii::$app->user->identity->cellule_id)->capaUsers, 'id', 'email');
+        $TVA = $model->company->country == 'France' ? 20 : 0; // Si la société est d'origine Française, la tva est fixé à 20%.
 
-        $model = ProjectCreateForm::getOneById($id);
-        $company = $model->company;
-        $TVA = 0;
+        if ($model->load(Yii::$app->request->post())) {
+            // Préparation du fichier.
+            $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
 
-        if ($company->country == 'France') {
-            $TVA = 20;
-        }
+            // Si le fichier est bien upload, on procède à l'enregistrement du projet.
+            if ($model->upload()) {
 
-        if (Yii::$app->request->isPost) {
-            $model->upfilename = UploadedFile::getInstances($model, 'upfilename');
+                $finalModel = Project::getOneById($model->id);
 
-            if ($model->upload(Yii::$app->request->post())) {
-                $post = Yii::$app->request->post();
-                $postform = $post["ProjectCreateForm"];
+                $finalModel->state = Project::STATE_DEVIS_SENDED;
+                $finalModel->draft = false;
+                $finalModel->capa_user_id = $model->projectManagerSelectedValue;
+                $finalModel->file_name = $model->file_name;
+                $finalModel->file_path = $model->file_path;
+                $finalModel->thematique = $model->thematique;
 
-                // file is uploaded successfully
-                $project = Project::getOneById($id);
-                $project->state = Project::STATE_DEVIS_SENDED;
-                $project->file_path = $model->file_path;
-                $project->file_name = $model->file_name;
-                $project->thematique = $postform["thematique"];
-                $project->save();
+                $finalModel->save();
+                MenuSelectorHelper::setMenuProjectDraft();
 
-                Yii::$app->response->redirect(['project/view', 'id' => $project->id]);
+                return Yii::$app->response->redirect(['project/view', 'id' => $model->id]);
             }
         }
 
+        MenuSelectorHelper::setMenuProjectDraft();
         return $this->render('createProject', [
-            'model' => ProjectCreateForm::getOneById($id),
+            'model' => $model,
             'celluleUsers' => $celluleUsers,
             'TVA' => $TVA
         ]);
