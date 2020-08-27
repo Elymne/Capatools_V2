@@ -394,7 +394,7 @@ function createMillestone(array $millestones)
         <th>Pourcentage</th>
         <th>Prix du jalon</th>
         <th>Statut</th>
-        <?php if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ADMIN, UserRoleEnum::SUPPORT])) {
+        <?php if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) {
             echo "<th></th>";
         } ?>
     </tr>
@@ -406,7 +406,7 @@ function createMillestone(array $millestones)
             <td><?php echo Yii::$app->formatter->asPercent($millestone->pourcentage / 100) ?></td>
             <td><?php echo Yii::$app->formatter->asCurrency($millestone->price) ?></td>
             <td><?php echo updateStatus($millestone) ?></td>
-            <?php if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ADMIN, UserRoleEnum::SUPPORT])) {
+            <?php if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) {
                 //getUpdateStatusButton($millestone);
             } ?>
         </tr>

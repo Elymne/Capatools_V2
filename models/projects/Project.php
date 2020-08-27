@@ -77,9 +77,29 @@ class Project extends ActiveRecord
         return static::find()->where(['project.cellule_id' => $idCellule])->all();
     }
 
-    public static function getAllDraft()
+    public static function getAllDataProvider()
     {
-        return static::find()->where(['draft' => true])->all();
+        return static::find();
+    }
+
+    public static function getAllDraftDataProvider()
+    {
+        return static::find()->where(['state' => self::STATE_DRAFT]);
+    }
+
+    public static function getAllProjectDataProvider()
+    {
+        return static::find()->where(['state' => [self::STATE_FINISHED, self::STATE_DEVIS_SIGNED, self::STATE_CANCELED, self::STATE_DEVIS_SENDED]]);
+    }
+
+    public static function getAllDraftByCelluleDataProvider($idCellule)
+    {
+        return static::find()->where(['state' => self::STATE_DRAFT, 'project.cellule_id' => $idCellule]);
+    }
+
+    public static function getAllProjectByCelluleDataProvider($idCellule)
+    {
+        return static::find()->where(['state' => [self::STATE_FINISHED, self::STATE_DEVIS_SIGNED, self::STATE_CANCELED, self::STATE_DEVIS_SENDED], 'project.cellule_id' => $idCellule]);
     }
 
     public function getStatusIndex()

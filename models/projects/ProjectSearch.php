@@ -5,6 +5,9 @@ namespace app\models\projects;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\projects\Project;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
+use Yii;
 
 /**
  * Cette classe permet de gérer différentes fonctionnalité à travers un objet GridView qui sert à afficher les données
@@ -24,9 +27,9 @@ use app\models\projects\Project;
 class ProjectSearch extends Project
 {
 
-    const GET_DRAFT_QUERY_OPTION = "get_draft";
-    const GET_PROJECT_QUERY_OPTION = "get_project";
-    const GET_ALL_QUERY_OPTION = "get_all";
+    // const GET_DRAFT_QUERY_OPTION = "get_draft";
+    // const GET_PROJECT_QUERY_OPTION = "get_project";
+    // const GET_ALL_QUERY_OPTION = "get_all";
 
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
@@ -61,26 +64,17 @@ class ProjectSearch extends Project
      *
      * @return ActiveDataProvider
      */
-    public function search($params, string $queryOption = self::GET_PROJECT_QUERY_OPTION)
+    public function search($params, $isDraft = false)
     {
 
-        // Check la query option envoyé en paramètre.
-        switch ($queryOption) {
-            case self::GET_ALL_QUERY_OPTION:
-                $query = Project::find();
-                break;
-            case self::GET_PROJECT_QUERY_OPTION:
-                $query = Project::find()->where([
-                    'state' => [PROJECT::STATE_FINISHED, PROJECT::STATE_DEVIS_SIGNED, PROJECT::STATE_CANCELED, PROJECT::STATE_DEVIS_SENDED]
-                ]);
-                break;
-            case self::GET_DRAFT_QUERY_OPTION:
-                $query = Project::find()->where(['state' => PROJECT::STATE_DRAFT]);
-                break;
-            default:
-                $query = Project::find()->where(['state' => [PROJECT::STATE_FINISHED, PROJECT::STATE_DEVIS_SIGNED, PROJECT::STATE_CANCELED, PROJECT::STATE_DEVIS_SENDED]]);
-                break;
-        }
+        if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) {
+            if ($isDraft) $query = self::getAllDraftDataProvider();
+            else $query = self::getAllProjectDataProvider();
+        } else
+        if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER])) {
+            if ($isDraft) $query = self::getAllDraftByCelluleDataProvider(Yii::$app->user->identity->cellule_id);
+            else $query = self::getAllProjectByCelluleDataProvider(Yii::$app->user->identity->cellule_id);
+        } else $query = self::getAllDataProvider();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

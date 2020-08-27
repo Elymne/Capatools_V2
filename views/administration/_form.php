@@ -73,7 +73,7 @@ AdminFormAsset::register($this);
                 ]) ?>
             </div>
             <div class="col s3">
-                <?php $checkboxLabel = '<span>support</span>'; ?>
+                <?php $checkboxLabel = '<span>support comptable</span>'; ?>
                 <?= $form->field($model, 'support_role_checkbox', [])->checkbox([
                     'label' => $checkboxLabel
                 ]) ?>

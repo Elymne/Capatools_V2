@@ -14,12 +14,14 @@ class PermissionAccessEnum
 
     // Enums relatif à la gestions des projets.
     const PROJECT_INDEX = 'projectIndex';
-    const PROJECT_CREATE = 'projectCreate';
+    const PROJECT_INDEX_DRAFT = 'projectIndexDraft';
     const PROJECT_VIEW = 'projectView';
+    const PROJECT_UPDATE_STATUS = 'ProjectUpdateStatus';
+    const PROJECT_UPDATE_MILESTONE_STATUS = 'ProjectUpdateMilestoneStatus';
+    const PROJECT_PDF = 'projectPdf';
+    const PROJECT_CREATE = 'ProjectCreate';
     const PROJECT_UPDATE = 'projectUpdate';
     const PROJECT_DELETE = 'projectDelete';
-    const PROJECT_UPDATE_STATUS = 'ProjectUpdateStatus';
-    const PROJECT_PDF = 'projectPdf';
 
     // Enums relatif à la gestions des utilisateurs.
     const ADMIN_INDEX = 'adminIndex';
