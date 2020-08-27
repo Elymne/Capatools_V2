@@ -50,6 +50,7 @@ use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\services\helpers\TimeStringifyHelper;
 use kartik\mpdf\Pdf;
+use phpDocumentor\Reflection\Types\Array_;
 use yii\helpers\ArrayHelper;
 #endregion
 
@@ -572,10 +573,9 @@ class ProjectController extends Controller implements ServiceInterface
         }
 
 
-        $laborary = array();
+        $laborarydepenses = array();
 
-        $resultatLaboColabborator =  $project->coutLaboratoire;
-        var_dump($resultatLaboColabborator);
+        $resultatLaboColabborator =  $project->coutlaboratoire;
 
         //Je parcour la maps des données
         foreach ($resultatLaboColabborator as $Labo) {
@@ -584,12 +584,13 @@ class ProjectController extends Controller implements ServiceInterface
             foreach ($Labo as $l) {
                 $couttotal = $couttotal + $l->total;
             }
-            $laborary = $laborary + array($laboid => array('labo_id' => $laboid, 'total' => $couttotal));
+            $laborarydepenses = $laborarydepenses + array($laboid => array('labo_id' => $laboid, 'total' => $couttotal));
         }
-        var_dump($laborary);
 
-        $resultatLaboEquipement = $project->coutEquipementLaboratoire;
+
+        $resultatLaboEquipement = $project->coutequipementlaboratoire;
         $ids = ArrayHelper::getColumn($resultatLaboEquipement, 'labo_id');
+
         //Je parcour la maps des données
         foreach ($resultatLaboEquipement as $Labo) {
             $couttotal = 0;
@@ -597,13 +598,24 @@ class ProjectController extends Controller implements ServiceInterface
             foreach ($Labo as $l) {
                 $couttotal = $couttotal + $l->total;
             }
-            if (array_key_exists(intval($laboid), $laborary)) {
-                $laborary[$laboid]['total'] = $laborary[$laboid]['total'] + $couttotal;
+            if (array_key_exists(intval($laboid), $laborarydepenses)) {
+                $laborarydepenses[$laboid]['total'] = $laborarydepenses[$laboid]['total'] + $couttotal;
             } else {
-                $laborary = $laborary + array($laboid => array('labo_id' => $laboid, 'total' => $couttotal));
+                $laborarydepenses = $laborarydepenses + array($laboid => array('labo_id' => $laboid, 'total' => $couttotal));
             }
         }
-        var_dump($laborary);
+
+
+
+        $laboratorylist = Laboratory::getAll();
+
+        $laboratorylistArray = ArrayHelper::map($laboratorylist, 'id', 'name');
+
+
+
+        $listExternalDepense = $project->coutExternalDepense;
+        $listInternalDepense = $project->coutInternalDepense;
+
 
 
         //Sum of pourcent millestone = 100%
@@ -622,7 +634,7 @@ class ProjectController extends Controller implements ServiceInterface
 
 
         MenuSelectorHelper::setMenuProjectDraft();
-        /* return $this->render(
+        return $this->render(
             'projectSimulation',
             [
                 'tjmstatut' => $tjmstat,
@@ -631,9 +643,14 @@ class ProjectController extends Controller implements ServiceInterface
                 'lotavp' => $lotavp,
                 'lots' => $lots,
                 'millestones' => (empty($millestones)) ? [new ProjectCreateMilleStoneForm()] : $millestones,
+                'laboratorydepenses' => $laborarydepenses,
+                'laboratorylistArray' => $laboratorylistArray,
+                'listExternalDepense' => $listExternalDepense,
+                'listInternalDepense' => $listInternalDepense,
+
             ]
 
-        );*/
+        );
     }
 
     /**

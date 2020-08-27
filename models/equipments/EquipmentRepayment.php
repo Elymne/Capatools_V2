@@ -71,11 +71,7 @@ class EquipmentRepayment extends ActiveRecord implements JsonSerializable
     }
     public function getLaboratory()
     {
-        return $res = self::find()
-            ->select('SUM(time_risk * price) as total,laboratory_id as id')
-            ->where(['lot_id' => $lotid])
-            ->groupBy(['laboratory_id'])
-            ->all();
+
         return $this->hasOne(Laboratory::className(), ['id' => 'laboratory_id'])
             ->via('equipment');
     }

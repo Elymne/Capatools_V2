@@ -231,15 +231,56 @@ class Project extends ActiveRecord
         }
     }
 
+    public function getCoutExternalDepense()
+    {
+        $ListeExternalFinal = array();
+        foreach ($this->lots as $lot) {
+            $couttotal = 0;
+            $ListeExternal = Consumable::getAllExternalGroupByTitleBylotID($lot->id);
+
+            foreach ($ListeExternal as $External) {
+                $couttotal = $couttotal + $External->total;
+                $title = $External->title;
+                if (array_key_exists($title, $ListeExternalFinal)) {
+                    $ListeExternalFinal[$title]['total'] = $ListeExternalFinal[$title]['total'] + $External->total;
+                } else {
+                    $ListeExternalFinal = $ListeExternalFinal + array($title => array('title' => $title, 'total' => $couttotal));
+                }
+            }
+        }
+        return  $ListeExternalFinal;
+    }
+
+    public function getCoutInternalDepense()
+    {
+        $ListeInternalternalFinal = array();
+        foreach ($this->lots as $lot) {
+            $couttotal = 0;
+            $ListeInternalternal = Consumable::getAllExternalGroupByTitleBylotID($lot->id);
+
+            foreach ($ListeInternalternal as $Internalternal) {
+                $couttotal = $couttotal + $Internalternal->total;
+                $title = $Internalternal->title;
+                if (array_key_exists($title, $ListeInternalternalFinal)) {
+                    $ListeInternalternalFinal[$title]['total'] = $ListeInternalternalFinal[$title]['total'] + $Internalternal->total;
+                } else {
+                    $ListeInternalternalFinal = $ListeInternalternalFinal + array($title => array('title' => $title, 'total' => $couttotal));
+                }
+            }
+        }
+        return  $ListeInternalternalFinal;
+    }
+
+
     public function getCoutEquipementLaboratoire()
     {
-        $ListeEquipementRepayment = array();
+        $ListeEquipementLaboratoire = array();
         foreach ($this->lots as $lot) {
 
             $ListeContributorGroupbyLabolot = EquipmentRepayment::getAllEquipementRepayementGroupByLaboBylotID($lot->id);
-            $ListeEquipementRepayment = array_merge($ListeEquipementRepayment, $ListeContributorGroupbyLabolot);
+            $ListeEquipementLaboratoire = array_merge($ListeEquipementLaboratoire, $ListeContributorGroupbyLabolot);
         }
-        return  ArrayHelper::index($ListeEquipementRepayment, null, 'id');
+        return  ArrayHelper::index($ListeEquipementLaboratoire, null, 'id');
     }
 
     public function getCoutLaboratoire()

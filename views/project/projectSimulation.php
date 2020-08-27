@@ -293,49 +293,46 @@ ix(s<?php
 
                     <div class="card-action">
 
-                        <div class="row  bottom-spacing">
-                            <div class="col s3">
-                                <label class='blue-text control-label typeLabel'> Reversement interne :</label>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col s3">
-                                Cellule 1 :
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col s3">
-                                Cellule 2 :
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="card-action">
-
                         <div class="row bottom-spacing">
                             <div class="col s3">
                                 <label class='blue-text control-label typeLabel'> Reversement Laboratoire :</label>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col s3">
-                                Labo 1 :
-                            </div>
+                        <?php
+                        foreach ($laboratorydepenses as $depense) { ?> <div class="row">
+                                <div class="col s3">
 
-                            <div class="col s2">
-                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
+                                    <?= $laboratorylistArray[$depense['labo_id']] . ':' ?>
+                                </div>
+                                <div class="col s2">
+                                    <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                </div>
+
+                            </div>
+                        <?php } ?>
+
+                    </div>
+                    <div class="card-action">
+
+                        <div class="row  bottom-spacing">
+                            <div class="col s3">
+                                <label class='blue-text control-label typeLabel'> Reversement interne :</label>
                             </div>
                         </div>
+
+                        <?php
+                        foreach ($listInternalDepense as $depense) { ?> <div class="row">
+                                <div class="col s3">
+
+                                    <?= $depense['title'] . ':' ?>
+                                </div>
+                                <div class="col s2">
+                                    <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                </div>
+
+                            </div>
+                        <?php } ?>
 
                     </div>
                     <div class="card-action">
@@ -345,15 +342,19 @@ ix(s<?php
                                 <label class='blue-text control-label typeLabel'> Reversement Externe :</label>
                             </div>
 
-                        </div>
-                        <div class="row">
-                            <div class="col s3">
-                                Capgemini :
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
-                            </div>
 
+                            <?php
+                            foreach ($listExternalDepense as $depense) { ?> <div class="row">
+                                    <div class="col s3">
+
+                                        <?= $depense['title'] . ':' ?>
+                                    </div>
+                                    <div class="col s2">
+                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                    </div>
+
+                                </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
