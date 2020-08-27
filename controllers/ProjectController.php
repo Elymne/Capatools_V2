@@ -721,6 +721,8 @@ class ProjectController extends Controller implements ServiceInterface
                 if (!empty($deletedTasksLotsModifIds)) {
                     ProjectCreateLotTaskForm::deleteAll(['id' => $deletedTasksLotsModifIds]);
                 }
+
+                Yii::$app->response->redirect(['project/update-task', 'project_id' => $project_id, 'number' => $number]);
             }
         }
 
@@ -888,7 +890,7 @@ class ProjectController extends Controller implements ServiceInterface
                     LaboratoryContributor::deleteAll(['id' => $deletedContributorsIDs]);
                 }
 
-                //Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project_id]);
+                Yii::$app->response->redirect(['project/update-dependencies-consumables', 'project_id' => $project_id, 'number' => $number]);
             }
         }
 
