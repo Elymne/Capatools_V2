@@ -30,8 +30,14 @@ class CapaUserUpdateForm extends CapaUser
     public function rules()
     {
         return [
-
-            // email required
+            [[
+                "salary_role_checkbox",
+                "project_manager_role_checkbox",
+                "cellule_manager_role_checkbox",
+                "support_role_checkbox",
+                "human_ressources_role_checkbox",
+                "admin_role_checkbox"
+            ], "safe"],
             ['email', 'required', 'message' => 'Veulliez renseigner l\'email de l\'utilisateur'],
             ['surname', 'required', 'message' => 'Veulliez renseigner le nom de l\'utilisateur'],
             ['firstname', 'required', 'message' => 'Veulliez renseigner le prénom de l\'utilisateur'],
