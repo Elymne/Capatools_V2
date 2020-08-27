@@ -24,20 +24,24 @@ class m200800_000050_rbac extends Migration
          * Création des permissions d'accès au service projet de l'application.
          */
         $projectIndex = $auth->createPermission(PermissionAccessEnum::PROJECT_INDEX);
-        $projectCreate = $auth->createPermission(PermissionAccessEnum::PROJECT_CREATE);
+        $projectIndexDraft = $auth->createPermission(PermissionAccessEnum::PROJECT_INDEX_DRAFT);
         $projectView = $auth->createPermission(PermissionAccessEnum::PROJECT_VIEW);
+        $projectUpdateStatus = $auth->createPermission(PermissionAccessEnum::PROJECT_UPDATE_STATUS);
+        $projectUpdateMilestoneStatus = $auth->createPermission(PermissionAccessEnum::PROJECT_UPDATE_MILESTONE_STATUS);
+        $projectPdf = $auth->createPermission(PermissionAccessEnum::PROJECT_PDF);
+        $projectCreate = $auth->createPermission(PermissionAccessEnum::PROJECT_CREATE);
         $projectUpdate = $auth->createPermission(PermissionAccessEnum::PROJECT_UPDATE);
         $projectDelete = $auth->createPermission(PermissionAccessEnum::PROJECT_DELETE);
-        $projectUpdateStatus = $auth->createPermission(PermissionAccessEnum::PROJECT_UPDATE_STATUS);
-        $projectPdf = $auth->createPermission(PermissionAccessEnum::PROJECT_PDF);
 
         $auth->add($projectIndex);
-        $auth->add($projectCreate);
+        $auth->add($projectIndexDraft);
         $auth->add($projectView);
+        $auth->add($projectUpdateStatus);
+        $auth->add($projectUpdateMilestoneStatus);
+        $auth->add($projectPdf);
+        $auth->add($projectCreate);
         $auth->add($projectUpdate);
         $auth->add($projectDelete);
-        $auth->add($projectUpdateStatus);
-        $auth->add($projectPdf);
 
 
         /**
@@ -99,7 +103,7 @@ class m200800_000050_rbac extends Migration
         $salaryRole = $auth->createRole(UserRoleEnum::SALARY);
         $projectManagerRole = $auth->createRole(UserRoleEnum::PROJECT_MANAGER);
         $celluleManagerRole = $auth->createRole(UserRoleEnum::CELLULE_MANAGER);
-        $supportRole = $auth->createRole(UserRoleEnum::SUPPORT);
+        $accountingSupportRole = $auth->createRole(UserRoleEnum::ACCOUNTING_SUPPORT);
         $humanRessourcesRole = $auth->createRole(UserRoleEnum::HUMAN_RESSOURCES);
         $adminRole = $auth->createRole(UserRoleEnum::ADMIN);
         $superAdminRole = $auth->createRole(UserRoleEnum::SUPER_ADMIN);
@@ -107,7 +111,7 @@ class m200800_000050_rbac extends Migration
         $auth->add($salaryRole);
         $auth->add($projectManagerRole);
         $auth->add($celluleManagerRole);
-        $auth->add($supportRole);
+        $auth->add($accountingSupportRole);
         $auth->add($humanRessourcesRole);
         $auth->add($adminRole);
         $auth->add($superAdminRole);
@@ -116,23 +120,21 @@ class m200800_000050_rbac extends Migration
         /** ATTRIBUTION DES PERMISSIONS AUX RÔLES */
 
         /**
-         * Attribution des permissions au rôles de salarié.
-         */
-        $auth->addChild($salaryRole, $projectIndex);
-        $auth->addChild($salaryRole, $projectView);
-        $auth->addChild($salaryRole, $projectPdf);
-
-        /**
          * Attribution des permissions au rôle de chef de projet.
          * Ce rôle pourra accéder à ces fonctionnalités cependant, notons ceci :
          *  - Il ne peut voir que les devis dont il fait parti ou qu'il a créé.
          *  - Il ne peut modifier que les devis dont il est le chef de projet.
          */
         $auth->addChild($projectManagerRole, $projectIndex);
-        $auth->addChild($projectManagerRole, $projectCreate);
+        $auth->addChild($projectManagerRole, $projectIndexDraft);
         $auth->addChild($projectManagerRole, $projectView);
-        $auth->addChild($projectManagerRole, $projectUpdate);
+        $auth->addChild($projectManagerRole, $projectUpdateStatus);
+        $auth->addChild($projectManagerRole, $projectUpdateMilestoneStatus);
         $auth->addChild($projectManagerRole, $projectPdf);
+        $auth->addChild($projectManagerRole, $projectCreate);
+        $auth->addChild($projectManagerRole, $projectUpdate);
+        $auth->addChild($projectManagerRole, $projectDelete);
+
 
         /**
          * Attribution des permissions au rôle de responsable de cellule.
@@ -140,33 +142,19 @@ class m200800_000050_rbac extends Migration
          *  - Il ne peut voir que les devis de sa cellule.
          *  - Il ne peut modifier que les devis de sa cellule.
          */
-        $auth->addChild($celluleManagerRole, $projectIndex);
-        $auth->addChild($celluleManagerRole, $projectCreate);
-        $auth->addChild($celluleManagerRole, $projectView);
-        $auth->addChild($celluleManagerRole, $projectUpdate);
-        $auth->addChild($celluleManagerRole, $projectDelete);
-        $auth->addChild($celluleManagerRole, $projectUpdateStatus);
-        $auth->addChild($celluleManagerRole, $projectPdf);
-
-        $auth->addChild($celluleManagerRole, $companyIndex);
-        $auth->addChild($celluleManagerRole, $companyCreate);
-        $auth->addChild($celluleManagerRole, $companyView);
-        $auth->addChild($celluleManagerRole, $companyUpdate);
-        $auth->addChild($celluleManagerRole, $companyDelete);
-        $auth->addChild($celluleManagerRole, $companyContactIndex);
-        $auth->addChild($celluleManagerRole, $companyContactCreate);
-        $auth->addChild($celluleManagerRole, $companyContactUpdate);
-        $auth->addChild($celluleManagerRole, $companyContactView);
-        $auth->addChild($celluleManagerRole, $companyContactDelete);
+        //TODO A voir.
 
         /**
          * Attribution des permissions au rôle de support.
          * Il peut voir tous les projets existants mais ne peut les modifier.
          */
-        $auth->addChild($supportRole, $projectIndex);
-        $auth->addChild($supportRole, $projectCreate);
-        $auth->addChild($supportRole, $projectView);
-        $auth->addChild($supportRole, $projectPdf);
+        $auth->addChild($accountingSupportRole, $projectIndex);
+        $auth->addChild($accountingSupportRole, $projectView);
+        $auth->addChild($accountingSupportRole, $projectPdf);
+
+        $auth->addChild($accountingSupportRole, $projectUpdateMilestoneStatus);
+        $auth->addChild($accountingSupportRole, $projectUpdateStatus);
+
 
         /**
          * Attribution des permissions au rôle de ressources humaine.
@@ -184,12 +172,14 @@ class m200800_000050_rbac extends Migration
          * Il ne peut pas créer d'admin.
          */
         $auth->addChild($adminRole, $projectIndex);
-        $auth->addChild($adminRole, $projectCreate);
+        $auth->addChild($adminRole, $projectIndexDraft);
         $auth->addChild($adminRole, $projectView);
+        $auth->addChild($adminRole, $projectUpdateStatus);
+        $auth->addChild($adminRole, $projectUpdateMilestoneStatus);
+        $auth->addChild($adminRole, $projectPdf);
+        $auth->addChild($adminRole, $projectCreate);
         $auth->addChild($adminRole, $projectUpdate);
         $auth->addChild($adminRole, $projectDelete);
-        $auth->addChild($adminRole, $projectUpdateStatus);
-        $auth->addChild($adminRole, $projectPdf);
 
         $auth->addChild($adminRole, $companyIndex);
         $auth->addChild($adminRole, $companyCreate);
@@ -218,12 +208,14 @@ class m200800_000050_rbac extends Migration
          * Il ne peut pas créer de super admin.
          */
         $auth->addChild($superAdminRole, $projectIndex);
-        $auth->addChild($superAdminRole, $projectCreate);
+        $auth->addChild($superAdminRole, $projectIndexDraft);
         $auth->addChild($superAdminRole, $projectView);
+        $auth->addChild($superAdminRole, $projectUpdateStatus);
+        $auth->addChild($superAdminRole, $projectUpdateMilestoneStatus);
+        $auth->addChild($superAdminRole, $projectPdf);
+        $auth->addChild($superAdminRole, $projectCreate);
         $auth->addChild($superAdminRole, $projectUpdate);
         $auth->addChild($superAdminRole, $projectDelete);
-        $auth->addChild($superAdminRole, $projectUpdateStatus);
-        $auth->addChild($superAdminRole, $projectPdf);
 
         $auth->addChild($superAdminRole, $companyIndex);
         $auth->addChild($superAdminRole, $companyCreate);
@@ -254,7 +246,7 @@ class m200800_000050_rbac extends Migration
         $auth->assign($salaryRole, 1);
         $auth->assign($projectManagerRole, 2);
         $auth->assign($celluleManagerRole, 3);
-        $auth->assign($supportRole, 4);
+        $auth->assign($accountingSupportRole, 4);
         $auth->assign($humanRessourcesRole, 5);
         $auth->assign($adminRole, 6);
         $auth->assign($superAdminRole, 7);

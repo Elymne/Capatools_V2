@@ -5,6 +5,7 @@ namespace app\models\laboratories;
 use app\models\projects\Lot;
 use JsonSerializable;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * Classe modèle métier des colaborateurs des laboratoires Capacités.
@@ -30,6 +31,7 @@ use yii\db\ActiveRecord;
 class LaboratoryContributor extends ActiveRecord implements JsonSerializable
 {
 
+    public $total;
     const TYPE_SEARCHER = "chercheur";
     const TYPE_PROBATIONER = "stagiaire";
     const TYPE_DOCTOR = "post-docteur";
@@ -52,6 +54,16 @@ class LaboratoryContributor extends ActiveRecord implements JsonSerializable
         return self::find()->where(['laboratory_id' => $laboratoryID])->all();
     }
 
+    public static function getAllContributionGroupByLaboBylotID(int $lotid)
+    {
+        return $res = self::find()
+            ->select('SUM(time_risk * price) as total,laboratory_id as id')
+            ->where(['lot_id' => $lotid])
+            ->groupBy(['laboratory_id'])
+            ->all();
+    }
+
+
     /**
      * Fait la jonction entre un intervenant labo et son laboratoire.
      * Créer un attribut "laboratory" qui sera un objet de type Laboratory.
@@ -65,7 +77,6 @@ class LaboratoryContributor extends ActiveRecord implements JsonSerializable
      * Fait la jonction entre un intervenant labo et son laboratoire.
      * Créer un attribut "laboratory" qui sera un objet de type Laboratory.
      * 
-     * //TODO Terminer cette fonction une fois la classe Payment développée.
      */
     public function getLot()
     {

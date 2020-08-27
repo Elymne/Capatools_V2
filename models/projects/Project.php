@@ -7,6 +7,9 @@ use app\models\users\Cellule;
 use app\models\users\CapaUser;
 use app\models\companies\Company;
 use app\models\companies\Contact;
+use app\models\laboratories\LaboratoryContributor;
+use app\models\equipments\EquipmentRepayment;
+use yii\helpers\ArrayHelper;
 
 /**
  * Classe modèle métier des projets.
@@ -74,9 +77,29 @@ class Project extends ActiveRecord
         return static::find()->where(['project.cellule_id' => $idCellule])->all();
     }
 
-    public static function getAllDraft()
+    public static function getAllDataProvider()
     {
-        return static::find()->where(['draft' => true])->all();
+        return static::find();
+    }
+
+    public static function getAllDraftDataProvider()
+    {
+        return static::find()->where(['state' => self::STATE_DRAFT]);
+    }
+
+    public static function getAllProjectDataProvider()
+    {
+        return static::find()->where(['state' => [self::STATE_FINISHED, self::STATE_DEVIS_SIGNED, self::STATE_CANCELED, self::STATE_DEVIS_SENDED]]);
+    }
+
+    public static function getAllDraftByCelluleDataProvider($idCellule)
+    {
+        return static::find()->where(['state' => self::STATE_DRAFT, 'project.cellule_id' => $idCellule]);
+    }
+
+    public static function getAllProjectByCelluleDataProvider($idCellule)
+    {
+        return static::find()->where(['state' => [self::STATE_FINISHED, self::STATE_DEVIS_SIGNED, self::STATE_CANCELED, self::STATE_DEVIS_SENDED], 'project.cellule_id' => $idCellule]);
     }
 
     public function getStatusIndex()
@@ -137,7 +160,7 @@ class Project extends ActiveRecord
 
         $lotavp = Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
         $lotavpTotalMarge = $lotavp->total / (1 - $this->marginaverage / 100);
-        return round(($lotavpTotalMarge / (count($this->lots) - 1)), 2);
+        return round(($lotavpTotalMarge / (count($this->lots) - 1)), -2);
     }
 
     public function getTotal()
@@ -226,6 +249,69 @@ class Project extends ActiveRecord
         } else {
             return 0;
         }
+    }
+
+    public function getCoutExternalDepense()
+    {
+        $ListeExternalFinal = array();
+        foreach ($this->lots as $lot) {
+            $couttotal = 0;
+            $ListeExternal = Consumable::getAllExternalGroupByTitleBylotID($lot->id);
+
+            foreach ($ListeExternal as $External) {
+                $couttotal = $couttotal + $External->total;
+                $title = $External->title;
+                if (array_key_exists($title, $ListeExternalFinal)) {
+                    $ListeExternalFinal[$title]['total'] = $ListeExternalFinal[$title]['total'] + $External->total;
+                } else {
+                    $ListeExternalFinal = $ListeExternalFinal + array($title => array('title' => $title, 'total' => $couttotal));
+                }
+            }
+        }
+        return  $ListeExternalFinal;
+    }
+
+    public function getCoutInternalDepense()
+    {
+        $ListeInternalternalFinal = array();
+        foreach ($this->lots as $lot) {
+            $couttotal = 0;
+            $ListeInternalternal = Consumable::getAllExternalGroupByTitleBylotID($lot->id);
+
+            foreach ($ListeInternalternal as $Internalternal) {
+                $couttotal = $couttotal + $Internalternal->total;
+                $title = $Internalternal->title;
+                if (array_key_exists($title, $ListeInternalternalFinal)) {
+                    $ListeInternalternalFinal[$title]['total'] = $ListeInternalternalFinal[$title]['total'] + $Internalternal->total;
+                } else {
+                    $ListeInternalternalFinal = $ListeInternalternalFinal + array($title => array('title' => $title, 'total' => $couttotal));
+                }
+            }
+        }
+        return  $ListeInternalternalFinal;
+    }
+
+
+    public function getCoutEquipementLaboratoire()
+    {
+        $ListeEquipementLaboratoire = array();
+        foreach ($this->lots as $lot) {
+
+            $ListeContributorGroupbyLabolot = EquipmentRepayment::getAllEquipementRepayementGroupByLaboBylotID($lot->id);
+            $ListeEquipementLaboratoire = array_merge($ListeEquipementLaboratoire, $ListeContributorGroupbyLabolot);
+        }
+        return  ArrayHelper::index($ListeEquipementLaboratoire, null, 'id');
+    }
+
+    public function getCoutLaboratoire()
+    {
+        $ListeContributor = array();
+        foreach ($this->lots as $lot) {
+
+            $ListeContributorGroupbyLabolot = LaboratoryContributor::getAllContributionGroupByLaboBylotID($lot->id);
+            $ListeContributor = array_merge($ListeContributor, $ListeContributorGroupbyLabolot);
+        }
+        return  ArrayHelper::index($ListeContributor, null, 'id');
     }
 
     public function getSupportPrice()

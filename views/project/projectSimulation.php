@@ -113,7 +113,6 @@ ProjectSimulationAsset::register($this);
 
                     <div class="card-content">
                         <label>Résumé du projet </label>
-                        <label> (+ coûts d'avant-projet intégré dans chaque lot)</label>
                     </div>
 
                     <?php
@@ -133,17 +132,33 @@ ProjectSimulationAsset::register($this);
                                     <div class="col s12">
                                         <p class='lot-title blue-text control-label typeLabel top-spacing bottom-spacing'> <?= $lotproject->title ?> </p>
                                     </div>
+                                </div>
+                                <div class="row">
 
-                                    <div class="col s12">
-                                        <!-- Détail du coût  -->
-                                        <b>Prix du total lot :</b>
+                                    <div class="col s3">
+                                        <b>Prix du total lot sans avp:</b>
                                     </div>
                                     <div class="col s3">
-                                        <!-- Détail du coût  -->
+                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency($lotproject->totalwithmargin), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                    </div>
+
+                                    <div class="col s3">
+                                        <b>Prix du total lot avec avp :</b>
+                                    </div>
+                                    <div class="col s3">
                                         <?= Html::input('text', '', Yii::$app->formatter->asCurrency($lotproject->totalwithmargin + $project->additionallotprice), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                    </div>
+                                    <div class="col s3">
+                                        <b>Prix du total lot avec avp et support :</b>
+                                    </div>
+                                    <div class="col s3">
+                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency(round(($lotproject->totalwithmargin + $project->additionallotprice) / (1 - $project->management_rate / 100), -2)), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
                                     </div>
                                 </div>
 
+                                <div class="row">
+
+                                </div>
                                 <div class="row top-spacing bottom-spacing">
                                     <div class="col s1">
                                         <?= Html::a(
@@ -293,49 +308,46 @@ ProjectSimulationAsset::register($this);
 
                     <div class="card-action">
 
-                        <div class="row  bottom-spacing">
-                            <div class="col s3">
-                                <label class='blue-text control-label typeLabel'> Reversement interne :</label>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col s3">
-                                Cellule 1 :
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col s3">
-                                Cellule 2 :
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="card-action">
-
                         <div class="row bottom-spacing">
                             <div class="col s3">
                                 <label class='blue-text control-label typeLabel'> Reversement Laboratoire :</label>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col s3">
-                                Labo 1 :
-                            </div>
+                        <?php
+                        foreach ($laboratorydepenses as $depense) { ?> <div class="row">
+                                <div class="col s3">
 
-                            <div class="col s2">
-                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
+                                    <?= $laboratorylistArray[$depense['labo_id']] . ':' ?>
+                                </div>
+                                <div class="col s2">
+                                    <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                </div>
+
+                            </div>
+                        <?php } ?>
+
+                    </div>
+                    <div class="card-action">
+
+                        <div class="row  bottom-spacing">
+                            <div class="col s3">
+                                <label class='blue-text control-label typeLabel'> Reversement interne :</label>
                             </div>
                         </div>
+
+                        <?php
+                        foreach ($listInternalDepense as $depense) { ?> <div class="row">
+                                <div class="col s3">
+
+                                    <?= $depense['title'] . ':' ?>
+                                </div>
+                                <div class="col s2">
+                                    <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                </div>
+
+                            </div>
+                        <?php } ?>
 
                     </div>
                     <div class="card-action">
@@ -345,15 +357,19 @@ ProjectSimulationAsset::register($this);
                                 <label class='blue-text control-label typeLabel'> Reversement Externe :</label>
                             </div>
 
-                        </div>
-                        <div class="row">
-                            <div class="col s3">
-                                Capgemini :
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
-                            </div>
 
+                            <?php
+                            foreach ($listExternalDepense as $depense) { ?> <div class="row">
+                                    <div class="col s3">
+
+                                        <?= $depense['title'] . ':' ?>
+                                    </div>
+                                    <div class="col s2">
+                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                    </div>
+
+                                </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>

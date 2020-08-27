@@ -2,6 +2,8 @@
 
 namespace app\models\equipments;
 
+
+use app\models\laboratories\Laboratory;
 use app\models\projects\Lot;
 use app\models\projects\Risk;
 use JsonSerializable;
@@ -16,6 +18,7 @@ use yii\db\ActiveRecord;
  */
 class EquipmentRepayment extends ActiveRecord implements JsonSerializable
 {
+    public $total;
     /**
      * Utilisé pour définir quelle table est associée à cette classe.
      */
@@ -54,6 +57,23 @@ class EquipmentRepayment extends ActiveRecord implements JsonSerializable
     public function getLot()
     {
         return $this->hasOne(Lot::class, ['id' => 'lot_id']);
+    }
+
+    public static function getAllEquipementRepayementGroupByLaboBylotID(int $lotid)
+    {
+        return $res = self::find()
+            ->select('SUM(aqr.time_risk * aqr.price) as total,equipment.laboratory_id as id')
+            ->from((['equipment_repayment as aqr']))
+            ->joinWith('equipment')
+            ->where(['aqr.lot_id' => $lotid])
+            ->groupBy(['equipment.laboratory_id'])
+            ->all();
+    }
+    public function getLaboratory()
+    {
+
+        return $this->hasOne(Laboratory::className(), ['id' => 'laboratory_id'])
+            ->via('equipment');
     }
 
     /**
