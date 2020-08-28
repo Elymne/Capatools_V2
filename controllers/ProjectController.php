@@ -762,6 +762,48 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+
+    /**
+     * Route : update-task
+     * Permet de modifier les tâches d'un lot de projet.
+     * @param integer $project_id : id du projet sur lequel se trouve le lot.
+     * @param integer $number : numéro du lot.
+     * 
+     * @return mixed|error
+     */
+    public function actionUpdateLot($project_id)
+    {
+
+        // Modèle du lot à updater. On s'en sert pour récupérer son id.
+        $model = Project::getOneById($project_id);
+
+
+        /*$tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
+        $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
+
+        //Recupération des membres de la cellule
+        $idcellule = Yii::$app->user->identity->cellule_id;
+        $cel = new Cellule();
+        $cel->id = $idcellule;
+        $celluleUsers = $cel->capaUsers;
+        $risk = Risk::find()->all();
+
+        $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
+        $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
+
+        MenuSelectorHelper::setMenuProjectDraft();*/
+        return $this->render(
+            'listLotModification',
+            [
+                'model' => $model,
+                'lots'  => $model->lots,
+
+            ]
+        );
+    }
+
+
+
     /**
      * Route : update-task
      * Permet de modifier les tâches d'un lot de projet.

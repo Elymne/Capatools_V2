@@ -112,7 +112,41 @@ ProjectSimulationAsset::register($this);
                 <div class="card">
 
                     <div class="card-content">
-                        <label>Résumé du projet </label>
+                        <div class="row">
+
+                            <div class="col s10">
+                                <label>Résumé du projet </label>
+                            </div>
+                            <div class="col s1">
+                                <?= Html::a(
+                                    '<i class="material-icons ">create</i>',
+                                    Url::to(['project/update-lot', 'project_id' => $project->id]),
+                                    [
+                                        'id' => 'grid-custom-button',
+                                        'data-pjax' => true,
+                                        'action' => Url::to(['project/update-lot', 'project_id' => $project->id]),
+                                        'class' => 'btn-small waves-effect waves-light btn-blue tooltipped',
+                                        'data-position' => "bottom",
+                                        'data-tooltip' => "Modifier la liste des lots"
+                                    ]
+                                ); ?>
+                            </div>
+                            <div class="col s1">
+                                <?= Html::a(
+                                    '<i class="material-icons ">swap_vert</i>',
+                                    Url::to(['project/update-lot', 'project_id' => $project->id]),
+                                    [
+                                        'id' => 'grid-custom-button',
+                                        'data-pjax' => true,
+                                        'action' => Url::to(['project/update-lot', 'project_id' => $project->id]),
+                                        'class' => 'btn-small waves-effect waves-light btn-blue tooltipped',
+                                        'data-position' => "bottom",
+                                        'data-tooltip' => "Modifier l'ordre des lots"
+                                    ]
+                                ); ?>
+                            </div>
+                        </div>
+
                     </div>
 
                     <?php
