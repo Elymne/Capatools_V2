@@ -54,6 +54,15 @@ $(() => {
             getEquipementsOptionsListFromSelectedLaboratory(equipmentsData, laboratoriesData),
         )
 
+        let selectedValue = equipmentsLocalStateList.findIndex((elementArray) => elementArray.id == elem.equipment_id)
+        if (selectedValue == -1) selectedValue = 0
+
+        /**
+         * Permet de sélectionner la bonne valeur dans la liste.
+         */
+        $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).val(selectedValue)
+        $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).trigger("change") // Notify any JS components that the value changed
+
         /**
          * On calcul le coût de risque de l'équipement inscrit dans l'élément corresponant à l'index i.
          * Si aucunes données ne permet de calculer le coût de risque, on part du principe que le jour et l'heure rentré est équivalent à 0,
