@@ -923,10 +923,12 @@ class ProjectController extends Controller implements ServiceInterface
             $deletedConsumablesIDs = array_diff($oldConsumablesIds, array_filter(ArrayHelper::map($consumables, 'id', 'id')));
 
             // Vérifications des investissements.
-            $oldInvestsIds = ArrayHelper::map($invests, 'id', 'id');
-            $invests = Model::createMultiple(ProjectCreateInvestForm::class, $invests);
-            if (!Model::loadMultiple($invests, Yii::$app->request->post())) $isValid = false;
-            $deletedInvestsIDs = array_diff($oldInvestsIds, array_filter(ArrayHelper::map($invests, 'id', 'id')));
+            if ($number != 0) {
+                $oldInvestsIds = ArrayHelper::map($invests, 'id', 'id');
+                $invests = Model::createMultiple(ProjectCreateInvestForm::class, $invests);
+                if (!Model::loadMultiple($invests, Yii::$app->request->post())) $isValid = false;
+                $deletedInvestsIDs = array_diff($oldInvestsIds, array_filter(ArrayHelper::map($invests, 'id', 'id')));
+            }
 
             // Vérification des équipements de laboratoire et de leur utilisation.
             $oldEquipmentsRepaymentIds = ArrayHelper::map($equipmentsRepayment, 'id', 'id');

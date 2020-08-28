@@ -30,6 +30,14 @@ const isPreProject = number === '"0"'
  */
 $(() => {
     /**
+     * Fix mineur.
+     */
+    if (number == '"0"') {
+        $("#projectcreateinvestform-0-name").val("SURPRISE EDITEUR D'HTML !")
+        $("#projectcreateinvestform-0-price").val(1)
+    }
+
+    /**
      * Mise à jour de l'état de la liste des matériels par rapport au labo choisi.
      * Très utile car on en a besoin pour faire le calcul du coût par matériel.
      */
