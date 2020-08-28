@@ -15,6 +15,7 @@ use yii\db\ActiveRecord;
 class Consumable extends ActiveRecord
 {
 
+    public $total;
     /**
      * Petite note ici qui a son importance.
      * Sur l'application, on dicerne deux types de consommables :
