@@ -898,8 +898,8 @@ class ProjectController extends Controller implements ServiceInterface
         }
 
         if ($lot->laboratory_id != null)
-            $contributors = ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($lot->laboratory_id)
-                ? ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($lot->laboratory_id) : [new ProjectCreateLaboratoryContributorForm];
+            $contributors = ProjectCreateLaboratoryContributorForm::getAllByLaboratoryIDAndLotID($lot->laboratory_id, $lot->id)
+                ? ProjectCreateLaboratoryContributorForm::getAllByLaboratoryIDAndLotID($lot->laboratory_id, $lot->id) : [new ProjectCreateLaboratoryContributorForm];
         else
             $contributors = [new ProjectCreateLaboratoryContributorForm];
         foreach ($contributors as $contributor) {
