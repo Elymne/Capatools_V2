@@ -36,9 +36,9 @@ AdminFormAsset::register($this);
     <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder' => 'Email capacités'])->label('Email :') ?>
 
     <!-- cellule dropdown field -->
-    <?= $form->field($model, 'cellule_id')->widget(Select2::classname(), [
+    <?= $form->field($model, 'cellule_id')->widget(Select2::class, [
         'data' => $cellules,
-        'options' => ['value' => 0],
+        'options' => ['value' => $model->cellule_id - 1],
         'pluginLoading' => false,
         'pluginOptions' => [
             'allowClear' => true
