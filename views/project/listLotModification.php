@@ -9,10 +9,10 @@ use app\widgets\TopTitle;
 use kidzen\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
+use kartik\sortinput\SortableInput;
 
 $this->title = 'Modification de la liste des lots';
 $this->params['breadcrumbs'][] = $this->title;
-
 
 AppAsset::register($this);
 ProjectModifLotAsset::register($this);
@@ -43,53 +43,21 @@ ProjectModifLotAsset::register($this);
                         <div id="lot-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
-
-                                    <?php DynamicFormWidget::begin([
-                                        'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-                                        'widgetBody' => '.container-items-task', // required: css class selector
-                                        'widgetItem' => '.item', // required: css class
-                                        'limit' => 10, // the maximum times, an element can be cloned (default 999)
-                                        'min' => 1, // 0 or 1 (default 1)
-                                        'insertButton' => '.add-item', // css class
-                                        'deleteButton' => '.remove-item', // css class
-                                        'model' => $lots[0],
-                                        'formId' => 'dynamic-form',
-                                        'formFields' => [
-                                            'number',
-                                            'title'
+                                    <?php
+                                    // Scenario # 2: Advanced usage without ActiveForm or model and hide the stored value.
+                                    // Style your sortable content and disable certain values in the list from sorting.
+                                    echo SortableInput::widget([
+                                        'name' => 'sort_list_1',
+                                        'items' => [
+                                            $lots[0]->number => ['content' =>  $form->field($lots[0], "title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Title") . '<i class="fas fa-cog"></i> '],
+                                            $lots[1]->number => ['content' =>  $form->field($lots[1], "title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Title") . '<i class="fas fa-cog"></i> '],
+                                            3 => ['content' => '<i class="fas fa-cog"></i> Item # 3'],
+                                            4 => ['content' => '<i class="fas fa-cog"></i> Item # 4'],
+                                            5 => ['content' => '<i class="fas fa-cog"></i> Item # 5', 'disabled' => true]
                                         ],
-                                    ]); ?>
-
-                                    <div class="container-items-task">
-                                        <!-- widgetContainer -->
-                                        <?php foreach ($lots as $i => $lot) : ?>
-                                            <?php if ($lot->number != 0) { ?>
-                                                <div class="item">
-                                                    <?php
-                                                    // necessary for update action.
-                                                    if (!$lot->isNewRecord) {
-                                                        echo Html::activeHiddenInput($lot, "[{$i}]id");
-                                                    }
-                                                    ?>
-                                                    <div class="row">
-                                                        <div class="col s1">
-                                                            <?= $form->field($lot, "[{$i}]number")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("N°") ?>
-                                                        </div>
-                                                        <div class="col s8">
-                                                            <?= $form->field($lot, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Titre lot") ?>
-                                                        </div>
-                                                        <div class="col 2">
-                                                            <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                        </div>
-                                                        <div class="col 2">
-                                                            <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
-                                                        </div>
-                                                    </div><!-- .row -->
-                                                </div>
-                                            <?php } ?>
-                                        <?php endforeach; ?>
-                                    </div>
-                                    <?php DynamicFormWidget::end(); ?>
+                                        'hideInput' => true,
+                                    ]);
+                                    ?>
                                 </div>
                             </div>
                         </div>
