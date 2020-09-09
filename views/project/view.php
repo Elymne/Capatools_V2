@@ -263,7 +263,7 @@ function createLaboxyTable(Project $model): string
                     <td>${laboxy_RHcost}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Coût total Achat,Frais généreaux, Investissement et RH </td>
+                    <td class='header'>Coût total Achat,Frais généraux, Investissement et RH </td>
                     <td>${laboxy_coutAchatInvestReversement} </td>
                 </tr>
                 <tr>
@@ -271,11 +271,11 @@ function createLaboxyTable(Project $model): string
                     <td>${laboxy_prixvente}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Marge avec frais généreaux</td>
+                    <td class='header'>Marge avec frais généraux</td>
                     <td>${laboxy_Marge}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Taux marge avec frais généreaux</td>
+                    <td class='header'>Taux marge avec frais généraux</td>
                     <td>${laboxy_TauxMarge}</td>
                 </tr>
 
