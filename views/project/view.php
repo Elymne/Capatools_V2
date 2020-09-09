@@ -500,6 +500,15 @@ function displayActionButtons($model)
     ?>
     <!-- Actions on devis -->
     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey rightspace-15px leftspace-15px']) ?>
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
+        <?= Html::a(
+            'Modifier le devis <i class="material-icons right">edit</i>',
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DRAFT,],
+            ['class' => 'waves-effect waves-light btn btn-black  rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Modifier le devis ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
 
     <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
         <?= Html::a(
@@ -521,15 +530,6 @@ function displayActionButtons($model)
             ]]
         ) ?>
     <?php endif; ?>
-    <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
-        <?= Html::a(
-            'Cloturer la prestation <i class="material-icons right">check</i>',
-            ['update-status', 'id' => $model->id, 'status' => Project::STATE_FINISHED,],
-            ['class' => 'waves-effect waves-light btn btn-blue  rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Clôturer la prestation ?'
-            ]]
-        ) ?>
-    <?php endif; ?>
 
 
     <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
@@ -541,17 +541,17 @@ function displayActionButtons($model)
             ]]
         ) ?>
     <?php endif; ?>
-
-
-    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
         <?= Html::a(
-            'Modifier le devis <i class="material-icons right">edit</i>',
-            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DRAFT,],
-            ['class' => 'waves-effect waves-light btn btn-black  rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Modifier le contrat ?'
+            'Prestation terminée <i class="material-icons right">check</i>',
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_FINISHED,],
+            ['class' => 'waves-effect waves-light btn btn-blue  rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Terminer la prestation ?'
             ]]
         ) ?>
     <?php endif; ?>
+
+
 
 <?php
 }
