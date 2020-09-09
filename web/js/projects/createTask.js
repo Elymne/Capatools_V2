@@ -240,7 +240,7 @@ $(() => {
         $(SelectRisk).val("1");
         let Taskdayduration =
             "#projectcreategestiontaskform-" + index + "-day_duration";
-        $(Taskdayduration).val(0);
+        $(Taskdayduration).val(1);
         $(Taskdayduration).on("input", function (e) {
             OnCalculIncertitudeGest(index);
         });
@@ -254,7 +254,7 @@ $(() => {
 
         let TaskRiskduration =
             "#projectcreategestiontaskform-" + index + "-risk_duration";
-        $(TaskRiskduration).val("0j 0h");
+        $(TaskRiskduration).val("1j 0h");
 
         let SelectUser =
             "#projectcreategestiontaskform-" + index + "-capa_user_id";

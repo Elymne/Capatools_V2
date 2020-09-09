@@ -276,7 +276,7 @@ class Project extends ActiveRecord
         $ListeInternalternalFinal = array();
         foreach ($this->lots as $lot) {
             $couttotal = 0;
-            $ListeInternalternal = Consumable::getAllExternalGroupByTitleBylotID($lot->id);
+            $ListeInternalternal = Consumable::getAllInternalGroupByTitleBylotID($lot->id);
 
             foreach ($ListeInternalternal as $Internalternal) {
                 $couttotal = $couttotal + $Internalternal->total;
