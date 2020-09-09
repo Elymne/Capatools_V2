@@ -160,19 +160,19 @@ class Lot extends ActiveRecord
 
     public function getTotalCostRepayement()
     {
-        $result = 0.0;
+        $result =  0.000;
         $Equipementrepayements = $this->equipmentrepayments;
         foreach ($Equipementrepayements as $Equipementrepayement) {
-            $result  = $result + $Equipementrepayement->price * $Equipementrepayement->time_risk;
+            $result  = $result + $Equipementrepayement->price;
         }
 
         $LabotoryContributors = $this->labotorycontributors;
         foreach ($LabotoryContributors as $LabotoryContributor) {
-            $result  = $result + $LabotoryContributor->price * $LabotoryContributor->time_risk;
+            $result  = $result + $LabotoryContributor->price;
         }
 
 
-        return 0;
+        return $result;
     }
 
     public function getTotal()

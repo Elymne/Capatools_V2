@@ -28,8 +28,6 @@ class ProjectCreateFirstStepForm extends Project
     public $combobox_lot_checked = 1;
     public $combobox_repayment_checked = 1;
 
-    public $management_rate;
-
     public $company_name;
     public $contact_email;
     /**
