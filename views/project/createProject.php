@@ -117,7 +117,7 @@ ProjectsRefactoringAsset::register($this);
                                 </div>
 
                                 <div class="input-field col s6">
-                                    <?= $form->field($model, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($model->SellingPrice / (1 - ($TVA / 100)))]])->label('Prix de vente du projet (TTC)') ?>
+                                    <?= $form->field($model, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($model->SellingPrice * (1 - ($TVA / 100)))]])->label('Prix de vente du projet (TTC)') ?>
 
                                 </div>
                             </div>
