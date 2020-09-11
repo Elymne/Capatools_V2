@@ -42,7 +42,10 @@ class ProjectCreateFirstStepForm extends Project
             ['combobox_repayment_checked', 'required', 'message' =>  'Vous devez cocher au moins un des deux choix proposés'],
             ['internal_name', 'required', 'message' => 'Vous devez préciser un nom pour le projet/brouillon'],
             ['company_name', 'noCompanyFound'],
-            ['contact_email', 'noContactFound']
+            ['contact_email', 'noContactFound'],
+            ['company_name', 'required', 'message' => 'Vous devez préciser une société'],
+            ['contact_email', 'required', 'message' => 'Vous devez préciser un mail de contact'],
+
         ];
     }
 
