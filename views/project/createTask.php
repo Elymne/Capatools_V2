@@ -49,12 +49,13 @@ if ($lot->number != 0) {
                         if ($lot->number != 0) { ?>
                             <!-- Liste de tâche de gestion de projet du lot  -->
                             <label class='blue-text control-label typeLabel'>Tâche de gestion du projet du lot</label>
+
                             <?php DynamicFormWidget::begin([
                                 'widgetContainer' => 'dynamicform_wrapperGest', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                 'widgetBody' => '.container-items-taskGestion', // required: css class selector
                                 'widgetItem' => '.item-taskGestion', // required: css class
                                 'limit' => 10, // the maximum times, an element can be cloned (default 999)
-                                'min' => 1, // 0 or 1 (default 1)
+                                'min' => 0, // 0 or 1 (default 1)
                                 'insertButton' => '.add-item-taskGestion', // css class
                                 'deleteButton' => '.remove-item-taskGestion', // css class
                                 'model' => $tasksGestions[0],
@@ -73,6 +74,13 @@ if ($lot->number != 0) {
                             ]); ?>
 
                             <div class="container-items-taskGestion">
+                                <div class="row">
+                                    <div class="col s11">
+                                    </div>
+                                    <div class="col s1">
+                                        <button type="button" class="add-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                    </div>
+                                </div>
                                 <!-- widgetContainer -->
                                 <?php foreach ($tasksGestions as $i => $taskGestion) : ?>
                                     <div class="item-taskGestion">

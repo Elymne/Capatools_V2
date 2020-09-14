@@ -133,7 +133,7 @@ $(() => {
     });
 
     $(".dynamicform_wrapperLot").on("beforeDelete", function (e, item) {
-        if (!confirm("Are you sure you want to delete this item?")) {
+        if (!confirm("Voulez-vous supprimer ce jalon?")) {
             return false;
         }
 
@@ -141,6 +141,17 @@ $(() => {
     });
 
     $(".dynamicform_wrapperLot").on("limitReached", function (e, item) {
-        alert("Limit reached");
+        alert("Limite atteinte");
+    });
+    SelectRaison = "#projectsimulate-low_tjm_raison";
+    $(SelectRaison).on("select2:select", function (e) {
+        description = "#projectsimulate-low_tjm_description";
+        if (e.currentTarget.value != "Autre") {
+            $(description).val(" ");
+            $(description).hide();
+        } else {
+            $(description).show();
+            $(description).val("");
+        }
     });
 });

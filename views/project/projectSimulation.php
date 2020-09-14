@@ -15,7 +15,7 @@ $this->title = 'Simulation du projet';
 
 AppAsset::register($this);
 ProjectSimulationAsset::register($this);
-
+$tjmstatut = true;
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -293,6 +293,19 @@ ProjectSimulationAsset::register($this);
                                     )->label(false);
                                 } else {
                                     echo  $form->field($project, "low_tjm_raison")->hiddeninput(['value' => $project::TJMRAISON_TJMOK])->label('');
+                                } ?>
+                            </div>
+                        </div>
+                        <div class="row bottom-spacing">
+                            <div class="col s5">
+
+                            </div>
+                            <div class="col s5">
+                                <?php
+                                if ($tjmstatut) {
+                                    echo   $form->field($project, "low_tjm_description", ['inputOptions' => ['hide' => true]])->label(false);
+                                } else {
+                                    echo  $form->field($project, "low_tjm_description")->hiddeninput(['value' => " "])->label('');
                                 } ?>
                             </div>
                         </div>

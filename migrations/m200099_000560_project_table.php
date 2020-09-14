@@ -21,6 +21,7 @@ class m200099_000560_project_table extends Migration
             'signing_probability' => $this->integer()->defaultValue(0),
             'management_rate' => $this->double()->defaultValue(0),
             'low_tjm_raison' => $this->string(),
+            'low_tjm_description' => $this->string(),
             'thematique' => $this->string(),
 
             'state' => $this->string()->notNull(),
@@ -97,6 +98,7 @@ class m200099_000560_project_table extends Migration
             'contact_id' => 1,
             'capa_user_id' => 4,
             'management_rate' => 12,
+            'low_tjm_description' => ' ',
         ]);
     }
 

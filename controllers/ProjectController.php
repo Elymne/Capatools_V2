@@ -488,6 +488,7 @@ class ProjectController extends Controller implements ServiceInterface
 
                 $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
 
+                $model->low_tjm_description = ' ';
                 // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
                 $model->save();
 
@@ -779,12 +780,19 @@ class ProjectController extends Controller implements ServiceInterface
         $model->number = $number;
         $lot = $model->GetCurrentLot();
 
-        $tasksGestionsModif = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT)
-            ? ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT) : [new ProjectCreateGestionTaskForm()];
+        ///Récupération des tâches gestions
+        $tasksGestionsModif = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
+        if (!$tasksGestionsModif) {
+            $tasksGestionsModif = [new ProjectCreateLotTaskForm()];
+        }
 
-        $tasksLotsModif = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK)
-            ? ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK) : [new ProjectCreateLotTaskForm()];
 
+
+        ///Récupération des tâches lots
+        $tasksLotsModif = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
+        if (!$tasksLotsModif) {
+            $tasksLotsModif = [new ProjectCreateLotTaskForm()];
+        }
 
         $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
         $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
@@ -800,9 +808,10 @@ class ProjectController extends Controller implements ServiceInterface
             $isValid = true;
 
             if ($number != 0) {
+
                 $oldTasksGestionsModifIds = ArrayHelper::map($tasksGestionsModif, 'id', 'id');
                 $tasksGestionsModif = Model::createMultiple(ProjectCreateGestionTaskForm::class, $tasksGestionsModif);
-                if (!ProjectCreateGestionTaskForm::loadMultiple($tasksGestionsModif, Yii::$app->request->post())) $isValid = false;
+
                 $deletedTasksGestionsModifIds = array_diff($oldTasksGestionsModifIds, array_filter(ArrayHelper::map($tasksGestionsModif, 'id', 'id')));
             }
 

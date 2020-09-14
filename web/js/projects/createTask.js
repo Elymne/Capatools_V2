@@ -31,6 +31,7 @@ function initialisationLotTask() {
             "#projectcreatelottaskform-" + element + "-capa_user_id";
         $(Userselect).on("input", function (e) {
             OnCalculIntervenantlot(element);
+            OnCalculIncertitudelot(parseInt(element));
         });
     }
 }
@@ -57,6 +58,7 @@ function initialisationGestionTask() {
         let Userselect = "#projectcreategestiontaskform-" + 0 + "-capa_user_id";
         $(TaskdaydurationGest).on("input", function (e) {
             OnCalculIntervenantGest(parseInt(element));
+            OnCalculIncertitudeGest(parseInt(element));
         });
     }
 }
