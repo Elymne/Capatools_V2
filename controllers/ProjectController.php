@@ -1051,6 +1051,7 @@ class ProjectController extends Controller implements ServiceInterface
                 $finalModel = Project::getOneById($model->id);
 
                 $finalModel->state = Project::STATE_DEVIS_SENDED;
+                $finalModel->signing_probability = $model->signing_probability;
                 $finalModel->draft = false;
                 $finalModel->capa_user_id = $model->projectManagerSelectedValue;
                 $finalModel->file_name = $model->file_name;

@@ -283,6 +283,7 @@ function getUpdateButtonArray()
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
+                    'target' => '_blank',
                     'action' => Url::to(['project/view', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-green',
                     'title' => "visualiser le devis"
