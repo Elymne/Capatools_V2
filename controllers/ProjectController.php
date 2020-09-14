@@ -895,8 +895,13 @@ class ProjectController extends Controller implements ServiceInterface
         $consumables = ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id)
             ? ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id) : [new ProjectCreateConsumableForm];
 
-        $invests = ProjectCreateInvestForm::getAllByLotID($lot->id)
-            ? ProjectCreateInvestForm::getAllByLotID($lot->id) : [new ProjectCreateInvestForm];
+        // Sur le lot n°0, on a pas d'investissements secondaires.
+        if ($number != 0) {
+            $invests = ProjectCreateInvestForm::getAllByLotID($lot->id)
+                ? ProjectCreateInvestForm::getAllByLotID($lot->id) : [new ProjectCreateInvestForm];
+        } else {
+            $invests = null;
+        }
 
         $equipmentsRepayment = ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id)
             ? ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id) : [new ProjectCreateEquipmentRepaymentForm];
@@ -907,8 +912,8 @@ class ProjectController extends Controller implements ServiceInterface
         }
 
         if ($lot->laboratory_id != null)
-            $contributors = ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($lot->laboratory_id)
-                ? ProjectCreateLaboratoryContributorForm::getAllByLaboratoryID($lot->laboratory_id) : [new ProjectCreateLaboratoryContributorForm];
+            $contributors = ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id)
+                ? ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id) : [new ProjectCreateLaboratoryContributorForm];
         else
             $contributors = [new ProjectCreateLaboratoryContributorForm];
         foreach ($contributors as $contributor) {
@@ -931,11 +936,13 @@ class ProjectController extends Controller implements ServiceInterface
             if (!Model::loadMultiple($consumables, Yii::$app->request->post())) $isValid = false;
             $deletedConsumablesIDs = array_diff($oldConsumablesIds, array_filter(ArrayHelper::map($consumables, 'id', 'id')));
 
-            // Vérifications des investissements.
-            $oldInvestsIds = ArrayHelper::map($invests, 'id', 'id');
-            $invests = Model::createMultiple(ProjectCreateInvestForm::class, $invests);
-            if (!Model::loadMultiple($invests, Yii::$app->request->post())) $isValid = false;
-            $deletedInvestsIDs = array_diff($oldInvestsIds, array_filter(ArrayHelper::map($invests, 'id', 'id')));
+            // Vérifications des investissements. On vérifie toujours qu'on est pas sur le laut 0.
+            if ($number != 0) {
+                $oldInvestsIds = ArrayHelper::map($invests, 'id', 'id');
+                $invests = Model::createMultiple(ProjectCreateInvestForm::class, $invests);
+                if (!Model::loadMultiple($invests, Yii::$app->request->post())) $isValid = false;
+                $deletedInvestsIDs = array_diff($oldInvestsIds, array_filter(ArrayHelper::map($invests, 'id', 'id')));
+            }
 
             // Vérification des équipements de laboratoire et de leur utilisation.
             $oldEquipmentsRepaymentIds = ArrayHelper::map($equipmentsRepayment, 'id', 'id');
@@ -966,8 +973,8 @@ class ProjectController extends Controller implements ServiceInterface
                 }
 
                 /**
-                 * On associe les consommables au lot actuel, puis on les sauvegardes. Notons que si le lot est égale à 0, on enregistre aucuns investissements.
-                 * Quand le lot est égale à 0, il n'y a pas d'investissements. Le fonctionement du widget DynamicForm nous 
+                 * On associe les consommables au lot actuel, puis on les sauvegardes. Notons que si le lot est égal à 0, on enregistre aucun investissement.
+                 * Quand le lot est égal à 0, il n'y a pas d'investissements. Le fonctionement du widget DynamicForm nous 
                  * oblige tout de même à garder un objet Invest dans la liste $invtests.
                  * On ne doit donc pas le prendre en compte lors de la validation du formulaire.
                  */

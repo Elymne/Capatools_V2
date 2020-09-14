@@ -32,9 +32,9 @@ class Consumable extends ActiveRecord
     const TYPE_SECONDARY_INVESTMENT = "Investissement éventuels";
 
     const TYPES = [
-        1 => self::TYPE_EXTERNAL_DELIVERY,
-        2 => self::TYPE_CONSUMABLE,
-        3 => self::TYPE_INTERNAL_DELIVERY
+        self::TYPE_EXTERNAL_DELIVERY,
+        self::TYPE_CONSUMABLE,
+        self::TYPE_INTERNAL_DELIVERY
     ];
 
     public static function tableName()
@@ -70,6 +70,6 @@ class Consumable extends ActiveRecord
     }
     public function getLot()
     {
-        return $this->hasOne(Lot::className(), ['id' => 'lot_id']);
+        return $this->hasOne(Lot::class, ['id' => 'lot_id']);
     }
 }
