@@ -15,12 +15,6 @@ use app\models\laboratories\LaboratoryContributor;
 class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
 {
 
-    private $keyTypes = [
-        self::TYPE_SEARCHER => 0,
-        self::TYPE_PROBATIONER => 1,
-        self::TYPE_DOCTOR => 2
-    ];
-
     /**
      * Liste d'attributs relatif au formulaire.
      * (Pour stocker la valeur choisie dans les listes déroulantes).
@@ -51,10 +45,22 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
      */
     public function getSelectedType(): int
     {
-        if ($this->type == null)
-            return 1;
-        else
-            return $this->keyTypes[$this->type];
+        switch ($this->type) {
+            case null:
+                return 0;
+                break;
+            case self::TYPE_SEARCHER:
+                return 0;
+                break;
+            case self::TYPE_PROBATIONER:
+                return 1;
+                break;
+            case self::TYPE_DOCTOR:
+                return 2;
+                break;
+            default:
+                return 0;
+        }
     }
 
     /**
