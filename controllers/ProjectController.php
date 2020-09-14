@@ -883,42 +883,32 @@ class ProjectController extends Controller implements ServiceInterface
 
         $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
 
-        if ($lot == null) {
+        if ($lot == null)
             return $this->redirect([
                 'error',
                 'errorName' => 'Lot innexistant',
                 'errorDescriptions' => ['Vous essayez actuellement de modifier une liste de matériels sur un lot/projet qui n\'existe pas.']
             ]);
-        }
 
         // Récupérer les données existantes du lot spécifié en paramètre.
-        $consumables = ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id)
-            ? ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id) : [new ProjectCreateConsumableForm];
+        $consumables = ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id) ? ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id) : [new ProjectCreateConsumableForm];
 
         // Sur le lot n°0, on a pas d'investissements secondaires.
-        if ($number != 0) {
-            $invests = ProjectCreateInvestForm::getAllByLotID($lot->id)
-                ? ProjectCreateInvestForm::getAllByLotID($lot->id) : [new ProjectCreateInvestForm];
-        } else {
-            $invests = null;
-        }
+        if ($number != 0) $invests = ProjectCreateInvestForm::getAllByLotID($lot->id) ? ProjectCreateInvestForm::getAllByLotID($lot->id) : [new ProjectCreateInvestForm];
+        else $invests = null;
+
 
         $equipmentsRepayment = ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id)
             ? ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id) : [new ProjectCreateEquipmentRepaymentForm];
         $equipmentByID = Equipment::getAllByLaboratoryID($lot->laboratory_id);
         foreach ($equipmentsRepayment as $equipmentRepayment) {
-            $equipmentRepayment->setSelectedEquipment($equipmentByID);
             $equipmentRepayment->setSelectedRisk();
         }
 
-        if ($lot->laboratory_id != null)
-            $contributors = ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id)
-                ? ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id) : [new ProjectCreateLaboratoryContributorForm];
-        else
-            $contributors = [new ProjectCreateLaboratoryContributorForm];
-        foreach ($contributors as $contributor) {
-            $contributor->setSelectedRisk();
-        }
+        if ($lot->laboratory_id != null) $contributors = ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id) ? ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id) : [new ProjectCreateLaboratoryContributorForm];
+        else $contributors = [new ProjectCreateLaboratoryContributorForm];
+        foreach ($contributors as $contributor) $contributor->setSelectedRisk();
+
 
         // Import de données depuis la bdd.
         $laboratoriesData = Laboratory::getAllThatHasEquipments();
@@ -988,17 +978,9 @@ class ProjectController extends Controller implements ServiceInterface
                     }
                 }
 
-                // On récupère la liste de matériels lié au choix du labo fait précédement. Utilisé pour récupérer le bon matériel sélectionné.
-                $id_laboratory = $lot->laboratory_id;
-                $equipmentsDataFilteredByLabo = array_values(
-                    array_filter($equipmentsData, function ($equipment) use ($id_laboratory) {
-                        return ($equipment->laboratory_id == $id_laboratory);
-                    })
-                );
 
                 // On associe les matériels au lot actuel, puis on les sauvegardes.
                 foreach ($equipmentsRepayment as $equipmentRepayment) {
-                    $equipmentRepayment->equipment_id = $equipmentsDataFilteredByLabo[$equipmentRepayment->equipmentSelected]->id;
                     $equipmentRepayment->lot_id = $lot->id;
                     $equipmentRepayment->risk_id = \intval($equipmentRepayment->riskSelected) + 1;
                     $equipmentRepayment->time_risk = TimeStringifyHelper::transformStringChainToHour($equipmentRepayment->timeRiskStringify);
@@ -1010,8 +992,7 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // On associe les intervenants de laboratoire au lot actuel, puis ont les sauvegardes.
                 foreach ($contributors as $contributor) {
-                    $contributor->type = LaboratoryContributor::TYPES[$contributor->type];
-                    $contributor->laboratory_id = $id_laboratory;
+                    $contributor->laboratory_id = $lot->laboratory_id;
                     $contributor->lot_id = $lot->id;
                     $contributor->risk_id = intval($contributor->riskSelected) + 1;
                     $contributor->time_risk = TimeStringifyHelper::transformStringChainToHour($contributor->timeRiskStringify);

@@ -29,13 +29,15 @@ class ProjectCreateLaboratoryContributorForm extends LaboratoryContributor
     {
         return [
             [['riskSelected', 'timeRiskStringify'], 'safe'],
-            ['type', 'required', 'message' => 'Veuillez renseigner le type d\'intervenant'],
+            ['name', 'required', 'message' => 'Veuillez renseigner le type d\'intervenant'],
+            ['daily_price', 'required', 'message' => 'Le coût n\'a pas été généré'],
+            ['daily_price', 'double', 'min' => 0, 'tooSmall' => 'Le coût généré doit être supérieur à 0', 'message' => 'Le coût généré doit être supérieur à 0'],
             ['nb_days', 'required', 'message' => 'Veuillez définir le nombre de jours'],
             ['nb_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
             ['nb_hours', 'required', 'message' => 'Veuillez définir le nombre d\'heures'],
             ['nb_hours', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
             ['price', 'required', 'message' => 'Le coût n\'a pas été généré'],
-            ['price', 'integer', 'min' => 0, 'tooSmall' => 'Le coût généré doit être supérieur à 0', 'message' => 'Le coût généré doit être supérieur à 0'],
+            ['price', 'double', 'min' => 0, 'tooSmall' => 'Le coût généré doit être supérieur à 0', 'message' => 'Le coût généré doit être supérieur à 0'],
             ['timeRiskStringify', 'required', 'message' => 'Le temps d\'incertitude n\'a pas été généré'],
         ];
     }
