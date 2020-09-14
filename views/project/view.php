@@ -6,6 +6,8 @@ use app\models\projects\Project;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
+use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
@@ -243,8 +245,6 @@ function createLaboxyTable(Project $model): string
         <table class="highlight">
 
             <tbody>
-
-
                  <!-- Laboxy data -->
                  <tr class='group'>
                     <td class='header'>Information Laboxy</td>
@@ -551,7 +551,18 @@ function displayActionButtons($model)
         ) ?>
     <?php endif; ?>
 
-
+    <?= Html::a(
+        'Générer le pdf <i class="material-icons right">picture_as_pdf</i>',
+        Url::to(['project/pdf', 'id' => $model->id,]),
+        [
+            'id' => 'grid-custom-button',
+            'target' => '_blank',
+            'data-pjax' => true,
+            'action' => Url::to(['project/pdf', 'id' => $model->id]),
+            'class' => 'waves-effect waves-light btn btn-purple  rightspace-15px leftspace-15px',
+            'title' => "Générer le devis sous forme pdf"
+        ]
+    ) ?>
 
 <?php
 }
