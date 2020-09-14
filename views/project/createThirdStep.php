@@ -237,10 +237,6 @@ ProjectCreateThirdStepAsset::register($this);
                                                             'pluginOptions' => [],
                                                         ])->label("Matériel "); ?>
                                                     </div>
-
-                                                    <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]price")->textInput(['readonly' => true])->label("Coût") ?>
-                                                    </div>
                                                     <div class="col s1">
                                                         <?= $form->field($equipment, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Jour(s)") ?>
                                                     </div>
@@ -260,6 +256,9 @@ ProjectCreateThirdStepAsset::register($this);
                                                     </div>
                                                     <div class="col s2">
                                                         <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($equipment, "[{$i}]price")->textInput(['readonly' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
@@ -320,9 +319,6 @@ ProjectCreateThirdStepAsset::register($this);
                                                         ])->label("Intervenant "); ?>
                                                     </div>
                                                     <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'readonly' => true])->label("Coût") ?>
-                                                    </div>
-                                                    <div class="col s1">
                                                         <?= $form->field($contributor, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Jour(s)") ?>
                                                     </div>
                                                     <div class="col s1">
@@ -339,6 +335,9 @@ ProjectCreateThirdStepAsset::register($this);
                                                     </div>
                                                     <div class="col s2">
                                                         <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($contributor, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'readonly' => true])->label("Coût") ?>
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
