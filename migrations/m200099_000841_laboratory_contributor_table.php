@@ -9,7 +9,8 @@ class m200099_000841_laboratory_contributor_table extends Migration
     {
         $this->createTable('{{%laboratory_contributor}}', [
             'id' => $this->primaryKey(),
-            'type' => $this->string()->notNull(),
+            'name' => $this->string()->notNull(),
+            'daily_price' => $this->double()->defaultValue(0),
             'nb_days' => $this->integer()->defaultValue(0),
             'nb_hours' => $this->integer()->defaultValue(0),
             'price' => $this->double()->defaultValue(0),
@@ -46,7 +47,8 @@ class m200099_000841_laboratory_contributor_table extends Migration
         );
 
         $this->insert('{{%laboratory_contributor}}', [
-            'type' => 'stagiaire',
+            'name' => 'le stagiaire débutant',
+            'daily_price' => 1000,
             'nb_days' => 20,
             'nb_hours' => 19,
             'price' => 300,
@@ -57,7 +59,8 @@ class m200099_000841_laboratory_contributor_table extends Migration
         ]);
 
         $this->insert('{{%laboratory_contributor}}', [
-            'type' => 'stagiaire',
+            'name' => 'stagiaire',
+            'daily_price' => 1000,
             'nb_days' => 20,
             'nb_hours' => 19,
             'price' => 300,

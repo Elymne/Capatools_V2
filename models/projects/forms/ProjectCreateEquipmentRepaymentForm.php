@@ -19,7 +19,6 @@ class ProjectCreateEquipmentRepaymentForm extends EquipmentRepayment
      * Liste d'attributs relatif au formulaire.
      * (Pour stocker la valeur choisie dans les listes déroulantes).
      */
-    public $equipmentSelected;
     public $riskSelected;
     public $timeRiskStringify;
 
@@ -29,14 +28,17 @@ class ProjectCreateEquipmentRepaymentForm extends EquipmentRepayment
     public function rules()
     {
         return [
-            [['equipmentSelected', 'riskSelected', 'timeRiskStringify'], 'safe'],
+            [['riskSelected', 'timeRiskStringify'], 'safe'],
+            ['name', 'required', 'message' => 'Veuillez renseigner le nom du matériel'],
+            ['daily_price', 'required', 'message' => 'Le coût n\'a pas été généré'],
+            ['daily_price', 'integer', 'min' => 0, 'tooSmall' => 'Le temps d\'incertitude généré doit être supérieur à 0', 'message' => 'Le temps d\'incertitude généré doit être supérieur à 0'],
             ['nb_days', 'required', 'message' => 'Veuillez renseigner le nombre de jours'],
             ['nb_days', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre de jours doit être supérieur à 0', 'message' => 'Le nombre de jours doit être supérieur à 0'],
             ['nb_hours', 'required', 'message' => 'Veuillez renseigner le nombre d\'heures'],
             ['nb_hours', 'integer', 'min' => 0, 'tooSmall' => 'Le nombre d\'heures doit être supérieur à 0', 'message' => 'Le nombre d\'heures doit être supérieur à 0'],
             ['timeRiskStringify', 'required', 'message' => 'Le temps d\'incertitude n\'a pas généré'],
             ['price', 'required', 'message' => 'Le coût n\'a pas été généré'],
-            ['price', 'integer', 'min' => 0, 'tooSmall' => 'Le temps d\'incertitude généré doit être supérieur à 0', 'message' => 'Le temps d\'incertitude généré doit être supérieur à 0'],
+            ['price', 'double', 'min' => 0, 'tooSmall' => 'Le temps d\'incertitude généré doit être supérieur à 0', 'message' => 'Le temps d\'incertitude généré doit être supérieur à 0'],
         ];
     }
 

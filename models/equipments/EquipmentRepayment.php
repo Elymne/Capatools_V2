@@ -61,18 +61,23 @@ class EquipmentRepayment extends ActiveRecord implements JsonSerializable
 
     public static function getAllEquipementRepayementGroupByLaboBylotID(int $lotid)
     {
-        return $res = self::find()
-            ->select('SUM(aqr.time_risk * aqr.price) as total,equipment.laboratory_id as id')
+        return self::find()
+            ->select('SUM(aqr.time_risk * aqr.price) as total, lot.laboratory_id as id')
             ->from((['equipment_repayment as aqr']))
-            ->joinWith('equipment')
+            ->joinWith('lot')
             ->where(['aqr.lot_id' => $lotid])
-            ->groupBy(['equipment.laboratory_id'])
+            ->groupBy(['lot.laboratory_id'])
             ->all();
     }
+
+    public function getAllEquipmentsRepayementGroupByLaboAndLotID(int $lotID)
+    {
+    }
+
     public function getLaboratory()
     {
 
-        return $this->hasOne(Laboratory::className(), ['id' => 'laboratory_id'])
+        return $this->hasOne(Laboratory::class, ['id' => 'laboratory_id'])
             ->via('equipment');
     }
 
@@ -83,11 +88,12 @@ class EquipmentRepayment extends ActiveRecord implements JsonSerializable
     {
         return array(
             'id' => $this->id,
+            'name' => $this->name,
+            'daily_price' => $this->daily_price,
             'nb_days' => $this->nb_days,
             'nb_hours' => $this->nb_hours,
             'price' => $this->price,
             'time_risk' => $this->time_risk,
-            'equipment_id' => $this->equipment_id,
             'lot_id' => $this->lot_id,
             'risk_id' => $this->risk_id
         );
