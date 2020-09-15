@@ -47,6 +47,7 @@ class Company extends ActiveRecord
 
     /**
      * Récupère une société par son id.
+     * @param int $id - ID de la société.
      * 
      * @return Company
      */
@@ -57,7 +58,7 @@ class Company extends ActiveRecord
 
     /**
      * Récupère une société par son nom.
-     * @param string name
+     * @param string name - Nom de la société.
      * 
      * @return Company
      */
