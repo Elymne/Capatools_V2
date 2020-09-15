@@ -1051,7 +1051,6 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
-
     /**
      * Route : none.
      * Redirect : project/view?id=?
