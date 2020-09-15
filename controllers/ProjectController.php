@@ -205,7 +205,7 @@ class ProjectController extends Controller implements ServiceInterface
         return $result;
     }
 
-    public static function getActionSubUser()
+    private static function getActionSubUser()
     {
         $arraySubMenu = [];
 
@@ -329,7 +329,6 @@ class ProjectController extends Controller implements ServiceInterface
             $project->signing_probability = 100;
             $project->id_laboxy = IdLaboxyManager::generateLaboxyId($project);
         }
-
 
         $project->save();
 
@@ -883,32 +882,51 @@ class ProjectController extends Controller implements ServiceInterface
 
         $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
 
-        if ($lot == null)
+        if ($lot == null) {
             return $this->redirect([
                 'error',
                 'errorName' => 'Lot innexistant',
                 'errorDescriptions' => ['Vous essayez actuellement de modifier une liste de matériels sur un lot/projet qui n\'existe pas.']
             ]);
+        }
 
         // Récupérer les données existantes du lot spécifié en paramètre.
-        $consumables = ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id) ? ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id) : [new ProjectCreateConsumableForm];
+        $consumables = ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id);
+        if ($consumables == null) {
+            $consumables = [new ProjectCreateConsumableForm];
+        }
 
-        // Sur le lot n°0, on a pas d'investissements secondaires.
-        if ($number != 0) $invests = ProjectCreateInvestForm::getAllByLotID($lot->id) ? ProjectCreateInvestForm::getAllByLotID($lot->id) : [new ProjectCreateInvestForm];
-        else $invests = null;
+        // Si lot 0, pas d'investissements.
+        $invests = null;
+        if ($number != 0) {
+            $invests = ProjectCreateInvestForm::getAllByLotID($lot->id);
+            if ($invests == null) {
+                $invests = [new ProjectCreateInvestForm];
+            }
+        }
 
-
-        $equipmentsRepayment = ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id)
-            ? ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id) : [new ProjectCreateEquipmentRepaymentForm];
-        $equipmentByID = Equipment::getAllByLaboratoryID($lot->laboratory_id);
+        // Récupération des équipements stockés.
+        $equipmentsRepayment = ProjectCreateEquipmentRepaymentForm::getAllByLotID($lot->id);
+        if ($equipmentsRepayment == null) {
+            $equipmentsRepayment = [new ProjectCreateEquipmentRepaymentForm];
+        }
         foreach ($equipmentsRepayment as $equipmentRepayment) {
             $equipmentRepayment->setSelectedRisk();
         }
 
-        if ($lot->laboratory_id != null) $contributors = ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id) ? ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id) : [new ProjectCreateLaboratoryContributorForm];
-        else $contributors = [new ProjectCreateLaboratoryContributorForm];
-        foreach ($contributors as $contributor) $contributor->setSelectedRisk();
+        // Récupération des contributors.
+        if ($lot->laboratory_id != null) {
+            $contributors = ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id);
+            if ($contributors == null) {
+                $contributors = [new ProjectCreateLaboratoryContributorForm];
+            }
+        } else {
+            $contributors = [new ProjectCreateLaboratoryContributorForm];
+        }
 
+        foreach ($contributors as $contributor) {
+            $contributor->setSelectedRisk();
+        }
 
         // Import de données depuis la bdd.
         $laboratoriesData = Laboratory::getAllThatHasEquipments();
@@ -923,31 +941,38 @@ class ProjectController extends Controller implements ServiceInterface
             // Vérification des consommables.
             $oldConsumablesIds = ArrayHelper::map($consumables, 'id', 'id');
             $consumables = Model::createMultiple(ProjectCreateConsumableForm::class, $consumables);
-            if (!Model::loadMultiple($consumables, Yii::$app->request->post())) $isValid = false;
+            if (!Model::loadMultiple($consumables, Yii::$app->request->post())) {
+                $isValid = false;
+            }
             $deletedConsumablesIDs = array_diff($oldConsumablesIds, array_filter(ArrayHelper::map($consumables, 'id', 'id')));
 
             // Vérifications des investissements. On vérifie toujours qu'on est pas sur le laut 0.
             if ($number != 0) {
                 $oldInvestsIds = ArrayHelper::map($invests, 'id', 'id');
                 $invests = Model::createMultiple(ProjectCreateInvestForm::class, $invests);
-                if (!Model::loadMultiple($invests, Yii::$app->request->post())) $isValid = false;
+                if (!Model::loadMultiple($invests, Yii::$app->request->post())) {
+                    $isValid = false;
+                }
                 $deletedInvestsIDs = array_diff($oldInvestsIds, array_filter(ArrayHelper::map($invests, 'id', 'id')));
             }
 
             // Vérification des équipements de laboratoire et de leur utilisation.
             $oldEquipmentsRepaymentIds = ArrayHelper::map($equipmentsRepayment, 'id', 'id');
             $equipmentsRepayment = Model::createMultiple(ProjectCreateEquipmentRepaymentForm::class, $equipmentsRepayment);
-            if (!Model::loadMultiple($equipmentsRepayment, Yii::$app->request->post())) $isValid = false;
+            if (!Model::loadMultiple($equipmentsRepayment, Yii::$app->request->post())) {
+                $isValid = false;
+            }
             $deletedEquipmentsRepaymentIDs = array_diff($oldEquipmentsRepaymentIds, array_filter(ArrayHelper::map($equipmentsRepayment, 'id', 'id')));
 
             // Vérification des intervenants.
             $oldContributorsIds = ArrayHelper::map($contributors, 'id', 'id');
             $contributors = Model::createMultiple(ProjectCreateLaboratoryContributorForm::class, $contributors);
-            if (!Model::loadMultiple($contributors, Yii::$app->request->post())) $isValid = false;
+            if (!Model::loadMultiple($contributors, Yii::$app->request->post())) {
+                $isValid = false;
+            }
             $deletedContributorsIDs = array_diff($oldContributorsIds, array_filter(ArrayHelper::map($contributors, 'id', 'id')));
 
             if ($isValid) {
-
                 // Sauvegarde du laboratoire sélectionné dans le lot.
                 $lot->laboratory_id = $laboratoriesData[$model->laboratoryselected - 1]->id;
                 $lot->save();
@@ -1026,7 +1051,6 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
-
     /**
      * Route : none.
      * Redirect : project/view?id=?
@@ -1039,7 +1063,12 @@ class ProjectController extends Controller implements ServiceInterface
     {
         $model = ProjectCreateForm::getOneById($id); // On récupère le modèle formulaire de données de projet avec l'id.
         $celluleUsers = ArrayHelper::map(Cellule::getOneById(Yii::$app->user->identity->cellule_id)->capaUsers, 'id', 'email');
-        $TVA = $model->company->country == 'France' ? 20 : 0; // Si la société est d'origine Française, la tva est fixé à 20%.
+
+        if ($model->company->country) {
+            $TVA = 20;
+        } else {
+            $TVA = 0;
+        }
 
         if ($model->load(Yii::$app->request->post())) {
             // Préparation du fichier.
@@ -1112,190 +1141,6 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public static function getIndicator($user)
     {
-    }
-
-
-    /**
-     * /!\ TRASHBOX /!\
-     * Methodes inutilisées - cassées
-     */
-
-    /**
-     * //TODO TO DELETE : not used anymore.
-     */
-    public function actionDownloadFile(int $id)
-    {
-        // $fileModel = UploadFile::getByDevis($id);
-
-        // if ($fileModel != null) {
-        //     $pathFile = $fileModel->name . '.' . $fileModel->type;
-        //     UploadFileHelper::downloadFile($pathFile);
-        // }
-    }
-
-    /**
-     * //TODO TO KEEP : just need an update.
-     */
-    public function actionDownloadExcel(int $id)
-    {
-        // $model = $this->findModel($id);
-        // if ($model != null) ExcelExportService::exportModelDataToExcel($model, ExcelExportService::DEVIS_TYPE);
-    }
-
-    /**
-     * //TODO TO DELETE : useless.
-     */
-    public function actionViewpdf($id)
-    {
-
-        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT_NONE;
-
-        $model = $this->findModel($id);
-
-        if ($model) {
-            $filepath = 'uploads/' . $model->id_capa . '/' . $model->filename;
-            if (file_exists($filepath)) {
-
-                // Set up PDF headers 
-                header('Content-type: application/pdf');
-                header('Content-Disposition: inline; filename="' . $model->filename . '"');
-                // Render the file
-                readfile($filepath);
-            } else {
-                // PDF doesn't exist so throw an error or something
-            }
-        }
-    }
-
-    /**
-     * //TODO TO DELETE : useless.
-     */
-    public function actionUpdateFirstStep(int $id)
-    {
-        // Récupération du projet brouillon.
-        $model = ProjectCreateFirstStepForm::getOneById($id);
-        $lots = ProjectCreateLotForm::getAllByIdProject($id);
-
-        // Check si il y a bien plus d'un lot attaché au projet (un lot d'avant-projet et un lot principal).
-        if (count($lots) <= 1) {
-            return $this->redirect([
-                'error',
-                'errorName' => 'Incohérence de lot',
-                'errorDescriptions' => [
-                    "Le projet que vous essayer de modifier présente une incohérence au niveau des lots.",
-                    "Il devrait avoir un nombre de lots supérieur ou égale à 2 or ce n'est pas le cas ici."
-                ]
-            ]);
-        }
-
-        // Retire le lot n°0 qui correspond à l'avant-projet.
-        unset($lots[0]);
-        $lots = array_values($lots);
-
-        if ($lots[0]->title == "Lot par défaut") $model->combobox_lot_checked = 0;
-        else $model->combobox_lot_checked = 1;
-
-        switch ($model->type) {
-            case Project::TYPE_PRESTATION:
-                $model->combobox_type_checked = 0;
-                break;
-            case Project::TYPE_OUTSOURCING_AD:
-                $model->combobox_type_checked = 1;
-                break;
-            case Project::TYPE_OUTSOURCING_UN:
-                $model->combobox_type_checked = 2;
-                break;
-            case Project::TYPE_INTERNAL:
-                $model->combobox_type_checked = 3;
-                break;
-        }
-
-
-        // Envoi par méthode POST.
-        if ($model->load(Yii::$app->request->post())) {
-
-            // Préparation de tous les modèles de lots reçu depuis la vue.
-            $oldIds = ArrayHelper::map($lots, 'id', 'id');
-            $lots = Model::createMultiple(ProjectCreateLotForm::className(), $lots);
-            Model::loadMultiple($lots, Yii::$app->request->post());
-            $deletedIDs = array_diff($oldIds, array_filter(ArrayHelper::map($lots, 'id', 'id')));
-
-            // Vérification de la validité de chaque modèle de lot.
-            $isLotsValid = true;
-            foreach ($lots as $lot) {
-                $lot->combobox_lot_checked = $model->combobox_lot_checked;
-                if (!$lot->validate()) $isLotsValid = false;
-            }
-
-            // Si tous les modèles de lots et le modèle de projet sont valides.
-            if ($model->validate() && $isLotsValid) {
-
-                // On met à jour la date de modification.
-                $model->date_version = date('Y-m-d H:i:s');
-
-                // On met à jour le type de projet.
-                $model->type = Project::TYPES[$model->combobox_type_checked];
-
-                // On met à jour l'option labo.
-                $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
-
-                // On récupère les paramètres de taux de gestion pour les appliquer au projet en cours de modification.
-                $rate  = DevisParameter::getParameters();
-                switch (Project::TYPES[$model->combobox_type_checked]) {
-                    case  Project::TYPE_PRESTATION: {
-                            $model->management_rate = $rate->rate_management;
-                        }
-                    case  Project::TYPE_OUTSOURCING_UN: {
-                            $model->management_rate = $rate->rate_management;
-                        }
-                    case  Project::TYPE_OUTSOURCING_AD: {
-                            $model->management_rate = $rate->delegate_rate_management;
-                        }
-                    case  Project::TYPE_INTERNAL: {
-                            $model->management_rate = $rate->internal_rate_management;
-                        }
-                    default: {
-                            $model->management_rate = $rate->rate_management;
-                        }
-                }
-
-                // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
-                $model->save();
-
-                // Création des lots.
-                // Si il a été décidé que ce projet ne devait plus avoir de lot, on récupère le lot n°1 pour en faire un lot par défaut.
-                if ($lots[0]->combobox_lot_checked == 0) {
-                    $lots = [$lots[0]];
-                    $lots[0]->title = 'Lot par défaut';
-                    $lots[0]->comment = 'Ceci est un lot qui a été généré automatiquement car le créateur ne souhaitait pas utiliser plusieurs lots';
-                }
-
-                // Suppression des lots dans la bdd.
-                if (!empty($deletedIDs)) {
-                    Lot::deleteAll(['id' => $deletedIDs]);
-                }
-
-                // Pour chaque lot, on lui attribut des valeurs par défaut.
-                foreach ($lots as $key => $lot) {
-                    $lot->number = $key + 1;
-                    $lot->status = Lot::STATE_IN_PROGRESS;
-                    $lot->project_id = $model->id;
-
-                    $lot->save();
-                }
-                // On redirige vers la prochaine étape.
-                //Yii::$app->response->redirect(['project/task', 'number' => 0, 'project_id' => $model->id]);
-            }
-        }
-
-        MenuSelectorHelper::setMenuProjectDraft();
-        return $this->render(
-            'createFirstStep',
-            [
-                'model' => $model,
-                'lots' => $lots
-            ]
-        );
     }
 
     public function actionTest($id)

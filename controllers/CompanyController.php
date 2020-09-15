@@ -13,7 +13,9 @@ use app\models\users\CapaUser;
 use app\models\companies\CompanyCreateForm;
 use app\models\companies\Contact;
 use app\models\companies\ContactCreateForm;
+use app\services\companyServices\CompanyHttpRequest;
 use app\services\companyTypeServices\CompanyTypeEnum;
+use app\services\countryServices\CountryCSVRequest;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\userRoleAccessServices\PermissionAccessEnum;
@@ -215,7 +217,6 @@ class CompanyController extends Controller
             if ($model->validate()) {
 
                 $model->type = CompanyTypeEnum::COMPANY_TYPE[$model->type];
-
                 $model->save(false);
 
                 MenuSelectorHelper::setMenuProjectCreate();
@@ -279,6 +280,11 @@ class CompanyController extends Controller
         return $this->render('createContact', [
             'model' => $model
         ]);
+    }
+
+    public function actionTest()
+    {
+        return \var_dump(CountryCSVRequest::getCountries());
     }
 
     /**

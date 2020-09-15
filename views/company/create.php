@@ -37,7 +37,7 @@ CompanyCreateAsset::register($this);
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'email-field'])
                             ->label("Email") ?>
 
-                        <?= $form->field($model, 'type')->widget(Select2::classname(), [
+                        <?= $form->field($model, 'type')->widget(Select2::class, [
                             'data' => CompanyTypeEnum::COMPANY_TYPE_STRING,
                             'pluginLoading' => false,
                             'pluginOptions' => [
