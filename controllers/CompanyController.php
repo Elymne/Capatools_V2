@@ -282,11 +282,6 @@ class CompanyController extends Controller
         ]);
     }
 
-    public function actionTest()
-    {
-        return \var_dump(CountryCSVRequest::getCountries());
-    }
-
     /**
      * Méthode générale pour le contrôleur permettant de retourner une société.
      * Cette méthode est utilisé pour gérer le cas où l'utilisateur recherché n'existe pas, et donc gérer l'exception.

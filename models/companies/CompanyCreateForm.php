@@ -41,6 +41,10 @@ class CompanyCreateForm extends Company
         ];
     }
 
+    /**
+     * Liste de vérifications personnalisés effectuées sur le champs - name :
+     *  - Vérification que le nom d'entreprise n'existe pas déjà en bdd.
+     */
     public function nameChecker($attribute, $params)
     {
         $companiesNames = ArrayHelper::map(self::find()->all(), 'id', 'name');
@@ -51,6 +55,10 @@ class CompanyCreateForm extends Company
         }
     }
 
+    /**
+     * Liste de vérifications personnalisés effectuées sur le champs - email :
+     *  - Vérification que l'email n'existe pas déjà en bdd.
+     */
     public function emailChecker($attribute, $params)
     {
         $companiesEmail = ArrayHelper::map(Company::find()->all(), 'id', 'email');
@@ -61,6 +69,13 @@ class CompanyCreateForm extends Company
         }
     }
 
+    /**
+     * Liste de vérifications personnalisés effectuées sur le champs - tva :
+     *  - Vérification que la tva est bien celle de l'entreprise inséré dans le champ non (dans le cas où celle-ci existerait sur l'api).
+     *  - Vérification que la tva est inscrite dans le champ dans le cas où le type d'entreprise n'est pas égale à 0.
+     *  - Vérification que la tva n'existe pas déjà en bdd.
+     *  - Vérification que le format de la tva soit correcte.
+     */
     public function tvaChecker($attribute, $params)
     {
 
@@ -89,6 +104,10 @@ class CompanyCreateForm extends Company
         }
     }
 
+    /**
+     * Liste de vérifications personnalisés effectuées sur le champs - postal_code :
+     *  - Vérification que le code postal corresponde bien au code postal de l'entreprise existante (dans le cas où elle est récupérable depuis l'api REST).
+     */
     public function postalCodeChecker($attribute, $params)
     {
 
@@ -101,6 +120,11 @@ class CompanyCreateForm extends Company
         }
     }
 
+    /**
+     * Liste de vérifications personnalisés effectuées sur le champs - postal_code :
+     *  - Vérification que le pays incrit existe réellement.
+     *  - Vérification lorsque l'on rentre une tva Française que le pays sélectionné est la France.
+     */
     public function countryChecker($attribute, $params)
     {
 

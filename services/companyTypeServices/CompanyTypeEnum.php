@@ -3,7 +3,11 @@
 namespace app\services\companyTypeServices;
 
 /**
- * Enum that is used to manage user roles.
+ * Constantes utilisées pour gérer les types d'entreprises
+ * C'est juste la liste de tous les droits sous format de chaîne de caractères.
+ * @since v2.0.0
+ * 
+ * TODO La classe pourrait être changé car elle a un mauvais design.
  */
 class CompanyTypeEnum
 {
