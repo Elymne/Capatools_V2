@@ -20,7 +20,7 @@ class m200099_000580_lot_table extends Migration
 
             // Foreign key.
             'project_id' => $this->integer()->notNull(),
-            'laboratory_id' => $this->integer()
+            'laboratory_id' => $this->integer(),
         ]);
 
         $this->addForeignKey(
@@ -44,7 +44,8 @@ class m200099_000580_lot_table extends Migration
             'title' => "lot numéro 1 : évasion",
             'status' => 'En cours',
             'comment' => 'Petit lot pour s\'évader',
-            'project_id' => 1
+            'project_id' => 1,
+            'laboratory_id' => 1
         ]);
 
         $this->insert('{{%lot}}', [
@@ -52,14 +53,16 @@ class m200099_000580_lot_table extends Migration
             'title' => "lot numéro 2 : vacances",
             'status' => 'En cours',
             'comment' => 'Petit lot pour prendre des vacances',
-            'project_id' => 1
+            'project_id' => 1,
+            'laboratory_id' => 1
         ]);
         $this->insert('{{%lot}}', [
             'number' => 0,
             'title' => "Avant projet",
             'status' => 'En cours',
             'comment' => 'Temps de chiffrage à la maison',
-            'project_id' => 1
+            'project_id' => 1,
+            'laboratory_id' => 1
         ]);
     }
 
