@@ -5,7 +5,7 @@ return [
 
     // Mailer  testing.
     'adminEmail' => 'admin@capatools.com',
-    'senderEmail' => 'noreply@example.com',
+    'senderEmail' => 'noreply@capatools.com',
     'senderName' => 'Capatools mailer',
     'LaboxyTimeDay' => 7.7,
 

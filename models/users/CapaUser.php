@@ -41,9 +41,9 @@ class CapaUser extends ActiveRecord  implements IdentityInterface
      * @param string|int $email de l'identifiant à rechercher
      * @return username|null l'objet identité qui correspond à l'email donné
      */
-    public static function findByemail($email)
+    public static function findByEmail($email): ?CapaUser
     {
-        return static::findOne(['email' => $email]);
+        return static::find()->where(['email' => $email])->one();
     }
 
     /**

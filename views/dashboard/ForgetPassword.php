@@ -14,11 +14,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col s6 m6">
         <div class="card">
+
             <p class="center-align">
                 <img src="<?= Html::encode(Yii::$app->homeUrl) ?>images/logo.png" alt="" />
             </p>
+
             <div class="card-action">
                 <span class="card-title">Réinitialisation du mot de passe</span>
+
                 <?php $form = ActiveForm::begin([
                     'id' => 'login-form',
                     'layout' => 'horizontal',
@@ -37,9 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         </p>
                     </div>
                 </div>
-
                 <?php ActiveForm::end(); ?>
             </div>
+
         </div>
     </div>
 </div>
