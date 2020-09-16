@@ -43,19 +43,7 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'dashboard/error',
         ],
-        // Php mailer.
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'useFileTransport' => false,
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'encryption' => 'tls',
-                'host' => 'gp7vw.mail.infomaniak.com',
-                'port' => '25',
-                'username' => 'gp7vw_capatools',
-                'password' => '6wZQaHpULTXY',
-            ],
-        ],
+
         // Logger file.
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

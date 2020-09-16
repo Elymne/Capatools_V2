@@ -10,6 +10,8 @@ use app\models\login\LoginForm;
 use app\models\login\ForgetPasswordForm;
 use app\models\login\FirstConnexionForm;
 use app\models\ContactForm;
+use app\models\users\CapaUser;
+use app\services\mailerServices\ForgotPasswordMailerManager;
 
 /**
  * Classe contrôleur des vues et des actions de la partie Dashboard.
@@ -161,17 +163,16 @@ class DashboardController extends Controller
      * @return Response|string
      */
     public function actionResetpassword()
-    { {
-            $model = new ForgetPasswordForm();
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $model->generatednewpassword();
-                return  $this->goHome();
-            }
-            $this->layout = "login";
-            return $this->render('ForgetPassword', [
-                'model' => $model,
-            ]);
+    {
+        $model = new ForgetPasswordForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->generateNewPassword();
+            return  $this->goHome();
         }
+        $this->layout = "login";
+        return $this->render('ForgetPassword', [
+            'model' => $model,
+        ]);
     }
 
     /**
