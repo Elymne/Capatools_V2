@@ -137,7 +137,8 @@ class CompanyCreateForm extends Company
 
         $companyData = CompanyHttpRequest::getUniqueCompanyFromName($this->name);
         if ($companyData != null && $this->country != "France") {
-            $this->addError($attribute, "La société que vous êtes en train d'ajouter est Française.");
+            // TODO On ne connait pas encore toutes les contraintes.
+            //$this->addError($attribute, "La société que vous êtes en train d'ajouter est Française.");
         }
     }
 }
