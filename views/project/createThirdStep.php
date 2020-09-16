@@ -364,7 +364,8 @@ ProjectCreateThirdStepAsset::register($this);
         'laboratorySelected' => $model->laboratoryselected,
         'equipments' => $ided,
         'contributors' => $idcd,
-        'number' => $lotnb
+        'number' => $lotnb,
+        'LaboxyTimeDay' =>  Yii::$app->params['LaboxyTimeDay']
     ]);
     ?>
 </div>
