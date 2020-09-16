@@ -45,7 +45,7 @@ class m200099_000560_project_table extends Migration
             // Le contacte client.
             'contact_id' => $this->integer(),
             // Le chef de projet.
-            'capa_user_id' => $this->integer()->notNull(),
+            'capa_user_id' => $this->integer(),
         ]);
 
         $this->addForeignKey(
