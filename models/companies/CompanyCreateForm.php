@@ -33,9 +33,11 @@ class CompanyCreateForm extends Company
             ['city', 'required', 'message' => 'Indiquer la ville !'],
 
             ['postal_code', 'required', 'message' => 'Indiquer le code postal !'],
+            ['postal_code', 'string', 'message' => 'Indiquer le code postal !'],
             ['postal_code', 'postalCodeChecker', 'skipOnEmpty' => false, 'skipOnError' => false],
 
             ['tva', 'tvaChecker', 'skipOnEmpty' => false, 'skipOnError' => false],
+            ['tva', 'string', 'min' => 13, 'max' => 16],
 
             ['type', 'required',  'message' => 'Il doit y avoir un type de sélectionné !'],
         ];
@@ -80,6 +82,7 @@ class CompanyCreateForm extends Company
     {
 
         $companyData = CompanyHttpRequest::getUniqueCompanyFromName($this->name);
+
         if ($companyData != null && $companyData->tva != null && $this->tva != $companyData->tva) {
             $this->addError(
                 $attribute,
