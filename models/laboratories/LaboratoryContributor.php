@@ -62,7 +62,7 @@ class LaboratoryContributor extends ActiveRecord implements JsonSerializable
     public static function getAllContributionGroupByLaboBylotID(int $lotid)
     {
         return $res = self::find()
-            ->select('SUM(time_risk * price) as total,laboratory_id as id')
+            ->select('SUM(price) as total,laboratory_id as id')
             ->where(['lot_id' => $lotid])
             ->groupBy(['laboratory_id'])
             ->all();
