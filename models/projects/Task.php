@@ -58,4 +58,10 @@ class Task extends ActiveRecord
     {
         return $this->hasOne(CapaUser::class, ['id' => 'capa_user_id']);
     }
+
+
+    public function getTotalprice()
+    {
+        return ($this->price / 7.7) * $this->risk_duration_hour;
+    }
 }

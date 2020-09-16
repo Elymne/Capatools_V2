@@ -28,7 +28,6 @@ use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use yii\data\ActiveDataProvider;
-use yii\web\UploadedFile;
 
 /**
  * Classe contrôleur des vues et des actions de la partie adminitration.
@@ -326,25 +325,15 @@ class AdministrationController extends Controller
     public function actionUpdate(int $id)
     {
         $model = CapaUserUpdateForm::findOne($id);
-
-        // Get cellule data used for our form.
-        $cellules = ArrayHelper::map(Cellule::getAll(), 'id', 'name');
-        $cellules = array_merge($cellules);
-
+        $cellules = array_merge(ArrayHelper::map(Cellule::getAll(), 'id', 'name')); // Get cellule data used for our form.
         UserRoleManager::setRoleToModelForm($model);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-            // +1 car le dropdown est un tableau et son index commence à 0. L'id lui commence à 1.
-            $model->cellule_id += 1;
+            $model->cellule_id += 1; // +1 car le dropdown est un tableau et son index commence à 0. L'id lui commence à 1.
 
             if ($model->save()) {
-
-                // Remove all roles.
-                UserRoleManager::removeRolesFromUser($model->id);
-
-                // And then, we set updated roles for the user.
-                UserRoleManager::setRolesFromUserUpdateForm($model);
+                UserRoleManager::removeRolesFromUser($model->id); // Remove all roles.
+                UserRoleManager::setRolesFromUserUpdateForm($model);  // And then, we set updated roles for the user.
 
                 MenuSelectorHelper::setMenuAdminNone();
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -400,51 +389,6 @@ class AdministrationController extends Controller
         return $this->render('devisParametersView', [
             'model' => DevisParameter::getParameters()
         ]);
-    }
-
-    /**
-     * Render view : devis/manage-devis-parameters.
-     * Méthode en deux temps :
-     * - Si pas de méthode POST de trouvé, on retourne la vue de la modification des paramètres devis.
-     * - Sinon, à partir de la méthode POST, on récupère toutes les informations des nouveaux param-tres devis, et ensuite à la vérification,
-     * on change celle-ci.
-     * 
-     * @return mixed
-     */
-    public function actionUpdateDevisParameters()
-    {
-
-        $model = DevisParameterUpdateForm::getParameters();
-
-        // Get file model.
-        $fileCguFrModel = new UploadFile();
-
-        // Get file model.
-        $fileCguEnModel = new UploadFile();
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-            $fileCguFrModel->file = UploadedFile::getInstance($fileCguFrModel, 'cguFrFile');
-            UploadFileHelper::uploadCguFrFile($fileCguFrModel);
-
-            $fileCguEnModel->file = UploadedFile::getInstance($fileCguEnModel, 'cguEnFile');
-            UploadFileHelper::uploadCguEnFile($fileCguEnModel);
-
-            $model->save();
-
-            MenuSelectorHelper::setMenuDevisParameters();
-            return $this->redirect(['administration/view-devis-parameters']);
-        }
-
-        MenuSelectorHelper::setMenuDevisParameters();
-        return $this->render(
-            'devisParametersUpdate',
-            [
-                'model' => $model,
-                'fileCguFrModel' => $fileCguFrModel,
-                'fileCguEnModel' => $fileCguEnModel
-            ]
-        );
     }
 
     /**
@@ -567,25 +511,6 @@ class AdministrationController extends Controller
             'model' => $model,
             'cellulesName' => $cellulesName
         ]);
-    }
-
-    /**
-     * //TODO
-     * Render view : aucune pour l'instant.
-     * Cette méthode retournera une liste avec toutes les cellules disponible ainsi que le prix de gestation de projet par cellule.
-     * Il sera donc possible à travers cette vue d'accéder à un formulaire pour modifier cette valeur de gestation.
-     */
-    public function actionIndexCellules()
-    {
-    }
-
-    /**
-     * //TODO
-     * Render view : aucune pour l'instant.
-     * Cette méthode retournera un formulaire permettant de modifier le prix de gestation d'une cellule.
-     */
-    public function actionUpdateCellule(int $id)
-    {
     }
 
     /**

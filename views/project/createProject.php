@@ -98,7 +98,7 @@ ProjectsRefactoringAsset::register($this);
                                         [
                                             'theme' => Select2::THEME_MATERIAL,
                                             'name' => 'TaskContributor',
-                                            'data' => ["10" => '10 %', "20" => '20 %', "30" => '30 %', "40" => '40 %', "50" => '50 %', "60" => '60 %', "70" => '70 %', "80" => '80 %', "90" => '90 %', "100" => '100 %'],
+                                            'data' => ["20" => '20 %', "50" => '50 %', "80" => '80 %'],
                                             'options' => ['placeholder' => 'Selectionner un pourcentage ...'],
                                         ]
                                     )->label("Probabilité de signature"); ?>
@@ -117,7 +117,7 @@ ProjectsRefactoringAsset::register($this);
                                 </div>
 
                                 <div class="input-field col s6">
-                                    <?= $form->field($model, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($model->SellingPrice / (1 - ($TVA / 100)))]])->label('Prix de vente du projet (TTC)') ?>
+                                    <?= $form->field($model, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($model->SellingPrice * (1 - ($TVA / 100)))]])->label('Prix de vente du projet (TTC)') ?>
 
                                 </div>
                             </div>

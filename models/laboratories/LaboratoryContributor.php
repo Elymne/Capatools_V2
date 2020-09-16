@@ -54,9 +54,9 @@ class LaboratoryContributor extends ActiveRecord implements JsonSerializable
         return self::find()->where(['laboratory_id' => $laboratoryID])->all();
     }
 
-    public static function getAllByLaboratoryIDAndLotID(int $laboratoryID, int $lotID)
+    public static function getAllByLotID(int $lotID)
     {
-        return self::find()->where(['laboratory_id' => $laboratoryID, 'lot_id' => $lotID])->all();
+        return self::find()->where(['lot_id' => $lotID])->all();
     }
 
     public static function getAllContributionGroupByLaboBylotID(int $lotid)
@@ -95,7 +95,8 @@ class LaboratoryContributor extends ActiveRecord implements JsonSerializable
     {
         return array(
             'id' => $this->id,
-            'type' => $this->type,
+            'name' => $this->name,
+            'daily_price' => $this->daily_price,
             'nb_days' => $this->nb_days,
             'nb_hours' => $this->nb_hours,
             'price' => $this->price,

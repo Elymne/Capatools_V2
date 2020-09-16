@@ -1,6 +1,5 @@
 // Initialisation des données sous format d'objet Javascript.
 const laboratoriesData = JSON.parse(document.getElementById("laboratories-data-target").textContent)
-const equipmentsData = JSON.parse(document.getElementById("equipments-data-target").textContent)
 const risksData = JSON.parse(document.getElementById("risks-data-target").textContent)
 
 // Liste d'informations relatives au données qui enreichissent le dynamicForm.
@@ -10,14 +9,6 @@ const laboratorySelected = infoData.laboratorySelected !== null ? infoData.labor
 const addedEquipementsOnInit = infoData.equipments
 const addedContributorsOnInit = infoData.contributors
 const number = infoData.number
-
-/**
- * Cette variable existe car suivant le laboratoire sélectionné, les éléments dans les listes déroulantes vont changer pour correspondre à leur laboratoire respectif.
- * Il nous faut donc une variable qui stock les éléments présent des ces listes déroulantes, et cette variable doit être mise à jour à chaque fois qu'un nouveau laboratoire est sélectionné.
- * Voir la fonction : getEquipementsListFromSelectedLaboratory() qui permet de mettre à jour cette variable (plus précisément, elle ne met pas à jour, elle retourne un tableau de données
- * et c'est nous qui mettons à jour la table en l'écrasant avec le résutat de la fonction).
- */
-let equipmentsLocalStateList = equipmentsData
 
 /**
  * Constante que j'utilise pour savoir si le lot actuel de la vue est un lot d'avant projet, c'est-à-dire un lot dont le numéro est égale à 0.
@@ -30,19 +21,8 @@ const isPreProject = number === '"0"'
  */
 $(() => {
     /**
-     * Fix mineur.
+     * On cache certains éléments suivant le numéro du lot en cours de modification.
      */
-    if (number == '"0"') {
-        $("#projectcreateinvestform-0-name").val("SURPRISE EDITEUR D'HTML !")
-        $("#projectcreateinvestform-0-price").val(1)
-    }
-
-    /**
-     * Mise à jour de l'état de la liste des matériels par rapport au labo choisi.
-     * Très utile car on en a besoin pour faire le calcul du coût par matériel.
-     */
-    equipmentsLocalStateList = getEquipementsListFromSelectedLaboratory(equipmentsData, laboratoriesData)
-
     hideCardInvestPlus(isPreProject)
     hideEquipmentRisk(isPreProject)
     hideContributorRisk(isPreProject)
@@ -53,24 +33,6 @@ $(() => {
      * C'est donc ce que l'on fait dans cette boucle.
      */
     addedEquipementsOnInit.forEach((elem, i) => {
-        /**
-         * On vide la liste déroulantes de toutes ses options, puis la nourrit avec la liste des matériels existants.
-         * En sommes, ici, nous rafraichissons la liste déroulante à l'initialisation de la vue.
-         */
-        $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).empty()
-        $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).append(
-            getEquipementsOptionsListFromSelectedLaboratory(equipmentsData, laboratoriesData),
-        )
-
-        let selectedValue = equipmentsLocalStateList.findIndex((elementArray) => elementArray.id == elem.equipment_id)
-        if (selectedValue == -1) selectedValue = 0
-
-        /**
-         * Permet de sélectionner la bonne valeur dans la liste.
-         */
-        $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).val(selectedValue)
-        $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).trigger("change") // Notify any JS components that the value changed
-
         /**
          * On calcul le coût de risque de l'équipement inscrit dans l'élément corresponant à l'index i.
          * Si aucunes données ne permet de calculer le coût de risque, on part du principe que le jour et l'heure rentré est équivalent à 0,
@@ -89,20 +51,20 @@ $(() => {
         const result = calculateEquipmentPrice(
             !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
             !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-            getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
+            !$(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val(),
         )
         $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
 
         /**
-         * Callback onChange sur la liste déroulante des matériels du premier item.
-         * Permet de reclaculer le coût d'utilisation d'un matériel.
+         * Callback input sur le prix journalier pour modifier le prix total.
          */
-        $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).change(() => {
+        $(`#projectcreateequipmentrepaymentform-${i}-daily_price`).on("input", () => {
             const result = calculateEquipmentPrice(
-                !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
-                !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
+                $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
+                $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
+                !$(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val(),
             )
+
             $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
         })
 
@@ -127,7 +89,7 @@ $(() => {
             const result = calculateEquipmentPrice(
                 !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
                 !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
+                !$(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val(),
             )
 
             $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
@@ -148,7 +110,7 @@ $(() => {
             const result = calculateEquipmentPrice(
                 !$(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
                 !$(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
+                !$(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val(),
             )
             $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
             const riskObject = calculateRiskTime(
@@ -169,7 +131,7 @@ $(() => {
         const result = calculateContributorPrice(
             !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
             !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
-            getValueFromLaboratorySelected(laboratoriesData),
+            !$(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val(),
         )
         $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
 
@@ -194,6 +156,21 @@ $(() => {
         })
 
         /**
+         * Calbacl onInput sur le champ de sélection du prix journalier pris par un intervenant labo.
+         * Permet de recalculer le coût d'une intervention.
+         */
+        $(`#projectcreatelaboratorycontributorform-${i}-daily_price`).on("input", () => {
+            console.log($(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val())
+
+            const result = calculateContributorPrice(
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+                !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
+                !$(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val(),
+            )
+            $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
+        })
+
+        /**
          * Calbacl onInput sur le champ de sélection des jours pris par un intervenant labo.
          * Permet de recalculer le coût d'une intervention.
          */
@@ -201,7 +178,7 @@ $(() => {
             const result = calculateContributorPrice(
                 !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
                 !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
-                getValueFromLaboratorySelected(laboratoriesData),
+                !$(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val(),
             )
             $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
 
@@ -221,7 +198,7 @@ $(() => {
             const result = calculateContributorPrice(
                 !$(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
                 !$(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
-                getValueFromLaboratorySelected(laboratoriesData),
+                !$(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val() ? 0 : $(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val(),
             )
             $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
 
@@ -247,44 +224,12 @@ $(() => {
     let nbEquipmentLineDuplicated = addedEquipementsOnInit.length - 1
 
     /**
-     * Callback onChange sur la liste déroulante des laboratoires.
-     * Permet de mettre à jours les valeurs dans les listes déroulantes des matériels et de recalculer le coût de chaque élément.
-     * En effet, chaque matériel est lié à un labo, de ce fait, le changement d'un labo entraine donc le changement de la liste des matériels à disposition.
-     * (Et donc le coût aussi vu que le matériel de chaque élément va changer).
-     */
-    $("#projectcreatethirdstepform-laboratoryselected").change(() => {
-        for (let i = 0; i <= nbEquipmentLineDuplicated; i++) {
-            $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).empty()
-            $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).append(
-                getEquipementsOptionsListFromSelectedLaboratory(equipmentsData, laboratoriesData),
-            )
-
-            equipmentsLocalStateList = getEquipementsListFromSelectedLaboratory(equipmentsData, laboratoriesData)
-            const result = calculateEquipmentPrice(
-                $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
-                $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
-            )
-            $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
-        }
-    })
-
-    /**
      * Calback onAddItem.
      * Permet de gérer les callback des futurs éléments que l'utilisateur pourra créer.
      */
     $(".dynamicform_wrapper_equipment").on("afterInsert", (e, item) => {
         nbEquipmentLineDuplicated++
         hideEquipmentRisk(isPreProject)
-
-        /**
-         * On vide la liste déroulantes de toutes ses options, puis la nourrit avec la liste des matériels existants.
-         * En sommes, ici, nous rafraichissons la liste déroulante à l'initialisation de la vue.
-         */
-        $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-equipmentselected`).empty()
-        $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-equipmentselected`).append(
-            getEquipementsOptionsListFromSelectedLaboratory(equipmentsData, laboratoriesData),
-        )
 
         // Par défaut, le temps généré par le risque est à 0.
         $(`#projectcreateequipmentrepaymentform-${nbEquipmentLineDuplicated}-timeriskstringify`).val(stringifyRiskTime())
@@ -299,14 +244,15 @@ $(() => {
             hideEquipmentRisk(isPreProject, i)
 
             /**
-             * Callback onChange sur la liste déroulante des matériels de l'élément ajouté.
-             * Permet de reclaculer le coût d'utilisation d'un matériel.
+             * Callback input sur le prix journalier pour modifier le prix total.
              */
-            $(`#projectcreateequipmentrepaymentform-${i}-equipmentselected`).change(() => {
+            $(`#projectcreateequipmentrepaymentform-${i}-daily_price`).on("input", () => {
+                console.log("HAHA")
+
                 const result = calculateEquipmentPrice(
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                    getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
+                    !$(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val(),
                 )
 
                 $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
@@ -333,7 +279,7 @@ $(() => {
                 const result = calculateEquipmentPrice(
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                    getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
+                    !$(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val(),
                 )
                 $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
                 const riskObject = calculateRiskTime(
@@ -352,7 +298,7 @@ $(() => {
                 const result = calculateEquipmentPrice(
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`).val(),
-                    getValueFromEquipmentSelectedByIndex(equipmentsLocalStateList, i),
+                    !$(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val() ? 0 : $(`#projectcreateequipmentrepaymentform-${i}-daily_price`).val(),
                 )
                 $(`#projectcreateequipmentrepaymentform-${i}-price`).val(result)
                 const riskObject = calculateRiskTime(
@@ -383,22 +329,6 @@ $(() => {
      * Commence toujours avec le nombre d'éléments lors de l'initialisation (soit 1 à l'init, ce qui veut dire que la première ligne sera la numéro 0).
      */
     let nbContributorLineDuplicated = addedContributorsOnInit.length - 1
-
-    /**
-     * Callback onChange sur la liste déroulante des laboratoires.
-     * Permet de recalculer le coût de chaque élément.
-     * En effet, chaque intervenant est lié à un labo, de ce fait, le changement d'un labo entraine donc le changement du coût d'un intervenant.
-     */
-    $("#projectcreatethirdstepform-laboratoryselected").change(() => {
-        for (let i = 0; i <= nbContributorLineDuplicated; i++) {
-            const result = calculateContributorPrice(
-                $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
-                $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
-                getValueFromLaboratorySelected(laboratoriesData),
-            )
-            $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
-        }
-    })
 
     /**
      * Calback onAddItem.
@@ -434,6 +364,21 @@ $(() => {
             })
 
             /**
+             * Calbacl onInput sur le champ de sélection du prix journalier pris par un intervenant labo.
+             * Permet de recalculer le coût d'une intervention.
+             */
+            $(`#projectcreatelaboratorycontributorform-${i}-daily_price`).on("input", () => {
+                console.log($(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val())
+
+                const result = calculateContributorPrice(
+                    $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
+                    $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
+                    $(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val(),
+                )
+                $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
+            })
+
+            /**
              * Callback onInput sur le champ de sélection des jours pris par un intervenant.
              * Permet de reclaculer le coût d'un intervenant.
              */
@@ -441,7 +386,7 @@ $(() => {
                 const result = calculateContributorPrice(
                     $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
                     $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
-                    getValueFromLaboratorySelected(laboratoriesData),
+                    $(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val(),
                 )
                 $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
 
@@ -461,7 +406,7 @@ $(() => {
                 const result = calculateContributorPrice(
                     $(`#projectcreatelaboratorycontributorform-${i}-nb_days`).val(),
                     $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`).val(),
-                    getValueFromLaboratorySelected(laboratoriesData),
+                    $(`#projectcreatelaboratorycontributorform-${i}-daily_price`).val(),
                 )
                 $(`#projectcreatelaboratorycontributorform-${i}-price`).val(result)
 
@@ -483,23 +428,6 @@ $(() => {
 //#region Liste des fonctions js
 
 /**
- * Fonction permettant de retourner le labo sélectionné.
- * @param {*} laboratoriesData - Liste de tous les laboratoires.
- *
- * IMPORTANT : Pour une raison inconnue, la première valeur dans la liste de cette selectList est égale à 1 et non à 0.
- * //TODO Trouver d'où vient ce comportement.
- */
-const getValueFromLaboratorySelected = (laboratoriesData) => laboratoriesData[$("#projectcreatethirdstepform-laboratoryselected option:selected").val() - 1]
-
-/**
- * Fonction qui permet de retourner l'équipement sélectionné sur un élément précis du dynamicView des matériels.
- * @param {*} equipmentsData - Une liste d'équipements/matériels que l'on a au préalable injecté dans la liste déroulante.
- * @param {*} index - Numéro de l'item précis dont on souhaite connaitre l'équipement sélectionné
- */
-const getValueFromEquipmentSelectedByIndex = (equipmentsData, index = 0) =>
-    equipmentsData[$(`#projectcreateequipmentrepaymentform-${index}-equipmentselected option:selected`).val()]
-
-/**
  * Fonction qui permet de retourner le risque sélectionné sur un élément précis du dynamicView des matériels.
  * @param {*} risksData - Une liste d'objet risque que l'on a au préalable injecté dans la liste déroulante.
  * @param {*} index - Numéro de l'item précis dont on souhaite connaitre l'équipement sélectionné
@@ -519,21 +447,21 @@ const getValueFromContributorRiskSelectedByIndex = (risksData, index = 0) =>
  * Fonction qui va être utilisé pour faire le calcul du coût.
  * @param {*} nbDay - Nombre de jour
  * @param {*} nbHour - Nombre d'heure
- * @param {*} laboratory - Un objet Laboratoire
+ * @param {*} daily_price - Le prix renseigné par l'utilisateur
  *
  * @returns Un prix.
  */
-const calculateEquipmentPrice = (nbDay, nbHour, equipment) => equipment.price_day * nbDay + equipment.price_hour * nbHour
+const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => (daily_price * nbDay + (daily_price / 7) * nbHour).toFixed(2)
 
 /**
  * Fonction qui va être utilisé pour faire le calcul du coût d'un contributeur.
  * @param {*} nbDay - Nombre de jours
  * @param {*} nbHour - Nombre d'heures
- * @param {*} laboratory - Un objet Laboratoire
+ * @param {*} daily_price - Un prix
  *
  * @returns Un prix.
  */
-const calculateContributorPrice = (nbDay, nbHour, laboratory) => laboratory.price_contributor_day * nbDay + laboratory.price_contributor_hour * nbHour
+const calculateContributorPrice = (nbDay, nbHour, daily_price) => (daily_price * nbDay + (daily_price / 7) * nbHour).toFixed(2)
 
 /**
  * Fonction qui va être utilisé pour calculer le temps d'incertitude par rapport au risque.
@@ -564,33 +492,6 @@ const calculateRiskTime = (nbDay, nbHour, risk) => {
  * @param {*} riskHour
  */
 const stringifyRiskTime = (riskDay = 0, riskHour = 0) => `${parseFloat(riskDay).toFixed(0)}d ${parseFloat(riskHour).toFixed(0)}h`
-
-/**
- * Fonction qui permet de retourner une liste d'option pour la liste déroulate des matériels suivant le laboratoire sélectionné.
- * @param {*} equipmentsData
- * @param {*} laboratoriesData
- */
-const getEquipementsOptionsListFromSelectedLaboratory = (equipmentsData, laboratoriesData) => {
-    dataToRefresh = equipmentsData.filter((element) => element.laboratory_id == getValueFromLaboratorySelected(laboratoriesData).id)
-
-    results = []
-
-    dataToRefresh.forEach((element, index) => {
-        const option = new Option(element.name, index, false, false)
-        $(option).html(element.name)
-        results.push(option)
-    })
-
-    return results
-}
-
-/**
- * Fonction qui permet de retourner une liste de matériel associée au laboratoire sélectionné..
- * @param {*} equipmentsData
- * @param {*} laboratoriesData
- */
-const getEquipementsListFromSelectedLaboratory = (equipmentsData, laboratoriesData) =>
-    equipmentsData.filter((element) => element.laboratory_id == getValueFromLaboratorySelected(laboratoriesData).id)
 
 /**
  * Fonction assez simple qui va regarder l'id du laboratoire associé à l'équipement fournit en paramètre.

@@ -215,7 +215,6 @@ class CompanyController extends Controller
             if ($model->validate()) {
 
                 $model->type = CompanyTypeEnum::COMPANY_TYPE[$model->type];
-
                 $model->save(false);
 
                 MenuSelectorHelper::setMenuProjectCreate();

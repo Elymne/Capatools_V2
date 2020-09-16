@@ -82,7 +82,7 @@ class Lot extends ActiveRecord
         $result = 0;
         $taskslot = $this->tasks;
         foreach ($taskslot as $task) {
-            $result  = $result + (($task->price / 7.7) *  $task->risk_duration_hour);
+            $result  = $result + $task->totalprice;
         }
 
         return $result;
@@ -93,7 +93,7 @@ class Lot extends ActiveRecord
         $result = 0;
         $taskslot = $this->tasks;
         foreach ($taskslot as $task) {
-            $result  = $result + (($task->price / 7.7) *  $task->risk_duration_hour);
+            $result  = $result + $task->totalprice;
         }
 
         return $result * (1 + $this->rate_human_margin / 100);
@@ -104,7 +104,7 @@ class Lot extends ActiveRecord
         $result = 0;
         $taskslot = $this->tasks;
         foreach ($taskslot as $task) {
-            $result  = $result + (($task->price / 7.7) *  ($task->day_duration * 7.7  + $task->hour_duration));
+            $result  = $result + $task->totalprice;
         }
 
         return $result * (1 + $this->rate_human_margin / 100);
@@ -129,7 +129,7 @@ class Lot extends ActiveRecord
         $result = 0;
         $taskslot = $this->tasks;
         foreach ($taskslot as $task) {
-            $result  =  $result +  $task->day_duration * 7.7  + $task->hour_duration;
+            $result  =  $result +  $task->risk_duration_hour;
         }
 
         return $result;
@@ -160,19 +160,19 @@ class Lot extends ActiveRecord
 
     public function getTotalCostRepayement()
     {
-        $result = 0.0;
+        $result =  0.000;
         $Equipementrepayements = $this->equipmentrepayments;
         foreach ($Equipementrepayements as $Equipementrepayement) {
-            $result  = $result + $Equipementrepayement->price * $Equipementrepayement->time_risk;
+            $result  = $result + $Equipementrepayement->price;
         }
 
         $LabotoryContributors = $this->labotorycontributors;
         foreach ($LabotoryContributors as $LabotoryContributor) {
-            $result  = $result + $LabotoryContributor->price * $LabotoryContributor->time_risk;
+            $result  = $result + $LabotoryContributor->price;
         }
 
 
-        return 0;
+        return $result;
     }
 
     public function getTotal()

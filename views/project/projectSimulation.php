@@ -15,7 +15,7 @@ $this->title = 'Simulation du projet';
 
 AppAsset::register($this);
 ProjectSimulationAsset::register($this);
-
+$tjmstatut = true;
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -296,6 +296,19 @@ ProjectSimulationAsset::register($this);
                                 } ?>
                             </div>
                         </div>
+                        <div class="row bottom-spacing">
+                            <div class="col s5">
+
+                            </div>
+                            <div class="col s5">
+                                <?php
+                                if ($tjmstatut) {
+                                    echo   $form->field($project, "low_tjm_description", ['inputOptions' => ['hide' => true]])->label(false);
+                                } else {
+                                    echo  $form->field($project, "low_tjm_description")->hiddeninput(['value' => " "])->label('');
+                                } ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -332,12 +345,13 @@ ProjectSimulationAsset::register($this);
 
                         <div class="row  bottom-spacing">
                             <div class="col s3">
-                                <label class='blue-text control-label typeLabel'> Reversement interne :</label>
+                                <label class='blue-text control-label typeLabel'> Prestation interne :</label>
                             </div>
                         </div>
 
                         <?php
-                        foreach ($listInternalDepense as $depense) { ?> <div class="row">
+                        foreach ($listInternalDepense as $depense) { ?>
+                            <div class="row">
                                 <div class="col s3">
 
                                     <?= $depense['title'] . ':' ?>
@@ -354,25 +368,27 @@ ProjectSimulationAsset::register($this);
 
                         <div class="row bottom-spacing">
                             <div class="col s3">
-                                <label class='blue-text control-label typeLabel'> Reversement Externe :</label>
+                                <label class='blue-text control-label typeLabel'> Prestation Externe :</label>
                             </div>
-
-
-                            <?php
-                            foreach ($listExternalDepense as $depense) { ?> <div class="row">
-                                    <div class="col s3">
-
-                                        <?= $depense['title'] . ':' ?>
-                                    </div>
-                                    <div class="col s2">
-                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
-                                    </div>
-
-                                </div>
-                            <?php } ?>
                         </div>
+
+
+                        <?php
+                        foreach ($listExternalDepense as $depense) { ?>
+                            <div class="row">
+                                <div class="col s3">
+
+                                    <?= $depense['title'] . ':' ?>
+                                </div>
+                                <div class="col s2">
+                                    <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
+                                </div>
+
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
+
 
 
                 <div class="card">

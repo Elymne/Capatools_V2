@@ -38,7 +38,7 @@ ProjectCreateAsset::register($this);
                         <div class="col s12">
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <?= $form->field($model, 'type')->widget(Select2::classname(), [
+                                    <?= $form->field($model, 'type')->widget(Select2::class, [
                                         'data' => Project::TYPES,
                                         'pluginLoading' => false,
                                         'pluginOptions' => [

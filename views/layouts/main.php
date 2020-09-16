@@ -11,8 +11,8 @@ use app\widgets\LeftMenuBar;
 
 AppAsset::register($this);
 $bread =  '' . Yii::$app->homeUrl . 'images/breadcrumb.png';
+$iconcapa = Yii::$app->homeUrl . '/favicon.png';
 ?>
-
 <?php $this->beginPage() ?>
 
 <!DOCTYPE html>
@@ -22,6 +22,9 @@ $bread =  '' . Yii::$app->homeUrl . 'images/breadcrumb.png';
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="shortcut icon" href="<?= Yii::$app->homeUrl ?>favicon.png" type="image/png" />
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -60,7 +63,7 @@ $bread =  '' . Yii::$app->homeUrl . 'images/breadcrumb.png';
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.collapsible').collapsible();
+        $(' .collapsible').collapsible();
         $('.sidenav').sidenav();
         $('.dropdown-trigger').dropdown({
             constrainWidth: false,
@@ -71,7 +74,4 @@ $bread =  '' . Yii::$app->homeUrl . 'images/breadcrumb.png';
     });
 </script>
 
-</html>
-<?php $this->endPage() ?>
-
-<?php
+</html> <?php $this->endPage() ?> <?php

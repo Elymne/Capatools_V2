@@ -6,6 +6,8 @@ use app\models\projects\Project;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
+use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
@@ -243,8 +245,6 @@ function createLaboxyTable(Project $model): string
         <table class="highlight">
 
             <tbody>
-
-
                  <!-- Laboxy data -->
                  <tr class='group'>
                     <td class='header'>Information Laboxy</td>
@@ -263,7 +263,7 @@ function createLaboxyTable(Project $model): string
                     <td>${laboxy_RHcost}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Coût total Achat,Frais généreaux, Investissement et RH </td>
+                    <td class='header'>Coût total Achat,Frais généraux, Investissement et RH </td>
                     <td>${laboxy_coutAchatInvestReversement} </td>
                 </tr>
                 <tr>
@@ -271,11 +271,11 @@ function createLaboxyTable(Project $model): string
                     <td>${laboxy_prixvente}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Marge avec frais généreaux</td>
+                    <td class='header'>Marge avec frais généraux</td>
                     <td>${laboxy_Marge}</td>
                 </tr>
                 <tr>
-                    <td class='header'>Taux marge avec frais généreaux</td>
+                    <td class='header'>Taux marge avec frais généraux</td>
                     <td>${laboxy_TauxMarge}</td>
                 </tr>
 
@@ -500,6 +500,15 @@ function displayActionButtons($model)
     ?>
     <!-- Actions on devis -->
     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey rightspace-15px leftspace-15px']) ?>
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
+        <?= Html::a(
+            'Modifier le devis <i class="material-icons right">edit</i>',
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DRAFT,],
+            ['class' => 'waves-effect waves-light btn btn-black  rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Modifier le devis ?'
+            ]]
+        ) ?>
+    <?php endif; ?>
 
     <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
         <?= Html::a(
@@ -521,15 +530,6 @@ function displayActionButtons($model)
             ]]
         ) ?>
     <?php endif; ?>
-    <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
-        <?= Html::a(
-            'Cloturer la prestation <i class="material-icons right">check</i>',
-            ['update-status', 'id' => $model->id, 'status' => Project::STATE_FINISHED,],
-            ['class' => 'waves-effect waves-light btn btn-blue  rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Clôturer la prestation ?'
-            ]]
-        ) ?>
-    <?php endif; ?>
 
 
     <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
@@ -541,17 +541,28 @@ function displayActionButtons($model)
             ]]
         ) ?>
     <?php endif; ?>
-
-
-    <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
+    <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
         <?= Html::a(
-            'Modifier le devis <i class="material-icons right">edit</i>',
-            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DRAFT,],
-            ['class' => 'waves-effect waves-light btn btn-black  rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Modifier le contrat ?'
+            'Prestation terminée <i class="material-icons right">check</i>',
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_FINISHED,],
+            ['class' => 'waves-effect waves-light btn btn-blue  rightspace-15px leftspace-15px', 'data' => [
+                'confirm' => 'Terminer la prestation ?'
             ]]
         ) ?>
     <?php endif; ?>
+
+    <?= Html::a(
+        'Générer le pdf <i class="material-icons right">picture_as_pdf</i>',
+        Url::to(['project/pdf', 'id' => $model->id,]),
+        [
+            'id' => 'grid-custom-button',
+            'target' => '_blank',
+            'data-pjax' => true,
+            'action' => Url::to(['project/pdf', 'id' => $model->id]),
+            'class' => 'waves-effect waves-light btn btn-purple  rightspace-15px leftspace-15px',
+            'title' => "Générer le devis sous forme pdf"
+        ]
+    ) ?>
 
 <?php
 }
