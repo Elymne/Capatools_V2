@@ -432,8 +432,7 @@ function createClientTable(Project $model): string
  * @return HTML table.
  */
 function createMillestone(array $millestones)
-{
-?>
+{ ?>
     <tr>
         <th>Titre</th>
         <th>Pourcentage</th>
@@ -539,15 +538,14 @@ function updateStatus($millestone): string
  * @return HTML cell of Action bouton
  */
 function displayActionButtons($model)
-{
-    ?>
+{ ?>
     <!-- Actions on devis -->
     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey rightspace-15px leftspace-15px']) ?>
     <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
         <?= Html::a(
             'Modifier le devis <i class="material-icons right">edit</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DRAFT,],
-            ['class' => 'waves-effect waves-light btn btn-black  rightspace-15px leftspace-15px', 'data' => [
+            ['class' => 'waves-effect waves-light btn btn-grey  rightspace-15px leftspace-15px', 'data' => [
                 'confirm' => 'Modifier le devis ?'
             ]]
         ) ?>
