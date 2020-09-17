@@ -22,6 +22,7 @@ class m200099_000840_equipment_repayment_table extends Migration
             // Foreign key.
             'lot_id' => $this->integer()->notNull(),
             'risk_id' => $this->integer()->notNull(),
+            'laboratory_id' => $this->integer()->notNull()
         ]);
 
         $this->addForeignKey(
@@ -49,7 +50,8 @@ class m200099_000840_equipment_repayment_table extends Migration
             'price' => 200,
             'time_risk' => 15,
             'lot_id' => 1,
-            'risk_id' => 1
+            'risk_id' => 1,
+            'laboratory_id' => 1
         ]);
 
         $this->insert('{{%equipment_repayment}}', [
@@ -61,7 +63,8 @@ class m200099_000840_equipment_repayment_table extends Migration
             'price' => 1000,
             'time_risk' => 239,
             'lot_id' => 2,
-            'risk_id' => 1
+            'risk_id' => 1,
+            'laboratory_id' => 2
         ]);
     }
 

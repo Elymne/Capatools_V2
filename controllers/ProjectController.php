@@ -320,7 +320,7 @@ class ProjectController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateStatus($id, $status)
+    public function actionUpdateStatus(int $id, int $status)
     {
         $project = project::getOneById($id);
         $project->state = $status;
@@ -348,7 +348,7 @@ class ProjectController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateMillestoneStatus($id, $status)
+    public function actionUpdateMillestoneStatus(int $id, int $status)
     {
         $jalon = Millestone::getOneById($id);
         $jalon->statut = $status;
@@ -357,6 +357,18 @@ class ProjectController extends Controller implements ServiceInterface
         MenuSelectorHelper::setMenuProjectIndex();
         return $this->render('view', [
             'model' => $this->findModel($jalon->project_id),
+        ]);
+    }
+
+    public function actionUpdateSigningProbability(int $id, int $probability)
+    {
+        $project = Project::getOneById($id);
+        $project->signing_probability = $probability;
+        $project->save();
+
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render('view', [
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -422,11 +434,9 @@ class ProjectController extends Controller implements ServiceInterface
 
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
-        unset($companiesNames[0]); // On supprime la première company qui représente la company "indéfini".
 
         $contactsEmail = ArrayHelper::map(Contact::find()->all(), 'id', 'email');
         $contactsEmail = array_merge($contactsEmail);
-        unset($contactsEmail[0]); // On supprime le premier contact qui est en "indéfini".
 
         // Envoi par méthode POST.
         if ($model->load(Yii::$app->request->post())) {
@@ -461,8 +471,6 @@ class ProjectController extends Controller implements ServiceInterface
                 $model->company_id = Company::getOneByName($model->company_name)->id;
                 // On inclu la clé étragère qui référence une donnée indéfini dans la table contact.
                 $model->contact_id = Contact::getOneByEmail($model->contact_email)->id;
-                // On inclu la clé étragère qui référence une donnée indéfini dans la table capa_user.
-                $model->capa_user_id = -1;
                 $model->type = Project::TYPES[$model->combobox_type_checked];
                 // On recopie le management rate
                 $rate  = DevisParameter::getParameters();
@@ -879,7 +887,6 @@ class ProjectController extends Controller implements ServiceInterface
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
         $model = new ProjectCreateThirdStepForm();
-
         $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
 
         if ($lot == null) {
@@ -910,19 +917,18 @@ class ProjectController extends Controller implements ServiceInterface
         if ($equipmentsRepayment == null) {
             $equipmentsRepayment = [new ProjectCreateEquipmentRepaymentForm];
         }
+
         foreach ($equipmentsRepayment as $equipmentRepayment) {
             $equipmentRepayment->setSelectedRisk();
         }
 
         // Récupération des contributors.
-        if ($lot->laboratory_id != null) {
-            $contributors = ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id);
-            if ($contributors == null) {
-                $contributors = [new ProjectCreateLaboratoryContributorForm];
-            }
-        } else {
+
+        $contributors = ProjectCreateLaboratoryContributorForm::getAllByLotID($lot->id);
+        if ($contributors == null) {
             $contributors = [new ProjectCreateLaboratoryContributorForm];
         }
+
 
         foreach ($contributors as $contributor) {
             $contributor->setSelectedRisk();
@@ -973,7 +979,7 @@ class ProjectController extends Controller implements ServiceInterface
             $deletedContributorsIDs = array_diff($oldContributorsIds, array_filter(ArrayHelper::map($contributors, 'id', 'id')));
 
             if ($isValid) {
-                // Sauvegarde du laboratoire sélectionné dans le lot.
+
                 $lot->laboratory_id = $laboratoriesData[$model->laboratoryselected - 1]->id;
                 $lot->save();
 
@@ -1009,6 +1015,7 @@ class ProjectController extends Controller implements ServiceInterface
                     $equipmentRepayment->lot_id = $lot->id;
                     $equipmentRepayment->risk_id = \intval($equipmentRepayment->riskSelected) + 1;
                     $equipmentRepayment->time_risk = TimeStringifyHelper::transformStringChainToHour($equipmentRepayment->timeRiskStringify);
+                    $equipmentRepayment->laboratory_id = $lot->laboratory_id;
                     $equipmentRepayment->save();
                 }
                 if (!empty($deletedEquipmentsRepaymentIDs)) {

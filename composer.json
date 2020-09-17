@@ -25,8 +25,7 @@
         "bower-asset/jquery-ui": "^1.12",
         "kartik-v/yii2-widget-select2": "dev-master",
         "myclabs/php-enum": "^1.7",
-        "damienlagae/xlsxwriter": "^1.0",
-        "yiisoft/yii2-httpclient": "*"
+        "damienlagae/xlsxwriter": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

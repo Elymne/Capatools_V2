@@ -1,12 +1,15 @@
 <?php
 
+use app\assets\projects\ProjectViewAsset;
 use yii\helpers\Html;
 use app\models\projects\Millestone;
 use app\models\projects\Project;
+use app\services\htmlServices\HtmlHelperConst;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 use yii\helpers\Url;
+use yii\web\YiiAsset;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
@@ -16,8 +19,10 @@ else $this->title = "Modification d'un devis";
 
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
 
+
+YiiAsset::register($this);
+ProjectViewAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -146,7 +151,7 @@ function isStatusPassed(int $indexStatus, int $arrayKey): bool
  * 
  * @return HTML table.
  */
-function createProjetTable(Project $model): string
+function createProjetTable(Project $model)
 {
 
     $internal_name = $model->internal_name;
@@ -159,63 +164,103 @@ function createProjetTable(Project $model): string
     $project_manager_email = $model->project_manager->email;
     $project_manager_cellule = strtolower($model->project_manager->cellule->name);
 
-    return <<<HTML
-        <table class="highlight">
+?>
+    <table class="highlight">
+        <tbody>
+            <!-- Devis details -->
+            <tr class='group'>
+                <td class='header'>Informations générale</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class='header'>Nom interne du projet</td>
+                <td><?= $internal_name ?></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class='header'>Reference interne du projet</td>
+                <td><?= $internal_reference ?> </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class='header'>Type de projet</td>
+                <td><?= $type ?></td>
+                <td></td>
+            </tr>
 
-            <tbody>
+            <tr>
+                <td class='header'>Probabilité de signature</td>
+                <td>
+                    <?= createProbabilityButtons($model) ?>
+                </td>
+                <td></td>
+            </tr>
 
-                <!-- Devis details -->
-                <tr class='group'>
-                    <td class='header'>Informations générale</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class='header'>Nom interne du projet</td>
-                    <td>${internal_name}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Reference interne du projet</td>
-                    <td>${internal_reference}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Type de projet</td>
-                    <td>${type}</td>
-                </tr>
+            <!-- Project manager data -->
+            <tr class='group'>
+                <td class='header'>Chef de projet</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class='header'>Nom</td>
+                <td><?= $project_manager_surname ?></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class='header'>Prénom</td>
+                <td><?= $project_manager_firstname ?></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class='header'>Email</td>
+                <td><?= $project_manager_email ?></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class='header'>Cellule capacité</td>
+                <td><?= $project_manager_cellule ?></td>
+                <td></td>
+            </tr>
 
-                <tr>
-                    <td class='header'>Probabilité de signature</td>
-                    <td>${signing_probability} %</td>
-                </tr>
+        </tbody>
 
-                <!-- Project manager data -->
-                <tr class='group'>
-                    <td class='header'>Chef de projet</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class='header'>Nom</td>
-                    <td>${project_manager_surname}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Prénom</td>
-                    <td>${project_manager_firstname}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Email</td>
-                    <td>${project_manager_email}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Cellule capacité</td>
-                    <td>${project_manager_cellule}</td>
-                </tr>
-
-            </tbody>
-
-        </table>
-HTML;
+    </table>
+<?php
 }
 
+function createProbabilityButtons(Project $model)
+{
 
+    if (UserRoleManager::hasRole(UserRoleEnum::PROJECT_MANAGER && $model->state == Project::STATE_DEVIS_SENDED)) {
+        if ($model->signing_probability == 20) {
+            echo Html::a('20%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('50%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 50], ['class' => 'waves-effect waves-light btn btn-grey']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('80%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 80], ['class' => 'waves-effect waves-light btn btn-grey']);
+        }
+
+        if ($model->signing_probability == 50) {
+            echo Html::a('20%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 20], ['class' => 'waves-effect waves-light btn btn-grey']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('50%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('80%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 80], ['class' => 'waves-effect waves-light btn btn-grey']);
+        }
+
+        if ($model->signing_probability == 80) {
+            echo Html::a('20%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 20], ['class' => 'waves-effect waves-light btn btn-grey']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('50%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 50], ['class' => 'waves-effect waves-light btn btn-grey']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('80%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
+        }
+    } else {
+        echo $model->signing_probability;
+    }
+}
 
 /**
  * Create table with all data.
@@ -282,7 +327,7 @@ function createLaboxyTable(Project $model): string
             </tbody>
 
         </table>
-HTML;
+    HTML;
 }
 
 
@@ -375,7 +420,7 @@ function createClientTable(Project $model): string
             </tbody>
 
         </table>
-HTML;
+    HTML;
 }
 
 
@@ -387,8 +432,7 @@ HTML;
  * @return HTML table.
  */
 function createMillestone(array $millestones)
-{
-?>
+{ ?>
     <tr>
         <th>Titre</th>
         <th>Pourcentage</th>
@@ -398,9 +442,7 @@ function createMillestone(array $millestones)
             echo "<th></th>";
         } ?>
     </tr>
-    <?php
-    foreach ($millestones as $key => $millestone) {
-    ?>
+    <?php foreach ($millestones as $key => $millestone) { ?>
         <tr>
             <td><?php echo $millestone->comment ?></td>
             <td><?php echo Yii::$app->formatter->asPercent($millestone->pourcentage / 100) ?></td>
@@ -496,15 +538,14 @@ function updateStatus($millestone): string
  * @return HTML cell of Action bouton
  */
 function displayActionButtons($model)
-{
-    ?>
+{ ?>
     <!-- Actions on devis -->
     <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey rightspace-15px leftspace-15px']) ?>
     <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
         <?= Html::a(
             'Modifier le devis <i class="material-icons right">edit</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DRAFT,],
-            ['class' => 'waves-effect waves-light btn btn-black  rightspace-15px leftspace-15px', 'data' => [
+            ['class' => 'waves-effect waves-light btn btn-grey  rightspace-15px leftspace-15px', 'data' => [
                 'confirm' => 'Modifier le devis ?'
             ]]
         ) ?>

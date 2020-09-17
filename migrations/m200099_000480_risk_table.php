@@ -21,17 +21,17 @@ class m200099_000480_risk_table extends Migration
 
         $this->insert('{{%risk}}', [
             'title' => "Moderée",
-            'coefficient' => 1.5,
+            'coefficient' => 1.25,
         ]);
 
 
         $this->insert('{{%risk}}', [
             'title' => "Importante",
-            'coefficient' => 3,
+            'coefficient' => 1.75,
         ]);
         $this->insert('{{%risk}}', [
             'title' => "Très importante",
-            'coefficient' => 4,
+            'coefficient' => 2,
         ]);
     }
     public function safeDown()

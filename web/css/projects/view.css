@@ -1,0 +1,8 @@
+.btn-blue-activated {
+    background-color: #078aca;
+}
+
+.btn-blue-activated:hover {
+    background-color: #078aca;
+    color: white;
+}
