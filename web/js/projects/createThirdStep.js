@@ -452,7 +452,7 @@ const getValueFromContributorRiskSelectedByIndex = (risksData, index = 0) =>
  *
  * @returns Un prix.
  */
-const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => daily_price * nbDay + (daily_price / laboxyTimeDay) * nbHour
+const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => (daily_price * nbDay + (daily_price / laboxyTimeDay) * nbHour).toFixed(2)
 
 /**
  * Fonction qui va être utilisé pour faire le calcul du coût d'un contributeur.
