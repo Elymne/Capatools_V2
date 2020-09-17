@@ -1,12 +1,12 @@
 /* cutom button class */
 
 .btn-green {
-    background-color: #07ca48;
+    background-color: #248f24;
     color: white;
 }
 
 .btn-green:hover {
-    background-color: #22f769;
+    background-color: #2eb82e;
     color: #333333;
 }
 
