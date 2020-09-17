@@ -192,7 +192,7 @@ function createProjetTable(Project $model)
             <tr>
                 <td class='header'>Probabilité de signature</td>
                 <td>
-                    <?= createProbabilityButtons($model, $signing_probability) ?>
+                    <?= createProbabilityButtons($model) ?>
                 </td>
                 <td></td>
             </tr>
@@ -230,30 +230,35 @@ function createProjetTable(Project $model)
 <?php
 }
 
-function createProbabilityButtons(Project $model, int $signing_probability)
+function createProbabilityButtons(Project $model)
 {
-    if ($signing_probability == 20) {
-        echo Html::a('20%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
-        echo HtmlHelperConst::SPACING;
-        echo Html::a('50%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 50], ['class' => 'waves-effect waves-light btn btn-grey']);
-        echo HtmlHelperConst::SPACING;
-        echo Html::a('80%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 80], ['class' => 'waves-effect waves-light btn btn-grey']);
-    }
 
-    if ($signing_probability == 50) {
-        echo Html::a('20%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 20], ['class' => 'waves-effect waves-light btn btn-grey']);
-        echo HtmlHelperConst::SPACING;
-        echo Html::a('50%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
-        echo HtmlHelperConst::SPACING;
-        echo Html::a('80%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 80], ['class' => 'waves-effect waves-light btn btn-grey']);
-    }
+    if (UserRoleManager::hasRole(UserRoleEnum::PROJECT_MANAGER)) {
+        if ($model->signing_probability == 20) {
+            echo Html::a('20%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('50%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 50], ['class' => 'waves-effect waves-light btn btn-grey']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('80%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 80], ['class' => 'waves-effect waves-light btn btn-grey']);
+        }
 
-    if ($signing_probability == 80) {
-        echo Html::a('20%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 20], ['class' => 'waves-effect waves-light btn btn-grey']);
-        echo HtmlHelperConst::SPACING;
-        echo Html::a('50%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 50], ['class' => 'waves-effect waves-light btn btn-grey']);
-        echo HtmlHelperConst::SPACING;
-        echo Html::a('80%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
+        if ($model->signing_probability == 50) {
+            echo Html::a('20%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 20], ['class' => 'waves-effect waves-light btn btn-grey']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('50%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('80%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 80], ['class' => 'waves-effect waves-light btn btn-grey']);
+        }
+
+        if ($model->signing_probability == 80) {
+            echo Html::a('20%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 20], ['class' => 'waves-effect waves-light btn btn-grey']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('50%', ['project/update-signing-probability', 'id' => $model->id, 'probability' => 50], ['class' => 'waves-effect waves-light btn btn-grey']);
+            echo HtmlHelperConst::SPACING;
+            echo Html::a('80%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
+        }
+    } else {
+        echo $model->signing_probability;
     }
 }
 
