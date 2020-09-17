@@ -320,7 +320,7 @@ class ProjectController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateStatus($id, $status)
+    public function actionUpdateStatus(int $id, int $status)
     {
         $project = project::getOneById($id);
         $project->state = $status;
@@ -348,7 +348,7 @@ class ProjectController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateMillestoneStatus($id, $status)
+    public function actionUpdateMillestoneStatus(int $id, int $status)
     {
         $jalon = Millestone::getOneById($id);
         $jalon->statut = $status;
@@ -357,6 +357,18 @@ class ProjectController extends Controller implements ServiceInterface
         MenuSelectorHelper::setMenuProjectIndex();
         return $this->render('view', [
             'model' => $this->findModel($jalon->project_id),
+        ]);
+    }
+
+    public function actionUpdateSigningProbability(int $id, int $probability)
+    {
+        $project = Project::getOneById($id);
+        $project->signing_probability = $probability;
+        $project->save();
+
+        MenuSelectorHelper::setMenuProjectNone();
+        return $this->render('view', [
+            'model' => $this->findModel($id),
         ]);
     }
 
