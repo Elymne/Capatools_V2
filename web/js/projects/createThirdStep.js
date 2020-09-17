@@ -8,7 +8,7 @@ const infoData = JSON.parse(document.getElementById("info-data-target").textCont
 const laboratorySelected = infoData.laboratorySelected !== null ? infoData.laboratorySelected : 0
 const addedEquipementsOnInit = infoData.equipments
 const addedContributorsOnInit = infoData.contributors
-const laboxyTimeDay = infoData.laboxyTimeDay
+const laboxyTimeDay = 7.7
 const number = infoData.number
 
 /**
@@ -248,7 +248,7 @@ $(() => {
              * Callback input sur le prix journalier pour modifier le prix total.
              */
             $(`#projectcreateequipmentrepaymentform-${i}-daily_price`).on("input", () => {
-                console.log("HAHA")
+                console.log(calculateEquipmentPrice(100, 100, 18))
 
                 const result = calculateEquipmentPrice(
                     $(`#projectcreateequipmentrepaymentform-${i}-nb_days`).val(),
@@ -452,7 +452,7 @@ const getValueFromContributorRiskSelectedByIndex = (risksData, index = 0) =>
  *
  * @returns Un prix.
  */
-const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => (daily_price * nbDay + (daily_price / laboxyTimeDay) * nbHour).toFixed(2)
+const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => daily_price * nbDay + (daily_price / laboxyTimeDay) * nbHour
 
 /**
  * Fonction qui va être utilisé pour faire le calcul du coût d'un contributeur.

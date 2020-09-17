@@ -320,23 +320,33 @@ class ProjectController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateStatus(int $id, int $status)
+    public function actionUpdateStatus(int $id, string $status)
     {
         $project = project::getOneById($id);
         $project->state = $status;
 
-        if (Project::STATE_DEVIS_SIGNED || Project::STATE_FINISHED) {
+        if ($status == Project::STATE_DEVIS_SIGNED || $status == Project::STATE_FINISHED) {
             $project->signing_probability = 100;
             $project->id_laboxy = IdLaboxyManager::generateLaboxyId($project);
         }
 
+        if ($status == Project::STATE_DRAFT) {
+            $project->draft = true;
+        }
+
         $project->save();
+
+        if ($status == Project::STATE_DRAFT) {
+            MenuSelectorHelper::setMenuProjectDraft();
+            return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project->id]);
+        }
 
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
+
 
     /**
      * Render view : none
@@ -1107,6 +1117,11 @@ class ProjectController extends Controller implements ServiceInterface
             'celluleUsers' => $celluleUsers,
             'TVA' => $TVA
         ]);
+    }
+
+    public function actionDeleteDraftProject(int $id)
+    {
+        $model = Project::getOneById($id);
     }
 
     /**

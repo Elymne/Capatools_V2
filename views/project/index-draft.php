@@ -164,3 +164,25 @@ function getUpdateButtonArray()
         }
     ];
 }
+
+function getDeleteButtonArray()
+{
+    return [
+        'format' => 'raw',
+        'label' => 'delete',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons center">visibility</i>',
+                Url::to(['project/view', 'id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'target' => '_blank',
+                    'action' => Url::to(['project/view', 'id' => $model->id]),
+                    'class' => 'btn-floating waves-effect waves-light btn-red',
+                    'title' => "visualiser le devis"
+                ]
+            );
+        }
+    ];
+}
