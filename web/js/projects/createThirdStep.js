@@ -8,6 +8,7 @@ const infoData = JSON.parse(document.getElementById("info-data-target").textCont
 const laboratorySelected = infoData.laboratorySelected !== null ? infoData.laboratorySelected : 0
 const addedEquipementsOnInit = infoData.equipments
 const addedContributorsOnInit = infoData.contributors
+const laboxyTimeDay = infoData.laboxyTimeDay
 const number = infoData.number
 
 /**
@@ -451,7 +452,7 @@ const getValueFromContributorRiskSelectedByIndex = (risksData, index = 0) =>
  *
  * @returns Un prix.
  */
-const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => (daily_price * nbDay + (daily_price / 7) * nbHour).toFixed(2)
+const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => (daily_price * nbDay + (daily_price / laboxyTimeDay) * nbHour).toFixed(2)
 
 /**
  * Fonction qui va être utilisé pour faire le calcul du coût d'un contributeur.
@@ -461,7 +462,7 @@ const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => (daily_price * n
  *
  * @returns Un prix.
  */
-const calculateContributorPrice = (nbDay, nbHour, daily_price) => (daily_price * nbDay + (daily_price / 7) * nbHour).toFixed(2)
+const calculateContributorPrice = (nbDay, nbHour, daily_price) => (daily_price * nbDay + (daily_price / laboxyTimeDay) * nbHour).toFixed(2)
 
 /**
  * Fonction qui va être utilisé pour calculer le temps d'incertitude par rapport au risque.
@@ -478,9 +479,9 @@ const calculateRiskTime = (nbDay, nbHour, risk) => {
     const decimalDay = riskDay - Math.floor(riskDay)
     riskDay = Math.trunc(riskDay)
 
-    riskHour = Math.round(riskHour + decimalDay * 7.7)
-    const additionalDay = Math.trunc(riskHour / 7.7)
-    riskHour = riskHour % 7.7
+    riskHour = Math.round(riskHour + decimalDay * laboxyTimeDay)
+    const additionalDay = Math.trunc(riskHour / laboxyTimeDay)
+    riskHour = riskHour % laboxyTimeDay
 
     riskDay = additionalDay + riskDay
     return { riskDay, riskHour }
@@ -491,7 +492,7 @@ const calculateRiskTime = (nbDay, nbHour, risk) => {
  * @param {*} riskDay
  * @param {*} riskHour
  */
-const stringifyRiskTime = (riskDay = 0, riskHour = 0) => `${parseFloat(riskDay).toFixed(0)}d ${parseFloat(riskHour).toFixed(0)}h`
+const stringifyRiskTime = (riskDay = 0, riskHour = 0) => `${parseFloat(riskDay).toFixed(0)}j ${parseFloat(riskHour).toFixed(0)}h`
 
 /**
  * Fonction assez simple qui va regarder l'id du laboratoire associé à l'équipement fournit en paramètre.
