@@ -233,7 +233,7 @@ function createProjetTable(Project $model)
 function createProbabilityButtons(Project $model)
 {
 
-    if (UserRoleManager::hasRole(UserRoleEnum::PROJECT_MANAGER)) {
+    if (UserRoleManager::hasRole(UserRoleEnum::PROJECT_MANAGER && $model->state == Project::STATE_DEVIS_SENDED)) {
         if ($model->signing_probability == 20) {
             echo Html::a('20%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
             echo HtmlHelperConst::SPACING;
