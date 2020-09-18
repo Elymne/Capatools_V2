@@ -433,16 +433,18 @@ $(() => {
  * @param {*} risksData - Une liste d'objet risque que l'on a au préalable injecté dans la liste déroulante.
  * @param {*} index - Numéro de l'item précis dont on souhaite connaitre l'équipement sélectionné
  */
-const getValueFromEquipmentRiskSelectedByIndex = (risksData, index = 0, number) =>
-    risksData[$(`#projectcreateequipmentrepaymentform-${index}-riskselected option:selected`).val()]
+const getValueFromEquipmentRiskSelectedByIndex = (risksData, index = 0, number) => {
+    return risksData[$(`#projectcreateequipmentrepaymentform-${index}-riskselected option:selected`).val()]
+}
 
 /**
  * Fonction qui permet de retourner le risque sélectionné sur un élément précis du dynamicView des matériels.
  * @param {*} risksData - Une liste d'objet risque que l'on a au préalable injecté dans la liste déroulante.
  * @param {*} index - Numéro de l'item précis dont on souhaite connaitre l'équipement sélectionné
  */
-const getValueFromContributorRiskSelectedByIndex = (risksData, index = 0) =>
+const getValueFromContributorRiskSelectedByIndex = (risksData, index = 0) => {
     risksData[$(`#projectcreatelaboratorycontributorform-${index}-riskselected option:selected`).val()]
+}
 
 /**
  * Fonction qui va être utilisé pour faire le calcul du coût.
@@ -452,7 +454,9 @@ const getValueFromContributorRiskSelectedByIndex = (risksData, index = 0) =>
  *
  * @returns Un prix.
  */
-const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => (daily_price * nbDay + (daily_price / laboxyTimeDay) * nbHour).toFixed(2)
+const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => {
+    return (daily_price * nbDay + (daily_price / laboxyTimeDay) * nbHour).toFixed(2)
+}
 
 /**
  * Fonction qui va être utilisé pour faire le calcul du coût d'un contributeur.
@@ -462,7 +466,9 @@ const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => (daily_price * n
  *
  * @returns Un prix.
  */
-const calculateContributorPrice = (nbDay, nbHour, daily_price) => (daily_price * nbDay + (daily_price / laboxyTimeDay) * nbHour).toFixed(2)
+const calculateContributorPrice = (nbDay, nbHour, daily_price) => {
+    return (daily_price * nbDay + (daily_price / laboxyTimeDay) * nbHour).toFixed(2)
+}
 
 /**
  * Fonction qui va être utilisé pour calculer le temps d'incertitude par rapport au risque.
@@ -492,7 +498,9 @@ const calculateRiskTime = (nbDay, nbHour, risk) => {
  * @param {*} riskDay
  * @param {*} riskHour
  */
-const stringifyRiskTime = (riskDay = 0, riskHour = 0) => `${parseFloat(riskDay).toFixed(0)}j ${parseFloat(riskHour).toFixed(0)}h`
+const stringifyRiskTime = (riskDay = 0, riskHour = 0) => {
+    return `${parseFloat(riskDay).toFixed(0)}j ${parseFloat(riskHour).toFixed(0)}h`
+}
 
 /**
  * Fonction assez simple qui va regarder l'id du laboratoire associé à l'équipement fournit en paramètre.
