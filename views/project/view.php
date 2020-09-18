@@ -258,7 +258,7 @@ function createProbabilityButtons(Project $model)
             echo Html::a('80%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
         }
     } else {
-        echo $model->signing_probability;
+        echo $model->signing_probability . ' %';
     }
 }
 
