@@ -443,7 +443,7 @@ const getValueFromEquipmentRiskSelectedByIndex = (risksData, index = 0, number) 
  * @param {*} index - Numéro de l'item précis dont on souhaite connaitre l'équipement sélectionné
  */
 const getValueFromContributorRiskSelectedByIndex = (risksData, index = 0) => {
-    risksData[$(`#projectcreatelaboratorycontributorform-${index}-riskselected option:selected`).val()]
+    return risksData[$(`#projectcreatelaboratorycontributorform-${index}-riskselected option:selected`).val()]
 }
 
 /**
