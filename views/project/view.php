@@ -157,7 +157,6 @@ function createProjetTable(Project $model)
     $internal_name = $model->internal_name;
     $internal_reference = $model->internal_reference;
     $type = $model->type;
-    $signing_probability = $model->signing_probability;
 
     $project_manager_firstname = $model->project_manager->firstname;
     $project_manager_surname = $model->project_manager->surname;
@@ -258,7 +257,7 @@ function createProbabilityButtons(Project $model)
             echo Html::a('80%', null, ['class' => 'waves-effect waves-light btn btn-blue-activated']);
         }
     } else {
-        echo $model->signing_probability . ' %';
+        echo $model->signing_probability . '%';
     }
 }
 
