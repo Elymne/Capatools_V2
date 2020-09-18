@@ -117,32 +117,32 @@ class Project extends ActiveRecord
 
     public function getCellule()
     {
-        return $this->hasOne(Cellule::className(), ['id' => 'cellule_id']);
+        return $this->hasOne(Cellule::class, ['id' => 'cellule_id']);
     }
 
     public function getContact()
     {
-        return $this->hasOne(Contact::className(), ['id' => 'contact_id']);
+        return $this->hasOne(Contact::class, ['id' => 'contact_id']);
     }
 
     public function getCompany()
     {
-        return $this->hasOne(Company::className(), ['id' => 'company_id']);
+        return $this->hasOne(Company::class, ['id' => 'company_id']);
     }
 
     public function getProject_manager()
     {
-        return $this->hasOne(CapaUser::className(), ['id' => 'capa_user_id']);
+        return $this->hasOne(CapaUser::class, ['id' => 'capa_user_id']);
     }
 
     public function getLots()
     {
-        return $this->hasMany(Lot::className(), ['project_id' => 'id']);
+        return $this->hasMany(Lot::class, ['project_id' => 'id']);
     }
 
     public function getMillestones()
     {
-        return $this->hasMany(Millestone::className(), ['project_id' => 'id']);
+        return $this->hasMany(Millestone::class, ['project_id' => 'id']);
     }
     public function getLotaventprojet()
     {

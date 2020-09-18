@@ -280,7 +280,7 @@ $tjmstatut = true;
                                 <?php
                                 if ($tjmstatut) {
                                     echo $form->field($project, "low_tjm_raison")->widget(
-                                        Select2::classname(),
+                                        Select2::class,
                                         [
                                             'theme' => Select2::THEME_MATERIAL,
                                             'data' => Project::TJMRAISON,
@@ -301,12 +301,7 @@ $tjmstatut = true;
 
                             </div>
                             <div class="col s5">
-                                <?php
-                                if ($tjmstatut) {
-                                    echo   $form->field($project, "low_tjm_description", ['inputOptions' => ['hide' => true]])->label(false);
-                                } else {
-                                    echo  $form->field($project, "low_tjm_description")->hiddeninput(['value' => " "])->label('');
-                                } ?>
+                                <?= $form->field($project, "low_tjm_description")->label('Décrivez la raison', ['id' => 'low_tjm_description-label']) ?>
                             </div>
                         </div>
                     </div>
