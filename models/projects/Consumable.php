@@ -25,7 +25,7 @@ class Consumable extends ActiveRecord
      * Pour résumer simplement, au niveau de l'affichage, on va séparer les consommables qui sont de type : TYPE_SECONDARY_INVESTMENT avec le reste.
      */
     // Consommable par défaut.
-    const TYPE_EXTERNAL_DELIVERY = "Prestation externe";
+    const TYPE_EXTERNAL_DELIVERY = "Sous traitance externe";
     const TYPE_CONSUMABLE = "Consommable & déplacement";
     const TYPE_INTERNAL_DELIVERY = "Prestation interne";
     // Dépenses éventuelles.

@@ -436,7 +436,7 @@ if ($validdevis == false) {
 
                         <div class="row bottom-spacing">
                             <div class="col s3">
-                                <label class='blue-text control-label typeLabel'> Prestation Externe :</label>
+                                <label class='blue-text control-label typeLabel'> Sous traitance externe :</label>
                             </div>
                         </div>
 
