@@ -16,7 +16,7 @@ $(() => {
     }
 
     // Callback.
-    lotRadioboxList.change(function () {
+    lotRadioboxList.change(() => {
         if ($(this).is(":checked") && $(this).val() == 0) {
             lotManagementLabel.hide()
             lotManagementBody.hide()
@@ -25,13 +25,9 @@ $(() => {
             lotManagementBody.show()
         }
     })
-    frameElement()
+    //frameElement()
 
-    // Callback lorsque l'utilisateur supprime un lot.
-    $(".dynamicform_wrapper").on("beforeDelete", (e, item) => {
-        if (!confirm("Etes-vous sûr de vouloir supprimer ce lot ? Pour rappel, toutes les tâches liées à ce lot seront supprimées dans le precessus")) {
-            return false
-        }
-        return true
-    })
+    $(".dynamicform_wrapper").on("beforeDelete", (e, item) =>
+        confirm("Etes-vous sûr de vouloir supprimer ce lot ? Pour rappel, toutes les tâches liées à ce lot seront supprimées dans le precessus"),
+    )
 })
