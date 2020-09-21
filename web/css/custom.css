@@ -21,6 +21,11 @@ a {
     color: #078aca;
 }
 
+div .scroll-box {
+    overflow-x: scroll;
+    padding: 1rem;
+}
+
 .blue-card {
     background-color: #006699;
     color: white;
@@ -89,7 +94,7 @@ span.span-combobox {
 
 button.btn-floating {
     border: none;
-    margin-top: 20px;
+    margin-top: 0px;
 }
 
 /* id css */

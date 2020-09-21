@@ -287,7 +287,6 @@ function createLaboxyTable(Project $model): string
 
     return <<<HTML
         <table class="highlight">
-
             <tbody>
                  <!-- Laboxy data -->
                  <tr class='group'>
@@ -322,9 +321,7 @@ function createLaboxyTable(Project $model): string
                     <td class='header'>Taux marge avec frais généraux</td>
                     <td>${laboxy_TauxMarge}</td>
                 </tr>
-
             </tbody>
-
         </table>
     HTML;
 }
@@ -356,9 +353,7 @@ function createClientTable(Project $model): string
 
     return <<<HTML
         <table class="highlight">
-
             <tbody>
-
                  <!-- Company data -->
                 <tr class='group'>
                     <td class='header'>Client</td>
@@ -392,7 +387,6 @@ function createClientTable(Project $model): string
                     <td class='header'>Tva</td>
                     <td>${company_tva}</td>
                 </tr>
-
                 <!-- Delivery data -->
                <tr class='group'>
                     <td class='header'>Contact client</td>
@@ -414,10 +408,7 @@ function createClientTable(Project $model): string
                     <td class='header'>email</td>
                     <td>${contact_email}</td>
                 </tr>
-
- 
-            </tbody>
-
+             </tbody>
         </table>
     HTML;
 }

@@ -110,10 +110,6 @@ $(() => {
      */
     let nbEquipmentLineDuplicated = addedEquipementsOnInit.length - 1
 
-    /**
-     * Calback onAddItem.
-     * Permet de gérer les callback des futurs éléments que l'utilisateur pourra créer.
-     */
     $(".dynamicform_wrapper_equipment").on("afterInsert", (e, item) => {
         nbEquipmentLineDuplicated++
         hideEquipmentRisk(isPreProject)
@@ -152,9 +148,8 @@ $(() => {
         }
     })
 
-    /**
-     * Calback onRemoveItem.
-     */
+    $(".dynamicform_wrapper_equipment").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer cette association d'équipement ?"))
+
     $(".dynamicform_wrapper_equipment").on("afterDelete", (e) => {
         nbEquipmentLineDuplicated--
     })
@@ -213,9 +208,20 @@ $(() => {
         }
     })
 
+    $(".dynamicform_wrapper_contributor").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer ce contributeur ?"))
+
     $(".dynamicform_wrapper_contributor").on("afterDelete", (e) => {
         nbContributorLineDuplicated--
     })
+})
+
+/**
+ * Scope Jquery pour les parties dynamiques restantes (alerte d'affichage ect ect..)
+ */
+$(() => {
+    $(".dynamicform_wrapper_consumable").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer ce consommable ?"))
+
+    $(".dynamicform_wrapper_invtest").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer cet investissement ?"))
 })
 
 //#region Liste des fonctions js

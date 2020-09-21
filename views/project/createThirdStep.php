@@ -3,7 +3,6 @@
 use app\assets\AppAsset;
 use app\assets\projects\ProjectCreateThirdStepAsset;
 
-use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\Consumable;
 
 use yii\helpers\ArrayHelper;
@@ -30,6 +29,7 @@ ProjectCreateThirdStepAsset::register($this);
     <div class="project-create">
         <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
         <div class="row">
+
             <div class="col s12">
 
                 <!-- Card : Gestion des consonmmables -->
@@ -288,15 +288,20 @@ ProjectCreateThirdStepAsset::register($this);
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="card-action">
-                        <!-- Buttons -->
-                        <div class="form-group">
-                            <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                            <?= Html::a(Yii::t('app', 'Retour'), ['project/project-simulate?project_id=' . $project_id], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
-                        </div>
+                <div class="form-group">
+                    <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
+                        <?= Html::a(
+                            Yii::t('app', '<i class="material-icons right">arrow_back</i>'),
+                            ['project/project-simulate?project_id=' . $project_id],
+                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-grey', 'title' => 'Retour à la page de simulation']
+                        ) ?>
+                        <?= Html::submitButton(
+                            '<i class="material-icons right">save</i>',
+                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-blue', 'title' => 'Sauvegarder les options']
+                        ) ?>
                     </div>
-
                 </div>
 
             </div>
