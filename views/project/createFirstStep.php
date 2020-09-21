@@ -153,7 +153,7 @@ ProjectCreateFirstStepAsset::register($this);
                                             "Société"
                                         );
                                     ?>
-                                    <?= Html::a('Ajouter une société', [''], ['class' => '']) ?>
+
                                     <br /><br />
                                 </div>
                                 <div class="input-field col s6">
@@ -178,7 +178,7 @@ ProjectCreateFirstStepAsset::register($this);
                                             "Contact client"
                                         );
                                     ?>
-                                    <?= Html::a('Ajouter un contact', [''], ['class' => '']) ?>
+
                                     <br /><br />
                                 </div>
 
