@@ -1,12 +1,16 @@
 .top-spacing {
-    padding-top: 15px;
+    padding-top: 48px;
 }
 
 .bottom-spacing {
-    padding-bottom: 15px;
+    padding-bottom: 6px;
 }
 
 .lot-title {
     font-size: x-large;
     font-weight: bolder;
+}
+
+.label-field {
+    margin-top: 12px;
 }
