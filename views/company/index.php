@@ -32,21 +32,19 @@ CompanyIndexAsset::register($this);
 
             <div class="card">
                 <div class="card-action">
-
-                    <?php Pjax::begin(); ?>
-
-                    <?= GridView::widget([
-                        'dataProvider' => $dataProvider,
-                        'tableOptions' => [
-                            'id' => 'company_table',
-                            'style' => 'height: 20px',
-                            'class' => ['highlight']
-                        ],
-                        'columns' => getCollumnArray(),
-                    ]); ?>
-
-                    <?php Pjax::end(); ?>
-
+                    <div class="scroll-box">
+                        <?php Pjax::begin(); ?>
+                        <?= GridView::widget([
+                            'dataProvider' => $dataProvider,
+                            'tableOptions' => [
+                                'id' => 'company_table',
+                                'style' => 'height: 20px',
+                                'class' => ['highlight']
+                            ],
+                            'columns' => getCollumnArray(),
+                        ]); ?>
+                        <?php Pjax::end(); ?>
+                    </div>
                 </div>
             </div>
 

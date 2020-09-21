@@ -18,6 +18,7 @@ ContactViewAsset::register($this);
 <div class="container">
     <div class="contact-view">
         <div class="row">
+
             <div class="card">
                 <div class="card-content">
                     <label>
@@ -28,21 +29,25 @@ ContactViewAsset::register($this);
                     <?php getSearchFilter() ?>
                 </div>
             </div>
+
             <div class="card">
                 <div class="card-action">
-                    <?php Pjax::begin(); ?>
-                    <?= GridView::widget([
-                        'dataProvider' => $dataProvider,
-                        'tableOptions' => [
-                            'id' => 'admin_table',
-                            'style' => 'height: 20px',
-                            'class' => ['highlight']
-                        ],
-                        'columns' => getCollumnArray(),
-                    ]); ?>
-                    <?php Pjax::end(); ?>
+                    <div class="scroll-box">
+                        <?php Pjax::begin(); ?>
+                        <?= GridView::widget([
+                            'dataProvider' => $dataProvider,
+                            'tableOptions' => [
+                                'id' => 'admin_table',
+                                'style' => 'height: 20px',
+                                'class' => ['highlight']
+                            ],
+                            'columns' => getCollumnArray(),
+                        ]); ?>
+                        <?php Pjax::end(); ?>
+                    </div>
                 </div>
             </div>
+
         </div>
 
         <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">

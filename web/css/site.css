@@ -3,6 +3,11 @@ body {
     height: 100%;
 }
 
+div .scroll-box {
+    overflow-x: scroll;
+    padding: 1rem;
+}
+
 .wrap {
     min-height: 100%;
     height: auto;
@@ -37,11 +42,12 @@ body {
 }
 
 /* add sorting icons to gridview sort links */
-a.asc:after, a.desc:after {
+a.asc:after,
+a.desc:after {
     position: relative;
     top: 1px;
     display: inline-block;
-    font-family: 'Glyphicons Halflings';
+    font-family: "Glyphicons Halflings";
     font-style: normal;
     font-weight: normal;
     line-height: 1;
@@ -96,9 +102,9 @@ a.desc:after {
     border: none;
 }
 
-@media(max-width:767px) {
+@media (max-width: 767px) {
     .nav li > form > button.logout {
-        display:block;
+        display: block;
         text-align: left;
         width: 100%;
         padding: 10px 15px;
@@ -112,4 +118,9 @@ a.desc:after {
 
 .nav > li > form > button.logout:focus {
     outline: none;
+}
+
+.card.big-card {
+    overflow-x: auto;
+    white-space: nowrap;
 }

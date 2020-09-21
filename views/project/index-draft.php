@@ -24,24 +24,23 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="card">
                 <div class="card-action">
 
-                    <br />
-                    <?php Pjax::begin(['id' => '1']); ?>
-
-                    <?= GridView::widget([
-                        'dataProvider' => $dataProvider,
-                        'rowOptions' => [
-                            'style' => 'height:20px;',
-                            'text-overflow:ellipsis;'
-                        ],
-                        'tableOptions' => [
-                            'id' => 'devis_table',
-                            'style' => 'height: 10px',
-                            'class' => ['highlight']
-                        ],
-                        'columns' => getCollumnsArray()
-                    ]); ?>
-
-                    <?php Pjax::end(); ?>
+                    <div class="scroll-box">
+                        <?php Pjax::begin(['id' => '1']) ?>
+                        <?= GridView::widget([
+                            'dataProvider' => $dataProvider,
+                            'rowOptions' => [
+                                'style' => 'height:20px;',
+                                'text-overflow:ellipsis;'
+                            ],
+                            'tableOptions' => [
+                                'id' => 'devis_table',
+                                'style' => 'height: 10px',
+                                'class' => ['highlight']
+                            ],
+                            'columns' => getCollumnsArray()
+                        ]); ?>
+                        <?php Pjax::end() ?>
+                    </div>
 
                 </div>
             </div>
