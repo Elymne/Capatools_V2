@@ -199,8 +199,17 @@ AppAsset::register($this);
                 </div>
                 <!-- Buttons -->
                 <div class="form-group">
-                    <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                    <?= Html::a(Yii::t('app', 'Retour'), ['project-simulate', 'project_id' => $lot->project_id], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
+                    <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
+                        <?= Html::a(
+                            Yii::t('app', '<i class="material-icons right">arrow_back</i>'),
+                            ['project/project-simulate?project_id=' . $lot->project_id],
+                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-grey', 'title' => 'Retour à la page de simulation']
+                        ) ?>
+                        <?= Html::submitButton(
+                            '<i class="material-icons right">save</i>',
+                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-blue', 'title' => 'Sauvegarder les options']
+                        ) ?>
+                    </div>
                 </div>
             </div>
         </div>

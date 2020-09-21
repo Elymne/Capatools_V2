@@ -8,6 +8,7 @@
 .btn-green:hover {
     background-color: #2eb82e;
     color: #333333;
+    background-position: right center;
 }
 
 .btn-green-darker {
@@ -18,6 +19,7 @@
 .btn-green-darker:hover {
     background-color: #00cc00;
     color: #333333;
+    background-position: right center;
 }
 
 .btn-blue {
@@ -27,6 +29,7 @@
 .btn-blue:hover {
     background-color: #22b0f7;
     color: #333333;
+    background-position: right center;
 }
 
 .btn-yellow {
@@ -37,6 +40,7 @@
 .btn-yellow:hover {
     background-color: #ffdb4d;
     color: #333333;
+    background-position: right center;
 }
 
 .btn-grey {
@@ -47,6 +51,7 @@
 .btn-grey:hover {
     background-color: #777777;
     color: #333333;
+    background-position: right center;
 }
 
 .btn-red {
@@ -57,6 +62,7 @@
 .btn-red:hover {
     background-color: #ff8080;
     color: #333333;
+    background-position: right center;
 }
 
 .btn-orange {
@@ -66,6 +72,7 @@
 .btn-orange:hover {
     background-color: #ffb380;
     color: #333333;
+    background-position: right center;
 }
 
 .btn-purple {
@@ -75,6 +82,7 @@
 .btn-purple:hover {
     background-color: #9933ff;
     color: #333333;
+    background-position: right center;
 }
 
 .btn-black {
@@ -84,11 +92,34 @@
 .btn-black:hover {
     background-color: #404040;
     color: #333333;
+    background-position: right center;
 }
 
 .btn-capa {
     background-image: linear-gradient(0.25turn, #5cd65c, #16a085, #002699);
 }
 .btn-capa:hover {
+    background-image: linear-gradient(0.25turn, #5cd65c, #16a085, #002699);
+    color: #333333;
+    background-position: right center;
+}
+
+.btn-blue-gradient {
+    background-image: linear-gradient(0.25turn, #078aca, #22b0f7, #07eede);
+}
+
+.btn-blue-gradient:hover {
+    background-image: linear-gradient(0.25turn, #09a7f6, #53c1f9, #20f8ea);
+    color: #333333;
+    background-position: right center;
+}
+
+.btn-grey-gradient {
+    background-image: linear-gradient(0.25turn, #262626, #404040, #595959);
+}
+
+.btn-grey-gradient:hover {
+    background-image: linear-gradient(0.25turn, #404040, #595959, #737373);
+    color: white;
     background-position: right center;
 }
