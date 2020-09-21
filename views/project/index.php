@@ -143,7 +143,7 @@ function getFilterCardContent(): string
             <span class="span-combobox">Resp projet</span>
         </label>
         <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="cellule-checkbox"/>
+            <input type="checkbox" class="filled-in" id="cellule-checkbox"/>
             <span class="span-combobox">Cellule</span>
         </label>
         <label class="rigthspace-20px">
@@ -227,8 +227,8 @@ function getCelluleArray()
         'attribute' => 'cellule.name',
         'format' => 'text',
         'label' => 'Cellule',
-        'contentOptions' => ['class' => 'cellule-row'],
-        'headerOptions' => ['class' => 'cellule-row'],
+        'contentOptions' => ['class' => 'cellule-row', 'style' => 'display: none'],
+        'headerOptions' => ['class' => 'cellule-row', 'style' => 'display: none'],
     ];
 }
 
