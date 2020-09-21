@@ -32,7 +32,7 @@ class ProjectCreateMilleStoneForm extends Millestone
             ['price', 'required', 'message' => 'Il faut indiquer un prix'],
 
             ['estimate_date', 'required', 'message' => 'Il faut indiquer la date de fin du jalon'],
-            ['estimate_date', 'date', 'format' => ' php:dd-MM-yyyy'],
+            ['estimate_date', 'date', 'format' => 'dd-MM-yyyy'],
         ];
     }
 }

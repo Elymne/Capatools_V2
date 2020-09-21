@@ -632,7 +632,7 @@ class ProjectController extends Controller implements ServiceInterface
                     $millestoneNew = new ProjectCreateMilleStoneForm();
                     $millestoneNew->number = $millestoneModif->number;
                 }
-
+                $millestoneNew->estimate_date =  Yii::$app->formatter->asDate($millestoneModif->estimate_date, 'yyyy-MM-dd');
                 $millestoneNew->comment = $millestoneModif->comment;
                 $millestoneNew->project_id = $project->id;
                 $millestoneNew->pourcentage = $millestoneModif->pourcentage;
