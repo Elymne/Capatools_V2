@@ -1,17 +1,17 @@
-$(document).ready(function() {
-    $(document).ready(function(data) {
-        $("company_field").autocomplete({
-            data: data
-        });
-    });
+$(() => {
+    if ($(window).width() < 980) {
+        $("#main").addClass("main-full")
+    } else {
+        $("#main").removeClass("main-full")
+    }
 
-    $(document).ready(function() {
-        $("input.autocomplete").autocomplete({
-            data: {
-                Apple: null,
-                Microsoft: null,
-                Google: "https://placehold.it/250x250"
-            }
-        });
-    });
-});
+    $(window).on("resize", function () {
+        console.log("On change - screen size")
+        var win = $(this)
+        if (win.width() <= 980) {
+            $("#main").addClass("main-full")
+        } else {
+            $("#main").removeClass("main-full")
+        }
+    })
+})
