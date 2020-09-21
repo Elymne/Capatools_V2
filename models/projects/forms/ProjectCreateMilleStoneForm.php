@@ -26,10 +26,13 @@ class ProjectCreateMilleStoneForm extends Millestone
     public function rules()
     {
         return [
-            [['comment', 'pourcentage', 'price', 'number'], 'safe',],
+            [['comment', 'pourcentage', 'price', 'number', 'estimate_date'], 'safe',],
             ['comment', 'required', 'message' => 'Il faut identifier le jalon'],
             ['pourcentage', 'required', 'message' => 'Il faut indiquer un pourcentage'],
             ['price', 'required', 'message' => 'Il faut indiquer un prix'],
+
+            ['estimate_date', 'required', 'message' => 'Il faut indiquer la date de fin du jalon'],
+            ['estimate_date', 'date', 'format' => ' php:dd-MM-yyyy'],
         ];
     }
 }

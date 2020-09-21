@@ -7,7 +7,7 @@ use app\widgets\TopTitle;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-
+use yii\jui\DatePicker;
 use kartik\select2\Select2;
 use kidzen\dynamicform\DynamicFormWidget;
 
@@ -434,6 +434,12 @@ $tjmstatut = true;
                                             <div class="col s2">
                                                 <?= $form->field($millestone, "[{$i}]priceeuros")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => Yii::$app->formatter->asCurrency($millestones[$i]->price)])->label("Prix") ?>
                                                 <?= Html::activeHiddenInput($millestone, "[{$i}]price") ?>
+                                            </div>
+                                            <div class="col s2">
+                                                <?= $form->field($millestone, "[{$i}]estimate_date")->widget(DatePicker::className(), [
+                                                    'language' => 'fr',
+                                                    'dateFormat' => 'dd-MM-yyyy',
+                                                ]) ?>
                                             </div>
                                             <div class="col 2">
                                                 <button type="button" class="add-item-millestone btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
