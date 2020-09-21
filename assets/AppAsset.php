@@ -24,7 +24,6 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
 
     public $css = [
-
         //default Yii css.
         'css/site.css',
 
@@ -56,10 +55,6 @@ class AppAsset extends AssetBundle
     ];
 
     public $js = [
-
-        // Materialize.
-        //'js/materialize.min.js',
-
         // JS Admin Template Html.
         'js/dark-forest/vendors.min.js',
         'js/dark-forest/plugins.min.js',
@@ -68,6 +63,7 @@ class AppAsset extends AssetBundle
 
         // Form js.
         'js/jquery.steps.js',
+        'js/capatools.js',
     ];
 
     public $depends = [
