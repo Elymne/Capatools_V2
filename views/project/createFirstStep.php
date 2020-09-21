@@ -32,9 +32,12 @@ ProjectCreateFirstStepAsset::register($this);
                     </div>
 
                     <div class="card-action">
-                        <!-- Champ titre -->
-                        <label class='blue-text control-label typeLabel'>Titre du projet</label>
-                        <?= $form->field($model, 'internal_name')->textInput([])->label(false) ?>
+                        <div class="col s6">
+                            <div class="row">
+                                <label class='blue-text control-label typeLabel'>Titre du projet</label>
+                                <?= $form->field($model, 'internal_name')->textInput([])->label(false) ?>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="card-action">
@@ -88,7 +91,6 @@ ProjectCreateFirstStepAsset::register($this);
                     </div>
 
                     <div class="card-action">
-
                         <!-- Création de lot -->
                         <label id="lot-management-label" class='blue-text control-label typeLabel'>Créer des lots - ils seront éditables par la suite</label>
                         <div id="lot-management-body" class="col s12">
@@ -136,39 +138,25 @@ ProjectCreateFirstStepAsset::register($this);
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="card-action">
-                        <div class="col s12">
+
+                        <div class="col s6">
                             <div class="row">
 
-                                <div class="input-field col s6">
+                                <label class='blue-text control-label typeLabel'>Nom de société</label>
+                                <div class="input-field">
                                     <?= $form->field($model, 'company_name')
                                         ->widget(\yii\jui\AutoComplete::class, [
-                                            'clientOptions' => [
-                                                'source' => $companiesNames,
-                                            ],
-                                        ])->label(
-                                            "Société"
-                                        );
-                                    ?>
-
+                                            'clientOptions' => ['source' => $companiesNames,]
+                                        ])->label(false); ?>
+                                    <?= Html::a('Ajouter une société', [''], ['class' => '']) ?>
                                     <br /><br />
                                 </div>
-                                <div class="input-field col s6">
-                                    <?php /*$form->field($fileModel, 'file')
-                                        ->label('Document technique / Cahier des charges annexe (PDF)', [])
-                                        ->fileInput([])*/
-                                    ?>
-                                </div>
 
-                            </div>
-                        </div>
-                        <div class="col s12">
-                            <div class="row">
-
-                                <div class="input-field col s6">
+                                <label SSS class='blue-text control-label typeLabel'>Contact client</label>
+                                <div class="input-field">
                                     <?= $form->field($model, 'contact_email')
                                         ->widget(\yii\jui\AutoComplete::class, [
                                             'clientOptions' => [
@@ -182,19 +170,16 @@ ProjectCreateFirstStepAsset::register($this);
                                     <br /><br />
                                 </div>
 
-
                             </div>
                         </div>
+
                     </div>
 
                     <div class="card-action">
-
-                        <!-- Buttons -->
                         <div class="form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
                             <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                         </div>
-
                     </div>
 
                 </div>
