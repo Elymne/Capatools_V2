@@ -655,19 +655,23 @@ class ProjectController extends Controller implements ServiceInterface
 
         //check validity of the devis
         //1 A least for each lot TotalCostHuman != 0
+        $Resultcheck = ['lots' => [], 'millestone' => true];
+        $lotsCheck = [];
         foreach ($lots as $lot) {
             if ($lot->totalCostHuman == 0) {
                 $validdevis = false;
-                break;
+                array_push($lotsCheck, false);
+            } else {
+                array_push($lotsCheck, true);
             }
         }
-
+        $Resultcheck['lots'] = $lotsCheck;
 
         $laborarydepenses = array();
 
         $resultatLaboColabborator =  $project->coutlaboratoire;
 
-        //Je parcour la maps des données
+        //Je parcours la maps des données
         foreach ($resultatLaboColabborator as $Labo) {
             $couttotal = 0;
             $laboid = $Labo[0]->id;
@@ -713,8 +717,10 @@ class ProjectController extends Controller implements ServiceInterface
         foreach ($millestones as $millestone) {
             $totalPoucent  = $totalPoucent  + $millestone->pourcentage;
         }
+
         if ($totalPoucent != 100) {
             $validdevis = false;
+            $Resultcheck['millestone'] = false;
         }
 
         $tjmstat = false;
@@ -737,6 +743,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'laboratorylistArray' => $laboratorylistArray,
                 'listExternalDepense' => $listExternalDepense,
                 'listInternalDepense' => $listInternalDepense,
+                'Resultcheck' => $Resultcheck,
 
             ]
 

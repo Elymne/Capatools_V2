@@ -72,6 +72,11 @@ $tjmstatut = true;
                                 <?= $form->field($project, "additionallotprice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->additionallotprice)]])->label(false) ?>
                             </div>
                         </div>
+                        <div>
+                            <?php if ($Resultcheck['lots'][0] == false) {
+                                echo '<label class=\'red-text control-label typeLabel\'> Il n\'y a pas de tâche présente dans le l\'avant projet</label>';
+                            } ?>
+                        </div>
                         <div class="row bottom-spacing">
                             <div class="col s1">
                                 <?= Html::a(
@@ -156,8 +161,11 @@ $tjmstatut = true;
                                     </div>
                                 </div>
 
-                                <div class="row">
 
+                                <div>
+                                    <?php if ($Resultcheck['lots'][$lotproject->number] == false) {
+                                        echo '<label class=\'red-text control-label typeLabel\'> Il n\'y a pas de tâche présente dans le l\'avant projet</label>';
+                                    } ?>
                                 </div>
                                 <div class="row top-spacing bottom-spacing">
                                     <div class="col s1">
@@ -455,6 +463,12 @@ $tjmstatut = true;
 
                             <?php DynamicFormWidget::end(); ?>
                         </div>
+                        <?php
+                        if ($Resultcheck['millestone'] == false) {
+                            echo '<label class=\'red-text control-label typeLabel\'> La somme de jalon ne correspond pas au prix de vente</label>';
+                        }
+                        ?>
+
                     </div>
 
                     <div class="card-action">
