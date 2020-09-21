@@ -439,7 +439,7 @@ $tjmstatut = true;
                                                 <?= $form->field($millestone, "[{$i}]estimate_date")->widget(DatePicker::className(), [
                                                     'language' => 'fr',
                                                     'dateFormat' => 'dd-MM-yyyy',
-                                                ]) ?>
+                                                ])->label(('Date(jj-mm-yyyy)')) ?>
                                             </div>
                                             <div class="col 2">
                                                 <button type="button" class="add-item-millestone btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
