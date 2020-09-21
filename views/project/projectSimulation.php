@@ -10,15 +10,80 @@ use yii\helpers\Url;
 use yii\jui\DatePicker;
 use kartik\select2\Select2;
 use kidzen\dynamicform\DynamicFormWidget;
+use yii\bootstrap\Alert;
 
 $this->title = 'Simulation du projet';
 
 AppAsset::register($this);
 ProjectSimulationAsset::register($this);
-$tjmstatut = true;
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
+
+<?php
+
+///Gère les bandeaux d'alerts
+if ($SaveSucess != null) {
+    if ($SaveSucess) {
+        echo Alert::widget([
+            'options' => [
+                'class' => 'alert-success',
+            ],
+            'body' => 'Enregistrement réussi ...',
+        ]);
+    } else {
+        echo Alert::widget([
+            'options' => [
+                'class' => 'alert-danger',
+            ],
+            'body' => 'Enregistrement échoué ...',
+        ]);
+    }
+}
+if ($tjmstatut == true) {
+
+    echo Alert::widget([
+        'options' => [
+            'class' => 'alert-warning',
+        ],
+        'body' => 'Attention le taux journalier est inférieur à 700 €',
+    ]);
+}
+if ($validdevis == false) {
+    foreach ($Resultcheck['lots'] as $lot) {
+
+        if ($lot['Result'] == false) {
+            if ($lot['number'] == 0) {
+                echo Alert::widget([
+                    'options' => [
+                        'class' => 'alert-danger',
+                    ],
+                    'body' => ' Il n\'y a pas de tâche présente dans le l\'avant projet',
+                ]);
+            } else {
+                echo Alert::widget([
+                    'options' => [
+                        'class' => 'alert-danger',
+                    ],
+                    'body' => ' Il n\'y a pas de tâche présente dans le lot ' . $lot['number'] . ' projet',
+                ]);
+            }
+        }
+    }
+    if ($Resultcheck['millestone'] == false) {
+
+        echo Alert::widget([
+            'options' => [
+                'class' => 'alert-danger',
+            ],
+            'body' => ' La somme des jalons ne correspond pas au prix de vente',
+        ]);
+    }
+}
+
+
+?>
+
 <div class="container">
     <div class="project-create">
         <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
@@ -73,7 +138,7 @@ $tjmstatut = true;
                             </div>
                         </div>
                         <div>
-                            <?php if ($Resultcheck['lots'][0] == false) {
+                            <?php if ($Resultcheck['lots'][0]['Result'] == false) {
                                 echo '<label class=\'red-text control-label typeLabel\'> Il n\'y a pas de tâche présente dans le l\'avant projet</label>';
                             } ?>
                         </div>
@@ -163,7 +228,7 @@ $tjmstatut = true;
 
 
                                 <div>
-                                    <?php if ($Resultcheck['lots'][$lotproject->number] == false) {
+                                    <?php if ($Resultcheck['lots'][$lotproject->number]['Result'] == false) {
                                         echo '<label class=\'red-text control-label typeLabel\'> Il n\'y a pas de tâche présente dans le l\'avant projet</label>';
                                     } ?>
                                 </div>
@@ -465,7 +530,7 @@ $tjmstatut = true;
                         </div>
                         <?php
                         if ($Resultcheck['millestone'] == false) {
-                            echo '<label class=\'red-text control-label typeLabel\'> La somme de jalon ne correspond pas au prix de vente</label>';
+                            echo '<label class=\'red-text control-label typeLabel\'> La somme des jalons ne correspond pas au prix de vente</label>';
                         }
                         ?>
 

@@ -560,7 +560,7 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionProjectSimulate($project_id = 1)
     {
-
+        $SaveSucess = null;
         // Modèle du projet à updater. On s'en sert pour récupérer son id.
         $project = ProjectSimulate::getOneById($project_id);
         if ($project == null) {
@@ -600,7 +600,7 @@ class ProjectController extends Controller implements ServiceInterface
         }
         // Si tous les Jalons sont valides
         if ($isValid) {
-
+            $SaveSucess = true;
             $MillestoneArray = ArrayHelper::index($millestones,  function ($element) {
                 return $element->number;
             });
@@ -660,9 +660,9 @@ class ProjectController extends Controller implements ServiceInterface
         foreach ($lots as $lot) {
             if ($lot->totalCostHuman == 0) {
                 $validdevis = false;
-                array_push($lotsCheck, false);
+                array_push($lotsCheck, ['Result' => false, 'number' => $lot->number]);
             } else {
-                array_push($lotsCheck, true);
+                array_push($lotsCheck, ['Result' => true, 'number' => $lot->number]);
             }
         }
         $Resultcheck['lots'] = $lotsCheck;
@@ -744,6 +744,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'listExternalDepense' => $listExternalDepense,
                 'listInternalDepense' => $listInternalDepense,
                 'Resultcheck' => $Resultcheck,
+                'SaveSucess' => $SaveSucess,
 
             ]
 
@@ -760,13 +761,13 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionLotSimulate($project_id = 1, $number = 1)
     {
-
+        $SaveSucess = null;
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = LotSimulate::getOneByIdProjectAndNumber($project_id, $number);
 
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
         if ($lot->load(Yii::$app->request->post())) {
-
+            $SaveSucess = true;
             $lot->save();
         }
 
@@ -781,7 +782,8 @@ class ProjectController extends Controller implements ServiceInterface
         return $this->render(
             'lotSimulation',
             [
-                'lot' =>  $lot
+                'lot' =>  $lot,
+                'SaveSucess' => $SaveSucess,
             ]
 
         );
@@ -798,6 +800,7 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionUpdateTask($number, $project_id)
     {
 
+        $SaveSucess = false;
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $model = new ProjectCreateTaskForm();
         $model->project_id = $project_id;
@@ -828,9 +831,10 @@ class ProjectController extends Controller implements ServiceInterface
         $celluleUsers = $cel->capaUsers;
         $risk = Risk::find()->all();
 
+
         if ($model->load(Yii::$app->request->post())) {
             $isValid = true;
-
+            $SaveSucess = true;
             if ($number != 0) {
 
                 $oldTasksGestionsModifIds = ArrayHelper::map($tasksGestionsModif, 'id', 'id');
@@ -841,7 +845,9 @@ class ProjectController extends Controller implements ServiceInterface
 
             $oldTasksLotsModifIds = ArrayHelper::map($tasksLotsModif, 'id', 'id');
             $tasksLotsModif = Model::createMultiple(ProjectCreateLotTaskForm::class, $tasksLotsModif);
-            if (!ProjectCreateLotTaskForm::loadMultiple($tasksLotsModif, Yii::$app->request->post())) $isValid = false;
+            if (!ProjectCreateLotTaskForm::loadMultiple($tasksLotsModif, Yii::$app->request->post())) {
+                $isValid = false;
+            }
             $deletedTasksLotsModifIds = array_diff($oldTasksLotsModifIds, array_filter(ArrayHelper::map($tasksLotsModif, 'id', 'id')));
 
             if ($isValid) {
@@ -869,11 +875,8 @@ class ProjectController extends Controller implements ServiceInterface
                 if (!empty($deletedTasksLotsModifIds)) {
                     ProjectCreateLotTaskForm::deleteAll(['id' => $deletedTasksLotsModifIds]);
                 }
-
-                return Yii::$app->response->redirect(['project/update-task', 'project_id' => $project_id, 'number' => $number]);
             }
         }
-
         $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
         $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
 
@@ -887,6 +890,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'tasksGestions' => (empty($tasksGestions)) ? [new ProjectCreateGestionTaskForm] : $tasksGestions,
                 'tasksOperational' => (empty($tasksOperational)) ? [new ProjectCreateLotTaskForm] : $tasksOperational,
                 'risk' => $risk,
+                'SaveSucess' => $SaveSucess,
             ]
         );
     }
@@ -905,7 +909,7 @@ class ProjectController extends Controller implements ServiceInterface
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
         $model = new ProjectCreateThirdStepForm();
         $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
-
+        $SaveSucess = null;
         if ($lot == null) {
             return $this->redirect([
                 'error',
@@ -1051,7 +1055,7 @@ class ProjectController extends Controller implements ServiceInterface
                     LaboratoryContributor::deleteAll(['id' => $deletedContributorsIDs]);
                 }
 
-                return Yii::$app->response->redirect(['project/update-dependencies-consumables', 'project_id' => $project_id, 'number' => $number]);
+                $SaveSucess = true;
             }
         }
 
@@ -1070,7 +1074,8 @@ class ProjectController extends Controller implements ServiceInterface
                 'consumables' => $consumables,
                 'invests' => $invests,
                 'equipments' => $equipmentsRepayment,
-                'contributors' => $contributors
+                'contributors' => $contributors,
+                'SaveSucess' => $SaveSucess,
             ]
         );
     }
@@ -1085,6 +1090,7 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionCreateProject(int $id = 1)
     {
+
         $model = ProjectCreateForm::getOneById($id); // On récupère le modèle formulaire de données de projet avec l'id.
         $celluleUsers = ArrayHelper::map(Cellule::getOneById(Yii::$app->user->identity->cellule_id)->capaUsers, 'id', 'email');
 

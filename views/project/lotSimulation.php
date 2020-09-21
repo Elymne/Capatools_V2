@@ -5,12 +5,34 @@ use app\widgets\TopTitle;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
+use yii\bootstrap\Alert;
+
 $this->title = 'Simulation de lot';
 
 AppAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
+<?php
+///Gère les bandeaux d'alerts
+if ($SaveSucess != null) {
+    if ($SaveSucess) {
+        echo Alert::widget([
+            'options' => [
+                'class' => 'alert-success',
+            ],
+            'body' => 'Enregistrement réussi ...',
+        ]);
+    } else {
+        echo Alert::widget([
+            'options' => [
+                'class' => 'alert-danger',
+            ],
+            'body' => 'Enregistrement échoué ...',
+        ]);
+    }
+}
+?>
 <div class="container">
     <div class="project-create">
         <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
