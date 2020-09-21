@@ -6,7 +6,9 @@ let TotalPrice = Number(
         .replace(",", ".")
         .replace(/[^0-9.-]+/g, ""),
 )
+
 Initialise()
+
 function Initialise() {
     let regex2 = new RegExp('id="projectcreatemillestoneform-([0-9]*)-pourcentage', "gim")
     let id = 0
@@ -60,6 +62,7 @@ function updatepourcent(id) {
     }
     $(SelectMillePourcent).val(pourcent)
 }
+
 let pourcentage = "#projectcreatemillestoneform-" + 0 + "-pourcentage"
 
 $(pourcentage).on("input", function (e) {
@@ -70,7 +73,9 @@ let price = "#projectcreatemillestoneform-" + 0 + "-priceeuros"
 $(price).on("input", function (e) {
     updatepourcent(0)
 })
+
 updateprice(0)
+
 $(() => {
     $(".dynamicform_millestone").on("afterInsert", function (e, item) {
         //Recherche de l'index courrent
@@ -156,12 +161,10 @@ $(() => {
     if ($("#projectsimulate-low_tjm_raison option:selected").val() == "Autre") {
         $(description).show()
         $(description_label).show()
-
-        console.log("AUTRE")
     } else {
         $(description).hide()
         $(description_label).hide()
-
-        console.log("HEUUUU")
     }
+
+    $(".dynamicform_millestone").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer ce jalon ?"))
 })

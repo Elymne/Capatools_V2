@@ -3,7 +3,6 @@
 use app\assets\AppAsset;
 use app\assets\projects\ProjectCreateThirdStepAsset;
 
-use app\models\laboratories\LaboratoryContributor;
 use app\models\projects\Consumable;
 
 use yii\helpers\ArrayHelper;
