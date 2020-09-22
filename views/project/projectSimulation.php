@@ -566,7 +566,7 @@ if ($validdevis == false) {
                             <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
                                 <?= Html::a(
                                     Yii::t('app', '<i class="material-icons right">arrow_back</i>'),
-                                    ['project/project-simulate?project_id=' . $project->id],
+                                    ['project/index-draft'],
                                     ['class' => 'waves-effect waves-light btn-floating btn-large btn-grey', 'title' => 'Retour à la liste des brouillons']
                                 ) ?>
                                 <?= Html::submitButton(
