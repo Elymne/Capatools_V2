@@ -151,7 +151,6 @@ ProjectCreateFirstStepAsset::register($this);
                                         ->widget(\yii\jui\AutoComplete::class, [
                                             'clientOptions' => ['source' => $companiesNames,]
                                         ])->label(false); ?>
-                                    <?= Html::a('Ajouter une société', [''], ['class' => '']) ?>
                                     <br /><br />
                                 </div>
 
