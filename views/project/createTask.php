@@ -10,6 +10,8 @@ use yii\widgets\ActiveForm;
 
 use yii\helpers\ArrayHelper;
 
+use yii\bootstrap\Alert;
+
 AppAsset::register($this);
 ProjectCreateTaskAsset::register($this);
 
@@ -25,6 +27,31 @@ if ($lot->number != 0) {
 
 ?>
 <?= TopTitle::widget(['title' => $this->title]) ?>
+
+
+<?php
+///Gère les bandeaux d'alerts
+if ($SaveSucess != null) {
+    if ($SaveSucess) {
+        echo Alert::widget([
+            'options' => [
+                'class' => 'alert-success',
+            ],
+            'body' => 'Enregistrement réussi ...',
+        ]);
+    } else {
+        echo Alert::widget([
+            'options' => [
+                'class' => 'alert-danger',
+            ],
+            'body' => 'Enregistrement échoué ...',
+        ]);
+    }
+}
+?>
+
+
+
 <div class="container">
     <div class="project-create">
 

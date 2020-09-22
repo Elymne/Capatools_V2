@@ -31,6 +31,11 @@ div .scroll-box {
     color: white;
 }
 
+.typeLabel {
+    margin-top: 4px;
+    margin-bottom: 10px;
+}
+
 /* overrided materialize css class */
 .centrage {
     text-align: center;

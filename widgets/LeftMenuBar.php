@@ -22,8 +22,8 @@ class LeftMenuBar extends \yii\bootstrap\Widget
     {
         //Yii::setAlias('@foo', '/path/to/foo');
         $homeNav = '' . Yii::$app->homeUrl . '';
-        $logo_capa = '/web/capacites-logo-Icone.png';
-        $logo_capa_color = '/web/images/materialize-logo-color.png';
+        $logo_capa = yii::getAlias('@web') . '/capacites-logo-Icone.png';
+        $logo_capa_color = yii::getAlias('@web') . '/images/materialize-logo-color.png';
 
         $ctrls =  Yii::$app->discoverService->getServices();
         $actionsCtrl = array();
@@ -51,12 +51,15 @@ class LeftMenuBar extends \yii\bootstrap\Widget
             <aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-dark sidenav-active-rounded">
                 <!-- Title, laissez le tag h1 sur une seule ligne. -->
                 <div class="brand-sidebar">
-                    <h1 class="logo-wrapper"><a class="brand-logo darken-1" ><img class="responsive-img hide-on-med-and-down large " src="${logo_capa}" alt="materialize logo" />
-                        <img class="show-on-medium-and-down hide-on-med-and-up" src="${logo_capa}" alt="materialize logo" />
-                        <span class="logo-text hide-on-med-and-down">CapaTools</span>
-                        <a class="navbar-toggler" href="#"></a>
+                    <h1 class="logo-wrapper">
+                        <a style="text-decoration:none" class="brand-logo darken-1">
+                            <img class="responsive-img hide-on-med-and-down large " src="${logo_capa}" alt="materialize logo" />
+                            <img class="show-on-medium-and-down hide-on-med-and-up" src="${logo_capa}" alt="materialize logo" />
+                            <span class="logo-text hide-on-med-and-down">CapaTools</span>
+                            <a class="navbar-toggler" href="#">
+                        </a>
                     </h1>
-                <span  class="footer-copyright" hide-on-med-and-down"> ${version}</span>
+                    <span  class="footer-copyright" hide-on-med-and-down"> ${version}</span>
                 </div>
                 <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
                     ${stringSubmenu}
