@@ -834,24 +834,30 @@ class ProjectController extends Controller implements ServiceInterface
 
         if ($model->load(Yii::$app->request->post())) {
             $isValid = true;
-            $SaveSucess = true;
             if ($number != 0) {
+                //Trie sur la gestion
 
                 $oldTasksGestionsModifIds = ArrayHelper::map($tasksGestionsModif, 'id', 'id');
                 $tasksGestionsModif = Model::createMultiple(ProjectCreateGestionTaskForm::class, $tasksGestionsModif);
 
+                ProjectCreateGestionTaskForm::loadMultiple($tasksGestionsModif, Yii::$app->request->post());
+
                 $deletedTasksGestionsModifIds = array_diff($oldTasksGestionsModifIds, array_filter(ArrayHelper::map($tasksGestionsModif, 'id', 'id')));
             }
 
+            //Trie sur la lot
             $oldTasksLotsModifIds = ArrayHelper::map($tasksLotsModif, 'id', 'id');
             $tasksLotsModif = Model::createMultiple(ProjectCreateLotTaskForm::class, $tasksLotsModif);
+
             if (!ProjectCreateLotTaskForm::loadMultiple($tasksLotsModif, Yii::$app->request->post())) {
                 $isValid = false;
             }
+
             $deletedTasksLotsModifIds = array_diff($oldTasksLotsModifIds, array_filter(ArrayHelper::map($tasksLotsModif, 'id', 'id')));
 
             if ($isValid) {
 
+                $SaveSucess = true;
                 if ($number != 0) {
                     //Ajout et modification des données.
                     foreach ($tasksGestionsModif as $taskGestionModif) {
