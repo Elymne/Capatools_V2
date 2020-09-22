@@ -584,63 +584,43 @@ class ProjectController extends Controller implements ServiceInterface
             $project->save();
         }
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        $millestonesModif = [new ProjectCreateMilleStoneForm()];
-        $millestonesModif =  Model::createMultiple(ProjectCreateMilleStoneForm::className(), $millestonesModif);
-        $isValid = true;
-        Model::loadMultiple($millestonesModif, Yii::$app->request->post());
-        if (!empty($millestonesModif)) {
 
-            foreach ($millestonesModif as $Millestone) {
-                if (!$Millestone->validate()) {
-                    $isValid = false;
-                }
-            }
-        } else {
+        $SaveSucess = false;
+        $millestonesModif  = ProjectCreateMilleStoneForm::getAllByProject($project->id);
+        if (!$millestonesModif) {
+            $millestonesModif = [new ProjectCreateMilleStoneForm];
+        }
+
+
+
+        $isValid = true;
+
+        $oldmillestonesIds = ArrayHelper::map($millestonesModif, 'id', 'id');
+        $millestonesModif = Model::createMultiple(ProjectCreateMilleStoneForm::class, $millestonesModif);
+        if (!ProjectCreateMilleStoneForm::loadMultiple($millestonesModif, Yii::$app->request->post())) {
             $isValid = false;
         }
-        // Si tous les Jalons sont valides
+
+        $deletedmillestonesModifIds = array_diff($oldmillestonesIds, array_filter(ArrayHelper::map($millestonesModif, 'id', 'id')));
         if ($isValid) {
+
             $SaveSucess = true;
-            $MillestoneArray = ArrayHelper::index($millestones,  function ($element) {
-                return $element->number;
-            });
-            $millestonesModifArray = ArrayHelper::index($millestonesModif,   function ($element) {
-                return $element->number;
-            });
-            //Suppression des tâches enlevées par l'utilisateur;
-            foreach ($MillestoneArray as $Millestone) {
+            foreach ($millestonesModif as $Milestone) {
+                echo $Milestone->id;
+                echo $Milestone->price;
+                // echo $Milestone->estimate_date = ;
 
-                if (!array_key_exists($Millestone->number, $millestonesModifArray)) {
-                    $Millestone->delete();
-                }
+                //$Milestone->estimate_date = $Milestone->dateui;
+                /// echo  $Milestone->dateui;
+                $Milestone->project_id = $project->id;
+                $Milestone->statut = Millestone::STATUT_ENCOURS;
+                $Milestone->save();
             }
-            //Ajout et modification des données.
-            foreach ($millestonesModif as $millestoneModif) {
-                $millestoneNew = null;
-
-                if (!empty($MillestoneArray)) {
-                    if (array_key_exists(intval($millestoneModif->number), $MillestoneArray)) {
-                        //Si la tâche existe MAJ de la tâche
-                        $millestoneNew =  $MillestoneArray[$millestoneModif->number];
-                    } else {
-                        //Si elle n'existe pas alors ajout de la tâche
-                        $millestoneNew = new ProjectCreateMilleStoneForm();
-                        $millestoneNew->number = $millestoneModif->number;
-                    }
-                } else {
-                    //Si elle n'existe pas alors ajout de la tâche
-                    $millestoneNew = new ProjectCreateMilleStoneForm();
-                    $millestoneNew->number = $millestoneModif->number;
-                }
-                $millestoneNew->estimate_date =  Yii::$app->formatter->asDate($millestoneModif->estimate_date, 'yyyy-MM-dd');
-                $millestoneNew->comment = $millestoneModif->comment;
-                $millestoneNew->project_id = $project->id;
-                $millestoneNew->pourcentage = $millestoneModif->pourcentage;
-                $millestoneNew->price = $millestoneModif->price;
-                $millestoneNew->statut = Millestone::STATUT_ENCOURS;
-                $millestoneNew->save();
+            if (!empty($deletedmillestonesModifIds)) {
+                ProjectCreateMilleStoneForm::deleteAll(['id' => $deletedmillestonesModifIds]);
             }
         }
+
 
         $millestones = ProjectCreateMilleStoneForm::getAllByProject($project->id);
 

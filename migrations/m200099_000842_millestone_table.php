@@ -14,7 +14,7 @@ class m200099_000842_millestone_table extends Migration
             'pourcentage' => $this->double()->notNull(),
             'price' => $this->double()->notNull(),
             'statut' => $this->string()->notNull(),
-            'estimate_date' => $this->date(),
+            'estimate_date' => $this->string(),
 
             // Foreign key.
             'project_id' => $this->integer()->notNull(),
