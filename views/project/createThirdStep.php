@@ -23,7 +23,6 @@ $risksName = array_map(function ($risk) {
 
 AppAsset::register($this);
 ProjectCreateThirdStepAsset::register($this);
-
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -74,7 +73,7 @@ if ($SaveSucess != null) {
                                         'widgetBody' => '.container-items-consummable', // required: css class selector
                                         'widgetItem' => '.item-consummable', // required: css class
                                         'limit' => 10, // the maximum times, an element can be cloned (default 999)
-                                        'min' => 1, // 0 or 1 (default 1)
+                                        'min' => 0, // 0 or 1 (default 1)
                                         'insertButton' => '.add-item', // css class
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $consumables[0],
@@ -83,6 +82,13 @@ if ($SaveSucess != null) {
                                     ]); ?>
 
                                     <div class="container-items-consummable">
+
+                                        <div class="row">
+                                            <div class="col s1 offset-s5">
+                                                <button id="button-consummable-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                            </div>
+                                        </div>
+
                                         <!-- widgetContainer -->
                                         <?php foreach ($consumables as $i => $consumable) : ?>
                                             <div class="item-consummable">
@@ -175,7 +181,7 @@ if ($SaveSucess != null) {
                                         'widgetBody' => '.container-items-equipment', // required: css class selector
                                         'widgetItem' => '.item-equipment', // required: css class
                                         'limit' => 10, // the maximum times, an element can be cloned (default 999)
-                                        'min' => 1, // 0 or 1 (default 1)
+                                        'min' => 0, // 0 or 1 (default 1)
                                         'insertButton' => '.add-item', // css class
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $equipments[0],
@@ -184,6 +190,13 @@ if ($SaveSucess != null) {
                                     ]); ?>
 
                                     <div class="container-items-equipment">
+
+                                        <div class="row">
+                                            <div class="col s1 offset-s5">
+                                                <button id="button-equipment-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                            </div>
+                                        </div>
+
                                         <!-- widgetContainer -->
                                         <?php foreach ($equipments as $i => $equipment) : ?>
                                             <div class="item-equipment">
@@ -248,7 +261,7 @@ if ($SaveSucess != null) {
                                         'widgetBody' => '.container-items-labocontributor', // required: css class selector
                                         'widgetItem' => '.item-labocontributor', // required: css class
                                         'limit' => 10, // the maximum times, an element can be cloned (default 999)
-                                        'min' => 1, // 0 or 1 (default 1)
+                                        'min' => 0, // 0 or 1 (default 1)
                                         'insertButton' => '.add-item', // css class
                                         'deleteButton' => '.remove-item', // css class
                                         'model' => $contributors[0],
@@ -257,6 +270,13 @@ if ($SaveSucess != null) {
                                     ]); ?>
 
                                     <div class="container-items-labocontributor">
+
+                                        <div class="row">
+                                            <div class="col s1 offset-s5">
+                                                <button id="button-labocontributor-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                            </div>
+                                        </div>
+
                                         <!-- widgetContainer -->
                                         <?php foreach ($contributors as $i => $contributor) : ?>
                                             <div class="item-labocontributor">
@@ -374,25 +394,47 @@ if ($SaveSucess != null) {
 <div id="info-data-target" style="display: none;">
     <?php
 
-    // Transformation des données sous format JSON.
-    $ided = array_map(function ($data) {
-        return $data->jsonSerialize();
-    }, $equipments);
+    // Transformation des données equipmentRepayment sous format JSON.
+    $equipmentsToJson = [];
+    if ($equipments != null)
+        $equipmentsToJson = array_map(function ($data) {
+            return $data->jsonSerialize();
+        }, $equipments);
 
-    // Transformation des données sous format JSON.
-    $idcd = array_map(function ($data) {
-        return $data->jsonSerialize();
-    }, $contributors);
+    // Transformation des données LaboratoryCOntributor sous format JSON.
+    $contributorsToJson = [];
+    if ($contributors != null)
+        $contributorsToJson = array_map(function ($data) {
+            return $data->jsonSerialize();
+        }, $contributors);
+
+    // Transformation des données consummables.
+    $consummablesToJson = [];
+    if ($consumables != null)
+        $consummablesToJson = array_map(function ($data) {
+            return $data->jsonSerialize();
+        }, $consumables);
+
+    // Transformation des données consummables.
+    $investsToJson = [];
+    if ($invests != null)
+        $investsToJson = array_map(function ($data) {
+            return $data->jsonSerialize();
+        }, $invests);
 
     $lotnb = json_encode($number);
 
     // Envoi de données.
     echo json_encode([
+        // Récupération du laboratoire sélectionné.
         'laboratorySelected' => $model->laboratoryselected,
-        'equipments' => $ided,
-        'contributors' => $idcd,
+
+        'equipments' => $equipmentsToJson,
+        'contributors' => $contributorsToJson,
+        'consummables' => $consummablesToJson,
+        'invests' => $investsToJson,
+
         'number' => $lotnb,
-        'LaboxyTimeDay' =>  Yii::$app->params['LaboxyTimeDay']
     ]);
     ?>
 </div>
@@ -415,7 +457,7 @@ function displayInvestsPlus(array $invests, $form)
                         'widgetBody' => '.container-items-invtest', // required: css class selector
                         'widgetItem' => '.item-invtest', // required: css class
                         'limit' => 10, // the maximum times, an element can be cloned (default 999)
-                        'min' => 1, // 0 or 1 (default 1)
+                        'min' => 0, // 0 or 1 (default 1)
                         'insertButton' => '.add-item', // css class
                         'deleteButton' => '.remove-item', // css class
                         'model' => $invests[0],
@@ -424,6 +466,13 @@ function displayInvestsPlus(array $invests, $form)
                     ]); ?>
 
                     <div class="container-items-invtest">
+
+                        <div class="row">
+                            <div class="col s1 offset-s5">
+                                <button id="button-invests-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                            </div>
+                        </div>
+
                         <?php foreach ($invests as $i => $invtest) : ?>
                             <div class="item-invtest">
                                 <?php

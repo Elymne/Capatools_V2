@@ -2,6 +2,7 @@
 
 namespace app\models\projects;
 
+use JsonSerializable;
 use yii\db\ActiveRecord;
 
 /**
@@ -12,7 +13,7 @@ use yii\db\ActiveRecord;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class Consumable extends ActiveRecord
+class Consumable extends ActiveRecord implements JsonSerializable
 {
 
     public $total;
@@ -51,6 +52,7 @@ class Consumable extends ActiveRecord
     {
         return self::find()->where(['lot_id' => $lotID, 'type' => self::TYPE_SECONDARY_INVESTMENT])->all();
     }
+
     public static function  getAllExternalGroupByTitleBylotID(int $lotID)
     {
         return $res = self::find()
@@ -68,8 +70,23 @@ class Consumable extends ActiveRecord
             ->groupBy(['title'])
             ->all();
     }
+
     public function getLot()
     {
         return $this->hasOne(Lot::class, ['id' => 'lot_id']);
+    }
+
+    /**
+     * Fonction pour envoyer au format json les données de l'objet.
+     */
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'title' => $this->title,
+            'price' => $this->price,
+            'type' => $this->type,
+            'lot_id' => $this->lot_id
+        );
     }
 }

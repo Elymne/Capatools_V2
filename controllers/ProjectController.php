@@ -793,8 +793,6 @@ class ProjectController extends Controller implements ServiceInterface
             $tasksGestionsModif = [new ProjectCreateLotTaskForm()];
         }
 
-
-
         ///Récupération des tâches lots
         $tasksLotsModif = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
         if (!$tasksLotsModif) {
@@ -863,6 +861,7 @@ class ProjectController extends Controller implements ServiceInterface
                 }
             }
         }
+
         $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
         $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
 
@@ -884,12 +883,13 @@ class ProjectController extends Controller implements ServiceInterface
     /**
      * Route : update-dependencies-consumables
      * Permet de modifier les dépenses et les consommables d'un lot.
-     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * @param integer $project_id - id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * @param integer $number - numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * @param bool $sucess - paramètre qui sert à définir si la modification/création/suppression des devis s'est correctement passé.
      * 
      * @return mixed|error
      */
-    public function actionUpdateDependenciesConsumables($project_id, $number)
+    public function actionUpdateDependenciesConsumables($project_id, $number, $sucess = false)
     {
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
@@ -951,38 +951,30 @@ class ProjectController extends Controller implements ServiceInterface
             // Variable de vérification de validité des données lors du renvoi par méthode POST.
             $isValid = true;
 
-            // Vérification des consommables.
+            // Chargement des consommables, notons qu'on ne vérifie pas 
             $oldConsumablesIds = ArrayHelper::map($consumables, 'id', 'id');
             $consumables = Model::createMultiple(ProjectCreateConsumableForm::class, $consumables);
-            if (!Model::loadMultiple($consumables, Yii::$app->request->post())) {
-                $isValid = false;
-            }
+            Model::loadMultiple($consumables, Yii::$app->request->post());
             $deletedConsumablesIDs = array_diff($oldConsumablesIds, array_filter(ArrayHelper::map($consumables, 'id', 'id')));
 
             // Vérifications des investissements. On vérifie toujours qu'on est pas sur le laut 0.
             if ($number != 0) {
                 $oldInvestsIds = ArrayHelper::map($invests, 'id', 'id');
                 $invests = Model::createMultiple(ProjectCreateInvestForm::class, $invests);
-                if (!Model::loadMultiple($invests, Yii::$app->request->post())) {
-                    $isValid = false;
-                }
+                Model::loadMultiple($invests, Yii::$app->request->post());
                 $deletedInvestsIDs = array_diff($oldInvestsIds, array_filter(ArrayHelper::map($invests, 'id', 'id')));
             }
 
             // Vérification des équipements de laboratoire et de leur utilisation.
             $oldEquipmentsRepaymentIds = ArrayHelper::map($equipmentsRepayment, 'id', 'id');
             $equipmentsRepayment = Model::createMultiple(ProjectCreateEquipmentRepaymentForm::class, $equipmentsRepayment);
-            if (!Model::loadMultiple($equipmentsRepayment, Yii::$app->request->post())) {
-                $isValid = false;
-            }
+            Model::loadMultiple($equipmentsRepayment, Yii::$app->request->post());
             $deletedEquipmentsRepaymentIDs = array_diff($oldEquipmentsRepaymentIds, array_filter(ArrayHelper::map($equipmentsRepayment, 'id', 'id')));
 
             // Vérification des intervenants.
             $oldContributorsIds = ArrayHelper::map($contributors, 'id', 'id');
             $contributors = Model::createMultiple(ProjectCreateLaboratoryContributorForm::class, $contributors);
-            if (!Model::loadMultiple($contributors, Yii::$app->request->post())) {
-                $isValid = false;
-            }
+            Model::loadMultiple($contributors, Yii::$app->request->post());
             $deletedContributorsIDs = array_diff($oldContributorsIds, array_filter(ArrayHelper::map($contributors, 'id', 'id')));
 
             if ($isValid) {
@@ -1041,7 +1033,13 @@ class ProjectController extends Controller implements ServiceInterface
                     LaboratoryContributor::deleteAll(['id' => $deletedContributorsIDs]);
                 }
 
-                $SaveSucess = true;
+                // project_id, $number, $sucess = false
+                return $this->redirect([
+                    'update-dependencies-consumables',
+                    'project_id' => $project_id,
+                    'number' => $number,
+                    'sucess' => true
+                ]);
             }
         }
 
@@ -1061,7 +1059,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'invests' => $invests,
                 'equipments' => $equipmentsRepayment,
                 'contributors' => $contributors,
-                'SaveSucess' => $SaveSucess,
+                'SaveSucess' => $sucess,
             ]
         );
     }
