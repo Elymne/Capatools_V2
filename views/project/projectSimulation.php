@@ -205,7 +205,7 @@ if ($validdevis == false) {
 
                                 <div class="row">
                                     <div class="col s12">
-                                        <p class='lot-title blue-text control-label typeLabel top-spacing bottom-spacing'> <?= $lotproject->title ?> </p>
+                                        <p class='lot-title blue-text control-label typeLabel bottom-spacing'> <?= $lotproject->title ?> </p>
                                     </div>
                                 </div>
 
