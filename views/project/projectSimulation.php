@@ -160,7 +160,7 @@ if ($validdevis == false) {
                                         'action' => Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
                                         'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
                                         'data-position' => "bottom",
-                                        'data-tooltip' => "Modifier les tâches"
+                                        'title' => "Modifier les tâches"
                                     ]
                                 ); ?>
                             </div>
@@ -175,7 +175,7 @@ if ($validdevis == false) {
                                         'action' => Url::to(['project/update-dependencies-consumables', 'number' => 0, 'project_id' => $project->id]),
                                         'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
                                         'data-position' => "bottom",
-                                        'data-tooltip' => "Modifier les investissements, les consommables et le laboratoire"
+                                        'title' => "Modifier les investissements, les consommables et le laboratoire"
                                     ]
                                 ); ?>
                             </div>
@@ -252,7 +252,7 @@ if ($validdevis == false) {
                                                 'action' => Url::to(['project/update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
                                                 'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
                                                 'data-position' => "bottom",
-                                                'data-tooltip' => "Modifier les tâches"
+                                                'title' => "Modifier les tâches"
                                             ]
                                         ); ?>
                                     </div>
@@ -267,7 +267,7 @@ if ($validdevis == false) {
                                                 'action' => Url::to(['project/Update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
                                                 'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
                                                 'data-position' => "bottom",
-                                                'data-tooltip' => "Modifier les investissements, les consommables et le laboratoire"
+                                                'title' => "Modifier les investissements, les consommables et le laboratoire"
                                             ]
                                         ); ?>
                                     </div>
@@ -282,7 +282,7 @@ if ($validdevis == false) {
                                                 'action' => Url::to(['project/lot-simulate', 'number' => $lotproject->number, 'project_id' => $project->id]),
                                                 'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
                                                 'data-position' => "bottom",
-                                                'data-tooltip' => "Modifier les marges",
+                                                'title' => "Modifier les marges",
                                             ]
                                         ); ?>
                                     </div>
