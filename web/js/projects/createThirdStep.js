@@ -148,7 +148,7 @@ $(() => {
         }
     })
 
-    $(".dynamicform_wrapper_equipment").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer cette association d'équipement ?"))
+    $(".dynamicform_wrapper_equipment").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer cet équipement ?"))
 
     $(".dynamicform_wrapper_equipment").on("afterDelete", (e) => {
         nbEquipmentLineDuplicated--
