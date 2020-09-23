@@ -14,77 +14,49 @@ use yii\bootstrap\Alert;
 
 $this->title = 'Simulation du projet';
 
+$MargeAverage = $project->marginaverage;
+$totalcostavplot = ($lotavp->total *  ($project->marginaverage / 100 + 1)) / (count($lots) - 1);
+$totalprojet = 0.0;
+
 AppAsset::register($this);
 ProjectSimulationAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 
-<?php
 
-///Gère les bandeaux d'alerts
-if ($SaveSucess != null) {
-    if ($SaveSucess) {
-        echo Alert::widget([
-            'options' => [
-                'class' => 'alert-success',
-            ],
-            'body' => 'Enregistrement réussi ...',
-        ]);
-    } else {
-        echo Alert::widget([
-            'options' => [
-                'class' => 'alert-danger',
-            ],
-            'body' => 'Enregistrement échoué ...',
-        ]);
-    }
-}
 
-if ($tjmstatut == true) {
+<!-- Gère les bandeaux d'alerts -->
+<?php if ($SaveSucess != null) : ?>
+    <?php if ($SaveSucess) : ?>
+        <?= Alert::widget(['options' => ['class' => 'alert-success',], 'body' => 'Enregistrement réussi ...']) ?>
+    <?php else : ?>
+        <?= Alert::widget(['options' => ['class' => 'alert-danger',], 'body' => 'Enregistrement échoué ...',]) ?>
+    <?php endif; ?>
+<?php endif; ?>
 
-    echo Alert::widget([
-        'options' => [
-            'class' => 'alert-warning',
-        ],
-        'body' => 'Attention le taux journalier est inférieur à 700 €',
-    ]);
-}
+<?php if ($tjmstatut == true) : ?>
+    <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => 'Attention le taux journalier est inférieur à 700 €',]) ?>
+<?php endif; ?>
 
-if ($validdevis == false) {
 
-    foreach ($Resultcheck['lots'] as $lot) {
-        if ($lot['Result'] == false) {
-            if ($lot['number'] == 0) {
-                echo Alert::widget([
-                    'options' => [
-                        'class' => 'alert-danger',
-                    ],
-                    'body' => ' Il n\'y a pas de tâche présente dans le l\'avant projet',
-                ]);
-            } else {
-                echo Alert::widget([
-                    'options' => [
-                        'class' => 'alert-danger',
-                    ],
-                    'body' => ' Il n\'y a pas de tâche présente dans le lot ' . $lot['number'],
-                ]);
-            }
-        }
-    }
+<?php if ($validdevis == false) : ?>
 
-    if ($Resultcheck['millestone'] == false) {
+    <?php foreach ($Resultcheck['lots'] as $lot) : ?>
+        <?php if ($lot['Result'] == false) : ?>
+            <?php if ($lot['number'] == 0) : ?>
+                <?= Alert::widget(['options' => ['class' => 'alert-danger',], 'body' => ' Il n\'y a pas de tâche présente dans le l\'avant projet']) ?>
+            <?php else : ?>
+                <?= Alert::widget(['options' => ['class' => 'alert-danger',], 'body' => ' Il n\'y a pas de tâche présente dans le lot ' . $lot['number'],]); ?>
+            <?php endif ?>
+        <?php endif ?>
+    <?php endforeach; ?>
 
-        echo Alert::widget([
-            'options' => [
-                'class' => 'alert-danger',
-            ],
-            'body' => ' La somme des jalons ne correspond pas au prix de vente',
-        ]);
-    }
-}
+    <?php if ($Resultcheck['millestone'] == false) : ?>
+        <?= Alert::widget(['options' => ['class' => 'alert-danger',], 'body' => ' La somme des jalons ne correspond pas au prix de vente',]); ?>
+    <?php endif; ?>
 
-?>
+<?php endif; ?>
 
 <div class="container">
     <div class="project-create">
@@ -101,55 +73,43 @@ if ($validdevis == false) {
 
                     <div class="card-action">
 
+                        <table class="highlight">
+                            <tbody>
+                                <tr>
+                                    <td width="30%" class="table-font-bold">Total coût temps homme :</td>
+                                    <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostHuman) ?></td>
+                                    <td width="30%" class="table-font-bold"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="table-font-bold">Total des dépenses et des investissement :</td>
+                                    <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostInvest) ?></td>
+                                    <td width="30%" class="table-font-bold"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="table-font-bold">Total des reversements laboratoires :</td>
+                                    <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostRepayement) ?></td>
+                                    <td width="30%" class="table-font-bold"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="table-font-bold">Total de l'avant projet (non margé):</td>
+                                    <td><?= Yii::$app->formatter->asCurrency($lotavp->total) ?></td>
+                                    <td width="30%" class="table-font-bold">Somme ajoutée par lot (margé avec le Taux moyen):</td>
+                                    <td><?= Yii::$app->formatter->asCurrency($project->additionallotprice) ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                         <div class="row top-spacing">
-                            <div class="col s3 label-field">
-                                Total coût temps homme :
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($lotavp, "totalCostHuman", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lotavp->totalCostHuman)]])->label(false) ?>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col s3 label-field">
-                                Total des dépenses et des investissements :
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($lotavp, "totalCostInvest", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lotavp->totalCostInvest)]])->label(false) ?>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col s3 label-field">
-                                Total des reversements laboratoires :
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($lotavp, "totalCostRepayement", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lotavp->totalCostRepayement)]])->label(false) ?>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col s3 label-field">
-                                Total de l'avant projet (non margé):
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($lotavp, "total", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lotavp->total)]])->label(false) ?>
-                            </div>
-                            <div class="col s4 label-field">
-                                Somme ajoutée par lot (margé avec le Taux moyen):
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "additionallotprice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->additionallotprice)]])->label(false) ?>
-                            </div>
-                        </div>
-
-                        <div>
-                            <?php if ($Resultcheck['lots'][0]['Result'] == false) {
-                                echo '<label class=\'red-text control-label typeLabel\'> Il n\'y a pas de tâche présente dans le l\'avant projet</label>';
-                            } ?>
+                            <?php if ($Resultcheck['lots'][0]['Result'] == false) : ?>
+                                <label class="red-text control-label typeLabel"> Il n'y a pas de tâche présente dans l'avant projet</label>
+                            <?php endif; ?>
                         </div>
 
                         <div class="row bottom-spacing">
+
                             <div class="col s1">
                                 <?= Html::a(
                                     '<i class="material-icons center">create</i>',
@@ -180,9 +140,7 @@ if ($validdevis == false) {
                                 ); ?>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
 
                 <!-- Card view basique -->
@@ -192,15 +150,8 @@ if ($validdevis == false) {
                         <label>Résumé du projet</label>
                     </div>
 
-                    <?php
-                    $MargeAverage = $project->marginaverage;
-                    $totalcostavplot = ($lotavp->total *  ($project->marginaverage / 100 + 1)) / (count($lots) - 1);
-                    $totalprojet = 0.0
-                    ?>
-
-                    <?php foreach ($lots as $lotproject) {
-                        if ($lotproject->number != 0) {
-                    ?>
+                    <?php foreach ($lots as $lotproject) : ?>
+                        <?php if ($lotproject->number != 0) : ?>
                             <div class="card-action">
 
                                 <div class="row">
@@ -209,38 +160,30 @@ if ($validdevis == false) {
                                     </div>
                                 </div>
 
+                                <table class="highlight">
+                                    <tbody>
+                                        <tr>
+                                            <td width="30%" class="table-font-bold">Prix du total lot sans avp:</td>
+                                            <td><?= Yii::$app->formatter->asCurrency($lotproject->totalwithmargin) ?></td>
+                                            <td width="30%" class="table-font-bold">Prix du total lot avec avp :</td>
+                                            <td><?= Yii::$app->formatter->asCurrency($lotproject->totalwithmargin + $project->additionallotprice) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%" class="table-font-bold">Prix du total lot avec avp et support :</td>
+                                            <td><?= Yii::$app->formatter->asCurrency(round(($lotproject->totalwithmargin + $project->additionallotprice) / (1 - $project->management_rate / 100), -2)) ?></td>
+                                            <td width="30%" class="table-font-bold"></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="row top-spacing">
+                                    <?php if ($Resultcheck['lots'][$lotproject->number]['Result'] == false) : ?>
+                                        <label class="red-text control-label typeLabel"> Il n'y a pas de tâche présente dans le l'avant projet</label>
+                                    <?php endif; ?>
+                                </div>
+
                                 <div class="row">
-
-                                    <div class="col s3 label-field">
-                                        <b>Prix du total lot sans avp:</b>
-                                    </div>
-                                    <div class="col s3">
-                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency($lotproject->totalwithmargin), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
-                                    </div>
-
-                                    <div class="col s3 label-field">
-                                        <b>Prix du total lot avec avp :</b>
-                                    </div>
-                                    <div class="col s3">
-                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency($lotproject->totalwithmargin + $project->additionallotprice), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
-                                    </div>
-
-                                    <div class="col s3 label-field">
-                                        <b>Prix du total lot avec avp et support :</b>
-                                    </div>
-                                    <div class="col s3">
-                                        <?= Html::input('text', '', Yii::$app->formatter->asCurrency(round(($lotproject->totalwithmargin + $project->additionallotprice) / (1 - $project->management_rate / 100), -2)), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
-                                    </div>
-
-                                </div>
-
-                                <div>
-                                    <?php if ($Resultcheck['lots'][$lotproject->number]['Result'] == false) {
-                                        echo '<label class=\'red-text control-label typeLabel\'> Il n\'y a pas de tâche présente dans le l\'avant projet</label>';
-                                    } ?>
-                                </div>
-
-                                <div class="row top-spacing bottom-spacing">
 
                                     <div class="col s1">
                                         <?= Html::a(
@@ -290,9 +233,8 @@ if ($validdevis == false) {
                                 </div>
 
                             </div>
-                    <?php
-                        }
-                    } ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
 
                 </div>
 
@@ -305,102 +247,84 @@ if ($validdevis == false) {
 
                     <div class="card-action">
 
-                        <div class="row top-spacing">
+                        <?php if ($tjmstatut) : ?>
+                            <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => 'Attention le taux journalier est inférieur à 700 €',]) ?>
+                        <?php endif; ?>
 
-                            <div class="col s3 label-field">
-                                Montant Total HT :
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "total", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->total)]])->label(false) ?>
-                            </div>
+                        <table class="highlight">
+                            <tbody>
+                                <tr>
+                                    <td width="30%" class="table-font-bold">Montant Total HT :</td>
+                                    <td><?= Yii::$app->formatter->asCurrency($project->total) ?></td>
+                                    <td width="30%" class="table-font-bold">Taux journalier homme sans risque:</td>
+                                    <td><?= Yii::$app->formatter->asCurrency($project->Tjm) ?></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="table-font-bold">Taux de marge moyen avant frais de gestion:</td>
+                                    <td><?= Yii::$app->formatter->asPercent($project->marginaverage / 100, 2) ?></td>
+                                    <td width="30%" class="table-font-bold">Taux journalier homme avec risque:</td>
+                                    <td><?= Yii::$app->formatter->asCurrency($project->tjmWithRisk) ?></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="table-font-bold">Frais de gestion du support HT:</td>
+                                    <td><?= Yii::$app->formatter->asCurrency($project->supportprice) ?></td>
+                                    <td width="30%" class="table-font-bold"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="table-font-bold">Taux de marge moyen avant frais de gestion:</td>
+                                    <td><?= Yii::$app->formatter->asPercent($project->marginaverage / 100, 2) ?></td>
+                                    <td width="30%" class="table-font-bold"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" class="table-font-bold">Prix de vente du projet HT (€ arrondis):</td>
+                                    <td id="projectsimulate-sellingprice"><?= Yii::$app->formatter->asCurrency($project->SellingPrice) ?></td>
+                                    <td width="30%" class="table-font-bold"></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                            <div class="col s3 label-field">
-                                Taux journalier homme sans risque:
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "tjm", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->Tjm)]])->label(false) ?>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col s3 label-field">
-                                Taux de marge moyen avant frais de gestion:
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "marginaverage", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asPercent($project->marginaverage / 100, 2)]])->label(false) ?>
-                            </div>
-
-                            <div class="col s3 label-field">
-                                Taux journalier homme avec risque:
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "tjmWithRisk", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->tjmWithRisk)]])->label(false) ?>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col s3 label-field">
-                                Frais de gestion du support HT:
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "supportprice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->supportprice)]])->label(false)  ?>
-                            </div>
-
-                            <div class="col s5 label-field">
-                                <?php if ($tjmstatut) { ?>
-                                    <label class='orange-text control-label typeLabel'> Attention le taux journalier est inférieur à 700 €</label>
-                                <?php  } ?>
-                            </div>
-
-                        </div>
-
-                        <div class="row bottom-spacing">
-
-                            <div class="col s3 label-field">
-                                Prix de vente du projet HT (€ arrondis):
-                            </div>
-                            <div class="col s2">
-                                <?= $form->field($project, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($project->SellingPrice)]])->label(false) ?>
-                            </div>
-
-                            <div class="col s3 label-field">
-                                <?php if ($tjmstatut) { ?>
-                                    Raison:
-                                <?php  } ?>
-                            </div>
-                            <div class="col s2">
-                                <?php
-                                if ($tjmstatut) {
-                                    echo $form->field($project, "low_tjm_raison")->widget(
-                                        Select2::class,
-                                        [
-                                            'theme' => Select2::THEME_MATERIAL,
-                                            'data' => Project::TJMRAISON,
-                                            'name' => 'GestionRisk',
-                                            'pluginLoading' => false,
-                                            'options' => [
-                                                'placeholder' => 'Raison...',
-                                            ],
-                                        ]
-                                    )->label(false);
-                                } else {
-                                    echo  $form->field($project, "low_tjm_raison")->hiddeninput(['value' => $project::TJMRAISON_TJMOK])->label('');
-                                } ?>
-                            </div>
-
-                        </div>
-
-                        <div class="row bottom-spacing">
-                            <div class="col s5 label-field">
-                                <!-- Nothing for now -->
-                            </div>
-                            <div class="col s5">
-                                <?= $form->field($project, "low_tjm_description")->label('Décrivez la raison', ['id' => 'low_tjm_description-label']) ?>
-                            </div>
-                        </div>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td width="10%" class="table-font-bold">
+                                        <?php if ($tjmstatut) : ?>
+                                            Raison:
+                                        <?php endif; ?>
+                                    </td>
+                                    <td width="20%">
+                                        <?php if ($tjmstatut) : ?>
+                                            <?=
+                                                $form->field($project, "low_tjm_raison")->widget(
+                                                    Select2::class,
+                                                    [
+                                                        'theme' => Select2::THEME_MATERIAL,
+                                                        'data' => Project::TJMRAISON,
+                                                        'name' => 'GestionRisk',
+                                                        'pluginLoading' => false,
+                                                        'options' => ['placeholder' => 'Raison...'],
+                                                    ]
+                                                )->label('')
+                                            ?>
+                                        <?php else : ?>
+                                            <?= $form->field($project, "low_tjm_raison")->hiddeninput(['value' => $project::TJMRAISON_TJMOK])->label(''); ?>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td width="20%" class="table-font-bold left-scpacing-32px">
+                                        <?php if ($tjmstatut) : ?>
+                                            <div id="low_tjm_description-label">Décrivez la raison :</div>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($tjmstatut) : ?>
+                                            <div id="projectsimulate-low_tjm_description"><?= $form->field($project, "low_tjm_description")->label('', ['id' => 'low_tjm_description-label']) ?></div>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
                     </div>
                 </div>
@@ -415,74 +339,71 @@ if ($validdevis == false) {
                     <div class="card-action">
 
                         <div class="row bottom-spacing">
-                            <div class="col s5">
-                                <label class='blue-text control-label typeLabel'> Reversement Laboratoire :</label>
+                            <div class="col s12">
+                                <label class='blue-text control-label typeLabel'>Reversement Laboratoire</label>
                             </div>
                         </div>
 
-                        <?php
-                        foreach ($laboratorydepenses as $depense) { ?> <div class="row">
-                                <div class="col s4 label-field">
+                        <table class="highlight">
+                            <tbody>
+                                <?php foreach ($laboratorydepenses as $depense) : ?>
+                                    <tr>
+                                        <td width="40%" class="table-font-bold"><?= $laboratorylistArray[$depense['labo_id']] ?></td>
+                                        <td><?= Yii::$app->formatter->asCurrency($depense['total']) ?></td>
+                                        <td width="30%" class="table-font-bold"></td>
+                                        <td></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
 
-                                    <?= $laboratorylistArray[$depense['labo_id']] . ':' ?>
-                                </div>
-                                <div class="col s2">
-                                    <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
-                                </div>
+                    </div>
 
+                    <div class="card-action">
+
+                        <div class="row">
+                            <div class="col s12">
+                                <label class='blue-text control-label typeLabel'>Prestation interne</label>
                             </div>
-                        <?php } ?>
+                        </div>
+
+                        <table class="highlight">
+                            <tbody>
+                                <?php foreach ($listInternalDepense as $depense) : ?>
+                                    <tr>
+                                        <td width="40%" class="table-font-bold"><?= $depense['title'] ?></td>
+                                        <td><?= Yii::$app->formatter->asCurrency($depense['total']) ?></td>
+                                        <td width="30%" class="table-font-bold"></td>
+                                        <td></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
 
                     </div>
                     <div class="card-action">
 
-                        <div class="row bottom-spacing">
-                            <div class="col s3 label-field">
-                                <label class='blue-text control-label typeLabel'> Prestation interne :</label>
+                        <div class="row">
+                            <div class="col s12">
+                                <label class='blue-text control-label typeLabel'>Sous traitance externe</label>
                             </div>
                         </div>
 
-                        <?php
-                        foreach ($listInternalDepense as $depense) { ?>
-                            <div class="row">
-                                <div class="col s3 label-field">
+                        <table class="highlight">
+                            <tbody>
+                                <?php foreach ($listExternalDepense as $depense) : ?>
+                                    <tr>
+                                        <td width="40%" class="table-font-bold"><?= $depense['title'] ?></td>
+                                        <td><?= Yii::$app->formatter->asCurrency($depense['total']) ?></td>
+                                        <td width="30%" class="table-font-bold"></td>
+                                        <td></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
 
-                                    <?= $depense['title'] . ':' ?>
-                                </div>
-                                <div class="col s2">
-                                    <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
-                                </div>
-
-                            </div>
-                        <?php } ?>
-
-                    </div>
-                    <div class="card-action">
-
-                        <div class="row bottom-spacing">
-                            <div class="col s3">
-                                <label class='blue-text control-label typeLabel'> Sous traitance externe :</label>
-                            </div>
-                        </div>
-
-
-                        <?php
-                        foreach ($listExternalDepense as $depense) { ?>
-                            <div class="row">
-                                <div class="col s3 label-field">
-
-                                    <?= $depense['title'] . ':' ?>
-                                </div>
-                                <div class="col s2">
-                                    <?= Html::input('text', '', Yii::$app->formatter->asCurrency($depense['total']), $options = ['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => 'currency']) ?>
-                                </div>
-
-                            </div>
-                        <?php } ?>
                     </div>
                 </div>
-
-
 
                 <div class="card">
 
@@ -594,9 +515,13 @@ if ($validdevis == false) {
 
                 </div>
 
-
             </div>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
+</div>
+
+<!-- Utilisation : envoi de données concernant le prix total de vente HT-->
+<div id="price-data-target" style="display: none;">
+    <?php echo json_encode(Yii::$app->formatter->asCurrency($project->SellingPrice)) ?>
 </div>

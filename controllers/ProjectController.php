@@ -559,9 +559,9 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionProjectSimulate($project_id = 1)
+    public function actionProjectSimulate($project_id = 1, $sucess = false)
     {
-        $SaveSucess = null;
+
         // Modèle du projet à updater. On s'en sert pour récupérer son id.
         $project = ProjectSimulate::getOneById($project_id);
         if ($project == null) {
@@ -577,22 +577,16 @@ class ProjectController extends Controller implements ServiceInterface
         $lots = $project->lots;
         $millestones = $project->millestones;
 
-
-
         // Modèles à sauvegarder.
-
         if ($project->load(Yii::$app->request->post())) {
             $project->save();
         }
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
 
-        $SaveSucess = false;
         $millestonesModif  = ProjectCreateMilleStoneForm::getAllByProject($project->id);
         if (!$millestonesModif) {
             $millestonesModif = [new ProjectCreateMilleStoneForm];
         }
-
-
 
         $isValid = true;
 
@@ -725,7 +719,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'listExternalDepense' => $listExternalDepense,
                 'listInternalDepense' => $listInternalDepense,
                 'Resultcheck' => $Resultcheck,
-                'SaveSucess' => $SaveSucess,
+                'SaveSucess' => $sucess,
 
             ]
 
@@ -896,7 +890,8 @@ class ProjectController extends Controller implements ServiceInterface
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
         $model = new ProjectCreateThirdStepForm();
         $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
-        $SaveSucess = null;
+
+        // Error checker.
         if ($lot == null) {
             return $this->redirect([
                 'error',
