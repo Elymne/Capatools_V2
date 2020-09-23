@@ -559,7 +559,7 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionProjectSimulate($project_id = 1, $sucess = false)
+    public function actionProjectSimulate($project_id = 1, $sucess = null)
     {
 
         // Modèle du projet à updater. On s'en sert pour récupérer son id.
@@ -884,7 +884,7 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionUpdateDependenciesConsumables($project_id, $number, $sucess = false)
+    public function actionUpdateDependenciesConsumables($project_id, $number, $sucess = null)
     {
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
@@ -1055,7 +1055,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'invests' => $invests,
                 'equipments' => $equipmentsRepayment,
                 'contributors' => $contributors,
-                'SaveSucess' => $sucess,
+                'sucess' => $sucess,
             ]
         );
     }
