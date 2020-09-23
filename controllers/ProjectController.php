@@ -580,12 +580,6 @@ class ProjectController extends Controller implements ServiceInterface
         // Modèles à sauvegarder.
         if ($project->load(Yii::$app->request->post())) {
             $project->save();
-
-            return $this->redirect([
-                'project-simulate',
-                'project_id' => $project_id,
-                'sucess' => true
-            ]);
         }
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
 
@@ -896,7 +890,8 @@ class ProjectController extends Controller implements ServiceInterface
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
         $model = new ProjectCreateThirdStepForm();
         $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
-        $SaveSucess = null;
+
+        // Error checker.
         if ($lot == null) {
             return $this->redirect([
                 'error',

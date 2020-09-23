@@ -1,11 +1,5 @@
-let SelectTOtalPrice = "#projectsimulate-sellingprice"
-//let = $(SelectTOtalPrice).val();
-let TotalPrice = Number(
-    $(SelectTOtalPrice)
-        .val()
-        .replace(",", ".")
-        .replace(/[^0-9.-]+/g, ""),
-)
+const totalPriceJson = JSON.parse(document.getElementById("price-data-target").textContent)
+const totalPrice = Number(totalPriceJson.replace(",", ".").replace(/[^0-9.-]+/g, ""))
 
 Initialise()
 
@@ -41,7 +35,7 @@ function updateprice(id) {
             .replace(/[^0-9.-]+/g, ""),
     )
     let SelectPrice = "#projectcreatemillestoneform-" + id + "-priceeuros"
-    let price = ((TotalPrice * pourcent) / 100).toFixed(2)
+    let price = ((totalPrice * pourcent) / 100).toFixed(2)
     if (isNaN(price)) {
         price = 0
     }
@@ -67,7 +61,7 @@ function updatepourcent(id) {
     )
 
     let SelectMillePourcent = "#projectcreatemillestoneform-" + id + "-pourcentage"
-    let pourcent = ((price / TotalPrice) * 100).toFixed(2)
+    let pourcent = ((price / totalPrice) * 100).toFixed(2)
     if (isNaN(pourcent)) {
         pourcent = 0
     }
@@ -154,11 +148,9 @@ $(() => {
      * On init, select the default display of field low_jtm_raison.
      */
     if ($("#projectsimulate-low_tjm_raison option:selected").val() == "Autre") {
-        console.log("show")
         $(description).show()
         $(description_label).show()
     } else {
-        console.log("hide")
         $(description).hide()
         $(description_label).hide()
     }

@@ -520,3 +520,8 @@ ProjectSimulationAsset::register($this);
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+
+<!-- Utilisation : envoi de données concernant le prix total de vente HT-->
+<div id="price-data-target" style="display: none;">
+    <?php echo json_encode(Yii::$app->formatter->asCurrency($project->SellingPrice)) ?>
+</div>
