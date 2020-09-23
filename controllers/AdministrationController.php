@@ -21,6 +21,7 @@ use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentCreateForm;
 use app\models\laboratories\Laboratory;
 use app\models\laboratories\LaboratoryCreateForm;
+use app\services\menuServices\LeftMenuCreator;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -131,98 +132,27 @@ class AdministrationController extends Controller
      */
     public static function getActionUser()
     {
-        $result = [];
+        $subMenu = new LeftMenuCreator(1, "Administration", SubMenuEnum::ADMIN, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::HUMAN_RESSOURCES
+        ]);
 
-        if (UserRoleManager::hasRoles([
-            UserRoleEnum::ADMIN,
-            UserRoleEnum::SUPER_ADMIN,
-            UserRoleEnum::HUMAN_RESSOURCES
-        ])) {
-            $result =
-                [
-                    'priorite' => 1,
-                    'name' => 'Administration',
-                    'serviceMenuActive' => SubMenuEnum::ADMIN,
-                    'items' => self::getSubActionUser()
-                ];
-        }
+        $subMenu->addSubMenu(4, "administration/index", "Salariés", SubMenuEnum::ADMIN_LIST_USER, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::HUMAN_RESSOURCES
+        ]);
 
-        return $result;
-    }
+        $subMenu->addSubMenu(3, "administration/view-devis-parameters", "Paramètres des devis", SubMenuEnum::ADMIN_UPDATE_DEVIS_PARAMETERS, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-    /**
-     * Utilisé dans la fonction getActionUser.
-     * Retourne tous les sous-menus.
-     * On utilise cette fonction pour permettre de filtrer les sous-menus visible selon les droits de l'utilisateur connecté.
-     * 
-     * @return Array Un tableau de données relatif aux sous-menus.
-     */
-    private static function getSubActionUser(): array
-    {
-        $result = [];
+        $subMenu->addSubMenu(2, "administration/index-equipment", "Liste des matériels", SubMenuEnum::ADMIN_LIST_EQUIPMENTS, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::ADMIN,
-                UserRoleEnum::SUPER_ADMIN,
-                UserRoleEnum::HUMAN_RESSOURCES
-            ])
-        ) {
-            array_push($result, [
-                'priorite' => 2,
-                'url' => 'administration/index',
-                'label' => 'Salariés',
-                'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_USER
-            ]);
-        }
+        $subMenu->addSubMenu(1, "administration/index-laboratory", "Liste des laboratoires", SubMenuEnum::ADMIN_LIST_LABORATORIES, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::ADMIN,
-                UserRoleEnum::SUPER_ADMIN
-            ])
-        ) {
-            array_push($result, [
-                'priorite' => 1,
-                'url' => 'administration/view-devis-parameters',
-                'label' => 'Paramètres des devis',
-                'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::ADMIN_UPDATE_DEVIS_PARAMETERS
-            ]);
-        }
-
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::ADMIN,
-                UserRoleEnum::SUPER_ADMIN
-            ])
-        ) {
-            array_push($result, [
-                'priorite' => 1,
-                'url' => 'administration/index-equipment',
-                'label' => 'Liste des matériels',
-                'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_EQUIPMENTS
-            ]);
-        }
-
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::ADMIN,
-                UserRoleEnum::SUPER_ADMIN
-            ])
-        ) {
-            array_push($result, [
-                'priorite' => 1,
-                'url' => 'administration/index-laboratory',
-                'label' => 'Liste des laboratoires',
-                'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_LABORATORIES
-            ]);
-        }
-
-        return $result;
+        return $subMenu->getSubMenuCreated();
     }
 
     /**
