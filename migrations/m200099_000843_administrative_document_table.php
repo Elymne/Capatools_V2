@@ -7,10 +7,10 @@ class m200099_000843_administrative_document_table extends Migration
 
     public function safeUp()
     {
-        $this->createTable('{{%administrative_document_table}}', [
+        $this->createTable('{{%administrative_document}}', [
             'id' => $this->string(),
-            'title' => $this->integer()->notNull(),
-            'internal_link' => $this->integer()->notNull(),
+            'title' => $this->string()->notNull(),
+            'internal_link' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
             'last_update_date' => $this->string(),
 
@@ -20,6 +20,6 @@ class m200099_000843_administrative_document_table extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('{{%administrative_document_table}}');
+        $this->dropTable('{{%administrative_document}}');
     }
 }

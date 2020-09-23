@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models\adminstrativeDocuments;
+namespace app\models\administrativeDocuments;
 
 
 use yii\db\ActiveRecord;
@@ -15,7 +15,7 @@ use yii\db\ActiveRecord;
  * @version Capatools v2.0
  * @since Classe existante depuis la Release v2.0
  */
-class AdminstrativeDocument extends ActiveRecord
+class AdministrativeDocument extends ActiveRecord
 {
 
     /**
@@ -23,7 +23,7 @@ class AdminstrativeDocument extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'adminstrative_document';
+        return 'administrative_document';
     }
 
     public function getOneById(int $id)

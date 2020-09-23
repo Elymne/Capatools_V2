@@ -1,16 +1,17 @@
 <?php
 
-use app\assets\administration\LaboratoryIndexAsset;
+use app\assets\administration\DocumentIndexAsset;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\Url;
 
 
-$this->title = 'Liste des laboratoires';
+$this->title = 'Liste des documents administratifs';
 $this->params['breadcrumbs'][] = $this->title;
 
-LaboratoryIndexAsset::register($this);
+DocumentIndexAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -48,7 +49,7 @@ LaboratoryIndexAsset::register($this);
         </div>
 
         <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
-            <a href="/administration/create-docuement" class="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow">
+            <a href="/administration/create-document" class="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow">
                 <i class="material-icons">add</i>
             </a>
         </div>
@@ -86,7 +87,8 @@ function getCollumnArray(): array
     array_push($result, getTypeArray());
     array_push($result, getLastUpdateArray());
 
-    array_push($result, getLaboratoryNameArray());
+    array_push($result, getUpdateButtonArray());
+    array_push($result, getDeleteButtonArray());
 
     return $result;
 }
@@ -108,10 +110,60 @@ function getTypeArray(): array
         'label' => 'Type du document',
         'encodeLabel' => false,
         'format' => 'ntext',
-        'attribute' => 'price_contributor_day',
-        'contentOptions' => ['class' => 'price_day-row'],
+        'attribute' => 'type',
+        'contentOptions' => ['class' => 'type-row'],
     ];
 }
 
+function getLastUpdateArray(): array
+{
+    return [
+        'label' => 'Date de mise à jour',
+        'encodeLabel' => false,
+        'format' => 'ntext',
+        'attribute' => 'last_update_date',
+        'contentOptions' => ['class' => 'price_day-row'],
+    ];
+}
+function getUpdateButtonArray()
+{
+    return [
+        'format' => 'raw',
+        'label' => 'Edit',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons right">build</i>',
+                Url::to(['project-simulate', 'project_id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'action' => Url::to(['project-simulate', 'project_id' => $model->id]),
+                    'class' => 'btn-floating waves-effect waves-light btn-green',
+                    'title' => "Modifier le docuement"
+                ]
+            );
+        }
+    ];
+}
 
-?>
+function getDeleteButtonArray()
+{
+    return [
+        'format' => 'raw',
+        'label' => 'suppression',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons center">delete</i>',
+                Url::to(['project/view', 'id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'target' => '_blank',
+                    'action' => Url::to(['administration/delete', 'id' => $model->id]),
+                    'class' => 'btn-floating waves-effect waves-light btn-red',
+                    'title' => "Supprimer "
+                ]
+            );
+        }
+    ];
+}

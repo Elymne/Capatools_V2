@@ -21,7 +21,7 @@ use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentCreateForm;
 use app\models\laboratories\Laboratory;
 use app\models\laboratories\LaboratoryCreateForm;
-use app\models\adminstrativeDocuments\AdminstrativeDocument;
+use app\models\administrativeDocuments\AdministrativeDocument;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -533,7 +533,7 @@ class AdministrationController extends Controller
     {
 
         $dataProvider = new ActiveDataProvider([
-            'query' => AdminstrativeDocument::getAllDataProvider(),
+            'query' => AdministrativeDocument::getAllDataProvider(),
             'pagination' => [
                 'pageSize' => -1,
             ],
