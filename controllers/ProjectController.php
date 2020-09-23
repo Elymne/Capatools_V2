@@ -51,6 +51,7 @@ use app\services\userRoleAccessServices\UserRoleManager;
 use app\services\helpers\TimeStringifyHelper;
 use app\services\menuServices\LeftMenuCreator;
 use kartik\mpdf\Pdf;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 #endregion
 
@@ -202,7 +203,7 @@ class ProjectController extends Controller implements ServiceInterface
 
         $subMenu->addSubMenu(2, "project/index", "Liste des projets",  SubMenuEnum::PROJECT_LIST, []);
 
-        $subMenu->addSubMenu(1, "project/index", "Liste des jalons", SubMenuEnum::PROJECT_LIST, [
+        $subMenu->addSubMenu(1, "project/index-milestones", "Liste des jalons", SubMenuEnum::PROJECT_MILESTONES, [
             UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT
         ]);
 
@@ -390,6 +391,29 @@ class ProjectController extends Controller implements ServiceInterface
 
         MenuSelectorHelper::setMenuProjectNone();
         return $pdf->render();
+    }
+
+    /**
+     * Render view : projet/index-milestones
+     * Route qui retourne une vue html composé de la liste des jalons en cours (et peut-être plus).
+     * 
+     * @return mixed
+     */
+    public function actionIndexMilestones()
+    {
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => Millestone::find(),
+            'pagination' => [
+                'pageSize' => -1,
+            ],
+        ]);
+
+        MenuSelectorHelper::setMenuCompanyIndex();
+        return $this->render(
+            'indexMilestones',
+            ['dataProvider' =>  $dataProvider]
+        );
     }
 
     // /!\ CREATION DE DEVIS-PROJET /!\

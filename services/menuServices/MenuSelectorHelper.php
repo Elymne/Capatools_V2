@@ -116,6 +116,17 @@ class MenuSelectorHelper
 
     /**
      * Description :
+     * - Déroule le menu Devis.
+     * - Le sub-menu de la création d'un devis.
+     */
+    static function setMenuProjectMilestones()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::PROJECT_MILESTONES;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::PROJECT;
+    }
+
+    /**
+     * Description :
      * - Déroule le menu Company.
      * - Aucun sub menu d'actif.
      */

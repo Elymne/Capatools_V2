@@ -35,6 +35,7 @@ class SubMenuEnum
     const PROJECT_CREATE = 'PROJECT_CREATE';
     const PROJECT_LIST = 'PROJECT_LIST';
     const PROJECT_DRAFT = 'PROJECT_DRAFT';
+    const PROJECT_MILESTONES = 'PROJECT_MILESTONES';
 
     /**
      * Company menu.
