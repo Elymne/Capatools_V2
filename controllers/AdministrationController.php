@@ -21,6 +21,7 @@ use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentCreateForm;
 use app\models\laboratories\Laboratory;
 use app\models\laboratories\LaboratoryCreateForm;
+use app\models\adminstrativeDocuments\AdminstrativeDocument;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -221,6 +222,14 @@ class AdministrationController extends Controller
                 'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_LABORATORIES
             ]);
         }
+
+        array_push($result, [
+            'priorite' => 2,
+            'url' => 'administration/index-document',
+            'label' => 'Documents administratifs',
+            'icon' => 'library_books',
+            'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_DOCUMENTS
+        ]);
 
         return $result;
     }
@@ -512,6 +521,46 @@ class AdministrationController extends Controller
             'cellulesName' => $cellulesName
         ]);
     }
+
+
+    /**
+     * Render view : administration/view-Documents.
+     * Cette méthode est utilisé pour retourner une vue affichant tous les documents.
+     * 
+     * @return mixed
+     */
+    public function actionIndexDocument()
+    {
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => AdminstrativeDocument::getAllDataProvider(),
+            'pagination' => [
+                'pageSize' => -1,
+            ],
+        ]);
+
+        MenuSelectorHelper::setMenuDocuments();
+        return $this->render(
+            'indexdocument',
+            [
+                'dataProvider' => $dataProvider
+            ]
+        );
+    }
+
+    /**
+     * Render view : administration/create-document.
+     * Cette méthode est utilisé pour retourner une vue permettant d'ajouter un document adminstratif'.
+     * 
+     * @return mixed
+     */
+    public function actionCreateDocument()
+    {
+    }
+
+
+
+
 
     /**
      * Méthode générale pour le contrôleur permettant de retourner un utilisateur.

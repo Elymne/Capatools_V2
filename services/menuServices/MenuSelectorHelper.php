@@ -72,6 +72,16 @@ class MenuSelectorHelper
 
     /**
      * Description :
+     * - Déroule le menu Administration.
+     * - Le sub-menu de la liste des docuements.
+     */
+    static function setMenuDocuments()
+    {
+        Yii::$app->params['subServiceMenuActive'] = SubMenuEnum::ADMIN_LIST_DOCUMENTS;
+        Yii::$app->params['serviceMenuActive'] = SubMenuEnum::ADMIN;
+    }
+    /**
+     * Description :
      * - Déroule le menu Devis.
      * - Aucuns sub-menu n'est actif.
      */
