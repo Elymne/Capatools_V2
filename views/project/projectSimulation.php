@@ -112,7 +112,7 @@ if ($validdevis == false) {
 
                         <div class="row">
                             <div class="col s3 label-field">
-                                Total des dépenses et investissement :
+                                Total des dépenses et des investissements :
                             </div>
                             <div class="col s2">
                                 <?= $form->field($lotavp, "totalCostInvest", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lotavp->totalCostInvest)]])->label(false) ?>
@@ -267,7 +267,7 @@ if ($validdevis == false) {
                                                 'action' => Url::to(['project/Update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
                                                 'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
                                                 'data-position' => "bottom",
-                                                'title' => "Modifier les investissements, les consommables et le laboratoire"
+                                                'title' => "Modifier investissements/consommables/reversements laboratoires"
                                             ]
                                         ); ?>
                                     </div>
@@ -282,7 +282,7 @@ if ($validdevis == false) {
                                                 'action' => Url::to(['project/lot-simulate', 'number' => $lotproject->number, 'project_id' => $project->id]),
                                                 'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
                                                 'data-position' => "bottom",
-                                                'title' => "Modifier les marges",
+                                                'title' => "Calcul marges et prix de vente client",
                                             ]
                                         ); ?>
                                     </div>
@@ -487,7 +487,7 @@ if ($validdevis == false) {
                 <div class="card">
 
                     <div class="card-content">
-                        <label>Facturation</label>
+                        <label>Echéancier prévisionnel</label>
                     </div>
 
                     <div class="card-action">
