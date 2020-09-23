@@ -49,6 +49,7 @@ use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\services\helpers\TimeStringifyHelper;
+use app\services\menuServices\LeftMenuCreator;
 use kartik\mpdf\Pdf;
 use yii\helpers\ArrayHelper;
 #endregion
@@ -186,63 +187,26 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public static function getActionUser()
     {
-        $result = [];
-        if (UserRoleManager::hasRoles([
-            UserRoleEnum::PROJECT_MANAGER,
-            UserRoleEnum::ACCOUNTING_SUPPORT,
-            UserRoleEnum::ADMIN,
-            UserRoleEnum::SUPER_ADMIN
-        ])) {
 
-            $result = [
-                'priorite' => 3,
-                'name' => 'Projets',
-                'serviceMenuActive' => SubMenuEnum::PROJECT,
-                'items' => static::getActionSubUser()
-            ];
-        }
+        $subMenu = new LeftMenuCreator(3, "Projets", SubMenuEnum::PROJECT, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ACCOUNTING_SUPPORT, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-        return $result;
-    }
+        $subMenu->addSubMenu(4, "project/create-first-step", "Création d'un devis", SubMenuEnum::PROJECT_CREATE, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-    private static function getActionSubUser()
-    {
-        $arraySubMenu = [];
+        $subMenu->addSubMenu(3, "project/index-draft", "Liste des brouillons", SubMenuEnum::PROJECT_DRAFT, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-        if (UserRoleManager::hasRoles([
-            UserRoleEnum::PROJECT_MANAGER,
-            UserRoleEnum::ADMIN,
-            UserRoleEnum::SUPER_ADMIN
-        ])) {
-            \array_push(
-                $arraySubMenu,
-                [
-                    'Priorite' => 3,
-                    'url' => 'project/create-first-step',
-                    'label' => 'Création d\'un devis',
-                    'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                ],
-                [
-                    'Priorite' => 2,
-                    'url' => 'project/index-draft',
-                    'label' => 'Liste des brouillons',
-                    'subServiceMenuActive' => SubMenuEnum::PROJECT_DRAFT
-                ]
-            );
-        }
+        $subMenu->addSubMenu(2, "project/index", "Liste des projets",  SubMenuEnum::PROJECT_LIST, []);
 
-        array_push(
-            $arraySubMenu,
-            [
-                'Priorite' => 1,
-                'url' => 'project/index',
-                'label' => 'Liste des projets',
-                'subServiceMenuActive' => SubMenuEnum::PROJECT_LIST
-            ],
+        $subMenu->addSubMenu(1, "project/index", "Liste des jalons", SubMenuEnum::PROJECT_LIST, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT
+        ]);
 
-        );
-
-        return $arraySubMenu;
+        return $subMenu->getSubMenuCreated();
     }
 
     /**

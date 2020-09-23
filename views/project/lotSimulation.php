@@ -54,7 +54,7 @@ if ($SaveSucess != null) {
                             <div class="col s3 label-field">
                                 Total coût temps homme :
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($lot, "totalCostHuman", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostHuman)]])->label(false) ?>
 
                             </div>
@@ -64,7 +64,7 @@ if ($SaveSucess != null) {
                             <div class="col s3 label-field">
                                 Total des dépenses et investissement :
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($lot, "totalCostInvest", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostInvest)]])->label(false) ?>
                             </div>
                         </div>
@@ -73,7 +73,7 @@ if ($SaveSucess != null) {
                             <div class="col s3 label-field">
                                 Total des reversements laboratoires :
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($lot, "totalCostRepayement", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostRepayement)]])->label(false) ?>
                             </div>
                         </div>
