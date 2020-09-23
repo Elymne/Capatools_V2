@@ -527,6 +527,7 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // Pour chaque lot, on lui attribut des valeurs par défaut.
                 foreach ($lots as $key => $lot) {
+                    $lot->title = $lot->id_string . $lot->title;
                     $lot->number = $key + 1;
                     $lot->status = Lot::STATE_IN_PROGRESS;
                     $lot->project_id = $model->id;

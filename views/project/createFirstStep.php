@@ -92,7 +92,7 @@ ProjectCreateFirstStepAsset::register($this);
 
                     <div class="card-action">
                         <!-- Création de lot -->
-                        <label id="lot-management-label" class='blue-text control-label typeLabel'>Créer des lots - ils seront éditables par la suite</label>
+                        <label id="lot-management-label" class='blue-text control-label typeLabel'>Créer des lots - ils ne seront pas éditables par la suite</label>
                         <div id="lot-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
@@ -121,6 +121,9 @@ ProjectCreateFirstStepAsset::register($this);
                                                 }
                                                 ?>
                                                 <div class="row">
+                                                    <div class=" col s1 ">
+                                                        <?= $form->field($lot, "[{$i}]id_string")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'value' => 'Lot N° ' . ($i + 1) . " "])->label(('')) ?>
+                                                    </div>
                                                     <div class="col s8">
                                                         <?= $form->field($lot, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Titre lot") ?>
                                                     </div>

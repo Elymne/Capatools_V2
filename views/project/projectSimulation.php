@@ -67,7 +67,7 @@ if ($validdevis == false) {
                     'options' => [
                         'class' => 'alert-danger',
                     ],
-                    'body' => ' Il n\'y a pas de tâche présente dans le lot ' . $lot['number'] . ' projet',
+                    'body' => ' Il n\'y a pas de tâche présente dans le lot ' . $lot['number'],
                 ]);
             }
         }
