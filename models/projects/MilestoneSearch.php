@@ -2,7 +2,12 @@
 
 namespace app\models\projects;
 
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
+use phpDocumentor\Reflection\Types\Mixed_;
+use Yii;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
 
 /**
  * Classe qui hérite de la classe Millestone.
@@ -30,10 +35,21 @@ class MilestoneSearch extends Millestone
      * Fonction que l'on va utiliser dans la vue index des milestones (jalons).
      * Les data que nous retourne cette fonction nous permet d'ordonner les noms de projet par exemple.
      */
-    public function search($params)
+    public function search($params): ?ActiveDataProvider
     {
-        $query = self::find();
+        if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) {
+            return $this->createActiveDataProvider(self::find(), $params);
+        }
 
+        if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER])) {
+            return $this->createActiveDataProvider(self::find()->where(["project.cellule_id" => Yii::$app->user->identity->cellule_id]), $params);
+        }
+
+        return null;
+    }
+
+    private function createActiveDataProvider(ActiveQuery $query, $params): ActiveDataProvider
+    {
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false
