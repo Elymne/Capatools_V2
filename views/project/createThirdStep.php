@@ -25,6 +25,7 @@ $risksName = array_map(function ($risk) {
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
+
 <?php if ($sucess != null) : ?>
     <?php if ($sucess) :  ?>
         <?= Alert::widget(['options' => ['class' => 'alert-success',], 'body' => 'Enregistrement réussi ...',]) ?>
@@ -79,12 +80,11 @@ $risksName = array_map(function ($risk) {
                                         <!-- widgetContainer -->
                                         <?php foreach ($consumables as $i => $consumable) : ?>
                                             <div class="item-consummable">
-                                                <?php
-                                                // necessary for update action.
-                                                if (!$consumable->isNewRecord) {
-                                                    echo Html::activeHiddenInput($consumable, "[{$i}]id");
-                                                }
-                                                ?>
+
+                                                <?php if (!$consumable->isNewRecord) : ?>
+                                                    <?= Html::activeHiddenInput($consumable, "[{$i}]id") ?>
+                                                <?php endif; ?>
+
                                                 <div class="row">
                                                     <div class="col s4">
                                                         <?= $form->field($consumable, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
@@ -92,9 +92,7 @@ $risksName = array_map(function ($risk) {
                                                     <div class="col s2">
                                                         <?= $form->field($consumable, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
                                                     </div>
-
                                                     <div class="col s4">
-                                                        <!-- type dropdown field -->
                                                         <?= $form->field($consumable, "[{$i}]type")->widget(Select2::class, [
                                                             'data' => Consumable::TYPES,
                                                             'options' => ['value' => $consumable->getSelectedType()],
@@ -125,7 +123,69 @@ $risksName = array_map(function ($risk) {
 
                     </div>
 
-                    <?php if ($number != 0) displayInvestsPlus($invests, $form) ?>
+                    <?php if ($number != 0) : ?>
+                        <div class="card-action" id="card-invest-plus">
+
+                            <!-- Création dépense , d'investissements -->
+                            <label id="invtest-management-label" class='blue-text control-label typeLabel'>Liste des achats d'investissement éventuels</label>
+                            <div id="invtest-management-body" class="col s12">
+                                <div class="row">
+                                    <div class="input-field col s12">
+
+                                        <?php DynamicFormWidget::begin([
+                                            'widgetContainer' => 'dynamicform_wrapper_invtest', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                                            'widgetBody' => '.container-items-invtest', // required: css class selector
+                                            'widgetItem' => '.item-invtest', // required: css class
+                                            'limit' => 10, // the maximum times, an element can be cloned (default 999)
+                                            'min' => 0, // 0 or 1 (default 1)
+                                            'insertButton' => '.add-item', // css class
+                                            'deleteButton' => '.remove-item', // css class
+                                            'model' => $invests[0],
+                                            'formId' => 'dynamic-form',
+                                            'formFields' => ['title', 'price'],
+                                        ]); ?>
+
+                                        <div class="container-items-invtest">
+
+                                            <div class="row">
+                                                <div class="col s1 offset-s5">
+                                                    <button id="button-invests-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                </div>
+                                            </div>
+
+                                            <?php foreach ($invests as $i => $invtest) : ?>
+                                                <div class="item-invtest">
+                                                    <?php if (!$invtest->isNewRecord) : ?>
+                                                        <?= Html::activeHiddenInput($invtest, "[{$i}]id") ?>
+                                                    <?php endif; ?>
+                                                    <div class="row">
+
+                                                        <div class="col s4">
+                                                            <?= $form->field($invtest, "[{$i}]name")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                        </div>
+                                                        <div class="col s2">
+                                                            <?= $form->field($invtest, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
+                                                        </div>
+                                                        <div class="col 1">
+                                                            <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                        </div>
+                                                        <div class="col 1">
+                                                            <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                        </div>
+
+                                                    </div><!-- .row -->
+                                                </div><!-- .item -->
+                                            <?php endforeach; ?>
+                                        </div><!-- .container -->
+
+                                        <?php DynamicFormWidget::end(); ?>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    <?php endif; ?>
 
                 </div>
 
@@ -187,7 +247,9 @@ $risksName = array_map(function ($risk) {
                                         <!-- widgetContainer -->
                                         <?php foreach ($equipments as $i => $equipment) : ?>
                                             <div class="item-equipment">
-                                                <?php if (!$equipment->isNewRecord) echo Html::activeHiddenInput($equipment, "[{$i}]id"); ?>
+                                                <?php if (!$equipment->isNewRecord) : ?>
+                                                    <?= Html::activeHiddenInput($equipment, "[{$i}]id"); ?>
+                                                <?php endif; ?>
                                                 <div class="row">
                                                     <div class="col s2">
                                                         <?= $form->field($equipment, "[{$i}]name")->textInput([])->label("Description") ?>
@@ -267,12 +329,9 @@ $risksName = array_map(function ($risk) {
                                         <!-- widgetContainer -->
                                         <?php foreach ($contributors as $i => $contributor) : ?>
                                             <div class="item-labocontributor">
-                                                <?php
-                                                // necessary for update action.
-                                                if (!$contributor->isNewRecord) {
-                                                    echo Html::activeHiddenInput($contributor, "[{$i}]id");
-                                                }
-                                                ?>
+                                                <?php if (!$contributor->isNewRecord) : ?>
+                                                    <?= Html::activeHiddenInput($contributor, "[{$i}]id"); ?>
+                                                <?php endif; ?>
                                                 <div class="row">
                                                     <div class="col s2">
                                                         <?= $form->field($contributor, "[{$i}]name")->textInput()->label("Desc. Intervenant") ?>
@@ -425,75 +484,3 @@ $risksName = array_map(function ($risk) {
     ]);
     ?>
 </div>
-
-<?php
-
-function displayInvestsPlus(array $invests, $form)
-{
-?>
-    <div class="card-action" id="card-invest-plus">
-
-        <!-- Création dépense , d'investissements -->
-        <label id="invtest-management-label" class='blue-text control-label typeLabel'>Liste des achats d'investissement éventuels</label>
-        <div id="invtest-management-body" class="col s12">
-            <div class="row">
-                <div class="input-field col s12">
-
-                    <?php DynamicFormWidget::begin([
-                        'widgetContainer' => 'dynamicform_wrapper_invtest', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-                        'widgetBody' => '.container-items-invtest', // required: css class selector
-                        'widgetItem' => '.item-invtest', // required: css class
-                        'limit' => 10, // the maximum times, an element can be cloned (default 999)
-                        'min' => 0, // 0 or 1 (default 1)
-                        'insertButton' => '.add-item', // css class
-                        'deleteButton' => '.remove-item', // css class
-                        'model' => $invests[0],
-                        'formId' => 'dynamic-form',
-                        'formFields' => ['title', 'price'],
-                    ]); ?>
-
-                    <div class="container-items-invtest">
-
-                        <div class="row">
-                            <div class="col s1 offset-s5">
-                                <button id="button-invests-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                            </div>
-                        </div>
-
-                        <?php foreach ($invests as $i => $invtest) : ?>
-                            <div class="item-invtest">
-                                <?php
-                                // necessary for update action.
-                                if (!$invtest->isNewRecord) {
-                                    echo Html::activeHiddenInput($invtest, "[{$i}]id");
-                                }
-                                ?>
-                                <div class="row">
-
-                                    <div class="col s4">
-                                        <?= $form->field($invtest, "[{$i}]name")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
-                                    </div>
-                                    <div class="col s2">
-                                        <?= $form->field($invtest, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
-                                    </div>
-                                    <div class="col 1">
-                                        <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                    </div>
-                                    <div class="col 1">
-                                        <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
-                                    </div>
-
-                                </div><!-- .row -->
-                            </div><!-- .item -->
-                        <?php endforeach; ?>
-                    </div><!-- .container -->
-
-                    <?php DynamicFormWidget::end(); ?>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-<?php
-}
