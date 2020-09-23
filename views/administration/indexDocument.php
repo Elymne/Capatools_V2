@@ -87,6 +87,7 @@ function getCollumnArray(): array
     array_push($result, getTypeArray());
     array_push($result, getLastUpdateArray());
 
+    array_push($result, getDownloadButtonArray());
     array_push($result, getUpdateButtonArray());
     array_push($result, getDeleteButtonArray());
 
@@ -125,11 +126,31 @@ function getLastUpdateArray(): array
         'contentOptions' => ['class' => 'price_day-row'],
     ];
 }
+function getDownloadButtonArray()
+{
+    return [
+        'format' => 'raw',
+        'label' => 'Télécharger',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons right">file_download</i>',
+                Url::to(['project-simulate', 'project_id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'action' => Url::to(['project-simulate', 'project_id' => $model->id]),
+                    'class' => 'btn-floating waves-effect waves-light btn-green',
+                    'title' => "Modifier le docuement"
+                ]
+            );
+        }
+    ];
+}
 function getUpdateButtonArray()
 {
     return [
         'format' => 'raw',
-        'label' => 'Edit',
+        'label' => 'Editer',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">build</i>',
@@ -150,7 +171,7 @@ function getDeleteButtonArray()
 {
     return [
         'format' => 'raw',
-        'label' => 'suppression',
+        'label' => 'supprimer',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons center">delete</i>',

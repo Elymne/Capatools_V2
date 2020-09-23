@@ -8,7 +8,7 @@ class m200099_000843_administrative_document_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%administrative_document}}', [
-            'id' => $this->string(),
+            'id' => $this->primaryKey(),
             'title' => $this->string()->notNull(),
             'internal_link' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
