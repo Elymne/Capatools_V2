@@ -2,50 +2,37 @@
 
 use app\assets\AppAsset;
 use app\assets\projects\ProjectCreateThirdStepAsset;
-
 use app\models\projects\Consumable;
-
 use yii\helpers\ArrayHelper;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use kidzen\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
-
 use yii\bootstrap\Alert;
-
-if ($number == 0) $this->title = 'Création d\'un projet - liste des dépenses et reversements : Avant-projet';
-else $this->title = 'Création d\'un projet - liste des dépenses et reversements : Lot n°' . $number;
-
-$risksName = array_map(function ($risk) {
-    return $risk->title;
-}, $risksData);
 
 AppAsset::register($this);
 ProjectCreateThirdStepAsset::register($this);
+
+// Si le numéro de lot correspondant est le 0, on a affaire à un lot d'avant-projet.
+if ($number == 0) $this->title = 'Création d\'un projet - liste des dépenses et reversements : Avant-projet';
+else $this->title = 'Création d\'un projet - liste des dépenses et reversements : Lot n°' . $number;
+
+// On map les noms des risques sur dans une table utilisable dans la vue.
+$risksName = array_map(function ($risk) {
+    return $risk->title;
+}, $risksData);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
-<?php
-///Gère les bandeaux d'alerts
-if ($SaveSucess != null) {
-    if ($SaveSucess) {
-        echo Alert::widget([
-            'options' => [
-                'class' => 'alert-success',
-            ],
-            'body' => 'Enregistrement réussi ...',
-        ]);
-    } else {
-        echo Alert::widget([
-            'options' => [
-                'class' => 'alert-danger',
-            ],
-            'body' => 'Enregistrement échoué ...',
-        ]);
-    }
-}
-?>
+<?php if ($sucess != null) : ?>
+    <?php if ($sucess) :  ?>
+        <?= Alert::widget(['options' => ['class' => 'alert-success',], 'body' => 'Enregistrement réussi ...',]) ?>
+    <?php else : ?>
+        <?= Alert::widget(['options' => ['class' => 'alert-danger',], 'body' => 'Enregistrement échoué ...',]); ?>
+    <?php endif; ?>
+<?php endif; ?>
+
 <div class="container">
     <div class="project-create">
         <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
