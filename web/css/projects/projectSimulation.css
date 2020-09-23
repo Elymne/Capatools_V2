@@ -1,16 +1,23 @@
+/* Class css pour définir un espacement en haut des éléments */
 .top-spacing {
     padding-top: 48px;
 }
 
+/* Class css pour définir un espacement en bas des éléments */
 .bottom-spacing {
     padding-bottom: 6px;
 }
 
+/* Class css pour définir une taille large et une police gras pour les titres des card-views. */
 .lot-title {
     font-size: x-large;
     font-weight: bolder;
 }
 
-.label-field {
-    margin-top: 12px;
+.left-scpacing-32px {
+    padding-left: 32px;
+}
+
+.top-margin-16px {
+    margin-top: 16px;
 }
