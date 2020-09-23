@@ -267,7 +267,7 @@ if ($validdevis == false) {
                                                 'action' => Url::to(['project/Update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
                                                 'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
                                                 'data-position' => "bottom",
-                                                'title' => "Modifier investissements/consommables/reversements laboratoires"
+                                                'title' => "Modifier les investissements, consommables, laboratoire"
                                             ]
                                         ); ?>
                                     </div>
