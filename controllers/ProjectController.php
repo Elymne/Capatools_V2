@@ -42,6 +42,7 @@ use app\models\projects\forms\ProjectCreateThirdStepForm;
 use app\models\projects\Investment;
 use app\models\projects\Lot;
 use app\models\projects\LotSimulate;
+use app\models\projects\MilestoneSearch;
 use app\services\laboxyServices\IdLaboxyManager;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
@@ -402,12 +403,10 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionIndexMilestones()
     {
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => Millestone::find(),
-            'pagination' => [
-                'pageSize' => -1,
-            ],
-        ]);
+        // MilestoneSearch est une classe qui implémente Millestone. Elle dispose donc de toutes les méthodes ORM.
+        $searchModel = new MilestoneSearch();
+        // Mais elle possède surtout cette méthode qui permet de founir au gridView de la vue, des spécifivité permettant de d'ordonner par exemple certains éléments du gridView.
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         MenuSelectorHelper::setMenuCompanyIndex();
         return $this->render(
