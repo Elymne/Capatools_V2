@@ -408,10 +408,18 @@ class ProjectController extends Controller implements ServiceInterface
         // Mais elle possède surtout cette méthode qui permet de founir au gridView de la vue, des spécifivité permettant de d'ordonner par exemple certains éléments du gridView.
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        MenuSelectorHelper::setMenuCompanyIndex();
+        $celluleNameList = array_map(function ($elem) {
+            return $elem->name;
+        }, Cellule::find()->all());
+
+        MenuSelectorHelper::setMenuProjectMilestones();
         return $this->render(
             'indexMilestones',
-            ['dataProvider' =>  $dataProvider]
+            [
+                'dataProvider' =>  $dataProvider,
+                'celluleNameList' => $celluleNameList,
+                'statusNameList' => Millestone::STATUT
+            ]
         );
     }
 
