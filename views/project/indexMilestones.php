@@ -2,6 +2,8 @@
 
 use app\assets\AppAsset;
 use app\assets\projects\ProjectIndexMilestonesAsset;
+use app\services\userRoleAccessServices\UserRoleEnum;
+use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\bootstrap\Html;
@@ -40,14 +42,22 @@ $this->params["breadcrumbs"][] = $this->title;
                 </div>
 
                 <div class="card-action">
-                    <div class="col s3">
-                        <p>Filtre cellule :</p>
-                        <?= getSelectListCelluleFilter($celluleNameList) ?>
-                    </div>
-                    <div class="col s8 offset-s1">
-                        <p>Filtre statut :</p>
-                        <?= getSelectListStatusFilter() ?>
-                    </div>
+                    <?php if (UserRoleManager::hasRoles([UserRoleEnum::ACCOUNTING_SUPPORT, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN])) : ?>
+                        <div class="col s3">
+                            <p>Filtre cellule :</p>
+                            <?= getSelectListCelluleFilter($celluleNameList) ?>
+                        </div>
+
+                        <div class="col s8 offset-s1">
+                            <p>Filtre statut :</p>
+                            <?= getSelectListStatusFilter() ?>
+                        </div>
+                    <?php else : ?>
+                        <div class="col s8">
+                            <p>Filtre statut :</p>
+                            <?= getSelectListStatusFilter() ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <!-- GRIDVIEW - OPTIONS DE FILTRES ET DE RECHERCHES -->

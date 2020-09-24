@@ -44,7 +44,7 @@ class MilestoneSearch extends Millestone
         }
 
         if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER])) {
-            return $this->createActiveDataProvider(self::find()->where(["project.cellule.id" => Yii::$app->user->identity->cellule_id]), $params);
+            return $this->createActiveDataProvider(self::find()->where(["project.cellule_id" => Yii::$app->user->identity->cellule_id]), $params);
         }
 
         return null;
