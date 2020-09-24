@@ -8,13 +8,13 @@ use kidzen\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
+AppAsset::register($this);
+ProjectCreateFirstStepAsset::register($this);
+
 $this->title = 'Création d\'un devis - paramètres généraux';
 $this->params['breadcrumbs'][] = ['label' => 'Project', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
-
-AppAsset::register($this);
-ProjectCreateFirstStepAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -31,7 +31,7 @@ ProjectCreateFirstStepAsset::register($this);
                         <label>Paramètres généraux</label>
                     </div>
 
-                    <div class="card-action">
+                    <div class="card-action" style="background-color: #f0f8ff;">
                         <div class="col s6">
                             <div class="row">
                                 <label class='blue-text control-label typeLabel'>Titre du projet</label>
@@ -90,7 +90,7 @@ ProjectCreateFirstStepAsset::register($this);
                         ])->label(false); ?>
                     </div>
 
-                    <div class="card-action">
+                    <div class="card-action" style="background-color: #f0f8ff;">
                         <!-- Création de lot -->
                         <label id="lot-management-label" class='blue-text control-label typeLabel'>Créer des lots - ils ne seront pas éditables par la suite</label>
                         <div id="lot-management-body" class="col s12">
@@ -153,20 +153,18 @@ ProjectCreateFirstStepAsset::register($this);
                                     <?= $form->field($model, 'company_name')
                                         ->widget(\yii\jui\AutoComplete::class, [
                                             'clientOptions' => ['source' => $companiesNames,]
-                                        ])->label(false); ?>
+                                        ])->label(""); ?>
                                     <br /><br />
                                 </div>
 
-                                <label SSS class='blue-text control-label typeLabel'>Contact client</label>
+                                <label class='blue-text control-label typeLabel'>Contact client</label>
                                 <div class="input-field">
                                     <?= $form->field($model, 'contact_email')
                                         ->widget(\yii\jui\AutoComplete::class, [
                                             'clientOptions' => [
                                                 'source' => $contactsEmail,
                                             ],
-                                        ])->label(
-                                            "Contact client"
-                                        );
+                                        ])->label("");
                                     ?>
 
                                     <br /><br />
@@ -178,7 +176,7 @@ ProjectCreateFirstStepAsset::register($this);
                     </div>
 
                     <div class="card-action">
-                        <div class="form-group">
+                        <div class=" form-group">
                             <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
                             <?= Html::a(Yii::t('app', 'Annuler'), ['#'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                         </div>

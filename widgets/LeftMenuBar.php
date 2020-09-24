@@ -21,8 +21,7 @@ class LeftMenuBar extends \yii\bootstrap\Widget
     public function run()
     {
         //Yii::setAlias('@foo', '/path/to/foo');
-        $logo_capa = yii::getAlias('@web') . 'capaicon/ms-icon-310x310.png';
-
+        $logo_capa = Yii::$app->homeUrl . 'capaicon/ms-icon-310x310.png';
 
         $ctrls =  Yii::$app->discoverService->getServices();
         $actionsCtrl = array();

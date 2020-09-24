@@ -42,6 +42,7 @@ use app\models\projects\forms\ProjectCreateThirdStepForm;
 use app\models\projects\Investment;
 use app\models\projects\Lot;
 use app\models\projects\LotSimulate;
+use app\models\projects\MilestoneSearch;
 use app\services\laboxyServices\IdLaboxyManager;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
@@ -49,7 +50,9 @@ use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\services\helpers\TimeStringifyHelper;
+use app\services\menuServices\LeftMenuCreator;
 use kartik\mpdf\Pdf;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 #endregion
 
@@ -186,63 +189,26 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public static function getActionUser()
     {
-        $result = [];
-        if (UserRoleManager::hasRoles([
-            UserRoleEnum::PROJECT_MANAGER,
-            UserRoleEnum::ACCOUNTING_SUPPORT,
-            UserRoleEnum::ADMIN,
-            UserRoleEnum::SUPER_ADMIN
-        ])) {
 
-            $result = [
-                'priorite' => 3,
-                'name' => 'Projets',
-                'serviceMenuActive' => SubMenuEnum::PROJECT,
-                'items' => static::getActionSubUser()
-            ];
-        }
+        $subMenu = new LeftMenuCreator(3, "Projets", SubMenuEnum::PROJECT, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ACCOUNTING_SUPPORT, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-        return $result;
-    }
+        $subMenu->addSubMenu(4, "project/create-first-step", "Création d'un devis", SubMenuEnum::PROJECT_CREATE, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-    private static function getActionSubUser()
-    {
-        $arraySubMenu = [];
+        $subMenu->addSubMenu(3, "project/index-draft", "Liste des brouillons", SubMenuEnum::PROJECT_DRAFT, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-        if (UserRoleManager::hasRoles([
-            UserRoleEnum::PROJECT_MANAGER,
-            UserRoleEnum::ADMIN,
-            UserRoleEnum::SUPER_ADMIN
-        ])) {
-            \array_push(
-                $arraySubMenu,
-                [
-                    'Priorite' => 3,
-                    'url' => 'project/create-first-step',
-                    'label' => 'Création d\'un devis',
-                    'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                ],
-                [
-                    'Priorite' => 2,
-                    'url' => 'project/index-draft',
-                    'label' => 'Liste des brouillons',
-                    'subServiceMenuActive' => SubMenuEnum::PROJECT_DRAFT
-                ]
-            );
-        }
+        $subMenu->addSubMenu(2, "project/index", "Liste des projets",  SubMenuEnum::PROJECT_LIST, []);
 
-        array_push(
-            $arraySubMenu,
-            [
-                'Priorite' => 1,
-                'url' => 'project/index',
-                'label' => 'Liste des projets',
-                'subServiceMenuActive' => SubMenuEnum::PROJECT_LIST
-            ],
+        $subMenu->addSubMenu(1, "project/index-milestones", "Liste des jalons", SubMenuEnum::PROJECT_MILESTONES, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT
+        ]);
 
-        );
-
-        return $arraySubMenu;
+        return $subMenu->getSubMenuCreated();
     }
 
     /**
@@ -428,6 +394,35 @@ class ProjectController extends Controller implements ServiceInterface
         return $pdf->render();
     }
 
+    /**
+     * Render view : projet/index-milestones
+     * Route qui retourne une vue html composé de la liste des jalons en cours (et peut-être plus).
+     * 
+     * @return mixed
+     */
+    public function actionIndexMilestones()
+    {
+
+        // MilestoneSearch est une classe qui implémente Millestone. Elle dispose donc de toutes les méthodes ORM.
+        $searchModel = new MilestoneSearch();
+        // Mais elle possède surtout cette méthode qui permet de founir au gridView de la vue, des spécifivité permettant de d'ordonner par exemple certains éléments du gridView.
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $celluleNameList = array_map(function ($elem) {
+            return $elem->name;
+        }, Cellule::find()->all());
+
+        MenuSelectorHelper::setMenuProjectMilestones();
+        return $this->render(
+            'indexMilestones',
+            [
+                'dataProvider' =>  $dataProvider,
+                'celluleNameList' => $celluleNameList,
+                'statusNameList' => Millestone::STATUT
+            ]
+        );
+    }
+
     // /!\ CREATION DE DEVIS-PROJET /!\
 
     /**
@@ -559,9 +554,9 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionProjectSimulate($project_id = 1)
+    public function actionProjectSimulate($project_id = 1, $sucess = null)
     {
-        $SaveSucess = null;
+
         // Modèle du projet à updater. On s'en sert pour récupérer son id.
         $project = ProjectSimulate::getOneById($project_id);
         if ($project == null) {
@@ -577,22 +572,16 @@ class ProjectController extends Controller implements ServiceInterface
         $lots = $project->lots;
         $millestones = $project->millestones;
 
-
-
         // Modèles à sauvegarder.
-
         if ($project->load(Yii::$app->request->post())) {
             $project->save();
         }
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
 
-        $SaveSucess = false;
         $millestonesModif  = ProjectCreateMilleStoneForm::getAllByProject($project->id);
         if (!$millestonesModif) {
             $millestonesModif = [new ProjectCreateMilleStoneForm];
         }
-
-
 
         $isValid = true;
 
@@ -725,7 +714,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'listExternalDepense' => $listExternalDepense,
                 'listInternalDepense' => $listInternalDepense,
                 'Resultcheck' => $Resultcheck,
-                'SaveSucess' => $SaveSucess,
+                'SaveSucess' => $sucess,
 
             ]
 
@@ -890,13 +879,14 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionUpdateDependenciesConsumables($project_id, $number, $sucess = false)
+    public function actionUpdateDependenciesConsumables($project_id, $number, $sucess = null)
     {
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
         $model = new ProjectCreateThirdStepForm();
         $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
-        $SaveSucess = null;
+
+        // Error checker.
         if ($lot == null) {
             return $this->redirect([
                 'error',
@@ -1060,7 +1050,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'invests' => $invests,
                 'equipments' => $equipmentsRepayment,
                 'contributors' => $contributors,
-                'SaveSucess' => $sucess,
+                'sucess' => $sucess,
             ]
         );
     }

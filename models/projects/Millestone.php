@@ -14,7 +14,7 @@ use yii\db\ActiveRecord;
  */
 class Millestone extends ActiveRecord
 {
-    const STATUT_ENCOURS = 'en cours';
+    const STATUT_ENCOURS = 'En cours';
     const STATUT_FACTURATIONENCOURS = 'Facturation en cours';
     const STATUT_FACTURER = 'Facturé';
     const STATUT_PAYED = "Payé";
@@ -47,6 +47,6 @@ class Millestone extends ActiveRecord
 
     public function getProject()
     {
-        return $this->hasOne(Project::className(), ['id' => 'project_id']);
+        return $this->hasOne(Project::class, ['id' => 'project_id']);
     }
 }

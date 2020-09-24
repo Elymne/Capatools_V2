@@ -157,6 +157,7 @@ class UserRoleManager
     static function hasRoles(array $userRoles): bool
     {
         $result = false;
+
         foreach ($userRoles as $userRole) {
             if (Yii::$app->user->can($userRole)) {
                 $result = true;
