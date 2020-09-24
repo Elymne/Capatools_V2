@@ -17,7 +17,7 @@ class ProjectIndexMilestonesAsset extends AssetBundle
 
     public $css = [];
 
-    public $js = [];
+    public $js = ['js/projects/indexMilestones.js'];
 
     public $depends = [
         'yii\web\YiiAsset',

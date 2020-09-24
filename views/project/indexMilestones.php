@@ -3,14 +3,17 @@
 use app\assets\AppAsset;
 use app\assets\projects\ProjectIndexMilestonesAsset;
 use app\widgets\TopTitle;
+use kartik\select2\Select2;
+use yii\bootstrap\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
+AppAsset::register($this);
+ProjectIndexMilestonesAsset::register($this);
 
 $this->title = "Liste des jalons";
 $this->params["breadcrumbs"][] = $this->title;
 
-AppAsset::register($this);
-ProjectIndexMilestonesAsset::register($this);
 ?>
 
 <?= TopTitle::widget(["title" => $this->title]) ?>
@@ -18,6 +21,36 @@ ProjectIndexMilestonesAsset::register($this);
 <div class="container">
     <div class="project-index">
         <div class="row">
+
+            <!-- GRIDVIEW - OPTIONS DE FILTRES ET DE RECHERCHES -->
+            <div class="card">
+                <div class="card-content">
+                    <label>Filtres - Recherches</label>
+                </div>
+
+                <div class="card-action">
+                    <div class="col s3">
+                        <p>Filtre nom de projet :</p>
+                        <?= getSearchNameFilter() ?>
+                    </div>
+                    <div class="col s8 offset-s1">
+                        <p>Filtre numéro de lot :</p>
+                        <?= getSearchNumberFilter() ?>
+                    </div>
+                </div>
+
+                <div class="card-action">
+                    <div class="col s3">
+                        <p>Filtre cellule :</p>
+                        <?= getSelectListCelluleFilter($celluleNameList) ?>
+                    </div>
+                    <div class="col s8 offset-s1">
+                        <p>Filtre statut :</p>
+                        <?= getSelectListStatusFilter() ?>
+                    </div>
+                </div>
+            </div>
+            <!-- GRIDVIEW - OPTIONS DE FILTRES ET DE RECHERCHES -->
 
             <!-- GRIDVIEW - LISTE DES JALONS -->
             <div class="card">
@@ -31,7 +64,7 @@ ProjectIndexMilestonesAsset::register($this);
                                 "text-overflow:ellipsis;"
                             ],
                             "tableOptions" => [
-                                "id" => "devis_table",
+                                "id" => "milestones_table",
                                 "style" => "height: 10px",
                                 "class" => ["highlight"]
                             ],
@@ -41,95 +74,155 @@ ProjectIndexMilestonesAsset::register($this);
                     </div>
                 </div>
             </div>
+            <!-- GRIDVIEW - LISTE DES JALONS -->
 
         </div>
     </div>
 </div>
 
+
 <?php
 
 /**
- * Fonction qui retourne la liste de tous les éléments à afficher sur le gridView.
+ * Fonction qui retourne la liste de tous les éléments/paramètres du modèle à afficher sur le gridView.
  * Voir le paramètre "columns" du GridView au dessus.
  */
 function getCollumnsArray()
 {
     $result = [];
 
-    array_push($result, getProjectInternalName());
-    array_push($result, getNumber());
-    array_push($result, getComment());
-    array_push($result, getPercent());
-    array_push($result, getStatus());
-    array_push($result, getEstimateDate());
-
-    return $result;
-}
-
-function getProjectInternalName()
-{
-    return [
+    array_push($result, [
         "attribute" => "project.internal_name",
         "format" => "raw",
         "label" => "Nom interne",
         "contentOptions" => ["class" => "project-internal_name-row"],
         "headerOptions" => ["class" => "project-internal_name-row"],
-    ];
-}
+    ]);
 
-function getNumber()
-{
-    return [
+    array_push($result, [
+        "attribute" => "project.cellule.name",
+        "format" => "raw",
+        "label" => "Cellule",
+        "contentOptions" => ["class" => "project-cellule-row"],
+        "headerOptions" => ["class" => "project-cellule-row"],
+    ]);
+
+    array_push($result, [
         "attribute" => "number",
         "format" => "raw",
         "label" => "Numéro de jalon",
-        "contentOptions" => ["class" => "project-internal_name-row"],
-        "headerOptions" => ["class" => "project-internal_name-row"],
-    ];
-}
+        "contentOptions" => ["class" => "project-number-row"],
+        "headerOptions" => ["class" => "project-number-row"],
+    ]);
 
-function getComment()
-{
-    return [
+    array_push($result, [
         "attribute" => "comment",
         "format" => "raw",
         "label" => "Description",
-        "contentOptions" => ["class" => "project-internal_name-row"],
-        "headerOptions" => ["class" => "project-internal_name-row"],
-    ];
-}
+        "contentOptions" => ["class" => "project-commentary-row"],
+        "headerOptions" => ["class" => "project-commentary-row"],
+    ]);
 
-function getPercent()
-{
-    return [
+    array_push($result, [
         "attribute" => "pourcentage",
         "format" => "raw",
         "label" => "Pourcentage",
-        "contentOptions" => ["class" => "project-internal_name-row"],
-        "headerOptions" => ["class" => "project-internal_name-row"],
-    ];
-}
+        "contentOptions" => ["class" => "project-pourcentage-row"],
+        "headerOptions" => ["class" => "project-pourcentage-row"],
+    ]);
 
-// TODO - Peut-être transformer ceci en bouton. Pour le prochain ticket.
-function getStatus()
-{
-    return [
+    array_push($result, [
         "attribute" => "statut",
         "format" => "raw",
-        "label" => "Status",
-        "contentOptions" => ["class" => "project-internal_name-row"],
-        "headerOptions" => ["class" => "project-internal_name-row"],
-    ];
-}
+        "label" => "Statut",
+        "contentOptions" => ["class" => "project-status-row"],
+        "headerOptions" => ["class" => "project-status-row"],
+    ]);
 
-
-function getEstimateDate()
-{
-    return [
+    array_push($result, [
         "attribute" => "estimate_date",
         "format" => "raw",
         "label" => "Date d'estimation",
-        "contentOptions" => ["class" => "project-internal_name-row"],
-        "headerOptions" => ["class" => "project-internal_name-row"],
-    ];
+        "contentOptions" => ["class" => "project-date-row"],
+        "headerOptions" => ["class" => "project-date-row"],
+    ]);
+
+    array_push($result, [
+        "attribute" => "last_update_date",
+        "format" => "raw",
+        "label" => "Date de modification",
+        "contentOptions" => ["class" => "project-last_update_date-row"],
+        "headerOptions" => ["class" => "project-last_update_date-row"],
+    ]);
+
+    return $result;
+}
+
+/**
+ * Fonction qui retourne le composant HTML (champ de text ici) qui va nous servir à filtrer par nom de projet.
+ */
+function getSearchNameFilter()
+{
+    echo Html::input('text', 'textinput_name_search', "", [
+        'id' => 'project-name-search',
+        'maxlength' => 100,
+        'style' => 'width:350px',
+        'placeholder' => 'Recherche par nom de projet',
+        'onkeyup' => 'onInputNameChange()',
+        'title' => 'Recherche par nom de projet'
+    ]);
+}
+
+function getSearchNumberFilter()
+{
+    echo Html::input('number', 'textinput_number_search', "", [
+        'id' => 'project-number-search',
+        'maxlength' => 10,
+        'style' => 'width:350px',
+        'placeholder' => 'Recherche par numéro de projet',
+        'onkeyup' => 'onInputNumberChange()',
+        'title' => 'Recherche par numéro de projet',
+        'min' => 0,
+        'max' => 100
+    ]);
+}
+
+function getSelectListCelluleFilter(array $celluleNameList)
+{
+    echo Select2::widget([
+        'id' => 'selectlist-cellule-search',
+        'name' => 'droplist_cellule',
+        'data' => $celluleNameList,
+        'pluginLoading' => false,
+        'hideSearch' => true,
+        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner une cellule ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+        'pluginEvents' => [
+            "select2:select" => "() => { onSelectCelluleChange() }",
+        ]
+    ]);
+}
+
+function getSelectListStatusFilter()
+{
+    echo <<<HTML
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" id="inprog-checkbox" onclick="onCheckboxStatusChange()" checked/>
+            <span class="span-combobox">En cours</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" id="facturing-checkbox" onclick="onCheckboxStatusChange()" checked/>
+            <span class="span-combobox">Facturation en cours</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" id="factured-checkbox" onclick="onCheckboxStatusChange()" checked/>
+            <span class="span-combobox">Facturé</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" id="payed-checkbox" onclick="onCheckboxStatusChange()"/>
+            <span class="span-combobox">Payé</span>
+        </label>
+    HTML;
 }
