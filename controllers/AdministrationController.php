@@ -22,6 +22,7 @@ use app\models\equipments\EquipmentCreateForm;
 use app\models\laboratories\Laboratory;
 use app\models\laboratories\LaboratoryCreateForm;
 use app\models\administrativeDocuments\AdministrativeDocument;
+use app\models\administrativeDocuments\DocumentCreateForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -296,7 +297,7 @@ class AdministrationController extends Controller
 
             $model->flag_active = true;
             //TODO Pensez à remettre ceci.
-            //$model->generatePasswordAndmail();
+            // $model->generatePasswordAndmail();
 
             // Set hash password.
             $model->setNewPassword($model->firstname);
@@ -556,6 +557,19 @@ class AdministrationController extends Controller
      */
     public function actionCreateDocument()
     {
+        $model = new DocumentCreateForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->save()) {
+                MenuSelectorHelper::setMenuDocuments();
+                return $this->redirect(['administration/index-document']);
+            }
+        }
+
+        MenuSelectorHelper::setMenuDocuments();
+        return $this->render('createDocument', [
+            'model' => $model,
+        ]);
     }
 
 
