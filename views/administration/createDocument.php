@@ -7,7 +7,11 @@ use kartik\select2\Select2;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
-$this->title = 'Création d\'un laboratoire';
+if ($update) {
+    $this->title = 'Mise à jour d\'un document';
+} else {
+    $this->title = 'Création d\'un document';
+}
 
 AppAsset::register($this);
 DocumentCreateAsset::register($this);
@@ -32,7 +36,9 @@ DocumentCreateAsset::register($this);
                     <div class="col s12">
                         <div class="row">
                             <div class="input-field col s12">
-                                <!-- title field -->
+
+
+                                <?= Html::activeHiddenInput($model, "id"); ?>
                                 <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'placeholder' => 'Titre'])->label('Nom du document :') ?>
                             </div>
                         </div>
@@ -53,6 +59,11 @@ DocumentCreateAsset::register($this);
                                     ->fileInput(['accept' => '*'])
                                     ->label('Document :', []) ?>
 
+                            </div>
+                            <div class="input-field col s6">
+                                <?php if ($update) { ?>
+                                    <?= $form->field($model, 'internal_link')->textInput(['maxlength' => true, 'placeholder' => 'Titre', 'readonly' => true])->label('') ?>
+                                <?php } ?>
                             </div>
                         </div>
 

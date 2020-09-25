@@ -26,9 +26,10 @@ class AdministrativeDocument extends ActiveRecord
         return 'administrative_document';
     }
 
-    public function getOneById(int $id)
+    public static function getOneById(int $id)
     {
-        return static::find(['id' => $id])->one();
+        var_dump($id);
+        return static::findOne($id);
     }
 
     /**
@@ -37,13 +38,13 @@ class AdministrativeDocument extends ActiveRecord
      * 
      * @return DataProvider
      */
-    static function getAllDataProvider()
+    public static function getAllDataProvider()
     {
         return static::find();
     }
 
 
-    static function getAllGategory()
+    public static function getAllGategory()
     {
         return static::find()->select('type')->distinct()->all();
     }

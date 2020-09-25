@@ -26,6 +26,7 @@ use app\models\laboratories\LaboratoryCreateForm;
 use app\services\menuServices\LeftMenuCreator;
 use app\models\administrativeDocuments\AdministrativeDocument;
 use app\models\administrativeDocuments\DocumentCreateForm;
+use app\models\administrativeDocuments\DocumentUpdateForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -33,8 +34,6 @@ use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use yii\data\ActiveDataProvider;
-use yii\log\Logger;
-
 
 
 /**
@@ -512,15 +511,13 @@ class AdministrationController extends Controller
                 $modelfinal = new AdministrativeDocument();
 
                 $modelfinal->title = $model->title;
-                $modelfinal->type = $model->title;
-                $modelfinal->internal_link = $model->title;
+                $modelfinal->type = $model->type;
+                $modelfinal->internal_link = $model->internal_link;
                 $modelfinal->last_update_date  = date("d-m-yy", strtotime("now"));
 
                 if ($modelfinal->save()) {
                     MenuSelectorHelper::setMenuDocuments();
                     return $this->redirect(['administration/index-document']);
-                } else {
-                    Yii::debug("errors saving SomeModel: " . var_export($model->getErrors(), true), Logger::LEVEL_WARNING, __METHOD__);
                 }
             }
         }
@@ -529,12 +526,64 @@ class AdministrationController extends Controller
         MenuSelectorHelper::setMenuDocuments();
         return $this->render('createDocument', [
             'model' => $model,
+            'update' => false,
         ]);
     }
 
 
 
+    /**
+     * Render view : administration/update-document.
+     * Cette méthode est utilisé pour retourner une vue permettant d'ajouter un document adminstratif'.
+     * 
+     * @return mixed
+     */
+    public function actionUpdateDocument(int $id = 1)
+    {
+        $model = DocumentUpdateForm::getOneById($id);
+        var_dump($id);
+        var_dump($model);
+        if ($model->load(Yii::$app->request->post())) {
 
+            $model->File = UploadedFile::getInstances($model, 'File');
+
+
+
+            $modelfinal =  AdministrativeDocument::getOneById($id);
+
+            $modelfinal->title = $model->title;
+            $modelfinal->type = $model->type;
+            $modelfinal->internal_link = $model->internal_link;
+            $modelfinal->last_update_date  = date("d-m-yy", strtotime("now"));
+
+            if ($modelfinal->save()) {
+                MenuSelectorHelper::setMenuDocuments();
+                return $this->redirect(['administration/index-document']);
+            }
+        }
+
+        MenuSelectorHelper::setMenuDocuments();
+        return $this->render('createDocument', [
+            'model' => $model,
+            'update' => true,
+        ]);
+    }
+
+
+    /**
+     * Render view : administration/delete-document.
+     * Cette méthode est utilisé pour retourner une vue permettant d'ajouter un document adminstratif'.
+     * 
+     * @return mixed
+     */
+    public function actionDeleteDocument(int $id = 1)
+    {
+        $model = DocumentUpdateForm::getOneById($id);
+        $model->delete();
+
+        MenuSelectorHelper::setMenuDocuments();
+        return $this->redirect(['administration/index-document']);
+    }
 
     /**
      * Méthode générale pour le contrôleur permettant de retourner un utilisateur.

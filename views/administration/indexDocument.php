@@ -153,13 +153,14 @@ function getDownloadButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">file_download</i>',
-                Url::to(['project-simulate', 'project_id' => $model->id]),
+                Url::to([$model->internal_link]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
-                    'action' => Url::to(['project-simulate', 'project_id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-green',
-                    'title' => "Modifier le docuement"
+                    'target' => '_blank',
+                    'action' => Url::to([$model->internal_link]),
+                    'class' => 'btn-floating waves-effect waves-light btn-blue',
+                    'title' => "Télécharge le document"
                 ]
             );
         }
@@ -173,13 +174,13 @@ function getUpdateButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">build</i>',
-                Url::to(['project-simulate', 'project_id' => $model->id]),
+                Url::to(['update-document', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
-                    'action' => Url::to(['project-simulate', 'project_id' => $model->id]),
+                    'action' => Url::to(['update-document', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-green',
-                    'title' => "Modifier le docuement"
+                    'title' => "Modifier le document"
                 ]
             );
         }
@@ -194,12 +195,11 @@ function getDeleteButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons center">delete</i>',
-                Url::to(['project/view', 'id' => $model->id]),
+                Url::to(['delete-document', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
-                    'target' => '_blank',
-                    'action' => Url::to(['administration/delete', 'id' => $model->id]),
+                    'action' => Url::to(['delete-document', 'id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-red',
                     'title' => "Supprimer "
                 ]
