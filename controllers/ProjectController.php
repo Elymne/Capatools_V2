@@ -596,12 +596,8 @@ class ProjectController extends Controller implements ServiceInterface
 
             $SaveSucess = true;
             foreach ($millestonesModif as $Milestone) {
-                echo $Milestone->id;
-                echo $Milestone->price;
-                // echo $Milestone->estimate_date = ;
 
-                //$Milestone->estimate_date = $Milestone->dateui;
-                /// echo  $Milestone->dateui;
+
                 $Milestone->project_id = $project->id;
                 $Milestone->statut = Millestone::STATUT_ENCOURS;
                 $Milestone->save();
@@ -614,12 +610,15 @@ class ProjectController extends Controller implements ServiceInterface
 
         $millestones = ProjectCreateMilleStoneForm::getAllByProject($project->id);
 
-        if (count($millestones) == 0  &&  $project->SellingPrice > 2000) {
+        if (count($millestones) == 0) {
             $advancepayement = new  ProjectCreateMilleStoneForm();
             $advancepayement->number = 0;
-            $advancepayement->comment = "Acompte";
-            $advancepayement->pourcentage = 30.0;
-            $advancepayement->price = (30.0 / 100) * $project->SellingPrice;
+
+            if ($project->SellingPrice > 2000) {
+                $advancepayement->comment = "Acompte";
+                $advancepayement->pourcentage = 30.0;
+                $advancepayement->price = (30.0 / 100) * $project->SellingPrice;
+            }
             array_push($millestones, $advancepayement);
         }
 
