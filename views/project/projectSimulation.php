@@ -353,8 +353,8 @@ ProjectSimulationAsset::register($this);
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
-                                            <td width="40%" class="table-font-bold">Reversement Laboratoire :</td>
-                                            <td></td>
+                                            <td width="80%" class="table-font-bold">Reversement Laboratoire :</td>
+                                            <td width="20%"></td>
                                         </tr>
                                         <?php if (sizeof($laboratorydepenses) == 0) : ?>
                                             <tr>
@@ -379,8 +379,8 @@ ProjectSimulationAsset::register($this);
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
-                                            <td class="table-font-bold">Prestation interne</td>
-                                            <td></td>
+                                            <td width="80%" class="table-font-bold">Prestation interne</td>
+                                            <td width="20%"></td>
                                         </tr>
                                         <?php if (sizeof($listInternalDepense) == 0) : ?>
                                             <tr>
@@ -405,8 +405,8 @@ ProjectSimulationAsset::register($this);
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
-                                            <td class="table-font-bold">Sous-traitance externe</td>
-                                            <td></td>
+                                            <td width="80%" class="table-font-bold">Sous-traitance externe</td>
+                                            <td width="20%"></td>
                                         </tr>
                                         <?php if (sizeof($listExternalDepense) == 0) : ?>
                                             <tr>
@@ -475,15 +475,15 @@ ProjectSimulationAsset::register($this);
                                             </div>
 
                                             <div class="col s5">
-                                                <?= $form->field($millestone, "[{$i}]comment")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Titre") ?>
+                                                <?= $form->field($millestone, "[{$i}]comment")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Titre'])->label(false) ?>
                                             </div>
 
                                             <div class="col s1">
-                                                <?= $form->field($millestone, "[{$i}]pourcentage")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label("Pourcentage") ?>
+                                                <?= $form->field($millestone, "[{$i}]pourcentage", [])->textInput(['autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Pourcentage'])->label(false) ?>
                                             </div>
 
                                             <div class="col s2">
-                                                <?= $form->field($millestone, "[{$i}]priceeuros")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => Yii::$app->formatter->asCurrency($millestones[$i]->price)])->label("Prix") ?>
+                                                <?= $form->field($millestone, "[{$i}]priceeuros")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => Yii::$app->formatter->asCurrency($millestones[$i]->price),  'placeholder' => 'prix'])->label(false) ?>
                                                 <?= Html::activeHiddenInput($millestone, "[{$i}]price") ?>
                                             </div>
 
