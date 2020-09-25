@@ -136,11 +136,12 @@ function getCollumnsArray()
     ]);
 
     array_push($result, [
-        "attribute" => "pourcentage",
+        "attribute" => "getPriceeuro",
+        'value' => "priceeuro",
         "format" => "raw",
-        "label" => "Pourcentage",
-        "contentOptions" => ["class" => "project-pourcentage-row"],
-        "headerOptions" => ["class" => "project-pourcentage-row"],
+        "label" => "Prix",
+        "contentOptions" => ["class" => "project-price-row"],
+        "headerOptions" => ["class" => "project-price-row"],
     ]);
 
     array_push($result, [

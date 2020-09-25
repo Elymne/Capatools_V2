@@ -599,7 +599,7 @@ class ProjectController extends Controller implements ServiceInterface
 
 
                 $Milestone->project_id = $project->id;
-                $Milestone->statut = Millestone::STATUT_ENCOURS;
+                $Milestone->statut = Millestone::STATUT_NOT_STARTED;
                 $Milestone->save();
             }
             if (!empty($deletedmillestonesModifIds)) {
