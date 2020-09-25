@@ -289,11 +289,23 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionUpdateStatus(int $id, string $status)
     {
         $project = project::getOneById($id);
+        $currentstate = $project->state;
         $project->state = $status;
 
-        if ($status == Project::STATE_DEVIS_SIGNED || $status == Project::STATE_FINISHED) {
+        if ($status == Project::STATE_DEVIS_SIGNED) {
             $project->signing_probability = 100;
             $project->id_laboxy = IdLaboxyManager::generateLaboxyId($project);
+        }
+        if ($status == Project::STATE_DEVIS_CANCELED &&  $currentstate == Project::STATE_DEVIS_SENDED) {
+            $project->signing_probability = 0;
+        }
+
+        if ($status == Project::STATE_DEVIS_CANCELED || $status == Project::STATE_DEVIS_FINISHED) {
+            foreach ($project->millestones as $millestone) {
+                if ($millestone->statut == Millestone::STATUT_ENCOURS) {
+                    $millestone->statut = Millestone::STATUT_CANCELED;
+                }
+            }
         }
 
         if ($status == Project::STATE_DRAFT) {
@@ -324,16 +336,22 @@ class ProjectController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateMillestoneStatus(int $id, int $status)
+    public function actionUpdateMillestoneStatus(int $id, string $status, string $direct = 'view')
     {
         $jalon = Millestone::getOneById($id);
         $jalon->statut = $status;
+        $jalon->last_update_date =  date("d-m-yy", strtotime("now"));
         $jalon->save();
 
-        MenuSelectorHelper::setMenuProjectIndex();
-        return $this->render('view', [
-            'model' => $this->findModel($jalon->project_id),
-        ]);
+        if ($direct == 'view') {
+            MenuSelectorHelper::setMenuProjectIndex();
+
+            return $this->render('view', [
+                'model' => $this->findModel($jalon->project_id),
+            ]);
+        } else {
+            Yii::$app->response->redirect(['project/index-milestones']);
+        }
     }
 
     public function actionUpdateSigningProbability(int $id, int $probability)
@@ -1092,6 +1110,7 @@ class ProjectController extends Controller implements ServiceInterface
                 $finalModel->thematique = $model->thematique;
 
                 $finalModel->save();
+
                 MenuSelectorHelper::setMenuProjectDraft();
 
                 return Yii::$app->response->redirect(['project/view', 'id' => $model->id]);

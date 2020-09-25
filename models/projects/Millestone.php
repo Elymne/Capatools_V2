@@ -2,6 +2,7 @@
 
 namespace app\models\projects;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -55,8 +56,8 @@ class Millestone extends ActiveRecord
     {
         return $this->hasOne(Project::class, ['id' => 'project_id']);
     }
-    public function getPriceeuro()
+    public function getPriceeuros()
     {
-        return $this->price;
+        return Yii::$app->formatter->asCurrency($this->price);
     }
 }

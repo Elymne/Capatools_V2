@@ -1,5 +1,6 @@
 <?php
 
+use app\models\projects\Millestone;
 use app\assets\AppAsset;
 use app\assets\projects\ProjectIndexMilestonesAsset;
 use app\services\userRoleAccessServices\UserRoleEnum;
@@ -136,8 +137,8 @@ function getCollumnsArray()
     ]);
 
     array_push($result, [
-        "attribute" => "getPriceeuro",
-        'value' => "priceeuro",
+        "attribute" => "price",
+        'value' => "priceeuros",
         "format" => "raw",
         "label" => "Prix",
         "contentOptions" => ["class" => "project-price-row"],
@@ -167,6 +168,16 @@ function getCollumnsArray()
         "contentOptions" => ["class" => "project-last_update_date-row"],
         "headerOptions" => ["class" => "project-last_update_date-row"],
     ]);
+
+
+    array_push($result, [
+        'format' => 'raw',
+        'label' => 'Action',
+        'value' => function ($model, $key, $index, $column) {
+            return   getUpdateStatusButton($model);
+        }
+    ]);
+
 
     return $result;
 }
@@ -238,4 +249,19 @@ function getSelectListStatusFilter()
             <span class="span-combobox">Payé</span>
         </label>
     HTML;
+}
+
+
+function getUpdateStatusButton($milestone)
+{
+    if ($milestone->statut == Millestone::STATUT_ENCOURS && (UserRoleManager::hasRole(UserRoleEnum::PROJECT_MANAGER || UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) || UserRoleManager::hasRole(UserRoleEnum::ADMIN)))) {
+        return  Html::a('A facturer', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURATIONENCOURS, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
+    }
+    if ($milestone->statut == Millestone::STATUT_FACTURATIONENCOURS && (UserRoleManager::hasRole(UserRoleEnum::ACCOUNTING_SUPPORT)  || UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) || UserRoleManager::hasRole(UserRoleEnum::ADMIN))) {
+        return Html::a('Valider la facturation', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURER, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
+    }
+    if ($milestone->statut == Millestone::STATUT_FACTURER && (UserRoleManager::hasRole(UserRoleEnum::ACCOUNTING_SUPPORT)  || UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) || UserRoleManager::hasRole(UserRoleEnum::ADMIN))) {
+        return Html::a('Valider le paiement', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_PAYED, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
+    }
+    return "";
 }

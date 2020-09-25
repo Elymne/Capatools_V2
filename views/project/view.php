@@ -434,29 +434,29 @@ function createMillestone(array $millestones)
     </tr>
     <?php foreach ($millestones as $key => $millestone) { ?>
         <tr>
-            <td><?php echo $millestone->comment ?></td>
-            <td><?php echo Yii::$app->formatter->asPercent($millestone->pourcentage / 100) ?></td>
-            <td><?php echo Yii::$app->formatter->asCurrency($millestone->price) ?></td>
-            <td><?php echo updateStatus($millestone) ?></td>
-            <?php if (UserRoleManager::hasRoles([UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) {
-                //getUpdateStatusButton($millestone);
-            } ?>
+            <td><?= $millestone->comment ?></td>
+            <td><?= Yii::$app->formatter->asPercent($millestone->pourcentage / 100) ?></td>
+            <td><?= $millestone->priceeuros ?></td>
+            <td><?= updateStatus($millestone) ?></td>
+            <?php
+            getUpdateStatusButton($millestone);
+            ?>
         </tr>
     <?php
     }
 }
 
-function getUpdateStatusButton(Millestone $milestone)
+function getUpdateStatusButton($milestone)
 {
-    if ($milestone->statut == Millestone::STATUT_ENCOURS) {
+    if ($milestone->statut == Millestone::STATUT_ENCOURS && (UserRoleManager::hasRole(UserRoleEnum::PROJECT_MANAGER || UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) || UserRoleManager::hasRole(UserRoleEnum::ADMIN)))) {
     ?> <td><?= Html::a('A facturer', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURATIONENCOURS], ['class' => 'waves-effect waves-light btn btn-grey']) ?></td>
     <?php
     }
-    if ($milestone->statut == Millestone::STATUT_FACTURATIONENCOURS) {
+    if ($milestone->statut == Millestone::STATUT_FACTURATIONENCOURS &&  (UserRoleManager::hasRole(UserRoleEnum::ACCOUNTING_SUPPORT)  || UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) || UserRoleManager::hasRole(UserRoleEnum::ADMIN))) {
     ?> <td><?= Html::a('Valider la facturation', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURER], ['class' => 'waves-effect waves-light btn btn-grey']) ?></td>
     <?php
     }
-    if ($milestone->statut == Millestone::STATUT_FACTURER) {
+    if ($milestone->statut == Millestone::STATUT_FACTURER &&  (UserRoleManager::hasRole(UserRoleEnum::ACCOUNTING_SUPPORT)  || UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) || UserRoleManager::hasRole(UserRoleEnum::ADMIN))) {
     ?> <td><?= Html::a('Valider le paiement', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_PAYED], ['class' => 'waves-effect waves-light btn btn-grey']) ?></td>
     <?php
     }
@@ -480,9 +480,7 @@ function updateStatus($millestone): string
         $status = Millestone::STATUT_FACTURATIONENCOURS;
         return <<<HTML
                 En Cours&nbsp;&nbsp;&nbsp;
-                <a href="update-millestone-status?id=${id}&status=${status}" class="btn-floating waves-effect waves-light blue">
-                    <i class="material-icons right">check_circle</i>
-                </a>
+
         HTML;
     }
     if ($millestone->statut == Millestone::STATUT_ENCOURS) {
@@ -568,7 +566,7 @@ function displayActionButtons($model)
             'Abandonner la prestation <i class="material-icons right">clear</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_CANCELED,],
             ['class' => 'waves-effect waves-light btn btn-red  rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Abandonner la prestation ?'
+                'confirm' => 'Attention : Les échanciers non facturés seront abandonnés. Abandonner la prestation ? '
             ]]
         ) ?>
     <?php endif; ?>
@@ -577,7 +575,7 @@ function displayActionButtons($model)
             'Prestation terminée <i class="material-icons right">check</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_FINISHED,],
             ['class' => 'waves-effect waves-light btn btn-blue  rightspace-15px leftspace-15px', 'data' => [
-                'confirm' => 'Terminer la prestation ?'
+                'confirm' => 'Attention : Les échanciers non facturés seront abandonnés. Terminer la prestation ?'
             ]]
         ) ?>
     <?php endif; ?>
