@@ -42,6 +42,11 @@ class AdministrativeDocument extends ActiveRecord
         return static::find();
     }
 
+
+    static function getAllGategory()
+    {
+        return static::find()->select('type')->distinct()->all();
+    }
     /**
      * Utilisé pour récupérer tous des documents.
      * 

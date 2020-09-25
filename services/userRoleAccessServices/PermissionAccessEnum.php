@@ -33,6 +33,8 @@ class PermissionAccessEnum
     const ADMIN_DEVIS_PARAMETERS_UPDATE = 'adminDevisParametersUpdate';
     const ADMIN_EQUIPEMENT_INDEX = 'adminEquipementIndex';
     const ADMIN_EQUIPEMENT_CREATE = 'adminEquipementCreate';
+    const ADMIN_DOCUMENT_INDEX = 'adminDocumentIndex';
+    const ADMIN_DOCUMENT_CREATE = 'adminDocumentCreate';
 
     // Enums relatif à la gestions des sociétés et des contacts.
     const COMPANY_INDEX = 'companyIndex';

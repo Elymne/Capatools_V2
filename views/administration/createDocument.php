@@ -42,18 +42,16 @@ DocumentCreateAsset::register($this);
 
                                 <?= $form->field($model, 'type')->textInput(['maxlength' => true, 'placeholder' => 'type'])->label('Type du document :') ?>
 
+
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="input-field col s6">
                                 <!-- file field -->
                                 <?= $form
                                     ->field($model, 'File')
                                     ->fileInput(['accept' => '*'])
-                                    ->label('Document', []) ?>
-
-                            </div>
-                            <div class="input-field col s6">
-
-                                <?= $form->field($model, 'File')->textInput(['maxlength' => true, 'placeholder' => 'type'])->label('Type du document :') ?>
+                                    ->label('Document :', []) ?>
 
                             </div>
                         </div>

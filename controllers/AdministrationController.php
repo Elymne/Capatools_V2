@@ -9,6 +9,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 
+use yii\web\UploadedFile;
+
 use app\models\users\CapaUser;
 use app\models\users\CapaUserCreateForm;
 use app\models\users\CapaUserSearch;
@@ -31,6 +33,9 @@ use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use yii\data\ActiveDataProvider;
+use yii\log\Logger;
+
+
 
 /**
  * Classe contrôleur des vues et des actions de la partie adminitration.
@@ -112,6 +117,16 @@ class AdministrationController extends Controller
                         'allow' => true,
                         'actions' => ['create-equipment'],
                         'roles' => [PermissionAccessEnum::ADMIN_EQUIPEMENT_CREATE]
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create-document'],
+                        'roles' => [PermissionAccessEnum::ADMIN_DOCUMENT_CREATE]
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index-document'],
+                        'roles' => [PermissionAccessEnum::ADMIN_DOCUMENT_INDEX]
                     ]
                 ],
             ],
@@ -135,7 +150,7 @@ class AdministrationController extends Controller
     public static function getActionUser()
     {
         $subMenu = new LeftMenuCreator(1, "Administration", SubMenuEnum::ADMIN, [
-            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::HUMAN_RESSOURCES
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::HUMAN_RESSOURCES, UserRoleEnum::SALARY
         ]);
 
         $subMenu->addSubMenu(4, "administration/index", "Salariés", SubMenuEnum::ADMIN_LIST_USER, [
@@ -154,14 +169,10 @@ class AdministrationController extends Controller
             UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
         ]);
 
-        array_push($result, [
-            'priorite' => 2,
-            'url' => 'administration/index-document',
-            'label' => 'Documents administratifs',
-            'icon' => 'library_books',
-            'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_DOCUMENTS
+        $subMenu->addSubMenu(1, 'administration/index-document', 'Documents administratifs',  SubMenuEnum::ADMIN_LIST_DOCUMENTS, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::HUMAN_RESSOURCES, UserRoleEnum::SALARY, UserRoleEnum::SUPER_ADMIN
         ]);
-return $subMenu->getSubMenuCreated()
+        return $subMenu->getSubMenuCreated();
     }
 
     /**
@@ -469,11 +480,13 @@ return $subMenu->getSubMenuCreated()
             ],
         ]);
 
+        $category =  AdministrativeDocument::getAllGategory();
         MenuSelectorHelper::setMenuDocuments();
         return $this->render(
             'indexdocument',
             [
-                'dataProvider' => $dataProvider
+                'dataProvider' => $dataProvider,
+                'category' => $category,
             ]
         );
     }
@@ -488,13 +501,31 @@ return $subMenu->getSubMenuCreated()
     {
         $model = new DocumentCreateForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->save()) {
-                MenuSelectorHelper::setMenuDocuments();
-                return $this->redirect(['administration/index-document']);
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->File = UploadedFile::getInstances($model, 'File');
+
+            if ($model->upload()) {
+
+
+                $modelfinal = new AdministrativeDocument();
+
+                $modelfinal->title = $model->title;
+                $modelfinal->type = $model->title;
+                $modelfinal->internal_link = $model->title;
+                $modelfinal->last_update_date  = date("d-m-yy", strtotime("now"));
+
+                if ($modelfinal->save()) {
+                    MenuSelectorHelper::setMenuDocuments();
+                    return $this->redirect(['administration/index-document']);
+                } else {
+                    Yii::debug("errors saving SomeModel: " . var_export($model->getErrors(), true), Logger::LEVEL_WARNING, __METHOD__);
+                }
             }
         }
 
+        $model = new DocumentCreateForm();
         MenuSelectorHelper::setMenuDocuments();
         return $this->render('createDocument', [
             'model' => $model,
