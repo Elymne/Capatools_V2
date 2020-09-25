@@ -1,0 +1,13 @@
+button.btn-floating {
+    border: none;
+    margin-top: 24px;
+}
+
+.main-button-margin {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.radio-button-right-margin {
+    margin-right: 12px;
+}
