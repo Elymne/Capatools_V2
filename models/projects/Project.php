@@ -48,13 +48,14 @@ class Project extends ActiveRecord
     const STATE_DRAFT = 'Avant-projet';
     const STATE_DEVIS_SENDED = 'Devis envoyé';
     const STATE_DEVIS_SIGNED = "Devis signé";
-    const STATE_CANCELED = "Projet annulé";
-    const STATE_FINISHED = "Projet terminé";
+    const STATE_DEVIS_CANCELED = "Projet annulé";
+    const STATE_DEVIS_FINISHED = "Projet terminé";
     const STATES = [
         1 => self::STATE_DRAFT,
         2 => self::STATE_DEVIS_SENDED,
         3 => self::STATE_DEVIS_SIGNED,
-        4 => self::STATE_CANCELED, self::STATE_FINISHED
+        4 => self::STATE_DEVIS_CANCELED,
+        5 => self::STATE_DEVIS_FINISHED
     ];
 
     public static function tableName()
