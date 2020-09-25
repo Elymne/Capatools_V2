@@ -513,8 +513,8 @@ class ProjectController extends Controller implements ServiceInterface
                 $lotProspection->save();
 
                 // Création des lots.
-                // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
-                if ($lots[0]->combobox_lot_checked == 0) {
+                // Si aucun lot de créé, on en créé un par défaut.
+                if (\sizeof($lots) == 0) {
                     $lots = [new ProjectCreateLotForm()];
                     $lots[0]->title = 'Lot par défaut';
                     $lots[0]->comment = 'Ceci est un lot qui a été généré automatiquement car le créateur ne souhaitait pas utiliser plusieurs lots';

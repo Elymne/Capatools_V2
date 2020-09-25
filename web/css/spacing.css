@@ -29,3 +29,11 @@
 .topspace-15px-invert {
     margin-top: -15px;
 }
+
+.bottomspace-16px {
+    margin-bottom: 16px;
+}
+
+.topspace-4px {
+    margin-top: 4px;
+}

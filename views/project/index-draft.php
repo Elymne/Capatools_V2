@@ -8,7 +8,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 
-$this->title = 'Liste des projets';
+$this->title = 'Liste des brouillons';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

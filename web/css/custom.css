@@ -1,3 +1,9 @@
+/* Text size */
+* {
+    font-size: 1.1rem;
+    font-family: sans-serif;
+}
+
 /* html tag css */
 h2 {
     color: #2196f3;
@@ -10,7 +16,7 @@ h3 {
 
 label {
     color: #333333;
-    font-size: 1em;
+    font-size: 1.2em;
 }
 
 body {
@@ -23,12 +29,12 @@ a {
 
 div .scroll-box {
     overflow-x: scroll;
-    padding: 1rem;
+    padding: 1.15rem;
 }
 
 .typeLabel {
     margin-top: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
 }
 
 /* overrided materialize css class */
@@ -55,8 +61,6 @@ div .scroll-box {
 
 .card {
     margin-top: 20px;
-    margin-left: 40px;
-    margin-right: 40px;
 }
 
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
