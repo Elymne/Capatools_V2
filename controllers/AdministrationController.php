@@ -168,7 +168,7 @@ class AdministrationController extends Controller
             UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
         ]);
 
-        $subMenu->addSubMenu(1, 'administration/index-document', 'Documents administratifs',  SubMenuEnum::ADMIN_LIST_DOCUMENTS, [
+        $subMenu->addSubMenu(1, 'administration/index-document', 'Documents',  SubMenuEnum::ADMIN_LIST_DOCUMENTS, [
             UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::HUMAN_RESSOURCES, UserRoleEnum::SALARY, UserRoleEnum::SUPER_ADMIN
         ]);
         return $subMenu->getSubMenuCreated();
