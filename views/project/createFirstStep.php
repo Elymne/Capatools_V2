@@ -22,7 +22,7 @@ $this->params["breadcrumbs"][] = "Update";
     <div class="project-create">
         <?php $form = ActiveForm::begin(["id" => "dynamic-form", "options" => ["enctype" => "multipart/form-data"]]); ?>
         <div class="row">
-            <div class="col s12 m10 offset-m1">
+            <div class="col s10 offset-s1">
 
                 <!-- Card view basique -->
                 <div class="card">
@@ -35,7 +35,7 @@ $this->params["breadcrumbs"][] = "Update";
                         <div class="row">
                             <div class="col s12">
                                 <label class="blue-text control-label topspace-4px">Titre du projet</label>
-                                <?= $form->field($model, "internal_name")->textInput([])->label(false) ?>
+                                <?= $form->field($model, "internal_name")->textInput()->label(false) ?>
                             </div>
                         </div>
                     </div>
@@ -95,26 +95,24 @@ $this->params["breadcrumbs"][] = "Update";
                                             <!-- widgetContainer -->
                                             <?php foreach ($lots as $i => $lot) : ?>
                                                 <div class="item">
-                                                    <div class="card">
-                                                        <div class="card-action">
-                                                            <?php if (!$lot->isNewRecord) : ?>
-                                                                <?= Html::activeHiddenInput($lot, "[{$i}]id"); ?>
-                                                            <?php endif; ?>
 
-                                                            <div class="row">
-                                                                <div class=" col m2 l2 ">
-                                                                    <?= $form->field($lot, "[{$i}]id_string")->textInput(["autocomplete" => "off", "maxlength" => true, "readonly" => true, "value" => "Lot N° " . ($i + 1) . " "])->label(("")) ?>
-                                                                </div>
-                                                                <div class="col m7 l7">
-                                                                    <?= $form->field($lot, "[{$i}]title")->textInput(["autocomplete" => "off", "placeholder" => "Titre du lot", "maxlength" => true])->label("") ?>
-                                                                </div>
-                                                                <div class="col m3 l3">
-                                                                    <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                                    <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
-                                                                </div>
-                                                            </div><!-- .row -->
+                                                    <?php if (!$lot->isNewRecord) : ?>
+                                                        <?= Html::activeHiddenInput($lot, "[{$i}]id"); ?>
+                                                    <?php endif; ?>
+
+                                                    <div class="row">
+                                                        <div class=" col m2 xl2 ">
+                                                            <?= $form->field($lot, "[{$i}]id_string")->textInput(["autocomplete" => "off", "maxlength" => true, "readonly" => true, "value" => "Lot N° " . ($i + 1) . " "])->label(("")) ?>
                                                         </div>
-                                                    </div>
+                                                        <div class="col m7 xl8">
+                                                            <?= $form->field($lot, "[{$i}]title")->textInput(["autocomplete" => "off", "placeholder" => "Titre du lot", "maxlength" => true])->label("") ?>
+                                                        </div>
+                                                        <div class="col m3 xl2">
+                                                            <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                                            <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                        </div>
+                                                    </div><!-- .row -->
+
                                                 </div>
                                             <?php endforeach; ?>
 

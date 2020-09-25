@@ -42,9 +42,35 @@ div .scroll-box {
     margin-bottom: 4px;
 }
 
-/* overrided materialize css class */
 .centrage {
     text-align: center;
+}
+
+/* overrided materialize css class */
+
+.btn-floating {
+    line-height: 40px;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    overflow: hidden;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    cursor: pointer;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+    vertical-align: middle;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.btn-floating i {
+    font-size: 1rem;
+    line-height: 36px;
+    display: inline-block;
+    width: inherit;
+    color: #fff;
 }
 
 .card-content {
