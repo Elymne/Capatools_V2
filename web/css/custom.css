@@ -32,6 +32,11 @@ div .scroll-box {
     padding: 1.15rem;
 }
 
+/* new css class */
+.body-marger {
+    margin: 12px;
+}
+
 .typeLabel {
     margin-top: 4px;
     margin-bottom: 4px;
@@ -57,10 +62,6 @@ div .scroll-box {
 .navbar .navbar-dark {
     margin-top: -1px;
     background-color: #333333;
-}
-
-.card {
-    margin-top: 20px;
 }
 
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {

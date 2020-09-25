@@ -23,7 +23,7 @@ ProjectIndexAsset::register($this);
     <div class="project-index">
 
         <!-- New -->
-        <div class="row">
+        <div class="row body-marger">
 
             <div class="card">
                 <div class="card-content">

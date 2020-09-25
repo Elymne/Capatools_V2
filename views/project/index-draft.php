@@ -19,7 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="project-index">
 
         <!-- New -->
-        <div class="row">
+        <div class="row body-marger">
+
 
             <div class="card">
                 <div class="card-action">
@@ -44,6 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 </div>
             </div>
+
 
         </div>
 

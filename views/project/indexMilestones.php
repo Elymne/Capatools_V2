@@ -22,7 +22,8 @@ $this->params["breadcrumbs"][] = $this->title;
 
 <div class="container">
     <div class="project-index">
-        <div class="row">
+
+        <div class="row body-marger">
 
             <!-- GRIDVIEW - OPTIONS DE FILTRES ET DE RECHERCHES -->
             <div class="card">
@@ -88,6 +89,7 @@ $this->params["breadcrumbs"][] = $this->title;
 
         </div>
     </div>
+
 </div>
 
 

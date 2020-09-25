@@ -17,7 +17,7 @@ ContactViewAsset::register($this);
 
 <div class="container">
     <div class="contact-view">
-        <div class="row">
+        <div class="row body-marger">
 
             <div class="card">
                 <div class="card-content">
