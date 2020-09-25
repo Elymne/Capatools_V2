@@ -1,5 +1,6 @@
 <?php
 
+use app\assets\AppAsset;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\assets\administration\DocumentIndexAsset;
@@ -16,6 +17,7 @@ use yii\helpers\ArrayHelper;
 $this->title = 'Liste des documents administratifs';
 $this->params['breadcrumbs'][] = $this->title;
 
+AppAsset::register($this);
 DocumentIndexAsset::register($this);
 ?>
 
@@ -31,7 +33,14 @@ DocumentIndexAsset::register($this);
                     </label>
                 </div>
                 <div class="card-action">
-                    <?php getSearchFilter($category) ?>
+                    <div class="col s3">
+                        <p>Filtre nom du document :</p>
+                        <?= getSearchNameFilter() ?>
+                    </div>
+                    <div class="col s3">
+                        <p>Filtre type de document :</p>
+                        <?= getSearchtypeFilter($category) ?>
+                    </div>
                 </div>
             </div>
             <div class="card">
@@ -41,7 +50,7 @@ DocumentIndexAsset::register($this);
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
                             'tableOptions' => [
-                                'id' => 'admin_table',
+                                'id' => 'document_table',
                                 'style' => 'height: 20px',
                                 'class' => ['highlight']
                             ],
@@ -64,31 +73,33 @@ DocumentIndexAsset::register($this);
 </div>
 
 <?php
-
-function getSearchFilter($category)
+function getSearchNameFilter()
 {
-    echo Select2::widget([
-        'id' => 'company-name-search',
-        'name' => 'droplist_company',
-        'data' => ArrayHelper::map($category, 'type', 'type'),
-        'pluginLoading' => false,
-        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner une categorie ...'],
-        'pluginOptions' => [
-            'allowClear' => true
-        ]
-    ]);
-
-    echo '<br />';
     echo Html::input('text', 'textinput_user', '', [
         'id' => 'indexdocument-name-search',
         'class' => 'form-control',
         'maxlength' => 50,
         'style' => 'width:350px',
         'placeholder' => 'Rechercher un nom de document',
-        'onkeyup' => 'docuementNameFilterSearch()'
+        'onkeyup' => 'onInputDocumentNameChange()'
     ]);
-
-    echo '<br />';
+}
+function getSearchtypeFilter($category)
+{
+    echo Select2::widget([
+        'id' => 'type-name-search',
+        'name' => 'droplist_type',
+        'data' => ArrayHelper::map($category, 'type', 'type'),
+        'pluginLoading' => false,
+        'hideSearch' => true,
+        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner une categorie ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+        'pluginEvents' => [
+            "change" => "() => { onSelectTypeChange() }",
+        ]
+    ]);
 }
 
 /**
@@ -116,22 +127,25 @@ function getCollumnArray(): array
 function getNameArray(): array
 {
     return [
+        "attribute" => "document.internal_name",
         'label' => 'Titre du document',
-        'encodeLabel' => false,
-        'format' => 'ntext',
+        "format" => "raw",
         'attribute' => 'title',
-        'contentOptions' => ['class' => 'title-row'],
+        "contentOptions" => ["class" => "document-internal_name-row"],
+        "headerOptions" => ["class" => "document-internal_name-row"],
     ];
 }
 
 function getTypeArray(): array
 {
     return [
+        "attribute" => "document.internal_type",
         'label' => 'Type du document',
-        'encodeLabel' => false,
-        'format' => 'ntext',
+        "format" => "raw",
         'attribute' => 'type',
-        'contentOptions' => ['class' => 'type-row'],
+        "contentOptions" => ["class" => "document-internal_type-row"],
+        "headerOptions" => ["class" => "document-internal_type-row"],
+
     ];
 }
 
@@ -139,10 +153,12 @@ function getLastUpdateArray(): array
 {
     return [
         'label' => 'Date de mise à jour',
-        'encodeLabel' => false,
-        'format' => 'ntext',
-        'attribute' => 'last_update_date',
-        'contentOptions' => ['class' => 'price_day-row'],
+        "attribute" => "document.internal_lastupdate",
+        "format" => "raw",
+        'attribute' => 'type',
+        "contentOptions" => ["class" => "document-internal_lastupdate-row"],
+        "headerOptions" => ["class" => "document-internal_lastupdate-row"],
+
     ];
 }
 function getDownloadButtonArray()

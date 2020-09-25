@@ -28,7 +28,7 @@ class AdministrativeDocument extends ActiveRecord
 
     public static function getOneById(int $id)
     {
-        var_dump($id);
+
         return static::findOne($id);
     }
 

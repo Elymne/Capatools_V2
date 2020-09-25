@@ -541,8 +541,7 @@ class AdministrationController extends Controller
     public function actionUpdateDocument(int $id = 1)
     {
         $model = DocumentUpdateForm::getOneById($id);
-        var_dump($id);
-        var_dump($model);
+
         if ($model->load(Yii::$app->request->post())) {
 
             $model->File = UploadedFile::getInstances($model, 'File');
@@ -579,7 +578,14 @@ class AdministrationController extends Controller
     public function actionDeleteDocument(int $id = 1)
     {
         $model = DocumentUpdateForm::getOneById($id);
+
+        // Si le fichier précédent existe, on le supprime.
+        if ($model->internal_link != '' || $model->internal_link != NULL) {
+            unlink($model->internal_link);
+        }
+
         $model->delete();
+
 
         MenuSelectorHelper::setMenuDocuments();
         return $this->redirect(['administration/index-document']);
