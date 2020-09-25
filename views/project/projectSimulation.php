@@ -136,7 +136,7 @@ ProjectSimulationAsset::register($this);
                 <!-- Card view basique : PROJETS -->
                 <div class="card">
 
-                    <div style="background-color: #00334d;" class="card-content">
+                    <div style="background-color: #2A2B36;" class="card-content">
                         <label>Résumé du projet</label>
                     </div>
 
@@ -358,7 +358,7 @@ ProjectSimulationAsset::register($this);
                                         </tr>
                                         <?php if (sizeof($laboratorydepenses) == 0) : ?>
                                             <tr>
-                                                <td style="font-style: italic;">Pas de reversements laboratoires</td>
+                                                <td style="font-style: italic;">Pas de reversements laboratoires trouvés</td>
                                                 <td></td>
                                             </tr>
                                         <?php else : ?>
@@ -384,7 +384,7 @@ ProjectSimulationAsset::register($this);
                                         </tr>
                                         <?php if (sizeof($listInternalDepense) == 0) : ?>
                                             <tr>
-                                                <td style="font-style: italic;">Pas de dépenses internes</td>
+                                                <td style="font-style: italic;">Pas de prestations internes trouvées</td>
                                                 <td></td>
                                             </tr>
                                         <?php else : ?>
@@ -405,12 +405,12 @@ ProjectSimulationAsset::register($this);
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
-                                            <td class="table-font-bold">Sous traitance externe</td>
+                                            <td class="table-font-bold">Sous-traitance externe</td>
                                             <td></td>
                                         </tr>
                                         <?php if (sizeof($listExternalDepense) == 0) : ?>
                                             <tr>
-                                                <td style="font-style: italic;">Pas de dépenses externes</td>
+                                                <td style="font-style: italic;">Pas de sous-traitances externes trouvées</td>
                                                 <td></td>
                                             </tr>
                                         <?php else : ?>
@@ -510,41 +510,40 @@ ProjectSimulationAsset::register($this);
                         </div>
                     </div>
 
-                    <div class="card-action">
-                        <div class="form-group">
-                            <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
-                                <?= Html::a(
-                                    Yii::t('app', '<i class="material-icons right">arrow_back</i>'),
-                                    ['project/index-draft'],
-                                    ['class' => 'waves-effect waves-light btn-floating btn-large btn-grey', 'title' => 'Retour à la liste des brouillons']
-                                ) ?>
-                                <?= Html::submitButton(
-                                    '<i class="material-icons right">save</i>',
-                                    ['class' => 'waves-effect waves-light btn-floating btn-large btn-blue', 'title' => 'Sauvegarder les options']
-                                ) ?>
-                                <?php
-                                if ($validdevis) {
-                                    echo Html::a(
-                                        Yii::t('app', '<i class="material-icons right">check</i>'),
-                                        ['project/create-project?id=' . $project->id],
-                                        ['class' => 'waves-effect waves-light btn-floating btn-large btn-green', 'title' => 'Créer le projet']
-                                    );
-                                } else {
-                                    echo Html::a(
-                                        Yii::t('app', '<i class="material-icons right">check</i>'),
-                                        null,
-                                        ['class' => 'btn-floating btn-large disabled', 'title' => 'Créer le projet']
-                                    );
-                                }
-                                ?>
-                            </div>
-                        </div>
-                    </div>
+
 
                 </div>
 
             </div>
         </div>
+
+        <!-- Floatbutton ! -->
+        <div class="card-action">
+            <div class="form-group">
+                <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
+
+                    <?= Html::a(
+                        Yii::t('app', '<i class="material-icons right">arrow_back</i>'),
+                        ['project/index-draft'],
+                        ['class' => 'waves-effect waves-light btn-floating btn-large btn-grey', 'title' => 'Retour à la liste des brouillons']
+                    ) ?>
+
+                    <?= Html::submitButton(
+                        '<i class="material-icons right">save</i>',
+                        ['class' => 'waves-effect waves-light btn-floating btn-large btn-blue', 'title' => 'Sauvegarder les options']
+                    ) ?>
+
+                    <?php if ($validdevis) : ?>
+                        <?= Html::a(
+                            Yii::t('app', '<i class="material-icons right">check</i>'),
+                            ['project/create-project?id=' . $project->id],
+                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-green', 'title' => 'Créer le projet']
+                        ) ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
         <?php ActiveForm::end(); ?>
     </div>
 </div>
