@@ -553,7 +553,7 @@ function displayActionButtons($model)
     <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
         <?= Html::a(
             'Cloturer le devis <i class="material-icons right">clear</i>',
-            ['update-status', 'id' => $model->id, 'status' => Project::STATE_CANCELED,],
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_CANCELED,],
             ['class' => 'waves-effect waves-light btn btn-red  rightspace-15px leftspace-15px', 'data' => [
                 'confirm' => 'Cloturer le devis ?'
             ]]
@@ -564,7 +564,7 @@ function displayActionButtons($model)
     <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
         <?= Html::a(
             'Abandonner la prestation <i class="material-icons right">clear</i>',
-            ['update-status', 'id' => $model->id, 'status' => Project::STATE_CANCELED,],
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_CANCELED,],
             ['class' => 'waves-effect waves-light btn btn-red  rightspace-15px leftspace-15px', 'data' => [
                 'confirm' => 'Attention : Les échanciers non facturés seront abandonnés. Abandonner la prestation ? '
             ]]
@@ -573,7 +573,7 @@ function displayActionButtons($model)
     <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
         <?= Html::a(
             'Prestation terminée <i class="material-icons right">check</i>',
-            ['update-status', 'id' => $model->id, 'status' => Project::STATE_FINISHED,],
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_FINISHED,],
             ['class' => 'waves-effect waves-light btn btn-blue  rightspace-15px leftspace-15px', 'data' => [
                 'confirm' => 'Attention : Les échanciers non facturés seront abandonnés. Terminer la prestation ?'
             ]]

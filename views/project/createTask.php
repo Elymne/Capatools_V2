@@ -102,10 +102,8 @@ if ($SaveSucess != null) {
 
                             <div class="container-items-taskGestion">
                                 <div class="row">
-                                    <div class="col s11">
-                                    </div>
-                                    <div class="col s1">
-                                        <button type="button" class="add-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                    <div class="col s1 offset-s5">
+                                        <button type="button" class="add-item-taskGestion btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
                                     </div>
                                 </div>
                                 <!-- widgetContainer -->
