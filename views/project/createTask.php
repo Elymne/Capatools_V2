@@ -172,7 +172,7 @@ if ($SaveSucess != null) {
                                                 ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Durée total") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Temps incertitude") ?>
 
                                                 <?php echo Html::activeHiddenInput($taskGestion, "[{$i}]risk_duration_hour"); ?>
                                             </div>
@@ -304,7 +304,7 @@ if ($SaveSucess != null) {
                                             </div><!-- .row -->
 
                                             <div class="col s1">
-                                                <?= $form->field($taskOperational, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Durée total") ?>
+                                                <?= $form->field($taskOperational, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Temps incertitude") ?>
                                                 <?php echo Html::activeHiddenInput($taskOperational, "[{$i}]risk_duration_hour"); ?>
                                             </div>
 
