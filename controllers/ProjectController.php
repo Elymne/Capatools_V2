@@ -298,6 +298,7 @@ class ProjectController extends Controller implements ServiceInterface
             foreach ($project->millestones as $millestone) {
 
                 $millestone->statut = Millestone::STATUT_ENCOURS;
+                $millestone->save();
             }
         }
         if ($status == Project::STATE_DEVIS_CANCELED &&  $currentstate == Project::STATE_DEVIS_SENDED) {
@@ -308,6 +309,7 @@ class ProjectController extends Controller implements ServiceInterface
             foreach ($project->millestones as $millestone) {
                 if ($millestone->statut == Millestone::STATUT_ENCOURS) {
                     $millestone->statut = Millestone::STATUT_CANCELED;
+                    $millestone->save();
                 }
             }
         }
