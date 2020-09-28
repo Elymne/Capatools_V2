@@ -295,6 +295,10 @@ class ProjectController extends Controller implements ServiceInterface
         if ($status == Project::STATE_DEVIS_SIGNED) {
             $project->signing_probability = 100;
             $project->id_laboxy = IdLaboxyManager::generateLaboxyId($project);
+            foreach ($project->millestones as $millestone) {
+
+                $millestone->statut = Millestone::STATUT_ENCOURS;
+            }
         }
         if ($status == Project::STATE_DEVIS_CANCELED &&  $currentstate == Project::STATE_DEVIS_SENDED) {
             $project->signing_probability = 0;
