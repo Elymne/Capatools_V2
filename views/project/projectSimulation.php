@@ -491,6 +491,7 @@ ProjectSimulationAsset::register($this);
                                                 <?= $form->field($millestone, "[{$i}]estimate_date")->widget(DatePicker::class, [
                                                     'language' => 'fr',
                                                     'dateFormat' => 'dd-MM-yyyy',
+                                                    'options' => ['class' => 'form-control picker'],
                                                 ])->label(('Date(jj-mm-yyyy)')) ?>
                                             </div>
 
