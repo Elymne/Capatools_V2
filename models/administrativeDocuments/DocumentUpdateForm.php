@@ -25,7 +25,6 @@ class DocumentUpdateForm extends AdministrativeDocument
     {
         return [
             [['title', 'type', 'File', 'file_name', 'internal_link'], 'safe'],
-            ['title', 'required', 'message' => 'Veulliez renseigner le nom du document'],
             ['type', 'required', 'message' => 'Veulliez renseigner le type du document'],
             [['File'], 'file', 'skipOnEmpty' => true, 'maxSize' => 2000000,  'tooBig' => 'Le document est trop gros (2Mo maxi)}'],
 

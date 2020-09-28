@@ -503,26 +503,28 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $model->File = UploadedFile::getInstances($model, 'File');
+            if ($model->validate()) {
+                $model->File = UploadedFile::getInstances($model, 'File');
 
-            if ($model->upload()) {
+                if ($model->upload()) {
 
 
-                $modelfinal = new AdministrativeDocument();
+                    $modelfinal = new AdministrativeDocument();
 
-                $modelfinal->title = $model->title;
-                $modelfinal->type = $model->type;
-                $modelfinal->internal_link = $model->internal_link;
-                $modelfinal->last_update_date  = date("d-m-yy", strtotime("now"));
+                    $modelfinal->title = $model->title;
+                    $modelfinal->type = $model->type;
+                    $modelfinal->internal_link = $model->internal_link;
+                    $modelfinal->last_update_date  = date("d-m-yy", strtotime("now"));
 
-                if ($modelfinal->save()) {
-                    MenuSelectorHelper::setMenuDocuments();
-                    return $this->redirect(['administration/index-document']);
+                    if ($modelfinal->save()) {
+                        MenuSelectorHelper::setMenuDocuments();
+                        return $this->redirect(['administration/index-document']);
+                    }
                 }
             }
         }
 
-        $model = new DocumentCreateForm();
+
         MenuSelectorHelper::setMenuDocuments();
         return $this->render('createDocument', [
             'model' => $model,

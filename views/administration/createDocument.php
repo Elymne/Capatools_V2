@@ -28,18 +28,18 @@ DocumentCreateAsset::register($this);
 
                 <div class="card-action">
 
-                    <?php $form = ActiveForm::begin([
-                        'fieldConfig' => [
-                            'labelOptions' => ['class' => 'blue-text control-label'],
-                        ],
-                    ]); ?>
+                    <?php $form = ActiveForm::begin(); ?>
                     <div class="col s12">
                         <div class="row">
                             <div class="input-field col s12">
 
 
                                 <?= Html::activeHiddenInput($model, "id"); ?>
-                                <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'placeholder' => 'Titre'])->label('Nom du document :') ?>
+                                <?php if ($update) { ?>
+                                    <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'placeholder' => 'Titre', 'readonly' => true])->label('Nom du document :') ?>
+                                <?php } else { ?>
+                                    <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'placeholder' => 'Titre'])->label('Nom du document :') ?>
+                                <?php } ?>
                             </div>
                         </div>
 
@@ -68,7 +68,7 @@ DocumentCreateAsset::register($this);
                         </div>
 
                         <div class="form-group">
-                            <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                            <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
 
                             <?= Html::a(Yii::t('app', 'Annuler'), ['index-document'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                         </div>

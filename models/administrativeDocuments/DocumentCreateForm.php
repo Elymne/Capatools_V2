@@ -26,12 +26,28 @@ class DocumentCreateForm extends AdministrativeDocument
         return [
             [['title', 'type', 'File', 'file_name', 'internal_link'], 'safe'],
             ['title', 'required', 'message' => 'Veulliez renseigner le nom du document'],
+            ['title', 'validateDocument'],
             ['type', 'required', 'message' => 'Veulliez renseigner le type du document'],
             ['File', 'required', 'message' => 'Un document doit être fournit'],
             [['File'], 'file', 'skipOnEmpty' => false, 'maxSize' => 2000000,  'tooBig' => 'Le document est trop gros (2Mo maxi)}'],
 
         ];
     }
+
+    /**
+     * Fonction vérifiant si un document de même nom existe déjà
+     */
+    public function validateDocument($attribute, $params)
+    {
+
+        $doc = AdministrativeDocument::find()->where(['title' => $this->title])->count();
+
+        if ($doc > 0) {
+            $this->addError('title', 'Un document porte dèjà ce nom');
+        }
+    }
+
+
     /**
      * Fonction permettant d'upload le fichier.
      * 
