@@ -11,6 +11,7 @@ class m200099_000843_administrative_document_table extends Migration
             'id' => $this->primaryKey(),
             'title' => $this->string()->notNull(),
             'internal_link' => $this->string()->notNull(),
+            'filename' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
             'last_update_date' => $this->string(),
 

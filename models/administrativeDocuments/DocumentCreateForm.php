@@ -41,7 +41,7 @@ class DocumentCreateForm extends AdministrativeDocument
     {
 
         $doc = AdministrativeDocument::find()->where(['title' => $this->title])->count();
-
+        echo $doc;
         if ($doc > 0) {
             $this->addError('title', 'Un document porte dèjà ce nom');
         }
@@ -56,21 +56,26 @@ class DocumentCreateForm extends AdministrativeDocument
     public function upload(): bool
     {
         // On attribut le nom du fichier à l'arribut file_name qui sera stocké en bdd.
-        $this->file_name =  $this->File[0]->name;
 
-        $path = 'referencedoc';
+        // On attribut le nom du fichier à l'arribut file_name qui sera stocké en bdd.
+        if ($this->File) {
+            $this->filename =  $this->File[0]->name;
 
-        // Si le dossier n'existe pas, on le créer.
-        if (!is_dir($path)) {
-            mkdir($path);
+            $path = 'referencedoc' . '/' . $this->title;
+
+            // Si le dossier n'existe pas, on le créer.
+            if (!is_dir($path)) {
+                mkdir($path);
+            }
+
+            // Si le fichier précédent existe, on le supprime.
+            if ($this->internal_link != '' || $this->internal_link != NULL) {
+                unlink($this->internal_link);
+            }
+
+            $this->internal_link = $path . '/' . $this->filename;
+            return $this->File[0]->saveAs($this->internal_link);
         }
-
-        // Si le fichier précédent existe, on le supprime.
-        if ($this->internal_link != '' || $this->internal_link != NULL) {
-            unlink($this->file_path);
-        }
-
-        $this->internal_link = $path . '/' . $this->file_name;
-        return $this->File[0]->saveAs($this->internal_link);
+        return false;
     }
 }

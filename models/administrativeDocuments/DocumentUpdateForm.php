@@ -39,9 +39,9 @@ class DocumentUpdateForm extends AdministrativeDocument
     {
         // On attribut le nom du fichier à l'arribut file_name qui sera stocké en bdd.
         if ($this->File) {
-            $this->file_name =  $this->File[0]->name;
+            $this->filename =  $this->File[0]->name;
 
-            $path = 'referencedoc';
+            $path = 'referencedoc' . '/' . $this->title;
 
             // Si le dossier n'existe pas, on le créer.
             if (!is_dir($path)) {
@@ -50,11 +50,14 @@ class DocumentUpdateForm extends AdministrativeDocument
 
             // Si le fichier précédent existe, on le supprime.
             if ($this->internal_link != '' || $this->internal_link != NULL) {
-                unlink($this->file_path);
+                unlink($this->internal_link);
             }
 
-            $this->internal_link = $path . '/' . $this->file_name;
+            $this->internal_link = $path . '/' . $this->filename;
+
+            return $this->File[0]->saveAs($this->internal_link);
         }
-        return $this->File[0]->saveAs($this->internal_link);
+
+        return false;
     }
 }

@@ -62,7 +62,7 @@ DocumentCreateAsset::register($this);
                             </div>
                             <div class="input-field col s6">
                                 <?php if ($update) { ?>
-                                    <?= $form->field($model, 'internal_link')->textInput(['maxlength' => true, 'placeholder' => 'Titre', 'readonly' => true])->label('') ?>
+                                    <?= $form->field($model, 'filename')->textInput(['maxlength' => true, 'placeholder' => 'Titre', 'readonly' => true])->label('') ?>
                                 <?php } ?>
                             </div>
                         </div>

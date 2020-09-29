@@ -503,15 +503,17 @@ class AdministrationController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            if ($model->validate()) {
-                $model->File = UploadedFile::getInstances($model, 'File');
 
-                if ($model->upload()) {
+            $model->File = UploadedFile::getInstances($model, 'File');
+
+            if ($model->upload()) {
+                echo "opiiiiiiopiopiopiop"; {
 
 
                     $modelfinal = new AdministrativeDocument();
 
                     $modelfinal->title = $model->title;
+                    $modelfinal->filename = $model->filename;
                     $modelfinal->type = $model->type;
                     $modelfinal->internal_link = $model->internal_link;
                     $modelfinal->last_update_date  = date("d-m-yy", strtotime("now"));
@@ -533,6 +535,17 @@ class AdministrationController extends Controller
     }
 
 
+    /**
+     * Render view : administration/update-document.
+     * Cette méthode est utilisé pour retourner une vue permettant d'ajouter un document adminstratif'.
+     * 
+     * @return mixed
+     */
+    public function actionShowDocument($file)
+    {
+        return Yii::$app->response->sendFile($file);
+    }
+
 
     /**
      * Render view : administration/update-document.
@@ -548,21 +561,26 @@ class AdministrationController extends Controller
 
             $model->File = UploadedFile::getInstances($model, 'File');
 
+            $model->File = UploadedFile::getInstances($model, 'File');
 
+            if ($model->upload()) {
 
-            $modelfinal =  AdministrativeDocument::getOneById($id);
+                $modelfinal =  AdministrativeDocument::getOneById($id);
 
-            $modelfinal->title = $model->title;
-            $modelfinal->type = $model->type;
-            $modelfinal->internal_link = $model->internal_link;
-            $modelfinal->last_update_date  = date("d-m-yy", strtotime("now"));
+                $modelfinal->title = $model->title;
+                $modelfinal->filename = $model->filename;
+                $modelfinal->type = $model->type;
+                $modelfinal->internal_link = $model->internal_link;
+                $modelfinal->last_update_date  = date("d-m-yy", strtotime("now"));
 
-            if ($modelfinal->save()) {
-                MenuSelectorHelper::setMenuDocuments();
-                return $this->redirect(['administration/index-document']);
+                if ($modelfinal->save()) {
+                    MenuSelectorHelper::setMenuDocuments();
+                    //return $this->redirect(['administration/index-document']);
+                }
             }
         }
 
+        $model = DocumentUpdateForm::getOneById($id);
         MenuSelectorHelper::setMenuDocuments();
         return $this->render('createDocument', [
             'model' => $model,

@@ -169,14 +169,14 @@ function getDownloadButtonArray()
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">file_download</i>',
-                Url::to([$model->internal_link]),
+                Url::to(['show-document', 'file' => $model->internal_link]),
                 [
-                    'id' => 'grid-custom-button',
-                    'data-pjax' => true,
+                    'id' => 'dl-custom-button',
+                    'data-pjax' => 0,
                     'target' => '_blank',
-                    'action' => Url::to([$model->internal_link]),
+                    'action' =>  Url::to(['show-document', 'file' => $model->internal_link]),
                     'class' => 'btn-floating waves-effect waves-light btn-blue',
-                    'title' => "Télécharge le document"
+                    'title' => "Télécharger le document"
                 ]
             );
         }
