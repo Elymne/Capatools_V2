@@ -493,6 +493,7 @@ class ProjectController extends Controller implements ServiceInterface
                 $model->id_capa = IdLaboxyManager::generateDraftId($model);
                 $model->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($model);
                 $model->state = Project::STATE_DRAFT;
+                $model->first_in = 0;
 
                 // On récupère l'id de la cellule de l'utilisateur connecté.
                 $model->cellule_id = Yii::$app->user->identity->cellule_id;
@@ -869,6 +870,10 @@ class ProjectController extends Controller implements ServiceInterface
                     $taskOperationalModif->task_category = Task::CATEGORY_TASK;
                     $taskOperationalModif->save();
                 }
+
+                $project = $lot->project;
+                $project->first_in = 1;
+                $project->save();
                 if (!empty($deletedTasksLotsModifIds)) {
                     ProjectCreateLotTaskForm::deleteAll(['id' => $deletedTasksLotsModifIds]);
                 }
@@ -1047,6 +1052,9 @@ class ProjectController extends Controller implements ServiceInterface
                     LaboratoryContributor::deleteAll(['id' => $deletedContributorsIDs]);
                 }
 
+                $project = $lot->project;
+                $project->first_in = 1;
+                $project->save();
                 // project_id, $number, $sucess = false
                 return $this->redirect([
                     'update-dependencies-consumables',

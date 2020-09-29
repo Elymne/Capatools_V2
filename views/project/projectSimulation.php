@@ -50,7 +50,7 @@ ProjectSimulationAsset::register($this);
 
                         <div class="row bottom-spacing">
 
-                            <?php if ($Resultcheck['lots'][0]['Result'] == false) : ?>
+                            <?php if (($Resultcheck['lots'][0]['Result'] == false) && $project->first_in == 1) : ?>
                                 <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => ' Il n\'y a pas de tâche présente dans l\'avant projet']) ?>
                             <?php endif; ?>
 
@@ -146,7 +146,7 @@ ProjectSimulationAsset::register($this);
 
                                 <div class="row bottom-spacing">
 
-                                    <?php if ($Resultcheck['lots'][$lotproject->number]['Result'] == false) : ?>
+                                    <?php if ($Resultcheck['lots'][$lotproject->number]['Result'] == false  && $project->first_in == 1) : ?>
                                         <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => ' Il n\'y a pas de tâche présente dans ce lot ']); ?>
                                     <?php endif; ?>
 
@@ -255,7 +255,7 @@ ProjectSimulationAsset::register($this);
 
                         <div class="row">
 
-                            <?php if ($tjmstatut) : ?>
+                            <?php if ($tjmstatut  && $project->first_in == 1) : ?>
                                 <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => 'Attention le taux journalier est inférieur à 700 €',]) ?>
                             <?php endif; ?>
 
@@ -441,7 +441,7 @@ ProjectSimulationAsset::register($this);
 
                         <div class="row bottom-spacing">
 
-                            <?php if ($Resultcheck['millestone'] == false) : ?>
+                            <?php if ($Resultcheck['millestone'] == false   && $project->first_in == 1) : ?>
                                 <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => ' La somme des jalons ne correspond pas au prix de vente',]); ?>
                             <?php endif; ?>
 

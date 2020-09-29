@@ -23,13 +23,12 @@ class m200099_000560_project_table extends Migration
             'low_tjm_raison' => $this->string(),
             'low_tjm_description' => $this->string(),
             'thematique' => $this->string(),
-
+            'first_in' => $this->integer()->defaultValue(0),
             'state' => $this->string()->notNull(),
             'version' => $this->string()->notNull(),
             'date_version' => $this->date()->notNull(),
             'file_path' => $this->string(),
             'file_name' => $this->string(),
-
             // Options for project.
             'draft' => $this->boolean()->defaultValue(true),
             'laboratory_repayment' => $this->boolean()->defaultValue(true),
