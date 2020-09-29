@@ -15,8 +15,8 @@ AppAsset::register($this);
 ProjectCreateThirdStepAsset::register($this);
 
 // Si le numéro de lot correspondant est le 0, on a affaire à un lot d'avant-projet.
-if ($number == 0) $this->title = 'Création d\'un projet - liste des dépenses et reversements : Avant-projet';
-else $this->title = 'Création d\'un projet - liste des dépenses et reversements : Lot n°' . $number;
+if ($number == 0) $this->title = 'Dépenses et reversements : Avant-projet';
+else $this->title = 'Dépenses et reversements : Lot n°' . $number;
 
 // On map les noms des risques sur dans une table utilisable dans la vue.
 $risksName = array_map(function ($risk) {

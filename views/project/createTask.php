@@ -15,7 +15,7 @@ use yii\bootstrap\Alert;
 AppAsset::register($this);
 ProjectCreateTaskAsset::register($this);
 
-$this->title = 'Liste des tâches';
+$this->title = 'Tâches';
 $lot = $model->GetCurrentLot();
 $hide = false;
 if ($lot->number != 0) {
