@@ -45,13 +45,15 @@ class Project extends ActiveRecord
         4 => self::TYPE_INTERNAL
     ];
 
-    const STATE_DRAFT = 'Avant-projet';
+    const STATE_DEVIS_MODEL = 'Model';
+    const STATE_DEVIS_DRAFT = 'Avant-projet';
     const STATE_DEVIS_SENDED = 'Devis envoyé';
     const STATE_DEVIS_SIGNED = "Devis signé";
     const STATE_DEVIS_CANCELED = "Projet annulé";
     const STATE_DEVIS_FINISHED = "Projet terminé";
     const STATES = [
-        1 => self::STATE_DRAFT,
+        0 => self::STATE_DEVIS_MODEL,
+        1 => self::STATE_DEVIS_DRAFT,
         2 => self::STATE_DEVIS_SENDED,
         3 => self::STATE_DEVIS_SIGNED,
         4 => self::STATE_DEVIS_CANCELED,
@@ -85,7 +87,7 @@ class Project extends ActiveRecord
 
     public static function getAllDraftDataProvider()
     {
-        return static::find()->where(['state' => self::STATE_DRAFT]);
+        return static::find()->where(['state' => [self::STATE_DEVIS_DRAFT,  self::STATE_DEVIS_MODEL]]);
     }
 
     public static function getAllProjectDataProvider()
@@ -95,7 +97,7 @@ class Project extends ActiveRecord
 
     public static function getAllDraftByCelluleDataProvider($idCellule)
     {
-        return static::find()->where(['state' => self::STATE_DRAFT, 'project.cellule_id' => $idCellule]);
+        return static::find()->where(['state' => [self::STATE_DEVIS_DRAFT,  self::STATE_DEVIS_MODEL], 'project.cellule_id' => $idCellule]);
     }
 
     public static function getAllProjectByCelluleDataProvider($idCellule)

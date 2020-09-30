@@ -533,8 +533,21 @@ ProjectSimulationAsset::register($this);
                         '<i class="material-icons right">save</i>',
                         ['class' => 'waves-effect waves-light btn-floating btn-large btn-blue', 'title' => 'Sauvegarder les options']
                     ) ?>
-
-                    <?php if ($validdevis) : ?>
+                    <?php if ($project->state != Project::STATE_DEVIS_MODEL) : ?>
+                        <?= Html::a(
+                            Yii::t('app', '<i class="material-icons right black-text">star_border</i>'),
+                            ['project/create-model', 'id' => $project->id],
+                            ['class' => 'waves-effect waves-light btn-floating btn-large yellow lighten-4', 'title' => 'Créer un model de devis']
+                        ) ?>
+                    <?php endif; ?>
+                    <?php if ($project->state == Project::STATE_DEVIS_MODEL) : ?>
+                        <?= Html::a(
+                            Yii::t('app', '<i class="material-icons right">star</i>'),
+                            ['project/create-model', 'id' => $project->id],
+                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-yellow', 'title' => 'supprimer le model de devis']
+                        ) ?>
+                    <?php endif; ?>
+                    <?php if ($validdevis && $project->state != Project::STATE_DEVIS_MODEL) : ?>
                         <?= Html::a(
                             Yii::t('app', '<i class="material-icons right">check</i>'),
                             ['project/create-project?id=' . $project->id],

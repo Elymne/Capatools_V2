@@ -314,13 +314,10 @@ class ProjectController extends Controller implements ServiceInterface
             }
         }
 
-        if ($status == Project::STATE_DRAFT) {
-            $project->draft = true;
-        }
 
         $project->save();
 
-        if ($status == Project::STATE_DRAFT) {
+        if ($status == Project::STATE_DEVIS_DRAFT) {
             MenuSelectorHelper::setMenuProjectDraft();
             return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project->id]);
         }
@@ -492,7 +489,7 @@ class ProjectController extends Controller implements ServiceInterface
                 $model->creation_date = date('Y-m-d H:i:s');
                 $model->id_capa = IdLaboxyManager::generateDraftId($model);
                 $model->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($model);
-                $model->state = Project::STATE_DRAFT;
+                $model->state = Project::STATE_DEVIS_DRAFT;
                 $model->first_in = 0;
 
                 // On récupère l'id de la cellule de l'utilisateur connecté.
@@ -1117,7 +1114,6 @@ class ProjectController extends Controller implements ServiceInterface
 
                 $finalModel->state = Project::STATE_DEVIS_SENDED;
                 $finalModel->signing_probability = $model->signing_probability;
-                $finalModel->draft = false;
                 $finalModel->capa_user_id = $model->projectManagerSelectedValue;
                 $finalModel->file_name = $model->file_name;
                 $finalModel->file_path = $model->file_path;
@@ -1144,8 +1140,22 @@ class ProjectController extends Controller implements ServiceInterface
         $model = Project::getOneById($id);
     }
 
-    /**
-     * Méthode générale pour le contrôleur permettant de retourner un devis.
+
+    public function actionCreateModel(int $id)
+    {
+        $project = Project::getOneById($id);
+        if ($project->state == Project::STATE_DEVIS_MODEL) {
+            $project->state = Project::STATE_DEVIS_DRAFT;
+        } else {
+            $project->state = Project::STATE_DEVIS_MODEL;
+        }
+        $project->save();
+
+        return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project->id]);
+    }
+
+
+    /* Méthode générale pour le contrôleur permettant de retourner un devis.
      * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
      * 
      * @param integer $id
@@ -1160,6 +1170,7 @@ class ProjectController extends Controller implements ServiceInterface
 
         throw new NotFoundHttpException('Le devis n\'existe pas.');
     }
+
 
     /**
      * Fonction qui rend une page d'erreur.

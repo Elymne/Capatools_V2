@@ -532,7 +532,7 @@ function displayActionButtons($model)
     <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
         <?= Html::a(
             'Modifier le devis <i class="material-icons right">edit</i>',
-            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DRAFT,],
+            ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_DRAFT,],
             ['class' => 'waves-effect waves-light btn btn-grey  rightspace-15px leftspace-15px', 'data' => [
                 'confirm' => 'Modifier le devis ?'
             ]]
