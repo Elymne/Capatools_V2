@@ -1138,6 +1138,43 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionDeleteDraftProject(int $id)
     {
         $model = Project::getOneById($id);
+        $lots = $model->lots;
+        foreach($lots as $lot){
+            $tasks = $lot->tasks;
+            foreach($tasks as $task){
+                $task->delete();
+            }
+            $consumables = $lot->consumables;
+            foreach($consumables as $consumable){
+                $consumable->delete();
+            }
+            $invests = $lot->invests;
+            foreach($invests as $invest){
+                $invest->delete();
+            }
+            $labotorycontributors = $lot->labotorycontributors;
+            foreach($labotorycontributors as $labotorycontributor){
+                $labotorycontributor->delete();
+            }
+            $equipmentrepayments = $lot->equipmentrepayments;
+            foreach($equipmentrepayments as $equipmentrepayment){
+                $equipmentrepayment->delete();
+            }
+            $lot->delete();
+        }
+        $millestones = $model->millestones;
+        foreach($millestones as $millestone) {
+            $millestone->delete();
+        }
+        $model->delete();
+        $searchModel = new ProjectSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
+        return $this->render(
+            'index-draft',
+            [
+                'dataProvider' => $dataProvider
+            ]
+        );
     }
 
 
