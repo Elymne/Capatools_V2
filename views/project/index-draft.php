@@ -8,6 +8,8 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 
+use app\models\projects\Project;
+
 $this->title = 'Liste des brouillons';
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -75,6 +77,7 @@ function getCollumnsArray()
 
     // Buttons displaying.
     array_push($result, getUpdateButtonArray());
+    array_push($result, getModelButtonArray());
 
     return $result;
 }
@@ -145,11 +148,47 @@ function getStatusArray()
     ];
 }
 
+function getModelButtonArray()
+{
+
+    return [
+        'format' => 'raw',
+        'label' => 'Edit',
+        'value' => function ($model, $key, $index, $column) {
+            if ($model->state == Project::STATE_DEVIS_DRAFT) {
+                return Html::a(
+                    '<i class="material-icons right black-text">star_border</i>',
+                    Url::to(['project-simulate', 'project_id' => $model->id]),
+                    [
+                        'id' => 'grid-custom-button',
+                        'data-pjax' => true,
+                        'action' => Url::to(['project-simulate', 'project_id' => $model->id]),
+                        'class' => 'btn-floating waves-effect waves-light  yellow lighten-4',
+                        'title' => "Modifier le devis"
+                    ]
+                );
+            } else {
+
+                return Html::a(
+                    '<i class="material-icons right">star</i>',
+                    Url::to(['create-model', 'project_id' => $model->id]),
+                    [
+                        'id' => 'grid-custom-button',
+                        'data-pjax' => true,
+                        'action' => Url::to(['create-model', 'project_id' => $model->id]),
+                        'class' => 'btn-floating waves-effect waves-light btn-yellow',
+                        'title' => "Modifier le devis"
+                    ]
+                );
+            }
+        }
+    ];
+}
 function getUpdateButtonArray()
 {
     return [
         'format' => 'raw',
-        'label' => 'Edit',
+        'label' => 'Visualiser',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">build</i>',
@@ -165,7 +204,6 @@ function getUpdateButtonArray()
         }
     ];
 }
-
 function getDeleteButtonArray()
 {
     return [
