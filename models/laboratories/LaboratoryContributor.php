@@ -41,6 +41,22 @@ class LaboratoryContributor extends ActiveRecord implements JsonSerializable
         self::TYPE_DOCTOR
     ];
 
+    public static function duplicateToLot(LaboratoryContributor $labo, $idlot)
+    {
+        $newLabo = new LaboratoryContributor();
+        $newLabo->name = $labo->name;
+        $newLabo->daily_price = $labo->daily_price;
+        $newLabo->nb_days = $labo->nb_days;
+        $newLabo->nb_hours = $labo->nb_hours;
+        $newLabo->price = $labo->price;
+        $newLabo->time_risk = $labo->time_risk;
+        $newLabo->laboratory_id = $labo->laboratory_id;
+        $newLabo->lot_id = $idlot;
+        $newLabo->risk_id = $labo->risk_id;
+
+        $newLabo->save();
+    }
+
     /**
      * Utilisé pour définir quelle table est associée à cette classe.
      */

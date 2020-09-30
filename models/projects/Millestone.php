@@ -31,6 +31,19 @@ class Millestone extends ActiveRecord
         5 => self::STATUT_CANCELED
     ];
 
+    public static function duplicateToProject(Millestone $millestone,$idproject)
+    {
+        $newMillestone = new Millestone();
+        $newMillestone->number = $millestone->number;
+        $newMillestone->statut = $millestone->statut;
+        $newMillestone->comment = $millestone->comment;
+        $newMillestone->price = $millestone->price;
+        $newMillestone->pourcentage = $millestone->pourcentage;
+        $newMillestone->project_id = $idproject;
+
+        $newMillestone->save();
+    }
+
     public static function tableName()
     {
         return 'millestone';

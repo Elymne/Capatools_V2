@@ -19,6 +19,24 @@ use yii\db\ActiveRecord;
 class EquipmentRepayment extends ActiveRecord implements JsonSerializable
 {
     public $total;
+
+    public static function duplicateToLot(EquipmentRepayment $equip, $idlot)
+    {
+        $newEquipment = new EquipmentRepayment();
+        $newEquipment->name = $equip->name;
+        $newEquipment->daily_price = $equip->daily_price;
+        $newEquipment->nb_days = $equip->nb_days;
+        $newEquipment->nb_hours = $equip->nb_hours;
+        $newEquipment->price = $equip->price;
+        $newEquipment->time_risk = $equip->time_risk;
+        $newEquipment->laboratory_id = $equip->laboratory_id;
+        $newEquipment->lot_id = $idlot;
+        $newEquipment->risk_id = $equip->risk_id;
+        $newEquipment->risk_coefficient = $equip->risk_coefficient;
+
+        $newEquipment->save();
+    }
+
     /**
      * Utilisé pour définir quelle table est associée à cette classe.
      */

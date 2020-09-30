@@ -2,6 +2,7 @@
 
 namespace app\models\projects;
 
+use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentRepayment;
 use app\models\laboratories\LaboratoryContributor;
 use yii\db\ActiveRecord;
@@ -20,6 +21,42 @@ class Lot extends ActiveRecord
 {
 
     const STATE_IN_PROGRESS = 'En cours';
+
+    public static function duplicateToProject(Lot $lot,$idproject)
+    {
+
+        $newlot = new Lot();
+        $newlot->title = $lot->title;
+        $newlot->number = $lot->number;
+        $newlot->status = $lot->status;
+        $newlot->comment = $lot->comment;
+        $newlot->rate_human_margin = $lot->rate_human_margin;
+        $newlot->rate_repayement_margin = $lot->rate_repayement_margin;
+        $newlot->rate_consumable_investement_margin = $lot->rate_consumable_investement_margin;
+        $newlot->project_id = $idproject;
+        $newlot->laboratory_id = $lot->laboratory_id;
+
+        $newlot->save();
+
+        foreach($lot->tasks as $task) {
+            Task::duplicateToLot($task,$newlot->id);
+        }
+
+        foreach($lot->consumables as $consumable){
+            Consumable::duplicateToLot($consumable,$newlot->id);
+        }
+        foreach($lot->invests as $invest){
+            Investment::duplicateToLot($invest,$newlot->id);
+        }
+
+        foreach($lot->labotorycontributors as $labotorycontributor){
+            LaboratoryContributor::duplicateToLot($labotorycontributor,$newlot->id);
+        }
+
+        foreach($lot->equipmentrepayments as $equipmentrepayment){
+            EquipmentRepayment::duplicateToLot($equipmentrepayment,$newlot->id);
+        }
+    }
 
     public static function tableName()
     {

@@ -48,7 +48,7 @@ $this->params["breadcrumbs"][] = "Update";
                                 <?= $form->field($model, "combobox_type_checked")->radioList(Project::TYPES, [
                                     "item" => function ($index, $label, $name, $checked, $value) use ($model) {
 
-                                        if ($index == $model->combobox_type_checked) $check = "checked";
+                                        if ($value == $model->combobox_type_checked) $check = "checked";
                                         else $check = "";
 
                                         $return = "<label class='modal-radio'>";
@@ -61,7 +61,7 @@ $this->params["breadcrumbs"][] = "Update";
                             </div>
                         </div>
                     </div>
-
+                    <?php if($showlot) {?>
                     <div class="card-action">
                         <!-- Création de lot -->
                         <div class="row">
@@ -124,9 +124,11 @@ $this->params["breadcrumbs"][] = "Update";
                             </div>
                         </div>
                     </div>
-
+                                                
                     <div class="card-action" style="background-color: #f0f8ff;">
-
+                    <?php }else{?>
+                        <div class="card-action">
+                    <?php }?>
                         <div class="row">
                             <div class="col m12 l6">
                                 <label class="blue-text">Nom de société</label>
