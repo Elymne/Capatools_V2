@@ -16,6 +16,16 @@ use yii\db\ActiveRecord;
 class Investment extends ActiveRecord implements JsonSerializable
 {
 
+    public static function duplicateToLot(Investment $investment, $idlot)
+    {
+        $newInvestment = new Investment();
+        $newInvestment->name = $investment->name;
+        $newInvestment->price = $investment->price;
+        $newInvestment->lot_id = $idlot;
+
+        $newInvestment->save();
+    }
+
     public static function tableName()
     {
         return 'investment';

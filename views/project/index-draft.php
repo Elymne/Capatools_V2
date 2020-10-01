@@ -78,6 +78,8 @@ function getCollumnsArray()
     // Buttons displaying.
     array_push($result, getUpdateButtonArray());
     array_push($result, getModelButtonArray());
+    array_push($result, getDeleteButtonArray());
+    array_push($result, getDuplicateButtonArray());
 
     return $result;
 }
@@ -208,18 +210,42 @@ function getDeleteButtonArray()
 {
     return [
         'format' => 'raw',
-        'label' => 'delete',
+        'label' => 'Supp.',
+        'value' => function ($model, $key, $index, $column) {
+            if ($model->state == Project::STATE_DEVIS_DRAFT) {
+                return Html::a(
+                    '<i class="material-icons center">delete</i>',
+                    Url::to(['delete-draft-project', 'id' => $model->id]),
+                    [
+                        'id' => 'grid-custom-button',
+                        'data-pjax' => true,
+                        'action' => Url::to(['delete-draft-project', 'id' => $model->id]),
+                        'class' => 'btn-floating waves-effect waves-light btn-red',
+                        'title' => "Supprimer le devis"
+                    ]
+                );
+            } else {
+                return "";
+            }
+        }
+    ];
+}
+
+function getDuplicateButtonArray()
+{
+    return [
+        'format' => 'raw',
+        'label' => 'Dupl.',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
-                '<i class="material-icons center">visibility</i>',
-                Url::to(['project/view', 'id' => $model->id]),
+                '<i class="material-icons center">content_copy</i>',
+                Url::to(['duplicate-project', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
-                    'target' => '_blank',
-                    'action' => Url::to(['project/view', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-red',
-                    'title' => "visualiser le devis"
+                    'action' => Url::to(['duplicate-project', 'id' => $model->id]),
+                    'class' => 'btn-floating waves-effect waves-light btn-blue',
+                    'title' => "Dupliquer le devis"
                 ]
             );
         }

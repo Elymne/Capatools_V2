@@ -29,6 +29,22 @@ class Task extends ActiveRecord
     const RISK_HIGH = "Très haut";
     const RISKS = [self::RISK_LOW => self::RISK_LOW, self::RISK_NORMAL => self::RISK_NORMAL, self::RISK_HIGH => self::RISK_HIGH];
 
+
+    public static function duplicateToLot(Task $task, $idlot)
+    {
+        $newTask = new Task();
+        $newTask->number = $task->number;
+        $newTask->title = $task->title;
+        $newTask->day_duration = $task->day_duration;
+        $newTask->hour_duration = $task->hour_duration;
+        $newTask->risk = $task->risk;
+        $newTask->task_category = $task->task_category;
+        $newTask->capa_user_id = $task->capa_user_id;
+        $newTask->lot_id = $idlot;
+
+        $newTask->save();
+    }
+
     public static function tableName()
     {
         return 'task';

@@ -501,19 +501,22 @@ class ProjectController extends Controller implements ServiceInterface
                 $model->type = Project::TYPES[$model->combobox_type_checked];
                 // On recopie le management rate
                 $rate  = DevisParameter::getParameters();
-
                 switch (Project::TYPES[$model->combobox_type_checked]) {
                     case  Project::TYPE_PRESTATION: {
                             $model->management_rate = $rate->rate_management;
+                            break;
                         }
                     case  Project::TYPE_OUTSOURCING_UN: {
                             $model->management_rate = $rate->rate_management;
+                            break;
                         }
                     case  Project::TYPE_OUTSOURCING_AD: {
                             $model->management_rate = $rate->delegate_rate_management;
+                            break;
                         }
                     case  Project::TYPE_INTERNAL: {
                             $model->management_rate = $rate->internal_rate_management;
+                            break;
                         }
                     default: {
                             $model->management_rate = $rate->rate_management;
@@ -560,6 +563,8 @@ class ProjectController extends Controller implements ServiceInterface
         return $this->render(
             'createFirstStep',
             [
+
+                'showlot' => true,
                 'model' => $model,
                 'lots' => $lots,
                 'companiesNames' => \array_values($companiesNames),
@@ -1138,6 +1143,139 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionDeleteDraftProject(int $id)
     {
         $model = Project::getOneById($id);
+        $lots = $model->lots;
+        foreach ($lots as $lot) {
+            $tasks = $lot->tasks;
+            foreach ($tasks as $task) {
+                $task->delete();
+            }
+            $consumables = $lot->consumables;
+            foreach ($consumables as $consumable) {
+                $consumable->delete();
+            }
+            $invests = $lot->invests;
+            foreach ($invests as $invest) {
+                $invest->delete();
+            }
+            $labotorycontributors = $lot->labotorycontributors;
+            foreach ($labotorycontributors as $labotorycontributor) {
+                $labotorycontributor->delete();
+            }
+            $equipmentrepayments = $lot->equipmentrepayments;
+            foreach ($equipmentrepayments as $equipmentrepayment) {
+                $equipmentrepayment->delete();
+            }
+            $lot->delete();
+        }
+        $millestones = $model->millestones;
+        foreach ($millestones as $millestone) {
+            $millestone->delete();
+        }
+        $model->delete();
+        $searchModel = new ProjectSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
+        return $this->render(
+            'index-draft',
+            [
+                'dataProvider' => $dataProvider
+            ]
+        );
+    }
+
+    public function actionDuplicateProject(int $id)
+    {
+
+
+        $model = ProjectCreateFirstStepForm::getOneById($id);
+        $model->company_name = $model->company->name;
+        $model->contact_email = $model->contact->email;
+        $model->combobox_type_checked = array_search($model->type, Project::TYPES);
+
+
+        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
+        $companiesNames = array_merge($companiesNames);
+
+        $contactsEmail = ArrayHelper::map(Contact::find()->all(), 'id', 'email');
+        $contactsEmail = array_merge($contactsEmail);
+        if ($model->load(Yii::$app->request->post())) {
+
+
+            $lots = $model->lots;
+            $millestones = $model->millestones;
+            // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
+            $defaultValue = "indéfini";
+            $model->internal_reference = $model->internal_name;
+            $model->version = $defaultValue;
+            $model->date_version = date('Y-m-d H:i:s');
+            $model->creation_date = date('Y-m-d H:i:s');
+            $model->id_capa = IdLaboxyManager::generateDraftId($model);
+            $model->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($model);
+            $model->state = Project::STATE_DEVIS_DRAFT;
+            $model->first_in = 0;
+            $model->id = null;
+
+            $model->isNewRecord = true;
+            // On récupère l'id de la cellule de l'utilisateur connecté.
+            $model->cellule_id = Yii::$app->user->identity->cellule_id;
+            // On inclu la clé étragère qui référence une donnée indéfini dans la table company.
+            $model->company_id = Company::getOneByName($model->company_name)->id;
+            // On inclu la clé étragère qui référence une donnée indéfini dans la table contact.
+            $model->contact_id = Contact::getOneByEmail($model->contact_email)->id;
+            $model->type = Project::TYPES[$model->combobox_type_checked];
+            // On recopie le management rate
+            $rate  = DevisParameter::getParameters();
+
+            switch (Project::TYPES[$model->combobox_type_checked]) {
+                case  Project::TYPE_PRESTATION: {
+                        $model->management_rate = $rate->rate_management;
+                        break;
+                    }
+                case  Project::TYPE_OUTSOURCING_UN: {
+                        $model->management_rate = $rate->rate_management;
+                        break;
+                    }
+                case  Project::TYPE_OUTSOURCING_AD: {
+                        $model->management_rate = $rate->delegate_rate_management;
+                        break;
+                    }
+                case  Project::TYPE_INTERNAL: {
+                        $model->management_rate = $rate->internal_rate_management;
+                        break;
+                    }
+                default: {
+                        $model->management_rate = $rate->rate_management;
+                    }
+            }
+
+            $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
+
+            $model->low_tjm_description = ' ';
+
+            // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
+            $model->save();
+
+            foreach ($lots as $lot) {
+                Lot::duplicateToProject($lot, $model->id);
+            }
+
+            foreach ($millestones as $millestone) {
+                Millestone::duplicateToProject($millestone, $model->id);
+            }
+            // On redirige vers la prochaine étape.
+            return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $model->id]);
+            ///duplication model project, lots,tâches....
+        }
+        MenuSelectorHelper::setMenuProjectCreate();
+        return $this->render(
+            'createFirstStep',
+            [
+                'showlot' => false,
+                'model' => $model,
+                'companiesNames' => \array_values($companiesNames),
+                'contactsEmail' => \array_values($contactsEmail),
+
+            ]
+        );
     }
 
 

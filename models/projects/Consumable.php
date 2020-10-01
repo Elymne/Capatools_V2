@@ -38,6 +38,17 @@ class Consumable extends ActiveRecord implements JsonSerializable
         self::TYPE_INTERNAL_DELIVERY
     ];
 
+    public static function duplicateToLot(Consumable $consumable, $idlot)
+    {
+        $newConsumable = new Consumable();
+        $newConsumable->title = $consumable->title;
+        $newConsumable->price = $consumable->price;
+        $newConsumable->type = $consumable->type;
+        $newConsumable->lot_id = $idlot;
+
+        $newConsumable->save();
+    }
+
     public static function tableName()
     {
         return 'consumable';
