@@ -536,14 +536,14 @@ ProjectSimulationAsset::register($this);
                     <?php if ($project->state != Project::STATE_DEVIS_MODEL) : ?>
                         <?= Html::a(
                             Yii::t('app', '<i class="material-icons right black-text">star_border</i>'),
-                            ['project/create-model', 'id' => $project->id],
+                            ['project/create-model', 'id' => $project->id, 'view' => 'projectsimulate'],
                             ['class' => 'waves-effect waves-light btn-floating btn-large yellow lighten-4', 'title' => 'Créer un model de devis']
                         ) ?>
                     <?php endif; ?>
                     <?php if ($project->state == Project::STATE_DEVIS_MODEL) : ?>
                         <?= Html::a(
                             Yii::t('app', '<i class="material-icons right">star</i>'),
-                            ['project/create-model', 'id' => $project->id],
+                            ['project/create-model', 'id' => $project->id, 'view' => 'projectsimulate'],
                             ['class' => 'waves-effect waves-light btn-floating btn-large btn-yellow', 'title' => 'supprimer le model de devis']
                         ) ?>
                     <?php endif; ?>

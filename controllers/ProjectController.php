@@ -1141,7 +1141,7 @@ class ProjectController extends Controller implements ServiceInterface
     }
 
 
-    public function actionCreateModel(int $id)
+    public function actionCreateModel(int $id, $view)
     {
         $project = Project::getOneById($id);
         if ($project->state == Project::STATE_DEVIS_MODEL) {
@@ -1151,7 +1151,12 @@ class ProjectController extends Controller implements ServiceInterface
         }
         $project->save();
 
-        return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project->id]);
+        if ($view == 'index') {
+            return Yii::$app->response->redirect(['project/index-draft']);
+        } else {
+
+            return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project->id]);
+        }
     }
 
 

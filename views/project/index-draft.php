@@ -158,11 +158,11 @@ function getModelButtonArray()
             if ($model->state == Project::STATE_DEVIS_DRAFT) {
                 return Html::a(
                     '<i class="material-icons right black-text">star_border</i>',
-                    Url::to(['create-model', 'id' => $model->id]),
+                    Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
                     [
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
-                        'action' => Url::to(['create-model', 'id' => $model->id]),
+                        'action' => Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
                         'class' => 'btn-floating waves-effect waves-light  yellow lighten-4',
                         'title' => "Modifier le devis"
                     ]
@@ -171,11 +171,11 @@ function getModelButtonArray()
 
                 return Html::a(
                     '<i class="material-icons right">star</i>',
-                    Url::to(['create-model', 'id' => $model->id]),
+                    Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
                     [
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
-                        'action' => Url::to(['create-model', 'id' => $model->id]),
+                        'action' => Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
                         'class' => 'btn-floating waves-effect waves-light btn-yellow',
                         'title' => "Modifier le devis"
                     ]
