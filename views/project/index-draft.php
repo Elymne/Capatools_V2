@@ -1,5 +1,7 @@
 <?php
 
+use app\assets\projects\ProjectIndexDraftAsset;
+use app\assets\AppAsset;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
@@ -8,8 +10,11 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 
+use kartik\select2\Select2;
 use app\models\projects\Project;
 
+AppAsset::register($this);
+ProjectIndexDraftAsset::register($this);
 $this->title = 'Liste des brouillons';
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -22,7 +27,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <!-- New -->
         <div class="row body-marger">
+            <div class="card">
+                <div class="card-content">
+                    <label>Filtres</label>
+                </div>
+                <div class="card-action">
+                    <?php getSearchFilter($companiesName) ?>
+                </div>
+            </div>
 
+            <div class="card">
+                <div class="card-content bottomspace-15px-invert">
+                    <label>Réglage du tableau</label>
+                </div>
+                <div class="card-action topspace-15px-invert">
+                    <?php echo getFilterCardContent() ?>
+                </div>
+            </div>
 
             <div class="card">
                 <div class="card-action">
@@ -58,6 +79,78 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 
+function getSearchFilter($companiesName)
+{
+
+    echo Select2::widget([
+        'id' => 'company-name-search',
+        'name' => 'droplist_company',
+        'data' => $companiesName,
+        'pluginLoading' => false,
+        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ]
+    ]);
+
+    echo '<br />';
+
+    echo Html::input('text', 'textinput_capaid', "", [
+        'id' => 'capa-id-search',
+        'maxlength' => 10,
+        'style' => 'width:350px',
+        'placeholder' => 'Rechercher un capa id',
+        'onkeyup' => 'capaidFilterSearch()'
+    ]);
+
+    echo '<br />';
+    echo '<br />';
+
+    echo <<<HTML
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
+            <span class="span-combobox">Model</span>
+        </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox"/>
+            <span class="span-combobox">Avant-projet</span>
+        </label>
+
+    HTML;
+}
+/**
+ * Used to display combobox.
+ * 
+ * @return string HTML content.
+ */
+function getFilterCardContent(): string
+{
+    $HTML =
+        "<label class=\"rigthspace-20px\">
+    <input type=\"checkbox\" class=\"filled-in\" checked=\"checked\" id=\"capaid-checkbox\" />
+    <span class=\"span-combobox\">CapaID</span>
+</label>
+<label class=\"rigthspace-20px\">
+    <input type=\"checkbox\" class=\"filled-in\" checked=\"checked\" id=\"projectname-checkbox\"/>
+    <span class=\"span-combobox\">Nom interne</span>
+</label>";
+    if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) {
+        $HTML .= "<label class=\"rigthspace-20px\">
+    <input type=\"checkbox\" class=\"filled-in\" id=\"cellule-checkbox\"/>
+    <span class=\"span-combobox\">Cellule</span>
+</label>";
+    }
+    $HTML .= "<label class=\"rigthspace-20px\">
+    <input type=\"checkbox\" class=\"filled-in\" checked=\"checked\" id=\"company-checkbox\"/>
+    <span class=\"span-combobox\">Client</span>
+</label>
+<label class=\"rigthspace-20px\">
+    <input type=\"checkbox\" class=\"filled-in\" checked=\"checked\" id=\"status-checkbox\"/>
+    <span class=\"span-combobox\">Statut</span>
+</label>";
+    return $HTML;
+}
+
 /**
  * Used to display all data needed for the table.
  * 
@@ -68,8 +161,7 @@ function getCollumnsArray()
     $result = [];
     array_push($result, getIdArray());
     array_push($result, getInternalNameArray());
-    array_push($result, getUsernameArray());
-    if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN])) {
+    if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) {
         array_push($result, getCelluleArray());
     }
     array_push($result, getCompanyArray());
@@ -90,8 +182,8 @@ function getIdArray()
         'attribute' => 'capaidreduc',
         'format' => 'text',
         'label' => 'CapaID',
-        'contentOptions' => ['class' => 'projectname-row'],
-        'headerOptions' => ['class' => 'projectname-row'],
+        'contentOptions' => ['class' => 'capaid-row'],
+        'headerOptions' => ['class' => 'capaid-row'],
     ];
 }
 
@@ -106,16 +198,6 @@ function getInternalNameArray()
     ];
 }
 
-function getUsernameArray()
-{
-    return [
-        'attribute' => 'project_manager.email',
-        'format' => 'text',
-        'label' => 'Resp projet',
-        'contentOptions' => ['class' => 'projectmanager-row', 'style' => 'display: none'],
-        'headerOptions' => ['class' => 'projectmanager-row', 'style' => 'display: none'],
-    ];
-}
 
 function getCelluleArray()
 {

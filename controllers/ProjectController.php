@@ -250,12 +250,17 @@ class ProjectController extends Controller implements ServiceInterface
         $searchModel = new ProjectSearch();
         // Nous aurons donc tous les models et en plus la possibilité d'ordonner ces données dans un gridview.
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
+        // Récupération des noms de companies des devis de manière distincte.
+        $companiesName = array_unique(array_map(function ($value) {
+            return $value->company->name;
+        }, ProjectSearch::find('company.name')->all()));
 
         MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(
             'index-draft',
             [
-                'dataProvider' => $dataProvider
+                'dataProvider' => $dataProvider,
+                'companiesName' => $companiesName
             ]
         );
     }
