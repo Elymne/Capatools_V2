@@ -70,6 +70,8 @@ class Project extends ActiveRecord
         return static::find()->all();
     }
 
+
+
     public static function getOneById($id)
     {
         return static::find()->where(['id' => $id])->one();
@@ -104,7 +106,10 @@ class Project extends ActiveRecord
     {
         return static::find()->where(['state' => [self::STATE_DEVIS_FINISHED, self::STATE_DEVIS_SIGNED, self::STATE_DEVIS_CANCELED, self::STATE_DEVIS_SENDED], 'project.cellule_id' => $idCellule]);
     }
-
+    public  function getcapaidreduc()
+    {
+        return substr($this->id_capa, 0, 20);
+    }
     public function getStatusIndex()
     {
         $result = -1;

@@ -87,7 +87,7 @@ function getCollumnsArray()
 function getIdArray()
 {
     return [
-        'attribute' => 'id_capa',
+        'attribute' => 'capaidreduc',
         'format' => 'text',
         'label' => 'CapaID',
         'contentOptions' => ['class' => 'projectname-row'],

@@ -190,13 +190,13 @@ function getCollumnsArray()
 function getIdArray()
 {
     return [
-        'attribute' => 'id_capa',
+        'attribute' => 'capaidreduc',
         'format' => 'raw',
         'label' => 'CapaID',
         'contentOptions' => ['class' => 'capaid-row'],
         'headerOptions' => ['class' => 'capaid-row'],
         'value' => function ($data) {
-            return Html::a($data['id_capa'], ['project/view', 'id' => $data['id']], ['target' => '_blank',]);
+            return Html::a($data['capaidreduc'], ['project/view', 'id' => $data['id']], ['target' => '_blank',]);
         }
     ];
 }
