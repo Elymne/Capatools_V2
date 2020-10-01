@@ -48,7 +48,7 @@ class Project extends ActiveRecord
     const STATE_DEVIS_MODEL = 'Model';
     const STATE_DEVIS_DRAFT = 'Avant-projet';
     const STATE_DEVIS_SENDED = 'Devis envoyé';
-    const STATE_DEVIS_SIGNED = "Devis signé";
+    const STATE_DEVIS_SIGNED = "Projet en cours";
     const STATE_DEVIS_CANCELED = "Projet annulé";
     const STATE_DEVIS_FINISHED = "Projet terminé";
     const STATES = [

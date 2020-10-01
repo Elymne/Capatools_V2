@@ -226,7 +226,7 @@ function getDeleteButtonArray()
                 );
             } else {
                 return "";
-            }  
+            }
         }
     ];
 }

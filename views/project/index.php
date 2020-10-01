@@ -1,6 +1,7 @@
 <?php
 
 use app\assets\projects\ProjectIndexAsset;
+use app\assets\AppAsset;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
@@ -13,6 +14,7 @@ use yii\widgets\Pjax;
 $this->title = 'Liste des projets';
 $this->params['breadcrumbs'][] = $this->title;
 
+AppAsset::register($this);
 ProjectIndexAsset::register($this);
 
 ?>
@@ -105,7 +107,7 @@ function getSearchFilter($companiesName)
     echo <<<HTML
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
-            <span class="span-combobox">Avant-contrats</span>
+            <span class="span-combobox">Devis envoyé</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox"/>
@@ -213,7 +215,7 @@ function getInternalNameArray()
 function getUsernameArray()
 {
     return [
-        'attribute' => 'project_manager.email',
+        'attribute' => 'project_manager.fullname',
         'format' => 'text',
         'label' => 'Resp projet',
         'contentOptions' => ['class' => 'projectmanager-row', 'style' => 'display: none'],
