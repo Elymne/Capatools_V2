@@ -72,76 +72,82 @@ ProjectsRefactoringAsset::register($this);
                                     )->label("Responsable projet"); ?>
                                 </div>
 
+                            </div>
+                            <div class="row">
                                 <div class="input-field col s6">
                                     <?= $form
                                         ->field($model, 'pdfFile')
                                         ->fileInput(['accept' => 'pdf/*'])
                                         ->label('Document technique / Cahier des charges annexe (PDF)', []) ?>
                                 </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col s12">
-                            <div class="row">
-
                                 <div class="input-field col s6">
-                                    <?= $form->field($model, 'thematique')
-                                        ->textInput(['autocomplete' => 'off'])
-                                        ->label("Thématique du projet")
-                                    ?>
-                                </div>
 
-                                <div class="input-field col s6">
-                                    <?= $form->field($model, 'signing_probability')->widget(
-                                        Select2::class,
-                                        [
-                                            'theme' => Select2::THEME_MATERIAL,
-                                            'name' => 'TaskContributor',
-                                            'data' => ["20" => '20 %', "50" => '50 %', "80" => '80 %'],
-                                            'options' => ['placeholder' => 'Selectionner un pourcentage ...'],
-                                        ]
-                                    )->label("Probabilité de signature"); ?>
+                                    <?= $form->field($model, 'file_name')->textInput(['maxlength' => true, 'placeholder' => '', 'readonly' => true])->label('') ?>
+
                                 </div>
 
                             </div>
-                        </div>
 
-                        <div class="col s12">
-                            <div class="row">
+                            <div class="col s12">
+                                <div class="row">
 
+                                    <div class="input-field col s6">
+                                        <?= $form->field($model, 'thematique')
+                                            ->textInput(['autocomplete' => 'off'])
+                                            ->label("Thématique du projet")
+                                        ?>
+                                    </div>
 
-                                <div class="input-field col s6">
-                                    <?= $form->field($model, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($model->SellingPrice)]])->label('Prix de vente du projet (HT)') ?>
-
-                                </div>
-
-                                <div class="input-field col s6">
-                                    <?= $form->field($model, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($model->SellingPrice * (1 - ($TVA / 100)))]])->label('Prix de vente du projet (TTC)') ?>
+                                    <div class="input-field col s6">
+                                        <?= $form->field($model, 'signing_probability')->widget(
+                                            Select2::class,
+                                            [
+                                                'theme' => Select2::THEME_MATERIAL,
+                                                'name' => 'TaskContributor',
+                                                'data' => ["20" => '20 %', "50" => '50 %', "80" => '80 %'],
+                                                'options' => ['placeholder' => 'Selectionner un pourcentage ...'],
+                                            ]
+                                        )->label("Probabilité de signature"); ?>
+                                    </div>
 
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col s12">
-                            <div class="row">
-                                <div class="input-field col s6">
-                                    <div class="input-field col s1 "> <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                            <div class="col s12">
+                                <div class="row">
+
+
+                                    <div class="input-field col s6">
+                                        <?= $form->field($model, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($model->SellingPrice)]])->label('Prix de vente du projet (HT)') ?>
+
+                                    </div>
+
+                                    <div class="input-field col s6">
+                                        <?= $form->field($model, "SellingPrice", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($model->SellingPrice * (1 - ($TVA / 100)))]])->label('Prix de vente du projet (TTC)') ?>
+
                                     </div>
                                 </div>
-
                             </div>
+
+                            <div class="col s12">
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <div class="input-field col s1 "> <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
-
                 </div>
+
             </div>
 
         </div>
+        <?php ActiveForm::end(); ?>
 
     </div>
-    <?php ActiveForm::end(); ?>
-
-</div>
 </div>
