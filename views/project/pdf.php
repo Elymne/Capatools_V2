@@ -26,6 +26,9 @@ $tva_price = $max_price * 0.2;
 $price_ttc = $max_price * 1.2;
 
 
+setlocale(LC_TIME, "fr_FR");
+
+
 ?>
 
 <div class="container">
@@ -53,7 +56,7 @@ $price_ttc = $max_price * 1.2;
         <!-- DEVIS -->
         <div class="col-print-7">
             <div class="row pull-right">
-                <span class="txt-gray"><?= 'Devis | Généré le: ' . date("r") ?></span>
+                <span class="txt-gray"><?= strftime("%A %d %B %G"); ?></span>
                 <br>
                 <br>
                 <br>
@@ -168,13 +171,18 @@ $price_ttc = $max_price * 1.2;
 
 <pagebreak />
 
-<div class="col s12">
+<div class="col-print-12">
     <div class="row">
-        <div class="col s5">
-            <?php echo footerLeftSideInformation() ?>
+        <div class="col-print-6 side-section-legals">
+            <div class="legals-content">
+                <?php echo footerLeftSideInformation() ?>
+            </div>
         </div>
-        <div class="col s5 offset-s1">
-            <?php echo footerRightSideInformation() ?>
+        
+        <div class="col-print-6 side-section-legals">
+            <div class="legals-content">
+                <?php echo footerRightSideInformation() ?>
+            </div>
         </div>
     </div>
 </div>
