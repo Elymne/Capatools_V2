@@ -1,6 +1,10 @@
 <?php
 
 use app\models\projects\Project;
+use app\assets\AppAsset;
+use yii\helpers\Html;
+
+AppAsset::register($this);
 
 $id = $model->id;
 if ($model->id_capa) $this->title = $model->id_capa;
@@ -8,174 +12,176 @@ else $this->title = "Modification d'un devis";
 
 $this->params['breadcrumbs'][] = ['label' => 'Devis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+// Laboxy prestation duration
+$laboxy_prestation_duration = Yii::$app->formatter->asInteger($model->totalHourWithRisk) . ' jours';
+
+
+// Prices
+$max_price = 0;
+if ($model->company->country == "France") $hasTVA = true;
+else $hasTVA = false;
+foreach ($model->lots as $lot) $max_price +=  round(($lot->totalwithmargin + $model->additionallotprice) / (1 - $model->management_rate / 100), -2);
+$tva_price = $max_price * 0.2;
+$price_ttc = $max_price * 1.2;
+
+
 ?>
 
-<div class="card">
-    <div class="card-content">
-        <p class="title"><?= 'Devis : ' . $this->title ?></p>
-    </div>
-</div>
+<div class="container">
 
-
-<div class="devis-view">
     <div class="row">
-        <!-- Details informations -->
 
-        <div class="col s12">
+
+        <!-- LOGOS & DATE -->
+        <div class="col-print-5">
             <div class="row">
-
-                <div class="col s5">
-                    <?php echo defaultDataTable() ?>
-
-                    <?php echo projectDataTable($model) ?>
+                <div class="capalogo-container">
                 </div>
-
-                <div class="col s6">
-                    <?php echo companyDataTable($model) ?>
-                </div>
-
             </div>
-        </div>
-
-        <div class="col s12">
-            <?php echo lotsDataTables($model) ?>
-        </div>
-
-        <div class="col s12">
             <div class="row">
-                <div class="col s6">
-                    <?php echo detailsDataTable($model); ?>
+                <div class="big-title">
+                    <?= $model->internal_name ?>
                 </div>
-                <div class="col s5">
-                    <?php echo lotsTotalDataTables($model) ?>
+                <div class="sub-title">
+                    Date: <?= $model->creation_date ?>
                 </div>
             </div>
         </div>
 
-        <div class="col s12">
-            <?php echo warningDataTable() ?>
+
+        <!-- DEVIS -->
+        <div class="col-print-7">
+            <div class="row pull-right">
+                <span class="txt-gray"><?= 'Devis | Généré le: ' . date("r") ?></span>
+                <br>
+                <br>
+                <br>
+            </div>
+
+            <!-- CLIENT INFORMATIONS -->
+            <div class="row bg-lightgray">
+                <div class="client-infos"><b>DESTINATAIRE</b> <span class="txt-gray"> <?= $model->company->name ?></span> <br></div>
+                <div class="client-infos"><b>ADRESSE</b> <span class="txt-gray"> <?= $model->company->address ?></span> <br></div>
+                <div class="client-infos"><b>TVA</b> <span class="txt-gray"> <?= $model->company->tva ?></span> <br></div>
+                <div class="client-infos"><b>EMAIL</b> <span class="txt-gray"> <?= $model->company->email ?></span> <br></div>
+                <div class="client-infos"><b>TEL</b> <span class="txt-gray"> <?= $model->company->phone ?></span> <br></div>
+            </div>
         </div>
+    </div>
+    <br>
+    <br>
 
-        <div class="col s12">
-            <?php echo signatureDataTable() ?>
+
+    <!-- REF: VALIDITY: PAYMENT: DETAILS PAYMENT -->
+    <div class="row">
+        <div class="col-print-3">
+            <b>Référence:</b>
+            <div class="txt-gray"><?= $model->internal_name ?></div>
         </div>
+        <div class="col-print-3">
+            <b>Validité du devis:</b>
+            <div class="txt-gray">45 jours</div>
+        </div>
+        <div class="col-print-3">
+            <b>Condition de paiement:</b>
+            <div class="txt-gray">30 jours nets, date de facture</div>
+        </div>
+        <div class="col-print-3">
+            <b>Détails du paiement(échéancier):</b>
+            <div class="txt-gray">Devis &lt; 2000 € </div>
+        </div>
+    </div>
 
-        <pagebreak />
 
-        <div class="col s12">
-            <div class="row">
-                <div class="col s5">
-                    <?php echo footerLeftSideInformation() ?>
-                </div>
-                <div class="col s5 offset-s1">
-                    <?php echo footerRightSideInformation() ?>
+
+    <!-- DETAILS LOTS -->
+    <div class="row">
+        <?php echo lotsDataTables($model); ?>
+    </div>
+
+    <div class="row ">
+        <div class="blue-border ">
+
+            <div class="col-print-6 presta-duration">
+                <div class="txt-bold">DURÉE DE LA PRESTATION: <span class="txt-gray"><?= $laboxy_prestation_duration ?></span></div>
+            </div>
+            <div class="col-print-6 lightblue-bg">
+                <div class="row txt-bold">
+                    <div class="col-print-8 white-txt">
+                        <div class="total-data">MONTANT TOTAL HT </div>
+                        <div class="total-data">TVA 20 % </div>
+                        <div class="total-data">MONTANT TOTAL TTC</div>
+                    </div>
+                    <div class="col-print-4 total-values">
+                        <div class="total-data"><?= $max_price ?> €</div>
+                        <div class="total-data"><?= $tva_price ?> €</div>
+                        <div class="total-data"><?= $price_ttc ?> €</div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="row">
+            <!--  ALIGN RIGHT -->
+            <div class="">
+                <br>
+                <div class="txt-gray pull-right"> 30% à la commande, 70% à la livraison des résultats </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- ROUNDED NOTE -->
+    <div class="row">
+        <div class="rounded-border txt-gray center">
+            En cas d'acceptation, merci de nous retourner le présent devis daté et signé avec la mention :
+            "bon pour accord" et le cachet de votre entreprise.
+            La signature du présent contrat vaut acceptation des conditions générales de ventes jointes au devis
+        </div>
+    </div>
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <!-- SIGNATURE CONTAINER -->
+    <div class="row txt-bold signature">
+        <div class="col-print-4">
+            Fait le :
+            <br>
+            <br>
+            Fonction:
+            <br>
+            <br>
+        </div>
+        <div class="col-print-4">
+            <br>
+            <br>
+            Signature:
+            <br>
+            <br>
+        </div>
     </div>
 </div>
+
+
+<pagebreak />
+
+<div class="col s12">
+    <div class="row">
+        <div class="col s5">
+            <?php echo footerLeftSideInformation() ?>
+        </div>
+        <div class="col s5 offset-s1">
+            <?php echo footerRightSideInformation() ?>
+        </div>
+    </div>
+</div>
+
 
 <?php
 
-function defaultDataTable(): string
-{
-    return <<<HTML
-        <table>
-            <tr>
-                <td class="textcenter">
-                    <b class="bolded">CAPACITES SAS</b>
-                    <p>26, boulevard Vincent Gâche</p>
-                    <p>44200 Nantes - FRANCE</p>
-                    <p><b class="bolded">Tél :</b> 02 72 64 88 40</p>
-                    <p><b class="bolded">Fax :</b> 02 72 64 88 98</p>
-                    <p><b class="bolded">Email :</b> commercial@capacites.fr</p>
-                </td>
-            </tr>
-        </table>
-        <br />
-    HTML;
-}
-
-function companyDataTable($model): string
-{
-    $company_name = $model->company->name;
-    $company_type = $model->company->type;
-    $company_address = $model->company->address;
-    $company_phone = $model->company->phone;
-    $company_email = $model->company->email;
-    $company_tva = $model->company->tva;
-    $company_siret = $model->company->siret;
-
-    return <<<HTML
-        <table>
-            <tr>
-                <th class="title-stylish">Société</th>
-            </tr>
-        </table>
-        <table>
-            <tbody>
-                <tr>
-                    <th>Dénomination</th>
-                    <td>${company_name}</td>
-                </tr>
-                <tr>
-                    <th>A l'attention de</th>
-                    <td>${company_type}</td>
-                </tr>
-                <tr>
-                    <th>Addresse</th>
-                    <td>${company_address}</td>
-                </tr>
-                <tr>
-                    <th>Téléphone</th>
-                    <td>${company_phone}</td>
-                </tr>
-                <tr>
-                    <th>E-mail</th>
-                    <td>${company_email}</td>
-                </tr>
-                <tr>
-                    <th>Tva</th>
-                    <td>${company_tva}</td>
-                </tr>
-                <tr>
-                    <th>Siret</th>
-                    <td>${company_siret}</td>
-                </tr>
-            </tbody>
-        </table>
-   HTML;
-}
-
-function projectDataTable($model): string
-{
-    $devis_name = $model->internal_name;
-    $devis_date = $model->creation_date;
-    $user_cellule = strtolower($model->project_manager->cellule->name);
-
-    return <<<HTML
-        <table>
-            <tr>
-                <th class="title-stylish">Devis</th>
-            </tr>
-        </table>
-        <table>
-                <tr>
-                    <tH>Référence :</th>
-                    <td>${devis_name}</td>
-                </tr>
-                <tr>
-                    <th>Date :</th>
-                    <td>${devis_date}</td>
-                </tr>
-                <tr>
-                    <th>Proposition <br />de <br />laboratoire :</th>
-                    <td>${user_cellule}</td>
-                </tr>
-        </table>
-   HTML;
-}
 
 function lotsDataTables($model): string
 {
@@ -199,12 +205,14 @@ function lotsDataTables($model): string
         $lot_total_total_price = $lot_total_price * $quantity;
 
         $html_body = $html_body . <<<HTML
-            <tr>
-                <td>${lot_title}</td>
-                <td>${lot_total_price}</td>
-                <td>${quantity}</td>
-                <td>${lot_total_total_price}</td>
-            </tr>
+            <tbody>
+                <tr>
+                    <td><b>${lot_title}</b></td>
+                    <td class="txt-gray">${lot_total_price}</td>
+                    <td class="txt-gray">${quantity}</td>
+                    <td class="txt-gray">${lot_total_total_price}</td>
+                </tr>
+            </tbody>
         HTML;
     }
 
@@ -215,199 +223,6 @@ function lotsDataTables($model): string
     return $html_header . $html_body . $html_footer;
 }
 
-function detailsDataTable($model): string
-{
-    $laboxy_prestation_duration = Yii::$app->formatter->asInteger($model->totalHourWithRisk);
-
-    return <<<HTML
-        <table>
-            <tr>
-                <td class="invisible"></td>
-            </tr>
-            <tr>
-                <td class="invisible"></td>
-            </tr>
-            <tr>
-                <td><p><mark class="stylish">Durée de la prestation : </mark>${laboxy_prestation_duration}</p></td>
-            </tr>
-            <tr>
-                <td><p><mark class="stylish">Validité du devis : </mark>3 mois</p></td>
-            </tr>
-            <tr>
-                <td><p><mark class="stylish">Condition de paiement : </mark>30 jours nets, date de facture</p></td>
-            </tr>
-            <tr>
-                <td><p><mark class="stylish">Détails du paiement (échéancier) : </mark>Devis < 2000 €</p></td>
-            </tr>
-            <tr>
-                <td><p>-30% à la commande</p></td>
-            </tr>
-            <tr>
-                <td><p>-70% à la livraison des résultats</p></td>
-            </tr>
-        </table>
-        <br />
-    HTML;
-}
-
-function lotsTotalDataTables($model): string
-{
-    $max_price = 0;
-    if ($model->company->country == "France") $hasTVA = true;
-    else $hasTVA = false;
-
-    foreach ($model->lots as $lot) $max_price +=  round(($lot->totalwithmargin + $model->additionallotprice) / (1 - $model->management_rate / 100), -2);
-
-    $tva_price = $max_price * 0.2;
-    $price_ttc = $max_price * 1.2;
-
-    $total_price_table_header = <<<HTML
-        <table id="filoutage-table">
-    HTML;
-
-    $total_price_table_data = <<<HTML
-        <tr>
-            <td class="price-stylish">MONTANT TOTAL HT</td>
-            <td class="price-stylish">${max_price} €</td>
-        </tr>
-    HTML;
-
-    $total_price_tva_table_data = "";
-    if ($hasTVA) {
-        $total_price_tva_table_data = <<<HTML
-            <tr>
-                <td class="price-stylish">TVA 20%</td>
-                <td class="price-stylish">${tva_price} €</td>
-            </tr>
-            <tr>
-                <td class="price-stylish">MONTANT TOTAL TTC</td>
-                <td class="price-stylish">${price_ttc} €</td>
-            </tr>
-        HTML;
-    }
-
-    $total_price_table_footer_data = <<<HTML
-        </table> 
-    HTML;
-
-    return $total_price_table_header . $total_price_table_data . $total_price_tva_table_data . $total_price_table_footer_data;
-}
-
-function createClientTable(Project $model): string
-{
-    $company_name = $model->company->name;
-    $company_email = $model->company->email;
-    $company_type = $model->company->type;
-    $company_postal_code = $model->company->postal_code;
-    $company_city = $model->company->city;
-    $company_country = $model->company->country;
-    $company_tva = $model->company->tva;
-
-    $contact_firstname = $model->contact->firstname;
-    $contact_surname = $model->contact->surname;
-    $contact_phone_number = $model->contact->phone_number;
-    $contact_email = $model->contact->email;
-
-    return <<<HTML
-        <table class="highlight">
-            <tbody>
-                 <!-- Company data -->
-                <tr class='group'>
-                    <td class='header'>Client</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class='header'>Nom du client / société</td>
-                    <td>${company_name}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Type d'entreprise</td>
-                    <td>${company_type}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Pays</td>
-                    <td>${company_country}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Ville</td>
-                    <td>${company_city}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Code postal</td>
-                    <td>${company_postal_code}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Email</td>
-                    <td>${company_email}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Tva</td>
-                    <td>${company_tva}</td>
-                </tr>
-
-                <!-- Delivery data -->
-               <tr class='group'>
-                    <td class='header'>Contact client</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class='header'>Nom</td>
-                    <td>${contact_surname}</td>
-                </tr>
-                <tr>
-                    <td class='header'>Prénom</td>
-                    <td>${contact_firstname}</td>
-                </tr>
-                <tr>
-                    <td class='header'>N° téléphone</td>
-                    <td>${contact_phone_number}</td>
-                </tr>
-                <tr>
-                    <td class='header'>email</td>
-                    <td>${contact_email}</td>
-                </tr>
-            </tbody>
-        </table>
-    HTML;
-}
-
-function warningDataTable(): string
-{
-    return <<<HTML
-        <table>
-            <tr>
-                <td class="textcenter">
-                    <p class="warning">En cas d'acceptation, merci de nous retourner le présent devis daté et signé avec la mention :</p>
-                    <p class="warning">"bon pour accord" et le cachet de votre entreprise.</p>
-                    <p class="warning">La signature du présent contrat vaut acceptation des conditions générales de ventes jointes au devis</p>
-                </td>
-            </tr>
-        </table>
-    HTML;
-}
-
-function signatureDataTable(): string
-{
-    return <<<HTML
-        <table>
-            <tr>
-                <td class="invisible">
-                    Nom-Prenom :
-                </td>
-            </tr>
-            <tr>
-                <td class="invisible">
-                    Fonction :
-                </td>
-            </tr>
-            <tr>
-                <td class="invisible">
-                    Date :
-                </td>
-            </tr>
-        </table>
-    HTML;
-}
 
 function footerLeftSideInformation(): string
 {

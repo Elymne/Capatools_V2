@@ -1,3 +1,6 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
 strong,
 b {
     font-weight: bold;
@@ -58,27 +61,28 @@ mark.stylish {
 }
 
 th {
-    background-color: #e6e6e6;
-    border: 1px solid #666666;
-    color: #509587;
+    background-color: #072E62;
+    border-bottom: 1px solid lightgray;
+    color: white;
+    font-weight: bold;
 }
 
 td {
-    border: 1px solid #666666;
+    border-bottom: 2px solid lightgray;
     color: #333333;
 }
+
+
 
 td.textcenter {
     text-align: center;
 }
 
-td.invisible {
-    border: 0px solid #ffffff;
-}
+
 
 td.price-stylish {
     background-color: #509587;
-    border: 0px solid #ffffff;
+    border-bottom: 0px solid #ffffff;
     color: #ffffff;
 }
 
@@ -97,3 +101,117 @@ th.title-stylish {
 #filoutage-table {
     padding-right: 100px;
 }
+
+
+
+
+.col-print-1 {width:8%;  float:left;}
+.col-print-2 {width:16%; float:left;}
+.col-print-3 {width:25%; float:left;}
+.col-print-4 {width:33%; float:left;}
+.col-print-5 {width:42%; float:left;}
+.col-print-6 {width:50%; float:left;}
+.col-print-7 {width:58%; float:left;}
+.col-print-8 {width:66%; float:left;}
+.col-print-9 {width:75%; float:left;}
+.col-print-10{width:83%; float:left;}
+.col-print-11{width:92%; float:left;}
+.col-print-12{width:100%; float:left;}
+
+#main{
+    padding-left: 0px !important;
+}
+
+
+.lightblue-bg .row{
+    padding: 15px;
+}
+.lightblue-bg{
+    background-color: #75C4C6;
+    
+}
+
+
+.txt-gray{
+    color: #656566;
+}
+.big-title{
+    color: #072E62;
+    font-weight: bold;
+    font-size: 40px;
+}
+.sub-title{
+    color: #75C4C6;
+    font-weight: bold;
+    font-size: 25px;
+}
+#main{
+    padding-left: 0px !important;
+}
+.white-txt{
+    color: white;
+}
+.bg-lightgray .client-infos{
+    margin-bottom: 20px;
+    display: inline-table;
+    
+}
+.bg-lightgray{
+    background-color: #F5F5F6;
+    padding: 30px;
+}
+.txt-bold{
+    font-weight: bold;
+}
+.blue-border{
+    -webkit-box-shadow:inset 0px 0px 0px 1px #072E62;
+    -moz-box-shadow:inset 0px 0px 0px 1px #072E62;
+    box-shadow:inset 0px 0px 0px 1px #072E62;
+}
+
+.container{
+    width: 100%;
+    margin-left:0px;
+    margin-right:0px;
+}
+.capalogo-container {
+    background-image: url("images/pdf/capalogo.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 250px;
+    height: 180px;
+}
+.signature{
+    margin-top: 20px;
+}
+.capalogo-container img{
+    border: 1px solid red;
+    max-width: 2pt;
+    max-width: 2px;
+}
+
+.presta-duration div{
+    padding: 10px;
+    display: inline-block;
+}
+ 
+.rounded-border{
+    border: 1px solid lightblue;
+    border-radius: 50%;
+    padding: 20px;
+}
+.pull-right{
+    text-align: right;
+}
+.center{
+    text-align: center;
+}
+.total-values{
+    text-align: right;
+    
+}
+.total-data{
+    padding: 7px 0;
+}
+
