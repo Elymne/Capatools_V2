@@ -84,14 +84,16 @@ $(() => {
             projectManagerField.hide();
         }
     };
-
-    celluleCheckbox.onchange = () => {
-        if (celluleCheckbox.checked) {
-            celluleField.show();
-        } else {
-            celluleField.hide();
-        }
-    };
+    var elementExists = celluleCheckbox;
+    if (elementExists) {
+        celluleCheckbox.onchange = () => {
+            if (celluleCheckbox.checked) {
+                celluleField.show();
+            } else {
+                celluleField.hide();
+            }
+        };
+    }
 
     companyCheckbox.onchange = () => {
         if (companyCheckbox.checked) {

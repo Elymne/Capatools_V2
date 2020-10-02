@@ -18,7 +18,7 @@ class MilestoneSearch extends Millestone
     {
         return [
             [
-                ["id", "number", "comment", "pourcentage", "price", "status", "estimate_date", "project_id", "project.internal_name", "cellule.name"],
+                ["id", "number", "comment", "pourcentage", "price", "status", "estimate_date", "project_id", "project.capaidreduc", "cellule.name"],
                 "safe"
             ],
         ];
@@ -30,7 +30,7 @@ class MilestoneSearch extends Millestone
      */
     public function attributes()
     {
-        return array_merge(parent::attributes(), ['project.internal_name', "project.cellule.name"]);
+        return array_merge(parent::attributes(), ['project.capaidreduc', "project.cellule.name"]);
     }
 
     /**
@@ -40,11 +40,11 @@ class MilestoneSearch extends Millestone
     public function search($params): ?ActiveDataProvider
     {
         if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) {
-            return $this->createActiveDataProvider(self::find(), $params);
+            return $this->createActiveDataProvider(self::find()->where(["statut" => [Millestone::STATUT_ENCOURS, Millestone::STATUT_FACTURATIONENCOURS, Millestone::STATUT_FACTURER, Millestone::STATUT_PAYED, Millestone::STATUT_CANCELED]]), $params);
         }
 
         if (UserRoleManager::hasRoles([UserRoleEnum::PROJECT_MANAGER])) {
-            return $this->createActiveDataProvider(self::find()->where(["project.cellule_id" => Yii::$app->user->identity->cellule_id]), $params);
+            return $this->createActiveDataProvider(self::find()->where(["project.cellule_id" => Yii::$app->user->identity->cellule_id, "statut" => [Millestone::STATUT_ENCOURS, Millestone::STATUT_FACTURATIONENCOURS, Millestone::STATUT_FACTURER, Millestone::STATUT_PAYED, Millestone::STATUT_CANCELED]]), $params);
         }
 
         return null;
@@ -60,9 +60,9 @@ class MilestoneSearch extends Millestone
             'pagination' => false
         ]);
 
-        $dataProvider->sort->attributes['project.internal_name'] = [
-            'asc' => ['project.internal_name' => SORT_ASC],
-            'desc' => ['project.internal_name' => SORT_DESC],
+        $dataProvider->sort->attributes['project.capaidreduc'] = [
+            'asc' => ['project.capaidreduc' => SORT_ASC],
+            'desc' => ['project.capaidreduc' => SORT_DESC],
         ];
 
         $dataProvider->sort->attributes['project.cellule.name'] = [

@@ -105,21 +105,21 @@ function getCollumnsArray()
     $result = [];
 
     array_push($result, [
-        "attribute" => "project.internal_name",
+        "attribute" => "project.capaidreduc",
         "format" => "raw",
-        "label" => "Nom interne",
+        "label" => "Capa id",
         "contentOptions" => ["class" => "project-internal_name-row"],
         "headerOptions" => ["class" => "project-internal_name-row"],
     ]);
-
-    array_push($result, [
-        "attribute" => "project.cellule.name",
-        "format" => "raw",
-        "label" => "Cellule",
-        "contentOptions" => ["class" => "project-cellule-row"],
-        "headerOptions" => ["class" => "project-cellule-row"],
-    ]);
-
+    if (UserRoleManager::hasRole(UserRoleEnum::ACCOUNTING_SUPPORT)  || UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) || UserRoleManager::hasRole(UserRoleEnum::ADMIN)) {
+        array_push($result, [
+            "attribute" => "project.cellule.name",
+            "format" => "raw",
+            "label" => "Cellule",
+            "contentOptions" => ["class" => "project-cellule-row"],
+            "headerOptions" => ["class" => "project-cellule-row"],
+        ]);
+    }
     array_push($result, [
         "attribute" => "number",
         "format" => "raw",
@@ -248,20 +248,30 @@ function getSelectListStatusFilter()
             <input type="checkbox" class="filled-in" id="payed-checkbox" onclick="onCheckboxStatusChange()"/>
             <span class="span-combobox">Payé</span>
         </label>
+        <label class="rigthspace-20px">
+            <input type="checkbox" class="filled-in" id="canceled-checkbox" onclick="onCheckboxStatusChange()"/>
+            <span class="span-combobox">Annulé</span>
+        </label>
     HTML;
 }
 
 
 function getUpdateStatusButton($milestone)
 {
+    $html = "";
     if ($milestone->statut == Millestone::STATUT_ENCOURS && (UserRoleManager::hasRole(UserRoleEnum::PROJECT_MANAGER) || UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) || UserRoleManager::hasRole(UserRoleEnum::ADMIN))) {
-        return  Html::a('A facturer', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURATIONENCOURS, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
+        $html =  Html::a('A facturer', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURATIONENCOURS, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
     }
     if ($milestone->statut == Millestone::STATUT_FACTURATIONENCOURS && (UserRoleManager::hasRole(UserRoleEnum::ACCOUNTING_SUPPORT)  || UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) || UserRoleManager::hasRole(UserRoleEnum::ADMIN))) {
-        return Html::a('Valider la facturation', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURER, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
+        $html = Html::a('Valider la facturation', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURER, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
+    }
+    if ($milestone->statut == Millestone::STATUT_FACTURATIONENCOURS) {
+        $html .=  Html::a('Annuler la facturation', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURATIONENCOURS, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
     }
     if ($milestone->statut == Millestone::STATUT_FACTURER && (UserRoleManager::hasRole(UserRoleEnum::ACCOUNTING_SUPPORT)  || UserRoleManager::hasRole(UserRoleEnum::SUPER_ADMIN) || UserRoleManager::hasRole(UserRoleEnum::ADMIN))) {
-        return Html::a('Valider le paiement', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_PAYED, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
+        $html = Html::a('Valider le paiement', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_PAYED, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
+        $html .=  Html::a('Annuler la payement', ['update-millestone-status', 'id' => $milestone->id, 'status' => Millestone::STATUT_FACTURATIONENCOURS, 'direct' => 'index-milestones'], ['class' => 'waves-effect waves-light btn btn-grey']);
     }
-    return "";
+
+    return $html;
 }
