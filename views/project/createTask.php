@@ -103,7 +103,7 @@ if ($SaveSucess != null) {
                             <div class="container-items-taskGestion">
                                 <div class="row">
                                     <div class="col s1 offset-s5">
-                                        <button type="button" class="add-item-taskGestion btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                        <button id="boutonfirstadd" type="button" class="add-item-taskGestion btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
                                     </div>
                                 </div>
                                 <!-- widgetContainer -->
@@ -124,7 +124,7 @@ if ($SaveSucess != null) {
                                             <div class="col s2">
                                                 <?= $form->field($taskGestion, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                             </div>
-                                            <div class="col s3">
+                                            <div class="col s2">
                                                 <?= $form->field($taskGestion, "[{$i}]capa_user_id")->widget(
                                                     Select2::class,
                                                     [
@@ -144,8 +144,8 @@ if ($SaveSucess != null) {
                                                 )->label("Intervenant");
                                                 ?>
                                             </div>
-                                            <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
+                                            <div class="col s2">
+                                                <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Prix journalier") ?>
                                             </div>
                                             <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['type' => 'number', 'min' => 0, 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
@@ -246,7 +246,7 @@ if ($SaveSucess != null) {
                                                 <div class="col s2">
                                                     <?= $form->field($taskOperational, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                 </div>
-                                                <div class="col s3">
+                                                <div class="col s2">
                                                     <?= $form->field($taskOperational, "[{$i}]capa_user_id")->widget(
                                                         Select2::class,
                                                         [
@@ -267,8 +267,8 @@ if ($SaveSucess != null) {
                                                     )->label("Intervenant");
                                                     ?>
                                                 </div>
-                                                <div class="col s1">
-                                                    <?= $form->field($taskOperational, "[{$i}]price")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Coût") ?>
+                                                <div class="col s2">
+                                                    <?= $form->field($taskOperational, "[{$i}]price")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Prix journalier") ?>
                                                 </div>
                                                 <div class="col s1">
                                                     <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['type' => 'number', 'min' => 0, 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>

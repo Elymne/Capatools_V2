@@ -254,8 +254,8 @@ $risksName = array_map(function ($risk) {
                                                     <div class="col s2">
                                                         <?= $form->field($equipment, "[{$i}]name")->textInput([])->label("Description") ?>
                                                     </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]daily_price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix") ?>
+                                                    <div class="col s2">
+                                                        <?= $form->field($equipment, "[{$i}]daily_price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix journalier") ?>
                                                     </div>
                                                     <div class="col s1">
                                                         <?= $form->field($equipment, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Jour(s)") ?>
@@ -336,8 +336,8 @@ $risksName = array_map(function ($risk) {
                                                     <div class="col s2">
                                                         <?= $form->field($contributor, "[{$i}]name")->textInput()->label("Desc. Intervenant") ?>
                                                     </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]daily_price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix") ?>
+                                                    <div class="col s2">
+                                                        <?= $form->field($contributor, "[{$i}]daily_price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix journalier") ?>
                                                     </div>
                                                     <div class="col s1">
                                                         <?= $form->field($contributor, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Jour(s)") ?>
