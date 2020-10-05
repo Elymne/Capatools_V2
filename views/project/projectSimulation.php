@@ -515,49 +515,40 @@ ProjectSimulationAsset::register($this);
 
                 </div>
 
-            </div>
-        </div>
+                <?= Html::a(
+                    Yii::t('app', '<i class="material-icons right">arrow_back</i>Retour'),
+                    ['project/index-draft'],
+                    ['class' => 'waves-effect waves-light btn btn-grey', 'title' => 'Retour à la liste des brouillons']
+                ) ?>
 
-        <!-- Floatbutton ! -->
-        <div class="card-action">
-            <div class="form-group">
-                <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
-
+                <?= Html::submitButton(
+                    '<i class="material-icons right">save</i>Enregistrer',
+                    ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Sauvegarder les options']
+                ) ?>
+                <?php if ($project->state != Project::STATE_DEVIS_MODEL) : ?>
                     <?= Html::a(
-                        Yii::t('app', '<i class="material-icons right">arrow_back</i>'),
-                        ['project/index-draft'],
-                        ['class' => 'waves-effect waves-light btn-floating btn-large btn-grey', 'title' => 'Retour à la liste des brouillons']
+                        Yii::t('app', '<i class="material-icons right black-text">star_border</i>Ajouter aux modèles'),
+                        ['project/create-model', 'id' => $project->id, 'view' => 'projectsimulate'],
+                        ['class' => 'waves-effect waves-light btn btn-white', 'title' => 'Créer un model de devis']
                     ) ?>
+                <?php endif; ?>
+                <?php if ($project->state == Project::STATE_DEVIS_MODEL) : ?>
+                    <?= Html::a(
+                        Yii::t('app', '<i class="material-icons right">star</i>Retirer des modèles'),
+                        ['project/create-model', 'id' => $project->id, 'view' => 'projectsimulate'],
+                        ['class' => 'waves-effect waves-light btn btn-capa', 'title' => 'supprimer le model de devis']
+                    ) ?>
+                <?php endif; ?>
+                <?php if ($validdevis && $project->state != Project::STATE_DEVIS_MODEL) : ?>
+                    <?= Html::a(
+                        Yii::t('app', '<i class="material-icons right">check</i>Créer le projet'),
+                        ['project/create-project?id=' . $project->id],
+                        ['class' => 'waves-effect waves-light btn btn-green', 'title' => 'Créer le projet']
+                    ) ?>
+                <?php endif; ?>
 
-                    <?= Html::submitButton(
-                        '<i class="material-icons right">save</i>',
-                        ['class' => 'waves-effect waves-light btn-floating btn-large btn-blue', 'title' => 'Sauvegarder les options']
-                    ) ?>
-                    <?php if ($project->state != Project::STATE_DEVIS_MODEL) : ?>
-                        <?= Html::a(
-                            Yii::t('app', '<i class="material-icons right black-text">star_border</i>'),
-                            ['project/create-model', 'id' => $project->id, 'view' => 'projectsimulate'],
-                            ['class' => 'waves-effect waves-light btn-floating btn-large yellow lighten-4', 'title' => 'Créer un model de devis']
-                        ) ?>
-                    <?php endif; ?>
-                    <?php if ($project->state == Project::STATE_DEVIS_MODEL) : ?>
-                        <?= Html::a(
-                            Yii::t('app', '<i class="material-icons right">star</i>'),
-                            ['project/create-model', 'id' => $project->id, 'view' => 'projectsimulate'],
-                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-yellow', 'title' => 'supprimer le model de devis']
-                        ) ?>
-                    <?php endif; ?>
-                    <?php if ($validdevis && $project->state != Project::STATE_DEVIS_MODEL) : ?>
-                        <?= Html::a(
-                            Yii::t('app', '<i class="material-icons right">check</i>'),
-                            ['project/create-project?id=' . $project->id],
-                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-green', 'title' => 'Créer le projet']
-                        ) ?>
-                    <?php endif; ?>
-                </div>
             </div>
         </div>
-
         <?php ActiveForm::end(); ?>
     </div>
 </div>

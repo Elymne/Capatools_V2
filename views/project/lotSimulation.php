@@ -17,24 +17,14 @@ ProjectLotSimulationAppAsset::register($this);
 <?= TopTitle::widget(['title' => $this->title]) ?>
 <?php
 ///Gère les bandeaux d'alerts
-if ($SaveSucess != null) {
-    if ($SaveSucess) {
-        echo Alert::widget([
-            'options' => [
-                'class' => 'alert-success',
-            ],
-            'body' => 'Enregistrement réussi ...',
-        ]);
-    } else {
-        echo Alert::widget([
-            'options' => [
-                'class' => 'alert-danger',
-            ],
-            'body' => 'Enregistrement échoué ...',
-        ]);
-    }
-}
-?>
+if ($SaveSucess != null) : ?>
+    <?php if ($SaveSucess) : ?>
+        <?= Alert::widget(['options' => ['class' => 'alert-success',], 'body' => 'Enregistrement réussi ...',]) ?>
+    <?php else : ?>
+        <?= Alert::widget(['options' => ['class' => 'alert-danger',], 'body' => 'Enregistrement échoué ...',]) ?>
+    <?php endif; ?>
+<?php endif; ?>
+
 <div class="container">
     <div class="project-create">
         <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
@@ -222,20 +212,17 @@ if ($SaveSucess != null) {
                         </div>
                     </div>
                 </div>
-                <!-- Buttons -->
-                <div class="form-group">
-                    <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
-                        <?= Html::a(
-                            Yii::t('app', '<i class="material-icons right">arrow_back</i>'),
-                            ['project/project-simulate?project_id=' . $lot->project_id],
-                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-grey', 'title' => 'Retour à la page de simulation']
-                        ) ?>
-                        <?= Html::submitButton(
-                            '<i class="material-icons right">save</i>',
-                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-blue', 'title' => 'Sauvegarder les options']
-                        ) ?>
-                    </div>
-                </div>
+
+                <?= Html::a(
+                    Yii::t('app', '<i class="material-icons right">arrow_back</i>Retour'),
+                    ['project/project-simulate?project_id=' . $lot->project_id],
+                    ['class' => 'waves-effect waves-light btn btn-grey', 'title' => 'Retour à la page de simulation']
+                ) ?>
+                <?= Html::submitButton(
+                    '<i class="material-icons right">save</i>Enregistrer',
+                    ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Sauvegarder les options']
+                ) ?>
+
             </div>
         </div>
         <?php ActiveForm::end(); ?>
