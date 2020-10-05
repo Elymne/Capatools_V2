@@ -408,7 +408,8 @@ class ProjectController extends Controller implements ServiceInterface
             'methods' => [
                 'SetTitle' => 'Fiche de devis - TEST',
                 'SetSubject' => 'Generating PDF files',
-                'SetFooter' => "<img src=\"" . YII::$app->basePath . "/web/images/pdf/footer.png\">",
+                'SetFooter' => "<img src=\"" . YII::$app->basePath . "/web/images/pdf/footer.png\">
+                <BR>{PAGENO}",
                 'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
             ]
         ]);

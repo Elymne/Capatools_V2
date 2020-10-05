@@ -26,8 +26,6 @@ $tva_price = $max_price * 0.2;
 $price_ttc = $max_price * 1.2;
 
 
-setlocale(LC_TIME, "fr_FR");
-
 
 ?>
 
@@ -47,7 +45,7 @@ setlocale(LC_TIME, "fr_FR");
                     <?= $model->internal_name ?>
                 </div>
                 <div class="sub-title">
-                    Date: <?= $model->creation_date ?>
+                    Date: <?= Yii::$app->formatter->asDate($model->creation_date, 'd-MM-yyyy') ?>
                 </div>
             </div>
         </div>
@@ -56,7 +54,7 @@ setlocale(LC_TIME, "fr_FR");
         <!-- DEVIS -->
         <div class="col-print-7">
             <div class="row pull-right">
-                <span class="txt-gray"><?= strftime("%A %d %B %G"); ?></span>
+                <span class="txt-gray"><?= Yii::$app->formatter->asDate('now', 'full') ?></span>
                 <br>
                 <br>
                 <br>
@@ -191,7 +189,7 @@ setlocale(LC_TIME, "fr_FR");
 
 <div class="col-print-12">
     <div class="row">
-        <img src="<?= $condition ?>" width="210mm" height="297mm" margin=0>
+        <img src="<?= $condition ?>" width="220mm" height="297mm" margin=0>
     </div>
 </div>
 
