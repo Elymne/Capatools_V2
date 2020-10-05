@@ -766,12 +766,6 @@ class ProjectController extends Controller implements ServiceInterface
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = LotSimulate::getOneByIdProjectAndNumber($project_id, $number);
 
-        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        if ($lot->load(Yii::$app->request->post())) {
-            $SaveSucess = true;
-            $lot->save();
-        }
-
         if ($lot == null) {
             return $this->redirect([
                 'error',
@@ -779,6 +773,16 @@ class ProjectController extends Controller implements ServiceInterface
                 'errorDescriptions' => ['Vous essayez actuellement de modifier un lot qui n\'existe pas.']
             ]);
         }
+
+        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
+        if ($lot->load(Yii::$app->request->post())) {
+            $SaveSucess = true;
+            $lot->save();
+
+            MenuSelectorHelper::setMenuProjectDraft();
+            return Yii::$app->response->redirect(['project/project-simulate', 'id' => $project_id]);
+        }
+
         MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(
             'lotSimulation',
@@ -786,7 +790,6 @@ class ProjectController extends Controller implements ServiceInterface
                 'lot' =>  $lot,
                 'SaveSucess' => $SaveSucess,
             ]
-
         );
     }
 
