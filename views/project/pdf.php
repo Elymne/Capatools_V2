@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 // Laboxy prestation duration
 $laboxy_prestation_duration = Yii::$app->formatter->asInteger($model->totalHourWithRisk) . ' jours';
 
-
+$condition = YII::$app->basePath . "/web/images/pdf/conditiongeneral.png";
 // Prices
 $max_price = 0;
 if ($model->company->country == "France") $hasTVA = true;
@@ -170,7 +170,7 @@ setlocale(LC_TIME, "fr_FR");
 
 
 <pagebreak />
-
+<!--
 <div class="col-print-12">
     <div class="row">
         <div class="col-print-6 side-section-legals">
@@ -187,6 +187,13 @@ setlocale(LC_TIME, "fr_FR");
     </div>
 </div>
 
+-->
+
+<div class="col-print-12">
+    <div class="row">
+        <img src="<?= $condition ?>" width="210mm" height="297mm" margin=0>
+    </div>
+</div>
 
 <?php
 

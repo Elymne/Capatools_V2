@@ -1,4 +1,4 @@
-body{
+body {
     font-family: Arial, Helvetica, sans-serif;
 }
 strong,
@@ -61,7 +61,7 @@ mark.stylish {
 }
 
 th {
-    background-color: #072E62;
+    background-color: #072e62;
     border-bottom: 1px solid lightgray;
     color: white;
     font-weight: bold;
@@ -72,13 +72,9 @@ td {
     color: #333333;
 }
 
-
-
 td.textcenter {
     text-align: center;
 }
-
-
 
 td.price-stylish {
     background-color: #509587;
@@ -102,77 +98,106 @@ th.title-stylish {
     padding-right: 100px;
 }
 
+.col-print-1 {
+    width: 8%;
+    float: left;
+}
+.col-print-2 {
+    width: 16%;
+    float: left;
+}
+.col-print-3 {
+    width: 25%;
+    float: left;
+}
+.col-print-4 {
+    width: 33%;
+    float: left;
+}
+.col-print-5 {
+    width: 42%;
+    float: left;
+}
+.col-print-6 {
+    width: 50%;
+    float: left;
+}
+.col-print-7 {
+    width: 58%;
+    float: left;
+}
+.col-print-8 {
+    width: 66%;
+    float: left;
+}
+.col-print-9 {
+    width: 75%;
+    float: left;
+}
+.col-print-10 {
+    width: 83%;
+    float: left;
+}
+.col-print-11 {
+    width: 92%;
+    float: left;
+}
+.col-print-12 {
+    width: 100%;
+    float: left;
+}
 
-
-
-.col-print-1 {width:8%;  float:left;}
-.col-print-2 {width:16%; float:left;}
-.col-print-3 {width:25%; float:left;}
-.col-print-4 {width:33%; float:left;}
-.col-print-5 {width:42%; float:left;}
-.col-print-6 {width:50%; float:left;}
-.col-print-7 {width:58%; float:left;}
-.col-print-8 {width:66%; float:left;}
-.col-print-9 {width:75%; float:left;}
-.col-print-10{width:83%; float:left;}
-.col-print-11{width:92%; float:left;}
-.col-print-12{width:100%; float:left;}
-
-#main{
+#main {
     padding-left: 0px !important;
 }
 
-
-.lightblue-bg .row{
+.lightblue-bg .row {
     padding: 15px;
 }
-.lightblue-bg{
-    background-color: #75C4C6;
-    
+.lightblue-bg {
+    background-color: #75c4c6;
 }
 
-
-.txt-gray{
+.txt-gray {
     color: #656566;
 }
-.big-title{
-    color: #072E62;
+.big-title {
+    color: #072e62;
     font-weight: bold;
     font-size: 40px;
 }
-.sub-title{
-    color: #75C4C6;
+.sub-title {
+    color: #75c4c6;
     font-weight: bold;
     font-size: 25px;
 }
-#main{
+#main {
     padding-left: 0px !important;
 }
-.white-txt{
+.white-txt {
     color: white;
 }
-.bg-lightgray .client-infos{
+.bg-lightgray .client-infos {
     margin-bottom: 20px;
     display: inline-table;
-    
 }
-.bg-lightgray{
-    background-color: #F5F5F6;
+.bg-lightgray {
+    background-color: #f5f5f6;
     padding: 30px;
 }
-.txt-bold{
+.txt-bold {
     font-weight: bold;
 }
-.blue-border{
-    -webkit-box-shadow:inset 0px 0px 0px 1px #072E62;
-    -moz-box-shadow:inset 0px 0px 0px 1px #072E62;
-    box-shadow:inset 0px 0px 0px 1px #072E62;
+.blue-border {
+    -webkit-box-shadow: inset 0px 0px 0px 1px #072e62;
+    -moz-box-shadow: inset 0px 0px 0px 1px #072e62;
+    box-shadow: inset 0px 0px 0px 1px #072e62;
 }
 
-.container{
+.container {
     width: 100%;
-    margin-left:0px;
-    margin-right:0px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 .capalogo-container {
     background-image: url("images/pdf/capalogo.png");
@@ -182,38 +207,38 @@ th.title-stylish {
     width: 250px;
     height: 180px;
 }
-.signature{
+
+.signature {
     margin-top: 20px;
 }
-.capalogo-container img{
+.capalogo-container img {
     border: 1px solid red;
     max-width: 2pt;
     max-width: 2px;
 }
 
-.presta-duration div{
+.presta-duration div {
     padding: 10px;
     display: inline-block;
 }
- 
-.rounded-border{
+
+.rounded-border {
     border: 1px solid lightblue;
     border-radius: 50%;
     padding: 20px;
 }
-.pull-right{
+.pull-right {
     text-align: right;
 }
-.center{
+.center {
     text-align: center;
 }
-.total-values{
+.total-values {
     text-align: right;
-    
 }
-.total-data{
+.total-data {
     padding: 7px 0;
 }
-.side-section-legals .legals-content{
+.side-section-legals .legals-content {
     padding: 13px;
 }
