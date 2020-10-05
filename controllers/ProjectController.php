@@ -884,6 +884,9 @@ class ProjectController extends Controller implements ServiceInterface
                 if (!empty($deletedTasksLotsModifIds)) {
                     ProjectCreateLotTaskForm::deleteAll(['id' => $deletedTasksLotsModifIds]);
                 }
+
+                MenuSelectorHelper::setMenuProjectDraft();
+                return Yii::$app->response->redirect(['project/project-simulate', 'id' => $project_id]);
             }
         }
 
@@ -1063,12 +1066,8 @@ class ProjectController extends Controller implements ServiceInterface
                 $project->first_in = 1;
                 $project->save();
                 // project_id, $number, $sucess = false
-                return $this->redirect([
-                    'update-dependencies-consumables',
-                    'project_id' => $project_id,
-                    'number' => $number,
-                    'sucess' => true
-                ]);
+                MenuSelectorHelper::setMenuProjectDraft();
+                return Yii::$app->response->redirect(['project/project-simulate', 'id' => $project_id]);
             }
         }
 
@@ -1132,7 +1131,6 @@ class ProjectController extends Controller implements ServiceInterface
                 $finalModel->save();
 
                 MenuSelectorHelper::setMenuProjectDraft();
-
                 return Yii::$app->response->redirect(['project/view', 'id' => $model->id]);
             }
         }
