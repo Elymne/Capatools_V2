@@ -178,7 +178,7 @@ setlocale(LC_TIME, "fr_FR");
                 <?php echo footerLeftSideInformation() ?>
             </div>
         </div>
-        
+
         <div class="col-print-6 side-section-legals">
             <div class="legals-content">
                 <?php echo footerRightSideInformation() ?>
@@ -244,21 +244,16 @@ function footerLeftSideInformation(): string
         <b class="stylish-minus">ARTICLE 2 - COLLABORATION À LA CHARGE DU CLIENT</b>
         <p class="minus"><b class="bluest-minus">2.1</b> Le client reconnaît être le seul à disposer des meilleures informations relatives à son entreprise et à ses activités commerciales et/ou industrielles. À ce titre, le client s'engage à respecter, du début de la relation contractuelle et tout au long de l'exécution du contrat, son obligation de collaboration avec les équipes de CAPACITÉS et en particulier, le cas échéant, lors de la rédaction d'un cahier des charges.</p>
         <p class="minus"><b class="bluest-minus">2.2</b> En l'absence de collaboration du client dans les délais requis, CAPACITÉS se réserve le droit de suspendre l'exécution des prestations ou de résilier le contrat. Cette obligation de collaboration est une obligation essentielle du contrat, ce que le client reconnaît expressément</p>
-
         <b class="stylish-minus">ARTICLE 3 - LOYAUTÉ ENTRE LES PARTIES</b>
         <p class="minus"><b class="bluest-minus">3.1</b> L'une et l'autre des parties aura, envers son co-contractant, un comportement loyal dans l'exécution du présent contrat. Ce comportement loyal comprend aussi bien la qualité des échanges entre les deux parties que les relations que l'une et l'autre des parties entretiennent avec les tiers.</p>
         <p class="minus"><b class="bluest-minus">3.2</b> Confidentialité : Chaque partie s'engage à ne pas publier, ni divulguer de quelque façon que ce soit les informations scientifiques, techniques, ou de toute nature, appartenant à l'autre partie dont elle pourrait avoir connaissance à l'occasion de l'exécution de la prestation. Chaque partie s'engage à ne donner accès aux informations confidentielles de l'autre partie, à l'intérieur de son propre établissement, qu'aux seuls membres et employés directement concernés par la prestation objet du présent contrat, à informer ses membres et employés des présentes obligations de confidentialité et s'engage à leur imposer individuellement le respect des engagements souscrits en vertu des présentes. Cette obligation de confidentialité sera valable à compter de la date d'entrée en vigueur du présent contrat et jusqu'à ce que les informations confidencielles tombent dans le domaine public. Toute publication ou communication portant sur la prestation ou ses résultats, par l'une des parties, devra recevir l'accord préalable écrit de l'autre partie qui fera connaître sa décision dans un délai maximum d'un mois à compter de la demande. Passé ce délai et faute de réponse, l'accord sera réputé acquis. Ces publications et communications devront mentionner le concours apporté par chacune des parties à la réalisation de la prestation.</p>
-
         <b class="stylish-minus">ARTICLE 4 - OBLIGATION CONTRACTUELLE - RESPONSABILITÉ DE CAPACITÉS</b>
         <p class="minus"><b class="bluest-minus">4.1</b> CAPACITÉS exécute les prestations dans le cadre d'une obligation de moyens et mettra tout en oeuvre pour assurer le bon déroulement de la prestation.</p>
         <p class="minus"><b class="bluest-minus">4.2</b> La responsabilité de CAPACITÉS ne pourra donc être engagée que sur la démonstration d'une faute exclusive imputable à CAPACITÉS.</p>
         <p class="minus"><b class="bluest-minus">4.3</b> La responsabilité de CAPACITÉS ne saurait être engagée en cas de force majeure tel défini par la jurisprudence française. En cas de prolongation de l'évènement au-delà d'une période de 3 (trois) mois, le contrat pourra être résilié par l'une ou l'autre des parties par lettre recommandée avec demande d'avis de réception.</p>
         <p class="minus"><b class="bluest-minus">4.4</b> Il est expressément convenu que, si la responsabilité de CAPACITÉS était reconnue judiciairement dans l'exécution du contrat, le client ne pourrait prétendre à d'autres indemnités et dommages-intérêts que le remboursement des règlements effectués, au titre du présent contrat. </p>
-
         <b class="stylish-minus">ARTICLE 5 - PROPRIÉTÉ INTELLECTUELLE</b>
         <p class="minus"> Les résultats de la prestation sont la propriété du client après complet paiement du prix mentionné par le devis. Le savoir-faire mis en oeuvre par CAPACITÉS pour réaliser la</p>
-
-
     HTML;
 }
 
@@ -266,7 +261,6 @@ function footerRightSideInformation(): string
 {
     return <<<HTML
         <p class="minus">prestation reste la propriété de l'Université de Nantes ou de CAPACITÉS : en conséquence, toute amélioration de ce savoir-faire demeurera leur propriété. L'évolution du présent contrat ne devra impliquer l'exercice d'aucune activité inventive nouvelle. En conséquence, elle ne devra pas déboucher sur la création d'éléments susceptibles d'être protégés au titre de la propriété industrielle. Dans le cas contraire, les parties s'engagent à s'en informer mutuellement et à négocier entre elles et de bonne foi un contrat spécifique ultérieur régissant notamment les règles de propriété et les conditions d'exploitation de ces éléments de propriété industrielle.</p>
-
         <b class="stylish-minus">ARTICLE 6 - CONDITIONS FINANCIÈRES</b>
         <p class="minus"><b class="bluest-minus">6.1</b> Détermination du prix et modalités de facturation 
             <br />Le montant du budget et les modalités de facturations sont détaillés dans le devis. Le devis a une durée de validité de 45 jours à compter de sa signature par CAPACITÉS
@@ -282,23 +276,19 @@ function footerRightSideInformation(): string
         <p class="minus"><b class="bluest-minus">6.4</b>
             Tout désaccord concernant la facturation devra être motivé par l'envoi d'une lettre recommandée avec demande d'avis de réception, dans les huit jours suivants la date d'émission de la facture. En l'absence de cette procédure, le client sera réputé avoir accepté celle-ci.
         </p>
-
         <b class="stylish-minus">ARTICLE 7 - ENTRÉE EN VIGUEUR ET DURÉE</b>
         <p class="minus">Le contrat prend effet à compter de la date de signature du contrat par les deux parties et est conclu pour la durée précisée par le devis.</p>
-
         <b class="stylish-minus">ARTICLE 8 - RÉSILIATION ANTICIPÉE</b>
         <p class="minus">
             Le présent contrat pourra être résilié par anticipation, par l'une ou l'autre des parties, en cas d'inexécution de l'une ou l'autre des obligations y figurant. La résiliation aura pour conséquence de rendre exigible l'ensemble des sommes dues à CAPACITÉS par le client qui s'engage à régler, sans délai, lesdites sommes.
             <br />La résiliation anticipée interviendra un mois après l'envoi d'une mise en demeure signifiée par la lettre recommandée avec demande d'avis de réception à la partie défaillante indiquant l'intention de faire application de la présente clause résolutoire expresse, restée, en tout ou partie, sans effet.
         </p>
-
         <b class="stylish-minus">ARTICLE 9 - DISPOSITIONS DIVERSES</b>
         <p class="minus"><b class="bluest-minus">9.1</b> Dans l'éventualité où l'une des quelconques dispositions du contrat serait déclarée nulle ou sans effet, de quelque façon et pour quelque motif que ce soit, elle serait réputée non écrite et n'entraînerait pas la nullité des autres dispositions.</p>
         <p class="minus"><b class="bluest-minus">9.2</b> CAPACITÉS déclare être assurée pour sa responsabilité civile professionnelle auprès d'une compagnie d'assurance notoirement solvable pour tous les dommages matériels et immatériels consécutifs à l'exécution du présent contrat par personnel ou ses collaborateurs.</p>
         <p class="minus"><b class="bluest-minus">9.3</b> En cas de traduction du contrat, seule la version en française fera foi.</p>
         <p class="minus"><b class="bluest-minus">9.4</b> Chaque partie est un entrepreneur indépendant et aucune des dispositions du présent contrat ne créera une société, de fait ou de droit, une société commune, un mandat, un contrat de franchise ou d'agent commercial ou un rapport de salariat, entre les parties.</p>
         <p class="minus"><b class="bluest-minus">9.5</b> Le client autorise CAPACITÉS à faire figurer sur son internet et sur ses plaquettes commerciales, la marque et/ou la dénomination sociale du client et une brève annonce de la conclusion du contrat avec le client.</p>
-
         <b class="stylish-minus">ARTICLE 10 - RÈGLEMENT DES LITIGES</b>
         <p class="minus">Le présent contrat est régi par le droit français. En cas de difficulté sur l'interprétation ou l'exécution du présent contrat, les parties s'efforceront de résoudre leur différend à l'amiable. En cas de désaccord persistant au-delà d'un mois, les litiges seront portés devant la juridiction française compétente.</p>
     HTML;
