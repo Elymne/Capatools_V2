@@ -1,8 +1,6 @@
 <?php
 
-use app\models\projects\Project;
 use app\assets\AppAsset;
-use yii\helpers\Html;
 
 AppAsset::register($this);
 
@@ -16,7 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
 // Laboxy prestation duration
 $laboxy_prestation_duration = Yii::$app->formatter->asInteger($model->totalHourWithRisk) . ' jours';
 
-$condition = YII::$app->basePath . "/web/images/pdf/conditiongeneral.png";
+if ($model->company->tva != null) $condition = YII::$app->basePath . "/web/images/pdf/condition_util_FR.png";
+else $condition = YII::$app->basePath . "/web/images/pdf/condition_util_EN.png";
+
+
 // Prices
 $max_price = 0;
 if ($model->company->country == "France") $hasTVA = true;
@@ -187,10 +188,10 @@ $price_ttc = $max_price * 1.2;
 
 -->
 
+
+
 <div class="col-print-12">
-    <div class="row">
-        <img src="<?= $condition ?>" width="220mm" height="297mm" margin=0>
-    </div>
+    <img src="<?= $condition ?>" width="220mm" height="297mm">
 </div>
 
 <?php
