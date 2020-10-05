@@ -14,10 +14,11 @@ LoginAsset::register($this);
 
 ?>
 <div class="row">
-    <div class="col s6 offset-s3">
-        <div class="card">
             <p class="center-align">
-                <img src="<?= Html::encode(Yii::$app->homeUrl) ?>images/logo.png" alt="" />
+                <img src="<?= Html::encode(Yii::$app->homeUrl) ?>images/logo_capa.png" alt="" class="logo"/>
+            </p>
+            <p class="logo-text">
+                FILIALE D'INGÉNIERIE ET DE VALORISATION DE LA RECHERCHE DE L'UNIVERSITÉ DE NANTES
             </p>
             <div class="card-action">
                 <?php $form = ActiveForm::begin([
@@ -28,24 +29,27 @@ LoginAsset::register($this);
                         'labelOptions' => ['class' => 'blue-text control-label'],
                     ],
                 ]); ?>
+                
+                <div class="fields">
 
-                <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'Adresse mail capacités'])->label('<i class="material-icons prefix">account_circle</i> Email') ?>
+                    <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'ADRESSE MAIL CAPACITÉS'])->label(false) ?>
 
-                <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Votre mot de passe'])->label('<i class="material-icons prefix">lock</i> Mot de passe')  ?>
+                    <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'MOT DE PASSE'])->label(false)  ?>
+                
+                </div>
 
-                <div class="form-group">
+                <div class="lighten-5 lostpassword">
+                    <?= Html::a('Mot de passe oublié ?', ['resetpassword']) ?>
+                </div>
+
+                <div class="form-group submit">
                     <div class="col s12">
                         <p class="center-align">
-                            <?= Html::submitButton('Connecter <i class="material-icons right">send</i>', ['class' => 'btn waves-effect waves-light ', 'name' => 'login-button']) ?>
+                            <?= Html::submitButton('CONNEXION', ['class' => 'btn waves-effect waves-light ', 'name' => 'login-button']) ?>
                         </p>
                     </div>
                 </div>
 
-                <div class="lighten-5 lostpassword">
-                    <?= Html::a('Mot de passe perdu ?', ['resetpassword']) ?>
-                </div>
                 <?php ActiveForm::end(); ?>
             </div>
-        </div>
-    </div>
 </div>
