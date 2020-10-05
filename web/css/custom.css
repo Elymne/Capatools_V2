@@ -4,6 +4,12 @@
     font-family: sans-serif;
 }
 
+/* Gère le padding de la petite carte lorsque l'on clique sur l'icône utilisateur */
+.dropdown-content li > a,
+.dropdown-content li > span {
+    padding: 14px 12px;
+}
+
 /* html tag css */
 h2 {
     color: #2196f3;
