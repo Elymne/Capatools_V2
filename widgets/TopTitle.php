@@ -20,7 +20,7 @@ class TopTitle extends Widget
 
         $title = $this->title;
 
-        $imagePath =  '' . Yii::$app->homeUrl . 'images/breadcrumb.png';
+        $imagePath =  'https://admin.preprod.capatools.fr/web/images/breadcrumb.png';
 
         return <<<HTML
             <div id="breadcrumbs-wrapper" data-image="${imagePath}">

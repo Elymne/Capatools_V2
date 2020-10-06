@@ -11,7 +11,7 @@ use app\assets\LoginAsset;
 AppAsset::register($this);
 LoginAsset::register($this);
 
-$backgroundImage = '' . Yii::$app->homeUrl . '';
+$backgroundImage = 'https://admin.preprod.capatools.fr/web/';
 
 ?>
 <?php $this->beginPage() ?>

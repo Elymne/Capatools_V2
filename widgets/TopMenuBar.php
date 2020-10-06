@@ -36,8 +36,8 @@ class TopMenuBar extends \yii\bootstrap\Widget
 
 
         // Path url to logout.
-        $logout = '' . Yii::$app->homeUrl . 'dashboard/logout';
-        $logo =  '' . Yii::$app->homeUrl . 'images/avatar.png';
+        $logout = 'https://admin.preprod.capatools.fr/web/dashboard/logout';
+        $logo =  'https://admin.preprod.capatools.fr/web/images/avatar.png';
 
         return <<<HTML
         <header class="page-topbar" id="header">

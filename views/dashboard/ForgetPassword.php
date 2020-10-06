@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="card">
 
             <p class="center-align">
-                <img src="<?= Html::encode(Yii::$app->homeUrl) ?>images/logo.png" alt="" />
+                <img src="https://admin.preprod.capatools.fr/web/images/logo.png" alt="" />
             </p>
 
             <div class="card-action">
