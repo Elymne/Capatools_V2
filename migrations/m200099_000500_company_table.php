@@ -17,7 +17,7 @@ class m200099_000500_company_table extends Migration
             'phone' => $this->string(),
             'city' => $this->string(),
             'country' => $this->string(),
-            'tva' => $this->string()->unique(),
+            'tva' => $this->string()->unique()->defaultValue(null),
             'siret' => $this->string()->unique(),
             'email' => $this->string()->unique(),
             'type' => $this->string(),
