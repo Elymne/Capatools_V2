@@ -482,7 +482,7 @@ class AdministrationController extends Controller
         $category =  AdministrativeDocument::getAllGategory();
         MenuSelectorHelper::setMenuDocuments();
         return $this->render(
-            'indexdocument',
+            'indexDocument',
             [
                 'dataProvider' => $dataProvider,
                 'category' => $category,
