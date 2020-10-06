@@ -106,7 +106,7 @@ class Project extends ActiveRecord
     {
         return static::find()->where(['state' => [self::STATE_DEVIS_FINISHED, self::STATE_DEVIS_SIGNED, self::STATE_DEVIS_CANCELED, self::STATE_DEVIS_SENDED], 'project.cellule_id' => $idCellule]);
     }
-    public  function getcapaidreduc()
+    public  function getCapaidreduc()
     {
         return substr($this->id_capa, 0, 20);
     }

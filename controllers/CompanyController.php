@@ -176,6 +176,10 @@ class CompanyController extends Controller
 
             if ($model->validate()) {
 
+                if ($model->type != CompanyTypeEnum::SELF_EMPLOYED) {
+                    $model->tva = null;
+                }
+
                 $model->type = CompanyTypeEnum::COMPANY_TYPE[$model->type];
                 $model->save(false);
 
@@ -232,7 +236,7 @@ class CompanyController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->save()) {
                 MenuSelectorHelper::setMenuCompanyNone();
-                return $this->redirect(['company/view-contacts']);
+                return $this->redirect(['company/index-contacts']);
             }
         }
 

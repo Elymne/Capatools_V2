@@ -18,7 +18,7 @@ class MilestoneSearch extends Millestone
     {
         return [
             [
-                ["id", "number", "comment", "pourcentage", "price", "status", "estimate_date", "project_id", "project.capaidreduc", "cellule.name"],
+                ["id", "number", "comment", "pourcentage", "price", "status", "estimate_date", "project_id", "project.capaid", "cellule.name"],
                 "safe"
             ],
         ];
@@ -30,7 +30,7 @@ class MilestoneSearch extends Millestone
      */
     public function attributes()
     {
-        return array_merge(parent::attributes(), ['project.capaidreduc', "project.cellule.name"]);
+        return array_merge(parent::attributes(), ['project.capaid', "project.cellule.name"]);
     }
 
     /**
@@ -60,9 +60,9 @@ class MilestoneSearch extends Millestone
             'pagination' => false
         ]);
 
-        $dataProvider->sort->attributes['project.capaidreduc'] = [
-            'asc' => ['project.capaidreduc' => SORT_ASC],
-            'desc' => ['project.capaidreduc' => SORT_DESC],
+        $dataProvider->sort->attributes['project.capaid'] = [
+            'asc' => ['project.capaid' => SORT_ASC],
+            'desc' => ['project.capaid' => SORT_DESC],
         ];
 
         $dataProvider->sort->attributes['project.cellule.name'] = [
