@@ -1,3 +1,15 @@
+/* Text size */
+* {
+    font-size: 1.1rem;
+    font-family: sans-serif;
+}
+
+/* Gère le padding de la petite carte lorsque l'on clique sur l'icône utilisateur */
+.dropdown-content li > a,
+.dropdown-content li > span {
+    padding: 14px 12px;
+}
+
 /* html tag css */
 h2 {
     color: #2196f3;
@@ -10,7 +22,7 @@ h3 {
 
 label {
     color: #333333;
-    font-size: 1em;
+    font-size: 1.2em;
 }
 
 body {
@@ -23,22 +35,48 @@ a {
 
 div .scroll-box {
     overflow-x: scroll;
-    padding: 1rem;
+    padding: 1.15rem;
 }
 
-.blue-card {
-    background-color: #006699;
-    color: white;
+/* new css class */
+.body-marger {
+    margin: 12px;
 }
 
 .typeLabel {
     margin-top: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
+}
+
+.centrage {
+    text-align: center;
 }
 
 /* overrided materialize css class */
-.centrage {
-    text-align: center;
+
+.btn-floating {
+    line-height: 40px;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    overflow: hidden;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    cursor: pointer;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+    vertical-align: middle;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.btn-floating i {
+    font-size: 1rem;
+    line-height: 36px;
+    display: inline-block;
+    width: inherit;
+    color: #fff;
 }
 
 .card-content {
@@ -56,12 +94,6 @@ div .scroll-box {
 .navbar .navbar-dark {
     margin-top: -1px;
     background-color: #333333;
-}
-
-.card {
-    margin-top: 20px;
-    margin-left: 40px;
-    margin-right: 40px;
 }
 
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
@@ -110,7 +142,7 @@ button.btn-floating {
 }
 
 #body-login {
-    background-image: url("../images/capa-login-bg.png");
+    background-image: url("../images/BG_capa_2.png");
     background-size: cover;
 }
 

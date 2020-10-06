@@ -14,7 +14,8 @@ class m200099_000842_millestone_table extends Migration
             'pourcentage' => $this->double()->notNull(),
             'price' => $this->double()->notNull(),
             'statut' => $this->string()->notNull(),
-            'estimate_date' => $this->date(),
+            'estimate_date' => $this->string(),
+            'last_update_date' => $this->string(),
 
             // Foreign key.
             'project_id' => $this->integer()->notNull(),
@@ -36,6 +37,7 @@ class m200099_000842_millestone_table extends Migration
             'price' => 1200,
             'statut' => 'en cours',
             'estimate_date' => '2020-09-01',
+            'last_update_date' => '2020-09-01',
 
             'project_id' => 1
         ]);
@@ -48,6 +50,7 @@ class m200099_000842_millestone_table extends Migration
             'price' => 1200,
             'statut' => 'en cours',
             'estimate_date' => '2021-09-01',
+            'last_update_date' => '2020-09-01',
 
             'project_id' => 1
         ]);

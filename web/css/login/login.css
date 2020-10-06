@@ -5,3 +5,88 @@
 .lostpassword a{
     color: grey;
 }
+
+.fields{
+    display: flex;
+    flex-flow: row wrap;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#login-form{
+    width: 50%;
+    margin: auto;
+}
+
+.form-horizontal .form-group{
+    margin: auto;
+    width: 45%;
+}
+
+.col-lg-8{
+    width: 100%;
+}
+
+div.form-group.submit{
+    margin: auto;
+    width: 35%;
+}
+
+.submit p button{
+    width: 70%;
+    height: 45px;
+    background-color: white;
+    font-weight: bold;
+    color: #03a9f4;
+} 
+
+.lostpassword{
+    margin-top: 1%;
+    margin-bottom: 5%;
+}
+
+.lostpassword a{
+    float: right;
+    color: white;
+    text-decoration: none;
+    margin-right: 5%;
+}
+
+.lostpassword a:before {
+    content:"* ";
+    color: rgb(182, 190, 83);
+  }
+
+#loginform-email, #loginform-password{
+    border-bottom: solid 2px white;
+    color: white;
+}
+
+#loginform-email::placeholder, #loginform-password::placeholder{
+    color: white;
+}
+
+input::placeholder{
+    color: white;
+}
+
+p.help-block.help-block-error {
+    color: rgb(182, 190, 83);
+}
+
+.logo{
+    margin-top: 5%;
+    margin-bottom: 1%;
+    height: 6%;
+    width: 12%;
+}
+
+p.logo-text{
+    margin: auto;   
+    margin-bottom: 8%;
+    text-align: center;
+    color: rgb(182, 190, 83);
+    width: 27%;
+    font-weight: bold;
+    font-size: 18px;
+}

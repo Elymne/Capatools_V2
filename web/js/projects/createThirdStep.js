@@ -5,11 +5,17 @@ const risksData = JSON.parse(document.getElementById("risks-data-target").textCo
 // Liste d'informations relatives au données qui enreichissent le dynamicForm.
 const infoData = JSON.parse(document.getElementById("info-data-target").textContent)
 
+// Laboratoire sélectionné.
 const laboratorySelected = infoData.laboratorySelected !== null ? infoData.laboratorySelected : 0
+
+// Données des éléments précédements sauvegardé à partir des dynamicForm.
+const addedConsummablesOnInit = infoData.consummables
+const addedInvestsOnInit = infoData.invests
 const addedEquipementsOnInit = infoData.equipments
 const addedContributorsOnInit = infoData.contributors
-const laboxyTimeDay = 7.7
+
 const number = infoData.number
+const laboxyTimeDay = 7.7
 
 /**
  * Constante que j'utilise pour savoir si le lot actuel de la vue est un lot d'avant projet, c'est-à-dire un lot dont le numéro est égale à 0.
@@ -17,8 +23,7 @@ const number = infoData.number
 const isPreProject = number === '"0"'
 
 /**
- * Scope de test parce que je ne sais pas trop ce que je fais actuellement, on va voir si ça marche en tout cas.
- * J'pense que j'vais appeler ce scope : THE BEGGIN OF BIG FAT JQUERY CODE OF DOOM.
+ * Scope d'initialisation pour préparer le calcul de temps + prix.
  */
 $(() => {
     /**
@@ -28,74 +33,78 @@ $(() => {
     hideEquipmentRisk(isPreProject)
     hideContributorRisk(isPreProject)
 
-    /**
-     * Explication : Pour chaque equipment de renvoyé dans la vue (des équipements donc qui seront affichés dans la dynamicView), il va nous falloir définir les callback de calcul
-     * pour chaque élément.
-     * C'est donc ce que l'on fait dans cette boucle.
-     */
-    addedEquipementsOnInit.forEach((elem, i) => {
-        const nbDaysField = $(`#projectcreateequipmentrepaymentform-${i}-nb_days`)
-        const nbHoursField = $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`)
-        const timeRiskStringifyField = $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`)
-        const dailyPriceField = $(`#projectcreateequipmentrepaymentform-${i}-daily_price`)
-        const totalPriceField = $(`#projectcreateequipmentrepaymentform-${i}-price`)
-        const riskSelector = $(`#projectcreateequipmentrepaymentform-${i}-riskselected`)
+    // Quand l'id du premier élément de la liste addedEquipementsOnInit est null, c'est qu'aucun élément n'a été précédement ajouté, ou tous les éléments ont été retiré à la dernière sauvegarde.
+    // En résumé, cela veut juste dire que sur la vue, il n'y a aucun équipement d'affiché. On ne fait donc aucun calcul.
+    if (addedEquipementsOnInit[0].id != null) {
+        addedEquipementsOnInit.forEach((elem, i) => {
+            const nbDaysField = $(`#projectcreateequipmentrepaymentform-${i}-nb_days`)
+            const nbHoursField = $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`)
+            const timeRiskStringifyField = $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`)
+            const dailyPriceField = $(`#projectcreateequipmentrepaymentform-${i}-daily_price`)
+            const totalPriceField = $(`#projectcreateequipmentrepaymentform-${i}-price`)
+            const riskSelector = $(`#projectcreateequipmentrepaymentform-${i}-riskselected`)
 
-        initNewEquipementRepaymentAdded(i)
-        equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-        equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
-
-        dailyPriceField.on("input", () => {
-            equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
-        })
-
-        riskSelector.change(() => {
+            initNewEquipementRepaymentAdded(i)
             equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-        })
-
-        nbDaysField.on("input", () => {
             equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
-            equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
+
+            dailyPriceField.on("input", () => {
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
+            })
+
+            riskSelector.change(() => {
+                equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
+            })
+
+            nbDaysField.on("input", () => {
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
+                equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
+            })
+
+            nbHoursField.on("input", () => {
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
+                equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
+            })
+
+            //getIndexSelectorOfEquipment(elem, equipmentsLocalStateList)
         })
+    }
 
-        nbHoursField.on("input", () => {
-            equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
-            equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-        })
+    // Quand l'id du premier élément de la liste addedContributorsOnInit est null, c'est qu'aucun élément n'a été précédement ajouté, ou tous les éléments ont été retiré à la dernière sauvegarde.
+    // En résumé, cela veut juste dire que sur la vue, il n'y a aucun contributeurs d'affiché. On ne fait donc aucun calcul.
+    if (addedContributorsOnInit[0].id != null) {
+        addedContributorsOnInit.forEach((elem, i) => {
+            const nbDaysField = $(`#projectcreatelaboratorycontributorform-${i}-nb_days`)
+            const nbHoursField = $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`)
+            const dailyPriceField = $(`#projectcreatelaboratorycontributorform-${i}-daily_price`)
+            const totalPriceField = $(`#projectcreatelaboratorycontributorform-${i}-price`)
+            const timeRiskStringifyField = $(`#projectcreatelaboratorycontributorform-${i}-timeriskstringify`)
+            const riskSelector = $(`#projectcreatelaboratorycontributorform-${i}-riskselected`)
 
-        //getIndexSelectorOfEquipment(elem, equipmentsLocalStateList)
-    })
-
-    addedContributorsOnInit.forEach((elem, i) => {
-        const nbDaysField = $(`#projectcreatelaboratorycontributorform-${i}-nb_days`)
-        const nbHoursField = $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`)
-        const dailyPriceField = $(`#projectcreatelaboratorycontributorform-${i}-daily_price`)
-        const totalPriceField = $(`#projectcreatelaboratorycontributorform-${i}-price`)
-        const timeRiskStringifyField = $(`#projectcreatelaboratorycontributorform-${i}-timeriskstringify`)
-        const riskSelector = $(`#projectcreatelaboratorycontributorform-${i}-riskselected`)
-
-        initNewLaboratoryContributorAdded(i)
-        laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-        laboratoryContributorTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
-
-        riskSelector.change(() => {
+            initNewLaboratoryContributorAdded(i)
             laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-        })
-
-        dailyPriceField.on("input", () => {
             laboratoryContributorTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
-        })
 
-        nbDaysField.on("input", () => {
-            laboratoryContributorTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
-            laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-        })
+            riskSelector.change(() => {
+                laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
+            })
 
-        nbHoursField.on("input", () => {
-            laboratoryContributorTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
-            laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
+            dailyPriceField.on("input", () => {
+                laboratoryContributorTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
+            })
+
+            nbDaysField.on("input", () => {
+                laboratoryContributorTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
+                laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
+            })
+
+            nbHoursField.on("input", () => {
+                laboratoryContributorTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField)
+                laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
+            })
         })
-    })
+    }
+
     //end
 })
 
@@ -104,19 +113,23 @@ $(() => {
  * GESTION MATERIELS/EQUIPEMENTS.
  */
 $(() => {
-    /**
-     * Variable pour garder en mémoire le nombre d'élément ajouté dans le dynamicForm des matériels.
-     * Commence toujours avec le nombre d'éléments lors de l'initialisation (soit 1 à l'init, ce qui veut dire que la première ligne sera la numéro 0).
-     */
-    let nbEquipmentLineDuplicated = addedEquipementsOnInit.length - 1
+    // Cette variable (let) stock le nombre d'équipement lors de l'initialisation de la vue. Si il y a aucun équipement sur la vue, cette variable est à 0.
+    let nbEquipmentLinesDuplicated = addedEquipementsOnInit[0].id == null ? 0 : addedEquipementsOnInit.length
+    // Si il n'y a aucun équipement, l'index maximum est égale à -1, sinon, l'élément 1 si il existe est égale à 0, puis 1, puis 2...n
+    let nbMaxIndexEquipment = nbEquipmentLinesDuplicated - 1
+
+    hideOrShowMainButton($("#button-equipment-first-add"), nbEquipmentLinesDuplicated)
 
     $(".dynamicform_wrapper_equipment").on("afterInsert", (e, item) => {
-        nbEquipmentLineDuplicated++
+        nbMaxIndexEquipment++
+        nbEquipmentLinesDuplicated++
+
         hideEquipmentRisk(isPreProject)
+        hideOrShowMainButton($("#button-equipment-first-add"), nbEquipmentLinesDuplicated)
 
-        initNewEquipementRepaymentAdded(nbEquipmentLineDuplicated)
+        initNewEquipementRepaymentAdded(nbMaxIndexEquipment)
 
-        for (let i = 0; i <= nbEquipmentLineDuplicated; i++) {
+        for (let i = 0; i <= nbMaxIndexEquipment; i++) {
             const nbDaysField = $(`#projectcreateequipmentrepaymentform-${i}-nb_days`)
             const nbHoursField = $(`#projectcreateequipmentrepaymentform-${i}-nb_hours`)
             const timeRiskStringifyField = $(`#projectcreateequipmentrepaymentform-${i}-timeriskstringify`)
@@ -148,10 +161,12 @@ $(() => {
         }
     })
 
-    $(".dynamicform_wrapper_equipment").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer cette association d'équipement ?"))
+    $(".dynamicform_wrapper_equipment").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer cet équipement ?"))
 
     $(".dynamicform_wrapper_equipment").on("afterDelete", (e) => {
-        nbEquipmentLineDuplicated--
+        nbMaxIndexEquipment--
+        nbEquipmentLinesDuplicated--
+        hideOrShowMainButton($("#button-equipment-first-add"), nbEquipmentLinesDuplicated)
     })
 })
 
@@ -160,23 +175,26 @@ $(() => {
  * GESTION INTERVENANTS.
  */
 $(() => {
-    /**
-     * Variable pour garder en mémoire le nombre d'élément ajouté dans le dynamicForm des matériels.
-     * Commence toujours avec le nombre d'éléments lors de l'initialisation (soit 1 à l'init, ce qui veut dire que la première ligne sera la numéro 0).
-     */
-    let nbContributorLineDuplicated = addedContributorsOnInit.length - 1
+    // Cette variable (let) stock le nombre d'équipement lors de l'initialisation de la vue. Si il y a aucun équipement sur la vue, cette variable est à 0.
+    let nbContributorLinesDuplicated = addedContributorsOnInit[0].id == null ? 0 : addedContributorsOnInit.length
+    // Si il n'y a aucun équipement, l'index maximum est égale à -1, sinon, l'élément 1 si il existe est égale à 0, puis 1, puis 2...n
+    let nbMaxIndexContributor = nbContributorLinesDuplicated - 1
+
+    hideOrShowMainButton($("#button-labocontributor-first-add"), nbContributorLinesDuplicated)
 
     /**
      * Calback onAddItem.
      * Permet de gérer les callback des futurs éléments que l'utilisateur pourra créer.
      */
     $(".dynamicform_wrapper_contributor").on("afterInsert", (e, item) => {
-        nbContributorLineDuplicated++
+        nbMaxIndexContributor++
+        nbContributorLinesDuplicated++
+
         hideContributorRisk(isPreProject)
+        hideOrShowMainButton($("#button-labocontributor-first-add"), nbContributorLinesDuplicated)
+        initNewLaboratoryContributorAdded(nbMaxIndexContributor)
 
-        initNewLaboratoryContributorAdded(nbContributorLineDuplicated)
-
-        for (let i = 0; i <= nbContributorLineDuplicated; i++) {
+        for (let i = 0; i <= nbMaxIndexContributor; i++) {
             const nbDaysField = $(`#projectcreatelaboratorycontributorform-${i}-nb_days`)
             const nbHoursField = $(`#projectcreatelaboratorycontributorform-${i}-nb_hours`)
             const dailyPriceField = $(`#projectcreatelaboratorycontributorform-${i}-daily_price`)
@@ -211,17 +229,57 @@ $(() => {
     $(".dynamicform_wrapper_contributor").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer ce contributeur ?"))
 
     $(".dynamicform_wrapper_contributor").on("afterDelete", (e) => {
-        nbContributorLineDuplicated--
+        nbMaxIndexContributor--
+        nbContributorLinesDuplicated--
+        hideOrShowMainButton($("#button-labocontributor-first-add"), nbContributorLinesDuplicated)
     })
 })
 
 /**
- * Scope Jquery pour les parties dynamiques restantes (alerte d'affichage ect ect..)
+ * Scope Jquery pour la gestion des consommables.
  */
 $(() => {
-    $(".dynamicform_wrapper_consumable").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer ce consommable ?"))
+    let nbConsummablesLinesDuplicated = addedConsummablesOnInit[0].id == null ? 0 : addedConsummablesOnInit.length
+    hideOrShowMainButton($("#button-consummable-first-add"), nbConsummablesLinesDuplicated)
 
-    $(".dynamicform_wrapper_invtest").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer cet investissement ?"))
+    $(".dynamicform_wrapper_consumable").on("beforeDelete", (e, item) => {
+        confirm("Voulez-vous supprimer ce consommable ?")
+    })
+
+    $(".dynamicform_wrapper_consumable").on("afterDelete", (e, item) => {
+        nbConsummablesLinesDuplicated--
+        hideOrShowMainButton($("#button-consummable-first-add"), nbConsummablesLinesDuplicated)
+    })
+
+    $(".dynamicform_wrapper_consumable").on("afterInsert", (e, item) => {
+        nbConsummablesLinesDuplicated++
+        hideOrShowMainButton($("#button-consummable-first-add"), nbConsummablesLinesDuplicated)
+    })
+})
+
+/**
+ * Scope Jquery pour la gestion des investissements.
+ */
+$(() => {
+    if (!isPreProject) {
+        let nbInvestsLinesDuplicated = addedInvestsOnInit[0].id == null ? 0 : addedInvestsOnInit.length
+
+        hideOrShowMainButton($("#button-invests-first-add"), nbInvestsLinesDuplicated)
+
+        $(".dynamicform_wrapper_invtest").on("beforeDelete", (e, item) => {
+            confirm("Voulez-vous supprimer cet investissement ?")
+        })
+
+        $(".dynamicform_wrapper_invtest").on("afterDelete", (e, item) => {
+            nbInvestsLinesDuplicated--
+            hideOrShowMainButton($("#button-invests-first-add"), nbInvestsLinesDuplicated)
+        })
+
+        $(".dynamicform_wrapper_invtest").on("afterInsert", (e, item) => {
+            nbInvestsLinesDuplicated++
+            hideOrShowMainButton($("#button-invests-first-add"), nbInvestsLinesDuplicated)
+        })
+    }
 })
 
 //#region Liste des fonctions js
@@ -403,7 +461,6 @@ const equipmentRepaymentTotalPriceUpdate = (nbDaysField, nbHoursField, dailyPric
 }
 
 /**
- *
  * @param {*} nbDaysField
  * @param {*} nbHoursField
  * @param {*} timeRiskStringifyField
@@ -431,6 +488,16 @@ const laboratoryContributorTotalPriceUpdate = (nbDaysField, nbHoursField, dailyP
         !dailyPriceField.val() ? 0 : dailyPriceField.val(),
     )
     totalPriceField.val(result)
+}
+
+/**
+ * Fonction qui permet d'afficher ou non le bouton principal si le nombre de ligne dupliqué donné en paramètre est égale à 0.
+ * @param {*} button
+ * @param {*} nbLinesDuplicated
+ */
+const hideOrShowMainButton = (button, nbLinesDuplicated) => {
+    if (nbLinesDuplicated == 0) button.show()
+    else button.hide()
 }
 
 //#endregion

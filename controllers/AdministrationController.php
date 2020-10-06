@@ -9,6 +9,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 
+use yii\web\UploadedFile;
+
 use app\models\users\CapaUser;
 use app\models\users\CapaUserCreateForm;
 use app\models\users\CapaUserSearch;
@@ -21,6 +23,10 @@ use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentCreateForm;
 use app\models\laboratories\Laboratory;
 use app\models\laboratories\LaboratoryCreateForm;
+use app\services\menuServices\LeftMenuCreator;
+use app\models\administrativeDocuments\AdministrativeDocument;
+use app\models\administrativeDocuments\DocumentCreateForm;
+use app\models\administrativeDocuments\DocumentUpdateForm;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\uploadFileServices\UploadFileHelper;
@@ -28,6 +34,7 @@ use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use yii\data\ActiveDataProvider;
+
 
 /**
  * Classe contrôleur des vues et des actions de la partie adminitration.
@@ -109,6 +116,16 @@ class AdministrationController extends Controller
                         'allow' => true,
                         'actions' => ['create-equipment'],
                         'roles' => [PermissionAccessEnum::ADMIN_EQUIPEMENT_CREATE]
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create-document'],
+                        'roles' => [PermissionAccessEnum::ADMIN_DOCUMENT_CREATE]
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index-document'],
+                        'roles' => [PermissionAccessEnum::ADMIN_DOCUMENT_INDEX]
                     ]
                 ],
             ],
@@ -131,98 +148,30 @@ class AdministrationController extends Controller
      */
     public static function getActionUser()
     {
-        $result = [];
+        $subMenu = new LeftMenuCreator(1, "Administration", SubMenuEnum::ADMIN, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::HUMAN_RESSOURCES, UserRoleEnum::SALARY
+        ]);
 
-        if (UserRoleManager::hasRoles([
-            UserRoleEnum::ADMIN,
-            UserRoleEnum::SUPER_ADMIN,
-            UserRoleEnum::HUMAN_RESSOURCES
-        ])) {
-            $result =
-                [
-                    'priorite' => 1,
-                    'name' => 'Administration',
-                    'serviceMenuActive' => SubMenuEnum::ADMIN,
-                    'items' => self::getSubActionUser()
-                ];
-        }
+        $subMenu->addSubMenu(4, "administration/index", "Salariés", SubMenuEnum::ADMIN_LIST_USER, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::HUMAN_RESSOURCES
+        ]);
 
-        return $result;
-    }
+        $subMenu->addSubMenu(3, "administration/view-devis-parameters", "Paramètres des devis", SubMenuEnum::ADMIN_UPDATE_DEVIS_PARAMETERS, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-    /**
-     * Utilisé dans la fonction getActionUser.
-     * Retourne tous les sous-menus.
-     * On utilise cette fonction pour permettre de filtrer les sous-menus visible selon les droits de l'utilisateur connecté.
-     * 
-     * @return Array Un tableau de données relatif aux sous-menus.
-     */
-    private static function getSubActionUser(): array
-    {
-        $result = [];
+        $subMenu->addSubMenu(2, "administration/index-equipment", "Liste des matériels", SubMenuEnum::ADMIN_LIST_EQUIPMENTS, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::ADMIN,
-                UserRoleEnum::SUPER_ADMIN,
-                UserRoleEnum::HUMAN_RESSOURCES
-            ])
-        ) {
-            array_push($result, [
-                'priorite' => 2,
-                'url' => 'administration/index',
-                'label' => 'Salariés',
-                'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_USER
-            ]);
-        }
+        $subMenu->addSubMenu(1, "administration/index-laboratory", "Liste des laboratoires", SubMenuEnum::ADMIN_LIST_LABORATORIES, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::ADMIN,
-                UserRoleEnum::SUPER_ADMIN
-            ])
-        ) {
-            array_push($result, [
-                'priorite' => 1,
-                'url' => 'administration/view-devis-parameters',
-                'label' => 'Paramètres des devis',
-                'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::ADMIN_UPDATE_DEVIS_PARAMETERS
-            ]);
-        }
-
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::ADMIN,
-                UserRoleEnum::SUPER_ADMIN
-            ])
-        ) {
-            array_push($result, [
-                'priorite' => 1,
-                'url' => 'administration/index-equipment',
-                'label' => 'Liste des matériels',
-                'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_EQUIPMENTS
-            ]);
-        }
-
-        if (
-            UserRoleManager::hasRoles([
-                UserRoleEnum::ADMIN,
-                UserRoleEnum::SUPER_ADMIN
-            ])
-        ) {
-            array_push($result, [
-                'priorite' => 1,
-                'url' => 'administration/index-laboratory',
-                'label' => 'Liste des laboratoires',
-                'icon' => 'show_chart',
-                'subServiceMenuActive' => SubMenuEnum::ADMIN_LIST_LABORATORIES
-            ]);
-        }
-
-        return $result;
+        $subMenu->addSubMenu(1, 'administration/index-document', 'Documents',  SubMenuEnum::ADMIN_LIST_DOCUMENTS, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::HUMAN_RESSOURCES, UserRoleEnum::SALARY, UserRoleEnum::SUPER_ADMIN
+        ]);
+        return $subMenu->getSubMenuCreated();
     }
 
     /**
@@ -287,7 +236,7 @@ class AdministrationController extends Controller
 
             $model->flag_active = true;
             //TODO Pensez à remettre ceci.
-            //$model->generatePasswordAndmail();
+            // $model->generatePasswordAndmail();
 
             // Set hash password.
             $model->setNewPassword($model->firstname);
@@ -511,6 +460,155 @@ class AdministrationController extends Controller
             'model' => $model,
             'cellulesName' => $cellulesName
         ]);
+    }
+
+
+    /**
+     * Render view : administration/view-Documents.
+     * Cette méthode est utilisé pour retourner une vue affichant tous les documents.
+     * 
+     * @return mixed
+     */
+    public function actionIndexDocument()
+    {
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => AdministrativeDocument::getAllDataProvider(),
+            'pagination' => [
+                'pageSize' => -1,
+            ],
+        ]);
+
+        $category =  AdministrativeDocument::getAllGategory();
+        MenuSelectorHelper::setMenuDocuments();
+        return $this->render(
+            'indexDocument',
+            [
+                'dataProvider' => $dataProvider,
+                'category' => $category,
+            ]
+        );
+    }
+
+    /**
+     * Render view : administration/create-document.
+     * Cette méthode est utilisé pour retourner une vue permettant d'ajouter un document adminstratif'.
+     * 
+     * @return mixed
+     */
+    public function actionCreateDocument()
+    {
+        $model = new DocumentCreateForm();
+
+
+        if ($model->load(Yii::$app->request->post())) {
+
+
+            $model->File = UploadedFile::getInstances($model, 'File');
+
+            if ($model->upload()) {
+                echo "opiiiiiiopiopiopiop"; {
+
+
+                    $modelfinal = new AdministrativeDocument();
+
+                    $modelfinal->title = $model->title;
+                    $modelfinal->filename = $model->filename;
+                    $modelfinal->type = $model->type;
+                    $modelfinal->internal_link = $model->internal_link;
+                    $modelfinal->last_update_date  = date("d-m-yy", strtotime("now"));
+
+                    if ($modelfinal->save()) {
+                        MenuSelectorHelper::setMenuDocuments();
+                        return $this->redirect(['administration/index-document']);
+                    }
+                }
+            }
+        }
+
+
+        MenuSelectorHelper::setMenuDocuments();
+        return $this->render('createDocument', [
+            'model' => $model,
+            'update' => false,
+        ]);
+    }
+
+
+    /**
+     * Render view : administration/update-document.
+     * Cette méthode est utilisé pour retourner une vue permettant d'ajouter un document adminstratif'.
+     * 
+     * @return mixed
+     */
+    public function actionShowDocument($file)
+    {
+        return Yii::$app->response->sendFile($file);
+    }
+
+
+    /**
+     * Render view : administration/update-document.
+     * Cette méthode est utilisé pour retourner une vue permettant d'ajouter un document adminstratif'.
+     * 
+     * @return mixed
+     */
+    public function actionUpdateDocument(int $id = 1)
+    {
+        $model = DocumentUpdateForm::getOneById($id);
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->File = UploadedFile::getInstances($model, 'File');
+
+            $model->File = UploadedFile::getInstances($model, 'File');
+
+            if ($model->upload()) {
+
+                $modelfinal =  AdministrativeDocument::getOneById($id);
+
+                $modelfinal->title = $model->title;
+                $modelfinal->filename = $model->filename;
+                $modelfinal->type = $model->type;
+                $modelfinal->internal_link = $model->internal_link;
+                $modelfinal->last_update_date  = date("d-m-yy", strtotime("now"));
+
+                if ($modelfinal->save()) {
+                    MenuSelectorHelper::setMenuDocuments();
+                    //return $this->redirect(['administration/index-document']);
+                }
+            }
+        }
+
+        $model = DocumentUpdateForm::getOneById($id);
+        MenuSelectorHelper::setMenuDocuments();
+        return $this->render('createDocument', [
+            'model' => $model,
+            'update' => true,
+        ]);
+    }
+
+
+    /**
+     * Render view : administration/delete-document.
+     * Cette méthode est utilisé pour retourner une vue permettant d'ajouter un document adminstratif'.
+     * 
+     * @return mixed
+     */
+    public function actionDeleteDocument(int $id = 1)
+    {
+        $model = DocumentUpdateForm::getOneById($id);
+
+        // Si le fichier précédent existe, on le supprime.
+        if ($model->internal_link != '' || $model->internal_link != NULL) {
+            unlink($model->internal_link);
+        }
+
+        $model->delete();
+
+
+        MenuSelectorHelper::setMenuDocuments();
+        return $this->redirect(['administration/index-document']);
     }
 
     /**

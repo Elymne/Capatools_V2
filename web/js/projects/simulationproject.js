@@ -1,10 +1,8 @@
-let SelectTOtalPrice = "#projectsimulate-sellingprice";
-//let = $(SelectTOtalPrice).val();
-let TotalPrice = Number(
-    $(SelectTOtalPrice)
-        .val()
-        .replace(",", ".")
-        .replace(/[^0-9.-]+/g, "")
+const totalPriceJson = JSON.parse(
+    document.getElementById("price-data-target").textContent
+);
+const totalPrice = Number(
+    totalPriceJson.replace(",", ".").replace(/[^0-9.-]+/g, "")
 );
 
 Initialise();
@@ -49,7 +47,7 @@ function updateprice(id) {
             .replace(/[^0-9.-]+/g, "")
     );
     let SelectPrice = "#projectcreatemillestoneform-" + id + "-priceeuros";
-    let price = ((TotalPrice * pourcent) / 100).toFixed(2);
+    let price = ((totalPrice * pourcent) / 100).toFixed(2);
     if (isNaN(price)) {
         price = 0;
     }
@@ -76,7 +74,7 @@ function updatepourcent(id) {
 
     let SelectMillePourcent =
         "#projectcreatemillestoneform-" + id + "-pourcentage";
-    let pourcent = ((price / TotalPrice) * 100).toFixed(2);
+    let pourcent = ((price / totalPrice) * 100).toFixed(2);
     if (isNaN(pourcent)) {
         pourcent = 0;
     }
@@ -134,6 +132,13 @@ $(() => {
 
         let TaskNumber = "#projectcreatemillestoneform-" + index + "-number";
         $(TaskNumber).val(index);
+
+        $(".picker").each(function () {
+            $(this).datepicker({
+                dateFormat: "dd-mm-yy",
+                language: "fr",
+            });
+        });
     });
 
     $(".dynamicform_wrapperLot").on("beforeDelete", function (e, item) {
@@ -160,13 +165,10 @@ $(() => {
             $(description).val(e.currentTarget.value);
             $(description).hide();
             $(description_label).hide();
-            $(reasonBlock).hide();
         } else {
             $(description).val("");
-
             $(description).show();
             $(description_label).show();
-            $(reasonBlock).show();
         }
     });
 

@@ -45,16 +45,19 @@ class Project extends ActiveRecord
         4 => self::TYPE_INTERNAL
     ];
 
-    const STATE_DRAFT = 'Avant-projet';
+    const STATE_DEVIS_MODEL = 'Model';
+    const STATE_DEVIS_DRAFT = 'Avant-projet';
     const STATE_DEVIS_SENDED = 'Devis envoyé';
-    const STATE_DEVIS_SIGNED = "Devis signé";
-    const STATE_CANCELED = "Projet annulé";
-    const STATE_FINISHED = "Projet terminé";
+    const STATE_DEVIS_SIGNED = "Projet en cours";
+    const STATE_DEVIS_CANCELED = "Projet annulé";
+    const STATE_DEVIS_FINISHED = "Projet terminé";
     const STATES = [
-        1 => self::STATE_DRAFT,
+        0 => self::STATE_DEVIS_MODEL,
+        1 => self::STATE_DEVIS_DRAFT,
         2 => self::STATE_DEVIS_SENDED,
         3 => self::STATE_DEVIS_SIGNED,
-        4 => self::STATE_CANCELED, self::STATE_FINISHED
+        4 => self::STATE_DEVIS_CANCELED,
+        5 => self::STATE_DEVIS_FINISHED
     ];
 
     public static function tableName()
@@ -66,6 +69,8 @@ class Project extends ActiveRecord
     {
         return static::find()->all();
     }
+
+
 
     public static function getOneById($id)
     {
@@ -84,24 +89,27 @@ class Project extends ActiveRecord
 
     public static function getAllDraftDataProvider()
     {
-        return static::find()->where(['state' => self::STATE_DRAFT]);
+        return static::find()->where(['state' => [self::STATE_DEVIS_DRAFT,  self::STATE_DEVIS_MODEL]]);
     }
 
     public static function getAllProjectDataProvider()
     {
-        return static::find()->where(['state' => [self::STATE_FINISHED, self::STATE_DEVIS_SIGNED, self::STATE_CANCELED, self::STATE_DEVIS_SENDED]]);
+        return static::find()->where(['state' => [self::STATE_DEVIS_FINISHED, self::STATE_DEVIS_SIGNED, self::STATE_DEVIS_CANCELED, self::STATE_DEVIS_SENDED]]);
     }
 
     public static function getAllDraftByCelluleDataProvider($idCellule)
     {
-        return static::find()->where(['state' => self::STATE_DRAFT, 'project.cellule_id' => $idCellule]);
+        return static::find()->where(['state' => [self::STATE_DEVIS_DRAFT,  self::STATE_DEVIS_MODEL], 'project.cellule_id' => $idCellule]);
     }
 
     public static function getAllProjectByCelluleDataProvider($idCellule)
     {
-        return static::find()->where(['state' => [self::STATE_FINISHED, self::STATE_DEVIS_SIGNED, self::STATE_CANCELED, self::STATE_DEVIS_SENDED], 'project.cellule_id' => $idCellule]);
+        return static::find()->where(['state' => [self::STATE_DEVIS_FINISHED, self::STATE_DEVIS_SIGNED, self::STATE_DEVIS_CANCELED, self::STATE_DEVIS_SENDED], 'project.cellule_id' => $idCellule]);
     }
-
+    public  function getCapaidreduc()
+    {
+        return substr($this->id_capa, 0, 20);
+    }
     public function getStatusIndex()
     {
         $result = -1;

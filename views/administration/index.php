@@ -24,7 +24,7 @@ AdminIndexAsset::register($this);
 
 <div class="container">
     <div class="capa_user-index">
-        <div class="row">
+        <div class="row body-marger">
 
             <div class="card">
                 <div class="card-content">

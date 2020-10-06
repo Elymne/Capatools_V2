@@ -1,6 +1,7 @@
 <?php
 
 use app\assets\projects\ProjectIndexAsset;
+use app\assets\AppAsset;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
@@ -13,6 +14,7 @@ use yii\widgets\Pjax;
 $this->title = 'Liste des projets';
 $this->params['breadcrumbs'][] = $this->title;
 
+AppAsset::register($this);
 ProjectIndexAsset::register($this);
 
 ?>
@@ -23,7 +25,7 @@ ProjectIndexAsset::register($this);
     <div class="project-index">
 
         <!-- New -->
-        <div class="row">
+        <div class="row body-marger">
 
             <div class="card">
                 <div class="card-content">
@@ -105,7 +107,7 @@ function getSearchFilter($companiesName)
     echo <<<HTML
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
-            <span class="span-combobox">Avant-contrats</span>
+            <span class="span-combobox">Devis envoyé</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox"/>
@@ -188,13 +190,13 @@ function getCollumnsArray()
 function getIdArray()
 {
     return [
-        'attribute' => 'id_capa',
+        'attribute' => 'capaidreduc',
         'format' => 'raw',
         'label' => 'CapaID',
         'contentOptions' => ['class' => 'capaid-row'],
         'headerOptions' => ['class' => 'capaid-row'],
         'value' => function ($data) {
-            return Html::a($data['id_capa'], ['project/view', 'id' => $data['id']], ['target' => '_blank',]);
+            return Html::a($data['capaidreduc'], ['project/view', 'id' => $data['id']], ['target' => '_blank',]);
         }
     ];
 }
@@ -213,7 +215,7 @@ function getInternalNameArray()
 function getUsernameArray()
 {
     return [
-        'attribute' => 'project_manager.email',
+        'attribute' => 'project_manager.fullname',
         'format' => 'text',
         'label' => 'Resp projet',
         'contentOptions' => ['class' => 'projectmanager-row', 'style' => 'display: none'],

@@ -27,8 +27,8 @@ class TopTitle extends Widget
                 <!-- Search for small screen-->
                 <div class="container">
                     <div class="row">
-                        <div class="col s12 m6 l6">
-                            <h5 class="breadcrumbs-title mt-0 mb-0"><span>${title}</span></h5>
+                        <div class="col s12">
+                            <span><b>${title}</b></span>
                         </div>
                     </div>
                 </div>

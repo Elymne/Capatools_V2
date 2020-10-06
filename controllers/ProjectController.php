@@ -42,6 +42,7 @@ use app\models\projects\forms\ProjectCreateThirdStepForm;
 use app\models\projects\Investment;
 use app\models\projects\Lot;
 use app\models\projects\LotSimulate;
+use app\models\projects\MilestoneSearch;
 use app\services\laboxyServices\IdLaboxyManager;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
@@ -49,7 +50,9 @@ use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\services\helpers\TimeStringifyHelper;
+use app\services\menuServices\LeftMenuCreator;
 use kartik\mpdf\Pdf;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 #endregion
 
@@ -186,63 +189,26 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public static function getActionUser()
     {
-        $result = [];
-        if (UserRoleManager::hasRoles([
-            UserRoleEnum::PROJECT_MANAGER,
-            UserRoleEnum::ACCOUNTING_SUPPORT,
-            UserRoleEnum::ADMIN,
-            UserRoleEnum::SUPER_ADMIN
-        ])) {
 
-            $result = [
-                'priorite' => 3,
-                'name' => 'Projets',
-                'serviceMenuActive' => SubMenuEnum::PROJECT,
-                'items' => static::getActionSubUser()
-            ];
-        }
+        $subMenu = new LeftMenuCreator(3, "Projets", SubMenuEnum::PROJECT, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ACCOUNTING_SUPPORT, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-        return $result;
-    }
+        $subMenu->addSubMenu(4, "project/create-first-step", "Création d'un devis", SubMenuEnum::PROJECT_CREATE, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-    private static function getActionSubUser()
-    {
-        $arraySubMenu = [];
+        $subMenu->addSubMenu(3, "project/index-draft", "Liste des brouillons", SubMenuEnum::PROJECT_DRAFT, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+        ]);
 
-        if (UserRoleManager::hasRoles([
-            UserRoleEnum::PROJECT_MANAGER,
-            UserRoleEnum::ADMIN,
-            UserRoleEnum::SUPER_ADMIN
-        ])) {
-            \array_push(
-                $arraySubMenu,
-                [
-                    'Priorite' => 3,
-                    'url' => 'project/create-first-step',
-                    'label' => 'Création d\'un devis',
-                    'subServiceMenuActive' => SubMenuEnum::PROJECT_CREATE
-                ],
-                [
-                    'Priorite' => 2,
-                    'url' => 'project/index-draft',
-                    'label' => 'Liste des brouillons',
-                    'subServiceMenuActive' => SubMenuEnum::PROJECT_DRAFT
-                ]
-            );
-        }
+        $subMenu->addSubMenu(2, "project/index", "Liste des projets",  SubMenuEnum::PROJECT_LIST, []);
 
-        array_push(
-            $arraySubMenu,
-            [
-                'Priorite' => 1,
-                'url' => 'project/index',
-                'label' => 'Liste des projets',
-                'subServiceMenuActive' => SubMenuEnum::PROJECT_LIST
-            ],
+        $subMenu->addSubMenu(1, "project/index-milestones", "Liste des jalons", SubMenuEnum::PROJECT_MILESTONES, [
+            UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT
+        ]);
 
-        );
-
-        return $arraySubMenu;
+        return $subMenu->getSubMenuCreated();
     }
 
     /**
@@ -284,12 +250,17 @@ class ProjectController extends Controller implements ServiceInterface
         $searchModel = new ProjectSearch();
         // Nous aurons donc tous les models et en plus la possibilité d'ordonner ces données dans un gridview.
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
+        // Récupération des noms de companies des devis de manière distincte.
+        $companiesName = array_unique(array_map(function ($value) {
+            return $value->company->name;
+        }, ProjectSearch::find('company.name')->all()));
 
         MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(
             'index-draft',
             [
-                'dataProvider' => $dataProvider
+                'dataProvider' => $dataProvider,
+                'companiesName' => $companiesName
             ]
         );
     }
@@ -323,20 +294,35 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionUpdateStatus(int $id, string $status)
     {
         $project = project::getOneById($id);
+        $currentstate = $project->state;
         $project->state = $status;
 
-        if ($status == Project::STATE_DEVIS_SIGNED || $status == Project::STATE_FINISHED) {
+        if ($status == Project::STATE_DEVIS_SIGNED) {
             $project->signing_probability = 100;
             $project->id_laboxy = IdLaboxyManager::generateLaboxyId($project);
+            foreach ($project->millestones as $millestone) {
+
+                $millestone->statut = Millestone::STATUT_ENCOURS;
+                $millestone->save();
+            }
+        }
+        if ($status == Project::STATE_DEVIS_CANCELED &&  $currentstate == Project::STATE_DEVIS_SENDED) {
+            $project->signing_probability = 0;
         }
 
-        if ($status == Project::STATE_DRAFT) {
-            $project->draft = true;
+        if ($status == Project::STATE_DEVIS_CANCELED || $status == Project::STATE_DEVIS_FINISHED) {
+            foreach ($project->millestones as $millestone) {
+                if ($millestone->statut == Millestone::STATUT_ENCOURS) {
+                    $millestone->statut = Millestone::STATUT_CANCELED;
+                    $millestone->save();
+                }
+            }
         }
+
 
         $project->save();
 
-        if ($status == Project::STATE_DRAFT) {
+        if ($status == Project::STATE_DEVIS_DRAFT) {
             MenuSelectorHelper::setMenuProjectDraft();
             return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project->id]);
         }
@@ -358,16 +344,22 @@ class ProjectController extends Controller implements ServiceInterface
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdateMillestoneStatus(int $id, int $status)
+    public function actionUpdateMillestoneStatus(int $id, string $status, string $direct = 'view')
     {
         $jalon = Millestone::getOneById($id);
         $jalon->statut = $status;
+        $jalon->last_update_date =  date("d-m-yy", strtotime("now"));
         $jalon->save();
 
-        MenuSelectorHelper::setMenuProjectIndex();
-        return $this->render('view', [
-            'model' => $this->findModel($jalon->project_id),
-        ]);
+        if ($direct == 'view') {
+            MenuSelectorHelper::setMenuProjectIndex();
+
+            return $this->render('view', [
+                'model' => $this->findModel($jalon->project_id),
+            ]);
+        } else {
+            Yii::$app->response->redirect(['project/index-milestones']);
+        }
     }
 
     public function actionUpdateSigningProbability(int $id, int $probability)
@@ -414,18 +406,48 @@ class ProjectController extends Controller implements ServiceInterface
             'content' => $content,
             'filename' => $filename,
             'cssFile' => $css,
-
             'options' => [],
             'methods' => [
                 'SetTitle' => 'Fiche de devis - TEST',
                 'SetSubject' => 'Generating PDF files',
-                'SetHeader' => ['Fiche Devis - ' . $model->internal_name . ' || Generated On: ' . date("r")],
+                'SetFooter' => "<img src=\"" . YII::$app->basePath . "/web/images/pdf/footer.png\">
+                <BR>{PAGENO}",
                 'SetKeywords' => 'Krajee, Yii2, Export, PDF, MPDF, Output, Privacy, Policy, yii2-mpdf',
             ]
         ]);
 
+
         MenuSelectorHelper::setMenuProjectNone();
         return $pdf->render();
+    }
+
+    /**
+     * Render view : projet/index-milestones
+     * Route qui retourne une vue html composé de la liste des jalons en cours (et peut-être plus).
+     * 
+     * @return mixed
+     */
+    public function actionIndexMilestones()
+    {
+
+        // MilestoneSearch est une classe qui implémente Millestone. Elle dispose donc de toutes les méthodes ORM.
+        $searchModel = new MilestoneSearch();
+        // Mais elle possède surtout cette méthode qui permet de founir au gridView de la vue, des spécifivité permettant de d'ordonner par exemple certains éléments du gridView.
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $celluleNameList = array_map(function ($elem) {
+            return $elem->name;
+        }, Cellule::find()->all());
+
+        MenuSelectorHelper::setMenuProjectMilestones();
+        return $this->render(
+            'indexMilestones',
+            [
+                'dataProvider' =>  $dataProvider,
+                'celluleNameList' => $celluleNameList,
+                'statusNameList' => Millestone::STATUT
+            ]
+        );
     }
 
     // /!\ CREATION DE DEVIS-PROJET /!\
@@ -473,7 +495,8 @@ class ProjectController extends Controller implements ServiceInterface
                 $model->creation_date = date('Y-m-d H:i:s');
                 $model->id_capa = IdLaboxyManager::generateDraftId($model);
                 $model->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($model);
-                $model->state = Project::STATE_DRAFT;
+                $model->state = Project::STATE_DEVIS_DRAFT;
+                $model->first_in = 0;
 
                 // On récupère l'id de la cellule de l'utilisateur connecté.
                 $model->cellule_id = Yii::$app->user->identity->cellule_id;
@@ -484,19 +507,22 @@ class ProjectController extends Controller implements ServiceInterface
                 $model->type = Project::TYPES[$model->combobox_type_checked];
                 // On recopie le management rate
                 $rate  = DevisParameter::getParameters();
-
                 switch (Project::TYPES[$model->combobox_type_checked]) {
                     case  Project::TYPE_PRESTATION: {
                             $model->management_rate = $rate->rate_management;
+                            break;
                         }
                     case  Project::TYPE_OUTSOURCING_UN: {
                             $model->management_rate = $rate->rate_management;
+                            break;
                         }
                     case  Project::TYPE_OUTSOURCING_AD: {
                             $model->management_rate = $rate->delegate_rate_management;
+                            break;
                         }
                     case  Project::TYPE_INTERNAL: {
                             $model->management_rate = $rate->internal_rate_management;
+                            break;
                         }
                     default: {
                             $model->management_rate = $rate->rate_management;
@@ -518,8 +544,8 @@ class ProjectController extends Controller implements ServiceInterface
                 $lotProspection->save();
 
                 // Création des lots.
-                // Création d'un lot par défaut si l'utilisateur ne souhaite pas créer son projet à partir d'une liste de lots.
-                if ($lots[0]->combobox_lot_checked == 0) {
+                // Si aucun lot de créé, on en créé un par défaut.
+                if (\sizeof($lots) == 0) {
                     $lots = [new ProjectCreateLotForm()];
                     $lots[0]->title = 'Lot par défaut';
                     $lots[0]->comment = 'Ceci est un lot qui a été généré automatiquement car le créateur ne souhaitait pas utiliser plusieurs lots';
@@ -527,6 +553,7 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // Pour chaque lot, on lui attribut des valeurs par défaut.
                 foreach ($lots as $key => $lot) {
+                    $lot->title = $lot->id_string . $lot->title;
                     $lot->number = $key + 1;
                     $lot->status = Lot::STATE_IN_PROGRESS;
                     $lot->project_id = $model->id;
@@ -542,6 +569,8 @@ class ProjectController extends Controller implements ServiceInterface
         return $this->render(
             'createFirstStep',
             [
+
+                'showlot' => true,
                 'model' => $model,
                 'lots' => $lots,
                 'companiesNames' => \array_values($companiesNames),
@@ -558,9 +587,9 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionProjectSimulate($project_id = 1)
+    public function actionProjectSimulate($project_id = 1, $sucess = null)
     {
-        $SaveSucess = null;
+
         // Modèle du projet à updater. On s'en sert pour récupérer son id.
         $project = ProjectSimulate::getOneById($project_id);
         if ($project == null) {
@@ -576,80 +605,53 @@ class ProjectController extends Controller implements ServiceInterface
         $lots = $project->lots;
         $millestones = $project->millestones;
 
-
-
         // Modèles à sauvegarder.
-
         if ($project->load(Yii::$app->request->post())) {
             $project->save();
         }
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        $millestonesModif = [new ProjectCreateMilleStoneForm()];
-        $millestonesModif =  Model::createMultiple(ProjectCreateMilleStoneForm::className(), $millestonesModif);
-        $isValid = true;
-        Model::loadMultiple($millestonesModif, Yii::$app->request->post());
-        if (!empty($millestonesModif)) {
 
-            foreach ($millestonesModif as $Millestone) {
-                if (!$Millestone->validate()) {
-                    $isValid = false;
-                }
-            }
-        } else {
+        $millestonesModif  = ProjectCreateMilleStoneForm::getAllByProject($project->id);
+        if (!$millestonesModif) {
+            $millestonesModif = [new ProjectCreateMilleStoneForm];
+        }
+
+        $isValid = true;
+
+        $oldmillestonesIds = ArrayHelper::map($millestonesModif, 'id', 'id');
+        $millestonesModif = Model::createMultiple(ProjectCreateMilleStoneForm::class, $millestonesModif);
+        if (!ProjectCreateMilleStoneForm::loadMultiple($millestonesModif, Yii::$app->request->post())) {
             $isValid = false;
         }
-        // Si tous les Jalons sont valides
+
+        $deletedmillestonesModifIds = array_diff($oldmillestonesIds, array_filter(ArrayHelper::map($millestonesModif, 'id', 'id')));
         if ($isValid) {
+
             $SaveSucess = true;
-            $MillestoneArray = ArrayHelper::index($millestones,  function ($element) {
-                return $element->number;
-            });
-            $millestonesModifArray = ArrayHelper::index($millestonesModif,   function ($element) {
-                return $element->number;
-            });
-            //Suppression des tâches enlevées par l'utilisateur;
-            foreach ($MillestoneArray as $Millestone) {
+            foreach ($millestonesModif as $Milestone) {
 
-                if (!array_key_exists($Millestone->number, $millestonesModifArray)) {
-                    $Millestone->delete();
-                }
+
+                $Milestone->project_id = $project->id;
+                $Milestone->statut = Millestone::STATUT_NOT_STARTED;
+                $Milestone->save();
             }
-            //Ajout et modification des données.
-            foreach ($millestonesModif as $millestoneModif) {
-                $millestoneNew = null;
-
-                if (!empty($MillestoneArray)) {
-                    if (array_key_exists(intval($millestoneModif->number), $MillestoneArray)) {
-                        //Si la tâche existe MAJ de la tâche
-                        $millestoneNew =  $MillestoneArray[$millestoneModif->number];
-                    } else {
-                        //Si elle n'existe pas alors ajout de la tâche
-                        $millestoneNew = new ProjectCreateMilleStoneForm();
-                        $millestoneNew->number = $millestoneModif->number;
-                    }
-                } else {
-                    //Si elle n'existe pas alors ajout de la tâche
-                    $millestoneNew = new ProjectCreateMilleStoneForm();
-                    $millestoneNew->number = $millestoneModif->number;
-                }
-                $millestoneNew->estimate_date =  Yii::$app->formatter->asDate($millestoneModif->estimate_date, 'yyyy-MM-dd');
-                $millestoneNew->comment = $millestoneModif->comment;
-                $millestoneNew->project_id = $project->id;
-                $millestoneNew->pourcentage = $millestoneModif->pourcentage;
-                $millestoneNew->price = $millestoneModif->price;
-                $millestoneNew->statut = Millestone::STATUT_ENCOURS;
-                $millestoneNew->save();
+            if (!empty($deletedmillestonesModifIds)) {
+                ProjectCreateMilleStoneForm::deleteAll(['id' => $deletedmillestonesModifIds]);
             }
         }
+
 
         $millestones = ProjectCreateMilleStoneForm::getAllByProject($project->id);
 
-        if (count($millestones) == 0  &&  $project->SellingPrice > 2000) {
+        if (count($millestones) == 0) {
             $advancepayement = new  ProjectCreateMilleStoneForm();
             $advancepayement->number = 0;
-            $advancepayement->comment = "Acompte";
-            $advancepayement->pourcentage = 30.0;
-            $advancepayement->price = (30.0 / 100) * $project->SellingPrice;
+
+            if ($project->SellingPrice > 2000) {
+                $advancepayement->comment = "Acompte";
+                $advancepayement->pourcentage = 30.0;
+                $advancepayement->price = (30.0 / 100) * $project->SellingPrice;
+            }
             array_push($millestones, $advancepayement);
         }
 
@@ -744,7 +746,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'listExternalDepense' => $listExternalDepense,
                 'listInternalDepense' => $listInternalDepense,
                 'Resultcheck' => $Resultcheck,
-                'SaveSucess' => $SaveSucess,
+                'SaveSucess' => $sucess,
 
             ]
 
@@ -765,12 +767,6 @@ class ProjectController extends Controller implements ServiceInterface
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = LotSimulate::getOneByIdProjectAndNumber($project_id, $number);
 
-        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
-        if ($lot->load(Yii::$app->request->post())) {
-            $SaveSucess = true;
-            $lot->save();
-        }
-
         if ($lot == null) {
             return $this->redirect([
                 'error',
@@ -778,6 +774,16 @@ class ProjectController extends Controller implements ServiceInterface
                 'errorDescriptions' => ['Vous essayez actuellement de modifier un lot qui n\'existe pas.']
             ]);
         }
+
+        // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
+        if ($lot->load(Yii::$app->request->post())) {
+            $SaveSucess = true;
+            $lot->save();
+
+            MenuSelectorHelper::setMenuProjectDraft();
+            return Yii::$app->response->redirect(['project/project-simulate', 'id' => $project_id]);
+        }
+
         MenuSelectorHelper::setMenuProjectDraft();
         return $this->render(
             'lotSimulation',
@@ -785,7 +791,6 @@ class ProjectController extends Controller implements ServiceInterface
                 'lot' =>  $lot,
                 'SaveSucess' => $SaveSucess,
             ]
-
         );
     }
 
@@ -812,8 +817,6 @@ class ProjectController extends Controller implements ServiceInterface
         if (!$tasksGestionsModif) {
             $tasksGestionsModif = [new ProjectCreateLotTaskForm()];
         }
-
-
 
         ///Récupération des tâches lots
         $tasksLotsModif = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
@@ -878,11 +881,19 @@ class ProjectController extends Controller implements ServiceInterface
                     $taskOperationalModif->task_category = Task::CATEGORY_TASK;
                     $taskOperationalModif->save();
                 }
+
+                $project = $lot->project;
+                $project->first_in = 1;
+                $project->save();
                 if (!empty($deletedTasksLotsModifIds)) {
                     ProjectCreateLotTaskForm::deleteAll(['id' => $deletedTasksLotsModifIds]);
                 }
+
+                MenuSelectorHelper::setMenuProjectDraft();
+                return Yii::$app->response->redirect(['project/project-simulate', 'id' => $project_id]);
             }
         }
+
         $tasksGestions = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
         $tasksOperational = ProjectCreateLotTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_TASK);
 
@@ -904,18 +915,20 @@ class ProjectController extends Controller implements ServiceInterface
     /**
      * Route : update-dependencies-consumables
      * Permet de modifier les dépenses et les consommables d'un lot.
-     * @param integer $project_id : id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
-     * @param integer $number : numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * @param integer $project_id - id du projet sur lequel se trouve le lot dans lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * @param integer $number - numéro du lot sur lequel on souhaite intégrer des éléments (matériels, intervenants ect...)
+     * @param bool $sucess - paramètre qui sert à définir si la modification/création/suppression des devis s'est correctement passé.
      * 
      * @return mixed|error
      */
-    public function actionUpdateDependenciesConsumables($project_id, $number)
+    public function actionUpdateDependenciesConsumables($project_id, $number, $sucess = null)
     {
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
         $model = new ProjectCreateThirdStepForm();
         $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
-        $SaveSucess = null;
+
+        // Error checker.
         if ($lot == null) {
             return $this->redirect([
                 'error',
@@ -971,38 +984,30 @@ class ProjectController extends Controller implements ServiceInterface
             // Variable de vérification de validité des données lors du renvoi par méthode POST.
             $isValid = true;
 
-            // Vérification des consommables.
+            // Chargement des consommables, notons qu'on ne vérifie pas 
             $oldConsumablesIds = ArrayHelper::map($consumables, 'id', 'id');
             $consumables = Model::createMultiple(ProjectCreateConsumableForm::class, $consumables);
-            if (!Model::loadMultiple($consumables, Yii::$app->request->post())) {
-                $isValid = false;
-            }
+            Model::loadMultiple($consumables, Yii::$app->request->post());
             $deletedConsumablesIDs = array_diff($oldConsumablesIds, array_filter(ArrayHelper::map($consumables, 'id', 'id')));
 
             // Vérifications des investissements. On vérifie toujours qu'on est pas sur le laut 0.
             if ($number != 0) {
                 $oldInvestsIds = ArrayHelper::map($invests, 'id', 'id');
                 $invests = Model::createMultiple(ProjectCreateInvestForm::class, $invests);
-                if (!Model::loadMultiple($invests, Yii::$app->request->post())) {
-                    $isValid = false;
-                }
+                Model::loadMultiple($invests, Yii::$app->request->post());
                 $deletedInvestsIDs = array_diff($oldInvestsIds, array_filter(ArrayHelper::map($invests, 'id', 'id')));
             }
 
             // Vérification des équipements de laboratoire et de leur utilisation.
             $oldEquipmentsRepaymentIds = ArrayHelper::map($equipmentsRepayment, 'id', 'id');
             $equipmentsRepayment = Model::createMultiple(ProjectCreateEquipmentRepaymentForm::class, $equipmentsRepayment);
-            if (!Model::loadMultiple($equipmentsRepayment, Yii::$app->request->post())) {
-                $isValid = false;
-            }
+            Model::loadMultiple($equipmentsRepayment, Yii::$app->request->post());
             $deletedEquipmentsRepaymentIDs = array_diff($oldEquipmentsRepaymentIds, array_filter(ArrayHelper::map($equipmentsRepayment, 'id', 'id')));
 
             // Vérification des intervenants.
             $oldContributorsIds = ArrayHelper::map($contributors, 'id', 'id');
             $contributors = Model::createMultiple(ProjectCreateLaboratoryContributorForm::class, $contributors);
-            if (!Model::loadMultiple($contributors, Yii::$app->request->post())) {
-                $isValid = false;
-            }
+            Model::loadMultiple($contributors, Yii::$app->request->post());
             $deletedContributorsIDs = array_diff($oldContributorsIds, array_filter(ArrayHelper::map($contributors, 'id', 'id')));
 
             if ($isValid) {
@@ -1061,7 +1066,12 @@ class ProjectController extends Controller implements ServiceInterface
                     LaboratoryContributor::deleteAll(['id' => $deletedContributorsIDs]);
                 }
 
-                $SaveSucess = true;
+                $project = $lot->project;
+                $project->first_in = 1;
+                $project->save();
+                // project_id, $number, $sucess = false
+                MenuSelectorHelper::setMenuProjectDraft();
+                return Yii::$app->response->redirect(['project/project-simulate', 'id' => $project_id]);
             }
         }
 
@@ -1081,7 +1091,7 @@ class ProjectController extends Controller implements ServiceInterface
                 'invests' => $invests,
                 'equipments' => $equipmentsRepayment,
                 'contributors' => $contributors,
-                'SaveSucess' => $SaveSucess,
+                'sucess' => $sucess,
             ]
         );
     }
@@ -1117,15 +1127,14 @@ class ProjectController extends Controller implements ServiceInterface
 
                 $finalModel->state = Project::STATE_DEVIS_SENDED;
                 $finalModel->signing_probability = $model->signing_probability;
-                $finalModel->draft = false;
                 $finalModel->capa_user_id = $model->projectManagerSelectedValue;
                 $finalModel->file_name = $model->file_name;
                 $finalModel->file_path = $model->file_path;
                 $finalModel->thematique = $model->thematique;
 
                 $finalModel->save();
-                MenuSelectorHelper::setMenuProjectDraft();
 
+                MenuSelectorHelper::setMenuProjectDraft();
                 return Yii::$app->response->redirect(['project/view', 'id' => $model->id]);
             }
         }
@@ -1141,10 +1150,162 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionDeleteDraftProject(int $id)
     {
         $model = Project::getOneById($id);
+        $lots = $model->lots;
+        foreach ($lots as $lot) {
+            $tasks = $lot->tasks;
+            foreach ($tasks as $task) {
+                $task->delete();
+            }
+            $consumables = $lot->consumables;
+            foreach ($consumables as $consumable) {
+                $consumable->delete();
+            }
+            $invests = $lot->invests;
+            foreach ($invests as $invest) {
+                $invest->delete();
+            }
+            $labotorycontributors = $lot->labotorycontributors;
+            foreach ($labotorycontributors as $labotorycontributor) {
+                $labotorycontributor->delete();
+            }
+            $equipmentrepayments = $lot->equipmentrepayments;
+            foreach ($equipmentrepayments as $equipmentrepayment) {
+                $equipmentrepayment->delete();
+            }
+            $lot->delete();
+        }
+        $millestones = $model->millestones;
+        foreach ($millestones as $millestone) {
+            $millestone->delete();
+        }
+        $model->delete();
+        $searchModel = new ProjectSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
+        return $this->render(
+            'index-draft',
+            [
+                'dataProvider' => $dataProvider
+            ]
+        );
     }
 
-    /**
-     * Méthode générale pour le contrôleur permettant de retourner un devis.
+    public function actionDuplicateProject(int $id)
+    {
+
+
+        $model = ProjectCreateFirstStepForm::getOneById($id);
+        $model->company_name = $model->company->name;
+        $model->contact_email = $model->contact->email;
+        $model->combobox_type_checked = array_search($model->type, Project::TYPES);
+
+
+        $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
+        $companiesNames = array_merge($companiesNames);
+
+        $contactsEmail = ArrayHelper::map(Contact::find()->all(), 'id', 'email');
+        $contactsEmail = array_merge($contactsEmail);
+        if ($model->load(Yii::$app->request->post())) {
+
+
+            $lots = $model->lots;
+            $millestones = $model->millestones;
+            // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
+            $defaultValue = "indéfini";
+            $model->internal_reference = $model->internal_name;
+            $model->version = $defaultValue;
+            $model->date_version = date('Y-m-d H:i:s');
+            $model->creation_date = date('Y-m-d H:i:s');
+            $model->id_capa = IdLaboxyManager::generateDraftId($model);
+            $model->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($model);
+            $model->state = Project::STATE_DEVIS_DRAFT;
+            $model->first_in = 0;
+            $model->id = null;
+
+            $model->isNewRecord = true;
+            // On récupère l'id de la cellule de l'utilisateur connecté.
+            $model->cellule_id = Yii::$app->user->identity->cellule_id;
+            // On inclu la clé étragère qui référence une donnée indéfini dans la table company.
+            $model->company_id = Company::getOneByName($model->company_name)->id;
+            // On inclu la clé étragère qui référence une donnée indéfini dans la table contact.
+            $model->contact_id = Contact::getOneByEmail($model->contact_email)->id;
+            $model->type = Project::TYPES[$model->combobox_type_checked];
+            // On recopie le management rate
+            $rate  = DevisParameter::getParameters();
+
+            switch (Project::TYPES[$model->combobox_type_checked]) {
+                case  Project::TYPE_PRESTATION: {
+                        $model->management_rate = $rate->rate_management;
+                        break;
+                    }
+                case  Project::TYPE_OUTSOURCING_UN: {
+                        $model->management_rate = $rate->rate_management;
+                        break;
+                    }
+                case  Project::TYPE_OUTSOURCING_AD: {
+                        $model->management_rate = $rate->delegate_rate_management;
+                        break;
+                    }
+                case  Project::TYPE_INTERNAL: {
+                        $model->management_rate = $rate->internal_rate_management;
+                        break;
+                    }
+                default: {
+                        $model->management_rate = $rate->rate_management;
+                    }
+            }
+
+            $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
+
+            $model->low_tjm_description = ' ';
+
+            // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
+            $model->save();
+
+            foreach ($lots as $lot) {
+                Lot::duplicateToProject($lot, $model->id);
+            }
+
+            foreach ($millestones as $millestone) {
+                Millestone::duplicateToProject($millestone, $model->id);
+            }
+            // On redirige vers la prochaine étape.
+            return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $model->id]);
+            ///duplication model project, lots,tâches....
+        }
+        MenuSelectorHelper::setMenuProjectCreate();
+        return $this->render(
+            'createFirstStep',
+            [
+                'showlot' => false,
+                'model' => $model,
+                'companiesNames' => \array_values($companiesNames),
+                'contactsEmail' => \array_values($contactsEmail),
+
+            ]
+        );
+    }
+
+
+    public function actionCreateModel(int $id, $view)
+    {
+        $project = Project::getOneById($id);
+        if ($project->state == Project::STATE_DEVIS_MODEL) {
+            $project->state = Project::STATE_DEVIS_DRAFT;
+        } else {
+            $project->state = Project::STATE_DEVIS_MODEL;
+        }
+        $project->save();
+
+        if ($view == 'index') {
+            return Yii::$app->response->redirect(['project/index-draft']);
+        } else {
+
+            return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project->id]);
+        }
+    }
+
+
+    /* Méthode générale pour le contrôleur permettant de retourner un devis.
      * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
      * 
      * @param integer $id
@@ -1159,6 +1320,7 @@ class ProjectController extends Controller implements ServiceInterface
 
         throw new NotFoundHttpException('Le devis n\'existe pas.');
     }
+
 
     /**
      * Fonction qui rend une page d'erreur.

@@ -13,7 +13,10 @@ $(() => {
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByClassName("status-row")[0];
         txtValue = td.textContent || td.innerText;
-        if (txtValue.toUpperCase() == tcVal || txtValue.toUpperCase() == paVal) {
+        if (
+            txtValue.toUpperCase() == tcVal ||
+            txtValue.toUpperCase() == paVal
+        ) {
             tr[i].style.display = "none";
         } else {
             tr[i].style.display = "";
@@ -28,22 +31,34 @@ $(() => {
     /**
      * Attributes
      */
-    const capaIdCheckbox = document.querySelector('input[id="capaid-checkbox"]');
+    const capaIdCheckbox = document.querySelector(
+        'input[id="capaid-checkbox"]'
+    );
     const capaIdField = $(".capaid-row");
 
-    const projectNameCheckbox = document.querySelector('input[id="projectname-checkbox"]');
+    const projectNameCheckbox = document.querySelector(
+        'input[id="projectname-checkbox"]'
+    );
     const projectNameField = $(".projectname-row");
 
-    const projectManagerCheckbox = document.querySelector('input[id="projectmanager-checkbox"]');
+    const projectManagerCheckbox = document.querySelector(
+        'input[id="projectmanager-checkbox"]'
+    );
     const projectManagerField = $(".projectmanager-row");
 
-    const celluleCheckbox = document.querySelector('input[id="cellule-checkbox"]');
+    const celluleCheckbox = document.querySelector(
+        'input[id="cellule-checkbox"]'
+    );
     const celluleField = $(".cellule-row");
 
-    const companyCheckbox = document.querySelector('input[id="company-checkbox"]');
+    const companyCheckbox = document.querySelector(
+        'input[id="company-checkbox"]'
+    );
     const companyField = $(".company-row");
 
-    const statusCheckbox = document.querySelector('input[id="status-checkbox"]');
+    const statusCheckbox = document.querySelector(
+        'input[id="status-checkbox"]'
+    );
     const statusField = $(".status-row");
 
     capaIdCheckbox.onchange = () => {
@@ -69,14 +84,16 @@ $(() => {
             projectManagerField.hide();
         }
     };
-
-    celluleCheckbox.onchange = () => {
-        if (celluleCheckbox.checked) {
-            celluleField.show();
-        } else {
-            celluleField.hide();
-        }
-    };
+    var elementExists = celluleCheckbox;
+    if (elementExists) {
+        celluleCheckbox.onchange = () => {
+            if (celluleCheckbox.checked) {
+                celluleField.show();
+            } else {
+                celluleField.hide();
+            }
+        };
+    }
 
     companyCheckbox.onchange = () => {
         if (companyCheckbox.checked) {
@@ -102,7 +119,7 @@ $(() => {
     const companyNameSelector = $("#company-name-search");
 
     const bcCheckbox = document.querySelector('input[id="bc-checkbox"]');
-    const bcVal = "AVANT CONTRAT";
+    const bcVal = "Devis envoyé";
     const bcVal_2 = "SIGNATURE CLIENT";
     const bcVal_3 = "VALIDATION OPÉRATIONEL";
 
@@ -124,10 +141,20 @@ $(() => {
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByClassName("status-row")[0];
             txtValue = td.textContent || td.innerText;
-            if (!bcCheckbox.checked && (txtValue.toUpperCase() == bcVal || txtValue.toUpperCase() == bcVal_2 || txtValue.toUpperCase() == bcVal_3)) {
+            if (
+                !bcCheckbox.checked &&
+                (txtValue == bcVal ||
+                    txtValue.toUpperCase() == bcVal_2 ||
+                    txtValue.toUpperCase() == bcVal_3)
+            ) {
                 tr[i].style.display = "none";
             }
-            if (bcCheckbox.checked && (txtValue.toUpperCase() == bcVal || txtValue.toUpperCase() == bcVal_2 || txtValue.toUpperCase() == bcVal_3)) {
+            if (
+                bcCheckbox.checked &&
+                (txtValue == bcVal ||
+                    txtValue.toUpperCase() == bcVal_2 ||
+                    txtValue.toUpperCase() == bcVal_3)
+            ) {
                 tr[i].style.display = "";
             }
         }
@@ -190,10 +217,12 @@ $(() => {
 
     // Filter data from company name.
     companyNameSelector.on("change", () => {
-        const selectedCompany = companyNameSelector.children("option:selected").html();
-        const selectedIndex = companyNameSelector.children("option:selected").val();
-
-        console.log(selectedIndex);
+        const selectedCompany = companyNameSelector
+            .children("option:selected")
+            .html();
+        const selectedIndex = companyNameSelector
+            .children("option:selected")
+            .val();
 
         const filter = selectedCompany.toUpperCase();
         const table = document.getElementById("devis_table");
@@ -204,7 +233,10 @@ $(() => {
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByClassName("company-row")[0];
             let txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1 || selectedIndex == "") {
+            if (
+                txtValue.toUpperCase().indexOf(filter) > -1 ||
+                selectedIndex == ""
+            ) {
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";

@@ -25,7 +25,7 @@ class SubMenuEnum
     const ADMIN_UPDATE_DEVIS_PARAMETERS = "USER_UPDATE_DEVIS_PARAMETERS";
     const ADMIN_LIST_EQUIPMENTS = "USER_UPDATE_EQUIPMENTS";
     const ADMIN_LIST_LABORATORIES = "USER_LIST_LABORATORIES";
-
+    const ADMIN_LIST_DOCUMENTS = "USER_LIST_DOCUMENTS";
     /**
      * Project menu.
      */
@@ -35,6 +35,7 @@ class SubMenuEnum
     const PROJECT_CREATE = 'PROJECT_CREATE';
     const PROJECT_LIST = 'PROJECT_LIST';
     const PROJECT_DRAFT = 'PROJECT_DRAFT';
+    const PROJECT_MILESTONES = 'PROJECT_MILESTONES';
 
     /**
      * Company menu.

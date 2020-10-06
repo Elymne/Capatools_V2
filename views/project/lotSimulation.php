@@ -1,6 +1,7 @@
 <?php
 
 use app\assets\AppAsset;
+use app\assets\projects\ProjectLotSimulationAppAsset;
 use app\widgets\TopTitle;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
@@ -10,29 +11,20 @@ use yii\bootstrap\Alert;
 $this->title = 'Simulation de lot';
 
 AppAsset::register($this);
+ProjectLotSimulationAppAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
 <?php
 ///Gère les bandeaux d'alerts
-if ($SaveSucess != null) {
-    if ($SaveSucess) {
-        echo Alert::widget([
-            'options' => [
-                'class' => 'alert-success',
-            ],
-            'body' => 'Enregistrement réussi ...',
-        ]);
-    } else {
-        echo Alert::widget([
-            'options' => [
-                'class' => 'alert-danger',
-            ],
-            'body' => 'Enregistrement échoué ...',
-        ]);
-    }
-}
-?>
+if ($SaveSucess != null) : ?>
+    <?php if ($SaveSucess) : ?>
+        <?= Alert::widget(['options' => ['class' => 'alert-success',], 'body' => 'Enregistrement réussi ...',]) ?>
+    <?php else : ?>
+        <?= Alert::widget(['options' => ['class' => 'alert-danger',], 'body' => 'Enregistrement échoué ...',]) ?>
+    <?php endif; ?>
+<?php endif; ?>
+
 <div class="container">
     <div class="project-create">
         <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
@@ -47,30 +39,31 @@ if ($SaveSucess != null) {
                     </div>
 
                     <div class="card-action">
+
                         <div class="row">
-                            <div class="col s3">
+                            <div class="col s3 label-field">
                                 Total coût temps homme :
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($lot, "totalCostHuman", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostHuman)]])->label(false) ?>
 
                             </div>
-
-
                         </div>
+
                         <div class="row">
-                            <div class="col s3">
+                            <div class="col s3 label-field">
                                 Total des dépenses et investissement :
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($lot, "totalCostInvest", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostInvest)]])->label(false) ?>
                             </div>
                         </div>
+
                         <div class="row">
-                            <div class="col s3">
+                            <div class="col s3 label-field">
                                 Total des reversements laboratoires :
                             </div>
-                            <div class="col s1">
+                            <div class="col s2">
                                 <?= $form->field($lot, "totalCostRepayement", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostRepayement)]])->label(false) ?>
                             </div>
                         </div>
@@ -88,7 +81,7 @@ if ($SaveSucess != null) {
 
                         <label class='blue-text control-label typeLabel'>Marge Temps homme</label>
                         <div class="row">
-                            <div class="col s4">
+                            <div class="col s5 label-field">
                                 <!-- Détail du coût  -->
                                 Taux de marge temps homme (%):
                             </div>
@@ -96,14 +89,14 @@ if ($SaveSucess != null) {
                                 <!-- Détail du coût  -->
                                 <?= $form->field($lot, "rate_human_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true,])->label(false) ?>
                             </div>
-                            <div class="col s4">
+                            <div class="col s5">
                                 <?= Html::button("+", ['id' => 'lotsimulate-rate_human_marginup',   'class' => 'waves-effect waves-light btn btn']) ?>
                                 <?= Html::button("-", ['id' => 'lotsimulate-rate_human_margindown',   'class' => 'waves-effect waves-light btn btn-red']) ?>
 
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col s4">
+                            <div class="col s5 label-field">
                                 <!-- Détail du coût  -->
                                 Total Prix de revient H.T. temps homme :
                             </div>
@@ -116,7 +109,7 @@ if ($SaveSucess != null) {
                         <label class='blue-text control-label typeLabel'>Marge consommables, déplacements et achat</label>
 
                         <div class="row">
-                            <div class="col s4">
+                            <div class="col s5 label-field">
                                 Taux de marge consommables, déplacements et achat (%):
 
                             </div>
@@ -131,7 +124,7 @@ if ($SaveSucess != null) {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col s4">
+                            <div class="col s5 label-field">
                                 <!-- Détail du coût  -->
                                 Total Prix de revient H.T. consommables, déplacements et achat :
                             </div>
@@ -144,7 +137,7 @@ if ($SaveSucess != null) {
                         <label class='blue-text control-label typeLabel'>Marge reversement Laboratoire</label>
 
                         <div class="row">
-                            <div class="col s4">
+                            <div class="col s5 label-field">
                                 Taux de marge reversement Laboratoire (%):
 
                             </div>
@@ -163,7 +156,7 @@ if ($SaveSucess != null) {
                         </div>
 
                         <div class="row">
-                            <div class="col s4">
+                            <div class="col s5 label-field">
                                 <!-- Détail du coût  -->
                                 Total Prix de revient H.T. reversement Laboratoire :
                             </div>
@@ -185,7 +178,7 @@ if ($SaveSucess != null) {
                     <div class="card-action">
 
                         <div class="row">
-                            <div class="col s3">
+                            <div class="col s4 label-field">
                                 Montant Total HT :
                             </div>
                             <div class="col s2">
@@ -194,7 +187,7 @@ if ($SaveSucess != null) {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col s3">
+                            <div class="col s4 label-field">
                                 Taux de marge moyen avant frais de gestion :
                             </div>
                             <div class="col s2">
@@ -202,7 +195,7 @@ if ($SaveSucess != null) {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col s3">
+                            <div class="col s4 label-field">
                                 Frais de gestion du support HT :
                             </div>
                             <div class="col s2">
@@ -210,7 +203,7 @@ if ($SaveSucess != null) {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col s3">
+                            <div class="col s4 label-field">
                                 Prix de vente du lot HT :
                             </div>
                             <div class="col s2">
@@ -219,20 +212,17 @@ if ($SaveSucess != null) {
                         </div>
                     </div>
                 </div>
-                <!-- Buttons -->
-                <div class="form-group">
-                    <div style="bottom: 50px; right: 25px;" class="fixed-action-btn direction-top">
-                        <?= Html::a(
-                            Yii::t('app', '<i class="material-icons right">arrow_back</i>'),
-                            ['project/project-simulate?project_id=' . $lot->project_id],
-                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-grey', 'title' => 'Retour à la page de simulation']
-                        ) ?>
-                        <?= Html::submitButton(
-                            '<i class="material-icons right">save</i>',
-                            ['class' => 'waves-effect waves-light btn-floating btn-large btn-blue', 'title' => 'Sauvegarder les options']
-                        ) ?>
-                    </div>
-                </div>
+
+                <?= Html::a(
+                    Yii::t('app', '<i class="material-icons right">arrow_back</i>Retour'),
+                    ['project/project-simulate?project_id=' . $lot->project_id],
+                    ['class' => 'waves-effect waves-light btn btn-grey', 'title' => 'Retour à la page de simulation']
+                ) ?>
+                <?= Html::submitButton(
+                    '<i class="material-icons right">save</i>Enregistrer',
+                    ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Sauvegarder les options']
+                ) ?>
+
             </div>
         </div>
         <?php ActiveForm::end(); ?>

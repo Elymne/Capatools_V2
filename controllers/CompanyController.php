@@ -14,6 +14,7 @@ use app\models\companies\CompanyCreateForm;
 use app\models\companies\Contact;
 use app\models\companies\ContactCreateForm;
 use app\services\companyTypeServices\CompanyTypeEnum;
+use app\services\menuServices\LeftMenuCreator;
 use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\userRoleAccessServices\PermissionAccessEnum;
@@ -105,57 +106,18 @@ class CompanyController extends Controller
      */
     public static function getActionUser()
     {
-        $result = [];
 
-        if (UserRoleManager::hasRoles([
-            UserRoleEnum::ADMIN,
-            UserRoleEnum::SUPER_ADMIN
-        ])) {
-            $result =
-                [
-                    'priorite' => 1,
-                    'name' => 'Sociétés',
-                    'serviceMenuActive' => SubMenuEnum::COMPANY,
-                    'items' => self::getSubActionUser()
-                ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Utilisé dans la fonction getActionUser.
-     * Retourne tous les sous-menus.
-     * On utilise cette fonction pour permettre de filtrer les sous-menus visible selon les droits de l'utilisateur connecté.
-     * 
-     * @return Array Un tableau de données relatif aux sous-menus.
-     */
-    private static function getSubActionUser(): array
-    {
-        $result = [];
-
-        array_push($result, [
-            'Priorite' => 1,
-            'url' => 'company/create',
-            'label' => 'Créer un client',
-            'subServiceMenuActive' => SubMenuEnum::COMPANY_CREATE
+        $subMenu = new LeftMenuCreator(2, "Sociétés", SubMenuEnum::COMPANY, [
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
         ]);
 
-        array_push($result, [
-            'Priorite' => 2,
-            'url' => 'company/index',
-            'label' => 'Liste des clients',
-            'subServiceMenuActive' => SubMenuEnum::COMPANY_INDEX
-        ]);
+        $subMenu->addSubMenu(3, "company/create", "Créer un client", SubMenuEnum::COMPANY_CREATE, []);
 
-        array_push($result, [
-            'Priorite' => 3,
-            'url' => 'company/index-contacts',
-            'label' => 'Liste des contacts',
-            'subServiceMenuActive' => SubMenuEnum::COMPANY_UPDATE_CONTACTS
-        ]);
+        $subMenu->addSubMenu(2, "company/index", "Liste des clients", SubMenuEnum::COMPANY_INDEX, []);
 
-        return $result;
+        $subMenu->addSubMenu(1, "company/index-contacts", "Liste des contacts",  SubMenuEnum::COMPANY_UPDATE_CONTACTS, []);
+
+        return $subMenu->getSubMenuCreated();
     }
 
     /**
@@ -214,6 +176,10 @@ class CompanyController extends Controller
 
             if ($model->validate()) {
 
+                if ($model->type != CompanyTypeEnum::SELF_EMPLOYED) {
+                    $model->tva = null;
+                }
+
                 $model->type = CompanyTypeEnum::COMPANY_TYPE[$model->type];
                 $model->save(false);
 
@@ -270,7 +236,7 @@ class CompanyController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->save()) {
                 MenuSelectorHelper::setMenuCompanyNone();
-                return $this->redirect(['company/view-contacts']);
+                return $this->redirect(['company/index-contacts']);
             }
         }
 

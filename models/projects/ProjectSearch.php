@@ -37,7 +37,7 @@ class ProjectSearch extends Project
     public function rules()
     {
         return [
-            [['id', 'version', 'cellule_id', 'company_id', 'capa_user_id'], 'integer'],
+            [['id', 'version', 'cellule_id', 'company_id', 'capaidreduc'], 'integer'],
             [['id_capa', 'internal_name', 'project_manager.email', 'company.name', 'cellule.name'], 'safe'],
         ];
     }
@@ -110,7 +110,7 @@ class ProjectSearch extends Project
             'version' => $this->version,
             'cellule_id' => $this->cellule_id,
             'company_id' => $this->company_id,
-            'capa_user_id' => $this->capa_user_id,
+            'capaidreduc' => $this->capaidreduc,
         ]);
 
         $query->andFilterWhere(['like', 'id_capa', $this->id_capa])

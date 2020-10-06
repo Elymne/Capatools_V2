@@ -25,10 +25,11 @@ class ProjectCreateLotForm extends Lot
     /**
      * Fonction provenant de la classe ActiveRecord, elle permet de vérifier l'intégrité des données.
      */
+    public $id_string;
     public function rules()
     {
         return [
-            [['title'], 'safe',],
+            [['title', 'id_string'], 'safe',],
             ['title', 'titleIsNeeded', 'skipOnEmpty' => false, 'skipOnError' => false],
         ];
     }
