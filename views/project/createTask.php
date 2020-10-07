@@ -122,8 +122,8 @@ if ($lot->number != 0) {
                                                 )->label("Intervenant");
                                                 ?>
                                             </div>
-                                            <div class="col s2">
-                                                <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Prix journalier") ?>
+                                            <div class="col s1">
+                                                <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Prix/jour") ?>
                                             </div>
                                             <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['type' => 'number', 'min' => 0, 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
@@ -149,7 +149,7 @@ if ($lot->number != 0) {
                                                 )->label("Incertitude");
                                                 ?>
                                             </div>
-                                            <div class="col s1">
+                                            <div class="col s2">
                                                 <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Temps total") ?>
                                                 <?php echo Html::activeHiddenInput($taskGestion, "[{$i}]risk_duration_hour"); ?>
                                             </div>
@@ -247,8 +247,8 @@ if ($lot->number != 0) {
                                                         )->label("Intervenant");
                                                         ?>
                                                     </div>
-                                                    <div class="col s2">
-                                                        <?= $form->field($taskOperational, "[{$i}]price")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Prix journalier") ?>
+                                                    <div class="col s1">
+                                                        <?= $form->field($taskOperational, "[{$i}]price")->textInput(['type' => 'number', 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Prix/jour") ?>
                                                     </div>
                                                     <div class="col s1">
                                                         <?= $form->field($taskOperational, "[{$i}]day_duration")->textInput(['type' => 'number', 'min' => 0, 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
@@ -283,7 +283,7 @@ if ($lot->number != 0) {
                                                     ?>
                                                 </div><!-- .row -->
 
-                                                <div class="col s1">
+                                                <div class="col s2">
                                                     <?= $form->field($taskOperational, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Temps total") ?>
                                                     <?php echo Html::activeHiddenInput($taskOperational, "[{$i}]risk_duration_hour"); ?>
                                                 </div>
