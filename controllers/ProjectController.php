@@ -781,7 +781,7 @@ class ProjectController extends Controller implements ServiceInterface
             $lot->save();
 
             MenuSelectorHelper::setMenuProjectDraft();
-            return Yii::$app->response->redirect(['project/project-simulate', 'id' => $project_id]);
+            return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project_id]);
         }
 
         MenuSelectorHelper::setMenuProjectDraft();
@@ -890,7 +890,7 @@ class ProjectController extends Controller implements ServiceInterface
                 }
 
                 MenuSelectorHelper::setMenuProjectDraft();
-                return Yii::$app->response->redirect(['project/project-simulate', 'id' => $project_id]);
+                return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project_id]);
             }
         }
 
@@ -1071,7 +1071,7 @@ class ProjectController extends Controller implements ServiceInterface
                 $project->save();
                 // project_id, $number, $sucess = false
                 MenuSelectorHelper::setMenuProjectDraft();
-                return Yii::$app->response->redirect(['project/project-simulate', 'id' => $project_id]);
+                return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project_id]);
             }
         }
 
