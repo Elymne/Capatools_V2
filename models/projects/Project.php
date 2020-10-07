@@ -167,7 +167,7 @@ class Project extends ActiveRecord
     {
 
         $lotavp = Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
-        $lotavpTotalMarge = $lotavp->total / (1 - $this->marginaverage / 100);
+        $lotavpTotalMarge = $lotavp->total * (1 - $this->marginaverage / 100);
         return round(($lotavpTotalMarge / (count($this->lots) - 1)), -2);
     }
 
