@@ -379,13 +379,13 @@ $risksName = array_map(function ($risk) {
                 </div>
 
                 <?= Html::a(
-                    Yii::t('app', '<i class="material-icons right">arrow_back</i>Retour'),
+                    Yii::t('app', '<i class="material-icons right">arrow_back</i>Annuler'),
                     ['project/project-simulate?project_id=' . $project_id],
-                    ['class' => 'waves-effect waves-light btn btn-grey', 'title' => 'Retour à la page de simulation']
+                    ['class' => 'waves-effect waves-light btn btn-grey', 'title' => 'Annuler']
                 ) ?>
                 <?= Html::submitButton(
-                    '<i class="material-icons right">save</i>Enregistrer',
-                    ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Sauvegarder les options']
+                    '<i class="material-icons right">save</i>Suivant',
+                    ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Suivant']
                 ) ?>
 
             </div>
