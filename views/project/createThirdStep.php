@@ -275,7 +275,7 @@ $risksName = array_map(function ($risk) {
                                                         ])->label("Incertitude"); ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
+                                                        <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps total") ?>
                                                     </div>
                                                     <div class="col s1">
                                                         <?= $form->field($equipment, "[{$i}]price")->textInput(['readonly' => true])->label("Prix total") ?>
@@ -355,7 +355,7 @@ $risksName = array_map(function ($risk) {
                                                         ])->label("Incertitude"); ?>
                                                     </div>
                                                     <div class="col s2">
-                                                        <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps incertitude") ?>
+                                                        <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps total") ?>
                                                     </div>
                                                     <div class="col s1">
                                                         <?= $form->field($contributor, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'readonly' => true])->label("Prix total") ?>
