@@ -204,7 +204,7 @@ class ProjectController extends Controller implements ServiceInterface
 
         $subMenu->addSubMenu(2, "project/index", "Liste des projets",  SubMenuEnum::PROJECT_LIST, []);
 
-        $subMenu->addSubMenu(1, "project/index-milestones", "Liste des jalons", SubMenuEnum::PROJECT_MILESTONES, [
+        $subMenu->addSubMenu(1, "project/index-milestones", "Liste des factures", SubMenuEnum::PROJECT_MILESTONES, [
             UserRoleEnum::PROJECT_MANAGER, UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT
         ]);
 
