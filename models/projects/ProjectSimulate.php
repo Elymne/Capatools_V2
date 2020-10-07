@@ -19,9 +19,10 @@ class ProjectSimulate extends Project
     public function rules()
     {
         return [
-            [['low_tjm_raison', 'low_tjm_description'], 'safe'],
+            [['low_tjm_raison', 'low_tjm_description', 'internal_name'], 'safe'],
             [['low_tjm_raison'], 'required', 'message' => 'Une Raison doit être sélectionnée pour valider le taux journalier'],
             [['low_tjm_description'], 'required', 'message' => 'Une raison doit être décrite'],
+            [['internal_name'], 'required', 'message' => 'Une nom du projet doit être indiqué'],
 
         ];
     }

@@ -31,7 +31,7 @@ class IdLaboxyManager
      */
     static function generateLaboxyDraftId(Project $project): string
     {
-        $companyName = $project->company_name;
+        $companyName = $project->company->name;
         $projectTitle = $project->internal_name;
 
         return "AVANT PROJET - " . $companyName . " - " . $projectTitle;

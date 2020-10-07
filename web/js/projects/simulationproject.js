@@ -158,11 +158,12 @@ $(() => {
      */
     const SelectRaison = "#projectsimulate-low_tjm_raison";
     const description = "#projectsimulate-low_tjm_description";
+    const descriptiondiv = "low_tjm_description_id";
     const description_label = "#low_tjm_description-label";
 
     $(SelectRaison).on("select2:select", function (e) {
         if (e.currentTarget.value != "Autre") {
-            $(description).val(e.currentTarget.value);
+            $(description).val("Aucune");
             $(description).hide();
             $(description_label).hide();
         } else {
@@ -179,6 +180,7 @@ $(() => {
         $(description).show();
         $(description_label).show();
     } else {
+        $(description).val("Aucune");
         $(description).hide();
         $(description_label).hide();
     }

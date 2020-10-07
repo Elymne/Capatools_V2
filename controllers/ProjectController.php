@@ -531,7 +531,7 @@ class ProjectController extends Controller implements ServiceInterface
 
                 $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
 
-                $model->low_tjm_description = ' ';
+                $model->low_tjm_description = 'aucune';
                 // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
                 $model->save();
 
@@ -607,6 +607,10 @@ class ProjectController extends Controller implements ServiceInterface
 
         // Modèles à sauvegarder.
         if ($project->load(Yii::$app->request->post())) {
+
+
+            $project->id_capa = IdLaboxyManager::generateDraftId($project);
+            $project->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($project);
             $project->save();
         }
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
@@ -1131,7 +1135,7 @@ class ProjectController extends Controller implements ServiceInterface
             $finalModel->file_name = $model->file_name;
             $finalModel->file_path = $model->file_path;
             $finalModel->thematique = $model->thematique;
-
+            $finalModel->id_laboxy = IdLaboxyManager::generateLaboxyId($model);
             $finalModel->save();
 
             MenuSelectorHelper::setMenuProjectDraft();
@@ -1255,7 +1259,7 @@ class ProjectController extends Controller implements ServiceInterface
 
             $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
 
-            $model->low_tjm_description = ' ';
+            $model->low_tjm_description = 'Aucune';
 
             // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
             $model->save();
