@@ -127,7 +127,7 @@ ProjectSimulationAsset::register($this);
 
                         <div class="row top-spacing">
 
-                            <div class="col s2">
+                            <div class="col s12">
                                 <?= Html::a(
                                     '<span>Ajouter des tâches</span>',
                                     Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
@@ -140,9 +140,7 @@ ProjectSimulationAsset::register($this);
                                         'title' => "Permet de créer, modifier, supprimer des tâche"
                                     ]
                                 ); ?>
-                            </div>
 
-                            <div class="col s2">
                                 <?= Html::a(
                                     '<span>Gérer les dépenses</span>',
                                     Url::to(['project/update-dependencies-consumables', 'number' => 0, 'project_id' => $project->id]),
@@ -219,7 +217,7 @@ ProjectSimulationAsset::register($this);
 
                                 <div class="row top-spacing">
 
-                                    <div class="col s2">
+                                    <div class="col s12">
                                         <?= Html::a(
                                             '<span>Ajouter des tâches</span>',
                                             Url::to(['project/update-task', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
@@ -232,9 +230,7 @@ ProjectSimulationAsset::register($this);
                                                 'title' => "Permet de créer, modifier, supprimer des tâche"
                                             ]
                                         ); ?>
-                                    </div>
 
-                                    <div class="col s2">
                                         <?= Html::a(
                                             '<span>Gérer les dépenses</span>',
                                             Url::to(['project/update-dependencies-consumables', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
@@ -247,9 +243,7 @@ ProjectSimulationAsset::register($this);
                                                 'title' => "Permet de créer les consommables et investissements ainsi que de gérer les matériels laboratoires et les contributeurs"
                                             ]
                                         ); ?>
-                                    </div>
 
-                                    <div class="col s2">
                                         <?= Html::a(
                                             '<span>Modifier les marges</span>',
                                             Url::to(['project/lot-simulate', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
