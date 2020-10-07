@@ -135,7 +135,7 @@ ProjectSimulationAsset::register($this);
                                         'id' => 'grid-custom-button',
                                         'data-pjax' => true,
                                         'action' => Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
-                                        'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
+                                        'class' => 'btn waves-effect waves-light btn-blue tooltipped',
                                         'data-position' => "bottom",
                                         'title' => "Permet de créer, modifier, supprimer des tâche"
                                     ]
@@ -150,7 +150,7 @@ ProjectSimulationAsset::register($this);
                                         'id' => 'grid-custom-button',
                                         'data-pjax' => true,
                                         'action' => Url::to(['project/update-dependencies-consumables', 'number' => 0, 'project_id' => $project->id]),
-                                        'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
+                                        'class' => 'btn waves-effect waves-light btn-blue tooltipped',
                                         'data-position' => "bottom",
                                         'title' => "Permet de créer les consommables et investissements ainsi que de gérer les matériels laboratoires et les contributeurs"
                                     ]
@@ -227,7 +227,7 @@ ProjectSimulationAsset::register($this);
                                                 'id' => 'grid-custom-button',
                                                 'data-pjax' => true,
                                                 'action' => Url::to(['project/update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
-                                                'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
+                                                'class' => 'btn waves-effect waves-light btn-blue tooltipped',
                                                 'data-position' => "bottom",
                                                 'title' => "Permet de créer, modifier, supprimer des tâche"
                                             ]
@@ -242,7 +242,7 @@ ProjectSimulationAsset::register($this);
                                                 'id' => 'grid-custom-button',
                                                 'data-pjax' => true,
                                                 'action' => Url::to(['project/Update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
-                                                'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
+                                                'class' => 'btn waves-effect waves-light btn-blue tooltipped',
                                                 'data-position' => "bottom",
                                                 'title' => "Permet de créer les consommables et investissements ainsi que de gérer les matériels laboratoires et les contributeurs"
                                             ]
@@ -257,7 +257,7 @@ ProjectSimulationAsset::register($this);
                                                 'id' => 'grid-custom-button',
                                                 'data-pjax' => true,
                                                 'action' => Url::to(['project/lot-simulate', 'number' => $lotproject->number, 'project_id' => $project->id]),
-                                                'class' => 'btn-large waves-effect waves-light btn-blue tooltipped',
+                                                'class' => 'btn waves-effect waves-light btn-blue tooltipped',
                                                 'data-position' => "bottom",
                                                 'title' => "Permet de modifier les marges",
                                             ]
@@ -541,37 +541,39 @@ ProjectSimulationAsset::register($this);
 
                 </div>
 
-                <?= Html::a(
-                    Yii::t('app', '<i class="material-icons right">arrow_back</i>Retour'),
-                    ['project/index-draft'],
-                    ['class' => 'waves-effect waves-light btn btn-grey', 'title' => 'Retour à la liste des brouillons']
-                ) ?>
+                <div class="form-group to-the-right">
+                    <?= Html::a(
+                        Yii::t('app', '<i class="material-icons right">arrow_back</i>Retour'),
+                        ['project/index-draft'],
+                        ['class' => 'waves-effect waves-light btn btn-grey', 'title' => 'Retour à la liste des brouillons']
+                    ) ?>
 
-                <?= Html::submitButton(
-                    '<i class="material-icons right">save</i>Enregistrer',
-                    ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Sauvegarder les options']
-                ) ?>
-                <?php if ($project->state != Project::STATE_DEVIS_MODEL) : ?>
-                    <?= Html::a(
-                        Yii::t('app', '<i class="material-icons right black-text">star_border</i>Ajouter aux modèles'),
-                        ['project/create-model', 'id' => $project->id, 'view' => 'projectsimulate'],
-                        ['class' => 'waves-effect waves-light btn btn-white', 'title' => 'Créer un model de devis']
+                    <?= Html::submitButton(
+                        '<i class="material-icons right">save</i>Enregistrer',
+                        ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Sauvegarder les options']
                     ) ?>
-                <?php endif; ?>
-                <?php if ($project->state == Project::STATE_DEVIS_MODEL) : ?>
-                    <?= Html::a(
-                        Yii::t('app', '<i class="material-icons right">star</i>Retirer des modèles'),
-                        ['project/create-model', 'id' => $project->id, 'view' => 'projectsimulate'],
-                        ['class' => 'waves-effect waves-light btn btn-capa', 'title' => 'supprimer le model de devis']
-                    ) ?>
-                <?php endif; ?>
-                <?php if ($validdevis && $project->state != Project::STATE_DEVIS_MODEL) : ?>
-                    <?= Html::a(
-                        Yii::t('app', '<i class="material-icons right">check</i>Créer le projet'),
-                        ['project/create-project?id=' . $project->id],
-                        ['class' => 'waves-effect waves-light btn btn-green', 'title' => 'Créer le projet']
-                    ) ?>
-                <?php endif; ?>
+                    <?php if ($project->state != Project::STATE_DEVIS_MODEL) : ?>
+                        <?= Html::a(
+                            Yii::t('app', '<i class="material-icons right black-text">star_border</i>Ajouter aux modèles'),
+                            ['project/create-model', 'id' => $project->id, 'view' => 'projectsimulate'],
+                            ['class' => 'waves-effect waves-light btn btn-white', 'title' => 'Créer un model de devis']
+                        ) ?>
+                    <?php endif; ?>
+                    <?php if ($project->state == Project::STATE_DEVIS_MODEL) : ?>
+                        <?= Html::a(
+                            Yii::t('app', '<i class="material-icons right">star</i>Retirer des modèles'),
+                            ['project/create-model', 'id' => $project->id, 'view' => 'projectsimulate'],
+                            ['class' => 'waves-effect waves-light btn btn-capa', 'title' => 'supprimer le model de devis']
+                        ) ?>
+                    <?php endif; ?>
+                    <?php if ($validdevis && $project->state != Project::STATE_DEVIS_MODEL) : ?>
+                        <?= Html::a(
+                            Yii::t('app', '<i class="material-icons right">check</i>Créer le projet'),
+                            ['project/create-project?id=' . $project->id],
+                            ['class' => 'waves-effect waves-light btn btn-green', 'title' => 'Créer le projet']
+                        ) ?>
+                    <?php endif; ?>
+                </div>
 
             </div>
         </div>

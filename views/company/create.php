@@ -22,12 +22,14 @@ CompanyCreateAsset::register($this);
 <div class="container">
     <div class="company-create">
 
+        <?php $form = ActiveForm::begin(); ?>
+
         <div class="row">
             <div class="col s6 offset-s3">
-                <div class="card">
 
+                <div class="card">
                     <div class="card-action">
-                        <?php $form = ActiveForm::begin(); ?>
+
 
                         <?= $form->field($model, 'name')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'name-field'])
@@ -63,20 +65,17 @@ CompanyCreateAsset::register($this);
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'tva-field'])
                             ->label("TVA") ?>
 
-                        <br />
-                        <div class="form-group">
-
-                            <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue', 'data' => ['confirm' => 'Créer ce client ?']]) ?>
-
-                            <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
-
-                            <?php ActiveForm::end(); ?>
-                        </div>
                     </div>
+                </div>
 
+                <div class="form-group to-the-right">
+                    <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue', 'data' => ['confirm' => 'Créer ce client ?']]) ?>
+                    <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                 </div>
             </div>
         </div>
+
+        <?php ActiveForm::end(); ?>
 
     </div>
 </div>

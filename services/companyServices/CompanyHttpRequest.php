@@ -42,6 +42,9 @@ class CompanyHttpRequest
         curl_close($curl);
 
         // Si la clé "message" existe dans la réponse, c'est qu'elle ne contient aucune donnée, on retourne donc null.
+
+        if ($response == null) $response = [];
+
         if (array_key_exists("message", $response)) {
             return null;
         }
@@ -61,6 +64,9 @@ class CompanyHttpRequest
      */
     private static function buildCompanyObject(array $httpResponse, string $companyName): ?CompanyHttpPojo
     {
+
+        if (!array_key_exists('etablissement', $httpResponse))  return null;
+
         foreach ($httpResponse['etablissement'] as $companiesDataArray) {
             if (strtolower($companiesDataArray['l1_normalisee']) == strtolower($companyName)) {
                 return new CompanyHttpPojo($companiesDataArray);

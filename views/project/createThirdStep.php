@@ -378,15 +378,17 @@ $risksName = array_map(function ($risk) {
                     </div>
                 </div>
 
-                <?= Html::a(
-                    Yii::t('app', '<i class="material-icons right">arrow_back</i>Annuler'),
-                    ['project/project-simulate?project_id=' . $project_id],
-                    ['class' => 'waves-effect waves-light btn btn-grey', 'title' => 'Annuler']
-                ) ?>
-                <?= Html::submitButton(
-                    '<i class="material-icons right">save</i>Suivant',
-                    ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Suivant']
-                ) ?>
+                <div class="form-group to-the-right">
+                    <?= Html::a(
+                        Yii::t('app', '<i class="material-icons right">arrow_back</i>Annuler'),
+                        ['project/project-simulate?project_id=' . $project_id],
+                        ['class' => 'waves-effect waves-light btn btn-grey', 'title' => 'Annuler']
+                    ) ?>
+                    <?= Html::submitButton(
+                        '<i class="material-icons right">save</i>Suivant',
+                        ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Suivant']
+                    ) ?>
+                </div>
 
             </div>
         </div>

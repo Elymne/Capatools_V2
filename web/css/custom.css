@@ -149,3 +149,7 @@ button.btn-floating {
 #breadcrumbs-wrapper {
     margin-top: -1px;
 }
+
+.to-the-right {
+    float: right;
+}

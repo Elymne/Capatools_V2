@@ -93,12 +93,7 @@ AdminFormAsset::register($this);
         </div>
     </div>
 
-
-
-
-
-
-    <div class="form-group">
+    <div class="form-group to-the-right">
         <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
 
         <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
