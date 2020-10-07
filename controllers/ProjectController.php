@@ -1121,22 +1121,21 @@ class ProjectController extends Controller implements ServiceInterface
             $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
 
             // Si le fichier est bien upload, on procède à l'enregistrement du projet.
-            if ($model->upload()) {
+            $model->upload();
 
-                $finalModel = Project::getOneById($model->id);
+            $finalModel = Project::getOneById($model->id);
 
-                $finalModel->state = Project::STATE_DEVIS_SENDED;
-                $finalModel->signing_probability = $model->signing_probability;
-                $finalModel->capa_user_id = $model->projectManagerSelectedValue;
-                $finalModel->file_name = $model->file_name;
-                $finalModel->file_path = $model->file_path;
-                $finalModel->thematique = $model->thematique;
+            $finalModel->state = Project::STATE_DEVIS_SENDED;
+            $finalModel->signing_probability = $model->signing_probability;
+            $finalModel->capa_user_id = $model->projectManagerSelectedValue;
+            $finalModel->file_name = $model->file_name;
+            $finalModel->file_path = $model->file_path;
+            $finalModel->thematique = $model->thematique;
 
-                $finalModel->save();
+            $finalModel->save();
 
-                MenuSelectorHelper::setMenuProjectDraft();
-                return Yii::$app->response->redirect(['project/view', 'id' => $model->id]);
-            }
+            MenuSelectorHelper::setMenuProjectDraft();
+            return Yii::$app->response->redirect(['project/view', 'id' => $model->id]);
         }
 
         MenuSelectorHelper::setMenuProjectDraft();

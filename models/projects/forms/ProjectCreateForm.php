@@ -42,9 +42,7 @@ class ProjectCreateForm extends Project
             ['thematique', 'required', 'message' => 'Indiquer la thématique du projet.'],
             ['capa_user_id', 'required', 'message' => 'Indiquer le chef de projet'],
             ['signing_probability', 'required', 'message' => 'Indiquez la probabilité de signature !.'],
-
-            ['pdfFile', 'required', 'message' => 'Un document pdf doit être fournit'],
-            [['pdfFile'], 'file', 'skipOnEmpty' => false, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros (2Mo maxi)}', 'message' => 'Une proposition technique doit être associée au devis.'],
+            [['pdfFile'], 'file', 'skipOnEmpty' => true, 'maxSize' => 2000000, 'extensions' => 'pdf', 'tooBig' => 'Le document est trop gros (2Mo maxi)}', 'message' => 'Une proposition technique doit être associée au devis.'],
         ];
     }
 
@@ -56,20 +54,23 @@ class ProjectCreateForm extends Project
      */
     public function upload(): bool
     {
-        // On attribut le nom du fichier à l'arribut file_name qui sera stocké en bdd.
-        $this->file_name =  $this->pdfFile[0]->name;
+        if ($this->pdfFile) {
+            // On attribut le nom du fichier à l'arribut file_name qui sera stocké en bdd.
+            $this->file_name =  $this->pdfFile[0]->name;
 
-        $path = 'uploads/' . $this->id_capa;
+            $path = 'uploads/' . $this->id_capa;
 
-        // Si le dossier n'existe pas, on le créer.
-        if (!is_dir($path))
-            mkdir($path);
+            // Si le dossier n'existe pas, on le créer.
+            if (!is_dir($path))
+                mkdir($path);
 
-        // Si le dossier existe déjà (donc qu'il y a déjà un fichier existant), on le supprime.
-        if ($this->file_path != '')
-            unlink($this->file_path);
+            // Si le dossier existe déjà (donc qu'il y a déjà un fichier existant), on le supprime.
+            if ($this->file_path != '')
+                unlink($this->file_path);
 
-        $this->file_path = $path . '/' . $this->file_name;
-        return $this->pdfFile[0]->saveAs($this->file_path);
+            $this->file_path = $path . '/' . $this->file_name;
+            return $this->pdfFile[0]->saveAs($this->file_path);
+        }
+        return false;
     }
 }
