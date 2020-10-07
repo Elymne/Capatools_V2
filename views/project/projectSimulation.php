@@ -12,7 +12,7 @@ use kartik\select2\Select2;
 use kidzen\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Alert;
 
-$this->title = 'Simulation du projet';
+$this->title = 'Simulation du projet ' . $project->internal_name;
 
 $MargeAverage = $project->marginaverage;
 $totalcostavplot = ($lotavp->total *  ($project->marginaverage / 100 + 1)) / (count($lots) - 1);
