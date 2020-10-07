@@ -135,6 +135,16 @@ class m200800_000050_rbac extends Migration
         $auth->addChild($projectManagerRole, $projectUpdate);
         $auth->addChild($projectManagerRole, $projectDelete);
 
+        $auth->addChild($projectManagerRole, $companyIndex);
+        $auth->addChild($projectManagerRole, $companyCreate);
+        $auth->addChild($projectManagerRole, $companyView);
+        $auth->addChild($projectManagerRole, $companyUpdate);
+        $auth->addChild($projectManagerRole, $companyDelete);
+        $auth->addChild($projectManagerRole, $companyContactIndex);
+        $auth->addChild($projectManagerRole, $companyContactCreate);
+        $auth->addChild($projectManagerRole, $companyContactUpdate);
+        $auth->addChild($projectManagerRole, $companyContactView);
+        $auth->addChild($projectManagerRole, $companyContactDelete);
 
         /**
          * Attribution des permissions au rôle de responsable de cellule.
@@ -144,6 +154,16 @@ class m200800_000050_rbac extends Migration
          */
         //TODO A voir.
 
+        $auth->addChild($celluleManagerRole, $companyIndex);
+        $auth->addChild($celluleManagerRole, $companyCreate);
+        $auth->addChild($celluleManagerRole, $companyView);
+        $auth->addChild($celluleManagerRole, $companyUpdate);
+        $auth->addChild($celluleManagerRole, $companyDelete);
+        $auth->addChild($celluleManagerRole, $companyContactIndex);
+        $auth->addChild($celluleManagerRole, $companyContactCreate);
+        $auth->addChild($celluleManagerRole, $companyContactUpdate);
+        $auth->addChild($celluleManagerRole, $companyContactView);
+        $auth->addChild($celluleManagerRole, $companyContactDelete);
         /**
          * Attribution des permissions au rôle de support.
          * Il peut voir tous les projets existants mais ne peut les modifier.
@@ -154,7 +174,16 @@ class m200800_000050_rbac extends Migration
 
         $auth->addChild($accountingSupportRole, $projectUpdateMilestoneStatus);
         $auth->addChild($accountingSupportRole, $projectUpdateStatus);
-
+        $auth->addChild($accountingSupportRole, $companyIndex);
+        $auth->addChild($accountingSupportRole, $companyCreate);
+        $auth->addChild($accountingSupportRole, $companyView);
+        $auth->addChild($accountingSupportRole, $companyUpdate);
+        $auth->addChild($accountingSupportRole, $companyDelete);
+        $auth->addChild($accountingSupportRole, $companyContactIndex);
+        $auth->addChild($accountingSupportRole, $companyContactCreate);
+        $auth->addChild($accountingSupportRole, $companyContactUpdate);
+        $auth->addChild($accountingSupportRole, $companyContactView);
+        $auth->addChild($accountingSupportRole, $companyContactDelete);
 
         /**
          * Attribution des permissions au rôle de ressources humaine.

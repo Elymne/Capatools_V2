@@ -108,7 +108,7 @@ class CompanyController extends Controller
     {
 
         $subMenu = new LeftMenuCreator(2, "Sociétés", SubMenuEnum::COMPANY, [
-            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN
+            UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT, UserRoleEnum::CELLULE_MANAGER, UserRoleEnum::PROJECT_MANAGER
         ]);
 
         $subMenu->addSubMenu(3, "company/create", "Créer un client", SubMenuEnum::COMPANY_CREATE, []);
