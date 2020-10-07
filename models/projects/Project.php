@@ -202,8 +202,13 @@ class Project extends ActiveRecord
         $lotsproject = $this->lots;
         foreach ($lotsproject as $lot) {
 
-            $totaltime = $totaltime + $lot->totaltime;
-            $TotalCostHumanWithMargin = $TotalCostHumanWithMargin + $lot->totalCostHumanWithMargin;
+            if ($lot->number != 0) {
+                $totaltime = $totaltime + $lot->totaltime;
+                $TotalCostHumanWithMargin = $TotalCostHumanWithMargin + $lot->totalCostHumanWithMargin;
+            } else {
+                $totaltime = $totaltime + $lot->totaltime;
+                $TotalCostHumanWithMargin = $TotalCostHumanWithMargin + $lot->totalCostHuman * (1 + $this->marginaverage);
+            }
         }
         $result = $TotalCostHumanWithMargin / (1 - $this->management_rate / 100);
         $totaltime = $totaltime / 7.7;
@@ -226,16 +231,16 @@ class Project extends ActiveRecord
         return $totaltimewithrisk;
     }
 
-    public function getTotalcostRHWithRisk()
+    public function getTotalcostRH()
     {
-        $TotalCostHumanWithMarginwithrisk = 0.0;
+        $TotalCostHuman = 0.0;
         $lotsproject = $this->lots;
         foreach ($lotsproject as $lot) {
 
-            $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHuman;
+            $TotalCostHuman = $TotalCostHuman + $lot->TotalcostHuman;
         }
 
-        return $TotalCostHumanWithMarginwithrisk;
+        return $TotalCostHuman;
     }
 
 
@@ -246,8 +251,15 @@ class Project extends ActiveRecord
         $lotsproject = $this->lots;
         foreach ($lotsproject as $lot) {
 
-            $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
-            $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHumanWithMarginAndRisk;
+            if ($lot->number != 0) {
+
+                $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
+                $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHumanWithMargin;
+            } else {
+                //Cas du lot AVP qi se base sur le taux marge moyen
+                $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
+                $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHuman * (1 + $this->marginaverage);
+            }
         }
         $totaltimewithrisk = $totaltimewithrisk / 7.7;
         $result = $TotalCostHumanWithMarginwithrisk / (1 - $this->management_rate / 100);

@@ -22,7 +22,7 @@ class Lot extends ActiveRecord
 
     const STATE_IN_PROGRESS = 'En cours';
 
-    public static function duplicateToProject(Lot $lot,$idproject)
+    public static function duplicateToProject(Lot $lot, $idproject)
     {
 
         $newlot = new Lot();
@@ -38,23 +38,23 @@ class Lot extends ActiveRecord
 
         $newlot->save();
 
-        foreach($lot->tasks as $task) {
-            Task::duplicateToLot($task,$newlot->id);
+        foreach ($lot->tasks as $task) {
+            Task::duplicateToLot($task, $newlot->id);
         }
 
-        foreach($lot->consumables as $consumable){
-            Consumable::duplicateToLot($consumable,$newlot->id);
+        foreach ($lot->consumables as $consumable) {
+            Consumable::duplicateToLot($consumable, $newlot->id);
         }
-        foreach($lot->invests as $invest){
-            Investment::duplicateToLot($invest,$newlot->id);
-        }
-
-        foreach($lot->labotorycontributors as $labotorycontributor){
-            LaboratoryContributor::duplicateToLot($labotorycontributor,$newlot->id);
+        foreach ($lot->invests as $invest) {
+            Investment::duplicateToLot($invest, $newlot->id);
         }
 
-        foreach($lot->equipmentrepayments as $equipmentrepayment){
-            EquipmentRepayment::duplicateToLot($equipmentrepayment,$newlot->id);
+        foreach ($lot->labotorycontributors as $labotorycontributor) {
+            LaboratoryContributor::duplicateToLot($labotorycontributor, $newlot->id);
+        }
+
+        foreach ($lot->equipmentrepayments as $equipmentrepayment) {
+            EquipmentRepayment::duplicateToLot($equipmentrepayment, $newlot->id);
         }
     }
 
@@ -125,16 +125,6 @@ class Lot extends ActiveRecord
         return $result;
     }
 
-    public function getTotalCostHumanWithMarginAndRisk()
-    {
-        $result = 0;
-        $taskslot = $this->tasks;
-        foreach ($taskslot as $task) {
-            $result  = $result + $task->totalprice;
-        }
-
-        return $result * (1 + $this->rate_human_margin / 100);
-    }
 
     public function getTotalCostHumanWithMargin()
     {
@@ -143,7 +133,6 @@ class Lot extends ActiveRecord
         foreach ($taskslot as $task) {
             $result  = $result + $task->totalprice;
         }
-
         return $result * (1 + $this->rate_human_margin / 100);
     }
 
