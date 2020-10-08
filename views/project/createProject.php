@@ -7,9 +7,6 @@ use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\bootstrap\Html;
 
-use yii\helpers\ArrayHelper;
-
-
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 

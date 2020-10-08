@@ -12,3 +12,8 @@ a {
 textarea {
     resize: none;
 }
+
+label {
+    color: #333333;
+    font-size: 1em;
+}

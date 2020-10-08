@@ -56,7 +56,7 @@ if ($lot->number != 0) {
                         <div class="card-action">
 
                             <!-- Liste de tâche de gestion de projet du lot  -->
-                            <label class='blue-text control-label typeLabel'>Tâche de gestion du projet du lot</label>
+                            <label class='blue-text control-label dynamic-form-label'>Tâche de gestion du projet du lot</label>
 
                             <?php DynamicFormWidget::begin([
                                 'widgetContainer' => 'dynamicform_wrapperGest', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
@@ -100,7 +100,7 @@ if ($lot->number != 0) {
                                                 <?= Html::activeHiddenInput($taskGestion, "[{$i}]number"); ?>
                                             </div>
                                             <div class="col s2">
-                                                <?= $form->field($taskGestion, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Description'])->label('Description', ['class' => '']) ?>
                                             </div>
                                             <div class="col s2">
                                                 <?= $form->field($taskGestion, "[{$i}]capa_user_id")->widget(
@@ -110,6 +110,7 @@ if ($lot->number != 0) {
                                                         'name' => 'GestionContributor',
                                                         'data' => ArrayHelper::map($celluleUsers, 'id', 'fullName'),
                                                         'pluginLoading' => false,
+                                                        "theme" => Select2::THEME_MATERIAL,
                                                         'options' => [
                                                             'placeholder' => 'Intervenant...',
                                                         ],
@@ -119,19 +120,19 @@ if ($lot->number != 0) {
                                                                 }',
                                                         ],
                                                     ]
-                                                )->label("Intervenant");
+                                                )->label('Intervenant', ['class' => '']);
                                                 ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Prix/jour") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]price")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Prix/jour'])->label('Prix/jour', ['class' => '']) ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['type' => 'number', 'min' => 0, 'autocomplete' => 'off', 'maxlength' => true])->label("Jour") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]day_duration")->textInput(['type' => 'number', 'min' => 0, 'autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Jour'])->label('Jour', ['class' => '']) ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['type' => 'number', 'min' => 0, 'autocomplete' => 'off', 'maxlength' => true])->label("heure") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]hour_duration")->textInput(['type' => 'number', 'min' => 0, 'autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Heure'])->label('Heure', ['class' => '']) ?>
                                             </div>
-                                            <div class="col s1">
+                                            <div class="col s2">
                                                 <?= $form->field($taskGestion, "[{$i}]risk")->widget(
                                                     Select2::class,
                                                     [
@@ -140,26 +141,26 @@ if ($lot->number != 0) {
                                                         'data' => ArrayHelper::map($risk, 'id', 'title'),
                                                         'value' => $tasksGestions[$i]->risk,
                                                         'pluginLoading' => false,
+                                                        "theme" => Select2::THEME_MATERIAL,
                                                         'pluginEvents' => [
                                                             'select2:select' => 'function(e) {
                                                                     OnCalculIncertitudeGest(0);
                                                                 }',
                                                         ],
                                                     ]
-                                                )->label("Incertitude");
+                                                )->label('Incertitude', ['class' => '']);
                                                 ?>
                                             </div>
-                                            <div class="col s2">
-                                                <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Temps total") ?>
+                                            <div class="col s1">
+                                                <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Temps total'])->label('Temps total', ['class' => '']) ?>
                                                 <?php echo Html::activeHiddenInput($taskGestion, "[{$i}]risk_duration_hour"); ?>
                                             </div>
                                             <div class="col s1">
-                                                <?= $form->field($taskGestion, "[{$i}]totalprice")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Prix total") ?>
+                                                <?= $form->field($taskGestion, "[{$i}]totalprice")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Prix total'])->label('Prix total', ['class' => '']) ?>
                                             </div>
-                                            <div class="col 2">
+                                            <div class="col 1">
                                                 <button type="button" class="add-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                            </div>
-                                            <div class="col 2">
+                                                <br />
                                                 <button type="button" class="remove-item-taskGestion btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                             </div>
                                         </div><!-- .row -->
@@ -176,9 +177,9 @@ if ($lot->number != 0) {
                     <div class="card-action">
 
                         <?php if ($lot->number != 0) : ?>
-                            <label class='blue-text control-label typeLabel'>Tâche du lot</label>
+                            <label class='blue-text control-label dynamic-form-label'>Tâche du lot</label>
                         <?php else : ?>
-                            <label class='blue-text control-label typeLabel'>Tâche d'avant projet</label>
+                            <label class='blue-text control-label dynamic-form-label'>Tâche d'avant projet</label>
                         <?php endif; ?>
 
                         <div id="lot-management-body" class="col s12">
@@ -234,7 +235,7 @@ if ($lot->number != 0) {
                                                                 'name' => 'TaskContributor',
                                                                 'data' => ArrayHelper::map($celluleUsers, 'id', 'fullName'),
                                                                 'pluginLoading' => false,
-
+                                                                "theme" => Select2::THEME_MATERIAL,
                                                                 'options' => [
                                                                     'placeholder' => 'Intervenant...',
                                                                 ],
@@ -272,6 +273,7 @@ if ($lot->number != 0) {
                                                                 'name' => 'TaskRisk[{$i}]',
                                                                 'data' => ArrayHelper::map($risk, 'id', 'title'),
                                                                 'pluginLoading' => false,
+                                                                "theme" => Select2::THEME_MATERIAL,
                                                                 'pluginEvents' => [
                                                                     'select2:select' => 'function(e) { 
                                                                         OnCalculIncertitudelot(0);
@@ -295,12 +297,9 @@ if ($lot->number != 0) {
 
                                                 <div class="col 2">
                                                     <button type="button" class="add-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                </div>
-
-                                                <div class="col 2">
+                                                    <br />
                                                     <button type="button" class="remove-item-taskLot btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                                 </div>
-
                                             </div>
                                     </div>
 

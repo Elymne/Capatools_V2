@@ -10,6 +10,12 @@
     padding: 14px 12px;
 }
 
+.select2-container--material.select2-container {
+    margin-top: 14px;
+    border-bottom: 1px solid #4285f4;
+    box-shadow: 0 1px 0 0 #4585f4;
+}
+
 /* html tag css */
 h2 {
     color: #2196f3;
@@ -43,9 +49,10 @@ div .scroll-box {
     margin: 12px;
 }
 
-.typeLabel {
+.dynamic-form-label {
     margin-top: 4px;
-    margin-bottom: 4px;
+    margin-bottom: 28px;
+    font-size: 1.2em;
 }
 
 .centrage {

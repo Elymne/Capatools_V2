@@ -51,7 +51,7 @@ $risksName = array_map(function ($risk) {
                     <div class="card-action">
 
                         <!-- Création de consommables -->
-                        <label id="consumable-management-label" class='blue-text control-label typeLabel'>Consommables, prestataires, déplacements...</label>
+                        <label id="consumable-management-label" class='blue-text control-label dynamic-form-label'>Consommables, prestataires, déplacements...</label>
                         <div id="consumable-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
@@ -86,17 +86,18 @@ $risksName = array_map(function ($risk) {
                                                 <?php endif; ?>
 
                                                 <div class="row">
-                                                    <div class="col s4">
+                                                    <div class="col s7">
                                                         <?= $form->field($consumable, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                     </div>
-                                                    <div class="col s2">
+                                                    <div class="col s1">
                                                         <?= $form->field($consumable, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
                                                     </div>
-                                                    <div class="col s4">
+                                                    <div class="col s2">
                                                         <?= $form->field($consumable, "[{$i}]type")->widget(Select2::class, [
                                                             'data' => Consumable::TYPES,
                                                             'options' => ['value' => $consumable->getSelectedType()],
                                                             'pluginLoading' => false,
+                                                            "theme" => Select2::THEME_MATERIAL,
                                                             'pluginOptions' => [
                                                                 'allowClear' => false
                                                             ],
@@ -106,8 +107,7 @@ $risksName = array_map(function ($risk) {
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                    </div>
-                                                    <div class="col 1">
+                                                        <br />
                                                         <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                                     </div>
                                                 </div><!-- .row -->
@@ -127,7 +127,7 @@ $risksName = array_map(function ($risk) {
                         <div class="card-action" id="card-invest-plus">
 
                             <!-- Création dépense , d'investissements -->
-                            <label id="invtest-management-label" class='blue-text control-label typeLabel'>Liste des achats d'investissement éventuels</label>
+                            <label id="invtest-management-label" class='blue-text control-label dynamic-form-label'>Liste des achats d'investissement éventuels</label>
                             <div id="invtest-management-body" class="col s12">
                                 <div class="row">
                                     <div class="input-field col s12">
@@ -160,19 +160,17 @@ $risksName = array_map(function ($risk) {
                                                     <?php endif; ?>
                                                     <div class="row">
 
-                                                        <div class="col s4">
+                                                        <div class="col s7">
                                                             <?= $form->field($invtest, "[{$i}]name")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
                                                         </div>
-                                                        <div class="col s2">
+                                                        <div class="col s1">
                                                             <?= $form->field($invtest, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
                                                         </div>
                                                         <div class="col 1">
                                                             <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                        </div>
-                                                        <div class="col 1">
+                                                            <br />
                                                             <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                                         </div>
-
                                                     </div><!-- .row -->
                                                 </div><!-- .item -->
                                             <?php endforeach; ?>
@@ -198,7 +196,7 @@ $risksName = array_map(function ($risk) {
 
                     <div class="card-action">
                         <!-- Sélection d'un laboratoire -->
-                        <label id="laboratory-management-label" class='blue-text control-label typeLabel'>Laboratoire</label>
+                        <label id="laboratory-management-label" class='blue-text control-label dynamic-form-label'>Laboratoire</label>
                         <div id="laboratory-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s4">
@@ -208,6 +206,7 @@ $risksName = array_map(function ($risk) {
                                         'data' => ArrayHelper::map($laboratoriesData, 'id', 'name'),
                                         'options' => ['value' => $model->laboratoryselected],
                                         'pluginLoading' => false,
+                                        "theme" => Select2::THEME_MATERIAL,
                                         'pluginOptions' => [],
                                     ])->label(false); ?>
 
@@ -218,7 +217,7 @@ $risksName = array_map(function ($risk) {
 
                     <div class="card-action">
                         <!-- Association de matériels au reversement labo -->
-                        <label id="equipment-management-label" class='blue-text control-label typeLabel'>Matériel utilisé</label>
+                        <label id="equipment-management-label" class='blue-text control-label dynamic-form-label'>Matériel utilisé</label>
                         <div id="equipment-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
@@ -251,7 +250,7 @@ $risksName = array_map(function ($risk) {
                                                     <?= Html::activeHiddenInput($equipment, "[{$i}]id"); ?>
                                                 <?php endif; ?>
                                                 <div class="row">
-                                                    <div class="col s2">
+                                                    <div class="col s3">
                                                         <?= $form->field($equipment, "[{$i}]name")->textInput([])->label("Description") ?>
                                                     </div>
                                                     <div class="col s2">
@@ -271,10 +270,11 @@ $risksName = array_map(function ($risk) {
                                                             }, $risksData),
                                                             'options' => ['value' => $equipment->riskSelected],
                                                             'pluginLoading' => false,
+                                                            "theme" => Select2::THEME_MATERIAL,
                                                             'pluginOptions' => [],
                                                         ])->label("Incertitude"); ?>
                                                     </div>
-                                                    <div class="col s2">
+                                                    <div class="col s1">
                                                         <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps total") ?>
                                                     </div>
                                                     <div class="col s1">
@@ -282,8 +282,7 @@ $risksName = array_map(function ($risk) {
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                    </div>
-                                                    <div class="col 1">
+                                                        <br />
                                                         <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                                     </div>
                                                 </div><!-- .row -->
@@ -300,7 +299,7 @@ $risksName = array_map(function ($risk) {
 
                     <div class="card-action">
                         <!-- Gestion temps humain - reversement labo -->
-                        <label id="labocontributor-management-label" class='blue-text control-label typeLabel'>Temps humain</label>
+                        <label id="labocontributor-management-label" class='blue-text control-label dynamic-form-label'>Temps humain</label>
                         <div id="labocontributor-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
@@ -333,7 +332,7 @@ $risksName = array_map(function ($risk) {
                                                     <?= Html::activeHiddenInput($contributor, "[{$i}]id"); ?>
                                                 <?php endif; ?>
                                                 <div class="row">
-                                                    <div class="col s2">
+                                                    <div class="col s3">
                                                         <?= $form->field($contributor, "[{$i}]name")->textInput()->label("Desc. Intervenant") ?>
                                                     </div>
                                                     <div class="col s2">
@@ -351,10 +350,11 @@ $risksName = array_map(function ($risk) {
                                                             'data' => $risksName,
                                                             'options' => ['value' => $contributor->riskSelected],
                                                             'pluginLoading' => false,
+                                                            "theme" => Select2::THEME_MATERIAL,
                                                             'pluginOptions' => [],
                                                         ])->label("Incertitude"); ?>
                                                     </div>
-                                                    <div class="col s2">
+                                                    <div class="col s1">
                                                         <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps total") ?>
                                                     </div>
                                                     <div class="col s1">
@@ -362,8 +362,7 @@ $risksName = array_map(function ($risk) {
                                                     </div>
                                                     <div class="col 1">
                                                         <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                    </div>
-                                                    <div class="col 1">
+                                                        <br />
                                                         <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                                     </div>
                                                 </div><!-- .row -->
