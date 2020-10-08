@@ -158,7 +158,6 @@ $(() => {
      */
     const SelectRaison = "#projectsimulate-low_tjm_raison";
     const description = "#projectsimulate-low_tjm_description";
-    const descriptiondiv = "low_tjm_description_id";
     const description_label = "#low_tjm_description-label";
 
     $(SelectRaison).on("select2:select", function (e) {
@@ -166,6 +165,10 @@ $(() => {
             $(description).val("Aucune");
             $(description).hide();
             $(description_label).hide();
+            $("#dynamic-form").yiiActiveForm(
+                "validateAttribute",
+                "projectsimulate-low_tjm_description"
+            );
         } else {
             $(description).val("");
             $(description).show();
@@ -182,9 +185,12 @@ $(() => {
     } else {
         $(description).val("Aucune");
         $(description).hide();
+        $("#dynamic-form").yiiActiveForm(
+            "validateAttribute",
+            "projectsimulate-low_tjm_description"
+        );
         $(description_label).hide();
     }
-
     $(".dynamicform_millestone").on("beforeDelete", (e, item) =>
         confirm("Voulez-vous supprimer ce jalon ?")
     );
