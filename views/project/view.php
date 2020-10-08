@@ -528,12 +528,12 @@ function updateStatus($millestone): string
 function displayActionButtons($model)
 { ?>
     <!-- Actions on devis -->
-    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey rightspace-15px leftspace-15px']) ?>
+    <?= Html::a('Retour <i class="material-icons right">arrow_back</i>', ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
     <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
         <?= Html::a(
             'Modifier le devis <i class="material-icons right">edit</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_DRAFT,],
-            ['class' => 'waves-effect waves-light btn btn-grey  rightspace-15px leftspace-15px', 'data' => [
+            ['class' => 'waves-effect waves-light btn btn-grey', 'data' => [
                 'confirm' => 'Modifier le devis ?'
             ]]
         ) ?>
@@ -543,7 +543,7 @@ function displayActionButtons($model)
         <?= Html::a(
             'Valider la signature client <i class="material-icons right">check</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_SIGNED,],
-            ['class' => 'waves-effect waves-light btn btn-green  rightspace-15px leftspace-15px', 'data' => [
+            ['class' => 'waves-effect waves-light btn btn-green', 'data' => [
                 'confirm' => 'Le client a signé le contrat ?'
             ]]
         ) ?>
@@ -554,7 +554,7 @@ function displayActionButtons($model)
         <?= Html::a(
             'Cloturer le devis <i class="material-icons right">clear</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_CANCELED,],
-            ['class' => 'waves-effect waves-light btn btn-red  rightspace-15px leftspace-15px', 'data' => [
+            ['class' => 'waves-effect waves-light btn btn-red', 'data' => [
                 'confirm' => 'Cloturer le devis ?'
             ]]
         ) ?>
@@ -565,7 +565,7 @@ function displayActionButtons($model)
         <?= Html::a(
             'Abandonner la prestation <i class="material-icons right">clear</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_CANCELED,],
-            ['class' => 'waves-effect waves-light btn btn-red  rightspace-15px leftspace-15px', 'data' => [
+            ['class' => 'waves-effect waves-light btn btn-red', 'data' => [
                 'confirm' => 'Attention : Les échanciers non facturés seront abandonnés. Abandonner la prestation ? '
             ]]
         ) ?>
@@ -574,7 +574,7 @@ function displayActionButtons($model)
         <?= Html::a(
             'Prestation terminée <i class="material-icons right">check</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_FINISHED,],
-            ['class' => 'waves-effect waves-light btn btn-blue  rightspace-15px leftspace-15px', 'data' => [
+            ['class' => 'waves-effect waves-light btn btn-blue', 'data' => [
                 'confirm' => 'Attention : Les échanciers non facturés seront abandonnés. Terminer la prestation ?'
             ]]
         ) ?>
@@ -588,7 +588,7 @@ function displayActionButtons($model)
             'target' => '_blank',
             'data-pjax' => true,
             'action' => Url::to(['project/pdf', 'id' => $model->id]),
-            'class' => 'waves-effect waves-light btn btn-purple  rightspace-15px leftspace-15px',
+            'class' => 'waves-effect waves-light btn btn-purple',
             'title' => "Générer le devis sous forme pdf"
         ]
     ) ?>

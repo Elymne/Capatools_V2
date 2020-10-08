@@ -39,15 +39,10 @@ class AppAsset extends AssetBundle
 
         // Timeline item css.
         'css/timeline.css',
-
         // Generic custom.
         'css/custom.css',
         // Custom button.
         'css/custom-button.css',
-        // Custom colors.
-        'css/custom-color.css',
-        // Custom table.
-        'css/custom-table.css',
         // Custom spacing.
         'css/spacing.css',
         // Table sort.

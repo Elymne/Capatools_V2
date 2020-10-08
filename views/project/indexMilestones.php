@@ -67,7 +67,7 @@ $this->params["breadcrumbs"][] = $this->title;
             <!-- GRIDVIEW - LISTE DES JALONS -->
             <div class="card">
                 <div class="card-action">
-                    <div class="scroll-box">
+                    <div>
                         <?php Pjax::begin(["id" => "1"]); ?>
                         <?= GridView::widget([
                             "dataProvider" => $dataProvider,

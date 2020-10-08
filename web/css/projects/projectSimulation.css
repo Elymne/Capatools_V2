@@ -1,17 +1,13 @@
-/* Class css pour définir un espacement en haut des éléments */
-.top-spacing {
-    padding-top: 48px;
-}
-
-/* Class css pour définir un espacement en bas des éléments */
-.bottom-spacing {
-    padding-bottom: 6px;
+/* Classe que j'utilise pour créer un espacement entre les tables de data dans les card-views et le groupe de boutons de modification */
+.block-buttons-spacing {
+    padding-top: 22px;
 }
 
 /* Class css pour définir une taille large et une police gras pour les titres des card-views. */
-.lot-title {
-    font-size: x-large;
+.label-lot-title {
+    font-size: 15px;
     font-weight: bolder;
+    color: #01579b;
 }
 
 .left-scpacing-32px {

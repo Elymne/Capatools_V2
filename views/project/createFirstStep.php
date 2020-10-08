@@ -34,7 +34,7 @@ $this->params["breadcrumbs"][] = "Update";
                     <div class="card-action">
                         <div class="row">
                             <div class="col s12">
-                                <label class="blue-text control-label topspace-4px">Titre du projet</label>
+                                <label class="blue-text control-label">Titre du projet</label>
                                 <?= $form->field($model, "internal_name")->textInput()->label(false) ?>
                             </div>
                         </div>
@@ -44,7 +44,7 @@ $this->params["breadcrumbs"][] = "Update";
                         <!-- Type de projet  -->
                         <div class="row">
                             <div class="col s12">
-                                <label class="blue-text control-label bottomspace-16px topspace-4px">Type de projet</label>
+                                <label class="blue-text control-label">Type de projet</label>
                                 <?= $form->field($model, "combobox_type_checked")->radioList(Project::TYPES, [
                                     "item" => function ($index, $label, $name, $checked, $value) use ($model) {
 
@@ -68,7 +68,7 @@ $this->params["breadcrumbs"][] = "Update";
                             <div class="row">
                                 <div class="col s12">
 
-                                    <label id="lot-management-label" class="blue-text control-label bottomspace-16px topspace-4px">Créer des lots (optionnel) - ils ne seront pas éditables par la suite</label>
+                                    <label id="lot-management-label" class="blue-text control-label">Créer des lots (optionnel) - ils ne seront pas éditables par la suite</label>
                                     <div id="lot-management-body">
                                         <div class="input-field col s12">
 

@@ -32,7 +32,7 @@ CompanyIndexAsset::register($this);
 
             <div class="card">
                 <div class="card-action">
-                    <div class="scroll-box">
+                    <div>
                         <?php Pjax::begin(); ?>
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
