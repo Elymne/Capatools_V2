@@ -1,5 +1,6 @@
 <?php
 
+use app\assets\AppAsset;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -9,6 +10,7 @@ use app\assets\companies\ContactViewAsset;
 $this->title = 'Liste des contacts';
 $this->params['breadcrumbs'][] = $this->title;
 
+AppAsset::register($this);
 ContactViewAsset::register($this);
 
 ?>

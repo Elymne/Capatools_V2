@@ -1,16 +1,17 @@
 <?php
 
 use app\assets\administration\EquipmentIndexAsset;
+use app\assets\AppAsset;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 
-$this->title = 'Liste des matériels';
-$this->params['breadcrumbs'][] = $this->title;
-
+AppAsset::register($this);
 EquipmentIndexAsset::register($this);
 
+$this->title = 'Liste des matériels';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>

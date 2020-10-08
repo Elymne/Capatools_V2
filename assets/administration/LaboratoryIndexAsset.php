@@ -9,7 +9,7 @@ class LaboratoryIndexAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
 
-    public $css = [];
+    public $css = ['css/admin/index.css'];
 
     public $js = ['js/admin/indexLaboratory.js'];
 

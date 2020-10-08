@@ -15,7 +15,7 @@ class CompanyIndexAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
 
-    public $css = [];
+    public $css = ['css/companies/index.css'];
 
     public $js = ['js/companies/index.js'];
 

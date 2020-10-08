@@ -1,5 +1,6 @@
 <?php
 
+use app\assets\AppAsset;
 use app\assets\companies\CompanyIndexAsset;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
@@ -9,6 +10,7 @@ use yii\widgets\Pjax;
 $this->title = 'Liste des sociétés';
 $this->params['breadcrumbs'][] = $this->title;
 
+AppAsset::register($this);
 CompanyIndexAsset::register($this);
 
 ?>

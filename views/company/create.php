@@ -42,6 +42,7 @@ CompanyCreateAsset::register($this);
                         <?= $form->field($model, 'type')->widget(Select2::class, [
                             'data' => CompanyTypeEnum::COMPANY_TYPE_STRING,
                             'pluginLoading' => false,
+                            "theme" => Select2::THEME_MATERIAL,
                             'pluginOptions' => [
                                 'allowClear' => false
                             ],

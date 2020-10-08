@@ -1,7 +1,7 @@
 <?php
 
 use app\assets\administration\AdminIndexAsset;
-use app\services\userRoleAccessServices\UserRoleEnum;
+use app\assets\AppAsset;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 use kartik\select2\Select2;
@@ -9,15 +9,12 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\users\CapaUserSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+
+AppAsset::register($this);
+AdminIndexAsset::register($this);
 
 $this->title = 'Liste des salariés';
 $this->params['breadcrumbs'][] = $this->title;
-
-AdminIndexAsset::register($this);
-
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
@@ -170,7 +167,7 @@ function getUpdateButtonArray()
 {
     return [
         'format' => 'raw',
-        'label' => 'Modification',
+        'label' => false,
         'value' => function ($model, $key, $index, $column) {
 
             // Get user roles.
@@ -178,11 +175,11 @@ function getUpdateButtonArray()
             if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
             $buttonClass = "";
-            if (UserRoleManager::canUpdateUser($userRoles)) $buttonClass = "waves-effect waves-light btn btn-green";
-            else $buttonClass = "btn disabled";
+            if (UserRoleManager::canUpdateUser($userRoles)) $buttonClass = "btn-floating waves-effect waves-light btn-green";
+            else $buttonClass = "btn-floating disabled";
 
             return Html::a(
-                '<i class="material-icons right">edit</i> Modifier',
+                '<i class="material-icons right">edit</i>',
                 Url::to(['administration/update', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',

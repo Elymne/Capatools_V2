@@ -1,6 +1,7 @@
 <?php
 
 use app\assets\administration\LaboratoryIndexAsset;
+use app\assets\AppAsset;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -10,6 +11,7 @@ use yii\widgets\Pjax;
 $this->title = 'Liste des laboratoires';
 $this->params['breadcrumbs'][] = $this->title;
 
+AppAsset::register($this);
 LaboratoryIndexAsset::register($this);
 ?>
 
