@@ -19,15 +19,15 @@ ContactCreateAsset::register($this);
 
     <div class="row">
         <div class="col s6 offset-s3">
+
+            <?php $form = ActiveForm::begin([
+                'fieldConfig' => [
+                    'labelOptions' => ['class' => 'blue-text control-label'],
+                ],
+            ]); ?>
+
             <div class="card">
-
                 <div class="card-action">
-
-                    <?php $form = ActiveForm::begin([
-                        'fieldConfig' => [
-                            'labelOptions' => ['class' => 'blue-text control-label'],
-                        ],
-                    ]); ?>
 
                     <!-- firstname field -->
                     <?= $form->field($model, 'firstname')->textInput(['maxlength' => true, 'placeholder' => 'Prénom'])->label('Prénom du contact :') ?>
@@ -41,16 +41,16 @@ ContactCreateAsset::register($this);
                     <!-- email field -->
                     <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder' => 'Email'])->label('Email du contact :') ?>
 
-                    <div class="form-group">
-                        <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-
-                        <?= Html::a(Yii::t('app', 'Annuler'), ['view-contacts'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
-                    </div>
-
-                    <?php ActiveForm::end(); ?>
-
                 </div>
             </div>
+
+            <div class="form-group to-the-right">
+                <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
+                <?= Html::a(Yii::t('app', 'Annuler'), ['view-contacts'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
+            </div>
+
+            <?php ActiveForm::end(); ?>
+
         </div>
     </div>
 </div>

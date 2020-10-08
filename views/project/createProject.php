@@ -7,9 +7,6 @@ use app\widgets\TopTitle;
 use kartik\select2\Select2;
 use yii\bootstrap\Html;
 
-use yii\helpers\ArrayHelper;
-
-
 /* @var $this yii\web\View */
 /* @var $model app\models\devis\Devis */
 
@@ -30,7 +27,6 @@ ProjectsRefactoringAsset::register($this);
         <div class="row">
 
             <div class="col s10 offset-s1">
-
                 <!-- Informations générales -->
                 <div id="first-form-card" class="card">
 
@@ -58,9 +54,10 @@ ProjectsRefactoringAsset::register($this);
 
                             </div>
                         </div>
-                        <div class="col s12">
-                            <div class="row">
 
+                        <div class="col s12">
+
+                            <div class="row">
                                 <div class="input-field col s6">
 
                                     <?= $form->field($model, 'projectManagerSelectedValue')->widget(
@@ -71,8 +68,8 @@ ProjectsRefactoringAsset::register($this);
                                         ]
                                     )->label("Responsable projet"); ?>
                                 </div>
-
                             </div>
+
                             <div class="row">
                                 <div class="input-field col s6">
                                     <?= $form
@@ -129,19 +126,14 @@ ProjectsRefactoringAsset::register($this);
                                 </div>
                             </div>
 
-                            <div class="col s12">
-                                <div class="row">
-                                    <div class="input-field col s6">
-                                        <div class="input-field col s1 "> <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
                         </div>
 
                     </div>
+
+                </div>
+
+                <div class="form-group to-the-right">
+                    <?= Html::submitButton('Enregistrer <i class="material-icons right">save</i>', ['class' => 'waves-effect waves-light btn btn-blue']) ?>
                 </div>
 
             </div>
