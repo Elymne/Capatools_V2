@@ -1,22 +1,128 @@
-/* Text size */
+/* --------------------------------------------------------- */
+/* CHARGEMENT PAR DEFAUT */
+/* --------------------------------------------------------- */
 * {
-    font-size: 1.1rem;
-    font-family: sans-serif;
+    font-size: 15px;
+    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
-/* Gère le padding de la petite carte lorsque l'on clique sur l'icône utilisateur */
+/* --------------------------------------------------------- */
+/* APPLICATION SUR DES ID D'ELEMENTS */
+/* --------------------------------------------------------- */
+
+/* ...  */
+#main {
+    padding-left: 250px;
+    margin-top: -19px;
+}
+
+/* Element de background qui a une image de fond */
+#body-login {
+    background-image: url("../images/BG_capa_2.png");
+    background-size: cover;
+}
+
+/* Permet de corrgiger un espacement non voulu entre le body et la top-bar */
+#breadcrumbs-wrapper {
+    margin-top: -1px;
+}
+
+/* --------------------------------------------------------- */
+/* MATERIALIZE OVERRIDE CLASSES (colors, padding ect..) */
+/* --------------------------------------------------------- */
+
+/* Modification des card-view */
+.card .card-action {
+    position: relative;
+    padding: 16px 24px;
+    border-top: 1px solid rgba(160, 160, 160, 0.2);
+    background-color: #f4f3f3;
+}
+
+/* Permet d'aligner dans le menu utilisateur de la top-bar l'icone et le texte en réduisant le padding */
 .dropdown-content li > a,
 .dropdown-content li > span {
     padding: 14px 12px;
 }
 
+/* Permet d'aligner les listes selectionnables au même niveau que les textfields de formulaires */
 .select2-container--material.select2-container {
     margin-top: 14px;
     border-bottom: 1px solid #4285f4;
     box-shadow: 0 1px 0 0 #4585f4;
 }
 
-/* html tag css */
+/* Permet de réduire la taille des floating button ainsi que leur texte (icons ect...) */
+.btn-floating {
+    line-height: 36px;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    overflow: hidden;
+    width: 36px;
+    height: 36px;
+    padding: 0px;
+    cursor: pointer;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+    vertical-align: middle;
+    color: #fff;
+    border-radius: 50%;
+}
+
+/* Permet de réduire la taille des floating button ainsi que leur texte (icons ect...) */
+.btn-floating i {
+    font-size: 0.8rem;
+    line-height: 32px;
+    display: inline-block;
+    width: inherit;
+    color: #fff;
+}
+
+/* Permet de changer les caractéristiques des headers-cards */
+.card .card-content {
+    background-color: #f0edee;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+/* Permet de changer les caractéristiques des labels dans les headers-cards */
+.card-content label {
+    color: #333333;
+    font-size: 15px;
+}
+
+/* Permet de changer la color de la top-bar et de régler un soucis de margin top */
+.navbar .navbar-dark {
+    margin-top: -1px;
+    background-color: #333333;
+}
+
+/* todo Regarder ce que c'est. Aucunes idées.  */
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
+    text-transform: none;
+}
+
+/* todo Regarder ce que c'est. Aucunes idées.  */
+input.select-dropdown.dropdown-trigger {
+    display: none;
+}
+
+/* todo Regarder ce que c'est. Aucunes idées.  */
+.navbar .navbar-light .header-search-wrapper input.header-search-input:focus::placeholder {
+    color: transparent;
+}
+
+svg.caret {
+    display: none;
+}
+
+/* --------------------------------------------------------- */
+/* MODIFICATION D'ELEMENTS HTML NATIFS */
+/* --------------------------------------------------------- */
+
 h2 {
     color: #2196f3;
     font-weight: bold;
@@ -28,7 +134,6 @@ h3 {
 
 label {
     color: #333333;
-    font-size: 1.2em;
 }
 
 body {
@@ -39,124 +144,38 @@ a {
     color: #078aca;
 }
 
-div .scroll-box {
-    overflow-x: scroll;
-    padding: 1.15rem;
+/* --------------------------------------------------------- */
+/* CREATION DE NOUVELLES CLASSES */
+/* --------------------------------------------------------- */
+
+/* Classe qui permet d'aligner les éléments sur la droite */
+.to-the-right {
+    float: right;
 }
 
-/* new css class */
-.body-marger {
-    margin: 12px;
-}
-
-.dynamic-form-label {
-    margin-top: 4px;
-    margin-bottom: 28px;
-    font-size: 1.2em;
-}
-
-.centrage {
+/* Classe qui permet d'aligner les éléments sur le centre */
+.to-the-center {
     text-align: center;
 }
 
-/* overrided materialize css class */
-
-.btn-floating {
-    line-height: 40px;
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    overflow: hidden;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    cursor: pointer;
-    -webkit-transition: background-color 0.3s;
-    transition: background-color 0.3s;
-    vertical-align: middle;
-    color: #fff;
-    border-radius: 50%;
+/* Classe qu'on applique au footer qui permet de faire un peu de margin top */
+.footer {
+    margin-top: 20px;
 }
 
-.btn-floating i {
-    font-size: 1rem;
-    line-height: 36px;
-    display: inline-block;
-    width: inherit;
-    color: #fff;
+/* Classe qu'on applique aux titres des dynamicForm (si ils en ont un) */
+.dynamic-form-label {
+    margin-top: 4px;
+    margin-bottom: 28px;
 }
 
-.card-content {
-    background-color: #333333;
-}
-
-.card-content label {
-    color: white;
-}
-
-.page-topbar {
-    background-color: #333333;
-}
-
-.navbar .navbar-dark {
-    margin-top: -1px;
-    background-color: #333333;
-}
-
-.card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
-    text-transform: none;
-}
-
-input.select-dropdown.dropdown-trigger {
-    display: none;
-}
-
-.navbar .navbar-light .header-search-wrapper input.header-search-input:focus::placeholder {
-    color: transparent;
-}
-
-svg.caret {
-    display: none;
-}
-
+/* Créer une classe qui ne s'applique que sur les td qui permet de définir une taille max et de mettre les fonts en bold */
 td.header {
     font-weight: bold;
     width: 30%;
 }
 
-.footer {
-    margin-top: 20px;
-}
-
-.navbar input.header-search-input {
-    width: 40%;
-}
-
+/* Permet de changer un peu les comboBox (qui sont enfait des spans stylisé) de filtrage des les indexs qui sont bien trop collés nativement */
 span.span-combobox {
     font-weight: lighter;
-}
-
-button.btn-floating {
-    border: none;
-    margin-top: 0px;
-}
-
-/* id css */
-
-#main {
-    padding-left: 250px;
-    margin-top: -19px;
-}
-
-#body-login {
-    background-image: url("../images/BG_capa_2.png");
-    background-size: cover;
-}
-
-#breadcrumbs-wrapper {
-    margin-top: -1px;
-}
-
-.to-the-right {
-    float: right;
 }

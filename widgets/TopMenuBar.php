@@ -40,7 +40,7 @@ class TopMenuBar extends \yii\bootstrap\Widget
         $logo =  '' . Yii::$app->homeUrl . 'images/avatar.png';
 
         return <<<HTML
-        <header class="page-topbar" id="header">
+        <header id="header">
                 <div class="navbar navbar-fixed">
                 <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark">
                     <div class="nav-wrapper">

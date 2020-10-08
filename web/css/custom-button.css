@@ -1,4 +1,17 @@
-/* cutom button class */
+/* --------------------------------------------------------- */
+/* CREATION DE BUTTON (gestions couleurs et font plus préciséments */
+/* --------------------------------------------------------- */
+
+/* Boutons que l'on utilise dans la vue de la simulation de projet */
+.btn-project-simulation {
+    background-color: #e8e3e5;
+    color: #01579b;
+}
+
+.btn-project-simulation:hover {
+    background-color: #01579b;
+    color: #f0edee;
+}
 
 .btn-green {
     background-color: #248f24;

@@ -37,17 +37,17 @@ ProjectIndexAsset::register($this);
             </div>
 
             <div class="card">
-                <div class="card-content bottomspace-15px-invert">
+                <div class="card-content">
                     <label>Réglage du tableau</label>
                 </div>
-                <div class="card-action topspace-15px-invert">
+                <div class="card-action">
                     <?php echo getFilterCardContent() ?>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-action">
-                    <div class="scroll-box">
+                    <div>
                         <?php Pjax::begin(['id' => '1']); ?>
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
@@ -179,7 +179,7 @@ function getCollumnsArray()
     array_push($result, getProbabilityArray());
 
     // Buttons displaying.
-    array_push($result, getUpdateButtonArray());
+    array_push($result, getViewButtonArray());
     array_push($result, getPdfButtonArray());
     array_push($result, getExcelButtonArray());
     array_push($result, getPieceButtonArray());
@@ -270,11 +270,11 @@ function getProbabilityArray()
     ];
 }
 
-function getUpdateButtonArray()
+function getViewButtonArray()
 {
     return [
         'format' => 'raw',
-        'label' => 'visualiser',
+        'label' => 'Voir',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons center">visibility</i>',

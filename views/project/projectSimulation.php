@@ -12,7 +12,7 @@ use kartik\select2\Select2;
 use kidzen\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Alert;
 
-$this->title = 'Simulation du projet ' . $project->internal_name;
+$this->title = 'Simulation du projet : ' . $project->internal_name;
 
 $MargeAverage = $project->marginaverage;
 $totalcostavplot = ($lotavp->total *  ($project->marginaverage / 100 + 1)) / (count($lots) - 1);
@@ -45,7 +45,7 @@ ProjectSimulationAsset::register($this);
                         <label>Paramètres généraux</label>
                     </div>
                     <div class="card-action">
-                        <div class="row bottom-spacing">
+                        <div class="row">
                             <div class="col s12 ">
                                 <td width="90%" class="table-font-bold">Nom interne :</td>
                                 <td><?= $form->field($project, "internal_name")->label(''); ?></td>
@@ -63,7 +63,7 @@ ProjectSimulationAsset::register($this);
 
                     <div class="card-action">
 
-                        <div class="row bottom-spacing">
+                        <div class="row">
 
                             <?php if (($Resultcheck['lots'][0]['Result'] == false) && $project->first_in == 1) : ?>
                                 <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => ' Il n\'y a pas de tâche présente dans l\'avant projet']) ?>
@@ -80,6 +80,10 @@ ProjectSimulationAsset::register($this);
                                             <td width="90%" class="table-font-bold">Total des reversements laboratoires :</td>
                                             <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostRepayement) ?></td>
                                         </tr>
+                                        <tr>
+                                            <td width="90%" class="table-font-bold">Total de l'avant projet (non margé):</td>
+                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->total) ?></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -91,26 +95,6 @@ ProjectSimulationAsset::register($this);
                                             <td width="90%" class="table-font-bold">Total des dépenses et des investissement :</td>
                                             <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostInvest) ?></td>
                                         </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="row bottom-spacing">
-                            <div class="col s12 l6">
-                                <table class="highlight">
-                                    <tbody>
-                                        <tr>
-                                            <td width="90%" class="table-font-bold">Total de l'avant projet (non margé):</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->total) ?></td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col s12 l6">
-                                <table class="highlight">
-                                    <tbody>
                                         <tr>
                                             <td width="90%" class="table-font-bold">Total de l'avant projet (margé avec le Taux moyen):</td>
                                             <td><?= Yii::$app->formatter->asCurrency($lotavp->total * (1 + $project->marginaverage / 100)) ?></td>
@@ -125,34 +109,35 @@ ProjectSimulationAsset::register($this);
 
                         </div>
 
-                        <div class="row top-spacing">
-
+                        <div class="row block-buttons-spacing">
                             <div class="col s12">
-                                <?= Html::a(
-                                    '<span>Ajouter des tâches</span>',
-                                    Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
-                                    [
-                                        'id' => 'grid-custom-button',
-                                        'data-pjax' => true,
-                                        'action' => Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
-                                        'class' => 'btn waves-effect waves-light btn-blue tooltipped',
-                                        'data-position' => "bottom",
-                                        'title' => "Permet de créer, modifier, supprimer des tâche"
-                                    ]
-                                ); ?>
+                                <div class="to-the-right">
+                                    <?= Html::a(
+                                        '<span>Ajouter des tâches</span>',
+                                        Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
+                                        [
+                                            'id' => 'grid-custom-button',
+                                            'data-pjax' => true,
+                                            'action' => Url::to(['project/update-task', 'number' => 0, 'project_id' => $project->id]),
+                                            'class' => 'btn waves-effect waves-light btn-project-simulation',
+                                            'data-position' => "bottom",
+                                            'title' => "Permet de créer, modifier, supprimer des tâche"
+                                        ]
+                                    ); ?>
 
-                                <?= Html::a(
-                                    '<span>Gérer les dépenses</span>',
-                                    Url::to(['project/update-dependencies-consumables', 'number' => 0, 'project_id' => $project->id]),
-                                    [
-                                        'id' => 'grid-custom-button',
-                                        'data-pjax' => true,
-                                        'action' => Url::to(['project/update-dependencies-consumables', 'number' => 0, 'project_id' => $project->id]),
-                                        'class' => 'btn waves-effect waves-light btn-blue tooltipped',
-                                        'data-position' => "bottom",
-                                        'title' => "Permet de créer les consommables et investissements ainsi que de gérer les matériels laboratoires et les contributeurs"
-                                    ]
-                                ); ?>
+                                    <?= Html::a(
+                                        '<span>Gérer les dépenses</span>',
+                                        Url::to(['project/update-dependencies-consumables', 'number' => 0, 'project_id' => $project->id]),
+                                        [
+                                            'id' => 'grid-custom-button',
+                                            'data-pjax' => true,
+                                            'action' => Url::to(['project/update-dependencies-consumables', 'number' => 0, 'project_id' => $project->id]),
+                                            'class' => 'btn waves-effect waves-light btn-project-simulation',
+                                            'data-position' => "bottom",
+                                            'title' => "Permet de créer les consommables et investissements ainsi que de gérer les matériels laboratoires et les contributeurs"
+                                        ]
+                                    ); ?>
+                                </div>
                             </div>
                         </div>
 
@@ -162,7 +147,7 @@ ProjectSimulationAsset::register($this);
                 <!-- Card view basique : PROJETS -->
                 <div class="card">
 
-                    <div style="background-color: #2A2B36;" class="card-content">
+                    <div class="card-content">
                         <label>Résumé du projet</label>
                     </div>
 
@@ -170,14 +155,14 @@ ProjectSimulationAsset::register($this);
                         <?php if ($lotproject->number != 0) : ?>
                             <div class="card-action">
 
-                                <div class="row bottom-spacing">
+                                <div class="row">
 
                                     <?php if ($Resultcheck['lots'][$lotproject->number]['Result'] == false  && $project->first_in == 1) : ?>
                                         <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => ' Il n\'y a pas de tâche présente dans ce lot ']); ?>
                                     <?php endif; ?>
 
                                     <div class="col s12">
-                                        <p class='lot-title blue-text control-label typeLabel bottom-spacing'> <?= $lotproject->title ?> </p>
+                                        <label class='control-label label-lot-title'> <?= $lotproject->title ?> </label>
                                     </div>
 
                                     <div class="col s12 l6 xl4">
@@ -215,49 +200,49 @@ ProjectSimulationAsset::register($this);
 
                                 </div>
 
-                                <div class="row top-spacing">
-
+                                <div class="row block-buttons-spacing">
                                     <div class="col s12">
-                                        <?= Html::a(
-                                            '<span>Ajouter des tâches</span>',
-                                            Url::to(['project/update-task', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
-                                            [
-                                                'id' => 'grid-custom-button',
-                                                'data-pjax' => true,
-                                                'action' => Url::to(['project/update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
-                                                'class' => 'btn waves-effect waves-light btn-blue tooltipped',
-                                                'data-position' => "bottom",
-                                                'title' => "Permet de créer, modifier, supprimer des tâche"
-                                            ]
-                                        ); ?>
+                                        <div class="to-the-right">
+                                            <?= Html::a(
+                                                '<span>Ajouter des tâches</span>',
+                                                Url::to(['project/update-task', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
+                                                [
+                                                    'id' => 'grid-custom-button',
+                                                    'data-pjax' => true,
+                                                    'action' => Url::to(['project/update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
+                                                    'class' => 'btn waves-effect waves-light btn-project-simulation',
+                                                    'data-position' => "bottom",
+                                                    'title' => "Permet de créer, modifier, supprimer des tâche"
+                                                ]
+                                            ); ?>
 
-                                        <?= Html::a(
-                                            '<span>Gérer les dépenses</span>',
-                                            Url::to(['project/update-dependencies-consumables', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
-                                            [
-                                                'id' => 'grid-custom-button',
-                                                'data-pjax' => true,
-                                                'action' => Url::to(['project/Update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
-                                                'class' => 'btn waves-effect waves-light btn-blue tooltipped',
-                                                'data-position' => "bottom",
-                                                'title' => "Permet de créer les consommables et investissements ainsi que de gérer les matériels laboratoires et les contributeurs"
-                                            ]
-                                        ); ?>
+                                            <?= Html::a(
+                                                '<span>Gérer les dépenses</span>',
+                                                Url::to(['project/update-dependencies-consumables', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
+                                                [
+                                                    'id' => 'grid-custom-button',
+                                                    'data-pjax' => true,
+                                                    'action' => Url::to(['project/Update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
+                                                    'class' => 'btn waves-effect waves-light btn-project-simulation',
+                                                    'data-position' => "bottom",
+                                                    'title' => "Permet de créer les consommables et investissements ainsi que de gérer les matériels laboratoires et les contributeurs"
+                                                ]
+                                            ); ?>
 
-                                        <?= Html::a(
-                                            '<span>Modifier les marges</span>',
-                                            Url::to(['project/lot-simulate', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
-                                            [
-                                                'id' => 'grid-custom-button',
-                                                'data-pjax' => true,
-                                                'action' => Url::to(['project/lot-simulate', 'number' => $lotproject->number, 'project_id' => $project->id]),
-                                                'class' => 'btn waves-effect waves-light btn-blue tooltipped',
-                                                'data-position' => "bottom",
-                                                'title' => "Permet de modifier les marges",
-                                            ]
-                                        ); ?>
+                                            <?= Html::a(
+                                                '<span>Modifier les marges</span>',
+                                                Url::to(['project/lot-simulate', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
+                                                [
+                                                    'id' => 'grid-custom-button',
+                                                    'data-pjax' => true,
+                                                    'action' => Url::to(['project/lot-simulate', 'number' => $lotproject->number, 'project_id' => $project->id]),
+                                                    'class' => 'btn waves-effect waves-light btn-project-simulation',
+                                                    'data-position' => "bottom",
+                                                    'title' => "Permet de modifier les marges",
+                                                ]
+                                            ); ?>
+                                        </div>
                                     </div>
-
                                 </div>
 
                             </div>
@@ -367,7 +352,7 @@ ProjectSimulationAsset::register($this);
 
                     <div class="card-action">
 
-                        <div class="row bottom-spacing">
+                        <div class="row">
                             <div class="col s12 l6">
 
                                 <table class="highlight">
@@ -399,7 +384,7 @@ ProjectSimulationAsset::register($this);
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
-                                            <td width="80%" class="table-font-bold">Prestation interne</td>
+                                            <td width="80%" class="table-font-bold">Prestation interne :</td>
                                             <td width="20%"></td>
                                         </tr>
                                         <?php if (sizeof($listInternalDepense) == 0) : ?>
@@ -425,7 +410,7 @@ ProjectSimulationAsset::register($this);
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
-                                            <td width="80%" class="table-font-bold">Sous-traitance externe</td>
+                                            <td width="80%" class="table-font-bold">Sous-traitance externe :</td>
                                             <td width="20%"></td>
                                         </tr>
                                         <?php if (sizeof($listExternalDepense) == 0) : ?>
@@ -459,7 +444,7 @@ ProjectSimulationAsset::register($this);
 
                     <div class="card-action">
 
-                        <div class="row bottom-spacing">
+                        <div class="row">
 
                             <?php if ($Resultcheck['millestone'] == false   && $project->first_in == 1) : ?>
                                 <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => ' La somme des jalons ne correspond pas au prix de vente',]); ?>
@@ -489,24 +474,19 @@ ProjectSimulationAsset::register($this);
                                             <?php if (!$millestone->isNewRecord) : ?>
                                                 <?= Html::activeHiddenInput($millestone, "[{$i}]id"); ?>
                                             <?php endif; ?>
-
                                             <div class="col s0">
                                                 <?= Html::activeHiddenInput($millestone, "[{$i}]number"); ?>
                                             </div>
-
-                                            <div class="col s5">
+                                            <div class="col s4">
                                                 <?= $form->field($millestone, "[{$i}]comment")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Titre'])->label(false) ?>
                                             </div>
-
                                             <div class="col s1">
                                                 <?= $form->field($millestone, "[{$i}]pourcentage", [])->textInput(['autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Pourcentage'])->label(false) ?>
                                             </div>
-
                                             <div class="col s2">
                                                 <?= $form->field($millestone, "[{$i}]priceeuros")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => Yii::$app->formatter->asCurrency($millestones[$i]->price),  'placeholder' => 'prix'])->label(false) ?>
                                                 <?= Html::activeHiddenInput($millestone, "[{$i}]price") ?>
                                             </div>
-
                                             <div class="col s2">
                                                 <?= $form->field($millestone, "[{$i}]estimate_date")->widget(DatePicker::class, [
                                                     'language' => 'fr',
@@ -514,15 +494,13 @@ ProjectSimulationAsset::register($this);
                                                     'options' => ['class' => 'form-control picker', 'placeholder' => 'Date (jour-mois-année)'],
                                                 ])->label(false) ?>
                                             </div>
-
-                                            <div class="col 2">
+                                            <div class="col 1">
                                                 <button type="button" class="add-item-millestone btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                            </div>
-                                            <div class="col 2">
+                                                <br />
                                                 <button type="button" class="remove-item-millestone btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                             </div>
                                         </div>
-
+                                        <br />
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -536,12 +514,6 @@ ProjectSimulationAsset::register($this);
                 </div>
 
                 <div class="form-group to-the-right">
-                    <?= Html::a(
-                        Yii::t('app', '<i class="material-icons right">arrow_back</i>Retour'),
-                        ['project/index-draft'],
-                        ['class' => 'waves-effect waves-light btn btn-grey', 'title' => 'Retour à la liste des brouillons']
-                    ) ?>
-
                     <?= Html::submitButton(
                         '<i class="material-icons right">save</i>Enregistrer',
                         ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Sauvegarder les options']

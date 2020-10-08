@@ -37,10 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <div class="card">
-                <div class="card-content bottomspace-15px-invert">
+                <div class="card-content">
                     <label>Réglage du tableau</label>
                 </div>
-                <div class="card-action topspace-15px-invert">
+                <div class="card-action">
                     <?php echo getFilterCardContent() ?>
                 </div>
             </div>
@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="card">
                 <div class="card-action">
 
-                    <div class="scroll-box">
+                    <div>
                         <?php Pjax::begin(['id' => '1']) ?>
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
@@ -75,8 +75,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-
-
 <?php
 
 function getSearchFilter($companiesName)
@@ -86,6 +84,7 @@ function getSearchFilter($companiesName)
         'id' => 'company-name-search',
         'name' => 'droplist_company',
         'data' => $companiesName,
+        "theme" => Select2::THEME_MATERIAL,
         'pluginLoading' => false,
         'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
         'pluginOptions' => [
@@ -109,13 +108,12 @@ function getSearchFilter($companiesName)
     echo <<<HTML
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
-            <span class="span-combobox">Model</span>
+            <span class="span-combobox">Afficher les modèles</span>
         </label>
         <label class="rigthspace-20px">
             <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox"/>
-            <span class="span-combobox">Avant-projet</span>
+            <span class="span-combobox">Afficher les brouillons</span>
         </label>
-
     HTML;
 }
 /**
@@ -234,10 +232,9 @@ function getStatusArray()
 
 function getModelButtonArray()
 {
-
     return [
         'format' => 'raw',
-        'label' => 'Modèle',
+        'label' => "Mod.",
         'value' => function ($model, $key, $index, $column) {
             if ($model->state == Project::STATE_DEVIS_DRAFT) {
                 return Html::a(
@@ -248,11 +245,10 @@ function getModelButtonArray()
                         'data-pjax' => true,
                         'action' => Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
                         'class' => 'btn-floating waves-effect waves-light  yellow lighten-4',
-                        'title' => "Modifier le devis"
+                        'title' => "Transforme ce devis en modèle"
                     ]
                 );
             } else {
-
                 return Html::a(
                     '<i class="material-icons right">star</i>',
                     Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
@@ -261,7 +257,7 @@ function getModelButtonArray()
                         'data-pjax' => true,
                         'action' => Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
                         'class' => 'btn-floating waves-effect waves-light btn-yellow',
-                        'title' => "Modifier le devis"
+                        'title' => "Transforme ce devis en modèle"
                     ]
                 );
             }
@@ -272,7 +268,7 @@ function getUpdateButtonArray()
 {
     return [
         'format' => 'raw',
-        'label' => 'Visualiser',
+        'label' => 'Voir',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons right">build</i>',
@@ -282,7 +278,7 @@ function getUpdateButtonArray()
                     'data-pjax' => true,
                     'action' => Url::to(['project-simulate', 'project_id' => $model->id]),
                     'class' => 'btn-floating waves-effect waves-light btn-green',
-                    'title' => "Modifier le devis"
+                    'title' => "Permet d'accéder au devis"
                 ]
             );
         }
@@ -292,7 +288,7 @@ function getDeleteButtonArray()
 {
     return [
         'format' => 'raw',
-        'label' => 'Supp.',
+        'label' => 'Sup.',
         'value' => function ($model, $key, $index, $column) {
             if ($model->state == Project::STATE_DEVIS_DRAFT) {
                 return Html::a(
@@ -303,7 +299,7 @@ function getDeleteButtonArray()
                         'data-pjax' => true,
                         'action' => Url::to(['delete-draft-project', 'id' => $model->id]),
                         'class' => 'btn-floating waves-effect waves-light btn-red',
-                        'title' => "Supprimer le devis"
+                        'title' => "Permet de supprimer le devis"
                     ]
                 );
             } else {
