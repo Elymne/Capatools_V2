@@ -28,7 +28,7 @@ class TopTitle extends Widget
                 <div class="container">
                     <div class="row">
                         <div class="col s12">
-                            <span><b>${title}</b></span>
+                            <span><b style="font-size:1.3rem;">${title}</b></span>
                         </div>
                     </div>
                 </div>

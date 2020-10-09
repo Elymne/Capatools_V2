@@ -12,9 +12,6 @@ AppAsset::register($this);
 ProjectCreateFirstStepAsset::register($this);
 
 $this->title = "Création d'un devis - Paramètres Généraux";
-$this->params["breadcrumbs"][] = ["label" => "Project", "url" => ["index"]];
-$this->params["breadcrumbs"][] = ["label" => $model->id, "url" => ["view", "id" => $model->id]];
-$this->params["breadcrumbs"][] = "Update";
 ?>
 
 <?= TopTitle::widget(["title" => $this->title]) ?>
@@ -23,11 +20,13 @@ $this->params["breadcrumbs"][] = "Update";
         <?php $form = ActiveForm::begin(["id" => "dynamic-form", "options" => ["enctype" => "multipart/form-data"]]); ?>
         <div class="row">
             <div class="col s10 offset-s1">
-                <!-- Card view basique -->
+                <!-- Card view PARAMTRES GENERAUX -->
                 <div class="card">
+                    <!-- HEADER CARD -->
                     <div class="card-content">
                         <label>Paramètres généraux</label>
                     </div>
+                    <!-- BODY CARD -->
                     <div class="card-action">
                         <div class="row">
                             <div class="col s12">
@@ -35,13 +34,14 @@ $this->params["breadcrumbs"][] = "Update";
                             </div>
                         </div>
                     </div>
+                    <!-- BODY CARD -->
                     <div class="card-action" style="background-color: #f0f8ff;">
                         <!-- Type de projet  -->
                         <div class="row">
                             <div class="col s12">
-                                <?= $form->field($model, "combobox_type_checked")->radioList(Project::TYPES, [
+                                <?= $form->field($model, "radiobutton_type_selected")->radioList(Project::TYPES, [
                                     "item" => function ($index, $label, $name, $checked, $value) use ($model) {
-                                        if ($value == $model->combobox_type_checked) $check = "checked";
+                                        if ($value == $model->radiobutton_type_selected) $check = "checked";
                                         else $check = "";
                                         $return = "<label class='modal-radio'>";
                                         $return .= "<input " . $check . " type='radio' name='" . $name . "' value='" . $value . "' tabindex='3'>";
@@ -53,6 +53,7 @@ $this->params["breadcrumbs"][] = "Update";
                             </div>
                         </div>
                     </div>
+                    <!-- BODY CARD -->
                     <?php if ($showlot) : ?>
                         <div class="card-action">
                             <!-- Création de lot -->
@@ -74,31 +75,33 @@ $this->params["breadcrumbs"][] = "Update";
                                                 "formFields" => ["title"],
                                             ]); ?>
                                             <div class="container-items-task">
-                                                <div class="row">
-                                                    <div class="col s1 offset-s5">
-                                                        <button id="button-lot-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey main-button-margin"><i class="glyphicon glyphicon-plus"></i></button>
-                                                    </div>
-                                                </div>
                                                 <!-- widgetContainer -->
                                                 <?php foreach ($lots as $i => $lot) : ?>
                                                     <div class="item">
-                                                        <?php if (!$lot->isNewRecord) : ?>
-                                                            <?= Html::activeHiddenInput($lot, "[{$i}]id"); ?>
-                                                        <?php endif; ?>
-                                                        <div class="row">
-                                                            <div class=" col m2 xl2 ">
-                                                                <?= $form->field($lot, "[{$i}]id_string")->textInput(["autocomplete" => "off", "maxlength" => true, "readonly" => true, "value" => "Lot N° " . ($i + 1) . " "])->label(("")) ?>
+                                                        <div class="card">
+                                                            <div class="card-item">
+                                                                <?php if (!$lot->isNewRecord) : ?>
+                                                                    <?= Html::activeHiddenInput($lot, "[{$i}]id"); ?>
+                                                                <?php endif; ?>
+                                                                <div class="row">
+                                                                    <div class=" col m2 xl2 ">
+                                                                        <?= $form->field($lot, "[{$i}]id_string")->textInput(["autocomplete" => "off", "maxlength" => true, "readonly" => true, "value" => "Lot N° " . ($i + 1) . " "])->label(false) ?>
+                                                                    </div>
+                                                                    <div class="col m7 xl9">
+                                                                        <?= $form->field($lot, "[{$i}]title")->textInput(["autocomplete" => "off", "placeholder" => "Titre du lot", "maxlength" => true])->label(false) ?>
+                                                                    </div>
+                                                                    <div class="col m3 xl1">
+                                                                        <button type="button" class="remove-item btn-flat remove-item-button-type"><i class="glyphicon glyphicon-trash"></i></button>
+                                                                    </div>
+                                                                </div><!-- .row -->
                                                             </div>
-                                                            <div class="col m7 xl8">
-                                                                <?= $form->field($lot, "[{$i}]title")->textInput(["autocomplete" => "off", "placeholder" => "Titre du lot", "maxlength" => true])->label("") ?>
-                                                            </div>
-                                                            <div class="col m3 xl2">
-                                                                <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                                <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
-                                                            </div>
-                                                        </div><!-- .row -->
+                                                        </div>
                                                     </div>
                                                 <?php endforeach; ?>
+
+                                            </div>
+                                            <div class="col s12">
+                                                <p class="add-item add-item-link-type">Ajouter un nouveau lot à ce devis</p>
                                             </div>
                                             <?php DynamicFormWidget::end(); ?>
                                         </div>
@@ -107,34 +110,34 @@ $this->params["breadcrumbs"][] = "Update";
                             </div>
                         </div>
                     <?php endif; ?>
+                    <!-- BODY CARD -->
                     <div class="card-action" <?php if ($showlot) : ?>style="background-color: #f0f8ff;" <?php endif; ?>>
-                        <div class="card-action">
-                            <div class="row">
-                                <div class="col m12 l6">
-                                    <?= $form->field($model, "company_name")
-                                        ->widget(\yii\jui\AutoComplete::class, [
-                                            "clientOptions" => ["source" => $companiesNames,]
-                                        ])->label("Nom de société"); ?>
-                                </div>
-                                <div class="col m12 l6">
-                                    <?= $form->field($model, "contact_email")
-                                        ->widget(\yii\jui\AutoComplete::class, [
-                                            "clientOptions" => [
-                                                "source" => $contactsEmail,
-                                            ],
-                                        ])->label("Contact client")
-                                    ?>
-                                </div>
+                        <div class="row">
+                            <div class="col m12 l6">
+                                <?= $form->field($model, "company_name")
+                                    ->widget(\yii\jui\AutoComplete::class, [
+                                        "clientOptions" => ["source" => $companiesNames,]
+                                    ])->label("Nom de société"); ?>
+                            </div>
+                            <div class="col m12 l6">
+                                <?= $form->field($model, "contact_email")
+                                    ->widget(\yii\jui\AutoComplete::class, [
+                                        "clientOptions" => [
+                                            "source" => $contactsEmail,
+                                        ],
+                                    ])->label("Contact client")
+                                ?>
                             </div>
                         </div>
                     </div>
-                    <div class="card-action" <?php if ($showlot) : ?>style="background-color: #f0f8ff;" <?php endif; ?>>
-                        <div class="form-group to-the-right">
-                            <?= Html::submitButton("Suivant <i class='material-icons right'>arrow_forward</i>", ["class" => "waves-effect waves-light btn btn-blue", "title" => "Sauvegarde le brouillon et vous dirige vers l'étape suivante"]) ?>
-                        </div>
-                    </div>
+                </div>
+                <!-- Card view END -->
+                <!-- FORM BUTTONS-->
+                <div class=" to-the-right">
+                    <?= Html::submitButton("Suivant <i class='material-icons right'>arrow_forward</i>", ["class" => "waves-effect waves-light btn btn-blue", "title" => "Sauvegarde le brouillon et vous dirige vers l'étape suivante"]) ?>
                 </div>
             </div>
-            <?php ActiveForm::end(); ?>
         </div>
+        <?php ActiveForm::end(); ?>
     </div>
+</div>

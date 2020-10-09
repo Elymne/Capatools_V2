@@ -39,9 +39,7 @@ class ProjectCreateLotForm extends Lot
      */
     public function titleIsNeeded($attribute, $params)
     {
-        if (
-            ($this->combobox_lot_checked == 1 && $this->title == null)
-        ) {
+        if (($this->combobox_lot_checked == 1 && $this->title == null)) {
             $this->addError($attribute, 'Vous devez donner un nom à votre lot');
         }
     }
