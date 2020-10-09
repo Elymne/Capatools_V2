@@ -81,26 +81,23 @@ function OnCalculIncertitudeGest(id) {
     let SelectRisk = "#projectcreategestiontaskform-" + id + "-risk";
     incertitude = $(SelectRisk).val();
 
-    let res = CalculTempsincertitude(hour, day, incertitude);
+    let dayIncertitude = CalculTempsincertitude(hour, day, incertitude);
 
     let SelectRiskDuration =
         "#projectcreategestiontaskform-" + id + "-risk_duration";
-    $(SelectRiskDuration).val(
-        res.dayIncertitude + "j " + res.hourIncertitude + "h"
-    );
+    $(SelectRiskDuration).val(dayIncertitude + "j ");
 
     let SelectRiskDurationhour =
-        "#projectcreategestiontaskform-" + id + "-risk_duration_hour";
-    let total = res.dayIncertitude * 7.7 + res.hourIncertitude;
+        "#projectcreategestiontaskform-" + id + "-risk_duration_day";
 
     let SelectPrice = "#projectcreategestiontaskform-" + id + "-price";
     price = $(SelectPrice).val();
     let SelectRiskTotalPrice =
         "#projectcreategestiontaskform-" + id + "-totalprice";
-    let totalprice = total * (price / 7.7);
-    $(SelectRiskTotalPrice).val(totalprice.toFixed(2));
+    let totalprice = dayIncertitude * price;
+    $(SelectRiskTotalPrice).val(totalprice);
 
-    $(SelectRiskDurationhour).val(total.toFixed(2));
+    $(SelectRiskDurationhour).val(dayIncertitude);
 }
 
 function OnCalculIntervenantGest(id) {
@@ -136,44 +133,31 @@ function OnCalculIncertitudelot(id) {
     let SelectRisk = "#projectcreatelottaskform-" + id + "-risk";
     incertitude = $(SelectRisk).val();
 
-    let res = CalculTempsincertitude(hour, day, incertitude);
+    let dayIncertitude = CalculTempsincertitude(hour, day, incertitude);
     let SelectRiskDuration =
         "#projectcreatelottaskform-" + id + "-risk_duration";
-    $(SelectRiskDuration).val(
-        res.dayIncertitude + "j " + res.hourIncertitude + "h"
-    );
+    $(SelectRiskDuration).val(dayIncertitude + "j ");
 
     let SelectRiskDurationhour =
-        "#projectcreatelottaskform-" + id + "-risk_duration_hour";
-    let total = res.dayIncertitude * 7.7 + res.hourIncertitude;
-    $(SelectRiskDurationhour).val(total.toFixed(2));
+        "#projectcreatelottaskform-" + id + "-risk_duration_day";
+    $(SelectRiskDurationhour).val(dayIncertitude);
 
     let SelectPrice = "#projectcreatelottaskform-" + id + "-price";
     price = $(SelectPrice).val();
     let SelectRiskTotalPrice =
         "#projectcreatelottaskform-" + id + "-totalprice";
-    let totalprice = total * (price / 7.7);
-    console.log(totalprice);
-    $(SelectRiskTotalPrice).val(totalprice.toFixed(2));
+    let totalprice = dayIncertitude * price;
+
+    $(SelectRiskTotalPrice).val(totalprice);
 }
 
 function CalculTempsincertitude(hour, day, incertitudestring) {
     let incertitudeMap = $incertudeMap;
     let incertitude = incertitudeMap[incertitudestring];
-    let hourIncertitude = hour * incertitude;
-    let dayIncertitude = day * incertitude;
 
-    let daydecimal = dayIncertitude - Math.floor(dayIncertitude);
-    dayIncertitude = Math.trunc(dayIncertitude);
+    let dayIncertitude = (day + hour / 7.7) * incertitude;
 
-    hourIncertitude = Math.round(hourIncertitude + daydecimal * 7.7);
-    let Additionalday = Math.trunc(hourIncertitude / 7.7);
-    hourIncertitude = hourIncertitude % 7.7;
-
-    dayIncertitude = Additionalday + dayIncertitude;
-    hourIncertitude = Math.round(hourIncertitude);
-
-    return { dayIncertitude, hourIncertitude };
+    return dayIncertitude;
 }
 
 $(() => {
@@ -313,7 +297,7 @@ $(() => {
     if (pt == "" || po == "") {
         $("#projectcreategestiontaskform-0-day_duration").val(1);
         $("#projectcreategestiontaskform-0-hour_duration").val(0);
-        $("#projectcreategestiontaskform-0-risk_duration").val("1j 0h");
+        $("#projectcreategestiontaskform-0-risk_duration").val("1j");
     }
 
     const ot = $("#projectcreatelottaskform-0-capa_user_id").val();
@@ -322,6 +306,6 @@ $(() => {
     if (ot == "" || oo == "") {
         $("#projectcreatelottaskform-0-day_duration").val(1);
         $("#projectcreatelottaskform-0-hour_duration").val(0);
-        $("#projectcreatelottaskform-0-risk_duration").val("1j 0h");
+        $("#projectcreatelottaskform-0-risk_duration").val("1j");
     }
 });

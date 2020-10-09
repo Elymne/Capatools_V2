@@ -153,7 +153,7 @@ if ($lot->number != 0) {
                                             </div>
                                             <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Temps total'])->label('Temps total', ['class' => '']) ?>
-                                                <?php echo Html::activeHiddenInput($taskGestion, "[{$i}]risk_duration_hour"); ?>
+                                                <?php echo Html::activeHiddenInput($taskGestion, "[{$i}]risk_duration_day"); ?>
                                             </div>
                                             <div class="col s1">
                                                 <?= $form->field($taskGestion, "[{$i}]totalprice")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Prix total'])->label('Prix total', ['class' => '']) ?>
@@ -205,7 +205,7 @@ if ($lot->number != 0) {
                                             'day_duration',
                                             'hour_duration',
                                             'risk',
-                                            'risk_duration_hour',
+                                            'risk_duration_day',
                                             'totalprice',
 
 
@@ -287,7 +287,7 @@ if ($lot->number != 0) {
 
                                                 <div class="col s2">
                                                     <?= $form->field($taskOperational, "[{$i}]risk_duration")->textInput(['readonly' => true, 'autocomplete' => 'off', 'maxlength' => true])->label("Temps total") ?>
-                                                    <?php echo Html::activeHiddenInput($taskOperational, "[{$i}]risk_duration_hour"); ?>
+                                                    <?php echo Html::activeHiddenInput($taskOperational, "[{$i}]risk_duration_day"); ?>
                                                 </div>
 
                                                 <div class="col s1">

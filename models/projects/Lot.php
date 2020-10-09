@@ -142,24 +142,12 @@ class Lot extends ActiveRecord
         $result = 0;
         $taskslot = $this->tasks;
         foreach ($taskslot as $task) {
-            $result  = $result +   $task->risk_duration_hour;
+            $result  = $result +   $task->risk_duration_day;
         }
 
         return $result;
     }
 
-
-
-    public function getTotalTime()
-    {
-        $result = 0;
-        $taskslot = $this->tasks;
-        foreach ($taskslot as $task) {
-            $result  =  $result +  $task->risk_duration_hour;
-        }
-
-        return $result;
-    }
 
 
 

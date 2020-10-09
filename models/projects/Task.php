@@ -78,6 +78,6 @@ class Task extends ActiveRecord
 
     public function getTotalprice()
     {
-        return ($this->price / 7.7) * $this->risk_duration_hour;
+        return ($this->price) * $this->risk_duration_day;
     }
 }

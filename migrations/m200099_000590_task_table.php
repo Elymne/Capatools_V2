@@ -16,7 +16,7 @@ class m200099_000590_task_table extends Migration
             'hour_duration' => $this->integer()->defaultValue(0),
             'price' => $this->double()->defaultValue(0),
             'risk' => $this->string()->notNull(),
-            'risk_duration_hour' => $this->double(),
+            'risk_duration_day' => $this->double(),
             'task_category' => $this->string()->notNull(),
 
             // Foreign key.
@@ -47,7 +47,7 @@ class m200099_000590_task_table extends Migration
 
             'price' => 15000,
             'risk' => '1',
-            'risk_duration_hour' => '7.7',
+            'risk_duration_day' => '7.7',
             'task_category' => 'Tâche',
             'capa_user_id' => 2,
             'lot_id' => 3,
@@ -59,7 +59,7 @@ class m200099_000590_task_table extends Migration
 
             'price' => 1456,
             'risk' => '1',
-            'risk_duration_hour' => '23.1',
+            'risk_duration_day' => '23.1',
             'task_category' => 'Management',
             'capa_user_id' => 2,
             'lot_id' => 1,
@@ -71,7 +71,7 @@ class m200099_000590_task_table extends Migration
             'price' => 1456,
             'risk' => '1',
             'task_category' => 'Tâche',
-            'risk_duration_hour' => '23.1',
+            'risk_duration_day' => '23.1',
             'capa_user_id' => 2,
             'lot_id' => 1,
         ]);
@@ -83,7 +83,7 @@ class m200099_000590_task_table extends Migration
             'price' => 123,
             'risk' => '4',
             'task_category' => 'Tâche',
-            'risk_duration_hour' => '23.1',
+            'risk_duration_day' => '23.1',
             'capa_user_id' => 3,
             'lot_id' => 1,
         ]);
@@ -95,7 +95,7 @@ class m200099_000590_task_table extends Migration
             'price' => 4005,
             'risk' => '4',
             'task_category' => 'Management',
-            'risk_duration_hour' => '23.1',
+            'risk_duration_day' => '23.1',
             'capa_user_id' => 6,
             'lot_id' => 2,
         ]);
@@ -106,7 +106,7 @@ class m200099_000590_task_table extends Migration
             'price' => 4005,
             'risk' => '4',
             'task_category' => 'Tâche',
-            'risk_duration_hour' => '23.1',
+            'risk_duration_day' => '23.1',
             'capa_user_id' => 6,
             'lot_id' => 2,
         ]);
