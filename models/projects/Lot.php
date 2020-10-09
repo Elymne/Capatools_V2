@@ -165,18 +165,14 @@ class Lot extends ActiveRecord
 
 
 
-    public function getTotalCostHumanWithMargin()
+    public function getTotalPriceHumanWithMargin()
     {
         $result = 0;
-        $taskslot = $this->tasks;
-        foreach ($taskslot as $task) {
-            $result  = $result + $task->totalprice;
-        }
-        return $result * (1 + $this->rate_human_margin / 100);
+        return $this->TotalCostHuman * (1 + $this->rate_human_margin / 100);
     }
 
 
-    public function getTotalTimeWithRisk()
+    public function getTotalTaskTimeWithRisk()
     {
         $result = 0;
         $taskslot = $this->tasks;
@@ -216,7 +212,7 @@ class Lot extends ActiveRecord
         return $result;
     }
 
-    public function getSellingPriceWithGestionPricet()
+    public function getSellingPriceWithGestionPrice()
     {
         $project = $this->project;
         $result = $this->sellingPriceWithoutGestionPrice / (1 - $project->management_rate / 100);
