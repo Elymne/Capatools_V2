@@ -163,24 +163,37 @@ class Project extends ActiveRecord
 
         return Lot::find()->where(['number' => $number, 'project_id' => $this->id])->one();
     }
-    public function getAdditionalLotPrice()
+    public function getRatiototalCostAVPDivTotalCostLot()
     {
 
         $lotavp = Lot::find()->where(['number' => 0, 'project_id' => $this->id])->one();
-        $lotavpTotalMarge = $lotavp->total * (1 - $this->marginaverage / 100);
-        return round(($lotavpTotalMarge / (count($this->lots) - 1)), -2);
+        return  $lotavp->totalCost / $this->totalCostlotWithoutAVP;
     }
 
-    public function getTotal()
+
+    public function getTotalCostlotWithoutAVP()
     {
-        $totalwithmargin = 0.0;
+        $totalCost = 0.0;
         $lotsproject = $this->lots;
         foreach ($lotsproject as $lot) {
             if ($lot->number != 0) {
-                $totalwithmargin = $totalwithmargin + $lot->totalwithmargin + $this->additionallotprice;
+                $totalCost = $totalCost + $lot->totalCost;
             }
         }
-        return $totalwithmargin;
+        return $totalCost;
+    }
+
+
+    public function getMontantTotal()
+    {
+        $totalwithmarginAvp = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+            if ($lot->number != 0) {
+                //  $totalwithmarginAvp = $totalwithmarginAvp + $lot->totalWithMarginWithAVP;
+            }
+        }
+        return $totalwithmarginAvp;
     }
 
     public function getTotalAchatInvesteReversementPrice()
@@ -195,29 +208,7 @@ class Project extends ActiveRecord
         return $totalAchatinvest + $this->SupportPrice;
     }
 
-    public function getTjm()
-    {
-        $totaltime = 0.0;
-        $TotalCostHumanWithMargin = 0.0;
-        $lotsproject = $this->lots;
-        foreach ($lotsproject as $lot) {
 
-            if ($lot->number != 0) {
-                $totaltime = $totaltime + $lot->totaltime;
-                $TotalCostHumanWithMargin = $TotalCostHumanWithMargin + $lot->totalCostHumanWithMargin;
-            } else {
-                $totaltime = $totaltime + $lot->totaltime;
-                $TotalCostHumanWithMargin = $TotalCostHumanWithMargin + $lot->totalCostHuman * (1 + $this->marginaverage);
-            }
-        }
-        $result = $TotalCostHumanWithMargin / (1 - $this->management_rate / 100);
-        $totaltime = $totaltime / 7.7;
-        if ($totaltime != 0) {
-            return round($result / $totaltime, 2);
-        } else {
-            return 0;
-        }
-    }
 
     public function getTotalHourWithRisk()
     {
@@ -250,25 +241,9 @@ class Project extends ActiveRecord
         $TotalCostHumanWithMarginwithrisk = 0.0;
         $lotsproject = $this->lots;
         foreach ($lotsproject as $lot) {
-
-            if ($lot->number != 0) {
-
-                $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
-                $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHumanWithMargin;
-            } else {
-                //Cas du lot AVP qi se base sur le taux marge moyen
-                $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
-                $TotalCostHumanWithMarginwithrisk = $TotalCostHumanWithMarginwithrisk + $lot->totalCostHuman * (1 + $this->marginaverage);
-            }
         }
-        $totaltimewithrisk = $totaltimewithrisk / 7.7;
-        $result = $TotalCostHumanWithMarginwithrisk / (1 - $this->management_rate / 100);
-        if ($totaltimewithrisk != 0) {
 
-            return round($result / $totaltimewithrisk, 2);
-        } else {
-            return 0;
-        }
+        return 0;
     }
 
     public function getCoutExternalDepense()
@@ -341,13 +316,32 @@ class Project extends ActiveRecord
 
     public function getSellingPrice()
     {
-        return round($this->total / (1 - $this->management_rate / 100), -2);
+        return round($this->montantTotal / (1 - $this->management_rate / 100), -2);
     }
 
+    public function getMarginAverageWithAVP()
+    {
+
+        /* $TotalWithMarginWithAVP = 0.0;
+        $lotsproject = $this->lots;
+        foreach ($lotsproject as $lot) {
+            if ($lot->number != 0) {
+                $TotalWithMarginWithAVP = $TotalWithMarginWithAVP + $lot->TotalWithMarginWithAVP;
+            }
+        }
+        if ($TotalWithMarginWithAVP != 0) {
+            return round(((($this->sellingPrice - $TotalWithMarginWithAVP) / $TotalWithMarginWithAVP)) * 100, 2);
+        } else {*/
+        return 0;
+        //}
+    }
+
+
+    ///Depreceted function
     public function getMarginAverage()
     {
 
-        $totalwithmargin = 0.0;
+        /*$totalwithmargin = 0.0;
         $totalwithoutmargin = 0.0;
         $lotsproject = $this->lots;
         foreach ($lotsproject as $lot) {
@@ -358,13 +352,8 @@ class Project extends ActiveRecord
         }
         if ($totalwithoutmargin != 0) {
             return round((($totalwithmargin / $totalwithoutmargin) - 1) * 100, 2);
-        } else {
-            return 0;
-        }
-    }
-    public function getNbLot()
-    {
-        $ListeLot = $this->lots;
-        return count($ListeLot) - 1;
+        } else {*/
+        return 0;
+        //}
     }
 }

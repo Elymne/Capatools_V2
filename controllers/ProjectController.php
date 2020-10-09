@@ -730,7 +730,7 @@ class ProjectController extends Controller implements ServiceInterface
         }
 
         $tjmstat = false;
-        if ($project->tjmWithRisk < 700 || $project->tjm < 700) {
+        if ($project->tjmWithRisk < 700) {
             $tjmstat = true;
         }
 

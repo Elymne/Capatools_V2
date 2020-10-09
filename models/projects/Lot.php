@@ -125,6 +125,45 @@ class Lot extends ActiveRecord
         return $result;
     }
 
+    public function getTotalCostInvest()
+    {
+        $result = 0.0;
+        $consumables = $this->consumables;
+        foreach ($consumables as $consumable) {
+            $result  = $result + $consumable->price;
+        }
+
+
+        $Invests = $this->invests;
+        foreach ($Invests as $Invest) {
+            $result  = $result + $Invest->price;
+        }
+
+
+        return $result;
+    }
+
+
+
+
+    public function getTotalCostRepayement()
+    {
+        $result =  0.000;
+        $Equipementrepayements = $this->equipmentrepayments;
+        foreach ($Equipementrepayements as $Equipementrepayement) {
+            $result  = $result + $Equipementrepayement->price;
+        }
+
+        $LabotoryContributors = $this->labotorycontributors;
+        foreach ($LabotoryContributors as $LabotoryContributor) {
+            $result  = $result + $LabotoryContributor->price;
+        }
+
+
+        return $result;
+    }
+
+
 
     public function getTotalCostHumanWithMargin()
     {
@@ -151,59 +190,51 @@ class Lot extends ActiveRecord
 
 
 
-
-
-    public function getTotalCostInvest()
+    public function getTotalCost()
     {
-        $result = 0.0;
-        $consumables = $this->consumables;
-        foreach ($consumables as $consumable) {
-            $result  = $result + $consumable->price;
-        }
-
-
-        $Invests = $this->invests;
-        foreach ($Invests as $Invest) {
-            $result  = $result + $Invest->price;
-        }
-
-
-        return $result;
-    }
-
-
-    public function getTotalCostRepayement()
-    {
-        $result =  0.000;
-        $Equipementrepayements = $this->equipmentrepayments;
-        foreach ($Equipementrepayements as $Equipementrepayement) {
-            $result  = $result + $Equipementrepayement->price;
-        }
-
-        $LabotoryContributors = $this->labotorycontributors;
-        foreach ($LabotoryContributors as $LabotoryContributor) {
-            $result  = $result + $LabotoryContributor->price;
-        }
-
-
-        return $result;
-    }
-
-    public function getTotal()
-    {
-        $result = 0.000;
         $result =  $this->totalcosthuman
             + $this->totalcostinvest
             + $this->totalcostrepayement;
         return round($result, 2);
     }
 
-    public function getTotalWithMargin()
+    public function getTotalPrice()
     {
         $result = 0.000;
         $result =  $this->totalcosthuman * (1 + $this->rate_human_margin / 100)
             + $this->totalcostinvest * (1 + $this->rate_consumable_investement_margin / 100)
             + $this->totalcostrepayement * (1 + $this->rate_repayement_margin / 100);
+
+        return round($result, 2);
+    }
+
+
+
+    public function getSellingPriceWithoutGestionPrice()
+    {
+        $result = $this->totalCostWithAVP * (1 + $this->averageMargin / 100);
+        return $result;
+    }
+
+    public function getSellingPriceWithGestionPricet()
+    {
+        $project = $this->project;
+        $result = $this->sellingPriceWithoutGestionPrice / (1 - $project->management_rate / 100);
         return round($result, -2);
+    }
+    public function getAverageMargin()
+    {
+
+        $average = 0000;
+        $average = ($this->totalPrice - $this->totalCost) / $this->totalCost;
+
+
+        return round(($average * 100), 2);
+    }
+
+    public function getTotalCostWithAVP()
+    {
+        $project = $this->project;
+        return ($project->ratiototalCostAVPDivTotalCostLot + 1) * $this->totalCost;
     }
 }

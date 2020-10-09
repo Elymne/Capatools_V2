@@ -13,10 +13,11 @@ use kidzen\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Alert;
 
 $this->title = 'Simulation du projet : ' . $project->internal_name;
-
+/*Depraceted
 $MargeAverage = $project->marginaverage;
 $totalcostavplot = ($lotavp->total *  ($project->marginaverage / 100 + 1)) / (count($lots) - 1);
 $totalprojet = 0.0;
+*/
 
 AppAsset::register($this);
 ProjectSimulationAsset::register($this);
@@ -73,16 +74,20 @@ ProjectSimulationAsset::register($this);
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
-                                            <td width="90%" class="table-font-bold">Total coût temps homme :</td>
+                                            <td width="90%" class="table-font-bold">Total des coûts temps homme :</td>
                                             <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostHuman) ?></td>
                                         </tr>
                                         <tr>
-                                            <td width="90%" class="table-font-bold">Total des reversements laboratoires :</td>
+                                            <td width="90%" class="table-font-bold">Total des coût des dépenses et des investissement :</td>
+                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostInvest) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="90%" class="table-font-bold">Total des coût reversements laboratoires :</td>
                                             <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostRepayement) ?></td>
                                         </tr>
                                         <tr>
-                                            <td width="90%" class="table-font-bold">Total de l'avant projet (non margé):</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->total) ?></td>
+                                            <td width="90%" class="table-font-bold">Total des coût l'avant projet (non margé):</td>
+                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCost) ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -91,18 +96,6 @@ ProjectSimulationAsset::register($this);
                             <div class="col s12 l6">
                                 <table class="highlight">
                                     <tbody>
-                                        <tr>
-                                            <td width="90%" class="table-font-bold">Total des dépenses et des investissement :</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostInvest) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="90%" class="table-font-bold">Total de l'avant projet (margé avec le Taux moyen):</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->total * (1 + $project->marginaverage / 100)) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="90%" class="table-font-bold">Somme ajoutée par lot (margé avec le Taux moyen):</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($project->additionallotprice) ?></td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -169,30 +162,32 @@ ProjectSimulationAsset::register($this);
                                         <table class="highlight">
                                             <tbody>
                                                 <tr>
-                                                    <td width="90%" class="table-font-bold">Prix du total lot sans avp:</td>
-                                                    <td><?= Yii::$app->formatter->asCurrency($lotproject->totalwithmargin) ?></td>
+                                                    <td width="90%" class="table-font-bold">Coût du total lot sans avp:</td>
+                                                    <td><?= Yii::$app->formatter->asCurrency($lotproject->totalCost) ?></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="highlight">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="90%" class="table-font-bold">Coût du total lot avec avp :</td>
+                                                    <td><?= Yii::$app->formatter->asCurrency($lotproject->totalCostWithAVP) ?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
 
                                     <div class="col s12 l6 xl4">
-                                        <table class="highlight">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="90%" class="table-font-bold">Prix du total lot avec avp :</td>
-                                                    <td><?= Yii::$app->formatter->asCurrency($lotproject->totalwithmargin + $project->additionallotprice) ?></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+
                                     </div>
 
                                     <div class="col s12 l6 xl4">
                                         <table class="highlight">
                                             <tbody>
                                                 <tr>
-                                                    <td width="90%" class="table-font-bold">Prix du total lot avec avp et support :</td>
-                                                    <td><?= Yii::$app->formatter->asCurrency(round(($lotproject->totalwithmargin + $project->additionallotprice) / (1 - $project->management_rate / 100), -2)) ?></td>
+                                                    <td width="90%" class="table-font-bold">Prix de vente total lot avec avp et support :</td>
+                                                    <td><?= Yii::$app->formatter->asCurrency($lotproject->sellingPriceWithGestionPricet) ?></td>
+
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -270,11 +265,7 @@ ProjectSimulationAsset::register($this);
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
-                                            <td width="90%" class="table-font-bold">Montant Total HT :</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($project->total) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="90%" class="table-font-bold">Taux de marge moyen avant frais de gestion:</td>
+                                            <td width="90%" class="table-font-bold">Taux de marge moyen du projet:</td>
                                             <td><?= Yii::$app->formatter->asPercent($project->marginaverage / 100, 2) ?></td>
                                         </tr>
                                         <tr>
@@ -292,10 +283,6 @@ ProjectSimulationAsset::register($this);
                             <div class="col s12 m6">
                                 <table class="highlight">
                                     <tbody>
-                                        <tr>
-                                            <td width="90%" class="table-font-bold">Taux journalier homme sans risque:</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($project->Tjm) ?></td>
-                                        </tr>
                                         <tr>
                                             <td width="90%" class="table-font-bold">Taux journalier homme avec risque:</td>
                                             <td><?= Yii::$app->formatter->asCurrency($project->tjmWithRisk) ?></td>

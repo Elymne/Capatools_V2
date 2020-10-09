@@ -42,7 +42,7 @@ if ($SaveSucess != null) : ?>
 
                         <div class="row">
                             <div class="col s3 label-field">
-                                Total coût temps homme :
+                                Total des coûts temps homme :
                             </div>
                             <div class="col s2">
                                 <?= $form->field($lot, "totalCostHuman", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostHuman)]])->label(false) ?>
@@ -52,7 +52,7 @@ if ($SaveSucess != null) : ?>
 
                         <div class="row">
                             <div class="col s3 label-field">
-                                Total des dépenses et investissement :
+                                Total des coûts des dépenses et investissement :
                             </div>
                             <div class="col s2">
                                 <?= $form->field($lot, "totalCostInvest", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostInvest)]])->label(false) ?>
@@ -61,7 +61,7 @@ if ($SaveSucess != null) : ?>
 
                         <div class="row">
                             <div class="col s3 label-field">
-                                Total des reversements laboratoires :
+                                Total des coûts des reversements laboratoires :
                             </div>
                             <div class="col s2">
                                 <?= $form->field($lot, "totalCostRepayement", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostRepayement)]])->label(false) ?>
@@ -437,14 +437,14 @@ function CalculTotalLot()
  let totalcostrepayementwithmarginprice =  (Number($(totalcostrepayementwithmargin).val().replace(',','.').replace(/[^0-9.-]+/g,""))); 
 
     let totalcost = totalcosthumanprice + totalcostinvestprice + totalcostrepayementprice  ;
-    let totalcostwithMargin = totalcosthumanwithmarginprice +  totalcostinvestwithmarginprice + totalcostrepayementwithmarginprice  ;
-    $(totalcostlot).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(totalcostwithMargin.toFixed(2)));
+    let totalPrice = totalcosthumanwithmarginprice +  totalcostinvestwithmarginprice + totalcostrepayementwithmarginprice  ;
+    $(totalcostlot).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(totalPrice.toFixed(2)));
 
 
     let averagelotmargin = "#lotsimulate-average_lot_margin";
 
 
-    let average = ((totalcostwithMargin / totalcost) - 1);
+    let average = ((totalPrice - totalcost)/ totalcost);
     if(isNaN(average))
     {
         average = 0;
@@ -457,7 +457,7 @@ function CalculTotalLot()
     let ratesupp = $management_rate;
 
 
-    let totalwithsupport = totalcostwithMargin / (1 - ratesupp /100);
+    let totalwithsupport = totalPrice / (1 - ratesupp /100);
     let support = totalwithsupport * (ratesupp /100);
     $(supportcost).val(new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(support.toFixed(2)));
 
