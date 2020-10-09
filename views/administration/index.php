@@ -175,11 +175,11 @@ function getUpdateButtonArray()
             if ($model->id != null) $userRoles = UserRoleManager::getUserRoles($model->id);
 
             $buttonClass = "";
-            if (UserRoleManager::canUpdateUser($userRoles)) $buttonClass = "btn-floating waves-effect waves-light btn-green";
-            else $buttonClass = "btn-floating disabled";
+            if (UserRoleManager::canUpdateUser($userRoles)) $buttonClass = "btn-floating-minus waves-effect waves-light btn-green";
+            else $buttonClass = "btn-floating-minus waves-effect waves-light btn-orangeG";
 
             return Html::a(
-                '<i class="material-icons right">edit</i>',
+                '<i class="material-icons center">edit</i>',
                 Url::to(['administration/update', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',

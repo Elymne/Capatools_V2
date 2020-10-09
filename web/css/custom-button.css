@@ -4,67 +4,100 @@
 
 /* Boutons que l'on utilise dans la vue de la simulation de projet */
 .btn-project-simulation {
-    background-color: #e8e3e5;
+    background-color: #f0edee;
     color: #01579b;
 }
 
 .btn-project-simulation:hover {
     background-color: #01579b;
     color: #f0edee;
+    background-position: right center;
 }
 
+.btn-project-simulation:hover i {
+    color: #f0edee;
+}
+/* ------------------------------------------------------------------ */
+
+/* GREEN BUTTON */
 .btn-green {
     background-color: #248f24;
-    color: white;
+    color: #f0edee;
 }
 
 .btn-green:hover {
-    background-color: #2eb82e;
-    color: #333333;
+    background-color: #f0edee;
+    color: #248f24;
     background-position: right center;
 }
 
+.btn-green:hover i {
+    color: #248f24;
+}
+/* ------------------------------------------------------------------ */
+
+/* GREEN DARK BUTTON */
 .btn-green-darker {
     background-color: #008000;
-    color: white;
+    color: #f0edee;
 }
 
 .btn-green-darker:hover {
-    background-color: #00cc00;
-    color: #333333;
+    background-color: #f0edee;
+    color: #008000;
     background-position: right center;
 }
 
+.btn-green-darker:hover i {
+    color: #008000;
+}
+/* ------------------------------------------------------------------ */
+
+/* BLUE BUTTON */
 .btn-blue {
-    background-color: #078aca;
+    background-color: #01579b;
+    color: #f0edee;
 }
 
 .btn-blue:hover {
-    background-color: #22b0f7;
-    color: #333333;
+    background-color: #f0edee;
+    color: #01579b;
     background-position: right center;
 }
+
+.btn-blue:hover i {
+    color: #01579b;
+}
+/* ------------------------------------------------------------------ */
 
 .btn-yellow {
     background-color: #ffaa00;
-    color: white;
+    color: #f0edee;
 }
 
 .btn-yellow:hover {
-    background-color: #ffc34d;
-    color: #333333;
+    background-color: #f0edee;
+    color: #ffaa00;
     background-position: right center;
+}
+
+.btn-yellow:hover i {
+    color: #ffaa00;
 }
 
 .btn-grey {
     background-color: #333333;
-    color: white;
+    color: #f0edee;
 }
 
 .btn-grey:hover {
-    background-color: #777777;
+    background-color: #f0edee;
     color: #333333;
     background-position: right center;
+}
+
+.btn-grey:hover i {
+    color: #333333;
 }
 
 .btn-white {
@@ -73,52 +106,74 @@
 }
 
 .btn-white:hover {
-    background-color: #cccccc;
+    background-color: #f0edee;
     color: #333333;
     background-position: right center;
+}
+
+.btn-white:hover i {
+    color: #333333;
 }
 
 .btn-red {
     background-color: #ff3333;
-    color: white;
+    color: #f0edee;
 }
 
 .btn-red:hover {
-    background-color: #ff8080;
-    color: #333333;
+    background-color: #f0edee;
+    color: #ff3333;
     background-position: right center;
+}
+
+.btn-red:hover i {
+    color: #ff3333;
 }
 
 .btn-orange {
     background-color: #ff8533;
+    color: #f0edee;
 }
 
 .btn-orange:hover {
-    background-color: #ffb380;
-    color: #333333;
+    background-color: #f0edee;
+    color: #ff8533;
     background-position: right center;
+}
+
+.btn-orange:hover i {
+    color: #ff8533;
 }
 
 .btn-purple {
     background-color: #7300e6;
+    color: #f0edee;
 }
 
 .btn-purple:hover {
-    background-color: #9933ff;
-    color: #333333;
+    background-color: #f0edee;
+    color: #7300e6;
     background-position: right center;
+}
+
+.btn-purple:hover i {
+    color: #7300e6;
 }
 
 .btn-black {
     background-color: #1a1a1a;
+    color: #f0edee;
 }
 
 .btn-black:hover {
-    background-color: #404040;
-    color: #333333;
+    background-color: #f0edee;
+    color: #1a1a1a;
     background-position: right center;
 }
 
+.btn-black:hover i {
+    color: #1a1a1a;
+}
 .btn-special-golden {
     background-image: linear-gradient(0.25turn, #ff7733, #ff9933, #ff6600);
 }
