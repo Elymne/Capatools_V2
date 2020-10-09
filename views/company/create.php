@@ -16,20 +16,14 @@ AppAsset::register($this);
 CompanyCreateAsset::register($this);
 
 ?>
-
 <?= TopTitle::widget(['title' => $this->title]) ?>
-
 <div class="container">
     <div class="company-create">
-
         <?php $form = ActiveForm::begin(); ?>
-
         <div class="row">
             <div class="col s6 offset-s3">
-
                 <div class="card">
                     <div class="card-action">
-
 
                         <?= $form->field($model, 'name')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'name-field'])
@@ -39,16 +33,14 @@ CompanyCreateAsset::register($this);
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'email-field'])
                             ->label("Email") ?>
 
-                        <?= $form->field($model, 'type')->widget(Select2::class, [
+                        <?= $form->field($model, 'select_type')->widget(Select2::class, [
                             'data' => CompanyTypeEnum::COMPANY_TYPE_STRING,
                             'pluginLoading' => false,
                             "theme" => Select2::THEME_MATERIAL,
                             'pluginOptions' => [
                                 'allowClear' => false
                             ],
-                        ])->label("Type de client"); ?>
-
-                        <br />
+                        ])->label("Type de client"); ?> <br />
 
                         <?= $form->field($model, 'postal_code')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'postal_code-field'])
@@ -62,21 +54,22 @@ CompanyCreateAsset::register($this);
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'city-field'])
                             ->label("Ville") ?>
 
+                        <?= $form->field($model, 'address')
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'city-field'])
+                            ->label("Adresse") ?>
+
                         <?= $form->field($model, 'tva')
                             ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'tva-field'])
                             ->label("TVA") ?>
 
                     </div>
                 </div>
-
                 <div class="form-group to-the-right">
                     <?= Html::submitButton('Enregistrer', ['class' => 'waves-effect waves-light btn btn-blue', 'data' => ['confirm' => 'Créer ce client ?']]) ?>
                     <?= Html::a(Yii::t('app', 'Annuler'), ['index'], ['class' => 'waves-effect waves-light btn btn-grey']) ?>
                 </div>
             </div>
         </div>
-
         <?php ActiveForm::end(); ?>
-
     </div>
 </div>

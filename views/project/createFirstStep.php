@@ -23,55 +23,44 @@ $this->params["breadcrumbs"][] = "Update";
         <?php $form = ActiveForm::begin(["id" => "dynamic-form", "options" => ["enctype" => "multipart/form-data"]]); ?>
         <div class="row">
             <div class="col s10 offset-s1">
-
                 <!-- Card view basique -->
                 <div class="card">
-
                     <div class="card-content">
                         <label>Paramètres généraux</label>
                     </div>
-
                     <div class="card-action">
                         <div class="row">
                             <div class="col s12">
-                                <label class="blue-text control-label">Titre du projet</label>
-                                <?= $form->field($model, "internal_name")->textInput()->label(false) ?>
+                                <?= $form->field($model, "internal_name")->textInput()->label("Titre du projet") ?>
                             </div>
                         </div>
                     </div>
-
                     <div class="card-action" style="background-color: #f0f8ff;">
                         <!-- Type de projet  -->
                         <div class="row">
                             <div class="col s12">
-                                <label class="blue-text control-label">Type de projet</label>
                                 <?= $form->field($model, "combobox_type_checked")->radioList(Project::TYPES, [
                                     "item" => function ($index, $label, $name, $checked, $value) use ($model) {
-
                                         if ($value == $model->combobox_type_checked) $check = "checked";
                                         else $check = "";
-
                                         $return = "<label class='modal-radio'>";
                                         $return .= "<input " . $check . " type='radio' name='" . $name . "' value='" . $value . "' tabindex='3'>";
                                         $return .= "<span style='margin-right:24px;'>" . ucwords($label) . "</span>";
                                         $return .= "</label>";
                                         return $return;
                                     }
-                                ])->label(false); ?>
+                                ])->label("Type de projet"); ?>
                             </div>
                         </div>
                     </div>
-
                     <?php if ($showlot) : ?>
                         <div class="card-action">
                             <!-- Création de lot -->
                             <div class="row">
                                 <div class="col s12">
-
-                                    <label id="lot-management-label" class="blue-text control-label">Créer des lots (optionnel) - ils ne seront pas éditables par la suite</label>
+                                    <label id="lot-management-label" class="control-label">Créer des lots (optionnel) - ils ne seront pas éditables par la suite</label>
                                     <div id="lot-management-body">
                                         <div class="input-field col s12">
-
                                             <?php DynamicFormWidget::begin([
                                                 "widgetContainer" => "dynamicform_wrapper", // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                                 "widgetBody" => ".container-items-task", // required: css class selector
@@ -84,23 +73,18 @@ $this->params["breadcrumbs"][] = "Update";
                                                 "formId" => "dynamic-form",
                                                 "formFields" => ["title"],
                                             ]); ?>
-
                                             <div class="container-items-task">
-
                                                 <div class="row">
                                                     <div class="col s1 offset-s5">
                                                         <button id="button-lot-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey main-button-margin"><i class="glyphicon glyphicon-plus"></i></button>
                                                     </div>
                                                 </div>
-
                                                 <!-- widgetContainer -->
                                                 <?php foreach ($lots as $i => $lot) : ?>
                                                     <div class="item">
-
                                                         <?php if (!$lot->isNewRecord) : ?>
                                                             <?= Html::activeHiddenInput($lot, "[{$i}]id"); ?>
                                                         <?php endif; ?>
-
                                                         <div class="row">
                                                             <div class=" col m2 xl2 ">
                                                                 <?= $form->field($lot, "[{$i}]id_string")->textInput(["autocomplete" => "off", "maxlength" => true, "readonly" => true, "value" => "Lot N° " . ($i + 1) . " "])->label(("")) ?>
@@ -113,54 +97,42 @@ $this->params["breadcrumbs"][] = "Update";
                                                                 <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
                                                             </div>
                                                         </div><!-- .row -->
-
                                                     </div>
                                                 <?php endforeach; ?>
-
                                             </div>
                                             <?php DynamicFormWidget::end(); ?>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     <?php endif; ?>
-
                     <div class="card-action" <?php if ($showlot) : ?>style="background-color: #f0f8ff;" <?php endif; ?>>
                         <div class="card-action">
-
                             <div class="row">
                                 <div class="col m12 l6">
-                                    <label class="blue-text">Nom de société</label>
                                     <?= $form->field($model, "company_name")
                                         ->widget(\yii\jui\AutoComplete::class, [
                                             "clientOptions" => ["source" => $companiesNames,]
-                                        ])->label(false); ?>
+                                        ])->label("Nom de société"); ?>
                                 </div>
-
                                 <div class="col m12 l6">
-                                    <label class="blue-text">Contact client</label>
                                     <?= $form->field($model, "contact_email")
                                         ->widget(\yii\jui\AutoComplete::class, [
                                             "clientOptions" => [
                                                 "source" => $contactsEmail,
                                             ],
-                                        ])->label(false)
+                                        ])->label("Contact client")
                                     ?>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
-
                     <div class="card-action" <?php if ($showlot) : ?>style="background-color: #f0f8ff;" <?php endif; ?>>
                         <div class="form-group to-the-right">
                             <?= Html::submitButton("Suivant <i class='material-icons right'>arrow_forward</i>", ["class" => "waves-effect waves-light btn btn-blue", "title" => "Sauvegarde le brouillon et vous dirige vers l'étape suivante"]) ?>
                         </div>
                     </div>
-
                 </div>
             </div>
             <?php ActiveForm::end(); ?>

@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 
 /**
  * Classe relative au modèle métier des sociétés.
- * Celle-ci permet lorsque l'on souhaite ajouter une nouvelle société, de vérifier la validité des données rentrées et de créer un formulaire à partir
+ * Celle-ci permet lorsque l"on souhaite ajouter une nouvelle société, de vérifier la validité des données rentrées et de créer un formulaire à partir
  * des champs de la table.
  * 
  * @version Capatools v2.0
@@ -17,70 +17,75 @@ use yii\helpers\ArrayHelper;
 class CompanyCreateForm extends Company
 {
 
+    // Correspond au champ html : Liste sélectionnable des types.
+    public $select_type;
+
     public function rules()
     {
         return [
-            ['name', 'required', 'message' => 'Indiquer le nom de la société !'],
-            ['name', 'nameChecker', 'skipOnEmpty' => false, 'skipOnError' => false],
+            [["select_type"], "safe"],
+            ["name", "required", "message" => "Indiquer le nom de la société !"],
+            ["name", "nameChecker", "skipOnEmpty" => false, "skipOnError" => false],
 
-            ['email', 'required', 'message' => 'Indiquer l\'email de la société !'],
-            ['email', 'emailChecker', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['email', 'email'],
+            ["email", "required", "message" => "Indiquer l\"email de la société !"],
+            ["email", "emailChecker", "skipOnEmpty" => false, "skipOnError" => false],
+            ["email", "email"],
 
-            ['country', 'required', 'message' => 'Indiquer le pays !'],
-            ['country', 'countryChecker', 'skipOnEmpty' => false, 'skipOnError' => false],
+            ["country", "required", "message" => "Indiquer le pays !"],
+            ["country", "countryChecker", "skipOnEmpty" => false, "skipOnError" => false],
 
-            ['city', 'required', 'message' => 'Indiquer la ville !'],
+            ["city", "required", "message" => "Indiquer la ville !"],
 
-            ['postal_code', 'required', 'message' => 'Indiquer le code postal !'],
-            ['postal_code', 'string', 'message' => 'Indiquer le code postal !'],
-            ['postal_code', 'postalCodeChecker', 'skipOnEmpty' => false, 'skipOnError' => false],
+            ["address", "required", "message" => "Indiquer l'addresse !"],
 
-            ['tva', 'tvaChecker', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['tva', 'string', 'min' => 13, 'max' => 16],
+            ["postal_code", "required", "message" => "Indiquer le code postal !"],
+            ["postal_code", "string", "message" => "Indiquer le code postal !"],
+            ["postal_code", "postalCodeChecker", "skipOnEmpty" => false, "skipOnError" => false],
 
-            ['type', 'required',  'message' => 'Il doit y avoir un type de sélectionné !'],
+            ["tva", "tvaChecker", "skipOnEmpty" => false, "skipOnError" => false],
+            ["tva", "string", "min" => 13, "max" => 16],
+
+            ["select_type", "required",  "message" => "Il doit y avoir un type de sélectionné !"],
         ];
     }
 
     /**
      * Liste de vérifications personnalisés effectuées sur le champs - name :
-     *  - Vérification que le nom d'entreprise n'existe pas déjà en bdd.
+     *  - Vérification que le nom d"entreprise n"existe pas déjà en bdd.
      */
     public function nameChecker($attribute, $params)
     {
-        $companiesNames = ArrayHelper::map(self::find()->all(), 'id', 'name');
+        $companiesNames = ArrayHelper::map(self::find()->all(), "id", "name");
         $companiesNames = array_merge($companiesNames);
 
         if (in_array($this->$attribute, $companiesNames)) {
-            $this->addError($attribute, 'Cette société existe déjà !');
+            $this->addError($attribute, "Cette société existe déjà !");
         }
     }
 
     /**
      * Liste de vérifications personnalisés effectuées sur le champs - email :
-     *  - Vérification que l'email n'existe pas déjà en bdd.
+     *  - Vérification que l"email n"existe pas déjà en bdd.
      */
     public function emailChecker($attribute, $params)
     {
-        $companiesEmail = ArrayHelper::map(Company::find()->all(), 'id', 'email');
+        $companiesEmail = ArrayHelper::map(Company::find()->all(), "id", "email");
         $companiesEmail = array_merge($companiesEmail);
 
         if (in_array($this->$attribute, $companiesEmail)) {
-            $this->addError($attribute, 'Cet email est déjà utilisé sur un client !');
+            $this->addError($attribute, "Cet email est déjà utilisé sur un client !");
         }
     }
 
     /**
      * Liste de vérifications personnalisés effectuées sur le champs - tva :
-     *  - Vérification que la tva est bien celle de l'entreprise inséré dans le champ non (dans le cas où celle-ci existerait sur l'api).
-     *  - Vérification que la tva est inscrite dans le champ dans le cas où le type d'entreprise n'est pas égale à 0.
-     *  - Vérification que la tva n'existe pas déjà en bdd.
+     *  - Vérification que la tva est bien celle de l"entreprise inséré dans le champ non (dans le cas où celle-ci existerait sur l"api).
+     *  - Vérification que la tva est inscrite dans le champ dans le cas où le type d"entreprise n"est pas égale à 0.
+     *  - Vérification que la tva n"existe pas déjà en bdd.
      *  - Vérification que le format de la tva soit correcte.
      */
     public function tvaChecker($attribute, $params)
     {
-
         $companyData = CompanyHttpRequest::getUniqueCompanyFromName($this->name);
 
         if ($companyData != null && $companyData->tva != null && $this->tva != $companyData->tva) {
@@ -94,22 +99,18 @@ class CompanyCreateForm extends Company
 
         $companyType = $this->type;
         if ($companyType == 0 && $this->tva == null) {
-            $this->addError($attribute, 'Vous devez préciser la tva !');
+            $this->addError($attribute, "Vous devez préciser la tva !");
         }
 
-        $companiesTva = array_merge(ArrayHelper::map(Company::find()->all(), 'id', 'tva'));
+        $companiesTva = array_merge(ArrayHelper::map(Company::find()->all(), "id", "tva"));
         if (in_array($this->$attribute, $companiesTva) && $this->$attribute != null) {
-            $this->addError($attribute, 'Cette tva existe déjà !');
-        }
-
-        if (preg_match('^[A-Za-z]{2,4}(?=.{2,12}$)[-_\s0-9]*(?:[a-zA-Z][-_\s0-9]*){0,2}^', $this->tva)) {
-            $this->addError($attribute, 'Mauvais format de tva');
+            $this->addError($attribute, "Cette tva existe déjà !");
         }
     }
 
     /**
      * Liste de vérifications personnalisés effectuées sur le champs - postal_code :
-     *  - Vérification que le code postal corresponde bien au code postal de l'entreprise existante (dans le cas où elle est récupérable depuis l'api REST).
+     *  - Vérification que le code postal corresponde bien au code postal de l"entreprise existante (dans le cas où elle est récupérable depuis l"api REST).
      */
     public function postalCodeChecker($attribute, $params)
     {
@@ -126,7 +127,7 @@ class CompanyCreateForm extends Company
     /**
      * Liste de vérifications personnalisés effectuées sur le champs - postal_code :
      *  - Vérification que le pays incrit existe réellement.
-     *  - Vérification lorsque l'on rentre une tva Française que le pays sélectionné est la France.
+     *  - Vérification lorsque l"on rentre une tva Française que le pays sélectionné est la France.
      */
     public function countryChecker($attribute, $params)
     {
@@ -138,7 +139,7 @@ class CompanyCreateForm extends Company
         $companyData = CompanyHttpRequest::getUniqueCompanyFromName($this->name);
         if ($companyData != null && $this->country != "France") {
             // TODO On ne connait pas encore toutes les contraintes.
-            //$this->addError($attribute, "La société que vous êtes en train d'ajouter est Française.");
+            //$this->addError($attribute, "La société que vous êtes en train d"ajouter est Française.");
         }
     }
 }
