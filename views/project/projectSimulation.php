@@ -73,7 +73,6 @@ $totalprojet = 0.0;
                                     </tbody>
                                 </table>
                             </div>
-
                             <div class="col s12 l6">
                                 <table class="highlight">
                                     <tbody>
@@ -88,9 +87,7 @@ $totalprojet = 0.0;
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
-
                         <div class="row block-buttons-spacing">
                             <div class="col s12">
                                 <div class="to-the-right">
@@ -106,7 +103,6 @@ $totalprojet = 0.0;
                                             'title' => "Permet de créer, modifier, supprimer des tâche"
                                         ]
                                     ); ?>
-
                                     <?= Html::a(
                                         '<span>Gérer les dépenses</span>',
                                         Url::to(['project/update-dependencies-consumables', 'number' => 0, 'project_id' => $project->id]),
@@ -122,7 +118,6 @@ $totalprojet = 0.0;
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <!-- Card view basique : PROJETS -->

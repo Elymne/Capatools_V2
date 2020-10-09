@@ -182,7 +182,8 @@ function getCollumnsArray()
     array_push($result, getViewButtonArray());
     array_push($result, getPdfButtonArray());
     array_push($result, getExcelButtonArray());
-    array_push($result, getPieceButtonArray());
+    //todo Pour l'instant, pas d'utilité sur ce bouton.
+    //array_push($result, getPieceButtonArray());
 
     return $result;
 }
