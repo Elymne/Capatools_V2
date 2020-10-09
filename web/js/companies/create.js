@@ -1,18 +1,22 @@
 $(() => {
-    const typeSelector = $("#companycreateform-type");
-    const privateEstablishement = "ENTREPRISE PRIVÉE";
+    const privateEstablishementString = 'ENTREPRISE PRIVÉE'
+    const tvaBlockDiv = $('#tva-block')
+    const typeSelector = $('#companycreateform-select_type')
+
+    hideOrShowTvaField(privateEstablishementString, tvaBlockDiv, typeSelector)
 
     // Filter data from company name.
-    typeSelector.on("change", () => {
-        const selectedCompany = typeSelector.children("option:selected").html();
+    typeSelector.on('change', () => {
+        hideOrShowTvaField(privateEstablishementString, tvaBlockDiv, typeSelector)
+    })
+})
 
-        const filter = selectedCompany.toUpperCase();
-        const div = document.getElementsByClassName("field-tva-field")[0];
+const hideOrShowTvaField = (privateEstablishementString, tvaBlockDiv, typeSelector) => {
+    const filter = typeSelector.children('option:selected').html().toUpperCase()
 
-        if (filter == privateEstablishement) {
-            div.style.display = "";
-        } else {
-            div.style.display = "none";
-        }
-    });
-});
+    if (filter == privateEstablishementString) {
+        tvaBlockDiv.show()
+    } else {
+        tvaBlockDiv.hide()
+    }
+}
