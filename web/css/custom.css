@@ -3,7 +3,7 @@
 /* --------------------------------------------------------- */
 * {
     font-size: 15px;
-    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 /* --------------------------------------------------------- */
@@ -18,7 +18,7 @@
 
 /* Element de background qui a une image de fond */
 #body-login {
-    background-image: url("../images/BG_capa_2.png");
+    background-image: url('../images/BG_capa_2.png');
     background-size: cover;
 }
 
@@ -208,4 +208,29 @@ button.remove-item-button-type:hover {
     padding: 0px 12px;
     border-top: 1px solid rgba(160, 160, 160, 0.2);
     background-color: #f4f3f3;
+}
+
+.btn-floating-minus {
+    line-height: 26px;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    overflow: hidden;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    cursor: pointer;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+    vertical-align: middle;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.btn-floating-minus i {
+    font-size: 0.8rem;
+    line-height: 26px;
+    display: inline-block;
+    width: inherit;
+    color: #fff;
 }

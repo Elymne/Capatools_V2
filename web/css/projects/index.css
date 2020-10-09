@@ -6,28 +6,3 @@ th {
     vertical-align: middle;
     border-radius: 2px;
 }
-
-.btn-floating {
-    line-height: 26px;
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    overflow: hidden;
-    width: 26px;
-    height: 26px;
-    padding: 0;
-    cursor: pointer;
-    -webkit-transition: background-color 0.3s;
-    transition: background-color 0.3s;
-    vertical-align: middle;
-    color: #fff;
-    border-radius: 50%;
-}
-
-.btn-floating i {
-    font-size: 0.8rem;
-    line-height: 26px;
-    display: inline-block;
-    width: inherit;
-    color: #fff;
-}

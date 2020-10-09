@@ -32,7 +32,37 @@ $this->params['breadcrumbs'][] = $this->title;
                     <label>Filtres</label>
                 </div>
                 <div class="card-action">
-                    <?php getSearchFilter($companiesName) ?>
+                    <?= Select2::widget([
+                        'id' => 'company-name-search',
+                        'name' => 'droplist_company',
+                        'data' => $companiesName,
+                        "theme" => Select2::THEME_MATERIAL,
+                        'pluginLoading' => false,
+                        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ]
+                    ]); ?>
+                    <br />
+
+                    <?= Html::input('text', 'textinput_capaid', "", [
+                        'id' => 'capa-id-search',
+                        'maxlength' => 10,
+                        'style' => 'width:350px',
+                        'placeholder' => 'Rechercher un capa id',
+                        'onkeyup' => 'capaidFilterSearch()'
+                    ]) ?>
+                    <br /><br />
+
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
+                        <span class="span-combobox">Afficher les modèles</span>
+                    </label>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox" />
+                        <span class="span-combobox">Afficher les brouillons</span>
+                    </label>
+
                 </div>
             </div>
 
@@ -41,7 +71,28 @@ $this->params['breadcrumbs'][] = $this->title;
                     <label>Réglage du tableau</label>
                 </div>
                 <div class="card-action">
-                    <?php echo getFilterCardContent() ?>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" checked="checked" id="capaid-checkbox" />
+                        <span class="span-combobox">CapaID</span>
+                    </label>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" checked="checked" id="projectname-checkbox" />
+                        <span class="span-combobox">Nom interne</span>
+                    </label>
+                    <?php if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) : ?>
+                        <label class="rigthspace-20px">
+                            <input type="checkbox" class="filled-in" id="cellule-checkbox" />
+                            <span class="span-combobox">Cellule</span>
+                        </label>
+                    <?php endif; ?>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" checked="checked" id="company-checkbox" />
+                        <span class="span-combobox">Client</span>
+                    </label>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" checked="checked" id="status-checkbox" />
+                        <span class="span-combobox">Statut</span>
+                    </label>
                 </div>
             </div>
 
@@ -76,78 +127,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php
-
-function getSearchFilter($companiesName)
-{
-
-    echo Select2::widget([
-        'id' => 'company-name-search',
-        'name' => 'droplist_company',
-        'data' => $companiesName,
-        "theme" => Select2::THEME_MATERIAL,
-        'pluginLoading' => false,
-        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
-        'pluginOptions' => [
-            'allowClear' => true
-        ]
-    ]);
-
-    echo '<br />';
-
-    echo Html::input('text', 'textinput_capaid', "", [
-        'id' => 'capa-id-search',
-        'maxlength' => 10,
-        'style' => 'width:350px',
-        'placeholder' => 'Rechercher un capa id',
-        'onkeyup' => 'capaidFilterSearch()'
-    ]);
-
-    echo '<br />';
-    echo '<br />';
-
-    echo <<<HTML
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
-            <span class="span-combobox">Afficher les modèles</span>
-        </label>
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox"/>
-            <span class="span-combobox">Afficher les brouillons</span>
-        </label>
-    HTML;
-}
-/**
- * Used to display combobox.
- * 
- * @return string HTML content.
- */
-function getFilterCardContent(): string
-{
-    $HTML =
-        "<label class=\"rigthspace-20px\">
-    <input type=\"checkbox\" class=\"filled-in\" checked=\"checked\" id=\"capaid-checkbox\" />
-    <span class=\"span-combobox\">CapaID</span>
-</label>
-<label class=\"rigthspace-20px\">
-    <input type=\"checkbox\" class=\"filled-in\" checked=\"checked\" id=\"projectname-checkbox\"/>
-    <span class=\"span-combobox\">Nom interne</span>
-</label>";
-    if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) {
-        $HTML .= "<label class=\"rigthspace-20px\">
-    <input type=\"checkbox\" class=\"filled-in\" id=\"cellule-checkbox\"/>
-    <span class=\"span-combobox\">Cellule</span>
-</label>";
-    }
-    $HTML .= "<label class=\"rigthspace-20px\">
-    <input type=\"checkbox\" class=\"filled-in\" checked=\"checked\" id=\"company-checkbox\"/>
-    <span class=\"span-combobox\">Client</span>
-</label>
-<label class=\"rigthspace-20px\">
-    <input type=\"checkbox\" class=\"filled-in\" checked=\"checked\" id=\"status-checkbox\"/>
-    <span class=\"span-combobox\">Statut</span>
-</label>";
-    return $HTML;
-}
 
 /**
  * Used to display all data needed for the table.
@@ -230,6 +209,27 @@ function getStatusArray()
     ];
 }
 
+function getUpdateButtonArray()
+{
+    return [
+        'format' => 'raw',
+        'label' => 'Voir',
+        'value' => function ($model, $key, $index, $column) {
+            return Html::a(
+                '<i class="material-icons center">build</i>',
+                Url::to(['project-simulate', 'project_id' => $model->id]),
+                [
+                    'id' => 'grid-custom-button',
+                    'data-pjax' => true,
+                    'action' => Url::to(['project-simulate', 'project_id' => $model->id]),
+                    'class' => 'btn-floating-minus waves-effect waves-light btn-green',
+                    'title' => "Permet d'accéder au devis"
+                ]
+            );
+        }
+    ];
+}
+
 function getModelButtonArray()
 {
     return [
@@ -238,25 +238,25 @@ function getModelButtonArray()
         'value' => function ($model, $key, $index, $column) {
             if ($model->state == Project::STATE_DEVIS_DRAFT) {
                 return Html::a(
-                    '<i class="material-icons right black-text">star_border</i>',
+                    '<i class="material-icons center black-text">star_border</i>',
                     Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
                     [
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
                         'action' => Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
-                        'class' => 'btn-floating waves-effect waves-light  yellow lighten-4',
+                        'class' => 'btn-floating-minus waves-effect waves-light  yellow lighten-4',
                         'title' => "Transforme ce devis en modèle"
                     ]
                 );
             } else {
                 return Html::a(
-                    '<i class="material-icons right">star</i>',
+                    '<i class="material-icons center">star</i>',
                     Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
                     [
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
                         'action' => Url::to(['create-model', 'id' => $model->id, 'view' => 'index']),
-                        'class' => 'btn-floating waves-effect waves-light btn-yellow',
+                        'class' => 'btn-floating-minus waves-effect waves-light btn-yellow',
                         'title' => "Transforme ce devis en modèle"
                     ]
                 );
@@ -264,26 +264,7 @@ function getModelButtonArray()
         }
     ];
 }
-function getUpdateButtonArray()
-{
-    return [
-        'format' => 'raw',
-        'label' => 'Voir',
-        'value' => function ($model, $key, $index, $column) {
-            return Html::a(
-                '<i class="material-icons right">build</i>',
-                Url::to(['project-simulate', 'project_id' => $model->id]),
-                [
-                    'id' => 'grid-custom-button',
-                    'data-pjax' => true,
-                    'action' => Url::to(['project-simulate', 'project_id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-green',
-                    'title' => "Permet d'accéder au devis"
-                ]
-            );
-        }
-    ];
-}
+
 function getDeleteButtonArray()
 {
     return [
@@ -298,7 +279,7 @@ function getDeleteButtonArray()
                         'id' => 'grid-custom-button',
                         'data-pjax' => true,
                         'action' => Url::to(['delete-draft-project', 'id' => $model->id]),
-                        'class' => 'btn-floating waves-effect waves-light btn-red',
+                        'class' => 'btn-floating-minus waves-effect waves-light btn-red',
                         'title' => "Permet de supprimer le devis"
                     ]
                 );
@@ -322,7 +303,7 @@ function getDuplicateButtonArray()
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['duplicate-project', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-blue',
+                    'class' => 'btn-floating-minus waves-effect waves-light btn-blue',
                     'title' => "Dupliquer le devis"
                 ]
             );
