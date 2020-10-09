@@ -34,7 +34,7 @@ ProjectViewAsset::register($this);
         <div class="row">
             <div class="card">
                 <div class="card-action">
-                    <?php echo displayActionButtons($model) ?>
+                    <?= displayActionButtons($model) ?>
                 </div>
             </div>
 
@@ -43,7 +43,18 @@ ProjectViewAsset::register($this);
                     <label>Etat du contrat</label>
                 </div>
                 <div class="card-action">
-                    <?php echo createTimeline(Project::STATES, $model->getStatusIndex()) ?>
+                    <div class="timeline">
+                        <?php foreach (Project::STATES as $key => $stage) : ?>
+                            <div class="timeline-event">
+                                <p class="event-label"><?php echo $stage; ?></p>
+                                <?php if (isStatusPassed($model->getStatusIndex(), $key)) : ?>
+                                    <span class="point-filled"></span>
+                                <?php else : ?>
+                                    <span class="point"></span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,21 +132,6 @@ ProjectViewAsset::register($this);
 </div>
 
 <?php
-
-function createTimeline(array $stages, int $indexStatus)
-{
-?>
-    <div class="timeline">
-        <?php foreach ($stages as $key => $stage) { ?>
-            <div class="timeline-event">
-                <p class="event-label"><?php echo $stage; ?></p>
-                <?php if (isStatusPassed($indexStatus, $key)) echo '<span class="point-filled"></span>';
-                else echo '<span class="point"></span>'; ?>
-            </div>
-        <?php } ?>
-    </div>
-<?php
-}
 
 function isStatusPassed(int $indexStatus, int $arrayKey): bool
 {
@@ -552,7 +548,7 @@ function displayActionButtons($model)
 
     <?php if ($model->state == PROJECT::STATE_DEVIS_SENDED) : ?>
         <?= Html::a(
-            'Cloturer le devis <i class="material-icons right">clear</i>',
+            'Devis refusé par le client <i class="material-icons right">clear</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_CANCELED,],
             ['class' => 'waves-effect waves-light btn btn-red', 'data' => [
                 'confirm' => 'Cloturer le devis ?'
@@ -563,7 +559,7 @@ function displayActionButtons($model)
 
     <?php if ($model->state == PROJECT::STATE_DEVIS_SIGNED) : ?>
         <?= Html::a(
-            'Abandonner la prestation <i class="material-icons right">clear</i>',
+            'Annuler le projet <i class="material-icons right">clear</i>',
             ['update-status', 'id' => $model->id, 'status' => Project::STATE_DEVIS_CANCELED,],
             ['class' => 'waves-effect waves-light btn btn-red', 'data' => [
                 'confirm' => 'Attention : Les échanciers non facturés seront abandonnés. Abandonner la prestation ? '
