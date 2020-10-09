@@ -64,74 +64,58 @@ $(() => {
             );
 
             initNewEquipementRepaymentAdded(i);
-            let riskObject = equipmentRepaymentRiskTimeUpdate(
-                nbDaysField,
-                nbHoursField,
-                timeRiskStringifyField,
-                i
-            );
-            equipmentRepaymentTotalPriceUpdate(
-                riskObject.riskDay,
-                riskObject.riskHour,
-                dailyPriceField,
-                totalPriceField
-            );
 
             dailyPriceField.on("input", () => {
-                let riskObject = equipmentRepaymentRiskTimeUpdate(
+                let nbRiskDay = equipmentRepaymentRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 equipmentRepaymentTotalPriceUpdate(
-                    riskObject.riskDay,
-                    riskObject.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             riskSelector.change(() => {
-                let riskObject = equipmentRepaymentRiskTimeUpdate(
+                let nbRiskDay = equipmentRepaymentRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 equipmentRepaymentTotalPriceUpdate(
-                    riskObject.riskDay,
-                    riskObject.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             nbDaysField.on("input", () => {
-                let riskObject = equipmentRepaymentRiskTimeUpdate(
+                let nbRiskDay = equipmentRepaymentRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 equipmentRepaymentTotalPriceUpdate(
-                    riskObject.riskDay,
-                    riskObject.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             nbHoursField.on("input", () => {
-                let riskObject = equipmentRepaymentRiskTimeUpdate(
+                let nbRiskDay = equipmentRepaymentRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 equipmentRepaymentTotalPriceUpdate(
-                    riskObject.riskDay,
-                    riskObject.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
@@ -165,59 +149,55 @@ $(() => {
             );
 
             initNewLaboratoryContributorAdded(i);
-            let riskObjectcont = laboratoryContributorRiskTimeUpdate(
+            let nbRiskDay = laboratoryContributorRiskTimeUpdate(
                 nbDaysField,
                 nbHoursField,
                 timeRiskStringifyField,
                 i
             );
             laboratoryContributorTotalPriceUpdate(
-                riskObjectcont.riskDay,
-                riskObjectcont.riskHour,
+                nbRiskDay,
                 dailyPriceField,
                 totalPriceField
             );
 
             riskSelector.change(() => {
-                let riskObjectcont = laboratoryContributorRiskTimeUpdate(
+                let nbRiskDay = laboratoryContributorRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 laboratoryContributorTotalPriceUpdate(
-                    riskObjectcont.riskDay,
-                    riskObjectcont.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             nbDaysField.on("input", () => {
-                let riskObjectcont = laboratoryContributorRiskTimeUpdate(
+                let nbRiskDay = laboratoryContributorRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 laboratoryContributorTotalPriceUpdate(
-                    riskObjectcont.riskDay,
-                    riskObjectcont.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             nbHoursField.on("input", () => {
-                let riskObjectcont = laboratoryContributorRiskTimeUpdate(
+                let nbRiskDay = laboratoryContributorRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 laboratoryContributorTotalPriceUpdate(
-                    riskObjectcont.riskDay,
-                    riskObjectcont.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
@@ -280,74 +260,69 @@ $(() => {
 
             hideEquipmentRisk(isPreProject, i);
 
-            let riskObject = equipmentRepaymentRiskTimeUpdate(
+            let nbRiskDay = equipmentRepaymentRiskTimeUpdate(
                 nbDaysField,
                 nbHoursField,
                 timeRiskStringifyField,
                 i
             );
             equipmentRepaymentTotalPriceUpdate(
-                riskObject.riskDay,
-                riskObject.riskHour,
+                nbRiskDay,
                 dailyPriceField,
                 totalPriceField
             );
 
             dailyPriceField.on("input", () => {
-                let riskObject = equipmentRepaymentRiskTimeUpdate(
+                let nbRiskDay = equipmentRepaymentRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 equipmentRepaymentTotalPriceUpdate(
-                    riskObject.riskDay,
-                    riskObject.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             riskSelector.change(() => {
-                let riskObject = equipmentRepaymentRiskTimeUpdate(
+                let nbRiskDay = equipmentRepaymentRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 equipmentRepaymentTotalPriceUpdate(
-                    riskObject.riskDay,
-                    riskObject.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             nbDaysField.on("input", () => {
-                let riskObject = equipmentRepaymentRiskTimeUpdate(
+                let nbRiskDay = equipmentRepaymentRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 equipmentRepaymentTotalPriceUpdate(
-                    riskObject.riskDay,
-                    riskObject.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             nbHoursField.on("input", () => {
-                let riskObject = equipmentRepaymentRiskTimeUpdate(
+                let nbRiskDay = equipmentRepaymentRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 equipmentRepaymentTotalPriceUpdate(
-                    riskObject.riskDay,
-                    riskObject.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
@@ -423,74 +398,70 @@ $(() => {
             );
 
             hideContributorRisk(isPreProject, i);
-            let riskObjectcont = laboratoryContributorRiskTimeUpdate(
+
+            let nbRiskDay = laboratoryContributorRiskTimeUpdate(
                 nbDaysField,
                 nbHoursField,
                 timeRiskStringifyField,
                 i
             );
             laboratoryContributorTotalPriceUpdate(
-                riskObjectcont.riskDay,
-                riskObjectcont.riskHour,
+                nbRiskDay,
                 dailyPriceField,
                 totalPriceField
             );
 
             riskSelector.change(() => {
-                let riskObjectcont = laboratoryContributorRiskTimeUpdate(
+                let nbRiskDay = laboratoryContributorRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 laboratoryContributorTotalPriceUpdate(
-                    riskObjectcont.riskDay,
-                    riskObjectcont.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             dailyPriceField.on("input", () => {
-                let riskObjectcont = laboratoryContributorRiskTimeUpdate(
+                let nbRiskDay = laboratoryContributorRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 laboratoryContributorTotalPriceUpdate(
-                    riskObjectcont.riskDay,
-                    riskObjectcont.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             nbDaysField.on("input", () => {
-                let riskObjectcont = laboratoryContributorRiskTimeUpdate(
+                let nbRiskDay = laboratoryContributorRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 laboratoryContributorTotalPriceUpdate(
-                    riskObjectcont.riskDay,
-                    riskObjectcont.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
             });
 
             nbHoursField.on("input", () => {
-                let riskObjectcont = laboratoryContributorRiskTimeUpdate(
+                let nbRiskDay = laboratoryContributorRiskTimeUpdate(
                     nbDaysField,
                     nbHoursField,
                     timeRiskStringifyField,
                     i
                 );
                 laboratoryContributorTotalPriceUpdate(
-                    riskObjectcont.riskDay,
-                    riskObjectcont.riskHour,
+                    nbRiskDay,
                     dailyPriceField,
                     totalPriceField
                 );
@@ -621,49 +592,34 @@ const getValueFromContributorRiskSelectedByIndex = (risksData, index = 0) => {
  *
  * @returns Un prix.
  */
-const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => {
-    return (
-        ((nbDay * laboxyTimeDay + nbHour) * daily_price) /
-        laboxyTimeDay
-    ).toFixed(2);
+const calculateEquipmentPrice = (nbDay, daily_price) => {
+    return (nbDay * daily_price).toFixed(2);
 };
 
 /**
  * Fonction qui va être utilisé pour faire le calcul du coût d'un contributeur.
  * @param {*} nbDay - Nombre de jours
- * @param {*} nbHour - Nombre d'heures
  * @param {*} daily_price - Un prix
  *
  * @returns Un prix.
  */
-const calculateContributorPrice = (nbDay, nbHour, daily_price) => {
-    return (
-        ((nbDay * laboxyTimeDay + nbHour) * daily_price) /
-        laboxyTimeDay
-    ).toFixed(2);
+const calculateContributorPrice = (nbRiskDay, daily_price) => {
+    return (nbRiskDay * daily_price).toFixed(2);
 };
 
 /**
  * Fonction qui va être utilisé pour calculer le temps d'incertitude par rapport au risque.
  * @param {*} nbDay - Nombre de jours
  * @param {*} nbHour - Nombre d'heures
- * @param {*} risk - Un objet risk
+ * @param {*} nbRiskDay - le temps en jour du risk
  *
  * @return Un objet avec deux valeurs de temps.
  */
 const calculateRiskTime = (nbDay, nbHour, risk) => {
-    let riskDay = nbDay * risk.coefficient;
-    let riskHour = nbHour * risk.coefficient;
+    let nbRiskDay =
+        (parseInt(nbDay) + parseInt(nbHour) / laboxyTimeDay) * risk.coefficient;
 
-    const decimalDay = riskDay - Math.floor(riskDay);
-    riskDay = Math.trunc(riskDay);
-
-    riskHour = Math.round(riskHour + decimalDay * laboxyTimeDay);
-    const additionalDay = Math.trunc(riskHour / laboxyTimeDay);
-    riskHour = riskHour % laboxyTimeDay;
-
-    riskDay = additionalDay + riskDay;
-    return { riskDay, riskHour };
+    return nbRiskDay;
 };
 
 /**
@@ -671,10 +627,8 @@ const calculateRiskTime = (nbDay, nbHour, risk) => {
  * @param {*} riskDay
  * @param {*} riskHour
  */
-const stringifyRiskTime = (riskDay = 0, riskHour = 0) => {
-    return `${parseFloat(riskDay).toFixed(0)}j ${parseFloat(riskHour).toFixed(
-        0
-    )}h`;
+const stringifyRiskTime = (riskDay) => {
+    return riskDay + "j";
 };
 
 /**
@@ -773,15 +727,13 @@ const equipmentRepaymentRiskTimeUpdate = (
     timeRiskStringifyField,
     index
 ) => {
-    const riskObject = calculateRiskTime(
+    const riskday = calculateRiskTime(
         !nbDaysField.val() ? 0 : nbDaysField.val(),
         !nbHoursField.val() ? 0 : nbHoursField.val(),
         getValueFromEquipmentRiskSelectedByIndex(risksData, index, number)
     );
-    timeRiskStringifyField.val(
-        stringifyRiskTime(riskObject.riskDay, riskObject.riskHour)
-    );
-    return riskObject;
+    timeRiskStringifyField.val(stringifyRiskTime(riskday));
+    return riskday;
 };
 
 /**
@@ -793,17 +745,13 @@ const equipmentRepaymentRiskTimeUpdate = (
  */
 const equipmentRepaymentTotalPriceUpdate = (
     nbDaysField,
-    nbHoursField,
     dailyPriceField,
     totalPriceField
 ) => {
     const result = calculateEquipmentPrice(
         nbDaysField,
-        nbHoursField,
         !dailyPriceField.val() ? 0 : dailyPriceField.val()
     );
-    console.log(nbDaysField);
-    console.log(nbHoursField);
     totalPriceField.val(result);
 };
 
@@ -818,15 +766,13 @@ const laboratoryContributorRiskTimeUpdate = (
     timeRiskStringifyField,
     index
 ) => {
-    const riskObject = calculateRiskTime(
+    const nbRiskDay = calculateRiskTime(
         !nbDaysField.val() ? 0 : nbDaysField.val(),
         !nbHoursField.val() ? 0 : nbHoursField.val(),
         getValueFromContributorRiskSelectedByIndex(risksData, index)
     );
-    timeRiskStringifyField.val(
-        stringifyRiskTime(riskObject.riskDay, riskObject.riskHour)
-    );
-    return riskObject;
+    timeRiskStringifyField.val(stringifyRiskTime(nbRiskDay));
+    return nbRiskDay;
 };
 
 /**
@@ -838,13 +784,11 @@ const laboratoryContributorRiskTimeUpdate = (
  */
 const laboratoryContributorTotalPriceUpdate = (
     nbDaysField,
-    nbHoursField,
     dailyPriceField,
     totalPriceField
 ) => {
     const result = calculateContributorPrice(
         nbDaysField,
-        nbHoursField,
         !dailyPriceField.val() ? 0 : dailyPriceField.val()
     );
     totalPriceField.val(result);
