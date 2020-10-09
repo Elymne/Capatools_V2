@@ -176,11 +176,11 @@ class CompanyController extends Controller
 
             if ($model->validate()) {
 
-                if ($model->type != CompanyTypeEnum::SELF_EMPLOYED) {
+                $model->type = CompanyTypeEnum::COMPANY_TYPE[$model->select_type];
+                if ($model->type != CompanyTypeEnum::PRIVATE_COMPANY) {
                     $model->tva = null;
                 }
 
-                $model->type = CompanyTypeEnum::COMPANY_TYPE[$model->type];
                 $model->save(false);
 
                 MenuSelectorHelper::setMenuProjectCreate();

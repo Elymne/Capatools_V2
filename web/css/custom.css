@@ -91,7 +91,7 @@
 /* Permet de changer les caractéristiques des labels dans les headers-cards */
 .card-content label {
     color: #333333;
-    font-size: 15px;
+    font-size: 1.1rem;
 }
 
 /* Permet de changer la color de la top-bar et de régler un soucis de margin top */
@@ -167,7 +167,8 @@ a {
 /* Classe qu'on applique aux titres des dynamicForm (si ils en ont un) */
 .dynamic-form-label {
     margin-top: 4px;
-    margin-bottom: 28px;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
 }
 
 /* Créer une classe qui ne s'applique que sur les td qui permet de définir une taille max et de mettre les fonts en bold */
@@ -179,4 +180,32 @@ td.header {
 /* Permet de changer un peu les comboBox (qui sont enfait des spans stylisé) de filtrage des les indexs qui sont bien trop collés nativement */
 span.span-combobox {
     font-weight: lighter;
+}
+
+/* Texte un peu spécial qu'on utilise pour ajouter des éléments dans les dynamicForm */
+p.add-item-link-type {
+    margin-top: 14px;
+    color: #01579b;
+    font-style: italic;
+    cursor: pointer;
+}
+
+p.add-item-link-type:hover {
+    text-decoration: underline;
+}
+
+button.remove-item-button-type {
+    padding: 0rem;
+    margin-top: 12px;
+}
+
+button.remove-item-button-type:hover {
+    color: tomato;
+}
+
+.card .card-item {
+    position: relative;
+    padding: 0px 12px;
+    border-top: 1px solid rgba(160, 160, 160, 0.2);
+    background-color: #f4f3f3;
 }

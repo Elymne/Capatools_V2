@@ -16,9 +16,9 @@ class IdLaboxyManager
      * 
      * @return string, retourne un capa-id fraichement généré.
      */
-    static function generateDraftId(Project $project)
+    static function generateDraftId(String $internal_name)
     {
-        $internalName = str_replace(' ', '_', $project->internal_name);
+        $internalName = str_replace(' ', '_', $internal_name);
         $internalName = strtoupper($internalName);
         return "AVT-" . $internalName;
     }
@@ -29,10 +29,10 @@ class IdLaboxyManager
      * 
      * @return string, retourne un capa-id fraichement généré.
      */
-    static function generateLaboxyDraftId(Project $project): string
+    static function generateLaboxyDraftId(String $company_name, String $internal_name): string
     {
-        $companyName = $project->company->name;
-        $projectTitle = $project->internal_name;
+        $companyName = $company_name;
+        $projectTitle = $internal_name;
 
         return "AVANT PROJET - " . $companyName . " - " . $projectTitle;
     }
@@ -47,7 +47,7 @@ class IdLaboxyManager
     {
         $celluleIdentity = $project->cellule->identity;
         $idNumber = static::generateNumberFromId($project->id);
-        $companyName = $project->company->name;
+        $companyName = $project->company_name;
         $projectTitle = $project->internal_name;
 
         return $celluleIdentity . $idNumber . " - " . $companyName . " - " . $projectTitle;

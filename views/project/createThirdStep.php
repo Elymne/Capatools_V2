@@ -25,7 +25,6 @@ $risksName = array_map(function ($risk) {
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
-
 <?php if ($sucess != null) : ?>
     <?php if ($sucess) :  ?>
         <?= Alert::widget(['options' => ['class' => 'alert-success',], 'body' => 'Enregistrement réussi ...',]) ?>
@@ -33,29 +32,22 @@ $risksName = array_map(function ($risk) {
         <?= Alert::widget(['options' => ['class' => 'alert-danger',], 'body' => 'Enregistrement échoué ...',]); ?>
     <?php endif; ?>
 <?php endif; ?>
-
 <div class="container">
     <div class="project-create">
         <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
         <div class="row">
-
             <div class="col s12">
-
-                <!-- Card : Gestion des consonmmables -->
+                <!-- Card : CONSOMMABLES -->
                 <div class="card">
-
                     <div class="card-content">
                         <label>Dépenses</label>
                     </div>
-
                     <div class="card-action">
-
                         <!-- Création de consommables -->
-                        <label id="consumable-management-label" class='blue-text control-label dynamic-form-label'>Consommables, prestataires, déplacements...</label>
+                        <label id="consumable-management-label" class='dynamic-form-label'>Consommables, prestataires, déplacements...</label>
                         <div id="consumable-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
-
                                     <?php DynamicFormWidget::begin([
                                         'widgetContainer' => 'dynamicform_wrapper_consumable', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                         'widgetBody' => '.container-items-consummable', // required: css class selector
@@ -68,70 +60,71 @@ $risksName = array_map(function ($risk) {
                                         'formId' => 'dynamic-form',
                                         'formFields' => ['title', 'price', 'type'],
                                     ]); ?>
-
                                     <div class="container-items-consummable">
-
-                                        <div class="row">
-                                            <div class="col s1 offset-s5">
-                                                <button id="button-consummable-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                        <div id="consummable-label-block" class="row" style="display: none;">
+                                            <div class="col s8">
+                                                <label>Description</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Prix HT</label>
+                                            </div>
+                                            <div class="col s2">
+                                                <label>Type</label>
+                                            </div>
+                                            <div class="col 1">
                                             </div>
                                         </div>
-
-                                        <!-- widgetContainer -->
                                         <?php foreach ($consumables as $i => $consumable) : ?>
                                             <div class="item-consummable">
-
-                                                <?php if (!$consumable->isNewRecord) : ?>
-                                                    <?= Html::activeHiddenInput($consumable, "[{$i}]id") ?>
-                                                <?php endif; ?>
-
-                                                <div class="row">
-                                                    <div class="col s7">
-                                                        <?= $form->field($consumable, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
-                                                    </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($consumable, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
-                                                    </div>
-                                                    <div class="col s2">
-                                                        <?= $form->field($consumable, "[{$i}]type")->widget(Select2::class, [
-                                                            'data' => Consumable::TYPES,
-                                                            'options' => ['value' => $consumable->getSelectedType()],
-                                                            'pluginLoading' => false,
-                                                            "theme" => Select2::THEME_MATERIAL,
-                                                            'pluginOptions' => [
-                                                                'allowClear' => false
-                                                            ],
-                                                        ])->label(
-                                                            "Type"
-                                                        ); ?>
-                                                    </div>
-                                                    <div class="col 1">
-                                                        <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                        <br />
-                                                        <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                                <div class="card">
+                                                    <div class="card-item">
+                                                        <?php if (!$consumable->isNewRecord) : ?>
+                                                            <?= Html::activeHiddenInput($consumable, "[{$i}]id") ?>
+                                                        <?php endif; ?>
+                                                        <div class="row">
+                                                            <div class="col s8">
+                                                                <?= $form->field($consumable, "[{$i}]title")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($consumable, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s2">
+                                                                <?= $form->field($consumable, "[{$i}]type")->widget(Select2::class, [
+                                                                    'data' => Consumable::TYPES,
+                                                                    'options' => ['value' => $consumable->getSelectedType()],
+                                                                    'pluginLoading' => false,
+                                                                    "theme" => Select2::THEME_MATERIAL,
+                                                                    'pluginOptions' => [
+                                                                        'allowClear' => false
+                                                                    ],
+                                                                ])->label(
+                                                                    false
+                                                                ); ?>
+                                                            </div>
+                                                            <div class="col 1">
+                                                                <button type="button" class="remove-item btn-flat remove-item-button-type"><i class="glyphicon glyphicon-trash"></i></button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div><!-- .row -->
                                             </div>
                                         <?php endforeach; ?>
                                     </div>
-
+                                    <div class="col s12">
+                                        <p class="add-item add-item-link-type">Ajouter un nouveau consommable</p>
+                                    </div>
                                     <?php DynamicFormWidget::end(); ?>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                     <?php if ($number != 0) : ?>
                         <div class="card-action" id="card-invest-plus">
-
                             <!-- Création dépense , d'investissements -->
-                            <label id="invtest-management-label" class='blue-text control-label dynamic-form-label'>Liste des achats d'investissement éventuels</label>
+                            <label id="invtest-management-label" class='control-label dynamic-form-label'>Liste des achats d'investissement éventuels</label>
                             <div id="invtest-management-body" class="col s12">
                                 <div class="row">
                                     <div class="input-field col s12">
-
                                         <?php DynamicFormWidget::begin([
                                             'widgetContainer' => 'dynamicform_wrapper_invtest', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                             'widgetBody' => '.container-items-invtest', // required: css class selector
@@ -144,63 +137,61 @@ $risksName = array_map(function ($risk) {
                                             'formId' => 'dynamic-form',
                                             'formFields' => ['title', 'price'],
                                         ]); ?>
-
                                         <div class="container-items-invtest">
-
-                                            <div class="row">
-                                                <div class="col s1 offset-s5">
-                                                    <button id="button-invests-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                            <div id="invest-label-block" class="row" style="display: none;">
+                                                <div class="col s10">
+                                                    <label>Description</label>
+                                                </div>
+                                                <div class="col s1">
+                                                    <label>Prix HT</label>
+                                                </div>
+                                                <div class="col s1">
                                                 </div>
                                             </div>
-
                                             <?php foreach ($invests as $i => $invtest) : ?>
                                                 <div class="item-invtest">
-                                                    <?php if (!$invtest->isNewRecord) : ?>
-                                                        <?= Html::activeHiddenInput($invtest, "[{$i}]id") ?>
-                                                    <?php endif; ?>
-                                                    <div class="row">
-
-                                                        <div class="col s7">
-                                                            <?= $form->field($invtest, "[{$i}]name")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label("Description") ?>
+                                                    <div class="card">
+                                                        <div class="card-item">
+                                                            <?php if (!$invtest->isNewRecord) : ?>
+                                                                <?= Html::activeHiddenInput($invtest, "[{$i}]id") ?>
+                                                            <?php endif; ?>
+                                                            <div class="row">
+                                                                <div class="col s10">
+                                                                    <?= $form->field($invtest, "[{$i}]name")->textInput(['autocomplete' => 'off', 'maxlength' => true])->label(false) ?>
+                                                                </div>
+                                                                <div class="col s1">
+                                                                    <?= $form->field($invtest, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label(false) ?>
+                                                                </div>
+                                                                <div class="col 1">
+                                                                    <button type="button" class="remove-item btn-flat remove-item-button-type"><i class="glyphicon glyphicon-trash"></i></button>
+                                                                </div>
+                                                            </div><!-- .row -->
                                                         </div>
-                                                        <div class="col s1">
-                                                            <?= $form->field($invtest, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix HT") ?>
-                                                        </div>
-                                                        <div class="col 1">
-                                                            <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                            <br />
-                                                            <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
-                                                        </div>
-                                                    </div><!-- .row -->
+                                                    </div>
                                                 </div><!-- .item -->
                                             <?php endforeach; ?>
                                         </div><!-- .container -->
-
+                                        <div class="col s12">
+                                            <p class="add-item add-item-link-type">Ajouter un nouveau investissement</p>
+                                        </div>
                                         <?php DynamicFormWidget::end(); ?>
-
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     <?php endif; ?>
-
                 </div>
-
                 <!-- Card : Gestion des reversements -->
                 <div class="card">
-
                     <div class="card-content">
                         <label>Reversements Labo</label>
                     </div>
-
                     <div class="card-action">
                         <!-- Sélection d'un laboratoire -->
-                        <label id="laboratory-management-label" class='blue-text control-label dynamic-form-label'>Laboratoire</label>
+                        <label id="laboratory-management-label" class='dynamic-form-label'>Laboratoire</label>
                         <div id="laboratory-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s4">
-
                                     <!-- type dropdown field -->
                                     <?= $form->field($model, "laboratoryselected")->widget(Select2::class, [
                                         'data' => ArrayHelper::map($laboratoriesData, 'id', 'name'),
@@ -209,19 +200,16 @@ $risksName = array_map(function ($risk) {
                                         "theme" => Select2::THEME_MATERIAL,
                                         'pluginOptions' => [],
                                     ])->label(false); ?>
-
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="card-action">
                         <!-- Association de matériels au reversement labo -->
-                        <label id="equipment-management-label" class='blue-text control-label dynamic-form-label'>Matériel utilisé</label>
+                        <label id="equipment-management-label" class='dynamic-form-label'>Matériel utilisé</label>
                         <div id="equipment-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
-
                                     <?php DynamicFormWidget::begin([
                                         'widgetContainer' => 'dynamicform_wrapper_equipment', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                         'widgetBody' => '.container-items-equipment', // required: css class selector
@@ -234,76 +222,92 @@ $risksName = array_map(function ($risk) {
                                         'formId' => 'dynamic-form',
                                         'formFields' => ['equipmentSelected', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'timeRiskStringify'],
                                     ]); ?>
-
                                     <div class="container-items-equipment">
-
-                                        <div class="row">
-                                            <div class="col s1 offset-s5">
-                                                <button id="button-equipment-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                        <div id="equipment-label-block" class="row" style="display: none;">
+                                            <div class="col s4">
+                                                <label>Description</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Prix journalier</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Jour(s)</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Heure(s)</label>
+                                            </div>
+                                            <div class="col s2">
+                                                <label>Incertitude</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Temps total</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Prix total</label>
                                             </div>
                                         </div>
-
                                         <!-- widgetContainer -->
                                         <?php foreach ($equipments as $i => $equipment) : ?>
                                             <div class="item-equipment">
-                                                <?php if (!$equipment->isNewRecord) : ?>
-                                                    <?= Html::activeHiddenInput($equipment, "[{$i}]id"); ?>
-                                                <?php endif; ?>
-                                                <div class="row">
-                                                    <div class="col s3">
-                                                        <?= $form->field($equipment, "[{$i}]name")->textInput([])->label("Description") ?>
+                                                <div class="card">
+                                                    <div class="card-item">
+                                                        <?php if (!$equipment->isNewRecord) : ?>
+                                                            <?= Html::activeHiddenInput($equipment, "[{$i}]id"); ?>
+                                                        <?php endif; ?>
+                                                        <div class="row">
+                                                            <div class="col s4">
+                                                                <?= $form->field($equipment, "[{$i}]name")->textInput([])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($equipment, "[{$i}]daily_price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($equipment, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s2 equipment_risk">
+                                                                <!-- type dropdown field -->
+                                                                <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::class, [
+                                                                    'data' => array_map(function ($risk) {
+                                                                        return $risk->title;
+                                                                    }, $risksData),
+                                                                    'options' => ['value' => $equipment->riskSelected],
+                                                                    'pluginLoading' => false,
+                                                                    "theme" => Select2::THEME_MATERIAL,
+                                                                    'pluginOptions' => [],
+                                                                ])->label(false); ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($equipment, "[{$i}]price")->textInput(['readonly' => true])->label(false) ?>
+                                                            </div>
+                                                            <div class="col 1">
+                                                                <button type="button" class="remove-item btn-flat remove-item-button-type"><i class="glyphicon glyphicon-trash"></i></button>
+                                                            </div>
+                                                        </div><!-- .row -->
                                                     </div>
-                                                    <div class="col s2">
-                                                        <?= $form->field($equipment, "[{$i}]daily_price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix journalier") ?>
-                                                    </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Jour(s)") ?>
-                                                    </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Heure(s)") ?>
-                                                    </div>
-                                                    <div class="col s2 equipment_risk">
-                                                        <!-- type dropdown field -->
-                                                        <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::class, [
-                                                            'data' => array_map(function ($risk) {
-                                                                return $risk->title;
-                                                            }, $risksData),
-                                                            'options' => ['value' => $equipment->riskSelected],
-                                                            'pluginLoading' => false,
-                                                            "theme" => Select2::THEME_MATERIAL,
-                                                            'pluginOptions' => [],
-                                                        ])->label("Incertitude"); ?>
-                                                    </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps total") ?>
-                                                    </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($equipment, "[{$i}]price")->textInput(['readonly' => true])->label("Prix total") ?>
-                                                    </div>
-                                                    <div class="col 1">
-                                                        <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                        <br />
-                                                        <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
-                                                    </div>
-                                                </div><!-- .row -->
+                                                </div>
                                             </div>
                                         <?php endforeach; ?>
                                     </div>
-
+                                    <div class="col 1">
+                                        <p class="add-item add-item-link-type">Ajouter un nouveau équipement</p>
+                                    </div>
                                     <?php DynamicFormWidget::end(); ?>
-
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="card-action">
                         <!-- Gestion temps humain - reversement labo -->
-                        <label id="labocontributor-management-label" class='blue-text control-label dynamic-form-label'>Temps humain</label>
+                        <label id="labocontributor-management-label" class='dynamic-form-label'>Temps humain</label>
                         <div id="labocontributor-management-body" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
-
                                     <?php DynamicFormWidget::begin([
                                         'widgetContainer' => 'dynamicform_wrapper_contributor', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                         'widgetBody' => '.container-items-labocontributor', // required: css class selector
@@ -316,67 +320,85 @@ $risksName = array_map(function ($risk) {
                                         'formId' => 'dynamic-form',
                                         'formFields' => ['name', 'daily_price', 'nb_days', 'nb_hours', 'price', 'riskSelected', 'timeRiskStringify'],
                                     ]); ?>
-
                                     <div class="container-items-labocontributor">
-
-                                        <div class="row">
-                                            <div class="col s1 offset-s5">
-                                                <button id="button-labocontributor-first-add" type="button" class="add-item btn waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
+                                        <div id="labocontributor-label-block" class="row" style="display: none;">
+                                            <div class="col s4">
+                                                <label>Desc. Intervenant</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Prix journalier</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Jour(s)</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Heure(s)</label>
+                                            </div>
+                                            <div class="col s2">
+                                                <label>Incertitude</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Temps total</label>
+                                            </div>
+                                            <div class="col s1">
+                                                <label>Prix total</label>
                                             </div>
                                         </div>
-
                                         <!-- widgetContainer -->
                                         <?php foreach ($contributors as $i => $contributor) : ?>
                                             <div class="item-labocontributor">
-                                                <?php if (!$contributor->isNewRecord) : ?>
-                                                    <?= Html::activeHiddenInput($contributor, "[{$i}]id"); ?>
-                                                <?php endif; ?>
-                                                <div class="row">
-                                                    <div class="col s3">
-                                                        <?= $form->field($contributor, "[{$i}]name")->textInput()->label("Desc. Intervenant") ?>
+                                                <div class="card">
+                                                    <div class="card-item">
+                                                        <?php if (!$contributor->isNewRecord) : ?>
+                                                            <?= Html::activeHiddenInput($contributor, "[{$i}]id"); ?>
+                                                        <?php endif; ?>
+                                                        <div class="row">
+                                                            <div class="col s4">
+                                                                <?= $form->field($contributor, "[{$i}]name")->textInput()->label(false) ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($contributor, "[{$i}]daily_price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($contributor, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s2 contributor_risk">
+                                                                <!-- type dropdown field -->
+                                                                <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::class, [
+                                                                    'data' => $risksName,
+                                                                    'options' => ['value' => $contributor->riskSelected],
+                                                                    'pluginLoading' => false,
+                                                                    "theme" => Select2::THEME_MATERIAL,
+                                                                    'pluginOptions' => [],
+                                                                ])->label(false); ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label(false) ?>
+                                                            </div>
+                                                            <div class="col s1">
+                                                                <?= $form->field($contributor, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'readonly' => true])->label(false) ?>
+                                                            </div>
+                                                            <div class="col 1">
+                                                                <button type="button" class="remove-item btn-flat remove-item-button-type"><i class="glyphicon glyphicon-trash"></i></button>
+                                                            </div>
+                                                        </div><!-- .row -->
                                                     </div>
-                                                    <div class="col s2">
-                                                        <?= $form->field($contributor, "[{$i}]daily_price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Prix journalier") ?>
-                                                    </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]nb_days")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Jour(s)") ?>
-                                                    </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label("Heure(s)") ?>
-                                                    </div>
-                                                    <div class="col s2 contributor_risk">
-                                                        <!-- type dropdown field -->
-                                                        <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::class, [
-                                                            'data' => $risksName,
-                                                            'options' => ['value' => $contributor->riskSelected],
-                                                            'pluginLoading' => false,
-                                                            "theme" => Select2::THEME_MATERIAL,
-                                                            'pluginOptions' => [],
-                                                        ])->label("Incertitude"); ?>
-                                                    </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label("Temps total") ?>
-                                                    </div>
-                                                    <div class="col s1">
-                                                        <?= $form->field($contributor, "[{$i}]price")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1, 'readonly' => true])->label("Prix total") ?>
-                                                    </div>
-                                                    <div class="col 1">
-                                                        <button type="button" class="add-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                        <br />
-                                                        <button type="button" class="remove-item btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
-                                                    </div>
-                                                </div><!-- .row -->
+                                                </div>
                                             </div>
                                         <?php endforeach; ?>
                                     </div>
-
+                                    <div class="col 1">
+                                        <p class="add-item add-item-link-type">Ajouter un nouveau équipement</p>
+                                    </div>
                                     <?php DynamicFormWidget::end(); ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group to-the-right">
                     <?= Html::a(
                         Yii::t('app', '<i class="material-icons right">arrow_back</i>Annuler'),
@@ -388,14 +410,11 @@ $risksName = array_map(function ($risk) {
                         ['class' => 'waves-effect waves-light btn btn-blue', 'title' => 'Suivant']
                     ) ?>
                 </div>
-
             </div>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-
-
 
 <!-- Utilisation : envoi de données concernant les laboratoires. -->
 <div id="laboratories-data-target" style="display: none;">

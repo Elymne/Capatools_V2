@@ -477,15 +477,8 @@ class ProjectController extends Controller implements ServiceInterface
             $lots = Model::createMultiple(ProjectCreateLotForm::class, $lots);
             Model::loadMultiple($lots, Yii::$app->request->post());
 
-            // Vérification de la validité de chaque modèle de lot.
-            $isLotsValid = true;
-            foreach ($lots as $lot) {
-                $lot->combobox_lot_checked = $model->combobox_lot_checked;
-                if (!$lot->validate()) $isLotsValid = false;
-            }
-
             // Si tous les modèles de lots et le modèle de projet sont valides.
-            if ($model->validate() && $isLotsValid) {
+            if ($model->validate()) {
 
                 // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
                 $defaultValue = "indéfini";
@@ -493,8 +486,8 @@ class ProjectController extends Controller implements ServiceInterface
                 $model->version = $defaultValue;
                 $model->date_version = date('Y-m-d H:i:s');
                 $model->creation_date = date('Y-m-d H:i:s');
-                $model->id_capa = IdLaboxyManager::generateDraftId($model);
-                $model->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($model);
+                $model->id_capa = IdLaboxyManager::generateDraftId($model->internal_name);
+                $model->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($model->company_name, $model->internal_name);
                 $model->state = Project::STATE_DEVIS_DRAFT;
                 $model->first_in = 0;
 
@@ -504,10 +497,10 @@ class ProjectController extends Controller implements ServiceInterface
                 $model->company_id = Company::getOneByName($model->company_name)->id;
                 // On inclu la clé étragère qui référence une donnée indéfini dans la table contact.
                 $model->contact_id = Contact::getOneByEmail($model->contact_email)->id;
-                $model->type = Project::TYPES[$model->combobox_type_checked];
+                $model->type = Project::TYPES[$model->radiobutton_type_selected];
                 // On recopie le management rate
                 $rate  = DevisParameter::getParameters();
-                switch (Project::TYPES[$model->combobox_type_checked]) {
+                switch (Project::TYPES[$model->radiobutton_type_selected]) {
                     case  Project::TYPE_PRESTATION: {
                             $model->management_rate = $rate->rate_management;
                             break;
@@ -529,8 +522,7 @@ class ProjectController extends Controller implements ServiceInterface
                         }
                 }
 
-                $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
-
+                $model->laboratory_repayment = 1;
                 $model->low_tjm_description = 'aucune';
                 // Sauvgarde du projet en base de données, permet de générer une clé primaire que l'on va utiliser pour ajouter le ou les lots.
                 $model->save();
@@ -545,7 +537,7 @@ class ProjectController extends Controller implements ServiceInterface
 
                 // Création des lots.
                 // Si aucun lot de créé, on en créé un par défaut.
-                if (\sizeof($lots) == 0) {
+                if (sizeof($lots) == 0) {
                     $lots = [new ProjectCreateLotForm()];
                     $lots[0]->title = 'Lot par défaut';
                     $lots[0]->comment = 'Ceci est un lot qui a été généré automatiquement car le créateur ne souhaitait pas utiliser plusieurs lots';
@@ -569,7 +561,6 @@ class ProjectController extends Controller implements ServiceInterface
         return $this->render(
             'createFirstStep',
             [
-
                 'showlot' => true,
                 'model' => $model,
                 'lots' => $lots,
@@ -609,8 +600,8 @@ class ProjectController extends Controller implements ServiceInterface
         if ($project->load(Yii::$app->request->post())) {
 
 
-            $project->id_capa = IdLaboxyManager::generateDraftId($project);
-            $project->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($project);
+            $project->id_capa = IdLaboxyManager::generateDraftId($project->internal_name);
+            $project->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($project->company->name, $project->internal_name);
             $project->save();
         }
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
@@ -1199,7 +1190,7 @@ class ProjectController extends Controller implements ServiceInterface
         $model = ProjectCreateFirstStepForm::getOneById($id);
         $model->company_name = $model->company->name;
         $model->contact_email = $model->contact->email;
-        $model->combobox_type_checked = array_search($model->type, Project::TYPES);
+        $model->radiobutton_type_selected = array_search($model->type, Project::TYPES);
 
 
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
@@ -1218,8 +1209,8 @@ class ProjectController extends Controller implements ServiceInterface
             $model->version = $defaultValue;
             $model->date_version = date('Y-m-d H:i:s');
             $model->creation_date = date('Y-m-d H:i:s');
-            $model->id_capa = IdLaboxyManager::generateDraftId($model);
-            $model->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($model);
+            $model->id_capa = IdLaboxyManager::generateDraftId($model->internal_name);
+            $model->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($model->company->name, $model->internal_name);
             $model->state = Project::STATE_DEVIS_DRAFT;
             $model->first_in = 0;
             $model->id = null;
@@ -1231,11 +1222,11 @@ class ProjectController extends Controller implements ServiceInterface
             $model->company_id = Company::getOneByName($model->company_name)->id;
             // On inclu la clé étragère qui référence une donnée indéfini dans la table contact.
             $model->contact_id = Contact::getOneByEmail($model->contact_email)->id;
-            $model->type = Project::TYPES[$model->combobox_type_checked];
+            $model->type = Project::TYPES[$model->radiobutton_type_selected];
             // On recopie le management rate
             $rate  = DevisParameter::getParameters();
 
-            switch (Project::TYPES[$model->combobox_type_checked]) {
+            switch (Project::TYPES[$model->radiobutton_type_selected]) {
                 case  Project::TYPE_PRESTATION: {
                         $model->management_rate = $rate->rate_management;
                         break;
@@ -1257,7 +1248,7 @@ class ProjectController extends Controller implements ServiceInterface
                     }
             }
 
-            $model->laboratory_repayment = ($model->combobox_repayment_checked == 1) ? true : false;
+            $model->laboratory_repayment = 1;
 
             $model->low_tjm_description = 'Aucune';
 

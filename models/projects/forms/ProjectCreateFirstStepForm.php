@@ -22,11 +22,9 @@ class ProjectCreateFirstStepForm extends Project
 {
 
     /**
-     * Gestion combobox.
+     * Gestion des radio buttons.
      */
-    public $combobox_type_checked = 1;
-    public $combobox_lot_checked = 1;
-    public $combobox_repayment_checked = 1;
+    public $radiobutton_type_selected = 1;
 
     public $company_name;
     public $contact_email;
@@ -37,9 +35,7 @@ class ProjectCreateFirstStepForm extends Project
     {
         return [
             [["company_name", "contact_email"], "safe"],
-            ['combobox_type_checked', 'required', 'message' => 'Le projet doit avoir un type'],
-            ['combobox_lot_checked', 'required', 'message' => 'Make a choice'],
-            ['combobox_repayment_checked', 'required', 'message' =>  'Vous devez cocher au moins un des deux choix proposés'],
+            ['radiobutton_type_selected', 'required', 'message' => 'Le projet doit avoir un type'],
             ['internal_name', 'required', 'message' => 'Vous devez préciser un nom pour le projet/brouillon'],
             ['company_name', 'noCompanyFound'],
             ['contact_email', 'noContactFound'],

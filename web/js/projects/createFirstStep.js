@@ -5,9 +5,7 @@ $(() => {
     let duplicatedLots = 0
 
     //frameElement()
-    $(".dynamicform_wrapper").on("beforeDelete", (e, item) => {
-        confirm("Etes-vous sûr de vouloir supprimer ce lot ?")
-    })
+    $(".dynamicform_wrapper").on("beforeDelete", (e, item) => confirm("Etes-vous sûr de vouloir supprimer ce lot ?"))
 
     $(".dynamicform_wrapper").on("afterDelete", (e, item) => {
         duplicatedLots--
@@ -22,8 +20,6 @@ $(() => {
             element += 1
             $(id_string).val("Lot N°" + element + " ")
         }
-
-        hideOrShowMainButton($("#button-lot-first-add"), duplicatedLots)
     })
 
     $(".dynamicform_wrapper").on("afterInsert", (e, item) => {
@@ -36,13 +32,12 @@ $(() => {
         let index = parseInt(arr[1])
         let id_string = "#projectcreatelotform-" + index + "-id_string"
         $(id_string).val("Lot N°" + (index + 1) + " ")
-
-        hideOrShowMainButton($("#button-lot-first-add"), duplicatedLots)
     })
 })
 
 /**
  * Fonction qui permet d'afficher ou non le bouton principal si le nombre de ligne dupliqué donné en paramètre est égale à 0.
+ * @deprecated - On n'utilise plus ce système.
  * @param {*} button
  * @param {*} nbLinesDuplicated
  */

@@ -12,18 +12,16 @@ use kartik\select2\Select2;
 use kidzen\dynamicform\DynamicFormWidget;
 use yii\bootstrap\Alert;
 
-$this->title = 'Simulation du projet : ' . $project->internal_name;
+AppAsset::register($this);
+ProjectSimulationAsset::register($this);
 
+$this->title = 'Simulation du projet : ' . $project->internal_name;
 $MargeAverage = $project->marginaverage;
 $totalcostavplot = ($lotavp->total *  ($project->marginaverage / 100 + 1)) / (count($lots) - 1);
 $totalprojet = 0.0;
-
-AppAsset::register($this);
-ProjectSimulationAsset::register($this);
 ?>
 
 <?= TopTitle::widget(['title' => $this->title]) ?>
-
 <!-- Gère les bandeaux d'alerts -->
 <?php if ($SaveSucess != null) : ?>
     <?php if ($SaveSucess) : ?>
@@ -32,13 +30,11 @@ ProjectSimulationAsset::register($this);
         <?= Alert::widget(['options' => ['class' => 'alert-danger',], 'body' => 'Enregistrement échoué ...',]) ?>
     <?php endif; ?>
 <?php endif; ?>
-
 <div class="container">
     <div class="project-create">
         <?php $form = ActiveForm::begin(['id' => 'dynamic-form', 'options' => ['enctype' => 'multipart/form-data']]); ?>
         <div class="row">
             <div class="col s12">
-
                 <!-- Card view basique : PARAM GENERAUX -->
                 <div class="card">
                     <div class="card-content">
@@ -53,22 +49,16 @@ ProjectSimulationAsset::register($this);
                         </div>
                     </div>
                 </div>
-
                 <!-- Card view basique : AVANT-PROJET -->
                 <div class="card">
-
                     <div class="card-content">
                         <label>Détail des coûts d'avant projet (hors marges)</label>
                     </div>
-
                     <div class="card-action">
-
                         <div class="row">
-
                             <?php if (($Resultcheck['lots'][0]['Result'] == false) && $project->first_in == 1) : ?>
                                 <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => ' Il n\'y a pas de tâche présente dans l\'avant projet']) ?>
                             <?php endif; ?>
-
                             <div class="col s12 l6">
                                 <table class="highlight">
                                     <tbody>
@@ -143,7 +133,6 @@ ProjectSimulationAsset::register($this);
 
                     </div>
                 </div>
-
                 <!-- Card view basique : PROJETS -->
                 <div class="card">
 
@@ -250,22 +239,16 @@ ProjectSimulationAsset::register($this);
                     <?php endforeach; ?>
 
                 </div>
-
                 <!-- Card view basique : BILAN -->
                 <div class="card">
-
                     <div class="card-content">
                         <label>Bilan du projet</label>
                     </div>
-
                     <div class="card-action">
-
                         <div class="row">
-
                             <?php if ($tjmstatut  && $project->first_in == 1) : ?>
                                 <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => 'Attention le taux journalier est inférieur à 700 €',]) ?>
                             <?php endif; ?>
-
                             <div class="col s12 m6">
                                 <table class="highlight">
                                     <tbody>
@@ -342,19 +325,14 @@ ProjectSimulationAsset::register($this);
 
                     </div>
                 </div>
-
                 <!-- Card view basique : OTHER REVERSMENTS -->
                 <div class="card">
-
                     <div class="card-content">
                         <label>Autres reversements</label>
                     </div>
-
                     <div class="card-action">
-
                         <div class="row">
                             <div class="col s12 l6">
-
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
@@ -376,11 +354,8 @@ ProjectSimulationAsset::register($this);
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
-
                             </div>
-
                             <div class="col s12 l6">
-
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
@@ -434,22 +409,16 @@ ProjectSimulationAsset::register($this);
 
                     </div>
                 </div>
-
                 <!-- Card view basique : MILESTONES -->
                 <div class="card">
-
                     <div class="card-content">
                         <label>Echéancier prévisionnel</label>
                     </div>
-
                     <div class="card-action">
-
                         <div class="row">
-
                             <?php if ($Resultcheck['millestone'] == false   && $project->first_in == 1) : ?>
                                 <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => ' La somme des jalons ne correspond pas au prix de vente',]); ?>
                             <?php endif; ?>
-
                             <?php DynamicFormWidget::begin([
                                 'widgetContainer' => 'dynamicform_millestone', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                                 'widgetBody' => '.container-items-millestone', // required: css class selector
@@ -464,55 +433,64 @@ ProjectSimulationAsset::register($this);
                                     'pourcentage',
                                 ],
                             ]); ?>
-
                             <div class="container-items-millestone">
+                                <div id="millestone-label-block" class="row">
+                                    <div class="col s6">
+                                        <label>Titre</label>
+                                    </div>
+                                    <div class="col s1">
+                                        <label>Pourc.</label>
+                                    </div>
+                                    <div class="col s2">
+                                        <label>Prix</label>
+                                    </div>
+                                    <div class="col 2">
+                                        <label>Date</label>
+                                    </div>
+                                </div>
                                 <!-- widgetContainer -->
-
                                 <?php foreach ($millestones as $i => $millestone) : ?>
                                     <div class="item-millestone">
-                                        <div class="row">
-                                            <?php if (!$millestone->isNewRecord) : ?>
-                                                <?= Html::activeHiddenInput($millestone, "[{$i}]id"); ?>
-                                            <?php endif; ?>
-                                            <div class="col s0">
-                                                <?= Html::activeHiddenInput($millestone, "[{$i}]number"); ?>
-                                            </div>
-                                            <div class="col s4">
-                                                <?= $form->field($millestone, "[{$i}]comment")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Titre'])->label(false) ?>
-                                            </div>
-                                            <div class="col s1">
-                                                <?= $form->field($millestone, "[{$i}]pourcentage", [])->textInput(['autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Pourcentage'])->label(false) ?>
-                                            </div>
-                                            <div class="col s2">
-                                                <?= $form->field($millestone, "[{$i}]priceeuros")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => Yii::$app->formatter->asCurrency($millestones[$i]->price),  'placeholder' => 'prix'])->label(false) ?>
-                                                <?= Html::activeHiddenInput($millestone, "[{$i}]price") ?>
-                                            </div>
-                                            <div class="col s2">
-                                                <?= $form->field($millestone, "[{$i}]estimate_date")->widget(DatePicker::class, [
-                                                    'language' => 'fr',
-                                                    'dateFormat' => 'dd-MM-yyyy',
-                                                    'options' => ['class' => 'form-control picker', 'placeholder' => 'Date (jour-mois-année)'],
-                                                ])->label(false) ?>
-                                            </div>
-                                            <div class="col 1">
-                                                <button type="button" class="add-item-millestone btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-plus"></i></button>
-                                                <br />
-                                                <button type="button" class="remove-item-millestone btn-floating waves-effect waves-light btn-grey"><i class="glyphicon glyphicon-minus"></i></button>
+                                        <div class="card">
+                                            <div class="card-item">
+                                                <div class="row">
+                                                    <?php if (!$millestone->isNewRecord) : ?>
+                                                        <?= Html::activeHiddenInput($millestone, "[{$i}]id"); ?>
+                                                    <?php endif; ?>
+                                                    <?= Html::activeHiddenInput($millestone, "[{$i}]number"); ?>
+                                                    <div class="col s6">
+                                                        <?= $form->field($millestone, "[{$i}]comment")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Titre'])->label(false) ?>
+                                                    </div>
+                                                    <div class="col s1">
+                                                        <?= $form->field($millestone, "[{$i}]pourcentage", [])->textInput(['autocomplete' => 'off', 'maxlength' => true, 'placeholder' => 'Pourcentage'])->label(false) ?>
+                                                    </div>
+                                                    <div class="col s2">
+                                                        <?= $form->field($millestone, "[{$i}]priceeuros")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'value' => Yii::$app->formatter->asCurrency($millestones[$i]->price),  'placeholder' => 'prix'])->label(false) ?>
+                                                        <?= Html::activeHiddenInput($millestone, "[{$i}]price") ?>
+                                                    </div>
+                                                    <div class="col s2">
+                                                        <?= $form->field($millestone, "[{$i}]estimate_date")->widget(DatePicker::class, [
+                                                            'language' => 'fr',
+                                                            'dateFormat' => 'dd-MM-yyyy',
+                                                            'options' => ['class' => 'form-control picker', 'placeholder' => 'Date (jour-mois-année)'],
+                                                        ])->label(false) ?>
+                                                    </div>
+                                                    <div class="col 1">
+                                                        <button type="button" class="remove-item-millestone btn-flat remove-item-button-type"><i class="glyphicon glyphicon-trash"></i></button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <br />
                                     </div>
                                 <?php endforeach; ?>
                             </div>
-
+                            <div class="col s12">
+                                <p class="add-item-millestone add-item-link-type">Ajouter un nouveau jalon</p>
+                            </div>
                             <?php DynamicFormWidget::end(); ?>
                         </div>
                     </div>
-
-
-
                 </div>
-
                 <div class="form-group to-the-right">
                     <?= Html::submitButton(
                         '<i class="material-icons right">save</i>Enregistrer',
@@ -540,7 +518,6 @@ ProjectSimulationAsset::register($this);
                         ) ?>
                     <?php endif; ?>
                 </div>
-
             </div>
         </div>
         <?php ActiveForm::end(); ?>
