@@ -45,10 +45,10 @@ class Project extends ActiveRecord
         4 => self::TYPE_INTERNAL
     ];
 
-    const STATE_DEVIS_MODEL = 'Model';
+    const STATE_DEVIS_MODEL = 'Modèle';
     const STATE_DEVIS_DRAFT = 'Avant-projet';
     const STATE_DEVIS_SENDED = 'Devis envoyé';
-    const STATE_DEVIS_SIGNED = "Projet en cours";
+    const STATE_DEVIS_SIGNED = "Projet signé";
     const STATE_DEVIS_CANCELED = "Projet annulé";
     const STATE_DEVIS_FINISHED = "Projet terminé";
     const STATES = [
