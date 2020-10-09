@@ -98,7 +98,7 @@ if ($SaveSucess != null) : ?>
                         <div class="row">
                             <div class="col s5 label-field">
                                 <!-- Détail du coût  -->
-                                Total Prix de revient H.T. temps homme :
+                                Prix de vente H.T. temps homme :
                             </div>
                             <div class="col s2">
                                 <!-- Détail du coût  -->
@@ -126,7 +126,7 @@ if ($SaveSucess != null) : ?>
                         <div class="row">
                             <div class="col s5 label-field">
                                 <!-- Détail du coût  -->
-                                Total Prix de revient H.T. consommables, déplacements et achat :
+                                Prix de vente H.T. consommables, déplacements et achat :
                             </div>
                             <div class="col s2">
                                 <!-- Détail du coût  -->
@@ -158,7 +158,7 @@ if ($SaveSucess != null) : ?>
                         <div class="row">
                             <div class="col s5 label-field">
                                 <!-- Détail du coût  -->
-                                Total Prix de revient H.T. reversement Laboratoire :
+                                Prix de vente H.T. reversement Laboratoire :
                             </div>
                             <div class="col s2">
                                 <!-- Détail du coût  -->
@@ -179,7 +179,7 @@ if ($SaveSucess != null) : ?>
 
                         <div class="row">
                             <div class="col s4 label-field">
-                                Montant Total HT :
+                                Prix de vente total HT :
                             </div>
                             <div class="col s2">
                                 <?= $form->field($lot, "total_cost_lot")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => ['decimal', 2]])->label(false) ?>
@@ -239,7 +239,6 @@ let stepsize = 0.5;
 
 
 
-//Fin debug
 let InputRateHumamMargin = "#lotsimulate-rate_human_margin";
     $(InputRateHumamMargin).on('blur', function(e){
         let rate = parseFloat(e.currentTarget.value);
