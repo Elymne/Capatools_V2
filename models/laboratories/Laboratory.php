@@ -66,18 +66,6 @@ class Laboratory extends ActiveRecord implements JsonSerializable
     }
 
     /**
-     * Récupère la liste de tous les laboratoires possédant au moins un équipement.
-     * 
-     * @return array<Laboratory>, retourne une liste d'objet Laboratory.
-     */
-    static function getAllThatHasEquipments(): array
-    {
-        return \array_filter(static::find()->all(), function ($elem) {
-            return \sizeof($elem->equipments) > 0;
-        });
-    }
-
-    /**
      * Fait la jonction entre un laboratoire et sa liste de matériels.
      * Créer un attribut "equipments" qui sera composé d'une liste d'objet Equipment.
      */
