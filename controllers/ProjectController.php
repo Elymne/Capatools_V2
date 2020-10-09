@@ -970,7 +970,7 @@ class ProjectController extends Controller implements ServiceInterface
         }
 
         // Import de données depuis la bdd.
-        $laboratoriesData = Laboratory::getAllThatHasEquipments();
+        $laboratoriesData = Laboratory::find()->all();
         $equipmentsData = Equipment::getAll();
         $risksData = Risk::getAll();
 
