@@ -70,14 +70,9 @@ $totalprojet = 0.0;
                                             <td width="90%" class="table-font-bold">Total des reversements laboratoires :</td>
                                             <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostRepayement) ?></td>
                                         </tr>
-                                        <tr>
-                                            <td width="90%" class="table-font-bold">Total de l'avant projet (non margé):</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->total) ?></td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
-
                             <div class="col s12 l6">
                                 <table class="highlight">
                                     <tbody>
@@ -86,19 +81,13 @@ $totalprojet = 0.0;
                                             <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostInvest) ?></td>
                                         </tr>
                                         <tr>
-                                            <td width="90%" class="table-font-bold">Total de l'avant projet (margé avec le Taux moyen):</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->total * (1 + $project->marginaverage / 100)) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="90%" class="table-font-bold">Somme ajoutée par lot (margé avec le Taux moyen):</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($project->additionallotprice) ?></td>
+                                            <td width="90%" class="table-font-bold">Total du coût de l'avant-projet :</td>
+                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->total) ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
-
                         <div class="row block-buttons-spacing">
                             <div class="col s12">
                                 <div class="to-the-right">
@@ -114,7 +103,6 @@ $totalprojet = 0.0;
                                             'title' => "Permet de créer, modifier, supprimer des tâche"
                                         ]
                                     ); ?>
-
                                     <?= Html::a(
                                         '<span>Gérer les dépenses</span>',
                                         Url::to(['project/update-dependencies-consumables', 'number' => 0, 'project_id' => $project->id]),
@@ -130,7 +118,6 @@ $totalprojet = 0.0;
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <!-- Card view basique : PROJETS -->
