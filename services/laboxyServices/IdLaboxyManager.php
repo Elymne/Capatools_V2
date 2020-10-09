@@ -3,6 +3,7 @@
 namespace app\services\laboxyServices;
 
 use app\models\projects\Project;
+use app\models\users\Cellule;
 
 /**
  * Petite classe qui servira à tout ce qui est génération d'id laboxy.
@@ -16,7 +17,7 @@ class IdLaboxyManager
      * 
      * @return string, retourne un capa-id fraichement généré.
      */
-    static function generateDraftId(String $internal_name)
+    static function generateDraftId(string $internal_name)
     {
         $internalName = str_replace(' ', '_', $internal_name);
         $internalName = strtoupper($internalName);
@@ -29,7 +30,7 @@ class IdLaboxyManager
      * 
      * @return string, retourne un capa-id fraichement généré.
      */
-    static function generateLaboxyDraftId(String $company_name, String $internal_name): string
+    static function generateLaboxyDraftId(string $company_name, string $internal_name): string
     {
         $companyName = $company_name;
         $projectTitle = $internal_name;
@@ -43,12 +44,12 @@ class IdLaboxyManager
      * 
      * @return string, un id laboxy généré.
      */
-    static function generateLaboxyId(Project $project): string
+    static function generateLaboxyId(string $company_name, string $internal_name, int $project_id, Cellule $cellule): string
     {
-        $celluleIdentity = $project->cellule->identity;
-        $idNumber = static::generateNumberFromId($project->id);
-        $companyName = $project->company_name;
-        $projectTitle = $project->internal_name;
+        $celluleIdentity = $cellule->identity;
+        $idNumber = static::generateNumberFromId($project_id);
+        $companyName = $company_name;
+        $projectTitle = $internal_name;
 
         return $celluleIdentity . $idNumber . " - " . $companyName . " - " . $projectTitle;
     }

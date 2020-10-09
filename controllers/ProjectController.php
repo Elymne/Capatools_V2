@@ -299,7 +299,7 @@ class ProjectController extends Controller implements ServiceInterface
 
         if ($status == Project::STATE_DEVIS_SIGNED) {
             $project->signing_probability = 100;
-            $project->id_laboxy = IdLaboxyManager::generateLaboxyId($project);
+            $project->id_laboxy = IdLaboxyManager::generateLaboxyId($project->company->name, $project->internal_name, $id, $project->cellule);
             foreach ($project->millestones as $millestone) {
 
                 $millestone->statut = Millestone::STATUT_ENCOURS;
@@ -1126,7 +1126,7 @@ class ProjectController extends Controller implements ServiceInterface
             $finalModel->file_name = $model->file_name;
             $finalModel->file_path = $model->file_path;
             $finalModel->thematique = $model->thematique;
-            $finalModel->id_laboxy = IdLaboxyManager::generateLaboxyId($model);
+            $finalModel->id_laboxy = IdLaboxyManager::generateLaboxyId($model->company->name, $model->internal_name, $id, $model->cellule);
             $finalModel->save();
 
             MenuSelectorHelper::setMenuProjectDraft();

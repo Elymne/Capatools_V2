@@ -24,7 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="container">
     <div class="project-index">
-
         <!-- New -->
         <div class="row body-marger">
             <div class="card">
@@ -44,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]); ?>
                     <br />
-
                     <?= Html::input('text', 'textinput_capaid', "", [
                         'id' => 'capa-id-search',
                         'maxlength' => 10,
@@ -53,7 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'onkeyup' => 'capaidFilterSearch()'
                     ]) ?>
                     <br /><br />
-
                     <label class="rigthspace-20px">
                         <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
                         <span class="span-combobox">Afficher les modèles</span>
@@ -62,10 +59,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox" />
                         <span class="span-combobox">Afficher les brouillons</span>
                     </label>
-
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-content">
                     <label>Réglage du tableau</label>
@@ -95,12 +90,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </label>
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-action">
-
                     <div>
-                        <?php Pjax::begin(['id' => '1']) ?>
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
                             'rowOptions' => [
@@ -114,15 +106,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             'columns' => getCollumnsArray()
                         ]); ?>
-                        <?php Pjax::end() ?>
                     </div>
-
                 </div>
             </div>
-
-
         </div>
-
     </div>
 </div>
 
@@ -223,7 +210,8 @@ function getUpdateButtonArray()
                     'data-pjax' => true,
                     'action' => Url::to(['project-simulate', 'project_id' => $model->id]),
                     'class' => 'btn-floating-minus waves-effect waves-light btn-green',
-                    'title' => "Permet d'accéder au devis"
+                    'title' => "Permet d'accéder au devis",
+                    'target' => '_blank'
                 ]
             );
         }
@@ -304,7 +292,8 @@ function getDuplicateButtonArray()
                     'data-pjax' => true,
                     'action' => Url::to(['duplicate-project', 'id' => $model->id]),
                     'class' => 'btn-floating-minus waves-effect waves-light btn-blue',
-                    'title' => "Dupliquer le devis"
+                    'title' => "Dupliquer le devis",
+                    'target' => '_blank'
                 ]
             );
         }

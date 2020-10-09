@@ -48,7 +48,6 @@ ProjectIndexAsset::register($this);
             <div class="card">
                 <div class="card-action">
                     <div>
-                        <?php Pjax::begin(['id' => '1']); ?>
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
                             'rowOptions' => [
@@ -62,13 +61,10 @@ ProjectIndexAsset::register($this);
                             ],
                             'columns' => getCollumnsArray()
                         ]); ?>
-                        <?php Pjax::end(); ?>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -285,7 +281,7 @@ function getViewButtonArray()
                     'data-pjax' => true,
                     'target' => '_blank',
                     'action' => Url::to(['project/view', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-green',
+                    'class' => 'btn-floating-minus waves-effect waves-light btn-green',
                     'title' => "visualiser le devis"
                 ]
             );
@@ -300,14 +296,14 @@ function getPdfButtonArray()
         'label' => 'PDF',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
-                '<i class="material-icons right">picture_as_pdf</i>',
+                '<i class="material-icons center">picture_as_pdf</i>',
                 Url::to(['project/pdf', 'id' => $model->id,]),
                 [
                     'id' => 'grid-custom-button',
                     'target' => '_blank',
                     'data-pjax' => true,
                     'action' => Url::to(['project/pdf', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-purple',
+                    'class' => 'btn-floating-minus waves-effect waves-light btn-purple',
                     'title' => "Générer le devis sous forme pdf"
                 ]
             );
@@ -322,13 +318,13 @@ function getExcelButtonArray()
         'label' => 'XLS',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
-                '<i class="material-icons right">grid_on</i>',
+                '<i class="material-icons center">grid_on</i>',
                 Url::to(['project/download-excel', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['devis/update', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-green-darker',
+                    'class' => 'btn-floating-minus waves-effect waves-light btn-green-darker',
                     'title' => "Générer le devis sous forme excel"
                 ]
             );
@@ -343,13 +339,13 @@ function getPieceButtonArray()
         'label' => 'Propositon',
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
-                '<i class="material-icons right">file_download</i>',
+                '<i class="material-icons center">file_download</i>',
                 Url::to(['project/download-piece', 'id' => $model->id]),
                 [
                     'id' => 'grid-custom-button',
                     'data-pjax' => true,
                     'action' => Url::to(['project/download-piece', 'id' => $model->id]),
-                    'class' => 'btn-floating waves-effect waves-light btn-green-darker',
+                    'class' => 'btn-floating-minus waves-effect waves-light btn-green-darker',
                     'title' => "Récupérer la proposition technique"
                 ]
             );
