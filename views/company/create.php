@@ -55,12 +55,14 @@ CompanyCreateAsset::register($this);
                             ->label("Ville") ?>
 
                         <?= $form->field($model, 'address')
-                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'city-field'])
+                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'address-field'])
                             ->label("Adresse") ?>
 
-                        <?= $form->field($model, 'tva')
-                            ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'tva-field'])
-                            ->label("TVA") ?>
+                        <div id="tva-block">
+                            <?= $form->field($model, 'tva')
+                                ->textInput(['maxlength' => true, 'autocomplete' => 'off', 'id' => 'tva-field'])
+                                ->label("TVA") ?>
+                        </div>
 
                     </div>
                 </div>

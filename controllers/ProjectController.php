@@ -1185,13 +1185,10 @@ class ProjectController extends Controller implements ServiceInterface
 
     public function actionDuplicateProject(int $id)
     {
-
-
         $model = ProjectCreateFirstStepForm::getOneById($id);
         $model->company_name = $model->company->name;
         $model->contact_email = $model->contact->email;
         $model->radiobutton_type_selected = array_search($model->type, Project::TYPES);
-
 
         $companiesNames = ArrayHelper::map(Company::find()->all(), 'id', 'name');
         $companiesNames = array_merge($companiesNames);
@@ -1199,8 +1196,6 @@ class ProjectController extends Controller implements ServiceInterface
         $contactsEmail = ArrayHelper::map(Contact::find()->all(), 'id', 'email');
         $contactsEmail = array_merge($contactsEmail);
         if ($model->load(Yii::$app->request->post())) {
-
-
             $lots = $model->lots;
             $millestones = $model->millestones;
             // Pré-remplissage des valeurs par défaut. Celle-ci seront complétés plus tard dans le projet.
@@ -1274,7 +1269,6 @@ class ProjectController extends Controller implements ServiceInterface
                 'model' => $model,
                 'companiesNames' => \array_values($companiesNames),
                 'contactsEmail' => \array_values($contactsEmail),
-
             ]
         );
     }
