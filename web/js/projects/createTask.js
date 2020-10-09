@@ -94,7 +94,7 @@ function OnCalculIncertitudeGest(id) {
     price = $(SelectPrice).val();
     let SelectRiskTotalPrice =
         "#projectcreategestiontaskform-" + id + "-totalprice";
-    let totalprice = dayIncertitude * price;
+    let totalprice = (dayIncertitude * price).toFixed(2);
     $(SelectRiskTotalPrice).val(totalprice);
 
     $(SelectRiskDurationhour).val(dayIncertitude);
@@ -146,17 +146,15 @@ function OnCalculIncertitudelot(id) {
     price = $(SelectPrice).val();
     let SelectRiskTotalPrice =
         "#projectcreatelottaskform-" + id + "-totalprice";
-    let totalprice = dayIncertitude * price;
+    let totalprice = (dayIncertitude * price).toFixed(2);
 
     $(SelectRiskTotalPrice).val(totalprice);
 }
 
-function CalculTempsincertitude(hour, day, incertitudestring) {
+function CalculTempsincertitude(hour = 0, day = 0, incertitudestring) {
     let incertitudeMap = $incertudeMap;
     let incertitude = incertitudeMap[incertitudestring];
-
-    let dayIncertitude = (day + hour / 7.7) * incertitude;
-
+    let dayIncertitude = (parseInt(day) + parseInt(hour) / 7.7) * incertitude;
     return dayIncertitude;
 }
 
