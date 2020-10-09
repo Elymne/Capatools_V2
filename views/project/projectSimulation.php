@@ -70,10 +70,6 @@ $totalprojet = 0.0;
                                             <td width="90%" class="table-font-bold">Total des reversements laboratoires :</td>
                                             <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostRepayement) ?></td>
                                         </tr>
-                                        <tr>
-                                            <td width="90%" class="table-font-bold">Total de l'avant projet (non margé):</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->total) ?></td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -86,12 +82,8 @@ $totalprojet = 0.0;
                                             <td><?= Yii::$app->formatter->asCurrency($lotavp->totalCostInvest) ?></td>
                                         </tr>
                                         <tr>
-                                            <td width="90%" class="table-font-bold">Total de l'avant projet (margé avec le Taux moyen):</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->total * (1 + $project->marginaverage / 100)) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td width="90%" class="table-font-bold">Somme ajoutée par lot (margé avec le Taux moyen):</td>
-                                            <td><?= Yii::$app->formatter->asCurrency($project->additionallotprice) ?></td>
+                                            <td width="90%" class="table-font-bold">Total du coût de l'avant-projet :</td>
+                                            <td><?= Yii::$app->formatter->asCurrency($lotavp->total) ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
