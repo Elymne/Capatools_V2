@@ -80,7 +80,7 @@ class EquipmentRepayment extends ActiveRecord implements JsonSerializable
     public static function getAllEquipementRepayementGroupByLaboBylotID(int $lotid)
     {
         return self::find()
-            ->select('SUM(aqr.time_risk * aqr.price) as total, aqr.laboratory_id as id')
+            ->select('SUM(aqr.price) as total, aqr.laboratory_id as id')
             ->from((['equipment_repayment as aqr']))
             ->joinWith('lot')
             ->where(['aqr.lot_id' => $lotid])

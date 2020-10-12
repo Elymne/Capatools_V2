@@ -212,6 +212,18 @@ class Lot extends ActiveRecord
         return $result;
     }
 
+
+
+    public function getManagementfeeSellingPrice()
+    {
+        $project = $this->project;
+        $result = $this->sellingPriceWithGestionPrice * (1 - $project->management_rate / 100);
+        return $result;
+    }
+
+
+
+
     public function getSellingPriceWithGestionPrice()
     {
         $project = $this->project;
@@ -222,7 +234,7 @@ class Lot extends ActiveRecord
     {
 
         $average = 0000;
-        $average = ($this->totalPrice - $this->totalCost) / $this->totalCost;
+        $average = ($this->totalPrice - $this->totalCost) / ($this->totalCost);
 
 
         return round(($average * 100), 2);

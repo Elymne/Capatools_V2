@@ -272,12 +272,15 @@ function createLaboxyTable(Project $model): string
 
     $laboxy_name = $model->id_laboxy;
     $prix_vente = $model->sellingprice;
-    $rhcost = $model->TotalcostRH;
-    $coutAchatInvestReversement = $model->TotalAchatInvesteReversementPrice;
+    $rhcost = $model->totalcostRH;
+    $coutAchatInvestReversement = $model->totalAchatInvesteReversementCost + $model->supportPrice;
+    $Managementfee = $model->supportPrice;
+
     $laboxy_prixvente = Yii::$app->formatter->asCurrency($prix_vente);
-    $laboxy_prestation_duration = Yii::$app->formatter->asInteger($model->totalHourWithRisk);
+    $laboxy_prestation_duration = ($model->totalHourWithRisk);
     $laboxy_RHcost = Yii::$app->formatter->asCurrency($rhcost);
     $laboxy_coutAchatInvestReversement = Yii::$app->formatter->asCurrency($coutAchatInvestReversement);
+
 
     $marge = $prix_vente - $rhcost - $coutAchatInvestReversement;
     $tauxMarge = $model->marginAverage;

@@ -184,19 +184,21 @@ class Project extends ActiveRecord
     }
 
 
-    public function getTotalCostlot()
+    public function getTotalCostlotWithAVP()
     {
         $totalCost = 0.0;
         $lotsproject = $this->lots;
         foreach ($lotsproject as $lot) {
-            $totalCost = $totalCost + $lot->totalCost;
+            if ($lot->number != 0) {
+                $totalCost = $totalCost + $lot->totalCostWithAVP;
+            }
         }
         return $totalCost;
     }
 
 
 
-    public function getTotalAchatInvesteReversementPrice()
+    public function getTotalAchatInvesteReversementCost()
     {
         $totalAchatinvest = 0.0;
         $lotsproject = $this->lots;
@@ -205,7 +207,7 @@ class Project extends ActiveRecord
                 $totalAchatinvest = $totalAchatinvest + $lot->totalCostInvest + $lot->totalCostRepayement;
             }
         }
-        return $totalAchatinvest + $this->SupportPrice;
+        return $totalAchatinvest;
     }
 
 
@@ -216,7 +218,7 @@ class Project extends ActiveRecord
         $lotsproject = $this->lots;
         foreach ($lotsproject as $lot) {
 
-            $totaltimewithrisk = $totaltimewithrisk + $lot->totaltimewithrisk;
+            $totaltimewithrisk = $totaltimewithrisk + $lot->totalTaskTimeWithRisk * 7.7;
         }
 
         return $totaltimewithrisk;
@@ -332,11 +334,9 @@ class Project extends ActiveRecord
     }
 
 
-
-    ///Depreceted function
     public function getMarginAverage()
     {
-        $average = ($this->sellingPrice - $this->SupportPrice - $this->totalCostlot) / $this->totalCostlot;
+        $average = ($this->sellingPrice  - $this->totalCostlotWithAVP - $this->supportPrice) / ($this->totalCostlotWithAVP + $this->supportPrice);
 
 
         return $average * 100;

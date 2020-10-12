@@ -265,7 +265,7 @@ ProjectSimulationAsset::register($this);
                                 <table class="highlight">
                                     <tbody>
                                         <tr>
-                                            <td width="90%" class="table-font-bold">Taux de marge moyen du projet sans frais de gestion:</td>
+                                            <td width="90%" class="table-font-bold">Taux de marge moyen du projet:</td>
                                             <td><?= Yii::$app->formatter->asPercent($project->marginaverage / 100, 2) ?></td>
                                         </tr>
                                         <tr>
