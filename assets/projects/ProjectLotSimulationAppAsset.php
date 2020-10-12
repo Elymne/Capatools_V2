@@ -17,7 +17,7 @@ class ProjectLotSimulationAppAsset extends AssetBundle
 
     public $css = ['css/projects/lotSimulation.css'];
 
-    public $js = [''];
+    public $js = ['js/projects/lotSimulation.js'];
 
     public $depends = [
         'yii\web\YiiAsset',
