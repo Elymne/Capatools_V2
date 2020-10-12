@@ -15,8 +15,14 @@ AppAsset::register($this);
 ProjectCreateThirdStepAsset::register($this);
 
 // Si le numéro de lot correspondant est le 0, on a affaire à un lot d'avant-projet.
-if ($number == 0) $this->title = 'Dépenses et reversements : Avant-projet';
-else $this->title = 'Dépenses et reversements : Lot n°' . $number;
+if ($number == 0) {
+    $this->title = 'Dépenses et reversements : Avant-projet';
+    $hideElement = "display: none;";
+} else {
+    $this->title = 'Dépenses et reversements : Lot n°' . $number;
+    $hideElement = "";
+}
+
 
 // On map les noms des risques sur dans une table utilisable dans la vue.
 $risksName = array_map(function ($risk) {
@@ -236,9 +242,11 @@ $risksName = array_map(function ($risk) {
                                             <div class="col s1">
                                                 <label>Heure(s)</label>
                                             </div>
-                                            <div class="col s2">
-                                                <label>Incertitude</label>
-                                            </div>
+                                            <?php if ($number != 0) : ?>
+                                                <div class="col s2">
+                                                    <label>Incertitude</label>
+                                                </div>
+                                            <?php endif; ?>
                                             <div class="col s1">
                                                 <label>Temps total</label>
                                             </div>
@@ -267,7 +275,8 @@ $risksName = array_map(function ($risk) {
                                                             <div class="col s1">
                                                                 <?= $form->field($equipment, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label(false) ?>
                                                             </div>
-                                                            <div class="col s2 equipment_risk">
+                                                            <!-- Petite note ici, ce champs est caché dans le DOM quand le numéro de lot est égale à 0. $hideElement est juste une valeur qui peut-être vide, et qui permet de cacher ou non l'élément. -->
+                                                            <div class="col s2 equipment_risk" style="<?= $hideElement ?>">
                                                                 <!-- type dropdown field -->
                                                                 <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::class, [
                                                                     'data' => array_map(function ($risk) {
@@ -279,6 +288,7 @@ $risksName = array_map(function ($risk) {
                                                                     'pluginOptions' => [],
                                                                 ])->label(false); ?>
                                                             </div>
+
                                                             <div class="col s1">
                                                                 <?= $form->field($equipment, "[{$i}]timeRiskStringify")->textInput(['readonly' => true])->label(false) ?>
                                                             </div>
@@ -334,9 +344,11 @@ $risksName = array_map(function ($risk) {
                                             <div class="col s1">
                                                 <label>Heure(s)</label>
                                             </div>
-                                            <div class="col s2">
-                                                <label>Incertitude</label>
-                                            </div>
+                                            <?php if ($number != 0) : ?>
+                                                <div class="col s2">
+                                                    <label>Incertitude</label>
+                                                </div>
+                                            <?php endif; ?>
                                             <div class="col s1">
                                                 <label>Temps total</label>
                                             </div>
@@ -365,7 +377,7 @@ $risksName = array_map(function ($risk) {
                                                             <div class="col s1">
                                                                 <?= $form->field($contributor, "[{$i}]nb_hours")->input('number', ['min' => 0, 'max' => 10000, 'step' => 1])->label(false) ?>
                                                             </div>
-                                                            <div class="col s2 contributor_risk">
+                                                            <div class="col s2 contributor_risk" style="<?= $hideElement ?>">
                                                                 <!-- type dropdown field -->
                                                                 <?= $form->field($contributor, "[{$i}]riskSelected")->widget(Select2::class, [
                                                                     'data' => $risksName,

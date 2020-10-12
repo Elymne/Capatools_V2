@@ -1,9 +1,9 @@
 // Initialisation des données sous format d'objet Javascript.
-const laboratoriesData = JSON.parse(document.getElementById("laboratories-data-target").textContent)
-const risksData = JSON.parse(document.getElementById("risks-data-target").textContent)
+const laboratoriesData = JSON.parse(document.getElementById('laboratories-data-target').textContent)
+const risksData = JSON.parse(document.getElementById('risks-data-target').textContent)
 
 // Liste d'informations relatives au données qui enreichissent le dynamicForm.
-const infoData = JSON.parse(document.getElementById("info-data-target").textContent)
+const infoData = JSON.parse(document.getElementById('info-data-target').textContent)
 
 // Laboratoire sélectionné.
 const laboratorySelected = infoData.laboratorySelected !== null ? infoData.laboratorySelected : 0
@@ -29,9 +29,9 @@ $(() => {
     /**
      * On cache certains éléments suivant le numéro du lot en cours de modification.
      */
-    hideCardInvestPlus(isPreProject)
-    hideEquipmentRisk(isPreProject)
-    hideContributorRisk(isPreProject)
+    //hideCardInvestPlus(isPreProject)
+    //hideEquipmentRisk(isPreProject)
+    //hideContributorRisk(isPreProject)
 
     // Quand l'id du premier élément de la liste addedEquipementsOnInit est null, c'est qu'aucun élément n'a été précédement ajouté, ou tous les éléments ont été retiré à la dernière sauvegarde.
     // En résumé, cela veut juste dire que sur la vue, il n'y a aucun équipement d'affiché. On ne fait donc aucun calcul.
@@ -48,7 +48,7 @@ $(() => {
             let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
             equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
 
-            dailyPriceField.on("input", () => {
+            dailyPriceField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
             })
@@ -58,12 +58,12 @@ $(() => {
                 equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
             })
 
-            nbDaysField.on("input", () => {
+            nbDaysField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
             })
 
-            nbHoursField.on("input", () => {
+            nbHoursField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
             })
@@ -92,12 +92,12 @@ $(() => {
                 laboratoryContributorTotalPriceUpdate(riskObjectcont.riskDay, riskObjectcont.riskHour, dailyPriceField, totalPriceField)
             })
 
-            nbDaysField.on("input", () => {
+            nbDaysField.on('input', () => {
                 let riskObjectcont = laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 laboratoryContributorTotalPriceUpdate(riskObjectcont.riskDay, riskObjectcont.riskHour, dailyPriceField, totalPriceField)
             })
 
-            nbHoursField.on("input", () => {
+            nbHoursField.on('input', () => {
                 let riskObjectcont = laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 laboratoryContributorTotalPriceUpdate(riskObjectcont.riskDay, riskObjectcont.riskHour, dailyPriceField, totalPriceField)
             })
@@ -117,14 +117,14 @@ $(() => {
     // Si il n'y a aucun équipement, l'index maximum est égale à -1, sinon, l'élément 1 si il existe est égale à 0, puis 1, puis 2...n
     let nbMaxIndexEquipment = nbEquipmentLinesDuplicated - 1
 
-    hideOrShowLabelBlock($("#equipment-label-block"), nbEquipmentLinesDuplicated)
+    hideOrShowLabelBlock($('#equipment-label-block'), nbEquipmentLinesDuplicated)
 
-    $(".dynamicform_wrapper_equipment").on("afterInsert", (e, item) => {
+    $('.dynamicform_wrapper_equipment').on('afterInsert', (e, item) => {
         nbMaxIndexEquipment++
         nbEquipmentLinesDuplicated++
 
-        hideEquipmentRisk(isPreProject)
-        hideOrShowLabelBlock($("#equipment-label-block"), nbEquipmentLinesDuplicated)
+        //hideEquipmentRisk(isPreProject)
+        hideOrShowLabelBlock($('#equipment-label-block'), nbEquipmentLinesDuplicated)
 
         initNewEquipementRepaymentAdded(nbMaxIndexEquipment)
 
@@ -136,12 +136,12 @@ $(() => {
             const totalPriceField = $(`#projectcreateequipmentrepaymentform-${i}-price`)
             const riskSelector = $(`#projectcreateequipmentrepaymentform-${i}-riskselected`)
 
-            hideEquipmentRisk(isPreProject, i)
+            //hideEquipmentRisk(isPreProject, i)
 
             let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
             equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
 
-            dailyPriceField.on("input", () => {
+            dailyPriceField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
             })
@@ -151,24 +151,24 @@ $(() => {
                 equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
             })
 
-            nbDaysField.on("input", () => {
+            nbDaysField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
             })
 
-            nbHoursField.on("input", () => {
+            nbHoursField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
             })
         }
     })
 
-    $(".dynamicform_wrapper_equipment").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer cet équipement ?"))
+    $('.dynamicform_wrapper_equipment').on('beforeDelete', (e, item) => confirm('Voulez-vous supprimer cet équipement ?'))
 
-    $(".dynamicform_wrapper_equipment").on("afterDelete", (e) => {
+    $('.dynamicform_wrapper_equipment').on('afterDelete', (e) => {
         nbMaxIndexEquipment--
         nbEquipmentLinesDuplicated--
-        hideOrShowLabelBlock($("#equipment-label-block"), nbEquipmentLinesDuplicated)
+        hideOrShowLabelBlock($('#equipment-label-block'), nbEquipmentLinesDuplicated)
     })
 })
 
@@ -182,18 +182,18 @@ $(() => {
     // Si il n'y a aucun équipement, l'index maximum est égale à -1, sinon, l'élément 1 si il existe est égale à 0, puis 1, puis 2...n
     let nbMaxIndexContributor = nbContributorLinesDuplicated - 1
 
-    hideOrShowLabelBlock($("#labocontributor-label-block"), nbContributorLinesDuplicated)
+    hideOrShowLabelBlock($('#labocontributor-label-block'), nbContributorLinesDuplicated)
 
     /**
      * Calback onAddItem.
      * Permet de gérer les callback des futurs éléments que l'utilisateur pourra créer.
      */
-    $(".dynamicform_wrapper_contributor").on("afterInsert", (e, item) => {
+    $('.dynamicform_wrapper_contributor').on('afterInsert', (e, item) => {
         nbMaxIndexContributor++
         nbContributorLinesDuplicated++
 
-        hideContributorRisk(isPreProject)
-        hideOrShowLabelBlock($("#labocontributor-label-block"), nbContributorLinesDuplicated)
+        //hideContributorRisk(isPreProject)
+        hideOrShowLabelBlock($('#labocontributor-label-block'), nbContributorLinesDuplicated)
         initNewLaboratoryContributorAdded(nbMaxIndexContributor)
 
         for (let i = 0; i <= nbMaxIndexContributor; i++) {
@@ -204,7 +204,7 @@ $(() => {
             const timeRiskStringifyField = $(`#projectcreatelaboratorycontributorform-${i}-timeriskstringify`)
             const riskSelector = $(`#projectcreatelaboratorycontributorform-${i}-riskselected`)
 
-            hideContributorRisk(isPreProject, i)
+            //hideContributorRisk(isPreProject, i)
             let riskObjectcont = laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
             laboratoryContributorTotalPriceUpdate(riskObjectcont.riskDay, riskObjectcont.riskHour, dailyPriceField, totalPriceField)
 
@@ -213,29 +213,29 @@ $(() => {
                 laboratoryContributorTotalPriceUpdate(riskObjectcont.riskDay, riskObjectcont.riskHour, dailyPriceField, totalPriceField)
             })
 
-            dailyPriceField.on("input", () => {
+            dailyPriceField.on('input', () => {
                 let riskObjectcont = laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 laboratoryContributorTotalPriceUpdate(riskObjectcont.riskDay, riskObjectcont.riskHour, dailyPriceField, totalPriceField)
             })
 
-            nbDaysField.on("input", () => {
+            nbDaysField.on('input', () => {
                 let riskObjectcont = laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 laboratoryContributorTotalPriceUpdate(riskObjectcont.riskDay, riskObjectcont.riskHour, dailyPriceField, totalPriceField)
             })
 
-            nbHoursField.on("input", () => {
+            nbHoursField.on('input', () => {
                 let riskObjectcont = laboratoryContributorRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
                 laboratoryContributorTotalPriceUpdate(riskObjectcont.riskDay, riskObjectcont.riskHour, dailyPriceField, totalPriceField)
             })
         }
     })
 
-    $(".dynamicform_wrapper_contributor").on("beforeDelete", (e, item) => confirm("Voulez-vous supprimer ce contributeur ?"))
+    $('.dynamicform_wrapper_contributor').on('beforeDelete', (e, item) => confirm('Voulez-vous supprimer ce contributeur ?'))
 
-    $(".dynamicform_wrapper_contributor").on("afterDelete", (e) => {
+    $('.dynamicform_wrapper_contributor').on('afterDelete', (e) => {
         nbMaxIndexContributor--
         nbContributorLinesDuplicated--
-        hideOrShowLabelBlock($("#labocontributor-label-block"), nbContributorLinesDuplicated)
+        hideOrShowLabelBlock($('#labocontributor-label-block'), nbContributorLinesDuplicated)
     })
 })
 
@@ -244,20 +244,20 @@ $(() => {
  */
 $(() => {
     let nbConsummablesLinesDuplicated = addedConsummablesOnInit[0].id == null ? 0 : addedConsummablesOnInit.length
-    hideOrShowLabelBlock($("#consummable-label-block"), nbConsummablesLinesDuplicated)
+    hideOrShowLabelBlock($('#consummable-label-block'), nbConsummablesLinesDuplicated)
 
-    $(".dynamicform_wrapper_consumable").on("beforeDelete", (e, item) => {
-        return confirm("Voulez-vous supprimer ce consommable ?")
+    $('.dynamicform_wrapper_consumable').on('beforeDelete', (e, item) => {
+        return confirm('Voulez-vous supprimer ce consommable ?')
     })
 
-    $(".dynamicform_wrapper_consumable").on("afterDelete", (e, item) => {
+    $('.dynamicform_wrapper_consumable').on('afterDelete', (e, item) => {
         nbConsummablesLinesDuplicated--
-        hideOrShowLabelBlock($("#consummable-label-block"), nbConsummablesLinesDuplicated)
+        hideOrShowLabelBlock($('#consummable-label-block'), nbConsummablesLinesDuplicated)
     })
 
-    $(".dynamicform_wrapper_consumable").on("afterInsert", (e, item) => {
+    $('.dynamicform_wrapper_consumable').on('afterInsert', (e, item) => {
         nbConsummablesLinesDuplicated++
-        hideOrShowLabelBlock($("#consummable-label-block"), nbConsummablesLinesDuplicated)
+        hideOrShowLabelBlock($('#consummable-label-block'), nbConsummablesLinesDuplicated)
     })
 })
 
@@ -268,20 +268,20 @@ $(() => {
     if (!isPreProject) {
         let nbInvestsLinesDuplicated = addedInvestsOnInit[0].id == null ? 0 : addedInvestsOnInit.length
 
-        hideOrShowLabelBlock($("#invest-label-block"), nbInvestsLinesDuplicated)
+        hideOrShowLabelBlock($('#invest-label-block'), nbInvestsLinesDuplicated)
 
-        $(".dynamicform_wrapper_invtest").on("beforeDelete", (e, item) => {
-            return confirm("Voulez-vous supprimer cet investissement ?")
+        $('.dynamicform_wrapper_invtest').on('beforeDelete', (e, item) => {
+            return confirm('Voulez-vous supprimer cet investissement ?')
         })
 
-        $(".dynamicform_wrapper_invtest").on("afterDelete", (e, item) => {
+        $('.dynamicform_wrapper_invtest').on('afterDelete', (e, item) => {
             nbInvestsLinesDuplicated--
-            hideOrShowLabelBlock($("#invest-label-block"), nbInvestsLinesDuplicated)
+            hideOrShowLabelBlock($('#invest-label-block'), nbInvestsLinesDuplicated)
         })
 
-        $(".dynamicform_wrapper_invtest").on("afterInsert", (e, item) => {
+        $('.dynamicform_wrapper_invtest').on('afterInsert', (e, item) => {
             nbInvestsLinesDuplicated++
-            hideOrShowLabelBlock($("#invest-label-block"), nbInvestsLinesDuplicated)
+            hideOrShowLabelBlock($('#invest-label-block'), nbInvestsLinesDuplicated)
         })
     }
 })
@@ -397,7 +397,7 @@ const hideContributorRisk = (bool) => {
  * @param {boolean} bool
  */
 const hideCardInvestPlus = (bool) => {
-    if (bool) $("#card-invest-plus").hide()
+    if (bool) $('#card-invest-plus').hide()
 }
 
 /**
