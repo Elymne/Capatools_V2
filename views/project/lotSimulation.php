@@ -46,7 +46,7 @@ $this->title = 'Simulation de lot';
                                 </tr>
                                 <tr>
                                     <td>Total Prix de revient H.T. temps homme :</td>
-                                    <td><?= $form->field($lot, "total_cost_human_with_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
+                                    <td><?= $form->field($lot, "total_cost_human_with_margin")->textInput(['disabled' => true, 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
                                 </tr>
                                 <tr>
                                     <td><label class='blue-text control-label typeLabel'>Marge consommables, déplacements et achat</label></td>
@@ -58,7 +58,7 @@ $this->title = 'Simulation de lot';
                                 </tr>
                                 <tr>
                                     <td>Total Prix de revient H.T. consommables, déplacements et achat :</td>
-                                    <td><?= $form->field($lot, "total_cost_invest_with_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
+                                    <td><?= $form->field($lot, "total_cost_invest_with_margin")->textInput(['disabled' => true, 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
                                 </tr>
                                 <tr>
                                     <td><label class='blue-text control-label typeLabel'>Marge reversement Laboratoire</label></td>
@@ -74,7 +74,7 @@ $this->title = 'Simulation de lot';
                                 </tr>
                                 <tr>
                                     <td>Total Prix de revient H.T. reversement Laboratoire :</td>
-                                    <td><?= $form->field($lot, "total_cost_repayement_with_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
+                                    <td><?= $form->field($lot, "total_cost_repayement_with_margin")->textInput(['disabled' => true, 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -91,15 +91,15 @@ $this->title = 'Simulation de lot';
                             <tbody>
                                 <tr>
                                     <td width="50%" class="table-font-bold">Total coût temps homme :</td>
-                                    <td><?= $form->field($lot, "totalCostHuman", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostHuman)]])->label(false) ?></td>
+                                    <td><?= $form->field($lot, "totalCostHuman", ['inputOptions' => ['disabled' => true, 'readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostHuman)]])->label(false) ?></td>
                                 </tr>
                                 <tr>
                                     <td width="50%" class="table-font-bold">Total des dépenses et investissement :</td>
-                                    <td> <?= $form->field($lot, "totalCostInvest", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostInvest)]])->label(false) ?></td>
+                                    <td> <?= $form->field($lot, "totalCostInvest", ['inputOptions' => ['disabled' => true, 'readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostInvest)]])->label(false) ?></td>
                                 </tr>
                                 <tr>
                                     <td width="50%" class="table-font-bold">Total des reversements laboratoires :</td>
-                                    <td><?= $form->field($lot, "totalCostRepayement", ['inputOptions' => ['readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostRepayement)]])->label(false) ?></td>
+                                    <td><?= $form->field($lot, "totalCostRepayement", ['inputOptions' => ['disabled' => true, 'readonly' => true, 'value' => Yii::$app->formatter->asCurrency($lot->totalCostRepayement)]])->label(false) ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -114,19 +114,19 @@ $this->title = 'Simulation de lot';
                             <tbody>
                                 <tr>
                                     <td width="50%" class="table-font-bold">Montant Total HT :</td>
-                                    <td><?= $form->field($lot, "total_cost_lot")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => ['decimal', 2]])->label(false) ?></td>
+                                    <td><?= $form->field($lot, "total_cost_lot")->textInput(['disabled' => true, 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true, 'format' => ['decimal', 2]])->label(false) ?></td>
                                 </tr>
                                 <tr>
                                     <td width="50%" class="table-font-bold">Taux de marge moyen avant frais de gestion :</td>
-                                    <td><?= $form->field($lot, "average_lot_margin")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
+                                    <td><?= $form->field($lot, "average_lot_margin")->textInput(['disabled' => true, 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
                                 </tr>
                                 <tr>
                                     <td width="50%" class="table-font-bold">Frais de gestion du support HT :</td>
-                                    <td><?= $form->field($lot, "support_cost")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
+                                    <td><?= $form->field($lot, "support_cost")->textInput(['disabled' => true, 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
                                 </tr>
                                 <tr>
                                     <td width="50%" class="table-font-bold">Prix de vente du lot HT :</td>
-                                    <td> <?= $form->field($lot, "total_cost_lot_with_support")->textInput(['autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
+                                    <td> <?= $form->field($lot, "total_cost_lot_with_support")->textInput(['disabled' => true, 'autocomplete' => 'off', 'maxlength' => true, 'readonly' => true])->label(false) ?></td>
                                 </tr>
                             </tbody>
                         </table>
