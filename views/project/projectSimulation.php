@@ -122,109 +122,107 @@ $totalprojet = 0.0;
                 </div>
                 <!-- Card view basique : PROJETS -->
                 <div class="card">
-
                     <div class="card-content">
                         <label>Résumé du projet</label>
                     </div>
+                    <div class="card-action" style="background-color:whitesmoke;">
+                        <?php foreach ($lots as $lotproject) : ?>
+                            <?php if ($lotproject->number != 0) : ?>
+                                <div class="card">
+                                    <div class="card-action">
+                                        <div class="row">
 
-                    <?php foreach ($lots as $lotproject) : ?>
-                        <?php if ($lotproject->number != 0) : ?>
-                            <div class="card-action">
+                                            <?php if ($Resultcheck['lots'][$lotproject->number]['Result'] == false  && $project->first_in == 1) : ?>
+                                                <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => ' Il n\'y a pas de tâche présente dans ce lot ']); ?>
+                                            <?php endif; ?>
 
-                                <div class="row">
+                                            <div class="col s12">
+                                                <label class='control-label label-lot-title'> <?= $lotproject->title ?> </label>
+                                            </div>
 
-                                    <?php if ($Resultcheck['lots'][$lotproject->number]['Result'] == false  && $project->first_in == 1) : ?>
-                                        <?= Alert::widget(['options' => ['class' => 'alert-warning',], 'body' => ' Il n\'y a pas de tâche présente dans ce lot ']); ?>
-                                    <?php endif; ?>
+                                            <div class="col s12 l6 xl4">
+                                                <table class="highlight">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="90%" class="table-font-bold">Prix du total lot sans avp:</td>
+                                                            <td><?= Yii::$app->formatter->asCurrency($lotproject->totalwithmargin) ?></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
-                                    <div class="col s12">
-                                        <label class='control-label label-lot-title'> <?= $lotproject->title ?> </label>
-                                    </div>
+                                            <div class="col s12 l6 xl4">
+                                                <table class="highlight">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="90%" class="table-font-bold">Prix du total lot avec avp :</td>
+                                                            <td><?= Yii::$app->formatter->asCurrency($lotproject->totalwithmargin + $project->additionallotprice) ?></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
-                                    <div class="col s12 l6 xl4">
-                                        <table class="highlight">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="90%" class="table-font-bold">Prix du total lot sans avp:</td>
-                                                    <td><?= Yii::$app->formatter->asCurrency($lotproject->totalwithmargin) ?></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            <div class="col s12 l6 xl4">
+                                                <table class="highlight">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="90%" class="table-font-bold">Prix du total lot avec avp et support :</td>
+                                                            <td><?= Yii::$app->formatter->asCurrency(round(($lotproject->totalwithmargin + $project->additionallotprice) / (1 - $project->management_rate / 100), -2)) ?></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
-                                    <div class="col s12 l6 xl4">
-                                        <table class="highlight">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="90%" class="table-font-bold">Prix du total lot avec avp :</td>
-                                                    <td><?= Yii::$app->formatter->asCurrency($lotproject->totalwithmargin + $project->additionallotprice) ?></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </div>
+                                        <div class="row block-buttons-spacing">
+                                            <div class="col s12">
+                                                <div class="to-the-right">
+                                                    <?= Html::a(
+                                                        '<span>Ajouter des tâches</span>',
+                                                        Url::to(['project/update-task', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
+                                                        [
+                                                            'id' => 'grid-custom-button',
+                                                            'data-pjax' => true,
+                                                            'action' => Url::to(['project/update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
+                                                            'class' => 'btn waves-effect waves-light btn-project-simulation',
+                                                            'data-position' => "bottom",
+                                                            'title' => "Permet de créer, modifier, supprimer des tâche"
+                                                        ]
+                                                    ); ?>
 
-                                    <div class="col s12 l6 xl4">
-                                        <table class="highlight">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="90%" class="table-font-bold">Prix du total lot avec avp et support :</td>
-                                                    <td><?= Yii::$app->formatter->asCurrency(round(($lotproject->totalwithmargin + $project->additionallotprice) / (1 - $project->management_rate / 100), -2)) ?></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                    <?= Html::a(
+                                                        '<span>Gérer les dépenses</span>',
+                                                        Url::to(['project/update-dependencies-consumables', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
+                                                        [
+                                                            'id' => 'grid-custom-button',
+                                                            'data-pjax' => true,
+                                                            'action' => Url::to(['project/Update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
+                                                            'class' => 'btn waves-effect waves-light btn-project-simulation',
+                                                            'data-position' => "bottom",
+                                                            'title' => "Permet de créer les consommables et investissements ainsi que de gérer les matériels laboratoires et les contributeurs"
+                                                        ]
+                                                    ); ?>
 
-                                </div>
-
-                                <div class="row block-buttons-spacing">
-                                    <div class="col s12">
-                                        <div class="to-the-right">
-                                            <?= Html::a(
-                                                '<span>Ajouter des tâches</span>',
-                                                Url::to(['project/update-task', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
-                                                [
-                                                    'id' => 'grid-custom-button',
-                                                    'data-pjax' => true,
-                                                    'action' => Url::to(['project/update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
-                                                    'class' => 'btn waves-effect waves-light btn-project-simulation',
-                                                    'data-position' => "bottom",
-                                                    'title' => "Permet de créer, modifier, supprimer des tâche"
-                                                ]
-                                            ); ?>
-
-                                            <?= Html::a(
-                                                '<span>Gérer les dépenses</span>',
-                                                Url::to(['project/update-dependencies-consumables', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
-                                                [
-                                                    'id' => 'grid-custom-button',
-                                                    'data-pjax' => true,
-                                                    'action' => Url::to(['project/Update-task', 'number' => $lotproject->number, 'project_id' => $project->id]),
-                                                    'class' => 'btn waves-effect waves-light btn-project-simulation',
-                                                    'data-position' => "bottom",
-                                                    'title' => "Permet de créer les consommables et investissements ainsi que de gérer les matériels laboratoires et les contributeurs"
-                                                ]
-                                            ); ?>
-
-                                            <?= Html::a(
-                                                '<span>Modifier les marges</span>',
-                                                Url::to(['project/lot-simulate', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
-                                                [
-                                                    'id' => 'grid-custom-button',
-                                                    'data-pjax' => true,
-                                                    'action' => Url::to(['project/lot-simulate', 'number' => $lotproject->number, 'project_id' => $project->id]),
-                                                    'class' => 'btn waves-effect waves-light btn-project-simulation',
-                                                    'data-position' => "bottom",
-                                                    'title' => "Permet de modifier les marges",
-                                                ]
-                                            ); ?>
+                                                    <?= Html::a(
+                                                        '<span>Modifier les marges</span>',
+                                                        Url::to(['project/lot-simulate', 'number' =>  $lotproject->number, 'project_id' => $project->id]),
+                                                        [
+                                                            'id' => 'grid-custom-button',
+                                                            'data-pjax' => true,
+                                                            'action' => Url::to(['project/lot-simulate', 'number' => $lotproject->number, 'project_id' => $project->id]),
+                                                            'class' => 'btn waves-effect waves-light btn-project-simulation',
+                                                            'data-position' => "bottom",
+                                                            'title' => "Permet de modifier les marges",
+                                                        ]
+                                                    ); ?>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
                 <!-- Card view basique : BILAN -->
                 <div class="card">
@@ -478,6 +476,7 @@ $totalprojet = 0.0;
                         </div>
                     </div>
                 </div>
+                <!-- BUTTONS LIST -->
                 <div class="form-group to-the-right">
                     <?= Html::submitButton(
                         '<i class="material-icons right">save</i>Enregistrer',
