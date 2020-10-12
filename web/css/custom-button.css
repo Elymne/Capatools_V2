@@ -6,6 +6,8 @@
 .btn-project-simulation {
     background-color: #f0edee;
     color: #01579b;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 .btn-project-simulation:hover {
