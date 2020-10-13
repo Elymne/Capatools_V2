@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 #region imports
-
 use app\models\companies\Company;
 use app\models\companies\Contact;
 use Yii;
@@ -20,9 +19,7 @@ use app\models\projects\ProjectSimulate;
 use app\models\projects\Risk;
 use app\models\projects\Millestone;
 use app\models\projects\Task;
-
 use yii\web\UploadedFile;
-
 use app\models\equipments\Equipment;
 use app\models\equipments\EquipmentRepayment;
 use app\models\laboratories\Laboratory;
@@ -48,11 +45,9 @@ use app\services\menuServices\MenuSelectorHelper;
 use app\services\menuServices\SubMenuEnum;
 use app\services\userRoleAccessServices\PermissionAccessEnum;
 use app\services\userRoleAccessServices\UserRoleEnum;
-use app\services\userRoleAccessServices\UserRoleManager;
 use app\services\helpers\TimeStringifyHelper;
 use app\services\menuServices\LeftMenuCreator;
 use kartik\mpdf\Pdf;
-use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 #endregion
 
@@ -268,6 +263,7 @@ class ProjectController extends Controller implements ServiceInterface
     /**
      * Render view : project/view?id=?
      * Retourne la vue détaillé d'un projet par rapport à l'id rentré en paramètre.
+     * Le projet doit avoir passé le status de brouillon.
      * @param integer $id
      * 
      * @return mixed
@@ -275,9 +271,18 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionView(int $id)
     {
+        $model = Project::find()->where(["id" => $id])->one();
+
+        if ($model == null)
+            return $this->actionError("Projet non trouvé", ["Il n'existe aucun projet avec cet identifiant."]);
+        if ($model->state == Project::STATE_DEVIS_MODEL)
+            return $this->actionError("le status du projet ne permet pas d'accéder à cette page", ["L'accès de cette page vous est interdit."]);
+        if ($model->state == Project::STATE_DEVIS_DRAFT)
+            return $this->actionError("le status du projet ne permet pas d'accéder à cette page", ["L'accès de cette page vous est interdit."]);
+
         MenuSelectorHelper::setMenuProjectIndex();
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -297,15 +302,22 @@ class ProjectController extends Controller implements ServiceInterface
         $currentstate = $project->state;
         $project->state = $status;
 
+        if ($project == null)
+            return $this->actionError("Projet non trouvé", ["Il n'existe aucun projet avec cet identifiant."]);
+        if ($project->state == Project::STATE_DEVIS_MODEL)
+            return $this->actionError("le status du projet ne permet pas d'accéder à cette page", ["L'accès de cette page vous est interdit."]);
+        if ($project->state == Project::STATE_DEVIS_DRAFT)
+            return $this->actionError("le status du projet ne permet pas d'accéder à cette page", ["L'accès de cette page vous est interdit."]);
+
         if ($status == Project::STATE_DEVIS_SIGNED) {
             $project->signing_probability = 100;
             $project->id_laboxy = IdLaboxyManager::generateLaboxyId($project->company->name, $project->internal_name, $id, $project->cellule);
             foreach ($project->millestones as $millestone) {
-
                 $millestone->statut = Millestone::STATUT_ENCOURS;
                 $millestone->save();
             }
         }
+
         if ($status == Project::STATE_DEVIS_CANCELED &&  $currentstate == Project::STATE_DEVIS_SENDED) {
             $project->signing_probability = 0;
         }
@@ -319,17 +331,11 @@ class ProjectController extends Controller implements ServiceInterface
             }
         }
 
-
         $project->save();
-
-        if ($status == Project::STATE_DEVIS_DRAFT) {
-            MenuSelectorHelper::setMenuProjectDraft();
-            return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project->id]);
-        }
 
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => Project::find()->where(["id" => $id])->one(),
         ]);
     }
 
@@ -355,7 +361,7 @@ class ProjectController extends Controller implements ServiceInterface
             MenuSelectorHelper::setMenuProjectIndex();
 
             return $this->render('view', [
-                'model' => $this->findModel($jalon->project_id),
+                'model' => Project::find()->where(["id" => $$jalon->project_id])->one(),
             ]);
         } else {
             Yii::$app->response->redirect(['project/index-milestones']);
@@ -365,12 +371,16 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionUpdateSigningProbability(int $id, int $probability)
     {
         $project = Project::getOneById($id);
+
+        if ($project == null)
+            return $this->actionError("Projet non trouvé", ["Il n'existe aucun projet avec cet identifiant."]);
+
         $project->signing_probability = $probability;
         $project->save();
 
         MenuSelectorHelper::setMenuProjectNone();
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => Project::find()->where(["id" => $id])->one(),
         ]);
     }
 
@@ -385,7 +395,14 @@ class ProjectController extends Controller implements ServiceInterface
     public function actionPdf(int $id)
     {
 
-        $model = $this->findModel($id);
+        $model = Project::find()->where(["id" => $id])->one();
+
+        if ($model == null) {
+            return $this->actionError("Projet non trouvé", ["Il n'existe aucun projet avec cet identifiant.", "Impossible de générer le pdf."]);
+        }
+
+        if ($model->state != Project::STATE_DEVIS_SIGNED && $model->state != !Project::STATE_DEVIS_FINISHED)
+            return $this->actionError("le status du projet ne permet pas d'accéder à cette page", ["L'accès de cette page vous est interdit.", "Impossible de générer un pdf avec ce projet pour l'instant."]);
 
         $css = [
             '' . Yii::getAlias('@web') . 'css/materialize_pdf.min.css',
@@ -578,17 +595,16 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionProjectSimulate($project_id = 1, $sucess = null)
+    public function actionProjectSimulate($project_id, $sucess = null)
     {
+        $project = ProjectSimulate::find()->where(["id" => $project_id])->one();
 
-        // Modèle du projet à updater. On s'en sert pour récupérer son id.
-        $project = ProjectSimulate::getOneById($project_id);
         if ($project == null) {
-            return $this->redirect([
-                'error',
-                'errorName' => 'projet innexistant',
-                'errorDescriptions' => ['Vous essayez actuellement de modifier un projet qui n\'existe pas.']
-            ]);
+            return $this->actionError("Projet non trouvé", ["Il n'existe aucun projet avec cet identifiant."]);
+        }
+
+        if ($project->state != Project::STATE_DEVIS_DRAFT && $project->state != Project::STATE_DEVIS_MODEL) {
+            return $this->actionError("Impossible d'accéder à la page", ["Le projet n'a pas le bon statut", "Status du projet : " . $project->state]);
         }
 
         $validdevis = true;
@@ -598,8 +614,6 @@ class ProjectController extends Controller implements ServiceInterface
 
         // Modèles à sauvegarder.
         if ($project->load(Yii::$app->request->post())) {
-
-
             $project->id_capa = IdLaboxyManager::generateDraftId($project->internal_name);
             $project->id_laboxy = IdLaboxyManager::generateLaboxyDraftId($project->company->name, $project->internal_name);
             $project->save();
@@ -756,18 +770,18 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionLotSimulate($project_id = 1, $number = 1)
+    public function actionLotSimulate($project_id, $number)
     {
         $SaveSucess = null;
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = LotSimulate::getOneByIdProjectAndNumber($project_id, $number);
 
         if ($lot == null) {
-            return $this->redirect([
-                'error',
-                'errorName' => 'Lot innexistant',
-                'errorDescriptions' => ['Vous essayez actuellement de modifier un lot qui n\'existe pas.']
-            ]);
+            return $this->actionError("Lot non trouvé", ["Il n'existe aucun lot avec cet identifiant."]);
+        }
+
+        if ($lot->project->state != Project::STATE_DEVIS_DRAFT && $lot->project->state != Project::STATE_DEVIS_MODEL) {
+            return $this->actionError("Impossible d'accéder à la page", ["Le projet n'a pas le bon statut pour permettre la modification des marges sur le lot", "Status du projet : " . $lot->project->state]);
         }
 
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
@@ -799,13 +813,21 @@ class ProjectController extends Controller implements ServiceInterface
      */
     public function actionUpdateTask($number, $project_id)
     {
-
         $SaveSucess = false;
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $model = new ProjectCreateTaskForm();
-        $model->project_id = $project_id;
-        $model->number = $number;
+        $model->project_id = $project_id; // A changer
+        $model->number = $number; // A changer
+        //todo Problème ici, dans le cas où le lot n'existe pas, mauvais code design.
         $lot = $model->GetCurrentLot();
+
+        if ($lot == null) {
+            return $this->actionError("Lot non trouvé", ["Il n'existe aucun lot avec cet identifiant."]);
+        }
+
+        if ($lot->project->state != Project::STATE_DEVIS_DRAFT && $lot->project->state != Project::STATE_DEVIS_MODEL) {
+            return $this->actionError("Impossible d'accéder à la page", ["Le projet n'a pas le bon statut pour permettre la modification des tâches sur le lot", "Status du projet : " . $lot->project->state]);
+        }
 
         ///Récupération des tâches gestions
         $tasksGestionsModif = ProjectCreateGestionTaskForm::getTypeTaskByLotId($lot->id, Task::CATEGORY_MANAGEMENT);
@@ -928,18 +950,16 @@ class ProjectController extends Controller implements ServiceInterface
         // Modèle du lot à updater. On s'en sert pour récupérer son id.
         $lot = Lot::getOneByIdProjectAndNumber($project_id, $number);
         $model = new ProjectCreateThirdStepForm();
-        $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
 
-        // Error checker.
         if ($lot == null) {
-            return $this->redirect([
-                'error',
-                'errorName' => 'Lot innexistant',
-                'errorDescriptions' => ['Vous essayez actuellement de modifier une liste de matériels sur un lot/projet qui n\'existe pas.']
-            ]);
+            return $this->actionError("Lot non trouvé", ["Il n'existe aucun lot avec cet identifiant."]);
         }
 
-        // Récupérer les données existantes du lot spécifié en paramètre.
+        if ($lot->project->state != Project::STATE_DEVIS_DRAFT && $lot->project->state != Project::STATE_DEVIS_MODEL) {
+            return $this->actionError("Impossible d'accéder à la page", ["Le projet n'a pas le bon statut pour permettre la modification des dépenses sur le lot", "Status du projet : " . $lot->project->state]);
+        }
+
+        $model->setLaboratorySelectedFromLaboID($lot->laboratory_id);
         $consumables = ProjectCreateConsumableForm::getAllConsummablesByLotID($lot->id);
         if ($consumables == null) {
             $consumables = [new ProjectCreateConsumableForm];
@@ -1106,10 +1126,19 @@ class ProjectController extends Controller implements ServiceInterface
      * 
      * @return mixed|error
      */
-    public function actionCreateProject(int $id = 1)
+    public function actionCreateProject(int $id)
     {
 
         $model = ProjectCreateForm::getOneById($id); // On récupère le modèle formulaire de données de projet avec l'id.
+
+        if ($model == null) {
+            return $this->actionError("Projet non trouvé", ["Il n'existe aucun projet avec cet identifiant."]);
+        }
+
+        if ($model->state != Project::STATE_DEVIS_DRAFT && $model->state != Project::STATE_DEVIS_MODEL) {
+            return $this->actionError("Impossible d'accéder à la page", ["Le projet n'a pas le bon statut pour permettre la finalisation du projet", "Status du projet : " . $model->state]);
+        }
+
         $celluleUsers = ArrayHelper::map(Cellule::getOneById(Yii::$app->user->identity->cellule_id)->capaUsers, 'id', 'email');
 
         if ($model->company->country) {
@@ -1148,9 +1177,22 @@ class ProjectController extends Controller implements ServiceInterface
         ]);
     }
 
+    /**
+     * Permet de supprimer un projet dont l'état est soit un modèle, soit un brouillon.
+     * Retourne une page d'erreur si l'état est autre.
+     */
     public function actionDeleteDraftProject(int $id)
     {
-        $model = Project::getOneById($id);
+        $model = Project::find()->where(["id" => $id])->one();
+
+        if ($model == null) {
+            return $this->actionError("Projet non trouvé", ["Il n'existe aucun projet avec cet identifiant."]);
+        }
+
+        if ($model->state != Project::STATE_DEVIS_DRAFT && $model->state != Project::STATE_DEVIS_MODEL) {
+            return $this->actionError("Impossible de supprimer ce projet", ["Le projet n'a pas le bon statut pour permettre la suppression", "Status du projet : " . $model->state]);
+        }
+
         $lots = $model->lots;
         foreach ($lots as $lot) {
             $tasks = $lot->tasks;
@@ -1190,9 +1232,22 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
+    /**
+     * Permet de dupliquer un projet dont l'état est soit un modèle, soit un brouillon.
+     * Retourne une page d'erreur si l'état est autre.
+     */
     public function actionDuplicateProject(int $id)
     {
-        $model = ProjectCreateFirstStepForm::getOneById($id);
+        $model = ProjectCreateFirstStepForm::find()->where(["id" => $id])->one();
+
+        if ($model == null) {
+            return $this->actionError("Projet non trouvé", ["Il n'existe aucun projet avec cet identifiant."]);
+        }
+
+        if ($model->state != Project::STATE_DEVIS_DRAFT && $model->state != Project::STATE_DEVIS_MODEL) {
+            return $this->actionError("Impossible d'accéder à la page", ["Le projet n'a pas le bon statut pour permettre la modification des marges sur le lot", "Status du projet : " . $model->state]);
+        }
+
         $model->company_name = $model->company->name;
         $model->contact_email = $model->contact->email;
         $model->radiobutton_type_selected = array_search($model->type, Project::TYPES);
@@ -1280,42 +1335,36 @@ class ProjectController extends Controller implements ServiceInterface
         );
     }
 
-
+    /**
+     * Permet de créer un modèle à partir d'un brouillon dont l'état est soit un modèle, soit un brouillon.
+     * Retourne une page d'erreur si l'état est autre.
+     */
     public function actionCreateModel(int $id, $view)
     {
-        $project = Project::getOneById($id);
-        if ($project->state == Project::STATE_DEVIS_MODEL) {
-            $project->state = Project::STATE_DEVIS_DRAFT;
-        } else {
-            $project->state = Project::STATE_DEVIS_MODEL;
+        $model = Project::find()->where(["id" => $id])->one();
+
+        if ($model == null) {
+            return $this->actionError("Projet non trouvé", ["Il n'existe aucun projet avec cet identifiant."]);
         }
-        $project->save();
+
+        if ($model->state != Project::STATE_DEVIS_DRAFT && $model->state != Project::STATE_DEVIS_MODEL) {
+            return $this->actionError("Impossible d'accéder à la page", ["Le projet n'a pas le bon statut pour permettre la modification des marges sur le lot", "Status du projet : " . $model->state]);
+        }
+
+        if ($model->state == Project::STATE_DEVIS_MODEL) {
+            $model->state = Project::STATE_DEVIS_DRAFT;
+        } else {
+            $model->state = Project::STATE_DEVIS_MODEL;
+        }
+        $model->save();
 
         if ($view == 'index') {
             return Yii::$app->response->redirect(['project/index-draft']);
         } else {
 
-            return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $project->id]);
+            return Yii::$app->response->redirect(['project/project-simulate', 'project_id' => $model->id]);
         }
     }
-
-
-    /* Méthode générale pour le contrôleur permettant de retourner un devis.
-     * Cette méthode est utilisé pour gérer le cas où le devis recherché n'existe pas, et donc gérer l'exception.
-     * 
-     * @param integer $id
-     * @return Devis the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Project::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('Le devis n\'existe pas.');
-    }
-
 
     /**
      * Fonction qui rend une page d'erreur.

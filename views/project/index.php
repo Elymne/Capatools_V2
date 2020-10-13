@@ -2,6 +2,7 @@
 
 use app\assets\projects\ProjectIndexAsset;
 use app\assets\AppAsset;
+use app\models\projects\Project;
 use app\services\userRoleAccessServices\UserRoleEnum;
 use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
@@ -9,54 +10,106 @@ use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
-use yii\widgets\Pjax;
-
-$this->title = 'Liste des projets';
-$this->params['breadcrumbs'][] = $this->title;
 
 AppAsset::register($this);
 ProjectIndexAsset::register($this);
-
+$this->title = 'Liste des projets';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<!-- HTML : start -->
 <?= TopTitle::widget(['title' => $this->title]) ?>
-
 <div class="container">
     <div class="project-index">
-
-        <!-- New -->
-        <div class="row body-marger">
-
+        <div class="row">
+            <!-- CardView : FILTER-CARD -->
             <div class="card">
                 <div class="card-content">
                     <label>Filtres</label>
                 </div>
                 <div class="card-action">
-                    <?php getSearchFilter($companiesName) ?>
+                    <div class="col s12 l6">
+                        <?= Select2::widget([
+                            'id' => 'company-name-search',
+                            'name' => 'droplist_company',
+                            'data' => $companiesName,
+                            'pluginLoading' => false,
+                            "theme" => Select2::THEME_MATERIAL,
+                            'options' => ['placeholder' => 'Selectionner un client ...'],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ]
+                        ]) ?>
+                    </div>
+                    <div class="col s12 l6">
+                        <?= Html::input('text', 'textinput_capaid', "", [
+                            'id' => 'capa-id-search',
+                            'maxlength' => 10,
+                            'placeholder' => 'Rechercher un capa id',
+                            'onkeyup' => 'capaidFilterSearch()'
+                        ]) ?>
+                    </div>
+                    <br /><br /><br /><br />
+                    <div class="col s12">
+                        <label class="rigthspace-20px">
+                            <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
+                            <span class="span-combobox">Devis envoyé</span>
+                        </label>
+                        <label class="rigthspace-20px">
+                            <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox" />
+                            <span class="span-combobox">Projets en cours</span>
+                        </label>
+                        <label class="rigthspace-20px">
+                            <input type="checkbox" class="filled-in" id="pt-checkbox" />
+                            <span class="span-combobox">Projets terminés</span>
+                        </label>
+                        <label class="rigthspace-20px">
+                            <input type="checkbox" class="filled-in" id="pa-checkbox" />
+                            <span class="span-combobox">Projets annulés</span>
+                        </label>
+                    </div>
                 </div>
             </div>
-
+            <!-- CardView : GRIDVIEW-MANAGEMENT -->
             <div class="card">
                 <div class="card-content">
                     <label>Réglage du tableau</label>
                 </div>
                 <div class="card-action">
-                    <?php echo getFilterCardContent() ?>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" checked="checked" id="capaid-checkbox" />
+                        <span class="span-combobox">CapaID</span>
+                    </label>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" checked="checked" id="projectname-checkbox" />
+                        <span class="span-combobox">Nom interne</span>
+                    </label>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" id="projectmanager-checkbox" />
+                        <span class="span-combobox">Resp projet</span>
+                    </label>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" id="cellule-checkbox" />
+                        <span class="span-combobox">Cellule</span>
+                    </label>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" checked="checked" id="company-checkbox" />
+                        <span class="span-combobox">Client</span>
+                    </label>
+                    <label class="rigthspace-20px">
+                        <input type="checkbox" class="filled-in" checked="checked" id="status-checkbox" />
+                        <span class="span-combobox">Status</span>
+                    </label>
                 </div>
             </div>
-
+            <!-- CardView : DATA GRIDVIEW -->
             <div class="card">
                 <div class="card-action">
                     <div>
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
-                            'rowOptions' => [
-                                'style' => 'height:20px;',
-                                'text-overflow:ellipsis;'
-                            ],
                             'tableOptions' => [
                                 'id' => 'devis_table',
-                                'style' => 'height: 10px',
                                 'class' => ['highlight']
                             ],
                             'columns' => getCollumnsArray()
@@ -67,94 +120,9 @@ ProjectIndexAsset::register($this);
         </div>
     </div>
 </div>
-
-
+<!-- HTML : end -->
 
 <?php
-
-
-function getSearchFilter($companiesName)
-{
-
-    echo Select2::widget([
-        'id' => 'company-name-search',
-        'name' => 'droplist_company',
-        'data' => $companiesName,
-        'pluginLoading' => false,
-        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
-        'pluginOptions' => [
-            'allowClear' => true
-        ]
-    ]);
-
-    echo '<br />';
-
-    echo Html::input('text', 'textinput_capaid', "", [
-        'id' => 'capa-id-search',
-        'maxlength' => 10,
-        'style' => 'width:350px',
-        'placeholder' => 'Rechercher un capa id',
-        'onkeyup' => 'capaidFilterSearch()'
-    ]);
-
-    echo '<br />';
-    echo '<br />';
-
-    echo <<<HTML
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
-            <span class="span-combobox">Devis envoyé</span>
-        </label>
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox"/>
-            <span class="span-combobox">Projets en cours</span>
-        </label>
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" id="pt-checkbox"/>
-            <span class="span-combobox">Projets terminés</span>
-        </label>
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" id="pa-checkbox"/>
-            <span class="span-combobox">Projets annulés</span>
-        </label>
-    HTML;
-}
-
-/**
- * Used to display combobox.
- * 
- * @return string HTML content.
- */
-function getFilterCardContent(): string
-{
-    return <<<HTML
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="capaid-checkbox" />
-            <span class="span-combobox">CapaID</span>
-        </label>
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="projectname-checkbox"/>
-            <span class="span-combobox">Nom interne</span>
-        </label>
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" id="projectmanager-checkbox"/>
-            <span class="span-combobox">Resp projet</span>
-        </label>
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" id="cellule-checkbox"/>
-            <span class="span-combobox">Cellule</span>
-        </label>
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="company-checkbox"/>
-            <span class="span-combobox">Client</span>
-        </label>
-        <label class="rigthspace-20px">
-            <input type="checkbox" class="filled-in" checked="checked" id="status-checkbox"/>
-            <span class="span-combobox">Status</span>
-        </label>
-    HTML;
-}
-
 
 /**
  * Used to display all data needed for the table.
@@ -178,6 +146,7 @@ function getCollumnsArray()
     array_push($result, getViewButtonArray());
     array_push($result, getPdfButtonArray());
     array_push($result, getExcelButtonArray());
+
     //todo Pour l'instant, pas d'utilité sur ce bouton.
     //array_push($result, getPieceButtonArray());
 
@@ -272,6 +241,8 @@ function getViewButtonArray()
     return [
         'format' => 'raw',
         'label' => 'Voir',
+        'headerOptions' => ['style' => 'width:5%'],
+        'contentOptions' => ['style' => 'width:5%'],
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons center">visibility</i>',
@@ -294,19 +265,26 @@ function getPdfButtonArray()
     return [
         'format' => 'raw',
         'label' => 'PDF',
+        'headerOptions' => ['style' => 'width:5%'],
+        'contentOptions' => ['style' => 'width:5%'],
         'value' => function ($model, $key, $index, $column) {
-            return Html::a(
-                '<i class="material-icons center">picture_as_pdf</i>',
-                Url::to(['project/pdf', 'id' => $model->id,]),
-                [
-                    'id' => 'grid-custom-button',
-                    'target' => '_blank',
-                    'data-pjax' => true,
-                    'action' => Url::to(['project/pdf', 'id' => $model->id]),
-                    'class' => 'btn-floating-minus waves-effect waves-light btn-purple',
-                    'title' => "Générer le devis sous forme pdf"
-                ]
-            );
+            // Si le projet est déjà signé ou terminé, on affiche le bouton d'accès au pdf.
+            if ($model->state == Project::STATE_DEVIS_SIGNED || $model->state == Project::STATE_DEVIS_FINISHED) {
+                return Html::a(
+                    '<i class="material-icons center">picture_as_pdf</i>',
+                    Url::to(['project/pdf', 'id' => $model->id,]),
+                    [
+                        'id' => 'grid-custom-button',
+                        'target' => '_blank',
+                        'data-pjax' => true,
+                        'class' => 'btn-floating-minus waves-effect waves-light btn-purple',
+                        'title' => "Générer le devis sous forme pdf"
+                    ]
+                );
+            } else {
+                // On retourne un tag vide.
+                return Html::tag(null);
+            }
         }
     ];
 }
@@ -316,6 +294,8 @@ function getExcelButtonArray()
     return [
         'format' => 'raw',
         'label' => 'XLS',
+        'headerOptions' => ['style' => 'width:5%'],
+        'contentOptions' => ['style' => 'width:5%'],
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons center">grid_on</i>',
@@ -337,6 +317,8 @@ function getPieceButtonArray()
     return [
         'format' => 'raw',
         'label' => 'Propositon',
+        'headerOptions' => ['style' => 'width:5%'],
+        'contentOptions' => ['style' => 'width:5%'],
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons center">file_download</i>',
