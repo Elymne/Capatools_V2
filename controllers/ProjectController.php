@@ -827,7 +827,14 @@ class ProjectController extends Controller implements ServiceInterface
         $cel = new Cellule();
         $cel->id = $idcellule;
         $celluleUsers = $cel->capaUsers;
+
         $risk = Risk::find()->all();
+
+        $risks = \array_map(function ($risk) {
+            return $risk->getStringifiedRisk();
+        }, Risk::find()->all());
+
+        //return var_dump($risks);
 
 
         if ($model->load(Yii::$app->request->post())) {
@@ -971,8 +978,8 @@ class ProjectController extends Controller implements ServiceInterface
 
         // Import de données depuis la bdd.
         $laboratoriesData = Laboratory::find()->all();
-        $equipmentsData = Equipment::getAll();
-        $risksData = Risk::getAll();
+        $equipmentsData = Equipment::find()->all();
+        $risksData = Risk::find()->all();
 
         // Si renvoi de données par méthode POST sur l'élément unique, on va supposer que c'est un renvoi de formulaire.
         if ($model->load(Yii::$app->request->post())) {

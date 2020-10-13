@@ -26,7 +26,7 @@ if ($number == 0) {
 
 // On map les noms des risques sur dans une table utilisable dans la vue.
 $risksName = array_map(function ($risk) {
-    return $risk->title;
+    return $risk->title . " (x" . $risk->coefficient . ")";
 }, $risksData);
 ?>
 
@@ -279,9 +279,7 @@ $risksName = array_map(function ($risk) {
                                                             <div class="col s2 equipment_risk" style="<?= $hideElement ?>">
                                                                 <!-- type dropdown field -->
                                                                 <?= $form->field($equipment, "[{$i}]riskSelected")->widget(Select2::class, [
-                                                                    'data' => array_map(function ($risk) {
-                                                                        return $risk->title;
-                                                                    }, $risksData),
+                                                                    'data' => $risksName,
                                                                     'options' => ['value' => $equipment->riskSelected],
                                                                     'pluginLoading' => false,
                                                                     "theme" => Select2::THEME_MATERIAL,
@@ -456,6 +454,10 @@ $risksName = array_map(function ($risk) {
 <div id="risks-data-target" style="display: none;">
     <?php
     // Transformation des données sous format JSON.
+    foreach ($risksData as $riskData) {
+        $riskData->title = $riskData->title . " (x" . $riskData->coefficient . ")";
+    }
+
     $rd = array_map(function ($data) {
         return $data->jsonSerialize();
     }, $risksData);

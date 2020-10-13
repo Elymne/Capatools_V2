@@ -145,9 +145,9 @@ if ($lot->number != 0) {
                                                                     <?= $form->field($taskGestion, "[{$i}]risk")->widget(
                                                                         Select2::class,
                                                                         [
-                                                                            //'theme' => Select2::THEME_MATERIAL,
+                                                                            'theme' => Select2::THEME_MATERIAL,
                                                                             'name' => 'GestionRisk',
-                                                                            'data' => ArrayHelper::map($risk, 'id', 'title'),
+                                                                            'data' => ArrayHelper::map($risk, 'id', 'stringifiedRisk'),
                                                                             'value' => $tasksGestions[$i]->risk,
                                                                             'pluginLoading' => false,
                                                                             "theme" => Select2::THEME_MATERIAL,
@@ -293,7 +293,7 @@ if ($lot->number != 0) {
                                                                     [
                                                                         'theme' => Select2::THEME_MATERIAL,
                                                                         'name' => 'TaskRisk[{$i}]',
-                                                                        'data' => ArrayHelper::map($risk, 'id', 'title'),
+                                                                        'data' => ArrayHelper::map($risk, 'id', 'stringifiedRisk'),
                                                                         'pluginLoading' => false,
                                                                         "theme" => Select2::THEME_MATERIAL,
                                                                         'pluginEvents' => [
