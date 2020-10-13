@@ -2,15 +2,10 @@
 
 use app\assets\projects\ProjectIndexDraftAsset;
 use app\assets\AppAsset;
-use app\services\userRoleAccessServices\UserRoleEnum;
-use app\services\userRoleAccessServices\UserRoleManager;
 use app\widgets\TopTitle;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
-use yii\widgets\Pjax;
-
-use kartik\select2\Select2;
 use app\models\projects\Project;
 
 AppAsset::register($this);
@@ -28,41 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row body-marger">
             <div class="card">
                 <div class="card-content">
-                    <label>Filtres</label>
-                </div>
-                <div class="card-action">
-                    <?= Select2::widget([
-                        'id' => 'company-name-search',
-                        'name' => 'droplist_company',
-                        'data' => $companiesName,
-                        "theme" => Select2::THEME_MATERIAL,
-                        'pluginLoading' => false,
-                        'options' => ['style' => 'width:350px', 'placeholder' => 'Selectionner un client ...'],
-                        'pluginOptions' => [
-                            'allowClear' => true
-                        ]
-                    ]); ?>
-                    <br />
-                    <?= Html::input('text', 'textinput_capaid', "", [
-                        'id' => 'capa-id-search',
-                        'maxlength' => 10,
-                        'style' => 'width:350px',
-                        'placeholder' => 'Rechercher un capa id',
-                        'onkeyup' => 'capaidFilterSearch()'
-                    ]) ?>
-                    <br /><br />
-                    <label class="rigthspace-20px">
-                        <input type="checkbox" class="filled-in" checked="checked" id="bc-checkbox" />
-                        <span class="span-combobox">Afficher les modèles</span>
-                    </label>
-                    <label class="rigthspace-20px">
-                        <input type="checkbox" class="filled-in" checked="checked" id="pc-checkbox" />
-                        <span class="span-combobox">Afficher les brouillons</span>
-                    </label>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
                     <label>Réglage du tableau</label>
                 </div>
                 <div class="card-action">
@@ -74,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <input type="checkbox" class="filled-in" checked="checked" id="projectname-checkbox" />
                         <span class="span-combobox">Nom interne</span>
                     </label>
-                    <?php if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) : ?>
+                    <?php if (false) : /* if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) : */ ?>
                         <label class="rigthspace-20px">
                             <input type="checkbox" class="filled-in" id="cellule-checkbox" />
                             <span class="span-combobox">Cellule</span>
@@ -84,10 +44,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <input type="checkbox" class="filled-in" checked="checked" id="company-checkbox" />
                         <span class="span-combobox">Client</span>
                     </label>
-                    <label class="rigthspace-20px">
-                        <input type="checkbox" class="filled-in" checked="checked" id="status-checkbox" />
-                        <span class="span-combobox">Statut</span>
-                    </label>
                 </div>
             </div>
             <div class="card">
@@ -95,13 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div>
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
-                            'rowOptions' => [
-                                'style' => 'height:20px;',
-                                'text-overflow:ellipsis;'
-                            ],
                             'tableOptions' => [
                                 'id' => 'devis_table',
-                                'style' => 'height: 10px',
                                 'class' => ['highlight']
                             ],
                             'columns' => getCollumnsArray()
@@ -125,17 +76,13 @@ function getCollumnsArray()
     $result = [];
     array_push($result, getIdArray());
     array_push($result, getInternalNameArray());
-    if (UserRoleManager::hasRoles([UserRoleEnum::ADMIN, UserRoleEnum::SUPER_ADMIN, UserRoleEnum::ACCOUNTING_SUPPORT])) {
+    if (false) {
         array_push($result, getCelluleArray());
     }
     array_push($result, getCompanyArray());
-    array_push($result, getStatusArray());
-
     // Buttons displaying.
     array_push($result, getUpdateButtonArray());
-    array_push($result, getModelButtonArray());
     array_push($result, getDeleteButtonArray());
-    array_push($result, getDuplicateButtonArray());
 
     return $result;
 }
@@ -161,7 +108,6 @@ function getInternalNameArray()
         'headerOptions' => ['class' => 'projectname-row'],
     ];
 }
-
 
 function getCelluleArray()
 {
@@ -201,6 +147,8 @@ function getUpdateButtonArray()
     return [
         'format' => 'raw',
         'label' => 'Voir',
+        'headerOptions' => ['style' => 'width:1%'],
+        'contentOptions' => ['style' => 'width:1%'],
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons center">build</i>',
@@ -223,6 +171,8 @@ function getModelButtonArray()
     return [
         'format' => 'raw',
         'label' => "Mod.",
+        'headerOptions' => ['style' => 'width:1%'],
+        'contentOptions' => ['style' => 'width:1%'],
         'value' => function ($model, $key, $index, $column) {
             if ($model->state == Project::STATE_DEVIS_DRAFT) {
                 return Html::a(
@@ -258,6 +208,8 @@ function getDeleteButtonArray()
     return [
         'format' => 'raw',
         'label' => 'Sup.',
+        'headerOptions' => ['style' => 'width:1%'],
+        'contentOptions' => ['style' => 'width:1%'],
         'value' => function ($model, $key, $index, $column) {
             if ($model->state == Project::STATE_DEVIS_DRAFT) {
                 return Html::a(
@@ -283,6 +235,8 @@ function getDuplicateButtonArray()
     return [
         'format' => 'raw',
         'label' => 'Dupl.',
+        'headerOptions' => ['style' => 'width:1%'],
+        'contentOptions' => ['style' => 'width:1%'],
         'value' => function ($model, $key, $index, $column) {
             return Html::a(
                 '<i class="material-icons center">content_copy</i>',
