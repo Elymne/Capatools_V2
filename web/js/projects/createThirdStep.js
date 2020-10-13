@@ -46,26 +46,26 @@ $(() => {
 
             initNewEquipementRepaymentAdded(i)
             let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-            equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
+            equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField, i)
 
             dailyPriceField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-                equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField, i)
             })
 
             riskSelector.change(() => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-                equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField, i)
             })
 
             nbDaysField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-                equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField, i)
             })
 
             nbHoursField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-                equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField, i)
             })
 
             //getIndexSelectorOfEquipment(elem, equipmentsLocalStateList)
@@ -139,26 +139,26 @@ $(() => {
             //hideEquipmentRisk(isPreProject, i)
 
             let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-            equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
+            equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField, i)
 
             dailyPriceField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-                equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField, i)
             })
 
             riskSelector.change(() => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-                equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField, i)
             })
 
             nbDaysField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-                equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField, i)
             })
 
             nbHoursField.on('input', () => {
                 let riskObject = equipmentRepaymentRiskTimeUpdate(nbDaysField, nbHoursField, timeRiskStringifyField, i)
-                equipmentRepaymentTotalPriceUpdate(riskObject.riskDay, riskObject.riskHour, dailyPriceField, totalPriceField)
+                equipmentRepaymentTotalPriceUpdate(nbDaysField, nbHoursField, dailyPriceField, totalPriceField, i)
             })
         }
     })
@@ -293,7 +293,7 @@ $(() => {
  * @param {*} risksData - Une liste d'objet risque que l'on a au préalable injecté dans la liste déroulante.
  * @param {*} index - Numéro de l'item précis dont on souhaite connaitre l'équipement sélectionné
  */
-const getValueFromEquipmentRiskSelectedByIndex = (risksData, index = 0, number) => {
+const getValueFromEquipmentRiskSelectedByIndex = (risksData, index = 0) => {
     return risksData[$(`#projectcreateequipmentrepaymentform-${index}-riskselected option:selected`).val()]
 }
 
@@ -314,8 +314,9 @@ const getValueFromContributorRiskSelectedByIndex = (risksData, index = 0) => {
  *
  * @returns Un prix.
  */
-const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => {
-    return (((nbDay * laboxyTimeDay + nbHour) * daily_price) / laboxyTimeDay).toFixed(2)
+const calculateEquipmentPrice = (nbDay, nbHour, coeffObject, daily_price) => {
+    const result = daily_price * (nbDay * coeffObject.coefficient + (nbHour * coeffObject.coefficient) / laboxyTimeDay)
+    return result.toFixed(2)
 }
 
 /**
@@ -327,7 +328,7 @@ const calculateEquipmentPrice = (nbDay, nbHour, daily_price) => {
  * @returns Un prix.
  */
 const calculateContributorPrice = (nbDay, nbHour, daily_price) => {
-    return (((nbDay * laboxyTimeDay + nbHour) * daily_price) / laboxyTimeDay).toFixed(2)
+    return (daily_price * (nbDay + nbHour.toFixed(0) / laboxyTimeDay)).toFixed(2)
 }
 
 /**
@@ -443,7 +444,7 @@ const equipmentRepaymentRiskTimeUpdate = (nbDaysField, nbHoursField, timeRiskStr
     const riskObject = calculateRiskTime(
         !nbDaysField.val() ? 0 : nbDaysField.val(),
         !nbHoursField.val() ? 0 : nbHoursField.val(),
-        getValueFromEquipmentRiskSelectedByIndex(risksData, index, number),
+        getValueFromEquipmentRiskSelectedByIndex(risksData, index),
     )
     timeRiskStringifyField.val(stringifyRiskTime(riskObject.riskDay, riskObject.riskHour))
     return riskObject
@@ -456,10 +457,13 @@ const equipmentRepaymentRiskTimeUpdate = (nbDaysField, nbHoursField, timeRiskStr
  * @param {*} nbHoursField
  * @param {*} dailyPriceField
  */
-const equipmentRepaymentTotalPriceUpdate = (nbDaysField, nbHoursField, dailyPriceField, totalPriceField) => {
-    const result = calculateEquipmentPrice(nbDaysField, nbHoursField, !dailyPriceField.val() ? 0 : dailyPriceField.val())
-    console.log(nbDaysField)
-    console.log(nbHoursField)
+const equipmentRepaymentTotalPriceUpdate = (nbDaysField, nbHoursField, dailyPriceField, totalPriceField, index) => {
+    const result = calculateEquipmentPrice(
+        nbDaysField.val(),
+        nbHoursField.val(),
+        getValueFromEquipmentRiskSelectedByIndex(risksData, index),
+        !dailyPriceField.val() ? 0 : dailyPriceField.val(),
+    )
     totalPriceField.val(result)
 }
 

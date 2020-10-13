@@ -26,6 +26,11 @@ class Risk extends ActiveRecord implements JsonSerializable
         return static::find()->all();
     }
 
+    public function getStringifiedRisk()
+    {
+        return $this->title . ' (x' . $this->coefficient . ")";
+    }
+
     /**
      * Fonction pour envoyer au format json les données de l'objet.
      * 
