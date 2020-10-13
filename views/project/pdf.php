@@ -17,7 +17,6 @@ $laboxy_prestation_duration = Yii::$app->formatter->asInteger($model->totalHourW
 if ($model->company->tva != null) $condition = YII::$app->basePath . "/web/images/pdf/condition_util_FR.png";
 else $condition = YII::$app->basePath . "/web/images/pdf/condition_util_EN.png";
 
-
 // Prices
 $max_price = 0;
 if ($model->company->country == "France") $hasTVA = true;
@@ -25,9 +24,6 @@ else $hasTVA = false;
 foreach ($model->lots as $lot) $max_price +=  round(($lot->totalwithmargin + $model->additionallotprice) / (1 - $model->management_rate / 100), -2);
 $tva_price = $max_price * 0.2;
 $price_ttc = $max_price * 1.2;
-
-
-
 ?>
 
 <div class="container">

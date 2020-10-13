@@ -16,9 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="card">
                 <div class="card-action">
                     <span>
-                        <?php foreach ($errorDescriptions as $errorDescription) {
-                            echo "<label>" . $errorDescription . "</label>";
-                        } ?>
+                        <?php foreach ($errorDescriptions as $errorDescription) : ?>
+                            <label><?= $errorDescription ?></label><br />
+                        <?php endforeach; ?>
                     </span>
                 </div>
             </div>

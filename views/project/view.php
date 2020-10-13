@@ -575,19 +575,20 @@ function displayActionButtons($model)
             ]]
         ) ?>
     <?php endif; ?>
-
-    <?= Html::a(
-        'Générer le pdf <i class="material-icons right">picture_as_pdf</i>',
-        Url::to(['project/pdf', 'id' => $model->id,]),
-        [
-            'id' => 'grid-custom-button',
-            'target' => '_blank',
-            'data-pjax' => true,
-            'action' => Url::to(['project/pdf', 'id' => $model->id]),
-            'class' => 'waves-effect waves-light btn btn-purple',
-            'title' => "Générer le devis sous forme pdf"
-        ]
-    ) ?>
+    <?php if ($model->state == Project::STATE_DEVIS_SIGNED || $model->state == Project::STATE_DEVIS_FINISHED) : ?>
+        <?= Html::a(
+            'Générer le pdf <i class="material-icons right">picture_as_pdf</i>',
+            Url::to(['project/pdf', 'id' => $model->id,]),
+            [
+                'id' => 'grid-custom-button',
+                'target' => '_blank',
+                'data-pjax' => true,
+                'action' => Url::to(['project/pdf', 'id' => $model->id]),
+                'class' => 'waves-effect waves-light btn btn-purple',
+                'title' => "Générer le devis sous forme pdf"
+            ]
+        ) ?>
+    <?php endif; ?>
 
 <?php
 }

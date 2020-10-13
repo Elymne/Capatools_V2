@@ -12,14 +12,13 @@ AppAsset::register($this);
 ProjectIndexDraftAsset::register($this);
 $this->title = 'Liste des brouillons';
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
 
+<!-- HTML : BEGGIN -->
 <?= TopTitle::widget(['title' => $this->title]) ?>
-
 <div class="container">
     <div class="project-index">
-        <!-- New -->
+        <!-- CardView : FILTER ROW -->
         <div class="row body-marger">
             <div class="card">
                 <div class="card-content">
@@ -46,6 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </label>
                 </div>
             </div>
+            <!-- CardView : DATA DISPLAYER -->
             <div class="card">
                 <div class="card-action">
                     <div>
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-
+<!-- HTML : ENDING -->
 <?php
 
 /**
