@@ -161,7 +161,8 @@ $(() => {
     } else {
         $(description).val('Aucune')
         $(description).hide()
-        $('#dynamic-form').yiiActiveForm('validateAttribute', 'projectsimulate-low_tjm_description')
+        //todo Erreur js ici. (la ligne commenté)
+        //$('#dynamic-form').yiiActiveForm('validateAttribute', 'projectsimulate-low_tjm_description')
         $(description_label).hide()
     }
     $('.dynamicform_millestone').on('beforeDelete', (e, item) => confirm('Voulez-vous supprimer ce jalon ?'))

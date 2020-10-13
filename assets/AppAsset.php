@@ -47,6 +47,9 @@ class AppAsset extends AssetBundle
         'css/spacing.css',
         // Table sort.
         'css/table-sort.css',
+
+        // Helvetica Font
+        "https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
     ];
 
     public $js = [
